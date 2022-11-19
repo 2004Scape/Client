@@ -1,0 +1,15 @@
+rootProject.name = "rs2"
+
+dependencyResolutionManagement {
+    repositories {
+        mavenCentral()
+        flatDir {
+            dirs 'lib'
+        }
+    }
+}
+
+include(
+    "deob-annotations",
+    "client"
+)
