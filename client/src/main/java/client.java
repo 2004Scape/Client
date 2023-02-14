@@ -1265,7 +1265,7 @@ public final class client extends Applet_Sub1 {
 					System.out.println("Usage: node-id, port-offset, [lowmem/highmem], [free/members]");
 					return;
 				}
-				signlink.startpriv(InetAddress.getLocalHost());
+				signlink.startpriv(InetAddress.getByName("world2.runewiki.org"));
 				@Pc(82) client local82 = new client();
 				local82.method62(532, 789, 0);
 			} else {
@@ -8238,7 +8238,7 @@ public final class client extends Applet_Sub1 {
 		}
 		try {
 			if (super.aFrame_Sub1_2 != null) {
-				return new URL("http://127.0.0.1:" + (Static6.anInt236 + 80));
+				return new URL("http://world2.runewiki.org:" + (Static6.anInt236 + 80));
 			}
 		} catch (@Pc(21) Exception local21) {
 		}
