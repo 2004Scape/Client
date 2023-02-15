@@ -5,26 +5,26 @@ import org.openrs2.deob.annotation.OriginalMember;
 public final class SceneObjStack {
 
 	@OriginalMember(owner = "client!k", name = "a", descriptor = "I")
-	public int anInt549;
+	public int y;
 
 	@OriginalMember(owner = "client!k", name = "b", descriptor = "I")
-	public int anInt550;
+	public int x;
 
 	@OriginalMember(owner = "client!k", name = "c", descriptor = "I")
-	public int anInt551;
+	public int z;
 
 	@OriginalMember(owner = "client!k", name = "d", descriptor = "Lclient!eb;")
-	public Model aClass1_Sub3_Sub1_5;
+	public Model topObj;
 
 	@OriginalMember(owner = "client!k", name = "e", descriptor = "Lclient!eb;")
-	public Model aClass1_Sub3_Sub1_6;
+	public Model middleObj;
 
 	@OriginalMember(owner = "client!k", name = "f", descriptor = "Lclient!eb;")
-	public Model aClass1_Sub3_Sub1_7;
+	public Model bottomObj;
 
 	@OriginalMember(owner = "client!k", name = "g", descriptor = "I")
-	public int anInt552;
+	public int bitset;
 
 	@OriginalMember(owner = "client!k", name = "h", descriptor = "I")
-	public int anInt553;
+	public int offset;
 }

@@ -113,7 +113,7 @@ public final class Model extends CacheableNode {
 	private int minDepth;
 
 	@OriginalMember(owner = "client!eb", name = "Q", descriptor = "I")
-	public int collisionPoint;
+	public int objRaise;
 
 	@OriginalMember(owner = "client!eb", name = "R", descriptor = "[I")
 	private int[] vertexLabel;

@@ -6,34 +6,34 @@ import org.openrs2.deob.annotation.OriginalMember;
 public final class SceneTileUnderlay {
 
 	@OriginalMember(owner = "client!o", name = "a", descriptor = "I")
-	public final int anInt658;
+	public final int southwestColor;
 
 	@OriginalMember(owner = "client!o", name = "b", descriptor = "I")
-	public final int anInt659;
+	public final int southeastColor;
 
 	@OriginalMember(owner = "client!o", name = "c", descriptor = "I")
-	public final int anInt660;
+	public final int northeastColor;
 
 	@OriginalMember(owner = "client!o", name = "d", descriptor = "I")
-	public final int anInt661;
+	public final int northwestColor;
 
 	@OriginalMember(owner = "client!o", name = "e", descriptor = "I")
-	public final int anInt662;
+	public final int textureId;
 
 	@OriginalMember(owner = "client!o", name = "f", descriptor = "Z")
-	public boolean aBoolean138 = true;
+	public boolean flat = true;
 
 	@OriginalMember(owner = "client!o", name = "g", descriptor = "I")
-	public final int anInt663;
+	public final int rgb;
 
 	@OriginalMember(owner = "client!o", name = "<init>", descriptor = "(IIIIIIZ)V")
 	public SceneTileUnderlay(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2, @OriginalArg(3) int arg3, @OriginalArg(4) int arg4, @OriginalArg(5) int arg5, @OriginalArg(6) boolean arg6) {
-		this.anInt658 = arg0;
-		this.anInt659 = arg1;
-		this.anInt660 = arg2;
-		this.anInt661 = arg3;
-		this.anInt662 = arg4;
-		this.anInt663 = arg5;
-		this.aBoolean138 = arg6;
+		this.southwestColor = arg0;
+		this.southeastColor = arg1;
+		this.northeastColor = arg2;
+		this.northwestColor = arg3;
+		this.textureId = arg4;
+		this.rgb = arg5;
+		this.flat = arg6;
 	}
 }

@@ -5,47 +5,47 @@ import org.openrs2.deob.annotation.OriginalMember;
 public final class SceneLoc {
 
 	@OriginalMember(owner = "client!p", name = "a", descriptor = "I")
-	public int anInt666;
+	public int level;
 
 	@OriginalMember(owner = "client!p", name = "b", descriptor = "I")
-	public int anInt667;
+	public int y;
 
 	@OriginalMember(owner = "client!p", name = "c", descriptor = "I")
-	public int anInt668;
+	public int x;
 
 	@OriginalMember(owner = "client!p", name = "d", descriptor = "I")
-	public int anInt669;
+	public int z;
 
 	@OriginalMember(owner = "client!p", name = "e", descriptor = "Lclient!eb;")
-	public Model aClass1_Sub3_Sub1_8;
+	public Model model;
 
 	@OriginalMember(owner = "client!p", name = "f", descriptor = "Lclient!w;")
-	public Entity aClass1_Sub1_1;
+	public Entity entity;
 
 	@OriginalMember(owner = "client!p", name = "g", descriptor = "I")
-	public int anInt670;
+	public int yaw;
 
 	@OriginalMember(owner = "client!p", name = "h", descriptor = "I")
-	public int anInt671;
+	public int minSceneTileX;
 
 	@OriginalMember(owner = "client!p", name = "i", descriptor = "I")
-	public int anInt672;
+	public int maxSceneTileX;
 
 	@OriginalMember(owner = "client!p", name = "j", descriptor = "I")
-	public int anInt673;
+	public int minSceneTileZ;
 
 	@OriginalMember(owner = "client!p", name = "k", descriptor = "I")
-	public int anInt674;
+	public int maxSceneTileZ;
 
 	@OriginalMember(owner = "client!p", name = "l", descriptor = "I")
-	public int anInt675;
+	public int distance;
 
 	@OriginalMember(owner = "client!p", name = "m", descriptor = "I")
-	public int anInt676;
+	public int cycle;
 
 	@OriginalMember(owner = "client!p", name = "n", descriptor = "I")
-	public int anInt677;
+	public int bitset;
 
 	@OriginalMember(owner = "client!p", name = "o", descriptor = "B")
-	public byte aByte33;
+	public byte info;
 }

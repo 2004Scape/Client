@@ -5,26 +5,26 @@ import org.openrs2.deob.annotation.OriginalMember;
 public final class SceneWallDecoration {
 
 	@OriginalMember(owner = "client!h", name = "a", descriptor = "I")
-	public int anInt439;
+	public int y;
 
 	@OriginalMember(owner = "client!h", name = "b", descriptor = "I")
-	public int anInt440;
+	public int x;
 
 	@OriginalMember(owner = "client!h", name = "c", descriptor = "I")
-	public int anInt441;
+	public int z;
 
 	@OriginalMember(owner = "client!h", name = "d", descriptor = "I")
-	public int anInt442;
+	public int type;
 
 	@OriginalMember(owner = "client!h", name = "e", descriptor = "I")
-	public int anInt443;
+	public int orientation;
 
 	@OriginalMember(owner = "client!h", name = "f", descriptor = "Lclient!eb;")
-	public Model aClass1_Sub3_Sub1_1;
+	public Model model;
 
 	@OriginalMember(owner = "client!h", name = "g", descriptor = "I")
-	public int anInt444;
+	public int bitset;
 
 	@OriginalMember(owner = "client!h", name = "h", descriptor = "B")
-	public byte aByte22;
+	public byte info;
 }

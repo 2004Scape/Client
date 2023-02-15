@@ -20,99 +20,99 @@ public final class SceneBuilder {
 	public static boolean lowMemory = true;
 
 	@OriginalMember(owner = "client!c", name = "e", descriptor = "I")
-	public static int anInt81;
+	public static int levelBuilt;
 
 	@OriginalMember(owner = "client!c", name = "f", descriptor = "Z")
-	public static boolean aBoolean24;
+	public static boolean fullbright;
 
 	@OriginalMember(owner = "client!c", name = "g", descriptor = "I")
-	private final int anInt82;
+	private final int maxTileX;
 
 	@OriginalMember(owner = "client!c", name = "h", descriptor = "I")
-	private final int anInt83;
+	private final int maxTileZ;
 
 	@OriginalMember(owner = "client!c", name = "i", descriptor = "[[[I")
-	private final int[][][] anIntArrayArrayArray1;
+	private final int[][][] levelHeightmap;
 
 	@OriginalMember(owner = "client!c", name = "j", descriptor = "[[[B")
-	private final byte[][][] aByteArrayArrayArray1;
+	private final byte[][][] levelTileFlags;
 
 	@OriginalMember(owner = "client!c", name = "k", descriptor = "[[[B")
-	private final byte[][][] aByteArrayArrayArray2;
+	private final byte[][][] levelTileUnderlayIds;
 
 	@OriginalMember(owner = "client!c", name = "l", descriptor = "[[[B")
-	private final byte[][][] aByteArrayArrayArray3;
+	private final byte[][][] levelTileOverlayIds;
 
 	@OriginalMember(owner = "client!c", name = "m", descriptor = "[[[B")
-	private final byte[][][] aByteArrayArrayArray4;
+	private final byte[][][] levelTileOverlayShape;
 
 	@OriginalMember(owner = "client!c", name = "n", descriptor = "[[[B")
-	private final byte[][][] aByteArrayArrayArray5;
+	private final byte[][][] levelTileOverlayRotation;
 
 	@OriginalMember(owner = "client!c", name = "o", descriptor = "[[[B")
-	private final byte[][][] aByteArrayArrayArray6;
+	private final byte[][][] levelShademap;
 
 	@OriginalMember(owner = "client!c", name = "p", descriptor = "[[I")
-	private final int[][] anIntArrayArray1;
+	private final int[][] levelLightmap;
 
 	@OriginalMember(owner = "client!c", name = "q", descriptor = "[I")
-	private final int[] anIntArray13;
+	private final int[] blendChroma;
 
 	@OriginalMember(owner = "client!c", name = "r", descriptor = "[I")
-	private final int[] anIntArray14;
+	private final int[] blendSaturation;
 
 	@OriginalMember(owner = "client!c", name = "s", descriptor = "[I")
-	private final int[] anIntArray15;
+	private final int[] blendLightness;
 
 	@OriginalMember(owner = "client!c", name = "t", descriptor = "[I")
-	private final int[] anIntArray16;
+	private final int[] blendLuminance;
 
 	@OriginalMember(owner = "client!c", name = "u", descriptor = "[I")
-	private final int[] anIntArray17;
+	private final int[] blendMagnitude;
 
 	@OriginalMember(owner = "client!c", name = "v", descriptor = "[[[I")
-	private final int[][][] anIntArrayArrayArray2;
+	private final int[][][] levelOccludemap;
 
 	@OriginalMember(owner = "client!c", name = "w", descriptor = "[I")
-	public static final int[] anIntArray18 = new int[] { 1, 2, 4, 8 };
+	public static final int[] ROTATION_WALL_TYPE = new int[] { 1, 2, 4, 8 };
 
 	@OriginalMember(owner = "client!c", name = "x", descriptor = "[I")
-	public static final int[] anIntArray19 = new int[] { 16, 32, 64, 128 };
+	public static final int[] ROTATION_WALL_CORNER_TYPE = new int[] { 16, 32, 64, 128 };
 
 	@OriginalMember(owner = "client!c", name = "y", descriptor = "[I")
-	public static final int[] anIntArray20 = new int[] { 1, 0, -1, 0 };
+	public static final int[] WALL_DECORATION_ROTATION_FORWARD_X = new int[] { 1, 0, -1, 0 };
 
 	@OriginalMember(owner = "client!c", name = "z", descriptor = "[I")
-	public static final int[] anIntArray21 = new int[] { 0, -1, 0, 1 };
+	public static final int[] WALL_DECORATION_ROTATION_FORWARD_Z = new int[] { 0, -1, 0, 1 };
 
 	@OriginalMember(owner = "client!c", name = "A", descriptor = "I")
-	public static int anInt84 = (int) (Math.random() * 17.0D) - 8;
+	public static int randomHueOffset = (int) (Math.random() * 17.0D) - 8;
 
 	@OriginalMember(owner = "client!c", name = "B", descriptor = "I")
-	public static int anInt85 = (int) (Math.random() * 33.0D) - 16;
+	public static int randomLightnessOffset = (int) (Math.random() * 33.0D) - 16;
 
 	@OriginalMember(owner = "client!c", name = "<init>", descriptor = "(I[[[BI[[[II)V")
 	public SceneBuilder(@OriginalArg(0) int arg0, @OriginalArg(1) byte[][][] arg1, @OriginalArg(2) int arg2, @OriginalArg(3) int[][][] arg3, @OriginalArg(4) int arg4) {
 		try {
-			this.anInt82 = arg2;
-			this.anInt83 = arg0;
-			this.anIntArrayArrayArray1 = arg3;
-			this.aByteArrayArrayArray1 = arg1;
-			this.aByteArrayArrayArray2 = new byte[4][this.anInt82][this.anInt83];
-			this.aByteArrayArrayArray3 = new byte[4][this.anInt82][this.anInt83];
-			this.aByteArrayArrayArray4 = new byte[4][this.anInt82][this.anInt83];
-			this.aByteArrayArrayArray5 = new byte[4][this.anInt82][this.anInt83];
-			this.anIntArrayArrayArray2 = new int[4][this.anInt82 + 1][this.anInt83 + 1];
-			this.aByteArrayArrayArray6 = new byte[4][this.anInt82 + 1][this.anInt83 + 1];
-			this.anIntArrayArray1 = new int[this.anInt82 + 1][this.anInt83 + 1];
-			this.anIntArray13 = new int[this.anInt83];
-			this.anIntArray14 = new int[this.anInt83];
+			this.maxTileX = arg2;
+			this.maxTileZ = arg0;
+			this.levelHeightmap = arg3;
+			this.levelTileFlags = arg1;
+			this.levelTileUnderlayIds = new byte[4][this.maxTileX][this.maxTileZ];
+			this.levelTileOverlayIds = new byte[4][this.maxTileX][this.maxTileZ];
+			this.levelTileOverlayShape = new byte[4][this.maxTileX][this.maxTileZ];
+			this.levelTileOverlayRotation = new byte[4][this.maxTileX][this.maxTileZ];
+			this.levelOccludemap = new int[4][this.maxTileX + 1][this.maxTileZ + 1];
+			this.levelShademap = new byte[4][this.maxTileX + 1][this.maxTileZ + 1];
+			this.levelLightmap = new int[this.maxTileX + 1][this.maxTileZ + 1];
+			this.blendChroma = new int[this.maxTileZ];
+			this.blendSaturation = new int[this.maxTileZ];
 			if (arg4 != -35388) {
 				this.flowObfuscator3 = 28;
 			}
-			this.anIntArray15 = new int[this.anInt83];
-			this.anIntArray16 = new int[this.anInt83];
-			this.anIntArray17 = new int[this.anInt83];
+			this.blendLightness = new int[this.maxTileZ];
+			this.blendLuminance = new int[this.maxTileZ];
+			this.blendMagnitude = new int[this.maxTileZ];
 		} catch (@Pc(119) RuntimeException local119) {
 			signlink.reporterror("87235, " + arg0 + ", " + arg1 + ", " + arg2 + ", " + arg3 + ", " + arg4 + ", " + local119.toString());
 			throw new RuntimeException();
@@ -120,8 +120,8 @@ public final class SceneBuilder {
 	}
 
 	@OriginalMember(owner = "client!c", name = "a", descriptor = "(II)I")
-	public static int method42(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1) {
-		@Pc(32) int local32 = method43(arg0 + 45365, arg1 + 91923, 4) + (method43(arg0 + 10294, arg1 + 37821, 2) - 128 >> 1) + (method43(arg0, arg1, 1) - 128 >> 2) - 128;
+	public static int perlin(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1) {
+		@Pc(32) int local32 = perlin(arg0 + 45365, arg1 + 91923, 4) + (perlin(arg0 + 10294, arg1 + 37821, 2) - 128 >> 1) + (perlin(arg0, arg1, 1) - 128 >> 2) - 128;
 		local32 = (int) ((double) local32 * 0.3D) + 35;
 		if (local32 < 10) {
 			local32 = 10;
@@ -132,36 +132,36 @@ public final class SceneBuilder {
 	}
 
 	@OriginalMember(owner = "client!c", name = "a", descriptor = "(III)I")
-	private static int method43(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2) {
+	private static int perlin(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2) {
 		@Pc(3) int local3 = arg0 / arg2;
 		@Pc(9) int local9 = arg0 & arg2 - 1;
 		@Pc(13) int local13 = arg1 / arg2;
 		@Pc(19) int local19 = arg1 & arg2 - 1;
-		@Pc(23) int local23 = method45(local3, local13);
-		@Pc(29) int local29 = method45(local3 + 1, local13);
-		@Pc(35) int local35 = method45(local3, local13 + 1);
-		@Pc(43) int local43 = method45(local3 + 1, local13 + 1);
-		@Pc(49) int local49 = method44(local23, local29, local9, arg2);
-		@Pc(55) int local55 = method44(local35, local43, local9, arg2);
-		return method44(local49, local55, local19, arg2);
+		@Pc(23) int local23 = smoothNoise(local3, local13);
+		@Pc(29) int local29 = smoothNoise(local3 + 1, local13);
+		@Pc(35) int local35 = smoothNoise(local3, local13 + 1);
+		@Pc(43) int local43 = smoothNoise(local3 + 1, local13 + 1);
+		@Pc(49) int local49 = interpolate(local23, local29, local9, arg2);
+		@Pc(55) int local55 = interpolate(local35, local43, local9, arg2);
+		return interpolate(local49, local55, local19, arg2);
 	}
 
 	@OriginalMember(owner = "client!c", name = "a", descriptor = "(IIII)I")
-	private static int method44(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2, @OriginalArg(3) int arg3) {
+	private static int interpolate(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2, @OriginalArg(3) int arg3) {
 		@Pc(11) int local11 = 65536 - Draw3D.cos[arg2 * 1024 / arg3] >> 1;
 		return (arg0 * (65536 - local11) >> 16) + (arg1 * local11 >> 16);
 	}
 
 	@OriginalMember(owner = "client!c", name = "b", descriptor = "(II)I")
-	private static int method45(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1) {
-		@Pc(31) int local31 = method46(arg0 - 1, arg1 - 1) + method46(arg0 + 1, arg1 - 1) + method46(arg0 - 1, arg1 + 1) + method46(arg0 + 1, arg1 + 1);
-		@Pc(55) int local55 = method46(arg0 - 1, arg1) + method46(arg0 + 1, arg1) + method46(arg0, arg1 - 1) + method46(arg0, arg1 + 1);
-		@Pc(59) int local59 = method46(arg0, arg1);
+	private static int smoothNoise(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1) {
+		@Pc(31) int local31 = noise(arg0 - 1, arg1 - 1) + noise(arg0 + 1, arg1 - 1) + noise(arg0 - 1, arg1 + 1) + noise(arg0 + 1, arg1 + 1);
+		@Pc(55) int local55 = noise(arg0 - 1, arg1) + noise(arg0 + 1, arg1) + noise(arg0, arg1 - 1) + noise(arg0, arg1 + 1);
+		@Pc(59) int local59 = noise(arg0, arg1);
 		return local31 / 16 + local55 / 8 + local59 / 4;
 	}
 
 	@OriginalMember(owner = "client!c", name = "c", descriptor = "(II)I")
-	private static int method46(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1) {
+	private static int noise(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1) {
 		@Pc(5) int local5 = arg0 + arg1 * 57;
 		@Pc(11) int local11 = local5 << 13 ^ local5;
 		@Pc(25) int local25 = local11 * (local11 * local11 * 15731 + 789221) + 1376312589 & Integer.MAX_VALUE;
@@ -169,7 +169,7 @@ public final class SceneBuilder {
 	}
 
 	@OriginalMember(owner = "client!c", name = "d", descriptor = "(II)I")
-	public static int method47(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1) {
+	public static int mulHSL(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1) {
 		if (arg0 == -1) {
 			return 12345678;
 		}
@@ -183,7 +183,7 @@ public final class SceneBuilder {
 	}
 
 	@OriginalMember(owner = "client!c", name = "a", descriptor = "(ILclient!ob;Lclient!ec;II[[[IIIIILclient!r;I)V")
-	public static void method50(@OriginalArg(0) int arg0, @OriginalArg(1) DoublyLinkedList arg1, @OriginalArg(2) CollisionMap arg2, @OriginalArg(3) int arg3, @OriginalArg(4) int arg4, @OriginalArg(5) int[][][] arg5, @OriginalArg(6) int arg6, @OriginalArg(7) int arg7, @OriginalArg(8) int arg8, @OriginalArg(9) int arg9, @OriginalArg(10) Scene arg10, @OriginalArg(11) int arg11) {
+	public static void addLoc(@OriginalArg(0) int arg0, @OriginalArg(1) DoublyLinkedList arg1, @OriginalArg(2) CollisionMap arg2, @OriginalArg(3) int arg3, @OriginalArg(4) int arg4, @OriginalArg(5) int[][][] arg5, @OriginalArg(6) int arg6, @OriginalArg(7) int arg7, @OriginalArg(8) int arg8, @OriginalArg(9) int arg9, @OriginalArg(10) Scene arg10, @OriginalArg(11) int arg11) {
 		try {
 			if (arg6 != 0) {
 				flowObfuscator1 = !flowObfuscator1;
@@ -202,7 +202,7 @@ public final class SceneBuilder {
 			@Pc(99) Model local99;
 			if (arg9 == 22) {
 				local99 = local60.getModel(22, arg4, local15, local25, local37, local47, -1);
-				arg10.method473(local99, (byte) 6, arg0, local72, arg3, arg7, local86, local57);
+				arg10.addGroundDecoration(local99, (byte) 6, arg0, local72, arg3, arg7, local86, local57);
 				if (local60.blockwalk && local60.interactable) {
 					arg2.setBlocked((byte) 12, arg3, arg0);
 				}
@@ -226,7 +226,7 @@ public final class SceneBuilder {
 							local174 = local60.sizeX;
 							local177 = local60.sizeZ;
 						}
-						arg10.method477(local57, 775, arg7, null, local72, arg3, arg0, local174, local86, local99, local161, local177);
+						arg10.addLoc(local57, 775, arg7, null, local72, arg3, arg0, local174, local86, local99, local161, local177);
 					}
 					if (local60.blockwalk) {
 						arg2.addLoc(arg4, local60.sizeZ, local60.sizeX, arg0, 9, arg3, local60.blockrange);
@@ -236,7 +236,7 @@ public final class SceneBuilder {
 					}
 				} else if (arg9 >= 12) {
 					local99 = local60.getModel(arg9, arg4, local15, local25, local37, local47, -1);
-					arg10.method477(local57, 775, arg7, null, local72, arg3, arg0, 1, local86, local99, 0, 1);
+					arg10.addLoc(local57, 775, arg7, null, local72, arg3, arg0, 1, local86, local99, 0, 1);
 					if (local60.blockwalk) {
 						arg2.addLoc(arg4, local60.sizeZ, local60.sizeX, arg0, 9, arg3, local60.blockrange);
 					}
@@ -245,7 +245,7 @@ public final class SceneBuilder {
 					}
 				} else if (arg9 == 0) {
 					local99 = local60.getModel(0, arg4, local15, local25, local37, local47, -1);
-					arg10.method475(0, local57, arg7, anIntArray18[arg4], 8, local99, null, arg0, local72, arg3, local86);
+					arg10.addWall(0, local57, arg7, ROTATION_WALL_TYPE[arg4], 8, local99, null, arg0, local72, arg3, local86);
 					if (local60.blockwalk) {
 						arg2.addWall(true, arg4, arg3, arg0, local60.blockrange, arg9);
 					}
@@ -254,7 +254,7 @@ public final class SceneBuilder {
 					}
 				} else if (arg9 == 1) {
 					local99 = local60.getModel(1, arg4, local15, local25, local37, local47, -1);
-					arg10.method475(0, local57, arg7, anIntArray19[arg4], 8, local99, null, arg0, local72, arg3, local86);
+					arg10.addWall(0, local57, arg7, ROTATION_WALL_CORNER_TYPE[arg4], 8, local99, null, arg0, local72, arg3, local86);
 					if (local60.blockwalk) {
 						arg2.addWall(true, arg4, arg3, arg0, local60.blockrange, arg9);
 					}
@@ -268,7 +268,7 @@ public final class SceneBuilder {
 						local430 = arg4 + 1 & 0x3;
 						@Pc(442) Model local442 = local60.getModel(2, arg4 + 4, local15, local25, local37, local47, -1);
 						local452 = local60.getModel(2, local430, local15, local25, local37, local47, -1);
-						arg10.method475(anIntArray18[local430], local57, arg7, anIntArray18[arg4], 8, local442, local452, arg0, local72, arg3, local86);
+						arg10.addWall(ROTATION_WALL_TYPE[local430], local57, arg7, ROTATION_WALL_TYPE[arg4], 8, local442, local452, arg0, local72, arg3, local86);
 						if (local60.blockwalk) {
 							arg2.addWall(true, arg4, arg3, arg0, local60.blockrange, arg9);
 						}
@@ -277,7 +277,7 @@ public final class SceneBuilder {
 						}
 					} else if (arg9 == 3) {
 						local99 = local60.getModel(3, arg4, local15, local25, local37, local47, -1);
-						arg10.method475(0, local57, arg7, anIntArray19[arg4], 8, local99, null, arg0, local72, arg3, local86);
+						arg10.addWall(0, local57, arg7, ROTATION_WALL_CORNER_TYPE[arg4], 8, local99, null, arg0, local72, arg3, local86);
 						if (local60.blockwalk) {
 							arg2.addWall(true, arg4, arg3, arg0, local60.blockrange, arg9);
 						}
@@ -286,7 +286,7 @@ public final class SceneBuilder {
 						}
 					} else if (arg9 == 9) {
 						local99 = local60.getModel(arg9, arg4, local15, local25, local37, local47, -1);
-						arg10.method477(local57, 775, arg7, null, local72, arg3, arg0, 1, local86, local99, 0, 1);
+						arg10.addLoc(local57, 775, arg7, null, local72, arg3, arg0, 1, local86, local99, 0, 1);
 						if (local60.blockwalk) {
 							arg2.addLoc(arg4, local60.sizeZ, local60.sizeX, arg0, 9, arg3, local60.blockrange);
 						}
@@ -295,36 +295,36 @@ public final class SceneBuilder {
 						}
 					} else if (arg9 == 4) {
 						local99 = local60.getModel(4, 0, local15, local25, local37, local47, -1);
-						arg10.method476(local57, arg3, 0, local72, arg4 * 512, anIntArray18[arg4], 465, 0, arg0, local99, local86, arg7);
+						arg10.setWallDecoration(local57, arg3, 0, local72, arg4 * 512, ROTATION_WALL_TYPE[arg4], 465, 0, arg0, local99, local86, arg7);
 						if (local60.anim != -1) {
 							arg1.pushBack(new LocEntity(true, arg8, arg7, 0, 1, SeqType.instances[local60.anim], arg3, arg0));
 						}
 					} else if (arg9 == 5) {
 						local430 = 16;
-						local174 = arg10.method494(arg7, arg0, arg3);
+						local174 = arg10.getWallBitset(arg7, arg0, arg3);
 						if (local174 > 0) {
 							local430 = LocType.get(local174 >> 14 & 0x7FFF).walloff;
 						}
 						local452 = local60.getModel(4, 0, local15, local25, local37, local47, -1);
-						arg10.method476(local57, arg3, anIntArray21[arg4] * local430, local72, arg4 * 512, anIntArray18[arg4], 465, anIntArray20[arg4] * local430, arg0, local452, local86, arg7);
+						arg10.setWallDecoration(local57, arg3, WALL_DECORATION_ROTATION_FORWARD_Z[arg4] * local430, local72, arg4 * 512, ROTATION_WALL_TYPE[arg4], 465, WALL_DECORATION_ROTATION_FORWARD_X[arg4] * local430, arg0, local452, local86, arg7);
 						if (local60.anim != -1) {
 							arg1.pushBack(new LocEntity(true, arg8, arg7, 0, 1, SeqType.instances[local60.anim], arg3, arg0));
 						}
 					} else if (arg9 == 6) {
 						local99 = local60.getModel(4, 0, local15, local25, local37, local47, -1);
-						arg10.method476(local57, arg3, 0, local72, arg4, 256, 465, 0, arg0, local99, local86, arg7);
+						arg10.setWallDecoration(local57, arg3, 0, local72, arg4, 256, 465, 0, arg0, local99, local86, arg7);
 						if (local60.anim != -1) {
 							arg1.pushBack(new LocEntity(true, arg8, arg7, 0, 1, SeqType.instances[local60.anim], arg3, arg0));
 						}
 					} else if (arg9 == 7) {
 						local99 = local60.getModel(4, 0, local15, local25, local37, local47, -1);
-						arg10.method476(local57, arg3, 0, local72, arg4, 512, 465, 0, arg0, local99, local86, arg7);
+						arg10.setWallDecoration(local57, arg3, 0, local72, arg4, 512, 465, 0, arg0, local99, local86, arg7);
 						if (local60.anim != -1) {
 							arg1.pushBack(new LocEntity(true, arg8, arg7, 0, 1, SeqType.instances[local60.anim], arg3, arg0));
 						}
 					} else if (arg9 == 8) {
 						local99 = local60.getModel(4, 0, local15, local25, local37, local47, -1);
-						arg10.method476(local57, arg3, 0, local72, arg4, 768, 465, 0, arg0, local99, local86, arg7);
+						arg10.setWallDecoration(local57, arg3, 0, local72, arg4, 768, 465, 0, arg0, local99, local86, arg7);
 						if (local60.anim != -1) {
 							arg1.pushBack(new LocEntity(true, arg8, arg7, 0, 1, SeqType.instances[local60.anim], arg3, arg0));
 						}
@@ -338,7 +338,7 @@ public final class SceneBuilder {
 	}
 
 	@OriginalMember(owner = "client!c", name = "a", descriptor = "(IIIII)V")
-	public void method36(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2, @OriginalArg(3) int arg3, @OriginalArg(4) int arg4) {
+	public void clearLandscape(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2, @OriginalArg(3) int arg3, @OriginalArg(4) int arg4) {
 		try {
 			@Pc(3) byte local3 = 0;
 			if (arg2 != 3) {
@@ -352,11 +352,11 @@ public final class SceneBuilder {
 			}
 			for (@Pc(33) int local33 = arg1; local33 < arg1 + arg4; local33++) {
 				for (@Pc(37) int local37 = arg0; local37 < arg0 + arg3; local37++) {
-					if (local37 >= 0 && local37 < this.anInt82 && local33 >= 0 && local33 < this.anInt83) {
-						this.aByteArrayArrayArray3[0][local37][local33] = local3;
+					if (local37 >= 0 && local37 < this.maxTileX && local33 >= 0 && local33 < this.maxTileZ) {
+						this.levelTileOverlayIds[0][local37][local33] = local3;
 						for (@Pc(62) int local62 = 0; local62 < 4; local62++) {
-							this.anIntArrayArrayArray1[local62][local37][local33] = 0;
-							this.aByteArrayArrayArray1[local62][local37][local33] = 0;
+							this.levelHeightmap[local62][local37][local33] = 0;
+							this.levelTileFlags[local62][local37][local33] = 0;
 						}
 					}
 				}
@@ -368,7 +368,7 @@ public final class SceneBuilder {
 	}
 
 	@OriginalMember(owner = "client!c", name = "a", descriptor = "([BIIIII)V")
-	public void method37(@OriginalArg(0) byte[] arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2, @OriginalArg(3) int arg3, @OriginalArg(4) int arg4, @OriginalArg(5) int arg5) {
+	public void readLandscape(@OriginalArg(0) byte[] arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2, @OriginalArg(3) int arg3, @OriginalArg(4) int arg4, @OriginalArg(5) int arg5) {
 		try {
 			@Pc(7) Buffer local7 = new Buffer(363, arg0);
 			if (arg2 != 1) {
@@ -381,14 +381,14 @@ public final class SceneBuilder {
 						@Pc(38) int local38 = local28 + arg3;
 						@Pc(60) int local60;
 						if (local34 >= 0 && local34 < 104 && local38 >= 0 && local38 < 104) {
-							this.aByteArrayArrayArray1[local20][local34][local38] = 0;
+							this.levelTileFlags[local20][local34][local38] = 0;
 							while (true) {
 								local60 = local7.g1();
 								if (local60 == 0) {
 									if (local20 == 0) {
-										this.anIntArrayArrayArray1[0][local34][local38] = -method42(local34 + arg1 + 932731, local38 + 556238 + arg5) * 8;
+										this.levelHeightmap[0][local34][local38] = -perlin(local34 + arg1 + 932731, local38 + 556238 + arg5) * 8;
 									} else {
-										this.anIntArrayArrayArray1[local20][local34][local38] = this.anIntArrayArrayArray1[local20 - 1][local34][local38] - 240;
+										this.levelHeightmap[local20][local34][local38] = this.levelHeightmap[local20 - 1][local34][local38] - 240;
 									}
 									break;
 								}
@@ -398,20 +398,20 @@ public final class SceneBuilder {
 										local116 = 0;
 									}
 									if (local20 == 0) {
-										this.anIntArrayArrayArray1[0][local34][local38] = -local116 * 8;
+										this.levelHeightmap[0][local34][local38] = -local116 * 8;
 									} else {
-										this.anIntArrayArrayArray1[local20][local34][local38] = this.anIntArrayArrayArray1[local20 - 1][local34][local38] - local116 * 8;
+										this.levelHeightmap[local20][local34][local38] = this.levelHeightmap[local20 - 1][local34][local38] - local116 * 8;
 									}
 									break;
 								}
 								if (local60 <= 49) {
-									this.aByteArrayArrayArray3[local20][local34][local38] = local7.g1b();
-									this.aByteArrayArrayArray4[local20][local34][local38] = (byte) ((local60 - 2) / 4);
-									this.aByteArrayArrayArray5[local20][local34][local38] = (byte) (local60 - 2 & 0x3);
+									this.levelTileOverlayIds[local20][local34][local38] = local7.g1b();
+									this.levelTileOverlayShape[local20][local34][local38] = (byte) ((local60 - 2) / 4);
+									this.levelTileOverlayRotation[local20][local34][local38] = (byte) (local60 - 2 & 0x3);
 								} else if (local60 <= 81) {
-									this.aByteArrayArrayArray1[local20][local34][local38] = (byte) (local60 - 49);
+									this.levelTileFlags[local20][local34][local38] = (byte) (local60 - 49);
 								} else {
-									this.aByteArrayArrayArray2[local20][local34][local38] = (byte) (local60 - 81);
+									this.levelTileUnderlayIds[local20][local34][local38] = (byte) (local60 - 81);
 								}
 							}
 						} else {
@@ -439,7 +439,7 @@ public final class SceneBuilder {
 	}
 
 	@OriginalMember(owner = "client!c", name = "a", descriptor = "([BLclient!r;[Lclient!ec;Lclient!ob;ZII)V")
-	public void method38(@OriginalArg(0) byte[] arg0, @OriginalArg(1) Scene arg1, @OriginalArg(2) CollisionMap[] arg2, @OriginalArg(3) DoublyLinkedList arg3, @OriginalArg(4) boolean arg4, @OriginalArg(5) int arg5, @OriginalArg(6) int arg6) {
+	public void readLocs(@OriginalArg(0) byte[] arg0, @OriginalArg(1) Scene arg1, @OriginalArg(2) CollisionMap[] arg2, @OriginalArg(3) DoublyLinkedList arg3, @OriginalArg(4) boolean arg4, @OriginalArg(5) int arg5, @OriginalArg(6) int arg6) {
 		try {
 			@Pc(7) Buffer local7 = new Buffer(363, arg0);
 			if (!arg4) {
@@ -469,14 +469,14 @@ public final class SceneBuilder {
 					@Pc(74) int local74 = local45 + arg5;
 					if (local70 > 0 && local74 > 0 && local70 < 103 && local74 < 103) {
 						@Pc(86) int local86 = local55;
-						if ((this.aByteArrayArrayArray1[1][local70][local74] & 0x2) == 2) {
+						if ((this.levelTileFlags[1][local70][local74] & 0x2) == 2) {
 							local86 = local55 - 1;
 						}
 						@Pc(101) CollisionMap local101 = null;
 						if (local86 >= 0) {
 							local101 = arg2[local86];
 						}
-						this.method39(local101, true, local55, local74, local66, local62, arg1, arg3, local19, local70);
+						this.addLoc(local101, true, local55, local74, local66, local62, arg1, arg3, local19, local70);
 					}
 				}
 			}
@@ -487,21 +487,21 @@ public final class SceneBuilder {
 	}
 
 	@OriginalMember(owner = "client!c", name = "a", descriptor = "(Lclient!ec;ZIIIILclient!r;Lclient!ob;II)V")
-	private void method39(@OriginalArg(0) CollisionMap arg0, @OriginalArg(1) boolean arg1, @OriginalArg(2) int arg2, @OriginalArg(3) int arg3, @OriginalArg(4) int arg4, @OriginalArg(5) int arg5, @OriginalArg(6) Scene arg6, @OriginalArg(7) DoublyLinkedList arg7, @OriginalArg(8) int arg8, @OriginalArg(9) int arg9) {
+	private void addLoc(@OriginalArg(0) CollisionMap arg0, @OriginalArg(1) boolean arg1, @OriginalArg(2) int arg2, @OriginalArg(3) int arg3, @OriginalArg(4) int arg4, @OriginalArg(5) int arg5, @OriginalArg(6) Scene arg6, @OriginalArg(7) DoublyLinkedList arg7, @OriginalArg(8) int arg8, @OriginalArg(9) int arg9) {
 		try {
 			if (arg1) {
 				if (lowMemory) {
-					if ((this.aByteArrayArrayArray1[arg2][arg9][arg3] & 0x10) != 0) {
+					if ((this.levelTileFlags[arg2][arg9][arg3] & 0x10) != 0) {
 						return;
 					}
-					if (this.method41(arg2, (byte) 10, arg9, arg3) != anInt81) {
+					if (this.getDrawLevel(arg2, (byte) 10, arg9, arg3) != levelBuilt) {
 						return;
 					}
 				}
-				@Pc(36) int local36 = this.anIntArrayArrayArray1[arg2][arg9][arg3];
-				@Pc(47) int local47 = this.anIntArrayArrayArray1[arg2][arg9 + 1][arg3];
-				@Pc(60) int local60 = this.anIntArrayArrayArray1[arg2][arg9 + 1][arg3 + 1];
-				@Pc(71) int local71 = this.anIntArrayArrayArray1[arg2][arg9][arg3 + 1];
+				@Pc(36) int local36 = this.levelHeightmap[arg2][arg9][arg3];
+				@Pc(47) int local47 = this.levelHeightmap[arg2][arg9 + 1][arg3];
+				@Pc(60) int local60 = this.levelHeightmap[arg2][arg9 + 1][arg3 + 1];
+				@Pc(71) int local71 = this.levelHeightmap[arg2][arg9][arg3 + 1];
 				@Pc(81) int local81 = local36 + local47 + local60 + local71 >> 2;
 				@Pc(84) LocType local84 = LocType.get(arg8);
 				@Pc(96) int local96 = arg9 + (arg3 << 7) + (arg8 << 14) + 1073741824;
@@ -527,15 +527,15 @@ public final class SceneBuilder {
 								local209 = local84.sizeX;
 								local212 = local84.sizeZ;
 							}
-							if (arg6.method477(local81, 775, arg2, null, local96, arg3, arg9, local209, local110, local132, local196, local212) && local84.active) {
+							if (arg6.addLoc(local81, 775, arg2, null, local96, arg3, arg9, local209, local110, local132, local196, local212) && local84.active) {
 								for (@Pc(240) int local240 = 0; local240 <= local209; local240++) {
 									for (@Pc(244) int local244 = 0; local244 <= local212; local244++) {
 										@Pc(251) int local251 = local132.radius / 4;
 										if (local251 > 30) {
 											local251 = 30;
 										}
-										if (local251 > this.aByteArrayArrayArray6[arg2][arg9 + local240][arg3 + local244]) {
-											this.aByteArrayArrayArray6[arg2][arg9 + local240][arg3 + local244] = (byte) local251;
+										if (local251 > this.levelShademap[arg2][arg9 + local240][arg3 + local244]) {
+											this.levelShademap[arg2][arg9 + local240][arg3 + local244] = (byte) local251;
 										}
 									}
 								}
@@ -549,9 +549,9 @@ public final class SceneBuilder {
 						}
 					} else if (arg5 >= 12) {
 						local132 = local84.getModel(arg5, arg4, local36, local47, local60, local71, -1);
-						arg6.method477(local81, 775, arg2, null, local96, arg3, arg9, 1, local110, local132, 0, 1);
+						arg6.addLoc(local81, 775, arg2, null, local96, arg3, arg9, 1, local110, local132, 0, 1);
 						if (arg5 >= 12 && arg5 <= 17 && arg5 != 13 && arg2 > 0) {
-							this.anIntArrayArrayArray2[arg2][arg9][arg3] |= 0x924;
+							this.levelOccludemap[arg2][arg9][arg3] |= 0x924;
 						}
 						if (local84.blockwalk && arg0 != null) {
 							arg0.addLoc(arg4, local84.sizeZ, local84.sizeX, arg9, 9, arg3, local84.blockrange);
@@ -561,38 +561,38 @@ public final class SceneBuilder {
 						}
 					} else if (arg5 == 0) {
 						local132 = local84.getModel(0, arg4, local36, local47, local60, local71, -1);
-						arg6.method475(0, local81, arg2, anIntArray18[arg4], 8, local132, null, arg9, local96, arg3, local110);
+						arg6.addWall(0, local81, arg2, ROTATION_WALL_TYPE[arg4], 8, local132, null, arg9, local96, arg3, local110);
 						if (arg4 == 0) {
 							if (local84.active) {
-								this.aByteArrayArrayArray6[arg2][arg9][arg3] = 50;
-								this.aByteArrayArrayArray6[arg2][arg9][arg3 + 1] = 50;
+								this.levelShademap[arg2][arg9][arg3] = 50;
+								this.levelShademap[arg2][arg9][arg3 + 1] = 50;
 							}
 							if (local84.occlude) {
-								this.anIntArrayArrayArray2[arg2][arg9][arg3] |= 0x249;
+								this.levelOccludemap[arg2][arg9][arg3] |= 0x249;
 							}
 						} else if (arg4 == 1) {
 							if (local84.active) {
-								this.aByteArrayArrayArray6[arg2][arg9][arg3 + 1] = 50;
-								this.aByteArrayArrayArray6[arg2][arg9 + 1][arg3 + 1] = 50;
+								this.levelShademap[arg2][arg9][arg3 + 1] = 50;
+								this.levelShademap[arg2][arg9 + 1][arg3 + 1] = 50;
 							}
 							if (local84.occlude) {
-								this.anIntArrayArrayArray2[arg2][arg9][arg3 + 1] |= 0x492;
+								this.levelOccludemap[arg2][arg9][arg3 + 1] |= 0x492;
 							}
 						} else if (arg4 == 2) {
 							if (local84.active) {
-								this.aByteArrayArrayArray6[arg2][arg9 + 1][arg3] = 50;
-								this.aByteArrayArrayArray6[arg2][arg9 + 1][arg3 + 1] = 50;
+								this.levelShademap[arg2][arg9 + 1][arg3] = 50;
+								this.levelShademap[arg2][arg9 + 1][arg3 + 1] = 50;
 							}
 							if (local84.occlude) {
-								this.anIntArrayArrayArray2[arg2][arg9 + 1][arg3] |= 0x249;
+								this.levelOccludemap[arg2][arg9 + 1][arg3] |= 0x249;
 							}
 						} else if (arg4 == 3) {
 							if (local84.active) {
-								this.aByteArrayArrayArray6[arg2][arg9][arg3] = 50;
-								this.aByteArrayArrayArray6[arg2][arg9 + 1][arg3] = 50;
+								this.levelShademap[arg2][arg9][arg3] = 50;
+								this.levelShademap[arg2][arg9 + 1][arg3] = 50;
 							}
 							if (local84.occlude) {
-								this.anIntArrayArrayArray2[arg2][arg9][arg3] |= 0x492;
+								this.levelOccludemap[arg2][arg9][arg3] |= 0x492;
 							}
 						}
 						if (local84.blockwalk && arg0 != null) {
@@ -602,20 +602,20 @@ public final class SceneBuilder {
 							arg7.pushBack(new LocEntity(true, arg8, arg2, 0, 0, SeqType.instances[local84.anim], arg3, arg9));
 						}
 						if (local84.walloff != 16) {
-							arg6.method484(arg2, arg3, arg9, local84.walloff, (byte) 6);
+							arg6.setWallDecorationOffset(arg2, arg3, arg9, local84.walloff, (byte) 6);
 						}
 					} else if (arg5 == 1) {
 						local132 = local84.getModel(1, arg4, local36, local47, local60, local71, -1);
-						arg6.method475(0, local81, arg2, anIntArray19[arg4], 8, local132, null, arg9, local96, arg3, local110);
+						arg6.addWall(0, local81, arg2, ROTATION_WALL_CORNER_TYPE[arg4], 8, local132, null, arg9, local96, arg3, local110);
 						if (local84.active) {
 							if (arg4 == 0) {
-								this.aByteArrayArrayArray6[arg2][arg9][arg3 + 1] = 50;
+								this.levelShademap[arg2][arg9][arg3 + 1] = 50;
 							} else if (arg4 == 1) {
-								this.aByteArrayArrayArray6[arg2][arg9 + 1][arg3 + 1] = 50;
+								this.levelShademap[arg2][arg9 + 1][arg3 + 1] = 50;
 							} else if (arg4 == 2) {
-								this.aByteArrayArrayArray6[arg2][arg9 + 1][arg3] = 50;
+								this.levelShademap[arg2][arg9 + 1][arg3] = 50;
 							} else if (arg4 == 3) {
-								this.aByteArrayArrayArray6[arg2][arg9][arg3] = 50;
+								this.levelShademap[arg2][arg9][arg3] = 50;
 							}
 						}
 						if (local84.blockwalk && arg0 != null) {
@@ -631,20 +631,20 @@ public final class SceneBuilder {
 							local810 = arg4 + 1 & 0x3;
 							@Pc(822) Model local822 = local84.getModel(2, arg4 + 4, local36, local47, local60, local71, -1);
 							local832 = local84.getModel(2, local810, local36, local47, local60, local71, -1);
-							arg6.method475(anIntArray18[local810], local81, arg2, anIntArray18[arg4], 8, local822, local832, arg9, local96, arg3, local110);
+							arg6.addWall(ROTATION_WALL_TYPE[local810], local81, arg2, ROTATION_WALL_TYPE[arg4], 8, local822, local832, arg9, local96, arg3, local110);
 							if (local84.occlude) {
 								if (arg4 == 0) {
-									this.anIntArrayArrayArray2[arg2][arg9][arg3] |= 0x249;
-									this.anIntArrayArrayArray2[arg2][arg9][arg3 + 1] |= 0x492;
+									this.levelOccludemap[arg2][arg9][arg3] |= 0x249;
+									this.levelOccludemap[arg2][arg9][arg3 + 1] |= 0x492;
 								} else if (arg4 == 1) {
-									this.anIntArrayArrayArray2[arg2][arg9][arg3 + 1] |= 0x492;
-									this.anIntArrayArrayArray2[arg2][arg9 + 1][arg3] |= 0x249;
+									this.levelOccludemap[arg2][arg9][arg3 + 1] |= 0x492;
+									this.levelOccludemap[arg2][arg9 + 1][arg3] |= 0x249;
 								} else if (arg4 == 2) {
-									this.anIntArrayArrayArray2[arg2][arg9 + 1][arg3] |= 0x249;
-									this.anIntArrayArrayArray2[arg2][arg9][arg3] |= 0x492;
+									this.levelOccludemap[arg2][arg9 + 1][arg3] |= 0x249;
+									this.levelOccludemap[arg2][arg9][arg3] |= 0x492;
 								} else if (arg4 == 3) {
-									this.anIntArrayArrayArray2[arg2][arg9][arg3] |= 0x492;
-									this.anIntArrayArrayArray2[arg2][arg9][arg3] |= 0x249;
+									this.levelOccludemap[arg2][arg9][arg3] |= 0x492;
+									this.levelOccludemap[arg2][arg9][arg3] |= 0x249;
 								}
 							}
 							if (local84.blockwalk && arg0 != null) {
@@ -654,20 +654,20 @@ public final class SceneBuilder {
 								arg7.pushBack(new LocEntity(true, arg8, arg2, 0, 0, SeqType.instances[local84.anim], arg3, arg9));
 							}
 							if (local84.walloff != 16) {
-								arg6.method484(arg2, arg3, arg9, local84.walloff, (byte) 6);
+								arg6.setWallDecorationOffset(arg2, arg3, arg9, local84.walloff, (byte) 6);
 							}
 						} else if (arg5 == 3) {
 							local132 = local84.getModel(3, arg4, local36, local47, local60, local71, -1);
-							arg6.method475(0, local81, arg2, anIntArray19[arg4], 8, local132, null, arg9, local96, arg3, local110);
+							arg6.addWall(0, local81, arg2, ROTATION_WALL_CORNER_TYPE[arg4], 8, local132, null, arg9, local96, arg3, local110);
 							if (local84.active) {
 								if (arg4 == 0) {
-									this.aByteArrayArrayArray6[arg2][arg9][arg3 + 1] = 50;
+									this.levelShademap[arg2][arg9][arg3 + 1] = 50;
 								} else if (arg4 == 1) {
-									this.aByteArrayArrayArray6[arg2][arg9 + 1][arg3 + 1] = 50;
+									this.levelShademap[arg2][arg9 + 1][arg3 + 1] = 50;
 								} else if (arg4 == 2) {
-									this.aByteArrayArrayArray6[arg2][arg9 + 1][arg3] = 50;
+									this.levelShademap[arg2][arg9 + 1][arg3] = 50;
 								} else if (arg4 == 3) {
-									this.aByteArrayArrayArray6[arg2][arg9][arg3] = 50;
+									this.levelShademap[arg2][arg9][arg3] = 50;
 								}
 							}
 							if (local84.blockwalk && arg0 != null) {
@@ -678,7 +678,7 @@ public final class SceneBuilder {
 							}
 						} else if (arg5 == 9) {
 							local132 = local84.getModel(arg5, arg4, local36, local47, local60, local71, -1);
-							arg6.method477(local81, 775, arg2, null, local96, arg3, arg9, 1, local110, local132, 0, 1);
+							arg6.addLoc(local81, 775, arg2, null, local96, arg3, arg9, 1, local110, local132, 0, 1);
 							if (local84.blockwalk && arg0 != null) {
 								arg0.addLoc(arg4, local84.sizeZ, local84.sizeX, arg9, 9, arg3, local84.blockrange);
 							}
@@ -687,36 +687,36 @@ public final class SceneBuilder {
 							}
 						} else if (arg5 == 4) {
 							local132 = local84.getModel(4, 0, local36, local47, local60, local71, -1);
-							arg6.method476(local81, arg3, 0, local96, arg4 * 512, anIntArray18[arg4], 465, 0, arg9, local132, local110, arg2);
+							arg6.setWallDecoration(local81, arg3, 0, local96, arg4 * 512, ROTATION_WALL_TYPE[arg4], 465, 0, arg9, local132, local110, arg2);
 							if (local84.anim != -1) {
 								arg7.pushBack(new LocEntity(true, arg8, arg2, 0, 1, SeqType.instances[local84.anim], arg3, arg9));
 							}
 						} else if (arg5 == 5) {
 							local810 = 16;
-							local209 = arg6.method494(arg2, arg9, arg3);
+							local209 = arg6.getWallBitset(arg2, arg9, arg3);
 							if (local209 > 0) {
 								local810 = LocType.get(local209 >> 14 & 0x7FFF).walloff;
 							}
 							local832 = local84.getModel(4, 0, local36, local47, local60, local71, -1);
-							arg6.method476(local81, arg3, anIntArray21[arg4] * local810, local96, arg4 * 512, anIntArray18[arg4], 465, anIntArray20[arg4] * local810, arg9, local832, local110, arg2);
+							arg6.setWallDecoration(local81, arg3, WALL_DECORATION_ROTATION_FORWARD_Z[arg4] * local810, local96, arg4 * 512, ROTATION_WALL_TYPE[arg4], 465, WALL_DECORATION_ROTATION_FORWARD_X[arg4] * local810, arg9, local832, local110, arg2);
 							if (local84.anim != -1) {
 								arg7.pushBack(new LocEntity(true, arg8, arg2, 0, 1, SeqType.instances[local84.anim], arg3, arg9));
 							}
 						} else if (arg5 == 6) {
 							local132 = local84.getModel(4, 0, local36, local47, local60, local71, -1);
-							arg6.method476(local81, arg3, 0, local96, arg4, 256, 465, 0, arg9, local132, local110, arg2);
+							arg6.setWallDecoration(local81, arg3, 0, local96, arg4, 256, 465, 0, arg9, local132, local110, arg2);
 							if (local84.anim != -1) {
 								arg7.pushBack(new LocEntity(true, arg8, arg2, 0, 1, SeqType.instances[local84.anim], arg3, arg9));
 							}
 						} else if (arg5 == 7) {
 							local132 = local84.getModel(4, 0, local36, local47, local60, local71, -1);
-							arg6.method476(local81, arg3, 0, local96, arg4, 512, 465, 0, arg9, local132, local110, arg2);
+							arg6.setWallDecoration(local81, arg3, 0, local96, arg4, 512, 465, 0, arg9, local132, local110, arg2);
 							if (local84.anim != -1) {
 								arg7.pushBack(new LocEntity(true, arg8, arg2, 0, 1, SeqType.instances[local84.anim], arg3, arg9));
 							}
 						} else if (arg5 == 8) {
 							local132 = local84.getModel(4, 0, local36, local47, local60, local71, -1);
-							arg6.method476(local81, arg3, 0, local96, arg4, 768, 465, 0, arg9, local132, local110, arg2);
+							arg6.setWallDecoration(local81, arg3, 0, local96, arg4, 768, 465, 0, arg9, local132, local110, arg2);
 							if (local84.anim != -1) {
 								arg7.pushBack(new LocEntity(true, arg8, arg2, 0, 1, SeqType.instances[local84.anim], arg3, arg9));
 							}
@@ -724,7 +724,7 @@ public final class SceneBuilder {
 					}
 				} else if (!lowMemory || local84.interactable || local84.forcedecor) {
 					local132 = local84.getModel(22, arg4, local36, local47, local60, local71, -1);
-					arg6.method473(local132, (byte) 6, arg9, local96, arg3, arg2, local110, local81);
+					arg6.addGroundDecoration(local132, (byte) 6, arg9, local96, arg3, arg2, local110, local81);
 					if (local84.blockwalk && local84.interactable && arg0 != null) {
 						arg0.setBlocked((byte) 12, arg3, arg9);
 					}
@@ -740,7 +740,7 @@ public final class SceneBuilder {
 	}
 
 	@OriginalMember(owner = "client!c", name = "a", descriptor = "(Lclient!r;I[Lclient!ec;)V")
-	public void method40(@OriginalArg(0) Scene arg0, @OriginalArg(1) int arg1, @OriginalArg(2) CollisionMap[] arg2) {
+	public void build(@OriginalArg(0) Scene arg0, @OriginalArg(1) int arg1, @OriginalArg(2) CollisionMap[] arg2) {
 		try {
 			@Pc(7) int local7;
 			@Pc(11) int local11;
@@ -748,9 +748,9 @@ public final class SceneBuilder {
 			for (@Pc(3) int local3 = 0; local3 < 4; local3++) {
 				for (local7 = 0; local7 < 104; local7++) {
 					for (local11 = 0; local11 < 104; local11++) {
-						if ((this.aByteArrayArrayArray1[local3][local7][local11] & 0x1) == 1) {
+						if ((this.levelTileFlags[local3][local7][local11] & 0x1) == 1) {
 							local27 = local3;
-							if ((this.aByteArrayArrayArray1[1][local7][local11] & 0x2) == 2) {
+							if ((this.levelTileFlags[1][local7][local11] & 0x2) == 2) {
 								local27 = local3 - 1;
 							}
 							if (local27 >= 0) {
@@ -760,19 +760,19 @@ public final class SceneBuilder {
 					}
 				}
 			}
-			anInt84 += (int) (Math.random() * 5.0D) - 2;
-			if (anInt84 < -8) {
-				anInt84 = -8;
+			randomHueOffset += (int) (Math.random() * 5.0D) - 2;
+			if (randomHueOffset < -8) {
+				randomHueOffset = -8;
 			}
-			if (anInt84 > 8) {
-				anInt84 = 8;
+			if (randomHueOffset > 8) {
+				randomHueOffset = 8;
 			}
-			anInt85 += (int) (Math.random() * 5.0D) - 2;
-			if (anInt85 < -16) {
-				anInt85 = -16;
+			randomLightnessOffset += (int) (Math.random() * 5.0D) - 2;
+			if (randomLightnessOffset < -16) {
+				randomLightnessOffset = -16;
 			}
-			if (anInt85 > 16) {
-				anInt85 = 16;
+			if (randomLightnessOffset > 16) {
+				randomLightnessOffset = 16;
 			}
 			@Pc(133) int local133;
 			@Pc(139) int local139;
@@ -787,7 +787,7 @@ public final class SceneBuilder {
 			@Pc(236) int local236;
 			@Pc(284) int local284;
 			for (local7 = 0; local7 < 4; local7++) {
-				@Pc(108) byte[][] local108 = this.aByteArrayArrayArray6[local7];
+				@Pc(108) byte[][] local108 = this.levelShademap[local7];
 				@Pc(110) byte local110 = 96;
 				@Pc(112) short local112 = 768;
 				@Pc(114) byte local114 = -50;
@@ -795,89 +795,89 @@ public final class SceneBuilder {
 				@Pc(118) byte local118 = -50;
 				local133 = (int) Math.sqrt((double) (local114 * local114 + local116 * local116 + local118 * local118));
 				local139 = local112 * local133 >> 8;
-				for (local141 = 1; local141 < this.anInt83 - 1; local141++) {
-					for (local145 = 1; local145 < this.anInt82 - 1; local145++) {
-						local169 = this.anIntArrayArrayArray1[local7][local145 + 1][local141] - this.anIntArrayArrayArray1[local7][local145 - 1][local141];
-						local191 = this.anIntArrayArrayArray1[local7][local145][local141 + 1] - this.anIntArrayArrayArray1[local7][local145][local141 - 1];
+				for (local141 = 1; local141 < this.maxTileZ - 1; local141++) {
+					for (local145 = 1; local145 < this.maxTileX - 1; local145++) {
+						local169 = this.levelHeightmap[local7][local145 + 1][local141] - this.levelHeightmap[local7][local145 - 1][local141];
+						local191 = this.levelHeightmap[local7][local145][local141 + 1] - this.levelHeightmap[local7][local145][local141 - 1];
 						local204 = (int) Math.sqrt((double) (local169 * local169 + local191 * local191 + 65536));
 						local210 = (local169 << 8) / local204;
 						local214 = 65536 / local204;
 						local220 = (local191 << 8) / local204;
 						local236 = local110 + (local114 * local210 + local116 * local214 + local118 * local220) / local139;
 						local284 = (local108[local145 - 1][local141] >> 2) + (local108[local145 + 1][local141] >> 3) + (local108[local145][local141 - 1] >> 2) + (local108[local145][local141 + 1] >> 3) + (local108[local145][local141] >> 1);
-						this.anIntArrayArray1[local145][local141] = local236 - local284;
+						this.levelLightmap[local145][local141] = local236 - local284;
 					}
 				}
-				for (local145 = 0; local145 < this.anInt83; local145++) {
-					this.anIntArray13[local145] = 0;
-					this.anIntArray14[local145] = 0;
-					this.anIntArray15[local145] = 0;
-					this.anIntArray16[local145] = 0;
-					this.anIntArray17[local145] = 0;
+				for (local145 = 0; local145 < this.maxTileZ; local145++) {
+					this.blendChroma[local145] = 0;
+					this.blendSaturation[local145] = 0;
+					this.blendLightness[local145] = 0;
+					this.blendLuminance[local145] = 0;
+					this.blendMagnitude[local145] = 0;
 				}
-				for (local169 = -5; local169 < this.anInt82 + 5; local169++) {
-					for (local191 = 0; local191 < this.anInt83; local191++) {
+				for (local169 = -5; local169 < this.maxTileX + 5; local169++) {
+					for (local191 = 0; local191 < this.maxTileZ; local191++) {
 						local204 = local169 + 5;
 						@Pc(419) int local419;
-						if (local204 >= 0 && local204 < this.anInt82) {
-							local210 = this.aByteArrayArrayArray2[local7][local204][local191] & 0xFF;
+						if (local204 >= 0 && local204 < this.maxTileX) {
+							local210 = this.levelTileUnderlayIds[local7][local204][local191] & 0xFF;
 							if (local210 > 0) {
 								@Pc(378) FloType local378 = FloType.instances[local210 - 1];
-								this.anIntArray13[local191] += local378.chroma;
-								this.anIntArray14[local191] += local378.saturation;
-								this.anIntArray15[local191] += local378.lightness;
-								this.anIntArray16[local191] += local378.luminance;
-								local419 = this.anIntArray17[local191]++;
+								this.blendChroma[local191] += local378.chroma;
+								this.blendSaturation[local191] += local378.saturation;
+								this.blendLightness[local191] += local378.lightness;
+								this.blendLuminance[local191] += local378.luminance;
+								local419 = this.blendMagnitude[local191]++;
 							}
 						}
 						local210 = local169 - 5;
-						if (local210 >= 0 && local210 < this.anInt82) {
-							local214 = this.aByteArrayArrayArray2[local7][local210][local191] & 0xFF;
+						if (local210 >= 0 && local210 < this.maxTileX) {
+							local214 = this.levelTileUnderlayIds[local7][local210][local191] & 0xFF;
 							if (local214 > 0) {
 								@Pc(451) FloType local451 = FloType.instances[local214 - 1];
-								this.anIntArray13[local191] -= local451.chroma;
-								this.anIntArray14[local191] -= local451.saturation;
-								this.anIntArray15[local191] -= local451.lightness;
-								this.anIntArray16[local191] -= local451.luminance;
-								local419 = this.anIntArray17[local191]--;
+								this.blendChroma[local191] -= local451.chroma;
+								this.blendSaturation[local191] -= local451.saturation;
+								this.blendLightness[local191] -= local451.lightness;
+								this.blendLuminance[local191] -= local451.luminance;
+								local419 = this.blendMagnitude[local191]--;
 							}
 						}
 					}
-					if (local169 >= 1 && local169 < this.anInt82 - 1) {
+					if (local169 >= 1 && local169 < this.maxTileX - 1) {
 						local204 = 0;
 						local210 = 0;
 						local214 = 0;
 						local220 = 0;
 						local236 = 0;
-						for (local284 = -5; local284 < this.anInt83 + 5; local284++) {
+						for (local284 = -5; local284 < this.maxTileZ + 5; local284++) {
 							@Pc(527) int local527 = local284 + 5;
-							if (local527 >= 0 && local527 < this.anInt83) {
-								local204 += this.anIntArray13[local527];
-								local210 += this.anIntArray14[local527];
-								local214 += this.anIntArray15[local527];
-								local220 += this.anIntArray16[local527];
-								local236 += this.anIntArray17[local527];
+							if (local527 >= 0 && local527 < this.maxTileZ) {
+								local204 += this.blendChroma[local527];
+								local210 += this.blendSaturation[local527];
+								local214 += this.blendLightness[local527];
+								local220 += this.blendLuminance[local527];
+								local236 += this.blendMagnitude[local527];
 							}
 							@Pc(572) int local572 = local284 - 5;
-							if (local572 >= 0 && local572 < this.anInt83) {
-								local204 -= this.anIntArray13[local572];
-								local210 -= this.anIntArray14[local572];
-								local214 -= this.anIntArray15[local572];
-								local220 -= this.anIntArray16[local572];
-								local236 -= this.anIntArray17[local572];
+							if (local572 >= 0 && local572 < this.maxTileZ) {
+								local204 -= this.blendChroma[local572];
+								local210 -= this.blendSaturation[local572];
+								local214 -= this.blendLightness[local572];
+								local220 -= this.blendLuminance[local572];
+								local236 -= this.blendMagnitude[local572];
 							}
-							if (local284 >= 1 && local284 < this.anInt83 - 1 && (!lowMemory || (this.aByteArrayArrayArray1[local7][local169][local284] & 0x10) == 0 && this.method41(local7, (byte) 10, local169, local284) == anInt81)) {
-								@Pc(655) int local655 = this.aByteArrayArrayArray2[local7][local169][local284] & 0xFF;
-								@Pc(666) int local666 = this.aByteArrayArrayArray3[local7][local169][local284] & 0xFF;
+							if (local284 >= 1 && local284 < this.maxTileZ - 1 && (!lowMemory || (this.levelTileFlags[local7][local169][local284] & 0x10) == 0 && this.getDrawLevel(local7, (byte) 10, local169, local284) == levelBuilt)) {
+								@Pc(655) int local655 = this.levelTileUnderlayIds[local7][local169][local284] & 0xFF;
+								@Pc(666) int local666 = this.levelTileOverlayIds[local7][local169][local284] & 0xFF;
 								if (local655 > 0 || local666 > 0) {
-									@Pc(679) int local679 = this.anIntArrayArrayArray1[local7][local169][local284];
-									@Pc(690) int local690 = this.anIntArrayArrayArray1[local7][local169 + 1][local284];
-									@Pc(703) int local703 = this.anIntArrayArrayArray1[local7][local169 + 1][local284 + 1];
-									@Pc(714) int local714 = this.anIntArrayArrayArray1[local7][local169][local284 + 1];
-									@Pc(721) int local721 = this.anIntArrayArray1[local169][local284];
-									@Pc(730) int local730 = this.anIntArrayArray1[local169 + 1][local284];
-									@Pc(741) int local741 = this.anIntArrayArray1[local169 + 1][local284 + 1];
-									@Pc(750) int local750 = this.anIntArrayArray1[local169][local284 + 1];
+									@Pc(679) int local679 = this.levelHeightmap[local7][local169][local284];
+									@Pc(690) int local690 = this.levelHeightmap[local7][local169 + 1][local284];
+									@Pc(703) int local703 = this.levelHeightmap[local7][local169 + 1][local284 + 1];
+									@Pc(714) int local714 = this.levelHeightmap[local7][local169][local284 + 1];
+									@Pc(721) int local721 = this.levelLightmap[local169][local284];
+									@Pc(730) int local730 = this.levelLightmap[local169 + 1][local284];
+									@Pc(741) int local741 = this.levelLightmap[local169 + 1][local284 + 1];
+									@Pc(750) int local750 = this.levelLightmap[local169][local284 + 1];
 									@Pc(752) int local752 = -1;
 									@Pc(754) int local754 = -1;
 									@Pc(762) int local762;
@@ -886,37 +886,37 @@ public final class SceneBuilder {
 										local762 = local204 * 256 / local220;
 										local766 = local210 / local236;
 										@Pc(770) int local770 = local214 / local236;
-										local752 = this.method49(local762, local766, local770);
-										@Pc(782) int local782 = local762 + anInt84 & 0xFF;
-										local770 += anInt85;
+										local752 = this.hsl24to16(local762, local766, local770);
+										@Pc(782) int local782 = local762 + randomHueOffset & 0xFF;
+										local770 += randomLightnessOffset;
 										if (local770 < 0) {
 											local770 = 0;
 										} else if (local770 > 255) {
 											local770 = 255;
 										}
-										local754 = this.method49(local782, local766, local770);
+										local754 = this.hsl24to16(local782, local766, local770);
 									}
 									if (local7 > 0) {
 										@Pc(807) boolean local807 = true;
-										if (local655 == 0 && this.aByteArrayArrayArray4[local7][local169][local284] != 0) {
+										if (local655 == 0 && this.levelTileOverlayShape[local7][local169][local284] != 0) {
 											local807 = false;
 										}
 										if (local666 > 0 && !FloType.instances[local666 - 1].occludes) {
 											local807 = false;
 										}
 										if (local807 && local679 == local690 && local679 == local703 && local679 == local714) {
-											this.anIntArrayArrayArray2[local7][local169][local284] |= 0x924;
+											this.levelOccludemap[local7][local169][local284] |= 0x924;
 										}
 									}
 									local762 = 0;
 									if (local752 != -1) {
-										local762 = Draw3D.palette[method47(local754, 96)];
+										local762 = Draw3D.palette[mulHSL(local754, 96)];
 									}
 									if (local666 == 0) {
-										arg0.method472(local7, local169, local284, 0, 0, -1, local679, local690, local703, local714, method47(local752, local721), method47(local752, local730), method47(local752, local741), method47(local752, local750), 0, 0, 0, 0, local762, 0);
+										arg0.setTile(local7, local169, local284, 0, 0, -1, local679, local690, local703, local714, mulHSL(local752, local721), mulHSL(local752, local730), mulHSL(local752, local741), mulHSL(local752, local750), 0, 0, 0, 0, local762, 0);
 									} else {
-										local766 = this.aByteArrayArrayArray4[local7][local169][local284] + 1;
-										@Pc(919) byte local919 = this.aByteArrayArrayArray5[local7][local169][local284];
+										local766 = this.levelTileOverlayShape[local7][local169][local284] + 1;
+										@Pc(919) byte local919 = this.levelTileOverlayRotation[local7][local169][local284];
 										@Pc(925) FloType local925 = FloType.instances[local666 - 1];
 										@Pc(928) int local928 = local925.texture;
 										@Pc(936) int local936;
@@ -929,19 +929,19 @@ public final class SceneBuilder {
 											local936 = -2;
 											local928 = -1;
 										} else {
-											local936 = this.method49(local925.hue, local925.saturation, local925.lightness);
-											local934 = Draw3D.palette[this.method48(local925.hsl, 96)];
+											local936 = this.hsl24to16(local925.hue, local925.saturation, local925.lightness);
+											local934 = Draw3D.palette[this.adjustLightness(local925.hsl, 96)];
 										}
-										arg0.method472(local7, local169, local284, local766, local919, local928, local679, local690, local703, local714, method47(local752, local721), method47(local752, local730), method47(local752, local741), method47(local752, local750), this.method48(local936, local721), this.method48(local936, local730), this.method48(local936, local741), this.method48(local936, local750), local762, local934);
+										arg0.setTile(local7, local169, local284, local766, local919, local928, local679, local690, local703, local714, mulHSL(local752, local721), mulHSL(local752, local730), mulHSL(local752, local741), mulHSL(local752, local750), this.adjustLightness(local936, local721), this.adjustLightness(local936, local730), this.adjustLightness(local936, local741), this.adjustLightness(local936, local750), local762, local934);
 									}
 								}
 							}
 						}
 					}
 				}
-				for (local191 = 1; local191 < this.anInt83 - 1; local191++) {
-					for (local204 = 1; local204 < this.anInt82 - 1; local204++) {
-						arg0.method471(local7, local204, local191, this.method41(local7, (byte) 10, local204, local191));
+				for (local191 = 1; local191 < this.maxTileZ - 1; local191++) {
+					for (local204 = 1; local204 < this.maxTileX - 1; local204++) {
+						arg0.setDrawLevel(local7, local204, local191, this.getDrawLevel(local7, (byte) 10, local204, local191));
 					}
 				}
 			}
@@ -949,17 +949,17 @@ public final class SceneBuilder {
 				for (local11 = 1; local11 > 0; local11++) {
 				}
 			}
-			if (!aBoolean24) {
-				arg0.method499(-10, 64, -50, 768, -50, false);
+			if (!fullbright) {
+				arg0.buildModels(-10, 64, -50, 768, -50, false);
 			}
-			for (local11 = 0; local11 < this.anInt82; local11++) {
-				for (local27 = 0; local27 < this.anInt83; local27++) {
-					if ((this.aByteArrayArrayArray1[1][local11][local27] & 0x2) == 2) {
-						arg0.method469(local27, local11, (byte) -41);
+			for (local11 = 0; local11 < this.maxTileX; local11++) {
+				for (local27 = 0; local27 < this.maxTileZ; local27++) {
+					if ((this.levelTileFlags[1][local11][local27] & 0x2) == 2) {
+						arg0.setBridge(local27, local11, (byte) -41);
 					}
 				}
 			}
-			if (!aBoolean24) {
+			if (!fullbright) {
 				local27 = 1;
 				@Pc(1123) int local1123 = 2;
 				@Pc(1125) int local1125 = 4;
@@ -970,23 +970,23 @@ public final class SceneBuilder {
 						local1125 <<= 0x3;
 					}
 					for (@Pc(1145) int local1145 = 0; local1145 <= local1127; local1145++) {
-						for (local133 = 0; local133 <= this.anInt83; local133++) {
-							for (local139 = 0; local139 <= this.anInt82; local139++) {
+						for (local133 = 0; local133 <= this.maxTileZ; local133++) {
+							for (local139 = 0; local139 <= this.maxTileX; local139++) {
 								@Pc(1284) short local1284;
-								if ((this.anIntArrayArrayArray2[local1145][local139][local133] & local27) != 0) {
+								if ((this.levelOccludemap[local1145][local139][local133] & local27) != 0) {
 									local141 = local133;
 									local145 = local133;
 									local169 = local1145;
 									local191 = local1145;
-									while (local141 > 0 && (this.anIntArrayArrayArray2[local1145][local139][local141 - 1] & local27) != 0) {
+									while (local141 > 0 && (this.levelOccludemap[local1145][local139][local141 - 1] & local27) != 0) {
 										local141--;
 									}
-									while (local145 < this.anInt83 && (this.anIntArrayArrayArray2[local1145][local139][local145 + 1] & local27) != 0) {
+									while (local145 < this.maxTileZ && (this.levelOccludemap[local1145][local139][local145 + 1] & local27) != 0) {
 										local145++;
 									}
 									label337: while (local169 > 0) {
 										for (local204 = local141; local204 <= local145; local204++) {
-											if ((this.anIntArrayArrayArray2[local169 - 1][local139][local204] & local27) == 0) {
+											if ((this.levelOccludemap[local169 - 1][local139][local204] & local27) == 0) {
 												break label337;
 											}
 										}
@@ -994,7 +994,7 @@ public final class SceneBuilder {
 									}
 									label326: while (local191 < local1127) {
 										for (local204 = local141; local204 <= local145; local204++) {
-											if ((this.anIntArrayArrayArray2[local191 + 1][local139][local204] & local27) == 0) {
+											if ((this.levelOccludemap[local191 + 1][local139][local204] & local27) == 0) {
 												break label326;
 											}
 										}
@@ -1003,30 +1003,30 @@ public final class SceneBuilder {
 									local204 = (local191 + 1 - local169) * (local145 + 1 - local141);
 									if (local204 >= 8) {
 										local1284 = 240;
-										local214 = this.anIntArrayArrayArray1[local191][local139][local141] - local1284;
-										local220 = this.anIntArrayArrayArray1[local169][local139][local141];
-										Scene.method470(local145 * 128 + 128, local139 * 128, -802, local220, 1, local139 * 128, local1127, local214, local141 * 128);
+										local214 = this.levelHeightmap[local191][local139][local141] - local1284;
+										local220 = this.levelHeightmap[local169][local139][local141];
+										Scene.addOccluder(local145 * 128 + 128, local139 * 128, -802, local220, 1, local139 * 128, local1127, local214, local141 * 128);
 										for (local236 = local169; local236 <= local191; local236++) {
 											for (local284 = local141; local284 <= local145; local284++) {
-												this.anIntArrayArrayArray2[local236][local139][local284] &= ~local27;
+												this.levelOccludemap[local236][local139][local284] &= ~local27;
 											}
 										}
 									}
 								}
-								if ((this.anIntArrayArrayArray2[local1145][local139][local133] & local1123) != 0) {
+								if ((this.levelOccludemap[local1145][local139][local133] & local1123) != 0) {
 									local141 = local139;
 									local145 = local139;
 									local169 = local1145;
 									local191 = local1145;
-									while (local141 > 0 && (this.anIntArrayArrayArray2[local1145][local141 - 1][local133] & local1123) != 0) {
+									while (local141 > 0 && (this.levelOccludemap[local1145][local141 - 1][local133] & local1123) != 0) {
 										local141--;
 									}
-									while (local145 < this.anInt82 && (this.anIntArrayArrayArray2[local1145][local145 + 1][local133] & local1123) != 0) {
+									while (local145 < this.maxTileX && (this.levelOccludemap[local1145][local145 + 1][local133] & local1123) != 0) {
 										local145++;
 									}
 									label390: while (local169 > 0) {
 										for (local204 = local141; local204 <= local145; local204++) {
-											if ((this.anIntArrayArrayArray2[local169 - 1][local204][local133] & local1123) == 0) {
+											if ((this.levelOccludemap[local169 - 1][local204][local133] & local1123) == 0) {
 												break label390;
 											}
 										}
@@ -1034,7 +1034,7 @@ public final class SceneBuilder {
 									}
 									label379: while (local191 < local1127) {
 										for (local204 = local141; local204 <= local145; local204++) {
-											if ((this.anIntArrayArrayArray2[local191 + 1][local204][local133] & local1123) == 0) {
+											if ((this.levelOccludemap[local191 + 1][local204][local133] & local1123) == 0) {
 												break label379;
 											}
 										}
@@ -1043,49 +1043,49 @@ public final class SceneBuilder {
 									local204 = (local191 + 1 - local169) * (local145 + 1 - local141);
 									if (local204 >= 8) {
 										local1284 = 240;
-										local214 = this.anIntArrayArrayArray1[local191][local141][local133] - local1284;
-										local220 = this.anIntArrayArrayArray1[local169][local141][local133];
-										Scene.method470(local133 * 128, local141 * 128, -802, local220, 2, local145 * 128 + 128, local1127, local214, local133 * 128);
+										local214 = this.levelHeightmap[local191][local141][local133] - local1284;
+										local220 = this.levelHeightmap[local169][local141][local133];
+										Scene.addOccluder(local133 * 128, local141 * 128, -802, local220, 2, local145 * 128 + 128, local1127, local214, local133 * 128);
 										for (local236 = local169; local236 <= local191; local236++) {
 											for (local284 = local141; local284 <= local145; local284++) {
-												this.anIntArrayArrayArray2[local236][local284][local133] &= ~local1123;
+												this.levelOccludemap[local236][local284][local133] &= ~local1123;
 											}
 										}
 									}
 								}
-								if ((this.anIntArrayArrayArray2[local1145][local139][local133] & local1125) != 0) {
+								if ((this.levelOccludemap[local1145][local139][local133] & local1125) != 0) {
 									local141 = local139;
 									local145 = local139;
 									local169 = local133;
 									local191 = local133;
-									while (local169 > 0 && (this.anIntArrayArrayArray2[local1145][local139][local169 - 1] & local1125) != 0) {
+									while (local169 > 0 && (this.levelOccludemap[local1145][local139][local169 - 1] & local1125) != 0) {
 										local169--;
 									}
-									while (local191 < this.anInt83 && (this.anIntArrayArrayArray2[local1145][local139][local191 + 1] & local1125) != 0) {
+									while (local191 < this.maxTileZ && (this.levelOccludemap[local1145][local139][local191 + 1] & local1125) != 0) {
 										local191++;
 									}
 									label443: while (local141 > 0) {
 										for (local204 = local169; local204 <= local191; local204++) {
-											if ((this.anIntArrayArrayArray2[local1145][local141 - 1][local204] & local1125) == 0) {
+											if ((this.levelOccludemap[local1145][local141 - 1][local204] & local1125) == 0) {
 												break label443;
 											}
 										}
 										local141--;
 									}
-									label432: while (local145 < this.anInt82) {
+									label432: while (local145 < this.maxTileX) {
 										for (local204 = local169; local204 <= local191; local204++) {
-											if ((this.anIntArrayArrayArray2[local1145][local145 + 1][local204] & local1125) == 0) {
+											if ((this.levelOccludemap[local1145][local145 + 1][local204] & local1125) == 0) {
 												break label432;
 											}
 										}
 										local145++;
 									}
 									if ((local145 + 1 - local141) * (local191 + 1 - local169) >= 4) {
-										local204 = this.anIntArrayArrayArray1[local1145][local141][local169];
-										Scene.method470(local191 * 128 + 128, local141 * 128, -802, local204, 4, local145 * 128 + 128, local1127, local204, local169 * 128);
+										local204 = this.levelHeightmap[local1145][local141][local169];
+										Scene.addOccluder(local191 * 128 + 128, local141 * 128, -802, local204, 4, local145 * 128 + 128, local1127, local204, local169 * 128);
 										for (local210 = local141; local210 <= local145; local210++) {
 											for (local214 = local169; local214 <= local191; local214++) {
-												this.anIntArrayArrayArray2[local1145][local210][local214] &= ~local1125;
+												this.levelOccludemap[local1145][local210][local214] &= ~local1125;
 											}
 										}
 									}
@@ -1102,13 +1102,13 @@ public final class SceneBuilder {
 	}
 
 	@OriginalMember(owner = "client!c", name = "a", descriptor = "(IBII)I")
-	private int method41(@OriginalArg(0) int arg0, @OriginalArg(1) byte arg1, @OriginalArg(2) int arg2, @OriginalArg(3) int arg3) {
+	private int getDrawLevel(@OriginalArg(0) int arg0, @OriginalArg(1) byte arg1, @OriginalArg(2) int arg2, @OriginalArg(3) int arg3) {
 		try {
 			if (arg1 != 10) {
 				this.flowObfuscator3 = 29;
 			}
-			if ((this.aByteArrayArrayArray1[arg0][arg2][arg3] & 0x8) == 0) {
-				return arg0 <= 0 || (this.aByteArrayArrayArray1[1][arg2][arg3] & 0x2) == 0 ? arg0 : arg0 - 1;
+			if ((this.levelTileFlags[arg0][arg2][arg3] & 0x8) == 0) {
+				return arg0 <= 0 || (this.levelTileFlags[1][arg2][arg3] & 0x2) == 0 ? arg0 : arg0 - 1;
 			} else {
 				return 0;
 			}
@@ -1119,7 +1119,7 @@ public final class SceneBuilder {
 	}
 
 	@OriginalMember(owner = "client!c", name = "e", descriptor = "(II)I")
-	private int method48(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1) {
+	private int adjustLightness(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1) {
 		if (arg0 == -2) {
 			return 12345678;
 		} else if (arg0 == -1) {
@@ -1141,7 +1141,7 @@ public final class SceneBuilder {
 	}
 
 	@OriginalMember(owner = "client!c", name = "b", descriptor = "(III)I")
-	private int method49(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2) {
+	private int hsl24to16(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2) {
 		if (arg2 > 179) {
 			arg1 /= 2;
 		}

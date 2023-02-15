@@ -1964,19 +1964,19 @@ public final class Game extends GameShell {
 						local112 = 0;
 						@Pc(114) int local114 = 0;
 						if (local47 == 0) {
-							local108 = this.scene.method494(this.currentLevel, local24, local31);
+							local108 = this.scene.getWallBitset(this.currentLevel, local24, local31);
 						}
 						if (local47 == 1) {
-							local108 = this.scene.method495(this.currentLevel, local31, 3, local24);
+							local108 = this.scene.getWallDecorationBitset(this.currentLevel, local31, 3, local24);
 						}
 						if (local47 == 2) {
-							local108 = this.scene.method496(this.currentLevel, local24, local31);
+							local108 = this.scene.getLocBitset(this.currentLevel, local24, local31);
 						}
 						if (local47 == 3) {
-							local108 = this.scene.method497(this.currentLevel, local24, local31);
+							local108 = this.scene.getGroundDecorationBitset(this.currentLevel, local24, local31);
 						}
 						if (local108 != 0) {
-							@Pc(169) int local169 = this.scene.method498(this.currentLevel, local24, local31, local108);
+							@Pc(169) int local169 = this.scene.getInfo(this.currentLevel, local24, local31, local108);
 							local110 = local108 >> 14 & 0x7FFF;
 							local112 = local169 & 0x1F;
 							local114 = local169 >> 6;
@@ -2007,16 +2007,16 @@ public final class Game extends GameShell {
 				if (local24 >= 0 && local31 >= 0 && local24 < 104 && local31 < 104) {
 					local52 = 0;
 					if (local42 == 0) {
-						local52 = this.scene.method494(this.currentLevel, local24, local31);
+						local52 = this.scene.getWallBitset(this.currentLevel, local24, local31);
 					}
 					if (local42 == 1) {
-						local52 = this.scene.method495(this.currentLevel, local31, 3, local24);
+						local52 = this.scene.getWallDecorationBitset(this.currentLevel, local31, 3, local24);
 					}
 					if (local42 == 2) {
-						local52 = this.scene.method496(this.currentLevel, local24, local31);
+						local52 = this.scene.getLocBitset(this.currentLevel, local24, local31);
 					}
 					if (local42 == 3) {
-						local52 = this.scene.method497(this.currentLevel, local24, local31);
+						local52 = this.scene.getGroundDecorationBitset(this.currentLevel, local24, local31);
 					}
 					if (local52 != 0) {
 						@Pc(348) LocEntity local348 = new LocEntity(false, local52 >> 14 & 0x7FFF, this.currentLevel, 0, local42, SeqType.instances[local47], local31, local24);
@@ -2400,8 +2400,8 @@ public final class Game extends GameShell {
 			Model.mouseX = super.mouseX - 8;
 			Model.mouseZ = super.mouseY - 11;
 			Draw2D.clear(this.anInt336);
-			this.scene.method507(this.cameraYaw, this.cameraX, local34, this.cameraPitch, this.cameraY, this.cameraZ, 0);
-			this.scene.method481(0);
+			this.scene.draw(this.cameraYaw, this.cameraX, local34, this.cameraPitch, this.cameraY, this.cameraZ, 0);
+			this.scene.clearTemporaryLocs(0);
 			this.method76(this.anInt194);
 			this.method194((byte) -11);
 			this.method102(local264, true);
@@ -2949,11 +2949,11 @@ public final class Game extends GameShell {
 								this.anIntArrayArray3[local87][local92] = this.sceneCycle;
 							}
 							local30.y = this.method94(this.currentLevel, local30.x, (byte) 5, local30.z);
-							this.scene.method478(-44713, local30.z, 60, local30.anInt884, local30.x, local35, local30.aBoolean160, null, local30, local30.y, this.currentLevel);
+							this.scene.addTemporary(-44713, local30.z, 60, local30.anInt884, local30.x, local35, local30.aBoolean160, null, local30, local30.y, this.currentLevel);
 						} else {
 							local30.lowMemory = false;
 							local30.y = this.method94(this.currentLevel, local30.x, (byte) 5, local30.z);
-							this.scene.method479(local30.anInt941, 60, null, local30.z, local30.y, local35, local30.anInt884, local30.anInt940, local30.anInt939, local30, false, this.currentLevel, local30.anInt942, local30.x);
+							this.scene.addTemporary(local30.anInt941, 60, null, local30.z, local30.y, local35, local30.anInt884, local30.anInt940, local30.anInt939, local30, false, this.currentLevel, local30.anInt942, local30.x);
 						}
 					}
 				}
@@ -3813,10 +3813,10 @@ public final class Game extends GameShell {
 					local37 = (103 - local25) * 512 * 4 + 24628;
 					for (local39 = 1; local39 < 103; local39++) {
 						if ((this.levelTileFlags[arg0][local39][local25] & 0x18) == 0) {
-							this.scene.method503(local5, local37, 512, arg0, local39, local25);
+							this.scene.drawMinimapTile(local5, local37, 512, arg0, local39, local25);
 						}
 						if (arg0 < 3 && (this.levelTileFlags[arg0 + 1][local39][local25] & 0x8) != 0) {
-							this.scene.method503(local5, local37, 512, arg0 + 1, local39, local25);
+							this.scene.drawMinimapTile(local5, local37, 512, arg0 + 1, local39, local25);
 						}
 						local37 += 4;
 					}
@@ -3839,7 +3839,7 @@ public final class Game extends GameShell {
 				this.anInt246 = 0;
 				for (local149 = 0; local149 < 104; local149++) {
 					for (@Pc(217) int local217 = 0; local217 < 104; local217++) {
-						@Pc(227) int local227 = this.scene.method497(this.currentLevel, local149, local217);
+						@Pc(227) int local227 = this.scene.getGroundDecorationBitset(this.currentLevel, local149, local217);
 						if (local227 != 0) {
 							local227 = local227 >> 14 & 0x7FFF;
 							@Pc(239) int local239 = LocType.get(local227).mapfunction;
@@ -3884,7 +3884,7 @@ public final class Game extends GameShell {
 	@OriginalMember(owner = "client!client", name = "a", descriptor = "(IIIIII)V")
 	private void method107(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2, @OriginalArg(3) int arg3, @OriginalArg(4) int arg4, @OriginalArg(5) int arg5) {
 		try {
-			@Pc(8) int local8 = this.scene.method494(arg1, arg3, arg5);
+			@Pc(8) int local8 = this.scene.getWallBitset(arg1, arg3, arg5);
 			@Pc(18) int local18;
 			@Pc(24) int local24;
 			@Pc(28) int local28;
@@ -3892,7 +3892,7 @@ public final class Game extends GameShell {
 			@Pc(52) int local52;
 			@Pc(58) int local58;
 			if (local8 != 0) {
-				local18 = this.scene.method498(arg1, arg3, arg5, local8);
+				local18 = this.scene.getInfo(arg1, arg3, arg5, local8);
 				local24 = local18 >> 6 & 0x3;
 				local28 = local18 & 0x1F;
 				local30 = arg2;
@@ -3970,10 +3970,10 @@ public final class Game extends GameShell {
 					}
 				}
 			}
-			local8 = this.scene.method496(arg1, arg3, arg5);
+			local8 = this.scene.getLocBitset(arg1, arg3, arg5);
 			@Pc(422) int local422 = 56 / arg0;
 			if (local8 != 0) {
-				local18 = this.scene.method498(arg1, arg3, arg5, local8);
+				local18 = this.scene.getInfo(arg1, arg3, arg5, local8);
 				local24 = local18 >> 6 & 0x3;
 				local28 = local18 & 0x1F;
 				local30 = local8 >> 14 & 0x7FFF;
@@ -4006,7 +4006,7 @@ public final class Game extends GameShell {
 					}
 				}
 			}
-			local8 = this.scene.method497(arg1, arg3, arg5);
+			local8 = this.scene.getGroundDecorationBitset(arg1, arg3, arg5);
 			if (local8 != 0) {
 				local18 = local8 >> 14 & 0x7FFF;
 				@Pc(615) LocType local615 = LocType.get(local18);
@@ -4296,7 +4296,7 @@ public final class Game extends GameShell {
 							}
 							this.anIntArrayArray3[local31][local36] = this.sceneCycle;
 						}
-						this.scene.method478(-44713, local11.z, (local11.size - 1) * 64 + 60, local11.anInt884, local11.x, local20, local11.aBoolean160, null, local11, this.method94(this.currentLevel, local11.x, (byte) 5, local11.z), this.currentLevel);
+						this.scene.addTemporary(-44713, local11.z, (local11.size - 1) * 64 + 60, local11.anInt884, local11.x, local20, local11.aBoolean160, null, local11, this.method94(this.currentLevel, local11.x, (byte) 5, local11.z), this.currentLevel);
 					}
 				}
 			}
@@ -4498,7 +4498,7 @@ public final class Game extends GameShell {
 			InputTracking.setDisabled((byte) 65);
 			this.method144(this.aByte10);
 			if (arg0 < 0) {
-				this.scene.method467(742);
+				this.scene.reset(742);
 				for (@Pc(41) int local41 = 0; local41 < 4; local41++) {
 					this.levelCollisionMap[local41].reset((byte) 74);
 				}
@@ -5692,9 +5692,9 @@ public final class Game extends GameShell {
 				}
 				if (local28 == 660) {
 					if (this.menuVisible) {
-						this.scene.method506(4, local23 - 11, local18 - 8);
+						this.scene.click(4, local23 - 11, local18 - 8);
 					} else {
-						this.scene.method506(4, super.mouseClickY - 11, super.mouseClickX - 8);
+						this.scene.click(4, super.mouseClickY - 11, super.mouseClickX - 8);
 					}
 				}
 				if (local28 == 188) {
@@ -6861,7 +6861,7 @@ public final class Game extends GameShell {
 				@Pc(1334) int local1334 = Draw3D.sin[local1228];
 				local1312[local1170] = local1330 * local1334 >> 16;
 			}
-			Scene.method504(local1312, 800, 512, aByte13, 334, 500);
+			Scene.init(local1312, 800, 512, aByte13, 334, 500);
 			Censor.method414(local310);
 		} catch (@Pc(1357) Exception local1357) {
 			this.errorLoading = true;
@@ -7125,7 +7125,7 @@ public final class Game extends GameShell {
 						}
 					}
 					local12.update((byte) -30, this.sceneDelta);
-					this.scene.method478(-44713, (int) local12.z, 60, local12.yaw, (int) local12.x, -1, false, null, local12, (int) local12.y, this.currentLevel);
+					this.scene.addTemporary(-44713, (int) local12.z, 60, local12.yaw, (int) local12.x, -1, false, null, local12, (int) local12.y, this.currentLevel);
 				}
 			}
 		} catch (@Pc(147) RuntimeException local147) {
@@ -7256,7 +7256,7 @@ public final class Game extends GameShell {
 	private boolean method153(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2, @OriginalArg(3) int arg3, @OriginalArg(4) boolean arg4) {
 		try {
 			@Pc(7) int local7 = arg3 >> 14 & 0x7FFF;
-			@Pc(16) int local16 = this.scene.method498(this.currentLevel, arg1, arg2, arg3);
+			@Pc(16) int local16 = this.scene.getInfo(this.currentLevel, arg1, arg2, arg3);
 			if (local16 == -1) {
 				return false;
 			}
@@ -7777,36 +7777,36 @@ public final class Game extends GameShell {
 				@Pc(29) boolean local29 = false;
 				@Pc(31) boolean local31 = false;
 				if (arg3 == 0) {
-					local25 = this.scene.method494(arg7, arg1, arg2);
+					local25 = this.scene.getWallBitset(arg7, arg1, arg2);
 				}
 				if (arg3 == 1) {
-					local25 = this.scene.method495(arg7, arg2, 3, arg1);
+					local25 = this.scene.getWallDecorationBitset(arg7, arg2, 3, arg1);
 				}
 				if (arg3 == 2) {
-					local25 = this.scene.method496(arg7, arg1, arg2);
+					local25 = this.scene.getLocBitset(arg7, arg1, arg2);
 				}
 				if (arg3 == 3) {
-					local25 = this.scene.method497(arg7, arg1, arg2);
+					local25 = this.scene.getGroundDecorationBitset(arg7, arg1, arg2);
 				}
 				@Pc(81) int local81;
 				if (local25 != 0) {
-					local81 = this.scene.method498(arg7, arg1, arg2, local25);
+					local81 = this.scene.getInfo(arg7, arg1, arg2, local25);
 					@Pc(87) int local87 = local25 >> 14 & 0x7FFF;
 					@Pc(91) int local91 = local81 & 0x1F;
 					@Pc(95) int local95 = local81 >> 6;
 					@Pc(107) LocType local107;
 					if (arg3 == 0) {
-						this.scene.method489(arg1, arg7, arg2, 1);
+						this.scene.removeWall(arg1, arg7, arg2, 1);
 						local107 = LocType.get(local87);
 						if (local107.blockwalk) {
 							this.levelCollisionMap[arg7].removeWall(local107.blockrange, local95, arg1, arg2, 323, local91);
 						}
 					}
 					if (arg3 == 1) {
-						this.scene.method490(arg7, arg2, this.anInt306, arg1);
+						this.scene.removeWallDecoration(arg7, arg2, this.anInt306, arg1);
 					}
 					if (arg3 == 2) {
-						this.scene.method491(arg1, arg2, -54, arg7);
+						this.scene.removeLoc(arg1, arg2, -54, arg7);
 						local107 = LocType.get(local87);
 						if (arg1 + local107.sizeX > 103 || arg2 + local107.sizeX > 103 || arg1 + local107.sizeZ > 103 || arg2 + local107.sizeZ > 103) {
 							return;
@@ -7816,7 +7816,7 @@ public final class Game extends GameShell {
 						}
 					}
 					if (arg3 == 3) {
-						this.scene.method492(arg7, this.anInt290, arg1, arg2);
+						this.scene.removeGroundDecoration(arg7, this.anInt290, arg1, arg2);
 						local107 = LocType.get(local87);
 						if (local107.blockwalk && local107.interactable) {
 							this.levelCollisionMap[arg7].removeBlocked(arg2, arg1, 0);
@@ -7828,7 +7828,7 @@ public final class Game extends GameShell {
 					if (arg7 < 3 && (this.levelTileFlags[1][arg1][arg2] & 0x2) == 2) {
 						local81 = arg7 + 1;
 					}
-					SceneBuilder.method50(arg1, this.aClass28_1, this.levelCollisionMap[arg7], arg2, arg0, this.levelHeightmap, 0, arg7, arg4, arg5, this.scene, local81);
+					SceneBuilder.addLoc(arg1, this.aClass28_1, this.levelCollisionMap[arg7], arg2, arg0, this.levelHeightmap, 0, arg7, arg4, arg5, this.scene, local81);
 					return;
 				}
 			}
@@ -8005,7 +8005,7 @@ public final class Game extends GameShell {
 			super.drawArea = null;
 			PlayerEntity.modelCache = null;
 			Draw3D.unload(true);
-			Scene.method466(true);
+			Scene.unload(true);
 			Model.unload(true);
 			SeqBase.instances = null;
 			SeqFrame.instances = null;
@@ -8249,11 +8249,11 @@ public final class Game extends GameShell {
 					this.out.p1isaac((byte) -34, 215);
 					this.out.p3(4991788);
 				}
-				if (Scene.clickedTileX != -1) {
-					local155 = Scene.clickedTileX;
+				if (Scene.clickTileX != -1) {
+					local155 = Scene.clickTileX;
 					local508 = Scene.clickTileZ;
 					@Pc(653) boolean local653 = this.method168(this.localPlayer.pathTileX[0], 0, true, local155, this.localPlayer.pathTileZ[0], 0, 0, 0, local508, 0, 0, 0);
-					Scene.clickedTileX = -1;
+					Scene.clickTileX = -1;
 					if (local653) {
 						this.crossX = super.mouseClickX;
 						this.crossY = super.mouseClickY;
@@ -8412,7 +8412,7 @@ public final class Game extends GameShell {
 					if (local13.seqComplete) {
 						local13.unlink();
 					} else {
-						this.scene.method478(-44713, local13.z, 60, 0, local13.x, -1, false, null, local13, local13.y, local13.level);
+						this.scene.addTemporary(-44713, local13.z, 60, 0, local13.x, -1, false, null, local13, local13.y, local13.level);
 					}
 				}
 			}
@@ -9383,7 +9383,7 @@ public final class Game extends GameShell {
 	private void method184(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1) {
 		@Pc(9) DoublyLinkedList local9 = this.levelObjStacks[this.currentLevel][arg0][arg1];
 		if (local9 == null) {
-			this.scene.method493(this.currentLevel, arg0, arg1);
+			this.scene.removeObjStack(this.currentLevel, arg0, arg1);
 			return;
 		}
 		@Pc(21) int local21 = -99999999;
@@ -9426,7 +9426,7 @@ public final class Game extends GameShell {
 		}
 		@Pc(144) int local144 = arg0 + (arg1 << 7) + 1610612736;
 		@Pc(148) ObjType local148 = ObjType.get(local23.index);
-		this.scene.method474(local148.getInterfaceModel(local23.count), local118, this.method94(this.currentLevel, arg0 * 128 + 64, (byte) 5, arg1 * 128 + 64), this.currentLevel, local144, arg1, arg0, local128, 429);
+		this.scene.addObjStack(local148.getInterfaceModel(local23.count), local118, this.method94(this.currentLevel, arg0 * 128 + 64, (byte) 5, arg1 * 128 + 64), this.currentLevel, local144, arg1, arg0, local128, 429);
 	}
 
 	@OriginalMember(owner = "client!client", name = "D", descriptor = "(I)V")
@@ -9440,7 +9440,7 @@ public final class Game extends GameShell {
 				this.projectiles.clear();
 				Draw3D.clearTexels(false);
 				this.method144(this.aByte10);
-				this.scene.method467(742);
+				this.scene.reset(742);
 				for (@Pc(28) int local28 = 0; local28 < 4; local28++) {
 					this.levelCollisionMap[local28].reset((byte) 74);
 				}
@@ -9459,9 +9459,9 @@ public final class Game extends GameShell {
 					}
 				}
 				if (SceneBuilder.lowMemory) {
-					this.scene.method468(0, this.currentLevel);
+					this.scene.setMinLevel(0, this.currentLevel);
 				} else {
-					this.scene.method468(0, 0);
+					this.scene.setMinLevel(0, 0);
 				}
 				this.out.p1isaac((byte) -34, 108);
 				@Pc(157) int local157;
@@ -9472,9 +9472,9 @@ public final class Game extends GameShell {
 					if (local148 != null) {
 						local157 = (new Buffer(363, local148)).g4();
 						BZip2InputStream.read(local56, local157, local148, local148.length - 4, 4);
-						local53.method37(local56, (this.sceneCenterZoneX - 6) * 8, 1, local143, local80, (this.sceneCenterZoneZ - 6) * 8);
+						local53.readLandscape(local56, (this.sceneCenterZoneX - 6) * 8, 1, local143, local80, (this.sceneCenterZoneZ - 6) * 8);
 					} else if (this.sceneCenterZoneZ < 800) {
-						local53.method36(local80, local143, 3, 64, 64);
+						local53.clearLandscape(local80, local143, 3, 64, 64);
 					}
 				}
 				this.out.p1isaac((byte) -34, 108);
@@ -9486,11 +9486,11 @@ public final class Game extends GameShell {
 						BZip2InputStream.read(local56, local225, local216, local216.length - 4, 4);
 						local157 = (this.anIntArray56[local80] >> 8) * 64 - this.sceneBaseTileX;
 						@Pc(259) int local259 = (this.anIntArray56[local80] & 0xFF) * 64 - this.sceneBaseTileZ;
-						local53.method38(local56, this.scene, this.levelCollisionMap, this.aClass28_1, true, local259, local157);
+						local53.readLocs(local56, this.scene, this.levelCollisionMap, this.aClass28_1, true, local259, local157);
 					}
 				}
 				this.out.p1isaac((byte) -34, 108);
-				local53.method40(this.scene, -270, this.levelCollisionMap);
+				local53.build(this.scene, -270, this.levelCollisionMap);
 				this.areaViewport.bind((byte) 62);
 				this.out.p1isaac((byte) -34, 108);
 				for (@Pc(301) LocEntity local301 = (LocEntity) this.aClass28_1.peekFront(); local301 != null; local301 = (LocEntity) this.aClass28_1.prev(551)) {
@@ -9833,16 +9833,16 @@ public final class Game extends GameShell {
 					@Pc(102) int local102 = local10.heightmapNW;
 					@Pc(104) int local104 = 0;
 					if (local10.heightmapSE == 0) {
-						local104 = this.scene.method494(local96, local99, local102);
+						local104 = this.scene.getWallBitset(local96, local99, local102);
 					}
 					if (local10.heightmapSE == 1) {
-						local104 = this.scene.method495(local96, local102, 3, local99);
+						local104 = this.scene.getWallDecorationBitset(local96, local102, 3, local99);
 					}
 					if (local10.heightmapSE == 2) {
-						local104 = this.scene.method496(local96, local99, local102);
+						local104 = this.scene.getLocBitset(local96, local99, local102);
 					}
 					if (local10.heightmapSE == 3) {
-						local104 = this.scene.method497(local96, local99, local102);
+						local104 = this.scene.getGroundDecorationBitset(local96, local99, local102);
 					}
 					if (local104 != 0 && (local104 >> 14 & 0x7FFF) == local10.anInt655) {
 						@Pc(171) int local171 = this.levelHeightmap[local96][local99][local102];
@@ -9859,35 +9859,35 @@ public final class Game extends GameShell {
 						@Pc(243) int local243;
 						@Pc(258) Model local258;
 						if (local10.heightmapSE == 2) {
-							local235 = this.scene.method498(local96, local99, local102, local104);
+							local235 = this.scene.getInfo(local96, local99, local102, local104);
 							local239 = local235 & 0x1F;
 							local243 = local235 >> 6;
 							if (local239 == 11) {
 								local239 = 10;
 							}
 							local258 = local210.getModel(local239, local243, local171, local182, local195, local206, local212);
-							this.scene.method483(local99, local258, 1, local96, local102);
+							this.scene.setLocModel(local99, local258, 1, local96, local102);
 						} else if (local10.heightmapSE == 1) {
 							@Pc(282) Model local282 = local210.getModel(4, 0, local171, local182, local195, local206, local212);
-							this.scene.method485(266, local102, local99, local282, local96);
+							this.scene.setWallDecorationModel(266, local102, local99, local282, local96);
 						} else if (local10.heightmapSE == 0) {
-							local235 = this.scene.method498(local96, local99, local102, local104);
+							local235 = this.scene.getInfo(local96, local99, local102, local104);
 							local239 = local235 & 0x1F;
 							local243 = local235 >> 6;
 							if (local239 == 2) {
 								@Pc(320) int local320 = local243 + 1 & 0x3;
 								@Pc(332) Model local332 = local210.getModel(2, local243 + 4, local171, local182, local195, local206, local212);
 								@Pc(342) Model local342 = local210.getModel(2, local320, local171, local182, local195, local206, local212);
-								this.scene.method488(local332, local342, local102, this.aBoolean44, local99, local96);
+								this.scene.setWallModels(local332, local342, local102, this.aBoolean44, local99, local96);
 							} else {
 								local258 = local210.getModel(local239, local243, local171, local182, local195, local206, local212);
-								this.scene.method487(35568, local258, local102, local99, local96);
+								this.scene.setWallModel(35568, local258, local102, local99, local96);
 							}
 						} else if (local10.heightmapSE == 3) {
-							local235 = this.scene.method498(local96, local99, local102, local104);
+							local235 = this.scene.getInfo(local96, local99, local102, local104);
 							local239 = local235 >> 6;
 							@Pc(400) Model local400 = local210.getModel(22, local239, local171, local182, local195, local206, local212);
-							this.scene.method486(local400, local102, -48639, local99, local96);
+							this.scene.setGroundDecorationModel(local400, local102, -48639, local99, local96);
 						}
 					} else {
 						local10.unlink();
@@ -9949,7 +9949,7 @@ public final class Game extends GameShell {
 				if (local58 != local41) {
 					local41 = local58;
 					@Pc(218) int local218;
-					if (local74 == 2 && this.scene.method498(this.currentLevel, local62, local68, local58) >= 0) {
+					if (local74 == 2 && this.scene.getInfo(this.currentLevel, local62, local68, local58) >= 0) {
 						@Pc(100) LocType local100 = LocType.get(local80);
 						if (this.objSelected == 1) {
 							this.menuOption[this.menuSize] = "Use " + this.selectedObjName + " with @cya@" + local100.name;
@@ -11365,15 +11365,15 @@ public final class Game extends GameShell {
 					this.method170(this.in, this.packetSize, 822);
 					if (this.sceneState == 1) {
 						this.sceneState = 2;
-						SceneBuilder.anInt81 = this.currentLevel;
+						SceneBuilder.levelBuilt = this.currentLevel;
 						this.method185(869);
 					}
-					if (lowMemory && this.sceneState == 2 && SceneBuilder.anInt81 != this.currentLevel) {
+					if (lowMemory && this.sceneState == 2 && SceneBuilder.levelBuilt != this.currentLevel) {
 						this.areaViewport.bind((byte) 62);
 						this.fontPlain12.drawStringCenter(151, (byte) 6, 0, "Loading - please wait.", 257);
 						this.fontPlain12.drawStringCenter(150, (byte) 6, 16777215, "Loading - please wait.", 256);
 						this.areaViewport.draw(11, super.graphics, 8, 5193);
-						SceneBuilder.anInt81 = this.currentLevel;
+						SceneBuilder.levelBuilt = this.currentLevel;
 						this.method185(869);
 					}
 					if (this.currentLevel != this.anInt176 && this.sceneState == 2) {

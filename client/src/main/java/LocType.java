@@ -418,7 +418,7 @@ public final class LocType {
 			}
 			local284.calculateNormals(this.ambient + 64, this.contrast * 5 + 768, -50, -10, -50, !this.computeVertexColors);
 			if (this.blockwalk) {
-				local284.collisionPoint = local284.maxY;
+				local284.objRaise = local284.maxY;
 			}
 			modelCacheDynamic.put(6, local47, local284);
 			if (this.hillskew || this.computeVertexColors) {

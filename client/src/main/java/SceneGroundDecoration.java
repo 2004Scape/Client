@@ -5,20 +5,20 @@ import org.openrs2.deob.annotation.OriginalMember;
 public final class SceneGroundDecoration {
 
 	@OriginalMember(owner = "client!j", name = "a", descriptor = "I")
-	public int anInt520;
+	public int y;
 
 	@OriginalMember(owner = "client!j", name = "b", descriptor = "I")
-	public int anInt521;
+	public int x;
 
 	@OriginalMember(owner = "client!j", name = "c", descriptor = "I")
-	public int anInt522;
+	public int z;
 
 	@OriginalMember(owner = "client!j", name = "d", descriptor = "Lclient!eb;")
-	public Model aClass1_Sub3_Sub1_4;
+	public Model model;
 
 	@OriginalMember(owner = "client!j", name = "e", descriptor = "I")
-	public int anInt523;
+	public int bitset;
 
 	@OriginalMember(owner = "client!j", name = "f", descriptor = "B")
-	public byte aByte25;
+	public byte info;
 }
