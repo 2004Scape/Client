@@ -20,10 +20,10 @@ public class PathingEntity extends Entity {
 	public int z;
 
 	@OriginalMember(owner = "client!x", name = "i", descriptor = "I")
-	public int anInt884;
+	public int seqDelay;
 
 	@OriginalMember(owner = "client!x", name = "j", descriptor = "Z")
-	public boolean aBoolean160 = false;
+	public boolean seqStretches = false;
 
 	@OriginalMember(owner = "client!x", name = "k", descriptor = "I")
 	public int size = 1;
@@ -92,7 +92,7 @@ public class PathingEntity extends Entity {
 	public int secondarySeqFrame;
 
 	@OriginalMember(owner = "client!x", name = "G", descriptor = "I")
-	public int anInt906;
+	public int secondarySeqCycle;
 
 	@OriginalMember(owner = "client!x", name = "H", descriptor = "I")
 	public int primarySeqId = -1;

@@ -143,12 +143,12 @@ public final class Draw3D extends Draw2D {
 						local5++;
 					}
 				}
-				lineOffset = new int[anInt529];
-				for (local5 = 0; local5 < anInt529; local5++) {
-					lineOffset[local5] = anInt528 * local5;
+				lineOffset = new int[height2d];
+				for (local5 = 0; local5 < height2d; local5++) {
+					lineOffset[local5] = width2d * local5;
 				}
-				centerX = anInt528 / 2;
-				centerY = anInt529 / 2;
+				centerX = width2d / 2;
+				centerY = height2d / 2;
 				return;
 			}
 		} catch (@Pc(39) RuntimeException local39) {
@@ -513,20 +513,20 @@ public final class Draw3D extends Draw2D {
 									if (arg2 < 0) {
 										return;
 									}
-									drawGouraudScanline(anIntArray178, arg0, 0, 0, arg5 >> 16, arg4 >> 16, arg8 >> 7, arg7 >> 7);
+									drawGouraudScanline(data, arg0, 0, 0, arg5 >> 16, arg4 >> 16, arg8 >> 7, arg7 >> 7);
 									arg5 += local57;
 									arg4 += local30;
 									arg8 += local59;
 									arg7 += local32;
-									arg0 += anInt528;
+									arg0 += width2d;
 								}
 							}
-							drawGouraudScanline(anIntArray178, arg0, 0, 0, arg5 >> 16, arg3 >> 16, arg8 >> 7, arg6 >> 7);
+							drawGouraudScanline(data, arg0, 0, 0, arg5 >> 16, arg3 >> 16, arg8 >> 7, arg6 >> 7);
 							arg5 += local57;
 							arg3 += local3;
 							arg8 += local59;
 							arg6 += local5;
-							arg0 += anInt528;
+							arg0 += width2d;
 						}
 					} else {
 						arg2 -= arg1;
@@ -540,20 +540,20 @@ public final class Draw3D extends Draw2D {
 									if (arg2 < 0) {
 										return;
 									}
-									drawGouraudScanline(anIntArray178, arg0, 0, 0, arg4 >> 16, arg5 >> 16, arg7 >> 7, arg8 >> 7);
+									drawGouraudScanline(data, arg0, 0, 0, arg4 >> 16, arg5 >> 16, arg7 >> 7, arg8 >> 7);
 									arg5 += local57;
 									arg4 += local30;
 									arg8 += local59;
 									arg7 += local32;
-									arg0 += anInt528;
+									arg0 += width2d;
 								}
 							}
-							drawGouraudScanline(anIntArray178, arg0, 0, 0, arg3 >> 16, arg5 >> 16, arg6 >> 7, arg8 >> 7);
+							drawGouraudScanline(data, arg0, 0, 0, arg3 >> 16, arg5 >> 16, arg6 >> 7, arg8 >> 7);
 							arg5 += local57;
 							arg3 += local3;
 							arg8 += local59;
 							arg6 += local5;
-							arg0 += anInt528;
+							arg0 += width2d;
 						}
 					}
 				} else {
@@ -585,20 +585,20 @@ public final class Draw3D extends Draw2D {
 									if (arg1 < 0) {
 										return;
 									}
-									drawGouraudScanline(anIntArray178, arg0, 0, 0, arg5 >> 16, arg3 >> 16, arg8 >> 7, arg6 >> 7);
+									drawGouraudScanline(data, arg0, 0, 0, arg5 >> 16, arg3 >> 16, arg8 >> 7, arg6 >> 7);
 									arg5 += local30;
 									arg3 += local3;
 									arg8 += local32;
 									arg6 += local5;
-									arg0 += anInt528;
+									arg0 += width2d;
 								}
 							}
-							drawGouraudScanline(anIntArray178, arg0, 0, 0, arg4 >> 16, arg3 >> 16, arg7 >> 7, arg6 >> 7);
+							drawGouraudScanline(data, arg0, 0, 0, arg4 >> 16, arg3 >> 16, arg7 >> 7, arg6 >> 7);
 							arg4 += local57;
 							arg3 += local3;
 							arg7 += local59;
 							arg6 += local5;
-							arg0 += anInt528;
+							arg0 += width2d;
 						}
 					} else {
 						arg1 -= arg2;
@@ -612,20 +612,20 @@ public final class Draw3D extends Draw2D {
 									if (arg1 < 0) {
 										return;
 									}
-									drawGouraudScanline(anIntArray178, arg0, 0, 0, arg3 >> 16, arg5 >> 16, arg6 >> 7, arg8 >> 7);
+									drawGouraudScanline(data, arg0, 0, 0, arg3 >> 16, arg5 >> 16, arg6 >> 7, arg8 >> 7);
 									arg5 += local30;
 									arg3 += local3;
 									arg8 += local32;
 									arg6 += local5;
-									arg0 += anInt528;
+									arg0 += width2d;
 								}
 							}
-							drawGouraudScanline(anIntArray178, arg0, 0, 0, arg3 >> 16, arg4 >> 16, arg6 >> 7, arg7 >> 7);
+							drawGouraudScanline(data, arg0, 0, 0, arg3 >> 16, arg4 >> 16, arg6 >> 7, arg7 >> 7);
 							arg4 += local57;
 							arg3 += local3;
 							arg7 += local59;
 							arg6 += local5;
-							arg0 += anInt528;
+							arg0 += width2d;
 						}
 					}
 				}
@@ -667,20 +667,20 @@ public final class Draw3D extends Draw2D {
 									if (arg0 < 0) {
 										return;
 									}
-									drawGouraudScanline(anIntArray178, arg1, 0, 0, arg3 >> 16, arg5 >> 16, arg6 >> 7, arg8 >> 7);
+									drawGouraudScanline(data, arg1, 0, 0, arg3 >> 16, arg5 >> 16, arg6 >> 7, arg8 >> 7);
 									arg3 += local3;
 									arg5 += local57;
 									arg6 += local5;
 									arg8 += local59;
-									arg1 += anInt528;
+									arg1 += width2d;
 								}
 							}
-							drawGouraudScanline(anIntArray178, arg1, 0, 0, arg3 >> 16, arg4 >> 16, arg6 >> 7, arg7 >> 7);
+							drawGouraudScanline(data, arg1, 0, 0, arg3 >> 16, arg4 >> 16, arg6 >> 7, arg7 >> 7);
 							arg3 += local3;
 							arg4 += local30;
 							arg6 += local5;
 							arg7 += local32;
-							arg1 += anInt528;
+							arg1 += width2d;
 						}
 					} else {
 						arg0 -= arg2;
@@ -694,20 +694,20 @@ public final class Draw3D extends Draw2D {
 									if (arg0 < 0) {
 										return;
 									}
-									drawGouraudScanline(anIntArray178, arg1, 0, 0, arg5 >> 16, arg3 >> 16, arg8 >> 7, arg6 >> 7);
+									drawGouraudScanline(data, arg1, 0, 0, arg5 >> 16, arg3 >> 16, arg8 >> 7, arg6 >> 7);
 									arg3 += local3;
 									arg5 += local57;
 									arg6 += local5;
 									arg8 += local59;
-									arg1 += anInt528;
+									arg1 += width2d;
 								}
 							}
-							drawGouraudScanline(anIntArray178, arg1, 0, 0, arg4 >> 16, arg3 >> 16, arg7 >> 7, arg6 >> 7);
+							drawGouraudScanline(data, arg1, 0, 0, arg4 >> 16, arg3 >> 16, arg7 >> 7, arg6 >> 7);
 							arg3 += local3;
 							arg4 += local30;
 							arg6 += local5;
 							arg7 += local32;
-							arg1 += anInt528;
+							arg1 += width2d;
 						}
 					}
 				} else {
@@ -739,20 +739,20 @@ public final class Draw3D extends Draw2D {
 									if (arg2 < 0) {
 										return;
 									}
-									drawGouraudScanline(anIntArray178, arg1, 0, 0, arg3 >> 16, arg4 >> 16, arg6 >> 7, arg7 >> 7);
+									drawGouraudScanline(data, arg1, 0, 0, arg3 >> 16, arg4 >> 16, arg6 >> 7, arg7 >> 7);
 									arg3 += local57;
 									arg4 += local30;
 									arg6 += local59;
 									arg7 += local32;
-									arg1 += anInt528;
+									arg1 += width2d;
 								}
 							}
-							drawGouraudScanline(anIntArray178, arg1, 0, 0, arg5 >> 16, arg4 >> 16, arg8 >> 7, arg7 >> 7);
+							drawGouraudScanline(data, arg1, 0, 0, arg5 >> 16, arg4 >> 16, arg8 >> 7, arg7 >> 7);
 							arg5 += local3;
 							arg4 += local30;
 							arg8 += local5;
 							arg7 += local32;
-							arg1 += anInt528;
+							arg1 += width2d;
 						}
 					} else {
 						arg2 -= arg0;
@@ -766,20 +766,20 @@ public final class Draw3D extends Draw2D {
 									if (arg2 < 0) {
 										return;
 									}
-									drawGouraudScanline(anIntArray178, arg1, 0, 0, arg4 >> 16, arg3 >> 16, arg7 >> 7, arg6 >> 7);
+									drawGouraudScanline(data, arg1, 0, 0, arg4 >> 16, arg3 >> 16, arg7 >> 7, arg6 >> 7);
 									arg3 += local57;
 									arg4 += local30;
 									arg6 += local59;
 									arg7 += local32;
-									arg1 += anInt528;
+									arg1 += width2d;
 								}
 							}
-							drawGouraudScanline(anIntArray178, arg1, 0, 0, arg4 >> 16, arg5 >> 16, arg7 >> 7, arg8 >> 7);
+							drawGouraudScanline(data, arg1, 0, 0, arg4 >> 16, arg5 >> 16, arg7 >> 7, arg8 >> 7);
 							arg5 += local3;
 							arg4 += local30;
 							arg8 += local5;
 							arg7 += local32;
-							arg1 += anInt528;
+							arg1 += width2d;
 						}
 					}
 				}
@@ -820,20 +820,20 @@ public final class Draw3D extends Draw2D {
 								if (arg1 < 0) {
 									return;
 								}
-								drawGouraudScanline(anIntArray178, arg2, 0, 0, arg4 >> 16, arg3 >> 16, arg7 >> 7, arg6 >> 7);
+								drawGouraudScanline(data, arg2, 0, 0, arg4 >> 16, arg3 >> 16, arg7 >> 7, arg6 >> 7);
 								arg4 += local30;
 								arg3 += local3;
 								arg7 += local32;
 								arg6 += local5;
-								arg2 += anInt528;
+								arg2 += width2d;
 							}
 						}
-						drawGouraudScanline(anIntArray178, arg2, 0, 0, arg4 >> 16, arg5 >> 16, arg7 >> 7, arg8 >> 7);
+						drawGouraudScanline(data, arg2, 0, 0, arg4 >> 16, arg5 >> 16, arg7 >> 7, arg8 >> 7);
 						arg4 += local30;
 						arg5 += local57;
 						arg7 += local32;
 						arg8 += local59;
-						arg2 += anInt528;
+						arg2 += width2d;
 					}
 				} else {
 					arg1 -= arg0;
@@ -847,20 +847,20 @@ public final class Draw3D extends Draw2D {
 								if (arg1 < 0) {
 									return;
 								}
-								drawGouraudScanline(anIntArray178, arg2, 0, 0, arg3 >> 16, arg4 >> 16, arg6 >> 7, arg7 >> 7);
+								drawGouraudScanline(data, arg2, 0, 0, arg3 >> 16, arg4 >> 16, arg6 >> 7, arg7 >> 7);
 								arg4 += local30;
 								arg3 += local3;
 								arg7 += local32;
 								arg6 += local5;
-								arg2 += anInt528;
+								arg2 += width2d;
 							}
 						}
-						drawGouraudScanline(anIntArray178, arg2, 0, 0, arg5 >> 16, arg4 >> 16, arg8 >> 7, arg7 >> 7);
+						drawGouraudScanline(data, arg2, 0, 0, arg5 >> 16, arg4 >> 16, arg8 >> 7, arg7 >> 7);
 						arg4 += local30;
 						arg5 += local57;
 						arg7 += local32;
 						arg8 += local59;
-						arg2 += anInt528;
+						arg2 += width2d;
 					}
 				}
 			} else {
@@ -892,20 +892,20 @@ public final class Draw3D extends Draw2D {
 								if (arg0 < 0) {
 									return;
 								}
-								drawGouraudScanline(anIntArray178, arg2, 0, 0, arg4 >> 16, arg5 >> 16, arg7 >> 7, arg8 >> 7);
+								drawGouraudScanline(data, arg2, 0, 0, arg4 >> 16, arg5 >> 16, arg7 >> 7, arg8 >> 7);
 								arg4 += local3;
 								arg5 += local57;
 								arg7 += local5;
 								arg8 += local59;
-								arg2 += anInt528;
+								arg2 += width2d;
 							}
 						}
-						drawGouraudScanline(anIntArray178, arg2, 0, 0, arg3 >> 16, arg5 >> 16, arg6 >> 7, arg8 >> 7);
+						drawGouraudScanline(data, arg2, 0, 0, arg3 >> 16, arg5 >> 16, arg6 >> 7, arg8 >> 7);
 						arg3 += local30;
 						arg5 += local57;
 						arg6 += local32;
 						arg8 += local59;
-						arg2 += anInt528;
+						arg2 += width2d;
 					}
 				} else {
 					arg0 -= arg1;
@@ -919,20 +919,20 @@ public final class Draw3D extends Draw2D {
 								if (arg0 < 0) {
 									return;
 								}
-								drawGouraudScanline(anIntArray178, arg2, 0, 0, arg5 >> 16, arg4 >> 16, arg8 >> 7, arg7 >> 7);
+								drawGouraudScanline(data, arg2, 0, 0, arg5 >> 16, arg4 >> 16, arg8 >> 7, arg7 >> 7);
 								arg4 += local3;
 								arg5 += local57;
 								arg7 += local5;
 								arg8 += local59;
-								arg2 += anInt528;
+								arg2 += width2d;
 							}
 						}
-						drawGouraudScanline(anIntArray178, arg2, 0, 0, arg5 >> 16, arg3 >> 16, arg8 >> 7, arg6 >> 7);
+						drawGouraudScanline(data, arg2, 0, 0, arg5 >> 16, arg3 >> 16, arg8 >> 7, arg6 >> 7);
 						arg3 += local30;
 						arg5 += local57;
 						arg6 += local32;
 						arg8 += local59;
-						arg2 += anInt528;
+						arg2 += width2d;
 					}
 				}
 			}
@@ -1114,16 +1114,16 @@ public final class Draw3D extends Draw2D {
 									if (arg2 < 0) {
 										return;
 									}
-									drawScanline(anIntArray178, arg0, arg6, 0, arg5 >> 16, arg4 >> 16);
+									drawScanline(data, arg0, arg6, 0, arg5 >> 16, arg4 >> 16);
 									arg5 += local33;
 									arg4 += local18;
-									arg0 += anInt528;
+									arg0 += width2d;
 								}
 							}
-							drawScanline(anIntArray178, arg0, arg6, 0, arg5 >> 16, arg3 >> 16);
+							drawScanline(data, arg0, arg6, 0, arg5 >> 16, arg3 >> 16);
 							arg5 += local33;
 							arg3 += local3;
-							arg0 += anInt528;
+							arg0 += width2d;
 						}
 					} else {
 						arg2 -= arg1;
@@ -1137,16 +1137,16 @@ public final class Draw3D extends Draw2D {
 									if (arg2 < 0) {
 										return;
 									}
-									drawScanline(anIntArray178, arg0, arg6, 0, arg4 >> 16, arg5 >> 16);
+									drawScanline(data, arg0, arg6, 0, arg4 >> 16, arg5 >> 16);
 									arg5 += local33;
 									arg4 += local18;
-									arg0 += anInt528;
+									arg0 += width2d;
 								}
 							}
-							drawScanline(anIntArray178, arg0, arg6, 0, arg3 >> 16, arg5 >> 16);
+							drawScanline(data, arg0, arg6, 0, arg3 >> 16, arg5 >> 16);
 							arg5 += local33;
 							arg3 += local3;
-							arg0 += anInt528;
+							arg0 += width2d;
 						}
 					}
 				} else {
@@ -1173,16 +1173,16 @@ public final class Draw3D extends Draw2D {
 									if (arg1 < 0) {
 										return;
 									}
-									drawScanline(anIntArray178, arg0, arg6, 0, arg5 >> 16, arg3 >> 16);
+									drawScanline(data, arg0, arg6, 0, arg5 >> 16, arg3 >> 16);
 									arg5 += local18;
 									arg3 += local3;
-									arg0 += anInt528;
+									arg0 += width2d;
 								}
 							}
-							drawScanline(anIntArray178, arg0, arg6, 0, arg4 >> 16, arg3 >> 16);
+							drawScanline(data, arg0, arg6, 0, arg4 >> 16, arg3 >> 16);
 							arg4 += local33;
 							arg3 += local3;
-							arg0 += anInt528;
+							arg0 += width2d;
 						}
 					} else {
 						arg1 -= arg2;
@@ -1196,16 +1196,16 @@ public final class Draw3D extends Draw2D {
 									if (arg1 < 0) {
 										return;
 									}
-									drawScanline(anIntArray178, arg0, arg6, 0, arg3 >> 16, arg5 >> 16);
+									drawScanline(data, arg0, arg6, 0, arg3 >> 16, arg5 >> 16);
 									arg5 += local18;
 									arg3 += local3;
-									arg0 += anInt528;
+									arg0 += width2d;
 								}
 							}
-							drawScanline(anIntArray178, arg0, arg6, 0, arg3 >> 16, arg4 >> 16);
+							drawScanline(data, arg0, arg6, 0, arg3 >> 16, arg4 >> 16);
 							arg4 += local33;
 							arg3 += local3;
-							arg0 += anInt528;
+							arg0 += width2d;
 						}
 					}
 				}
@@ -1242,16 +1242,16 @@ public final class Draw3D extends Draw2D {
 									if (arg0 < 0) {
 										return;
 									}
-									drawScanline(anIntArray178, arg1, arg6, 0, arg3 >> 16, arg5 >> 16);
+									drawScanline(data, arg1, arg6, 0, arg3 >> 16, arg5 >> 16);
 									arg3 += local3;
 									arg5 += local33;
-									arg1 += anInt528;
+									arg1 += width2d;
 								}
 							}
-							drawScanline(anIntArray178, arg1, arg6, 0, arg3 >> 16, arg4 >> 16);
+							drawScanline(data, arg1, arg6, 0, arg3 >> 16, arg4 >> 16);
 							arg3 += local3;
 							arg4 += local18;
-							arg1 += anInt528;
+							arg1 += width2d;
 						}
 					} else {
 						arg0 -= arg2;
@@ -1265,16 +1265,16 @@ public final class Draw3D extends Draw2D {
 									if (arg0 < 0) {
 										return;
 									}
-									drawScanline(anIntArray178, arg1, arg6, 0, arg5 >> 16, arg3 >> 16);
+									drawScanline(data, arg1, arg6, 0, arg5 >> 16, arg3 >> 16);
 									arg3 += local3;
 									arg5 += local33;
-									arg1 += anInt528;
+									arg1 += width2d;
 								}
 							}
-							drawScanline(anIntArray178, arg1, arg6, 0, arg4 >> 16, arg3 >> 16);
+							drawScanline(data, arg1, arg6, 0, arg4 >> 16, arg3 >> 16);
 							arg3 += local3;
 							arg4 += local18;
-							arg1 += anInt528;
+							arg1 += width2d;
 						}
 					}
 				} else {
@@ -1301,16 +1301,16 @@ public final class Draw3D extends Draw2D {
 									if (arg2 < 0) {
 										return;
 									}
-									drawScanline(anIntArray178, arg1, arg6, 0, arg3 >> 16, arg4 >> 16);
+									drawScanline(data, arg1, arg6, 0, arg3 >> 16, arg4 >> 16);
 									arg3 += local33;
 									arg4 += local18;
-									arg1 += anInt528;
+									arg1 += width2d;
 								}
 							}
-							drawScanline(anIntArray178, arg1, arg6, 0, arg5 >> 16, arg4 >> 16);
+							drawScanline(data, arg1, arg6, 0, arg5 >> 16, arg4 >> 16);
 							arg5 += local3;
 							arg4 += local18;
-							arg1 += anInt528;
+							arg1 += width2d;
 						}
 					} else {
 						arg2 -= arg0;
@@ -1324,16 +1324,16 @@ public final class Draw3D extends Draw2D {
 									if (arg2 < 0) {
 										return;
 									}
-									drawScanline(anIntArray178, arg1, arg6, 0, arg4 >> 16, arg3 >> 16);
+									drawScanline(data, arg1, arg6, 0, arg4 >> 16, arg3 >> 16);
 									arg3 += local33;
 									arg4 += local18;
-									arg1 += anInt528;
+									arg1 += width2d;
 								}
 							}
-							drawScanline(anIntArray178, arg1, arg6, 0, arg4 >> 16, arg5 >> 16);
+							drawScanline(data, arg1, arg6, 0, arg4 >> 16, arg5 >> 16);
 							arg5 += local3;
 							arg4 += local18;
-							arg1 += anInt528;
+							arg1 += width2d;
 						}
 					}
 				}
@@ -1369,16 +1369,16 @@ public final class Draw3D extends Draw2D {
 								if (arg1 < 0) {
 									return;
 								}
-								drawScanline(anIntArray178, arg2, arg6, 0, arg4 >> 16, arg3 >> 16);
+								drawScanline(data, arg2, arg6, 0, arg4 >> 16, arg3 >> 16);
 								arg4 += local18;
 								arg3 += local3;
-								arg2 += anInt528;
+								arg2 += width2d;
 							}
 						}
-						drawScanline(anIntArray178, arg2, arg6, 0, arg4 >> 16, arg5 >> 16);
+						drawScanline(data, arg2, arg6, 0, arg4 >> 16, arg5 >> 16);
 						arg4 += local18;
 						arg5 += local33;
-						arg2 += anInt528;
+						arg2 += width2d;
 					}
 				} else {
 					arg1 -= arg0;
@@ -1392,16 +1392,16 @@ public final class Draw3D extends Draw2D {
 								if (arg1 < 0) {
 									return;
 								}
-								drawScanline(anIntArray178, arg2, arg6, 0, arg3 >> 16, arg4 >> 16);
+								drawScanline(data, arg2, arg6, 0, arg3 >> 16, arg4 >> 16);
 								arg4 += local18;
 								arg3 += local3;
-								arg2 += anInt528;
+								arg2 += width2d;
 							}
 						}
-						drawScanline(anIntArray178, arg2, arg6, 0, arg5 >> 16, arg4 >> 16);
+						drawScanline(data, arg2, arg6, 0, arg5 >> 16, arg4 >> 16);
 						arg4 += local18;
 						arg5 += local33;
-						arg2 += anInt528;
+						arg2 += width2d;
 					}
 				}
 			} else {
@@ -1428,16 +1428,16 @@ public final class Draw3D extends Draw2D {
 								if (arg0 < 0) {
 									return;
 								}
-								drawScanline(anIntArray178, arg2, arg6, 0, arg4 >> 16, arg5 >> 16);
+								drawScanline(data, arg2, arg6, 0, arg4 >> 16, arg5 >> 16);
 								arg4 += local3;
 								arg5 += local33;
-								arg2 += anInt528;
+								arg2 += width2d;
 							}
 						}
-						drawScanline(anIntArray178, arg2, arg6, 0, arg3 >> 16, arg5 >> 16);
+						drawScanline(data, arg2, arg6, 0, arg3 >> 16, arg5 >> 16);
 						arg3 += local18;
 						arg5 += local33;
-						arg2 += anInt528;
+						arg2 += width2d;
 					}
 				} else {
 					arg0 -= arg1;
@@ -1451,16 +1451,16 @@ public final class Draw3D extends Draw2D {
 								if (arg0 < 0) {
 									return;
 								}
-								drawScanline(anIntArray178, arg2, arg6, 0, arg5 >> 16, arg4 >> 16);
+								drawScanline(data, arg2, arg6, 0, arg5 >> 16, arg4 >> 16);
 								arg4 += local3;
 								arg5 += local33;
-								arg2 += anInt528;
+								arg2 += width2d;
 							}
 						}
-						drawScanline(anIntArray178, arg2, arg6, 0, arg5 >> 16, arg3 >> 16);
+						drawScanline(data, arg2, arg6, 0, arg5 >> 16, arg3 >> 16);
 						arg3 += local18;
 						arg5 += local33;
-						arg2 += anInt528;
+						arg2 += width2d;
 					}
 				}
 			}
@@ -1610,23 +1610,23 @@ public final class Draw3D extends Draw2D {
 									if (arg2 < 0) {
 										return;
 									}
-									drawTexturedScanline(anIntArray178, local4, 0, 0, arg0, arg5 >> 16, arg4 >> 16, arg8 >> 8, arg7 >> 8, local46, local76, local106, local56, local86, local116);
+									drawTexturedScanline(data, local4, 0, 0, arg0, arg5 >> 16, arg4 >> 16, arg8 >> 8, arg7 >> 8, local46, local76, local106, local56, local86, local116);
 									arg5 += local182;
 									arg4 += local155;
 									arg8 += local184;
 									arg7 += local157;
-									arg0 += anInt528;
+									arg0 += width2d;
 									local46 += local66;
 									local76 += local96;
 									local106 += local126;
 								}
 							}
-							drawTexturedScanline(anIntArray178, local4, 0, 0, arg0, arg5 >> 16, arg3 >> 16, arg8 >> 8, arg6 >> 8, local46, local76, local106, local56, local86, local116);
+							drawTexturedScanline(data, local4, 0, 0, arg0, arg5 >> 16, arg3 >> 16, arg8 >> 8, arg6 >> 8, local46, local76, local106, local56, local86, local116);
 							arg5 += local182;
 							arg3 += local128;
 							arg8 += local184;
 							arg6 += local130;
-							arg0 += anInt528;
+							arg0 += width2d;
 							local46 += local66;
 							local76 += local96;
 							local106 += local126;
@@ -1643,23 +1643,23 @@ public final class Draw3D extends Draw2D {
 									if (arg2 < 0) {
 										return;
 									}
-									drawTexturedScanline(anIntArray178, local4, 0, 0, arg0, arg4 >> 16, arg5 >> 16, arg7 >> 8, arg8 >> 8, local46, local76, local106, local56, local86, local116);
+									drawTexturedScanline(data, local4, 0, 0, arg0, arg4 >> 16, arg5 >> 16, arg7 >> 8, arg8 >> 8, local46, local76, local106, local56, local86, local116);
 									arg5 += local182;
 									arg4 += local155;
 									arg8 += local184;
 									arg7 += local157;
-									arg0 += anInt528;
+									arg0 += width2d;
 									local46 += local66;
 									local76 += local96;
 									local106 += local126;
 								}
 							}
-							drawTexturedScanline(anIntArray178, local4, 0, 0, arg0, arg3 >> 16, arg5 >> 16, arg6 >> 8, arg8 >> 8, local46, local76, local106, local56, local86, local116);
+							drawTexturedScanline(data, local4, 0, 0, arg0, arg3 >> 16, arg5 >> 16, arg6 >> 8, arg8 >> 8, local46, local76, local106, local56, local86, local116);
 							arg5 += local182;
 							arg3 += local128;
 							arg8 += local184;
 							arg6 += local130;
-							arg0 += anInt528;
+							arg0 += width2d;
 							local46 += local66;
 							local76 += local96;
 							local106 += local126;
@@ -1698,23 +1698,23 @@ public final class Draw3D extends Draw2D {
 									if (arg1 < 0) {
 										return;
 									}
-									drawTexturedScanline(anIntArray178, local4, 0, 0, arg0, arg3 >> 16, arg5 >> 16, arg6 >> 8, arg8 >> 8, local46, local76, local106, local56, local86, local116);
+									drawTexturedScanline(data, local4, 0, 0, arg0, arg3 >> 16, arg5 >> 16, arg6 >> 8, arg8 >> 8, local46, local76, local106, local56, local86, local116);
 									arg5 += local155;
 									arg3 += local128;
 									arg8 += local157;
 									arg6 += local130;
-									arg0 += anInt528;
+									arg0 += width2d;
 									local46 += local66;
 									local76 += local96;
 									local106 += local126;
 								}
 							}
-							drawTexturedScanline(anIntArray178, local4, 0, 0, arg0, arg3 >> 16, arg4 >> 16, arg6 >> 8, arg7 >> 8, local46, local76, local106, local56, local86, local116);
+							drawTexturedScanline(data, local4, 0, 0, arg0, arg3 >> 16, arg4 >> 16, arg6 >> 8, arg7 >> 8, local46, local76, local106, local56, local86, local116);
 							arg4 += local182;
 							arg3 += local128;
 							arg7 += local184;
 							arg6 += local130;
-							arg0 += anInt528;
+							arg0 += width2d;
 							local46 += local66;
 							local76 += local96;
 							local106 += local126;
@@ -1731,23 +1731,23 @@ public final class Draw3D extends Draw2D {
 									if (arg1 < 0) {
 										return;
 									}
-									drawTexturedScanline(anIntArray178, local4, 0, 0, arg0, arg5 >> 16, arg3 >> 16, arg8 >> 8, arg6 >> 8, local46, local76, local106, local56, local86, local116);
+									drawTexturedScanline(data, local4, 0, 0, arg0, arg5 >> 16, arg3 >> 16, arg8 >> 8, arg6 >> 8, local46, local76, local106, local56, local86, local116);
 									arg5 += local155;
 									arg3 += local128;
 									arg8 += local157;
 									arg6 += local130;
-									arg0 += anInt528;
+									arg0 += width2d;
 									local46 += local66;
 									local76 += local96;
 									local106 += local126;
 								}
 							}
-							drawTexturedScanline(anIntArray178, local4, 0, 0, arg0, arg4 >> 16, arg3 >> 16, arg7 >> 8, arg6 >> 8, local46, local76, local106, local56, local86, local116);
+							drawTexturedScanline(data, local4, 0, 0, arg0, arg4 >> 16, arg3 >> 16, arg7 >> 8, arg6 >> 8, local46, local76, local106, local56, local86, local116);
 							arg4 += local182;
 							arg3 += local128;
 							arg7 += local184;
 							arg6 += local130;
-							arg0 += anInt528;
+							arg0 += width2d;
 							local46 += local66;
 							local76 += local96;
 							local106 += local126;
@@ -1796,23 +1796,23 @@ public final class Draw3D extends Draw2D {
 									if (arg0 < 0) {
 										return;
 									}
-									drawTexturedScanline(anIntArray178, local4, 0, 0, arg1, arg3 >> 16, arg5 >> 16, arg6 >> 8, arg8 >> 8, local46, local76, local106, local56, local86, local116);
+									drawTexturedScanline(data, local4, 0, 0, arg1, arg3 >> 16, arg5 >> 16, arg6 >> 8, arg8 >> 8, local46, local76, local106, local56, local86, local116);
 									arg3 += local128;
 									arg5 += local182;
 									arg6 += local130;
 									arg8 += local184;
-									arg1 += anInt528;
+									arg1 += width2d;
 									local46 += local66;
 									local76 += local96;
 									local106 += local126;
 								}
 							}
-							drawTexturedScanline(anIntArray178, local4, 0, 0, arg1, arg3 >> 16, arg4 >> 16, arg6 >> 8, arg7 >> 8, local46, local76, local106, local56, local86, local116);
+							drawTexturedScanline(data, local4, 0, 0, arg1, arg3 >> 16, arg4 >> 16, arg6 >> 8, arg7 >> 8, local46, local76, local106, local56, local86, local116);
 							arg3 += local128;
 							arg4 += local155;
 							arg6 += local130;
 							arg7 += local157;
-							arg1 += anInt528;
+							arg1 += width2d;
 							local46 += local66;
 							local76 += local96;
 							local106 += local126;
@@ -1829,23 +1829,23 @@ public final class Draw3D extends Draw2D {
 									if (arg0 < 0) {
 										return;
 									}
-									drawTexturedScanline(anIntArray178, local4, 0, 0, arg1, arg5 >> 16, arg3 >> 16, arg8 >> 8, arg6 >> 8, local46, local76, local106, local56, local86, local116);
+									drawTexturedScanline(data, local4, 0, 0, arg1, arg5 >> 16, arg3 >> 16, arg8 >> 8, arg6 >> 8, local46, local76, local106, local56, local86, local116);
 									arg3 += local128;
 									arg5 += local182;
 									arg6 += local130;
 									arg8 += local184;
-									arg1 += anInt528;
+									arg1 += width2d;
 									local46 += local66;
 									local76 += local96;
 									local106 += local126;
 								}
 							}
-							drawTexturedScanline(anIntArray178, local4, 0, 0, arg1, arg4 >> 16, arg3 >> 16, arg7 >> 8, arg6 >> 8, local46, local76, local106, local56, local86, local116);
+							drawTexturedScanline(data, local4, 0, 0, arg1, arg4 >> 16, arg3 >> 16, arg7 >> 8, arg6 >> 8, local46, local76, local106, local56, local86, local116);
 							arg3 += local128;
 							arg4 += local155;
 							arg6 += local130;
 							arg7 += local157;
-							arg1 += anInt528;
+							arg1 += width2d;
 							local46 += local66;
 							local76 += local96;
 							local106 += local126;
@@ -1884,23 +1884,23 @@ public final class Draw3D extends Draw2D {
 									if (arg2 < 0) {
 										return;
 									}
-									drawTexturedScanline(anIntArray178, local4, 0, 0, arg1, arg3 >> 16, arg4 >> 16, arg6 >> 8, arg7 >> 8, local46, local76, local106, local56, local86, local116);
+									drawTexturedScanline(data, local4, 0, 0, arg1, arg3 >> 16, arg4 >> 16, arg6 >> 8, arg7 >> 8, local46, local76, local106, local56, local86, local116);
 									arg3 += local182;
 									arg4 += local155;
 									arg6 += local184;
 									arg7 += local157;
-									arg1 += anInt528;
+									arg1 += width2d;
 									local46 += local66;
 									local76 += local96;
 									local106 += local126;
 								}
 							}
-							drawTexturedScanline(anIntArray178, local4, 0, 0, arg1, arg5 >> 16, arg4 >> 16, arg8 >> 8, arg7 >> 8, local46, local76, local106, local56, local86, local116);
+							drawTexturedScanline(data, local4, 0, 0, arg1, arg5 >> 16, arg4 >> 16, arg8 >> 8, arg7 >> 8, local46, local76, local106, local56, local86, local116);
 							arg5 += local128;
 							arg4 += local155;
 							arg8 += local130;
 							arg7 += local157;
-							arg1 += anInt528;
+							arg1 += width2d;
 							local46 += local66;
 							local76 += local96;
 							local106 += local126;
@@ -1917,23 +1917,23 @@ public final class Draw3D extends Draw2D {
 									if (arg2 < 0) {
 										return;
 									}
-									drawTexturedScanline(anIntArray178, local4, 0, 0, arg1, arg4 >> 16, arg3 >> 16, arg7 >> 8, arg6 >> 8, local46, local76, local106, local56, local86, local116);
+									drawTexturedScanline(data, local4, 0, 0, arg1, arg4 >> 16, arg3 >> 16, arg7 >> 8, arg6 >> 8, local46, local76, local106, local56, local86, local116);
 									arg3 += local182;
 									arg4 += local155;
 									arg6 += local184;
 									arg7 += local157;
-									arg1 += anInt528;
+									arg1 += width2d;
 									local46 += local66;
 									local76 += local96;
 									local106 += local126;
 								}
 							}
-							drawTexturedScanline(anIntArray178, local4, 0, 0, arg1, arg4 >> 16, arg5 >> 16, arg7 >> 8, arg8 >> 8, local46, local76, local106, local56, local86, local116);
+							drawTexturedScanline(data, local4, 0, 0, arg1, arg4 >> 16, arg5 >> 16, arg7 >> 8, arg8 >> 8, local46, local76, local106, local56, local86, local116);
 							arg5 += local128;
 							arg4 += local155;
 							arg8 += local130;
 							arg7 += local157;
-							arg1 += anInt528;
+							arg1 += width2d;
 							local46 += local66;
 							local76 += local96;
 							local106 += local126;
@@ -1981,23 +1981,23 @@ public final class Draw3D extends Draw2D {
 								if (arg1 < 0) {
 									return;
 								}
-								drawTexturedScanline(anIntArray178, local4, 0, 0, arg2, arg4 >> 16, arg3 >> 16, arg7 >> 8, arg6 >> 8, local46, local76, local106, local56, local86, local116);
+								drawTexturedScanline(data, local4, 0, 0, arg2, arg4 >> 16, arg3 >> 16, arg7 >> 8, arg6 >> 8, local46, local76, local106, local56, local86, local116);
 								arg4 += local155;
 								arg3 += local128;
 								arg7 += local157;
 								arg6 += local130;
-								arg2 += anInt528;
+								arg2 += width2d;
 								local46 += local66;
 								local76 += local96;
 								local106 += local126;
 							}
 						}
-						drawTexturedScanline(anIntArray178, local4, 0, 0, arg2, arg4 >> 16, arg5 >> 16, arg7 >> 8, arg8 >> 8, local46, local76, local106, local56, local86, local116);
+						drawTexturedScanline(data, local4, 0, 0, arg2, arg4 >> 16, arg5 >> 16, arg7 >> 8, arg8 >> 8, local46, local76, local106, local56, local86, local116);
 						arg4 += local155;
 						arg5 += local182;
 						arg7 += local157;
 						arg8 += local184;
-						arg2 += anInt528;
+						arg2 += width2d;
 						local46 += local66;
 						local76 += local96;
 						local106 += local126;
@@ -2014,23 +2014,23 @@ public final class Draw3D extends Draw2D {
 								if (arg1 < 0) {
 									return;
 								}
-								drawTexturedScanline(anIntArray178, local4, 0, 0, arg2, arg3 >> 16, arg4 >> 16, arg6 >> 8, arg7 >> 8, local46, local76, local106, local56, local86, local116);
+								drawTexturedScanline(data, local4, 0, 0, arg2, arg3 >> 16, arg4 >> 16, arg6 >> 8, arg7 >> 8, local46, local76, local106, local56, local86, local116);
 								arg4 += local155;
 								arg3 += local128;
 								arg7 += local157;
 								arg6 += local130;
-								arg2 += anInt528;
+								arg2 += width2d;
 								local46 += local66;
 								local76 += local96;
 								local106 += local126;
 							}
 						}
-						drawTexturedScanline(anIntArray178, local4, 0, 0, arg2, arg5 >> 16, arg4 >> 16, arg8 >> 8, arg7 >> 8, local46, local76, local106, local56, local86, local116);
+						drawTexturedScanline(data, local4, 0, 0, arg2, arg5 >> 16, arg4 >> 16, arg8 >> 8, arg7 >> 8, local46, local76, local106, local56, local86, local116);
 						arg4 += local155;
 						arg5 += local182;
 						arg7 += local157;
 						arg8 += local184;
-						arg2 += anInt528;
+						arg2 += width2d;
 						local46 += local66;
 						local76 += local96;
 						local106 += local126;
@@ -2069,23 +2069,23 @@ public final class Draw3D extends Draw2D {
 								if (arg0 < 0) {
 									return;
 								}
-								drawTexturedScanline(anIntArray178, local4, 0, 0, arg2, arg4 >> 16, arg5 >> 16, arg7 >> 8, arg8 >> 8, local46, local76, local106, local56, local86, local116);
+								drawTexturedScanline(data, local4, 0, 0, arg2, arg4 >> 16, arg5 >> 16, arg7 >> 8, arg8 >> 8, local46, local76, local106, local56, local86, local116);
 								arg4 += local128;
 								arg5 += local182;
 								arg7 += local130;
 								arg8 += local184;
-								arg2 += anInt528;
+								arg2 += width2d;
 								local46 += local66;
 								local76 += local96;
 								local106 += local126;
 							}
 						}
-						drawTexturedScanline(anIntArray178, local4, 0, 0, arg2, arg3 >> 16, arg5 >> 16, arg6 >> 8, arg8 >> 8, local46, local76, local106, local56, local86, local116);
+						drawTexturedScanline(data, local4, 0, 0, arg2, arg3 >> 16, arg5 >> 16, arg6 >> 8, arg8 >> 8, local46, local76, local106, local56, local86, local116);
 						arg3 += local155;
 						arg5 += local182;
 						arg6 += local157;
 						arg8 += local184;
-						arg2 += anInt528;
+						arg2 += width2d;
 						local46 += local66;
 						local76 += local96;
 						local106 += local126;
@@ -2102,23 +2102,23 @@ public final class Draw3D extends Draw2D {
 								if (arg0 < 0) {
 									return;
 								}
-								drawTexturedScanline(anIntArray178, local4, 0, 0, arg2, arg5 >> 16, arg4 >> 16, arg8 >> 8, arg7 >> 8, local46, local76, local106, local56, local86, local116);
+								drawTexturedScanline(data, local4, 0, 0, arg2, arg5 >> 16, arg4 >> 16, arg8 >> 8, arg7 >> 8, local46, local76, local106, local56, local86, local116);
 								arg4 += local128;
 								arg5 += local182;
 								arg7 += local130;
 								arg8 += local184;
-								arg2 += anInt528;
+								arg2 += width2d;
 								local46 += local66;
 								local76 += local96;
 								local106 += local126;
 							}
 						}
-						drawTexturedScanline(anIntArray178, local4, 0, 0, arg2, arg5 >> 16, arg3 >> 16, arg8 >> 8, arg6 >> 8, local46, local76, local106, local56, local86, local116);
+						drawTexturedScanline(data, local4, 0, 0, arg2, arg5 >> 16, arg3 >> 16, arg8 >> 8, arg6 >> 8, local46, local76, local106, local56, local86, local116);
 						arg3 += local155;
 						arg5 += local182;
 						arg6 += local157;
 						arg8 += local184;
-						arg2 += anInt528;
+						arg2 += width2d;
 						local46 += local66;
 						local76 += local96;
 						local106 += local126;

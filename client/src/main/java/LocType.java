@@ -14,7 +14,7 @@ public final class LocType {
 	public static int flowObfuscator2;
 
 	@OriginalMember(owner = "client!ac", name = "c", descriptor = "Z")
-	public static boolean aBoolean6;
+	public static boolean reset;
 
 	@OriginalMember(owner = "client!ac", name = "d", descriptor = "I")
 	private static int count;
@@ -357,7 +357,7 @@ public final class LocType {
 			return null;
 		}
 		@Pc(47) long local47 = (long) ((this.index << 6) + (local3 << 3) + arg1) + ((long) (arg6 + 1) << 32);
-		if (aBoolean6) {
+		if (reset) {
 			local47 = 0L;
 		}
 		@Pc(56) Model local56 = (Model) modelCacheDynamic.get(local47);
@@ -437,7 +437,7 @@ public final class LocType {
 				local284.calculateBoundsY(flowObfuscator2);
 			}
 			return local284;
-		} else if (aBoolean6) {
+		} else if (reset) {
 			return local56;
 		} else {
 			if (this.hillskew || this.computeVertexColors) {

@@ -1738,22 +1738,22 @@ public final class Model extends CacheableNode {
 		}
 		@Pc(49) int local49 = arg7 * arg3 + arg5 * arg4 >> 16;
 		@Pc(56) int local56 = local49 - this.radius << 9;
-		if (local56 / local32 >= Draw2D.anInt535) {
+		if (local56 / local32 >= Draw2D.centerX2d) {
 			return;
 		}
 		@Pc(69) int local69 = local49 + this.radius << 9;
-		if (local69 / local32 <= -Draw2D.anInt535) {
+		if (local69 / local32 <= -Draw2D.centerX2d) {
 			return;
 		}
 		@Pc(86) int local86 = arg6 * arg2 - local11 * arg1 >> 16;
 		@Pc(93) int local93 = this.radius * arg1 >> 16;
 		@Pc(99) int local99 = local86 + local93 << 9;
-		if (local99 / local32 <= -Draw2D.anInt536) {
+		if (local99 / local32 <= -Draw2D.centerY2d) {
 			return;
 		}
 		@Pc(115) int local115 = local93 + (this.maxY * arg2 >> 16);
 		@Pc(121) int local121 = local86 - local115 << 9;
-		if (local121 / local32 >= Draw2D.anInt536) {
+		if (local121 / local32 >= Draw2D.centerY2d) {
 			return;
 		}
 		@Pc(136) int local136 = local28 + (this.maxY * arg1 >> 16);

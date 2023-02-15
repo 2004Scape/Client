@@ -137,13 +137,13 @@ public final class Scene {
 	public static int clickTileZ = -1;
 
 	@OriginalMember(owner = "client!r", name = "R", descriptor = "I")
-	public static final int anInt716 = 4;
+	public static final int LEVEL_COUNT = 4;
 
 	@OriginalMember(owner = "client!r", name = "S", descriptor = "[I")
-	public static int[] levelOccluderCount = new int[anInt716];
+	public static int[] levelOccluderCount = new int[LEVEL_COUNT];
 
 	@OriginalMember(owner = "client!r", name = "T", descriptor = "[[Lclient!m;")
-	public static SceneOccluder[][] levelOccluders = new SceneOccluder[anInt716][500];
+	public static SceneOccluder[][] levelOccluders = new SceneOccluder[LEVEL_COUNT][500];
 
 	@OriginalMember(owner = "client!r", name = "U", descriptor = "I")
 	public static int activeOccluderCount;
@@ -396,7 +396,7 @@ public final class Scene {
 				}
 			}
 			@Pc(41) int local41 = 38 / arg0;
-			for (local7 = 0; local7 < anInt716; local7++) {
+			for (local7 = 0; local7 < LEVEL_COUNT; local7++) {
 				for (local11 = 0; local11 < levelOccluderCount[local7]; local11++) {
 					levelOccluders[local7][local11] = null;
 				}

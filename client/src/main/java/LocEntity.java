@@ -20,7 +20,7 @@ public final class LocEntity extends Node {
 	public final int heightmapNW;
 
 	@OriginalMember(owner = "client!nb", name = "i", descriptor = "I")
-	public final int anInt655;
+	public final int index;
 
 	@OriginalMember(owner = "client!nb", name = "j", descriptor = "Lclient!jc;")
 	public final SeqType seq;
@@ -41,7 +41,7 @@ public final class LocEntity extends Node {
 			if (arg3 != 0) {
 				throw new NullPointerException();
 			}
-			this.anInt655 = arg1;
+			this.index = arg1;
 			this.seq = arg5;
 			if (arg0 && arg5.replayoff != -1) {
 				this.seqFrame = (int) (Math.random() * (double) this.seq.framecount);

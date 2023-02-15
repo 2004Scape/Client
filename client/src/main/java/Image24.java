@@ -176,11 +176,11 @@ public final class Image24 extends Draw2D {
 		try {
 			arg1 += this.cropX;
 			arg2 += this.cropY;
-			@Pc(15) int local15 = arg1 + arg2 * Draw2D.anInt528;
+			@Pc(15) int local15 = arg1 + arg2 * Draw2D.width2d;
 			@Pc(17) int local17 = 0;
 			@Pc(20) int local20 = this.height;
 			@Pc(23) int local23 = this.width;
-			@Pc(27) int local27 = Draw2D.anInt528 - local23;
+			@Pc(27) int local27 = Draw2D.width2d - local23;
 			@Pc(29) int local29 = 0;
 			@Pc(36) int local36;
 			if (arg2 < Draw2D.top) {
@@ -188,7 +188,7 @@ public final class Image24 extends Draw2D {
 				local20 -= local36;
 				arg2 = Draw2D.top;
 				local17 += local36 * local23;
-				local15 += local36 * Draw2D.anInt528;
+				local15 += local36 * Draw2D.width2d;
 			}
 			if (arg2 + local20 > Draw2D.bottom) {
 				local20 -= arg2 + local20 - Draw2D.bottom;
@@ -209,7 +209,7 @@ public final class Image24 extends Draw2D {
 				local27 += local36;
 			}
 			if (local23 > 0 && local20 > 0) {
-				this.copyPixels(15223, this.pixels, local27, local20, local17, local29, local15, local23, Draw2D.anIntArray178);
+				this.copyPixels(15223, this.pixels, local27, local20, local17, local29, local15, local23, Draw2D.data);
 				if (arg0 != 34676) {
 					this.flowObfuscator2 = 117;
 				}
@@ -257,11 +257,11 @@ public final class Image24 extends Draw2D {
 			}
 			arg1 += this.cropX;
 			arg0 += this.cropY;
-			@Pc(20) int local20 = arg1 + arg0 * Draw2D.anInt528;
+			@Pc(20) int local20 = arg1 + arg0 * Draw2D.width2d;
 			@Pc(22) int local22 = 0;
 			@Pc(25) int local25 = this.height;
 			@Pc(28) int local28 = this.width;
-			@Pc(32) int local32 = Draw2D.anInt528 - local28;
+			@Pc(32) int local32 = Draw2D.width2d - local28;
 			@Pc(34) int local34 = 0;
 			@Pc(41) int local41;
 			if (arg0 < Draw2D.top) {
@@ -269,7 +269,7 @@ public final class Image24 extends Draw2D {
 				local25 -= local41;
 				arg0 = Draw2D.top;
 				local22 += local41 * local28;
-				local20 += local41 * Draw2D.anInt528;
+				local20 += local41 * Draw2D.width2d;
 			}
 			if (arg0 + local25 > Draw2D.bottom) {
 				local25 -= arg0 + local25 - Draw2D.bottom;
@@ -290,7 +290,7 @@ public final class Image24 extends Draw2D {
 				local32 += local41;
 			}
 			if (local28 > 0 && local25 > 0) {
-				this.copyPixels(Draw2D.anIntArray178, this.pixels, 0, local22, local20, local28, local25, local32, local34);
+				this.copyPixels(Draw2D.data, this.pixels, 0, local22, local20, local28, local25, local32, local34);
 			}
 		} catch (@Pc(143) RuntimeException local143) {
 			signlink.reporterror("90492, " + arg0 + ", " + arg1 + ", " + arg2 + ", " + local143.toString());
@@ -368,14 +368,14 @@ public final class Image24 extends Draw2D {
 					}
 					arg2 = arg2 * (this.width - (local11 >> 16)) / local28;
 					arg0 = arg0 * (this.height - (local13 >> 16)) / local31;
-					@Pc(137) int local137 = arg4 + arg1 * Draw2D.anInt528;
-					@Pc(141) int local141 = Draw2D.anInt528 - arg2;
+					@Pc(137) int local137 = arg4 + arg1 * Draw2D.width2d;
+					@Pc(141) int local141 = Draw2D.width2d - arg2;
 					@Pc(148) int local148;
 					if (arg1 < Draw2D.top) {
 						local148 = Draw2D.top - arg1;
 						arg0 -= local148;
 						arg1 = 0;
-						local137 += local148 * Draw2D.anInt528;
+						local137 += local148 * Draw2D.width2d;
 						local13 += local43 * local148;
 					}
 					if (arg1 + arg0 > Draw2D.bottom) {
@@ -394,7 +394,7 @@ public final class Image24 extends Draw2D {
 						arg2 -= local148;
 						local141 += local148;
 					}
-					this.scale(local11, local37, Draw2D.anIntArray178, 0, local43, local13, 0, this.pixels, local141, local137, arg0, local6, arg2);
+					this.scale(local11, local37, Draw2D.data, 0, local43, local13, 0, this.pixels, local141, local137, arg0, local6, arg2);
 				} catch (@Pc(243) Exception local243) {
 					System.out.println("error in sprite clipping routine");
 				}
@@ -449,11 +449,11 @@ public final class Image24 extends Draw2D {
 			}
 			arg1 += this.cropX;
 			arg2 += this.cropY;
-			local4 = arg1 + arg2 * Draw2D.anInt528;
+			local4 = arg1 + arg2 * Draw2D.width2d;
 			@Pc(27) int local27 = 0;
 			@Pc(30) int local30 = this.height;
 			@Pc(33) int local33 = this.width;
-			@Pc(37) int local37 = Draw2D.anInt528 - local33;
+			@Pc(37) int local37 = Draw2D.width2d - local33;
 			@Pc(39) int local39 = 0;
 			@Pc(46) int local46;
 			if (arg2 < Draw2D.top) {
@@ -461,7 +461,7 @@ public final class Image24 extends Draw2D {
 				local30 -= local46;
 				arg2 = Draw2D.top;
 				local27 += local46 * local33;
-				local4 += local46 * Draw2D.anInt528;
+				local4 += local46 * Draw2D.width2d;
 			}
 			if (arg2 + local30 > Draw2D.bottom) {
 				local30 -= arg2 + local30 - Draw2D.bottom;
@@ -482,7 +482,7 @@ public final class Image24 extends Draw2D {
 				local37 += local46;
 			}
 			if (local33 > 0 && local30 > 0) {
-				this.copyPixelsAlpha(local4, 0, this.pixels, arg0, local30, Draw2D.anIntArray178, local27, (byte) 8, local33, local37, local39);
+				this.copyPixelsAlpha(local4, 0, this.pixels, arg0, local30, Draw2D.data, local27, (byte) 8, local33, local37, local39);
 			}
 		} catch (@Pc(150) RuntimeException local150) {
 			signlink.reporterror("1642, " + arg0 + ", " + arg1 + ", " + arg2 + ", " + arg3 + ", " + local150.toString());
@@ -531,20 +531,20 @@ public final class Image24 extends Draw2D {
 				@Pc(51) int local51 = local39 * arg5 >> 8;
 				@Pc(63) int local63 = (arg6 << 16) + local21 * local45 + local16 * local51;
 				@Pc(75) int local75 = (arg4 << 16) + (local21 * local51 - local16 * local45);
-				@Pc(81) int local81 = arg7 + arg8 * Draw2D.anInt528;
+				@Pc(81) int local81 = arg7 + arg8 * Draw2D.width2d;
 				for (@Pc(83) int local83 = 0; local83 < arg3; local83++) {
 					@Pc(89) int local89 = arg2[local83];
 					@Pc(93) int local93 = local81 + local89;
 					@Pc(99) int local99 = local63 + local51 * local89;
 					@Pc(105) int local105 = local75 - local45 * local89;
 					for (@Pc(110) int local110 = -arg10[local83]; local110 < 0; local110++) {
-						Draw2D.anIntArray178[local93++] = this.pixels[(local99 >> 16) + (local105 >> 16) * this.width];
+						Draw2D.data[local93++] = this.pixels[(local99 >> 16) + (local105 >> 16) * this.width];
 						local99 += local51;
 						local105 -= local45;
 					}
 					local63 += local45;
 					local75 += local51;
-					local81 += Draw2D.anInt528;
+					local81 += Draw2D.width2d;
 				}
 			} catch (@Pc(158) Exception local158) {
 			}
@@ -559,12 +559,12 @@ public final class Image24 extends Draw2D {
 		try {
 			arg2 += this.cropX;
 			arg1 += this.cropY;
-			@Pc(15) int local15 = arg2 + arg1 * Draw2D.anInt528;
+			@Pc(15) int local15 = arg2 + arg1 * Draw2D.width2d;
 			@Pc(17) int local17 = 0;
 			if (arg3 == -15) {
 				@Pc(24) int local24 = this.height;
 				@Pc(27) int local27 = this.width;
-				@Pc(31) int local31 = Draw2D.anInt528 - local27;
+				@Pc(31) int local31 = Draw2D.width2d - local27;
 				@Pc(33) int local33 = 0;
 				@Pc(40) int local40;
 				if (arg1 < Draw2D.top) {
@@ -572,7 +572,7 @@ public final class Image24 extends Draw2D {
 					local24 -= local40;
 					arg1 = Draw2D.top;
 					local17 += local40 * local27;
-					local15 += local40 * Draw2D.anInt528;
+					local15 += local40 * Draw2D.width2d;
 				}
 				if (arg1 + local24 > Draw2D.bottom) {
 					local24 -= arg1 + local24 - Draw2D.bottom;
@@ -593,7 +593,7 @@ public final class Image24 extends Draw2D {
 					local31 += local40;
 				}
 				if (local27 > 0 && local24 > 0) {
-					this.copyPixelsMasked(local27, local33, 0, -478, local24, local17, Draw2D.anIntArray178, this.pixels, local15, arg0.pixels, local31);
+					this.copyPixelsMasked(local27, local33, 0, -478, local24, local17, Draw2D.data, this.pixels, local15, arg0.pixels, local31);
 				}
 			}
 		} catch (@Pc(145) RuntimeException local145) {

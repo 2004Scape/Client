@@ -239,9 +239,9 @@ public final class ObjType {
 			local38 = Draw3D.centerX;
 			local40 = Draw3D.centerY;
 			@Pc(80) int[] local80 = Draw3D.lineOffset;
-			@Pc(82) int[] local82 = Draw2D.anIntArray178;
-			@Pc(84) int local84 = Draw2D.anInt528;
-			@Pc(86) int local86 = Draw2D.anInt529;
+			@Pc(82) int[] local82 = Draw2D.data;
+			@Pc(84) int local84 = Draw2D.width2d;
+			@Pc(86) int local86 = Draw2D.height2d;
 			@Pc(88) int local88 = Draw2D.left;
 			@Pc(90) int local90 = Draw2D.right;
 			@Pc(92) int local92 = Draw2D.top;

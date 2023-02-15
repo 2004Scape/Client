@@ -65,16 +65,16 @@ public final class PlayerEntity extends PathingEntity {
 	public Model locModel;
 
 	@OriginalMember(owner = "client!z", name = "xb", descriptor = "I")
-	public int anInt939;
+	public int minTileX;
 
 	@OriginalMember(owner = "client!z", name = "yb", descriptor = "I")
-	public int anInt940;
+	public int minTileZ;
 
 	@OriginalMember(owner = "client!z", name = "zb", descriptor = "I")
-	public int anInt941;
+	public int maxTileX;
 
 	@OriginalMember(owner = "client!z", name = "Ab", descriptor = "I")
-	public int anInt942;
+	public int maxTileZ;
 
 	@OriginalMember(owner = "client!z", name = "Bb", descriptor = "Z")
 	public boolean lowMemory = false;

@@ -345,8 +345,8 @@ public final class BitmapFont extends Draw2D {
 
 	@OriginalMember(owner = "client!jb", name = "a", descriptor = "([BIIIII)V")
 	private void fillMaskedRect(@OriginalArg(0) byte[] arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2, @OriginalArg(3) int arg3, @OriginalArg(4) int arg4, @OriginalArg(5) int arg5) {
-		@Pc(5) int local5 = arg1 + arg2 * Draw2D.anInt528;
-		@Pc(9) int local9 = Draw2D.anInt528 - arg3;
+		@Pc(5) int local5 = arg1 + arg2 * Draw2D.width2d;
+		@Pc(9) int local9 = Draw2D.width2d - arg3;
 		@Pc(11) int local11 = 0;
 		@Pc(13) int local13 = 0;
 		@Pc(20) int local20;
@@ -355,7 +355,7 @@ public final class BitmapFont extends Draw2D {
 			arg4 -= local20;
 			arg2 = Draw2D.top;
 			local13 += local20 * arg3;
-			local5 += local20 * Draw2D.anInt528;
+			local5 += local20 * Draw2D.width2d;
 		}
 		if (arg2 + arg4 >= Draw2D.bottom) {
 			arg4 -= arg2 + arg4 + 1 - Draw2D.bottom;
@@ -376,7 +376,7 @@ public final class BitmapFont extends Draw2D {
 			local9 += local20;
 		}
 		if (arg3 > 0 && arg4 > 0) {
-			this.fillMaskedRect(Draw2D.anIntArray178, arg0, arg5, local13, local5, arg3, arg4, local9, local11);
+			this.fillMaskedRect(Draw2D.data, arg0, arg5, local13, local5, arg3, arg4, local9, local11);
 		}
 	}
 
@@ -423,8 +423,8 @@ public final class BitmapFont extends Draw2D {
 	private void fillMaskedRect(@OriginalArg(0) byte[] arg0, @OriginalArg(1) byte arg1, @OriginalArg(2) int arg2, @OriginalArg(3) int arg3, @OriginalArg(4) int arg4, @OriginalArg(5) int arg5, @OriginalArg(6) int arg6, @OriginalArg(7) int arg7) {
 		try {
 			if (arg1 == this.flowObfuscator3) {
-				@Pc(10) int local10 = arg2 + arg5 * Draw2D.anInt528;
-				@Pc(14) int local14 = Draw2D.anInt528 - arg7;
+				@Pc(10) int local10 = arg2 + arg5 * Draw2D.width2d;
+				@Pc(14) int local14 = Draw2D.width2d - arg7;
 				@Pc(16) int local16 = 0;
 				@Pc(18) int local18 = 0;
 				@Pc(25) int local25;
@@ -433,7 +433,7 @@ public final class BitmapFont extends Draw2D {
 					arg3 -= local25;
 					arg5 = Draw2D.top;
 					local18 += local25 * arg7;
-					local10 += local25 * Draw2D.anInt528;
+					local10 += local25 * Draw2D.width2d;
 				}
 				if (arg5 + arg3 >= Draw2D.bottom) {
 					arg3 -= arg5 + arg3 + 1 - Draw2D.bottom;
@@ -454,7 +454,7 @@ public final class BitmapFont extends Draw2D {
 					local14 += local25;
 				}
 				if (arg7 > 0 && arg3 > 0) {
-					this.fillMaskedRect(arg3, local10, arg7, Draw2D.anIntArray178, arg0, arg6, local18, local14, local16, (byte) 2, arg4);
+					this.fillMaskedRect(arg3, local10, arg7, Draw2D.data, arg0, arg6, local18, local14, local16, (byte) 2, arg4);
 				}
 			}
 		} catch (@Pc(132) RuntimeException local132) {

@@ -23,10 +23,10 @@ public final class IfType {
 	public int[] inventorySlotObjCount;
 
 	@OriginalMember(owner = "client!hc", name = "f", descriptor = "I")
-	public int anInt468;
+	public int seqFrame;
 
 	@OriginalMember(owner = "client!hc", name = "g", descriptor = "I")
-	public int anInt469;
+	public int seqCycle;
 
 	@OriginalMember(owner = "client!hc", name = "h", descriptor = "I")
 	public int id;
@@ -50,10 +50,10 @@ public final class IfType {
 	public int height;
 
 	@OriginalMember(owner = "client!hc", name = "o", descriptor = "I")
-	public int anInt477;
+	public int x;
 
 	@OriginalMember(owner = "client!hc", name = "p", descriptor = "I")
-	public int anInt478;
+	public int y;
 
 	@OriginalMember(owner = "client!hc", name = "q", descriptor = "[[I")
 	public int[][] scripts;

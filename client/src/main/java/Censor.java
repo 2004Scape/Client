@@ -33,57 +33,57 @@ public final class Censor {
 	private static boolean flowObfuscator9;
 
 	@OriginalMember(owner = "client!mc", name = "j", descriptor = "[I")
-	private static int[] anIntArray195;
+	private static int[] fragments;
 
 	@OriginalMember(owner = "client!mc", name = "k", descriptor = "[[C")
-	private static char[][] aCharArrayArray1;
+	private static char[][] badWords;
 
 	@OriginalMember(owner = "client!mc", name = "l", descriptor = "[[[B")
-	private static byte[][][] aByteArrayArrayArray8;
+	private static byte[][][] badCombinations;
 
 	@OriginalMember(owner = "client!mc", name = "m", descriptor = "[[C")
-	private static char[][] aCharArrayArray2;
+	private static char[][] domains;
 
 	@OriginalMember(owner = "client!mc", name = "n", descriptor = "[[C")
-	private static char[][] aCharArrayArray3;
+	private static char[][] tlds;
 
 	@OriginalMember(owner = "client!mc", name = "o", descriptor = "[I")
-	private static int[] anIntArray196;
+	private static int[] tldType;
 
 	@OriginalMember(owner = "client!mc", name = "p", descriptor = "[Ljava/lang/String;")
-	private static final String[] aStringArray11 = new String[] { "cook", "cook's", "cooks", "seeks", "sheet" };
+	private static final String[] ALLOWLIST = new String[] { "cook", "cook's", "cooks", "seeks", "sheet" };
 
 	@OriginalMember(owner = "client!mc", name = "a", descriptor = "(Lclient!ub;)V")
-	public static void method414(@OriginalArg(0) FileArchive arg0) {
+	public static void unpack(@OriginalArg(0) FileArchive arg0) {
 		@Pc(11) Buffer local11 = new Buffer(363, arg0.read("fragmentsenc.txt", null, (byte) 2));
 		@Pc(21) Buffer local21 = new Buffer(363, arg0.read("badenc.txt", null, (byte) 2));
 		@Pc(31) Buffer local31 = new Buffer(363, arg0.read("domainenc.txt", null, (byte) 2));
 		@Pc(41) Buffer local41 = new Buffer(363, arg0.read("tldlist.txt", null, (byte) 2));
-		method415(local11, local21, local31, local41);
+		read(local11, local21, local31, local41);
 	}
 
 	@OriginalMember(owner = "client!mc", name = "a", descriptor = "(Lclient!kb;Lclient!kb;Lclient!kb;Lclient!kb;)V")
-	private static void method415(@OriginalArg(0) Buffer arg0, @OriginalArg(1) Buffer arg1, @OriginalArg(2) Buffer arg2, @OriginalArg(3) Buffer arg3) {
-		method417(-33152, arg1);
-		method418(arg2, -717);
-		method419(24882, arg0);
-		method416(true, arg3);
+	private static void read(@OriginalArg(0) Buffer arg0, @OriginalArg(1) Buffer arg1, @OriginalArg(2) Buffer arg2, @OriginalArg(3) Buffer arg3) {
+		readBadWords(-33152, arg1);
+		readDomains(arg2, -717);
+		readFragments(24882, arg0);
+		readTld(true, arg3);
 	}
 
 	@OriginalMember(owner = "client!mc", name = "a", descriptor = "(ZLclient!kb;)V")
-	private static void method416(@OriginalArg(0) boolean arg0, @OriginalArg(1) Buffer arg1) {
+	private static void readTld(@OriginalArg(0) boolean arg0, @OriginalArg(1) Buffer arg1) {
 		try {
 			@Pc(4) int local4 = arg1.g4();
-			aCharArrayArray3 = new char[local4][];
-			anIntArray196 = new int[local4];
+			tlds = new char[local4][];
+			tldType = new int[local4];
 			if (arg0) {
 				for (@Pc(15) int local15 = 0; local15 < local4; local15++) {
-					anIntArray196[local15] = arg1.g1();
+					tldType[local15] = arg1.g1();
 					@Pc(26) char[] local26 = new char[arg1.g1()];
 					for (@Pc(28) int local28 = 0; local28 < local26.length; local28++) {
 						local26[local28] = (char) arg1.g1();
 					}
-					aCharArrayArray3[local15] = local26;
+					tlds[local15] = local26;
 				}
 			}
 		} catch (@Pc(51) RuntimeException local51) {
@@ -93,16 +93,16 @@ public final class Censor {
 	}
 
 	@OriginalMember(owner = "client!mc", name = "a", descriptor = "(ILclient!kb;)V")
-	private static void method417(@OriginalArg(0) int arg0, @OriginalArg(1) Buffer arg1) {
+	private static void readBadWords(@OriginalArg(0) int arg0, @OriginalArg(1) Buffer arg1) {
 		try {
 			@Pc(2) int local2 = arg1.g4();
 			if (arg0 != -33152) {
 				for (@Pc(7) int local7 = 1; local7 > 0; local7++) {
 				}
 			}
-			aCharArrayArray1 = new char[local2][];
-			aByteArrayArrayArray8 = new byte[local2][][];
-			method420(aByteArrayArrayArray8, aCharArrayArray1, arg1, (byte) 1);
+			badWords = new char[local2][];
+			badCombinations = new byte[local2][][];
+			readBadCombinations(badCombinations, badWords, arg1, (byte) 1);
 		} catch (@Pc(25) RuntimeException local25) {
 			signlink.reporterror("34550, " + arg0 + ", " + arg1 + ", " + local25.toString());
 			throw new RuntimeException();
@@ -110,12 +110,12 @@ public final class Censor {
 	}
 
 	@OriginalMember(owner = "client!mc", name = "a", descriptor = "(Lclient!kb;I)V")
-	private static void method418(@OriginalArg(0) Buffer arg0, @OriginalArg(1) int arg1) {
+	private static void readDomains(@OriginalArg(0) Buffer arg0, @OriginalArg(1) int arg1) {
 		try {
 			@Pc(2) int local2 = arg0.g4();
 			if (arg1 < 0) {
-				aCharArrayArray2 = new char[local2][];
-				method421(-178, arg0, aCharArrayArray2);
+				domains = new char[local2][];
+				readDomain(-178, arg0, domains);
 			}
 		} catch (@Pc(14) RuntimeException local14) {
 			signlink.reporterror("77072, " + arg0 + ", " + arg1 + ", " + local14.toString());
@@ -124,11 +124,11 @@ public final class Censor {
 	}
 
 	@OriginalMember(owner = "client!mc", name = "b", descriptor = "(ILclient!kb;)V")
-	private static void method419(@OriginalArg(0) int arg0, @OriginalArg(1) Buffer arg1) {
+	private static void readFragments(@OriginalArg(0) int arg0, @OriginalArg(1) Buffer arg1) {
 		try {
-			anIntArray195 = new int[arg1.g4()];
-			for (@Pc(5) int local5 = 0; local5 < anIntArray195.length; local5++) {
-				anIntArray195[local5] = arg1.g2();
+			fragments = new int[arg1.g4()];
+			for (@Pc(5) int local5 = 0; local5 < fragments.length; local5++) {
+				fragments[local5] = arg1.g2();
 			}
 			if (arg0 != flowObfuscator2) {
 				flowObfuscator1 = !flowObfuscator1;
@@ -140,7 +140,7 @@ public final class Censor {
 	}
 
 	@OriginalMember(owner = "client!mc", name = "a", descriptor = "([[[B[[CLclient!kb;B)V")
-	private static void method420(@OriginalArg(0) byte[][][] arg0, @OriginalArg(1) char[][] arg1, @OriginalArg(2) Buffer arg2, @OriginalArg(3) byte arg3) {
+	private static void readBadCombinations(@OriginalArg(0) byte[][][] arg0, @OriginalArg(1) char[][] arg1, @OriginalArg(2) Buffer arg2, @OriginalArg(3) byte arg3) {
 		try {
 			if (arg3 == 1) {
 				@Pc(6) boolean local6 = false;
@@ -167,7 +167,7 @@ public final class Censor {
 	}
 
 	@OriginalMember(owner = "client!mc", name = "a", descriptor = "(ILclient!kb;[[C)V")
-	private static void method421(@OriginalArg(0) int arg0, @OriginalArg(1) Buffer arg1, @OriginalArg(2) char[][] arg2) {
+	private static void readDomain(@OriginalArg(0) int arg0, @OriginalArg(1) Buffer arg1, @OriginalArg(2) char[][] arg2) {
 		try {
 			label35: while (true) {
 				@Pc(5) int local5;
@@ -196,11 +196,11 @@ public final class Censor {
 	}
 
 	@OriginalMember(owner = "client!mc", name = "a", descriptor = "([CI)V")
-	private static void method422(@OriginalArg(0) char[] arg0, @OriginalArg(1) int arg1) {
+	private static void filterCharacters(@OriginalArg(0) char[] arg0, @OriginalArg(1) int arg1) {
 		try {
 			@Pc(3) int local3 = 0;
 			for (@Pc(5) int local5 = 0; local5 < arg0.length; local5++) {
-				if (method423(16180, arg0[local5])) {
+				if (allowCharacter(16180, arg0[local5])) {
 					arg0[local3] = arg0[local5];
 				} else {
 					arg0[local3] = ' ';
@@ -222,7 +222,7 @@ public final class Censor {
 	}
 
 	@OriginalMember(owner = "client!mc", name = "a", descriptor = "(IC)Z")
-	private static boolean method423(@OriginalArg(0) int arg0, @OriginalArg(1) char arg1) {
+	private static boolean allowCharacter(@OriginalArg(0) int arg0, @OriginalArg(1) char arg1) {
 		try {
 			if (arg0 != flowObfuscator5) {
 				throw new NullPointerException();
@@ -235,23 +235,23 @@ public final class Censor {
 	}
 
 	@OriginalMember(owner = "client!mc", name = "a", descriptor = "(Ljava/lang/String;I)Ljava/lang/String;")
-	public static String method424(@OriginalArg(0) String arg0, @OriginalArg(1) int arg1) {
+	public static String filter(@OriginalArg(0) String arg0, @OriginalArg(1) int arg1) {
 		try {
 			@Pc(3) long local3 = System.currentTimeMillis();
 			@Pc(6) char[] local6 = arg0.toCharArray();
-			method422(local6, 0);
+			filterCharacters(local6, 0);
 			@Pc(15) String local15 = (new String(local6)).trim();
 			@Pc(19) char[] local19 = local15.toLowerCase().toCharArray();
 			@Pc(22) String local22 = local15.toLowerCase();
-			method432(local19, 0);
-			method427(true, local19);
-			method428((byte) 120, local19);
-			method441(8, local19);
+			filterTld(local19, 0);
+			filterBad(true, local19);
+			filterDomains((byte) 120, local19);
+			filterFragments(8, local19);
 			@Pc(45) int local45;
-			for (@Pc(36) int local36 = 0; local36 < aStringArray11.length; local36++) {
+			for (@Pc(36) int local36 = 0; local36 < ALLOWLIST.length; local36++) {
 				local45 = -1;
-				while ((local45 = local22.indexOf(aStringArray11[local36], local45 + 1)) != -1) {
-					@Pc(52) char[] local52 = aStringArray11[local36].toCharArray();
+				while ((local45 = local22.indexOf(ALLOWLIST[local36], local45 + 1)) != -1) {
+					@Pc(52) char[] local52 = ALLOWLIST[local36].toCharArray();
 					for (@Pc(54) int local54 = 0; local54 < local52.length; local54++) {
 						local19[local54 + local45] = local52[local54];
 					}
@@ -261,8 +261,8 @@ public final class Censor {
 				for (local45 = 1; local45 > 0; local45++) {
 				}
 			}
-			method425(local19, 135, local15.toCharArray());
-			method426((byte) 6, local19);
+			replaceUpperCases(local19, 135, local15.toCharArray());
+			formatUpperCases((byte) 6, local19);
 			@Pc(105) long local105 = System.currentTimeMillis();
 			return (new String(local19)).trim();
 		} catch (@Pc(112) RuntimeException local112) {
@@ -272,10 +272,10 @@ public final class Censor {
 	}
 
 	@OriginalMember(owner = "client!mc", name = "a", descriptor = "([CI[C)V")
-	private static void method425(@OriginalArg(0) char[] arg0, @OriginalArg(1) int arg1, @OriginalArg(2) char[] arg2) {
+	private static void replaceUpperCases(@OriginalArg(0) char[] arg0, @OriginalArg(1) int arg1, @OriginalArg(2) char[] arg2) {
 		try {
 			for (@Pc(1) int local1 = 0; local1 < arg2.length; local1++) {
-				if (arg0[local1] != '*' && method449(0, arg2[local1])) {
+				if (arg0[local1] != '*' && isUpperCase(0, arg2[local1])) {
 					arg0[local1] = arg2[local1];
 				}
 			}
@@ -287,20 +287,20 @@ public final class Censor {
 	}
 
 	@OriginalMember(owner = "client!mc", name = "a", descriptor = "(B[C)V")
-	private static void method426(@OriginalArg(0) byte arg0, @OriginalArg(1) char[] arg1) {
+	private static void formatUpperCases(@OriginalArg(0) byte arg0, @OriginalArg(1) char[] arg1) {
 		try {
 			@Pc(3) boolean local3 = true;
 			if (arg0 == 6) {
 				@Pc(8) boolean local8 = false;
 				for (@Pc(12) int local12 = 0; local12 < arg1.length; local12++) {
 					@Pc(19) char local19 = arg1[local12];
-					if (!method446(-175, local19)) {
+					if (!isAlpha(-175, local19)) {
 						local3 = true;
 					} else if (local3) {
-						if (method448((byte) 0, local19)) {
+						if (isLowerCase((byte) 0, local19)) {
 							local3 = false;
 						}
-					} else if (method449(0, local19)) {
+					} else if (isUpperCase(0, local19)) {
 						arg1[local12] = (char) (local19 + 'a' - 65);
 					}
 				}
@@ -312,11 +312,11 @@ public final class Censor {
 	}
 
 	@OriginalMember(owner = "client!mc", name = "a", descriptor = "(Z[C)V")
-	private static void method427(@OriginalArg(0) boolean arg0, @OriginalArg(1) char[] arg1) {
+	private static void filterBad(@OriginalArg(0) boolean arg0, @OriginalArg(1) char[] arg1) {
 		try {
 			for (@Pc(3) int local3 = 0; local3 < 2; local3++) {
-				for (@Pc(10) int local10 = aCharArrayArray1.length - 1; local10 >= 0; local10--) {
-					method436((byte) -102, aByteArrayArrayArray8[local10], arg1, aCharArrayArray1[local10]);
+				for (@Pc(10) int local10 = badWords.length - 1; local10 >= 0; local10--) {
+					filter((byte) -102, badCombinations[local10], arg1, badWords[local10]);
 				}
 			}
 			if (arg0) {
@@ -329,17 +329,17 @@ public final class Censor {
 	}
 
 	@OriginalMember(owner = "client!mc", name = "b", descriptor = "(B[C)V")
-	private static void method428(@OriginalArg(0) byte arg0, @OriginalArg(1) char[] arg1) {
+	private static void filterDomains(@OriginalArg(0) byte arg0, @OriginalArg(1) char[] arg1) {
 		try {
 			@Pc(3) char[] local3 = (char[]) arg1.clone();
 			@Pc(18) char[] local18 = new char[] { '(', 'a', ')' };
-			method436((byte) -102, null, local3, local18);
+			filter((byte) -102, null, local3, local18);
 			@Pc(27) char[] local27 = (char[]) arg1.clone();
 			@Pc(42) char[] local42 = new char[] { 'd', 'o', 't' };
-			method436((byte) -102, null, local27, local42);
+			filter((byte) -102, null, local27, local42);
 			if (arg0 == 120) {
-				for (@Pc(56) int local56 = aCharArrayArray2.length - 1; local56 >= 0; local56--) {
-					method429(local27, -706, local3, aCharArrayArray2[local56], arg1);
+				for (@Pc(56) int local56 = domains.length - 1; local56 >= 0; local56--) {
+					filterDomain(local27, -706, local3, domains[local56], arg1);
 				}
 			}
 		} catch (@Pc(71) RuntimeException local71) {
@@ -349,7 +349,7 @@ public final class Censor {
 	}
 
 	@OriginalMember(owner = "client!mc", name = "a", descriptor = "([CI[C[C[C)V")
-	private static void method429(@OriginalArg(0) char[] arg0, @OriginalArg(1) int arg1, @OriginalArg(2) char[] arg2, @OriginalArg(3) char[] arg3, @OriginalArg(4) char[] arg4) {
+	private static void filterDomain(@OriginalArg(0) char[] arg0, @OriginalArg(1) int arg1, @OriginalArg(2) char[] arg2, @OriginalArg(3) char[] arg3, @OriginalArg(4) char[] arg4) {
 		try {
 			if (arg3.length <= arg4.length) {
 				@Pc(9) boolean local9 = true;
@@ -374,7 +374,7 @@ public final class Censor {
 								local33 = arg4[local19 + 1];
 							}
 							@Pc(58) int local58;
-							if (local21 < arg3.length && (local58 = method438(-81, local33, arg3[local21], local31)) > 0) {
+							if (local21 < arg3.length && (local58 = getEmulatedDomainCharSize(-81, local33, arg3[local21], local31)) > 0) {
 								local19 += local58;
 								local21++;
 							} else {
@@ -382,13 +382,13 @@ public final class Censor {
 									break label62;
 								}
 								@Pc(79) int local79;
-								if ((local79 = method438(-81, local33, arg3[local21 - 1], local31)) > 0) {
+								if ((local79 = getEmulatedDomainCharSize(-81, local33, arg3[local21 - 1], local31)) > 0) {
 									local19 += local79;
 									if (local21 == 1) {
 										local23++;
 									}
 								} else {
-									if (local21 >= arg3.length || !method444(local31, 2)) {
+									if (local21 >= arg3.length || !isSymbol(local31, 2)) {
 										break label62;
 									}
 									local19++;
@@ -398,8 +398,8 @@ public final class Censor {
 					}
 					if (local21 >= arg3.length) {
 						var9 = false;
-						@Pc(116) int local116 = method430(local15, arg4, (byte) 6, arg2);
-						@Pc(124) int local124 = method431(arg0, arg4, local19 - 1, -808);
+						@Pc(116) int local116 = getDomainAtFilterStatus(local15, arg4, (byte) 6, arg2);
+						@Pc(124) int local124 = getDomainDotFilterStatus(arg0, arg4, local19 - 1, -808);
 						if (local116 > 2 || local124 > 2) {
 							var9 = true;
 						}
@@ -418,12 +418,12 @@ public final class Censor {
 	}
 
 	@OriginalMember(owner = "client!mc", name = "a", descriptor = "(I[CB[C)I")
-	private static int method430(@OriginalArg(0) int arg0, @OriginalArg(1) char[] arg1, @OriginalArg(2) byte arg2, @OriginalArg(3) char[] arg3) {
+	private static int getDomainAtFilterStatus(@OriginalArg(0) int arg0, @OriginalArg(1) char[] arg1, @OriginalArg(2) byte arg2, @OriginalArg(3) char[] arg3) {
 		try {
 			if (arg0 == 0) {
 				return 2;
 			}
-			for (@Pc(9) int local9 = arg0 - 1; local9 >= 0 && method444(arg1[local9], 2); local9--) {
+			for (@Pc(9) int local9 = arg0 - 1; local9 >= 0 && isSymbol(arg1[local9], 2); local9--) {
 				if (arg1[local9] == '@') {
 					return 3;
 				}
@@ -433,14 +433,14 @@ public final class Censor {
 			}
 			@Pc(32) boolean local32 = false;
 			@Pc(37) int local37 = 0;
-			for (@Pc(41) int local41 = arg0 - 1; local41 >= 0 && method444(arg3[local41], 2); local41--) {
+			for (@Pc(41) int local41 = arg0 - 1; local41 >= 0 && isSymbol(arg3[local41], 2); local41--) {
 				if (arg3[local41] == '*') {
 					local37++;
 				}
 			}
 			if (local37 >= 3) {
 				return 4;
-			} else if (method444(arg1[arg0 - 1], 2)) {
+			} else if (isSymbol(arg1[arg0 - 1], 2)) {
 				return 1;
 			} else {
 				return 0;
@@ -452,7 +452,7 @@ public final class Censor {
 	}
 
 	@OriginalMember(owner = "client!mc", name = "a", descriptor = "([C[CII)I")
-	private static int method431(@OriginalArg(0) char[] arg0, @OriginalArg(1) char[] arg1, @OriginalArg(2) int arg2, @OriginalArg(3) int arg3) {
+	private static int getDomainDotFilterStatus(@OriginalArg(0) char[] arg0, @OriginalArg(1) char[] arg1, @OriginalArg(2) int arg2, @OriginalArg(3) int arg3) {
 		try {
 			if (arg3 >= 0) {
 				return flowObfuscator4;
@@ -461,7 +461,7 @@ public final class Censor {
 			} else {
 				@Pc(17) int local17 = arg2 + 1;
 				while (true) {
-					if (local17 < arg1.length && method444(arg1[local17], 2)) {
+					if (local17 < arg1.length && isSymbol(arg1[local17], 2)) {
 						if (arg1[local17] != '.' && arg1[local17] != ',') {
 							local17++;
 							continue;
@@ -469,7 +469,7 @@ public final class Censor {
 						return 3;
 					}
 					@Pc(44) int local44 = 0;
-					for (@Pc(48) int local48 = arg2 + 1; local48 < arg1.length && method444(arg0[local48], 2); local48++) {
+					for (@Pc(48) int local48 = arg2 + 1; local48 < arg1.length && isSymbol(arg0[local48], 2); local48++) {
 						if (arg0[local48] == '*') {
 							local44++;
 						}
@@ -477,7 +477,7 @@ public final class Censor {
 					if (local44 >= 3) {
 						return 4;
 					}
-					if (method444(arg1[arg2 + 1], 2)) {
+					if (isSymbol(arg1[arg2 + 1], 2)) {
 						return 1;
 					}
 					return 0;
@@ -490,19 +490,19 @@ public final class Censor {
 	}
 
 	@OriginalMember(owner = "client!mc", name = "b", descriptor = "([CI)V")
-	private static void method432(@OriginalArg(0) char[] arg0, @OriginalArg(1) int arg1) {
+	private static void filterTld(@OriginalArg(0) char[] arg0, @OriginalArg(1) int arg1) {
 		try {
 			@Pc(3) char[] local3 = (char[]) arg0.clone();
 			@Pc(18) char[] local18 = new char[] { 'd', 'o', 't' };
-			method436((byte) -102, null, local3, local18);
+			filter((byte) -102, null, local3, local18);
 			@Pc(27) char[] local27 = (char[]) arg0.clone();
 			@Pc(50) char[] local50 = new char[] { 's', 'l', 'a', 's', 'h' };
 			if (arg1 != 0) {
 				flowObfuscator1 = !flowObfuscator1;
 			}
-			method436((byte) -102, null, local27, local50);
-			for (@Pc(65) int local65 = 0; local65 < aCharArrayArray3.length; local65++) {
-				method433(local27, anIntArray196[local65], true, arg0, aCharArrayArray3[local65], local3);
+			filter((byte) -102, null, local27, local50);
+			for (@Pc(65) int local65 = 0; local65 < tlds.length; local65++) {
+				filterTld(local27, tldType[local65], true, arg0, tlds[local65], local3);
 			}
 		} catch (@Pc(85) RuntimeException local85) {
 			signlink.reporterror("31380, " + arg0 + ", " + arg1 + ", " + local85.toString());
@@ -511,7 +511,7 @@ public final class Censor {
 	}
 
 	@OriginalMember(owner = "client!mc", name = "a", descriptor = "([CIZ[C[C[C)V")
-	private static void method433(@OriginalArg(0) char[] arg0, @OriginalArg(1) int arg1, @OriginalArg(2) boolean arg2, @OriginalArg(3) char[] arg3, @OriginalArg(4) char[] arg4, @OriginalArg(5) char[] arg5) {
+	private static void filterTld(@OriginalArg(0) char[] arg0, @OriginalArg(1) int arg1, @OriginalArg(2) boolean arg2, @OriginalArg(3) char[] arg3, @OriginalArg(4) char[] arg4, @OriginalArg(5) char[] arg5) {
 		try {
 			@Pc(5) int local5;
 			if (!arg2) {
@@ -537,7 +537,7 @@ public final class Censor {
 								local38 = arg3[local24 + 1];
 							}
 							@Pc(63) int local63;
-							if (local26 < arg4.length && (local63 = method438(-81, local38, arg4[local26], local36)) > 0) {
+							if (local26 < arg4.length && (local63 = getEmulatedDomainCharSize(-81, local38, arg4[local26], local36)) > 0) {
 								local24 += local63;
 								local26++;
 							} else {
@@ -545,13 +545,13 @@ public final class Censor {
 									break label124;
 								}
 								@Pc(84) int local84;
-								if ((local84 = method438(-81, local38, arg4[local26 - 1], local36)) > 0) {
+								if ((local84 = getEmulatedDomainCharSize(-81, local38, arg4[local26 - 1], local36)) > 0) {
 									local24 += local84;
 									if (local26 == 1) {
 										local5++;
 									}
 								} else {
-									if (local26 >= arg4.length || !method444(local36, 2)) {
+									if (local26 >= arg4.length || !isSymbol(local36, 2)) {
 										break label124;
 									}
 									local24++;
@@ -561,8 +561,8 @@ public final class Censor {
 					}
 					if (local26 >= arg4.length) {
 						var10 = false;
-						@Pc(121) int local121 = method434(arg3, false, arg5, local20);
-						@Pc(129) int local129 = method435(arg0, -678, local24 - 1, arg3);
+						@Pc(121) int local121 = getTldDotFilterStatus(arg3, false, arg5, local20);
+						@Pc(129) int local129 = getTldSlashFilterStatus(arg0, -678, local24 - 1, arg3);
 						if (arg1 == 1 && local121 > 0 && local129 > 0) {
 							var10 = true;
 						}
@@ -601,11 +601,11 @@ public final class Censor {
 								local191 = false;
 								for (local195 = local179 - 1; local195 >= 0; local195--) {
 									if (local191) {
-										if (method444(arg3[local195], 2)) {
+										if (isSymbol(arg3[local195], 2)) {
 											break;
 										}
 										local179 = local195;
-									} else if (!method444(arg3[local195], 2)) {
+									} else if (!isSymbol(arg3[local195], 2)) {
 										local191 = true;
 										local179 = local195;
 									}
@@ -629,11 +629,11 @@ public final class Censor {
 								local191 = false;
 								for (local195 = local183 + 1; local195 < arg3.length; local195++) {
 									if (local191) {
-										if (method444(arg3[local195], 2)) {
+										if (isSymbol(arg3[local195], 2)) {
 											break;
 										}
 										local183 = local195;
-									} else if (!method444(arg3[local195], 2)) {
+									} else if (!isSymbol(arg3[local195], 2)) {
 										local191 = true;
 										local183 = local195;
 									}
@@ -653,14 +653,14 @@ public final class Censor {
 	}
 
 	@OriginalMember(owner = "client!mc", name = "a", descriptor = "([CZ[CI)I")
-	private static int method434(@OriginalArg(0) char[] arg0, @OriginalArg(1) boolean arg1, @OriginalArg(2) char[] arg2, @OriginalArg(3) int arg3) {
+	private static int getTldDotFilterStatus(@OriginalArg(0) char[] arg0, @OriginalArg(1) boolean arg1, @OriginalArg(2) char[] arg2, @OriginalArg(3) int arg3) {
 		try {
 			if (arg3 == 0) {
 				return 2;
 			}
 			@Pc(9) int local9 = arg3 - 1;
 			while (true) {
-				if (local9 >= 0 && method444(arg0[local9], 2)) {
+				if (local9 >= 0 && isSymbol(arg0[local9], 2)) {
 					if (arg0[local9] != ',' && arg0[local9] != '.') {
 						local9--;
 						continue;
@@ -673,7 +673,7 @@ public final class Censor {
 					for (local38 = 1; local38 > 0; local38++) {
 					}
 				}
-				for (local38 = arg3 - 1; local38 >= 0 && method444(arg2[local38], 2); local38--) {
+				for (local38 = arg3 - 1; local38 >= 0 && isSymbol(arg2[local38], 2); local38--) {
 					if (arg2[local38] == '*') {
 						local34++;
 					}
@@ -681,7 +681,7 @@ public final class Censor {
 				if (local34 >= 3) {
 					return 4;
 				}
-				if (method444(arg0[arg3 - 1], 2)) {
+				if (isSymbol(arg0[arg3 - 1], 2)) {
 					return 1;
 				}
 				return 0;
@@ -693,14 +693,14 @@ public final class Censor {
 	}
 
 	@OriginalMember(owner = "client!mc", name = "a", descriptor = "([CII[C)I")
-	private static int method435(@OriginalArg(0) char[] arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2, @OriginalArg(3) char[] arg3) {
+	private static int getTldSlashFilterStatus(@OriginalArg(0) char[] arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2, @OriginalArg(3) char[] arg3) {
 		try {
 			if (arg2 + 1 == arg3.length) {
 				return 2;
 			}
 			@Pc(13) int local13 = arg2 + 1;
 			while (true) {
-				if (local13 < arg3.length && method444(arg3[local13], 2)) {
+				if (local13 < arg3.length && isSymbol(arg3[local13], 2)) {
 					if (arg3[local13] != '\\' && arg3[local13] != '/') {
 						local13++;
 						continue;
@@ -708,7 +708,7 @@ public final class Censor {
 					return 3;
 				}
 				@Pc(40) int local40 = 0;
-				for (@Pc(44) int local44 = arg2 + 1; local44 < arg3.length && method444(arg0[local44], 2); local44++) {
+				for (@Pc(44) int local44 = arg2 + 1; local44 < arg3.length && isSymbol(arg0[local44], 2); local44++) {
 					if (arg0[local44] == '*') {
 						local40++;
 					}
@@ -719,7 +719,7 @@ public final class Censor {
 				if (local40 >= 5) {
 					return 4;
 				}
-				if (method444(arg3[arg2 + 1], 2)) {
+				if (isSymbol(arg3[arg2 + 1], 2)) {
 					return 1;
 				}
 				return 0;
@@ -731,7 +731,7 @@ public final class Censor {
 	}
 
 	@OriginalMember(owner = "client!mc", name = "a", descriptor = "(B[[B[C[C)V")
-	private static void method436(@OriginalArg(0) byte arg0, @OriginalArg(1) byte[][] arg1, @OriginalArg(2) char[] arg2, @OriginalArg(3) char[] arg3) {
+	private static void filter(@OriginalArg(0) byte arg0, @OriginalArg(1) byte[][] arg1, @OriginalArg(2) char[] arg2, @OriginalArg(3) char[] arg3) {
 		try {
 			if (arg3.length <= arg2.length) {
 				@Pc(9) boolean local9 = true;
@@ -762,11 +762,11 @@ public final class Censor {
 								var14 = arg2[local20 + 1];
 							}
 							@Pc(67) int local67;
-							if (local22 < arg3.length && (local67 = method439(var14, arg3[local22], var13, 7326)) > 0) {
-								if (local67 == 1 && method447(var13, 10361)) {
+							if (local22 < arg3.length && (local67 = getEmulatedSize(var14, arg3[local22], var13, 7326)) > 0) {
+								if (local67 == 1 && isNumber(var13, 10361)) {
 									local30 = true;
 								}
-								if (local67 == 2 && (method447(var13, 10361) || method447(var14, 10361))) {
+								if (local67 == 2 && (isNumber(var13, 10361) || isNumber(var14, 10361))) {
 									local30 = true;
 								}
 								local20 += local67;
@@ -776,19 +776,19 @@ public final class Censor {
 									break label163;
 								}
 								@Pc(110) int local110;
-								if ((local110 = method439(var14, arg3[local22 - 1], var13, 7326)) > 0) {
+								if ((local110 = getEmulatedSize(var14, arg3[local22 - 1], var13, 7326)) > 0) {
 									local20 += local110;
 									if (local22 == 1) {
 										local26++;
 									}
 								} else {
-									if (local22 >= arg3.length || !method445(var13, (byte) 13)) {
+									if (local22 >= arg3.length || !isLowerCaseAlpha(var13, (byte) 13)) {
 										break label163;
 									}
-									if (method444(var13, 2) && var13 != '\'') {
+									if (isSymbol(var13, 2) && var13 != '\'') {
 										local28 = true;
 									}
-									if (method447(var13, 10361)) {
+									if (isNumber(var13, 10361)) {
 										local32 = true;
 									}
 									local20++;
@@ -806,10 +806,10 @@ public final class Censor {
 						if (local28) {
 							@Pc(221) boolean local221 = false;
 							@Pc(223) boolean local223 = false;
-							if (local16 - 1 < 0 || method444(arg2[local16 - 1], 2) && arg2[local16 - 1] != '\'') {
+							if (local16 - 1 < 0 || isSymbol(arg2[local16 - 1], 2) && arg2[local16 - 1] != '\'') {
 								local221 = true;
 							}
-							if (local20 >= arg2.length || method444(arg2[local20], 2) && arg2[local20] != '\'') {
+							if (local20 >= arg2.length || isSymbol(arg2[local20], 2) && arg2[local20] != '\'') {
 								local223 = true;
 							}
 							if (!local221 || !local223) {
@@ -819,20 +819,20 @@ public final class Censor {
 									local271 = local16;
 								}
 								while (!local267 && local271 < local20) {
-									if (local271 >= 0 && (!method444(arg2[local271], 2) || arg2[local271] == '\'')) {
+									if (local271 >= 0 && (!isSymbol(arg2[local271], 2) || arg2[local271] == '\'')) {
 										@Pc(293) char[] local293 = new char[3];
 										@Pc(295) int local295;
-										for (local295 = 0; local295 < 3 && local271 + local295 < arg2.length && (!method444(arg2[local271 + local295], 2) || arg2[local271 + local295] == '\''); local295++) {
+										for (local295 = 0; local295 < 3 && local271 + local295 < arg2.length && (!isSymbol(arg2[local271 + local295], 2) || arg2[local271 + local295] == '\''); local295++) {
 											local293[local295] = arg2[local271 + local295];
 										}
 										@Pc(333) boolean local333 = true;
 										if (local295 == 0) {
 											local333 = false;
 										}
-										if (local295 < 3 && local271 - 1 >= 0 && (!method444(arg2[local271 - 1], 2) || arg2[local271 - 1] == '\'')) {
+										if (local295 < 3 && local271 - 1 >= 0 && (!isSymbol(arg2[local271 - 1], 2) || arg2[local271 - 1] == '\'')) {
 											local333 = false;
 										}
-										if (local333 && !method450(local293, 6)) {
+										if (local333 && !isBadFragment(local293, 6)) {
 											local267 = true;
 										}
 									}
@@ -851,9 +851,9 @@ public final class Censor {
 							if (local20 < arg2.length) {
 								var14 = arg2[local20];
 							}
-							@Pc(203) byte local203 = method440(0, var13);
-							@Pc(207) byte local207 = method440(0, var14);
-							if (arg1 != null && method437(841, local203, arg1, local207)) {
+							@Pc(203) byte local203 = getIndex(0, var13);
+							@Pc(207) byte local207 = getIndex(0, var14);
+							if (arg1 != null && comboMatches(841, local203, arg1, local207)) {
 								var12 = false;
 							}
 						}
@@ -861,9 +861,9 @@ public final class Censor {
 							@Pc(383) int local383 = 0;
 							@Pc(385) int local385 = 0;
 							for (@Pc(387) int local387 = local16; local387 < local20; local387++) {
-								if (method447(arg2[local387], 10361)) {
+								if (isNumber(arg2[local387], 10361)) {
 									local383++;
-								} else if (method446(-175, arg2[local387])) {
+								} else if (isAlpha(-175, arg2[local387])) {
 									local385++;
 								}
 							}
@@ -883,7 +883,7 @@ public final class Censor {
 	}
 
 	@OriginalMember(owner = "client!mc", name = "a", descriptor = "(IB[[BB)Z")
-	private static boolean method437(@OriginalArg(0) int arg0, @OriginalArg(1) byte arg1, @OriginalArg(2) byte[][] arg2, @OriginalArg(3) byte arg3) {
+	private static boolean comboMatches(@OriginalArg(0) int arg0, @OriginalArg(1) byte arg1, @OriginalArg(2) byte[][] arg2, @OriginalArg(3) byte arg3) {
 		try {
 			if (arg0 <= 0) {
 				flowObfuscator9 = !flowObfuscator9;
@@ -915,7 +915,7 @@ public final class Censor {
 	}
 
 	@OriginalMember(owner = "client!mc", name = "a", descriptor = "(ICCC)I")
-	private static int method438(@OriginalArg(0) int arg0, @OriginalArg(1) char arg1, @OriginalArg(2) char arg2, @OriginalArg(3) char arg3) {
+	private static int getEmulatedDomainCharSize(@OriginalArg(0) int arg0, @OriginalArg(1) char arg1, @OriginalArg(2) char arg2, @OriginalArg(3) char arg3) {
 		try {
 			while (arg0 >= 0) {
 				for (@Pc(5) int local5 = 1; local5 > 0; local5++) {
@@ -945,7 +945,7 @@ public final class Censor {
 	}
 
 	@OriginalMember(owner = "client!mc", name = "a", descriptor = "(CCCI)I")
-	private static int method439(@OriginalArg(0) char arg0, @OriginalArg(1) char arg1, @OriginalArg(2) char arg2, @OriginalArg(3) int arg3) {
+	private static int getEmulatedSize(@OriginalArg(0) char arg0, @OriginalArg(1) char arg1, @OriginalArg(2) char arg2, @OriginalArg(3) int arg3) {
 		try {
 			if (arg3 != 7326) {
 				for (@Pc(4) int local4 = 1; local4 > 0; local4++) {
@@ -1132,7 +1132,7 @@ public final class Censor {
 	}
 
 	@OriginalMember(owner = "client!mc", name = "b", descriptor = "(IC)B")
-	private static byte method440(@OriginalArg(0) int arg0, @OriginalArg(1) char arg1) {
+	private static byte getIndex(@OriginalArg(0) int arg0, @OriginalArg(1) char arg1) {
 		try {
 			if (arg0 != 0) {
 				throw new NullPointerException();
@@ -1152,7 +1152,7 @@ public final class Censor {
 	}
 
 	@OriginalMember(owner = "client!mc", name = "a", descriptor = "(I[C)V")
-	private static void method441(@OriginalArg(0) int arg0, @OriginalArg(1) char[] arg1) {
+	private static void filterFragments(@OriginalArg(0) int arg0, @OriginalArg(1) char[] arg1) {
 		try {
 			@Pc(3) boolean local3 = false;
 			@Pc(5) int local5 = 0;
@@ -1162,12 +1162,12 @@ public final class Censor {
 				while (true) {
 					do {
 						@Pc(112) int local112;
-						if ((local112 = method442(149, arg1, local5)) == -1) {
+						if ((local112 = indexOfNumber(149, arg1, local5)) == -1) {
 							return;
 						}
 						@Pc(17) boolean local17 = false;
 						for (@Pc(19) int local19 = local5; local19 >= 0 && local19 < local112 && !local17; local19++) {
-							if (!method444(arg1[local19], 2) && !method445(arg1[local19], (byte) 13)) {
+							if (!isSymbol(arg1[local19], 2) && !isLowerCaseAlpha(arg1[local19], (byte) 13)) {
 								local17 = true;
 							}
 						}
@@ -1177,7 +1177,7 @@ public final class Censor {
 						if (local11 == 0) {
 							local13 = local112;
 						}
-						local5 = method443(6, local112, arg1);
+						local5 = indexOfNonNumber(6, local112, arg1);
 						@Pc(58) int local58 = 0;
 						for (@Pc(60) int local60 = local112; local60 < local5; local60++) {
 							local58 = local58 * 10 + arg1[local60] - 48;
@@ -1201,7 +1201,7 @@ public final class Censor {
 	}
 
 	@OriginalMember(owner = "client!mc", name = "a", descriptor = "(I[CI)I")
-	private static int method442(@OriginalArg(0) int arg0, @OriginalArg(1) char[] arg1, @OriginalArg(2) int arg2) {
+	private static int indexOfNumber(@OriginalArg(0) int arg0, @OriginalArg(1) char[] arg1, @OriginalArg(2) int arg2) {
 		try {
 			@Pc(3) int local3 = 66 / arg0;
 			for (@Pc(5) int local5 = arg2; local5 < arg1.length && local5 >= 0; local5++) {
@@ -1217,7 +1217,7 @@ public final class Censor {
 	}
 
 	@OriginalMember(owner = "client!mc", name = "a", descriptor = "(II[C)I")
-	private static int method443(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(2) char[] arg2) {
+	private static int indexOfNonNumber(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(2) char[] arg2) {
 		try {
 			if (arg0 != 6) {
 				return 4;
@@ -1240,12 +1240,12 @@ public final class Censor {
 	}
 
 	@OriginalMember(owner = "client!mc", name = "a", descriptor = "(CI)Z")
-	private static boolean method444(@OriginalArg(0) char arg0, @OriginalArg(1) int arg1) {
+	private static boolean isSymbol(@OriginalArg(0) char arg0, @OriginalArg(1) int arg1) {
 		try {
 			if (arg1 != 2) {
 				throw new NullPointerException();
 			}
-			return !method446(-175, arg0) && !method447(arg0, 10361);
+			return !isAlpha(-175, arg0) && !isNumber(arg0, 10361);
 		} catch (@Pc(19) RuntimeException local19) {
 			signlink.reporterror("40138, " + arg0 + ", " + arg1 + ", " + local19.toString());
 			throw new RuntimeException();
@@ -1253,7 +1253,7 @@ public final class Censor {
 	}
 
 	@OriginalMember(owner = "client!mc", name = "a", descriptor = "(CB)Z")
-	private static boolean method445(@OriginalArg(0) char arg0, @OriginalArg(1) byte arg1) {
+	private static boolean isLowerCaseAlpha(@OriginalArg(0) char arg0, @OriginalArg(1) byte arg1) {
 		try {
 			if (arg1 != 13) {
 				throw new NullPointerException();
@@ -1269,7 +1269,7 @@ public final class Censor {
 	}
 
 	@OriginalMember(owner = "client!mc", name = "c", descriptor = "(IC)Z")
-	private static boolean method446(@OriginalArg(0) int arg0, @OriginalArg(1) char arg1) {
+	private static boolean isAlpha(@OriginalArg(0) int arg0, @OriginalArg(1) char arg1) {
 		try {
 			if (arg0 >= 0) {
 				throw new NullPointerException();
@@ -1282,7 +1282,7 @@ public final class Censor {
 	}
 
 	@OriginalMember(owner = "client!mc", name = "b", descriptor = "(CI)Z")
-	private static boolean method447(@OriginalArg(0) char arg0, @OriginalArg(1) int arg1) {
+	private static boolean isNumber(@OriginalArg(0) char arg0, @OriginalArg(1) int arg1) {
 		try {
 			if (arg1 != 10361) {
 				flowObfuscator2 = -124;
@@ -1295,7 +1295,7 @@ public final class Censor {
 	}
 
 	@OriginalMember(owner = "client!mc", name = "a", descriptor = "(BC)Z")
-	private static boolean method448(@OriginalArg(0) byte arg0, @OriginalArg(1) char arg1) {
+	private static boolean isLowerCase(@OriginalArg(0) byte arg0, @OriginalArg(1) char arg1) {
 		try {
 			if (arg0 != 0) {
 				flowObfuscator3 = -254;
@@ -1308,7 +1308,7 @@ public final class Censor {
 	}
 
 	@OriginalMember(owner = "client!mc", name = "d", descriptor = "(IC)Z")
-	private static boolean method449(@OriginalArg(0) int arg0, @OriginalArg(1) char arg1) {
+	private static boolean isUpperCase(@OriginalArg(0) int arg0, @OriginalArg(1) char arg1) {
 		try {
 			if (arg0 < 0 || arg0 > 0) {
 				flowObfuscator1 = !flowObfuscator1;
@@ -1321,34 +1321,34 @@ public final class Censor {
 	}
 
 	@OriginalMember(owner = "client!mc", name = "c", descriptor = "([CI)Z")
-	private static boolean method450(@OriginalArg(0) char[] arg0, @OriginalArg(1) int arg1) {
+	private static boolean isBadFragment(@OriginalArg(0) char[] arg0, @OriginalArg(1) int arg1) {
 		try {
 			@Pc(3) boolean local3 = true;
 			for (@Pc(5) int local5 = 0; local5 < arg0.length; local5++) {
-				if (!method447(arg0[local5], 10361) && arg0[local5] != '\u0000') {
+				if (!isNumber(arg0[local5], 10361) && arg0[local5] != '\u0000') {
 					local3 = false;
 				}
 			}
 			if (local3) {
 				return true;
 			}
-			@Pc(32) int local32 = method451(5, arg0);
+			@Pc(32) int local32 = firstFragmentId(5, arg0);
 			@Pc(34) int local34 = 0;
 			@Pc(39) int local39;
 			if (arg1 != 6) {
 				for (local39 = 1; local39 > 0; local39++) {
 				}
 			}
-			local39 = anIntArray195.length - 1;
-			if (local32 == anIntArray195[local34] || local32 == anIntArray195[local39]) {
+			local39 = fragments.length - 1;
+			if (local32 == fragments[local34] || local32 == fragments[local39]) {
 				return true;
 			}
 			do {
 				@Pc(67) int local67 = (local34 + local39) / 2;
-				if (local32 == anIntArray195[local67]) {
+				if (local32 == fragments[local67]) {
 					return true;
 				}
-				if (local32 < anIntArray195[local67]) {
+				if (local32 < fragments[local67]) {
 					local39 = local67;
 				} else {
 					local34 = local67;
@@ -1362,7 +1362,7 @@ public final class Censor {
 	}
 
 	@OriginalMember(owner = "client!mc", name = "b", descriptor = "(I[C)I")
-	private static int method451(@OriginalArg(0) int arg0, @OriginalArg(1) char[] arg1) {
+	private static int firstFragmentId(@OriginalArg(0) int arg0, @OriginalArg(1) char[] arg1) {
 		try {
 			if (arg1.length > 6) {
 				return 0;

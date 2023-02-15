@@ -122,7 +122,7 @@ public final class BZip2State {
 	public final byte[] mtfa = new byte[4096];
 
 	@OriginalMember(owner = "client!sb", name = "N", descriptor = "[I")
-	public final int[] anIntArray217 = new int[16];
+	public final int[] mtfbase = new int[16];
 
 	@OriginalMember(owner = "client!sb", name = "O", descriptor = "[B")
 	public final byte[] selector = new byte[18002];

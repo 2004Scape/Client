@@ -220,11 +220,11 @@ public final class Image8 extends Draw2D {
 		try {
 			arg1 += this.cropX;
 			arg0 += this.cropY;
-			@Pc(15) int local15 = arg1 + arg0 * Draw2D.anInt528;
+			@Pc(15) int local15 = arg1 + arg0 * Draw2D.width2d;
 			@Pc(17) int local17 = 0;
 			@Pc(20) int local20 = this.height;
 			@Pc(23) int local23 = this.width;
-			@Pc(27) int local27 = Draw2D.anInt528 - local23;
+			@Pc(27) int local27 = Draw2D.width2d - local23;
 			@Pc(29) int local29 = 0;
 			@Pc(36) int local36;
 			if (arg0 < Draw2D.top) {
@@ -232,7 +232,7 @@ public final class Image8 extends Draw2D {
 				local20 -= local36;
 				arg0 = Draw2D.top;
 				local17 += local36 * local23;
-				local15 += local36 * Draw2D.anInt528;
+				local15 += local36 * Draw2D.width2d;
 			}
 			if (arg0 + local20 > Draw2D.bottom) {
 				local20 -= arg0 + local20 - Draw2D.bottom;
@@ -253,7 +253,7 @@ public final class Image8 extends Draw2D {
 				local27 += local36;
 			}
 			if (local23 > 0 && local20 > 0) {
-				this.copyPixels(Draw2D.anIntArray178, local17, local29, this.pixels, local20, 0, local23, local15, local27, this.palette);
+				this.copyPixels(Draw2D.data, local17, local29, this.pixels, local20, 0, local23, local15, local27, this.palette);
 				if (!arg2) {
 					;
 				}

@@ -307,7 +307,7 @@ public final class BZip2InputStream {
 						arg0.mtfa[local486] = (byte) (local488 * 16 + local492);
 						local486--;
 					}
-					arg0.anIntArray217[local488] = local486 + 1;
+					arg0.mtfbase[local488] = local486 + 1;
 				}
 				@Pc(520) int local520 = 0;
 				@Pc(530) byte local530;
@@ -359,7 +359,7 @@ public final class BZip2InputStream {
 								local582 = local47[local557 - local45[local553]];
 							} while (local582 == 0 || local582 == 1);
 							local592++;
-							local64 = arg0.seqToUnseq[arg0.mtfa[arg0.anIntArray217[0]] & 0xFF];
+							local64 = arg0.seqToUnseq[arg0.mtfa[arg0.mtfbase[0]] & 0xFF];
 							arg0.unzftab[local64 & 0xFF] += local592;
 							while (local592 > 0) {
 								BZip2State.tt[local520] = local64 & 0xFF;
@@ -370,7 +370,7 @@ public final class BZip2InputStream {
 							@Pc(724) int local724 = local582 - 1;
 							@Pc(732) int local732;
 							if (local724 < 16) {
-								local732 = arg0.anIntArray217[0];
+								local732 = arg0.mtfbase[0];
 								local64 = arg0.mtfa[local732 + local724];
 								while (local724 > 3) {
 									@Pc(745) int local745 = local732 + local724;
@@ -388,28 +388,28 @@ public final class BZip2InputStream {
 							} else {
 								@Pc(825) int local825 = local724 / 16;
 								@Pc(829) int local829 = local724 % 16;
-								local732 = arg0.anIntArray217[local825] + local829;
+								local732 = arg0.mtfbase[local825] + local829;
 								local64 = arg0.mtfa[local732];
-								while (local732 > arg0.anIntArray217[local825]) {
+								while (local732 > arg0.mtfbase[local825]) {
 									arg0.mtfa[local732] = arg0.mtfa[local732 - 1];
 									local732--;
 								}
-								@Pc(865) int local865 = arg0.anIntArray217[local825]++;
+								@Pc(865) int local865 = arg0.mtfbase[local825]++;
 								while (local825 > 0) {
-									local865 = arg0.anIntArray217[local825]--;
-									arg0.mtfa[arg0.anIntArray217[local825]] = arg0.mtfa[arg0.anIntArray217[local825 - 1] + 16 - 1];
+									local865 = arg0.mtfbase[local825]--;
+									arg0.mtfa[arg0.mtfbase[local825]] = arg0.mtfa[arg0.mtfbase[local825 - 1] + 16 - 1];
 									local825--;
 								}
-								local865 = arg0.anIntArray217[0]--;
-								arg0.mtfa[arg0.anIntArray217[0]] = local64;
-								if (arg0.anIntArray217[0] == 0) {
+								local865 = arg0.mtfbase[0]--;
+								arg0.mtfa[arg0.mtfbase[0]] = local64;
+								if (arg0.mtfbase[0] == 0) {
 									@Pc(924) int local924 = 4095;
 									for (@Pc(926) int local926 = 15; local926 >= 0; local926--) {
 										for (@Pc(930) int local930 = 15; local930 >= 0; local930--) {
-											arg0.mtfa[local924] = arg0.mtfa[arg0.anIntArray217[local926] + local930];
+											arg0.mtfa[local924] = arg0.mtfa[arg0.mtfbase[local926] + local930];
 											local924--;
 										}
-										arg0.anIntArray217[local926] = local924 + 1;
+										arg0.mtfbase[local926] = local924 + 1;
 									}
 								}
 							}
