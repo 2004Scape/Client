@@ -110,7 +110,7 @@ public final class ProjectileEntity extends Entity {
 	}
 
 	@OriginalMember(owner = "client!ab", name = "a", descriptor = "(IIIII)V")
-	public void method19(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2, @OriginalArg(3) int arg3, @OriginalArg(4) int arg4) {
+	public void updateVelocity(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2, @OriginalArg(3) int arg3, @OriginalArg(4) int arg4) {
 		try {
 			@Pc(8) double local8;
 			if (!this.mobile) {
@@ -139,7 +139,7 @@ public final class ProjectileEntity extends Entity {
 	}
 
 	@OriginalMember(owner = "client!ab", name = "a", descriptor = "(BI)V")
-	public void method20(@OriginalArg(0) byte arg0, @OriginalArg(1) int arg1) {
+	public void update(@OriginalArg(0) byte arg0, @OriginalArg(1) int arg1) {
 		try {
 			if (arg0 != -30) {
 				this.flowObfuscator2 = -454;
@@ -156,7 +156,7 @@ public final class ProjectileEntity extends Entity {
 				while (this.seqCycle > this.spotanim.seq.frameDelay[this.seqFrame]) {
 					this.seqCycle -= this.spotanim.seq.frameDelay[this.seqFrame] + 1;
 					this.seqFrame++;
-					if (this.seqFrame >= this.spotanim.seq.frameCount) {
+					if (this.seqFrame >= this.spotanim.seq.framecount) {
 						this.seqFrame = 0;
 					}
 				}
@@ -179,15 +179,15 @@ public final class ProjectileEntity extends Entity {
 			}
 			if (this.spotanim.seq != null) {
 				local19.createLabelReferences(4);
-				local19.applyTransform(-16599, this.spotanim.seq.transformIds[this.seqFrame]);
+				local19.applyTransform(-16599, this.spotanim.seq.primaryFrames[this.seqFrame]);
 				local19.labelFaces = null;
 				local19.labelVertices = null;
 			}
-			if (this.spotanim.scaleXY != 128 || this.spotanim.scaleZ != 128) {
-				local19.scale(this.spotanim.scaleXY, 2, this.spotanim.scaleZ, this.spotanim.scaleXY);
+			if (this.spotanim.resizeh != 128 || this.spotanim.resizev != 128) {
+				local19.scale(this.spotanim.resizeh, 2, this.spotanim.resizev, this.spotanim.resizeh);
 			}
-			local19.method235((byte) 7, this.pitch);
-			local19.calculateNormals(this.spotanim.lightAmbient + 64, this.spotanim.lightAttenuation + 850, -30, -50, -30, true);
+			local19.rotateX((byte) 7, this.pitch);
+			local19.calculateNormals(this.spotanim.ambient + 64, this.spotanim.contrast + 850, -30, -50, -30, true);
 			return local19;
 		} catch (@Pc(97) RuntimeException local97) {
 			signlink.reporterror("99718, " + arg0 + ", " + local97.toString());

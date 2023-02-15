@@ -18,39 +18,39 @@ public final class InputTracking {
 	private static boolean flowObfuscator4;
 
 	@OriginalMember(owner = "client!e", name = "e", descriptor = "Z")
-	public static boolean aBoolean81;
+	public static boolean enabled;
 
 	@OriginalMember(owner = "client!e", name = "f", descriptor = "Lclient!kb;")
-	private static Buffer aClass1_Sub3_Sub3_7 = null;
+	private static Buffer outBuffer = null;
 
 	@OriginalMember(owner = "client!e", name = "g", descriptor = "Lclient!kb;")
-	private static Buffer aClass1_Sub3_Sub3_8 = null;
+	private static Buffer oldBuffer = null;
 
 	@OriginalMember(owner = "client!e", name = "h", descriptor = "J")
-	private static long aLong11;
+	private static long lastTime;
 
 	@OriginalMember(owner = "client!e", name = "i", descriptor = "I")
-	private static int anInt352;
+	private static int trackedCount;
 
 	@OriginalMember(owner = "client!e", name = "j", descriptor = "J")
-	private static long aLong12;
+	private static long lastMoveTime;
 
 	@OriginalMember(owner = "client!e", name = "k", descriptor = "I")
-	private static int anInt353;
+	private static int lastX;
 
 	@OriginalMember(owner = "client!e", name = "l", descriptor = "I")
-	private static int anInt354;
+	private static int lastY;
 
 	@OriginalMember(owner = "client!e", name = "a", descriptor = "(I)V")
-	public static synchronized void method208(@OriginalArg(0) int arg0) {
+	public static synchronized void setEnabled(@OriginalArg(0) int arg0) {
 		try {
-			aClass1_Sub3_Sub3_7 = Buffer.method378(1, -737);
-			aClass1_Sub3_Sub3_8 = null;
-			aLong11 = System.currentTimeMillis();
+			outBuffer = Buffer.alloc(1, -737);
+			oldBuffer = null;
+			lastTime = System.currentTimeMillis();
 			if (arg0 != -31717) {
 				flowObfuscator4 = !flowObfuscator4;
 			}
-			aBoolean81 = true;
+			enabled = true;
 		} catch (@Pc(20) RuntimeException local20) {
 			signlink.reporterror("89678, " + arg0 + ", " + local20.toString());
 			throw new RuntimeException();
@@ -58,12 +58,12 @@ public final class InputTracking {
 	}
 
 	@OriginalMember(owner = "client!e", name = "a", descriptor = "(B)V")
-	public static synchronized void method209(@OriginalArg(0) byte arg0) {
+	public static synchronized void setDisabled(@OriginalArg(0) byte arg0) {
 		try {
-			aBoolean81 = false;
-			aClass1_Sub3_Sub3_7 = null;
+			enabled = false;
+			outBuffer = null;
 			if (arg0 == flowObfuscator1) {
-				aClass1_Sub3_Sub3_8 = null;
+				oldBuffer = null;
 			}
 		} catch (@Pc(11) RuntimeException local11) {
 			signlink.reporterror("9859, " + arg0 + ", " + local11.toString());
@@ -72,13 +72,13 @@ public final class InputTracking {
 	}
 
 	@OriginalMember(owner = "client!e", name = "b", descriptor = "(I)Lclient!kb;")
-	public static synchronized Buffer method210(@OriginalArg(0) int arg0) {
+	public static synchronized Buffer flush(@OriginalArg(0) int arg0) {
 		try {
 			@Pc(1) Buffer local1 = null;
-			if (aClass1_Sub3_Sub3_8 != null && aBoolean81) {
-				local1 = aClass1_Sub3_Sub3_8;
+			if (oldBuffer != null && enabled) {
+				local1 = oldBuffer;
 			}
-			aClass1_Sub3_Sub3_8 = null;
+			oldBuffer = null;
 			if (arg0 >= 0) {
 				flowObfuscator3 = !flowObfuscator3;
 			}
@@ -90,16 +90,16 @@ public final class InputTracking {
 	}
 
 	@OriginalMember(owner = "client!e", name = "c", descriptor = "(I)Lclient!kb;")
-	public static synchronized Buffer method211(@OriginalArg(0) int arg0) {
+	public static synchronized Buffer stop(@OriginalArg(0) int arg0) {
 		try {
 			if (arg0 <= 0) {
 				flowObfuscator4 = !flowObfuscator4;
 			}
 			@Pc(9) Buffer local9 = null;
-			if (aClass1_Sub3_Sub3_7 != null && aClass1_Sub3_Sub3_7.position > 0 && aBoolean81) {
-				local9 = aClass1_Sub3_Sub3_7;
+			if (outBuffer != null && outBuffer.pos > 0 && enabled) {
+				local9 = outBuffer;
 			}
-			method209((byte) 65);
+			setDisabled((byte) 65);
 			return local9;
 		} catch (@Pc(23) RuntimeException local23) {
 			signlink.reporterror("12569, " + arg0 + ", " + local23.toString());
@@ -108,15 +108,15 @@ public final class InputTracking {
 	}
 
 	@OriginalMember(owner = "client!e", name = "a", descriptor = "(II)V")
-	private static synchronized void method212(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1) {
+	private static synchronized void ensureCapacity(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1) {
 		try {
 			if (arg0 <= 0) {
 				flowObfuscator3 = !flowObfuscator3;
 			}
-			if (aClass1_Sub3_Sub3_7.position + arg1 >= 500) {
-				@Pc(15) Buffer local15 = aClass1_Sub3_Sub3_7;
-				aClass1_Sub3_Sub3_7 = Buffer.method378(1, -737);
-				aClass1_Sub3_Sub3_8 = local15;
+			if (outBuffer.pos + arg1 >= 500) {
+				@Pc(15) Buffer local15 = outBuffer;
+				outBuffer = Buffer.alloc(1, -737);
+				oldBuffer = local15;
 			}
 		} catch (@Pc(23) RuntimeException local23) {
 			signlink.reporterror("3191, " + arg0 + ", " + arg1 + ", " + local23.toString());
@@ -125,25 +125,25 @@ public final class InputTracking {
 	}
 
 	@OriginalMember(owner = "client!e", name = "a", descriptor = "(IIIB)V")
-	public static synchronized void method213(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2, @OriginalArg(3) byte arg3) {
+	public static synchronized void mousePressed(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2, @OriginalArg(3) byte arg3) {
 		try {
-			if (aBoolean81 && (arg0 >= 0 && arg0 < 789 && arg2 >= 0 && arg2 < 532)) {
-				anInt352++;
+			if (enabled && (arg0 >= 0 && arg0 < 789 && arg2 >= 0 && arg2 < 532)) {
+				trackedCount++;
 				@Pc(19) long local19 = System.currentTimeMillis();
-				@Pc(25) long local25 = (local19 - aLong11) / 10L;
+				@Pc(25) long local25 = (local19 - lastTime) / 10L;
 				if (local25 > 250L) {
 					local25 = 250L;
 				}
-				aLong11 = local19;
-				method212(flowObfuscator2, 5);
+				lastTime = local19;
+				ensureCapacity(flowObfuscator2, 5);
 				if (arg3 == 4) {
 					if (arg1 == 1) {
-						aClass1_Sub3_Sub3_7.method381(1);
+						outBuffer.p1(1);
 					} else {
-						aClass1_Sub3_Sub3_7.method381(2);
+						outBuffer.p1(2);
 					}
-					aClass1_Sub3_Sub3_7.method381((int) local25);
-					aClass1_Sub3_Sub3_7.method384(arg0 + (arg2 << 10));
+					outBuffer.p1((int) local25);
+					outBuffer.p3(arg0 + (arg2 << 10));
 				}
 			}
 		} catch (@Pc(64) RuntimeException local64) {
@@ -153,24 +153,24 @@ public final class InputTracking {
 	}
 
 	@OriginalMember(owner = "client!e", name = "b", descriptor = "(II)V")
-	public static synchronized void method214(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1) {
+	public static synchronized void mouseReleased(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1) {
 		try {
-			if (aBoolean81) {
-				anInt352++;
+			if (enabled) {
+				trackedCount++;
 				@Pc(8) long local8 = System.currentTimeMillis();
-				@Pc(14) long local14 = (local8 - aLong11) / 10L;
+				@Pc(14) long local14 = (local8 - lastTime) / 10L;
 				if (local14 > 250L) {
 					local14 = 250L;
 				}
-				aLong11 = local8;
+				lastTime = local8;
 				if (arg1 == 0) {
-					method212(flowObfuscator2, 2);
+					ensureCapacity(flowObfuscator2, 2);
 					if (arg0 == 1) {
-						aClass1_Sub3_Sub3_7.method381(3);
+						outBuffer.p1(3);
 					} else {
-						aClass1_Sub3_Sub3_7.method381(4);
+						outBuffer.p1(4);
 					}
-					aClass1_Sub3_Sub3_7.method381((int) local14);
+					outBuffer.p1((int) local14);
 				}
 			}
 		} catch (@Pc(45) RuntimeException local45) {
@@ -180,40 +180,40 @@ public final class InputTracking {
 	}
 
 	@OriginalMember(owner = "client!e", name = "a", descriptor = "(IZI)V")
-	public static synchronized void method215(@OriginalArg(0) int arg0, @OriginalArg(1) boolean arg1, @OriginalArg(2) int arg2) {
+	public static synchronized void mouseMoved(@OriginalArg(0) int arg0, @OriginalArg(1) boolean arg1, @OriginalArg(2) int arg2) {
 		try {
-			if (aBoolean81 && (arg2 >= 0 && arg2 < 789 && arg0 >= 0 && arg0 < 532)) {
+			if (enabled && (arg2 >= 0 && arg2 < 789 && arg0 >= 0 && arg0 < 532)) {
 				@Pc(17) long local17 = System.currentTimeMillis();
 				if (!arg1) {
 					flowObfuscator2 = 445;
 				}
-				if (local17 - aLong12 >= 50L) {
-					aLong12 = local17;
-					anInt352++;
-					@Pc(39) long local39 = (local17 - aLong11) / 10L;
+				if (local17 - lastMoveTime >= 50L) {
+					lastMoveTime = local17;
+					trackedCount++;
+					@Pc(39) long local39 = (local17 - lastTime) / 10L;
 					if (local39 > 250L) {
 						local39 = 250L;
 					}
-					aLong11 = local17;
-					if (arg2 - anInt353 < 8 && arg2 - anInt353 >= -8 && arg0 - anInt354 < 8 && arg0 - anInt354 >= -8) {
-						method212(flowObfuscator2, 3);
-						aClass1_Sub3_Sub3_7.method381(5);
-						aClass1_Sub3_Sub3_7.method381((int) local39);
-						aClass1_Sub3_Sub3_7.method381(arg2 + (arg0 - anInt354 + 8 << 4) + 8 - anInt353);
-					} else if (arg2 - anInt353 < 128 && arg2 - anInt353 >= -128 && arg0 - anInt354 < 128 && arg0 - anInt354 >= -128) {
-						method212(flowObfuscator2, 4);
-						aClass1_Sub3_Sub3_7.method381(6);
-						aClass1_Sub3_Sub3_7.method381((int) local39);
-						aClass1_Sub3_Sub3_7.method381(arg2 + 128 - anInt353);
-						aClass1_Sub3_Sub3_7.method381(arg0 + 128 - anInt354);
+					lastTime = local17;
+					if (arg2 - lastX < 8 && arg2 - lastX >= -8 && arg0 - lastY < 8 && arg0 - lastY >= -8) {
+						ensureCapacity(flowObfuscator2, 3);
+						outBuffer.p1(5);
+						outBuffer.p1((int) local39);
+						outBuffer.p1(arg2 + (arg0 - lastY + 8 << 4) + 8 - lastX);
+					} else if (arg2 - lastX < 128 && arg2 - lastX >= -128 && arg0 - lastY < 128 && arg0 - lastY >= -128) {
+						ensureCapacity(flowObfuscator2, 4);
+						outBuffer.p1(6);
+						outBuffer.p1((int) local39);
+						outBuffer.p1(arg2 + 128 - lastX);
+						outBuffer.p1(arg0 + 128 - lastY);
 					} else {
-						method212(flowObfuscator2, 5);
-						aClass1_Sub3_Sub3_7.method381(7);
-						aClass1_Sub3_Sub3_7.method381((int) local39);
-						aClass1_Sub3_Sub3_7.method384(arg2 + (arg0 << 10));
+						ensureCapacity(flowObfuscator2, 5);
+						outBuffer.p1(7);
+						outBuffer.p1((int) local39);
+						outBuffer.p3(arg2 + (arg0 << 10));
 					}
-					anInt353 = arg2;
-					anInt354 = arg0;
+					lastX = arg2;
+					lastY = arg0;
 				}
 			}
 		} catch (@Pc(163) RuntimeException local163) {
@@ -223,16 +223,16 @@ public final class InputTracking {
 	}
 
 	@OriginalMember(owner = "client!e", name = "a", descriptor = "(IZ)V")
-	public static synchronized void method216(@OriginalArg(0) int arg0, @OriginalArg(1) boolean arg1) {
+	public static synchronized void keyPressed(@OriginalArg(0) int arg0, @OriginalArg(1) boolean arg1) {
 		try {
-			if (aBoolean81) {
-				anInt352++;
+			if (enabled) {
+				trackedCount++;
 				@Pc(8) long local8 = System.currentTimeMillis();
-				@Pc(14) long local14 = (local8 - aLong11) / 10L;
+				@Pc(14) long local14 = (local8 - lastTime) / 10L;
 				if (local14 > 250L) {
 					local14 = 250L;
 				}
-				aLong11 = local8;
+				lastTime = local8;
 				if (arg0 == 1000) {
 					arg0 = 11;
 				}
@@ -248,14 +248,14 @@ public final class InputTracking {
 				if (arg0 >= 1008) {
 					arg0 -= 992;
 				}
-				method212(flowObfuscator2, 3);
+				ensureCapacity(flowObfuscator2, 3);
 				if (!arg1) {
 					for (@Pc(53) int local53 = 1; local53 > 0; local53++) {
 					}
 				}
-				aClass1_Sub3_Sub3_7.method381(8);
-				aClass1_Sub3_Sub3_7.method381((int) local14);
-				aClass1_Sub3_Sub3_7.method381(arg0);
+				outBuffer.p1(8);
+				outBuffer.p1((int) local14);
+				outBuffer.p1(arg0);
 			}
 		} catch (@Pc(70) RuntimeException local70) {
 			signlink.reporterror("93007, " + arg0 + ", " + arg1 + ", " + local70.toString());
@@ -264,16 +264,16 @@ public final class InputTracking {
 	}
 
 	@OriginalMember(owner = "client!e", name = "c", descriptor = "(II)V")
-	public static synchronized void method217(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1) {
+	public static synchronized void keyReleased(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1) {
 		try {
-			if (aBoolean81) {
-				anInt352++;
+			if (enabled) {
+				trackedCount++;
 				@Pc(8) long local8 = System.currentTimeMillis();
-				@Pc(14) long local14 = (local8 - aLong11) / 10L;
+				@Pc(14) long local14 = (local8 - lastTime) / 10L;
 				if (local14 > 250L) {
 					local14 = 250L;
 				}
-				aLong11 = local8;
+				lastTime = local8;
 				if (arg0 == 1000) {
 					arg0 = 11;
 				}
@@ -289,10 +289,10 @@ public final class InputTracking {
 				if (arg0 >= 1008) {
 					arg0 -= 992;
 				}
-				method212(flowObfuscator2, 3);
-				aClass1_Sub3_Sub3_7.method381(9);
-				aClass1_Sub3_Sub3_7.method381((int) local14);
-				aClass1_Sub3_Sub3_7.method381(arg0);
+				ensureCapacity(flowObfuscator2, 3);
+				outBuffer.p1(9);
+				outBuffer.p1((int) local14);
+				outBuffer.p1(arg0);
 				if (arg1 == 1) {
 					;
 				}
@@ -304,20 +304,20 @@ public final class InputTracking {
 	}
 
 	@OriginalMember(owner = "client!e", name = "d", descriptor = "(I)V")
-	public static synchronized void method218(@OriginalArg(0) int arg0) {
+	public static synchronized void focusGained(@OriginalArg(0) int arg0) {
 		try {
-			if (aBoolean81) {
-				anInt352++;
+			if (enabled) {
+				trackedCount++;
 				if (arg0 < 0) {
 					@Pc(11) long local11 = System.currentTimeMillis();
-					@Pc(17) long local17 = (local11 - aLong11) / 10L;
+					@Pc(17) long local17 = (local11 - lastTime) / 10L;
 					if (local17 > 250L) {
 						local17 = 250L;
 					}
-					aLong11 = local11;
-					method212(flowObfuscator2, 2);
-					aClass1_Sub3_Sub3_7.method381(10);
-					aClass1_Sub3_Sub3_7.method381((int) local17);
+					lastTime = local11;
+					ensureCapacity(flowObfuscator2, 2);
+					outBuffer.p1(10);
+					outBuffer.p1((int) local17);
 				}
 			}
 		} catch (@Pc(37) RuntimeException local37) {
@@ -327,22 +327,22 @@ public final class InputTracking {
 	}
 
 	@OriginalMember(owner = "client!e", name = "e", descriptor = "(I)V")
-	public static synchronized void method219(@OriginalArg(0) int arg0) {
+	public static synchronized void focusLost(@OriginalArg(0) int arg0) {
 		try {
-			if (aBoolean81) {
-				anInt352++;
+			if (enabled) {
+				trackedCount++;
 				@Pc(8) long local8 = System.currentTimeMillis();
-				@Pc(14) long local14 = (local8 - aLong11) / 10L;
+				@Pc(14) long local14 = (local8 - lastTime) / 10L;
 				if (local14 > 250L) {
 					local14 = 250L;
 				}
-				aLong11 = local8;
-				method212(flowObfuscator2, 2);
+				lastTime = local8;
+				ensureCapacity(flowObfuscator2, 2);
 				if (arg0 != 0) {
 					flowObfuscator4 = !flowObfuscator4;
 				}
-				aClass1_Sub3_Sub3_7.method381(11);
-				aClass1_Sub3_Sub3_7.method381((int) local14);
+				outBuffer.p1(11);
+				outBuffer.p1((int) local14);
 			}
 		} catch (@Pc(42) RuntimeException local42) {
 			signlink.reporterror("80777, " + arg0 + ", " + local42.toString());
@@ -351,20 +351,20 @@ public final class InputTracking {
 	}
 
 	@OriginalMember(owner = "client!e", name = "f", descriptor = "(I)V")
-	public static synchronized void method220(@OriginalArg(0) int arg0) {
+	public static synchronized void mouseEntered(@OriginalArg(0) int arg0) {
 		try {
-			if (aBoolean81) {
-				anInt352++;
+			if (enabled) {
+				trackedCount++;
 				@Pc(8) long local8 = System.currentTimeMillis();
-				@Pc(14) long local14 = (local8 - aLong11) / 10L;
+				@Pc(14) long local14 = (local8 - lastTime) / 10L;
 				if (local14 > 250L) {
 					local14 = 250L;
 				}
-				aLong11 = local8;
-				method212(flowObfuscator2, 2);
+				lastTime = local8;
+				ensureCapacity(flowObfuscator2, 2);
 				if (arg0 < 0) {
-					aClass1_Sub3_Sub3_7.method381(12);
-					aClass1_Sub3_Sub3_7.method381((int) local14);
+					outBuffer.p1(12);
+					outBuffer.p1((int) local14);
 				}
 			}
 		} catch (@Pc(39) RuntimeException local39) {
@@ -374,19 +374,19 @@ public final class InputTracking {
 	}
 
 	@OriginalMember(owner = "client!e", name = "a", descriptor = "(Z)V")
-	public static synchronized void method221(@OriginalArg(0) boolean arg0) {
+	public static synchronized void mouseExited(@OriginalArg(0) boolean arg0) {
 		try {
-			if (!arg0 && aBoolean81) {
-				anInt352++;
+			if (!arg0 && enabled) {
+				trackedCount++;
 				@Pc(11) long local11 = System.currentTimeMillis();
-				@Pc(17) long local17 = (local11 - aLong11) / 10L;
+				@Pc(17) long local17 = (local11 - lastTime) / 10L;
 				if (local17 > 250L) {
 					local17 = 250L;
 				}
-				aLong11 = local11;
-				method212(flowObfuscator2, 2);
-				aClass1_Sub3_Sub3_7.method381(13);
-				aClass1_Sub3_Sub3_7.method381((int) local17);
+				lastTime = local11;
+				ensureCapacity(flowObfuscator2, 2);
+				outBuffer.p1(13);
+				outBuffer.p1((int) local17);
 			}
 		} catch (@Pc(37) RuntimeException local37) {
 			signlink.reporterror("76997, " + arg0 + ", " + local37.toString());

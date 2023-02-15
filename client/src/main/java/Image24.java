@@ -79,53 +79,53 @@ public final class Image24 extends Draw2D {
 
 	@OriginalMember(owner = "client!hb", name = "<init>", descriptor = "(Lclient!ub;Ljava/lang/String;I)V")
 	public Image24(@OriginalArg(0) FileArchive arg0, @OriginalArg(1) String arg1, @OriginalArg(2) int arg2) {
-		@Pc(32) Buffer local32 = new Buffer(363, arg0.method536(arg1 + ".dat", null, (byte) 2));
-		@Pc(42) Buffer local42 = new Buffer(363, arg0.method536("index.dat", null, (byte) 2));
-		local42.position = local32.method393();
-		this.cropW = local42.method393();
-		this.cropH = local42.method393();
-		@Pc(57) int local57 = local42.method391();
+		@Pc(32) Buffer local32 = new Buffer(363, arg0.read(arg1 + ".dat", null, (byte) 2));
+		@Pc(42) Buffer local42 = new Buffer(363, arg0.read("index.dat", null, (byte) 2));
+		local42.pos = local32.g2();
+		this.cropW = local42.g2();
+		this.cropH = local42.g2();
+		@Pc(57) int local57 = local42.g1();
 		@Pc(60) int[] local60 = new int[local57];
 		for (@Pc(62) int local62 = 0; local62 < local57 - 1; local62++) {
-			local60[local62 + 1] = local42.method395();
+			local60[local62 + 1] = local42.g3();
 			if (local60[local62 + 1] == 0) {
 				local60[local62 + 1] = 1;
 			}
 		}
 		for (@Pc(91) int local91 = 0; local91 < arg2; local91++) {
-			local42.position += 2;
-			local32.position += local42.method393() * local42.method393();
-			local42.position++;
+			local42.pos += 2;
+			local32.pos += local42.g2() * local42.g2();
+			local42.pos++;
 		}
-		this.cropX = local42.method391();
-		this.cropY = local42.method391();
-		this.width = local42.method393();
-		this.height = local42.method393();
-		@Pc(138) int local138 = local42.method391();
+		this.cropX = local42.g1();
+		this.cropY = local42.g1();
+		this.width = local42.g2();
+		this.height = local42.g2();
+		@Pc(138) int local138 = local42.g1();
 		@Pc(144) int local144 = this.width * this.height;
 		this.pixels = new int[local144];
 		@Pc(152) int local152;
 		if (local138 == 0) {
 			for (local152 = 0; local152 < local144; local152++) {
-				this.pixels[local152] = local60[local32.method391()];
+				this.pixels[local152] = local60[local32.g1()];
 			}
 		} else if (local138 == 1) {
 			for (local152 = 0; local152 < this.width; local152++) {
 				for (@Pc(176) int local176 = 0; local176 < this.height; local176++) {
-					this.pixels[local152 + local176 * this.width] = local60[local32.method391()];
+					this.pixels[local152 + local176 * this.width] = local60[local32.g1()];
 				}
 			}
 		}
 	}
 
 	@OriginalMember(owner = "client!hb", name = "a", descriptor = "(B)V")
-	public void method318(@OriginalArg(0) byte arg0) {
+	public void bind(@OriginalArg(0) byte arg0) {
 		try {
 			if (arg0 != 62) {
 				for (@Pc(4) int local4 = 1; local4 > 0; local4++) {
 				}
 			}
-			Draw2D.method354(this.width, this.pixels, -657, this.height);
+			Draw2D.bind(this.width, this.pixels, -657, this.height);
 		} catch (@Pc(19) RuntimeException local19) {
 			signlink.reporterror("23946, " + arg0 + ", " + local19.toString());
 			throw new RuntimeException();
@@ -133,7 +133,7 @@ public final class Image24 extends Draw2D {
 	}
 
 	@OriginalMember(owner = "client!hb", name = "a", descriptor = "(IIIZ)V")
-	public void method319(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2, @OriginalArg(3) boolean arg3) {
+	public void translate(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2, @OriginalArg(3) boolean arg3) {
 		try {
 			for (@Pc(3) int local3 = 0; local3 < this.pixels.length; local3++) {
 				@Pc(10) int local10 = this.pixels[local3];
@@ -172,7 +172,7 @@ public final class Image24 extends Draw2D {
 	}
 
 	@OriginalMember(owner = "client!hb", name = "a", descriptor = "(III)V")
-	public void method320(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2) {
+	public void blitOpaque(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2) {
 		try {
 			arg1 += this.cropX;
 			arg2 += this.cropY;
@@ -183,33 +183,33 @@ public final class Image24 extends Draw2D {
 			@Pc(27) int local27 = Draw2D.anInt528 - local23;
 			@Pc(29) int local29 = 0;
 			@Pc(36) int local36;
-			if (arg2 < Draw2D.anInt530) {
-				local36 = Draw2D.anInt530 - arg2;
+			if (arg2 < Draw2D.top) {
+				local36 = Draw2D.top - arg2;
 				local20 -= local36;
-				arg2 = Draw2D.anInt530;
+				arg2 = Draw2D.top;
 				local17 += local36 * local23;
 				local15 += local36 * Draw2D.anInt528;
 			}
-			if (arg2 + local20 > Draw2D.anInt531) {
-				local20 -= arg2 + local20 - Draw2D.anInt531;
+			if (arg2 + local20 > Draw2D.bottom) {
+				local20 -= arg2 + local20 - Draw2D.bottom;
 			}
-			if (arg1 < Draw2D.anInt532) {
-				local36 = Draw2D.anInt532 - arg1;
+			if (arg1 < Draw2D.left) {
+				local36 = Draw2D.left - arg1;
 				local23 -= local36;
-				arg1 = Draw2D.anInt532;
+				arg1 = Draw2D.left;
 				local17 += local36;
 				local15 += local36;
 				local29 += local36;
 				local27 += local36;
 			}
-			if (arg1 + local23 > Draw2D.anInt533) {
-				local36 = arg1 + local23 - Draw2D.anInt533;
+			if (arg1 + local23 > Draw2D.right) {
+				local36 = arg1 + local23 - Draw2D.right;
 				local23 -= local36;
 				local29 += local36;
 				local27 += local36;
 			}
 			if (local23 > 0 && local20 > 0) {
-				this.method321(15223, this.pixels, local27, local20, local17, local29, local15, local23, Draw2D.anIntArray178);
+				this.copyPixels(15223, this.pixels, local27, local20, local17, local29, local15, local23, Draw2D.anIntArray178);
 				if (arg0 != 34676) {
 					this.flowObfuscator2 = 117;
 				}
@@ -221,7 +221,7 @@ public final class Image24 extends Draw2D {
 	}
 
 	@OriginalMember(owner = "client!hb", name = "a", descriptor = "(I[IIIIIII[I)V")
-	private void method321(@OriginalArg(0) int arg0, @OriginalArg(1) int[] arg1, @OriginalArg(2) int arg2, @OriginalArg(3) int arg3, @OriginalArg(4) int arg4, @OriginalArg(5) int arg5, @OriginalArg(6) int arg6, @OriginalArg(7) int arg7, @OriginalArg(8) int[] arg8) {
+	private void copyPixels(@OriginalArg(0) int arg0, @OriginalArg(1) int[] arg1, @OriginalArg(2) int arg2, @OriginalArg(3) int arg3, @OriginalArg(4) int arg4, @OriginalArg(5) int arg5, @OriginalArg(6) int arg6, @OriginalArg(7) int arg7, @OriginalArg(8) int[] arg8) {
 		try {
 			@Pc(6) int local6 = -(arg7 >> 2);
 			@Pc(11) int local11 = -(arg7 & 0x3);
@@ -250,7 +250,7 @@ public final class Image24 extends Draw2D {
 	}
 
 	@OriginalMember(owner = "client!hb", name = "a", descriptor = "(IIZ)V")
-	public void method322(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(2) boolean arg2) {
+	public void draw(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(2) boolean arg2) {
 		try {
 			if (arg2) {
 				this.flowObfuscator4 = 32;
@@ -264,33 +264,33 @@ public final class Image24 extends Draw2D {
 			@Pc(32) int local32 = Draw2D.anInt528 - local28;
 			@Pc(34) int local34 = 0;
 			@Pc(41) int local41;
-			if (arg0 < Draw2D.anInt530) {
-				local41 = Draw2D.anInt530 - arg0;
+			if (arg0 < Draw2D.top) {
+				local41 = Draw2D.top - arg0;
 				local25 -= local41;
-				arg0 = Draw2D.anInt530;
+				arg0 = Draw2D.top;
 				local22 += local41 * local28;
 				local20 += local41 * Draw2D.anInt528;
 			}
-			if (arg0 + local25 > Draw2D.anInt531) {
-				local25 -= arg0 + local25 - Draw2D.anInt531;
+			if (arg0 + local25 > Draw2D.bottom) {
+				local25 -= arg0 + local25 - Draw2D.bottom;
 			}
-			if (arg1 < Draw2D.anInt532) {
-				local41 = Draw2D.anInt532 - arg1;
+			if (arg1 < Draw2D.left) {
+				local41 = Draw2D.left - arg1;
 				local28 -= local41;
-				arg1 = Draw2D.anInt532;
+				arg1 = Draw2D.left;
 				local22 += local41;
 				local20 += local41;
 				local34 += local41;
 				local32 += local41;
 			}
-			if (arg1 + local28 > Draw2D.anInt533) {
-				local41 = arg1 + local28 - Draw2D.anInt533;
+			if (arg1 + local28 > Draw2D.right) {
+				local41 = arg1 + local28 - Draw2D.right;
 				local28 -= local41;
 				local34 += local41;
 				local32 += local41;
 			}
 			if (local28 > 0 && local25 > 0) {
-				this.method323(Draw2D.anIntArray178, this.pixels, 0, local22, local20, local28, local25, local32, local34);
+				this.copyPixels(Draw2D.anIntArray178, this.pixels, 0, local22, local20, local28, local25, local32, local34);
 			}
 		} catch (@Pc(143) RuntimeException local143) {
 			signlink.reporterror("90492, " + arg0 + ", " + arg1 + ", " + arg2 + ", " + local143.toString());
@@ -299,7 +299,7 @@ public final class Image24 extends Draw2D {
 	}
 
 	@OriginalMember(owner = "client!hb", name = "a", descriptor = "([I[IIIIIIII)V")
-	private void method323(@OriginalArg(0) int[] arg0, @OriginalArg(1) int[] arg1, @OriginalArg(2) int arg2, @OriginalArg(3) int arg3, @OriginalArg(4) int arg4, @OriginalArg(5) int arg5, @OriginalArg(6) int arg6, @OriginalArg(7) int arg7, @OriginalArg(8) int arg8) {
+	private void copyPixels(@OriginalArg(0) int[] arg0, @OriginalArg(1) int[] arg1, @OriginalArg(2) int arg2, @OriginalArg(3) int arg3, @OriginalArg(4) int arg4, @OriginalArg(5) int arg5, @OriginalArg(6) int arg6, @OriginalArg(7) int arg7, @OriginalArg(8) int arg8) {
 		@Pc(6) int local6 = -(arg5 >> 2);
 		@Pc(11) int local11 = -(arg5 & 0x3);
 		for (@Pc(14) int local14 = -arg6; local14 < 0; local14++) {
@@ -344,7 +344,7 @@ public final class Image24 extends Draw2D {
 	}
 
 	@OriginalMember(owner = "client!hb", name = "d", descriptor = "(IIIII)V")
-	public void method324(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2, @OriginalArg(3) int arg3, @OriginalArg(4) int arg4) {
+	public void crop(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2, @OriginalArg(3) int arg3, @OriginalArg(4) int arg4) {
 		try {
 			if (arg3 == 17713) {
 				try {
@@ -371,30 +371,30 @@ public final class Image24 extends Draw2D {
 					@Pc(137) int local137 = arg4 + arg1 * Draw2D.anInt528;
 					@Pc(141) int local141 = Draw2D.anInt528 - arg2;
 					@Pc(148) int local148;
-					if (arg1 < Draw2D.anInt530) {
-						local148 = Draw2D.anInt530 - arg1;
+					if (arg1 < Draw2D.top) {
+						local148 = Draw2D.top - arg1;
 						arg0 -= local148;
 						arg1 = 0;
 						local137 += local148 * Draw2D.anInt528;
 						local13 += local43 * local148;
 					}
-					if (arg1 + arg0 > Draw2D.anInt531) {
-						arg0 -= arg1 + arg0 - Draw2D.anInt531;
+					if (arg1 + arg0 > Draw2D.bottom) {
+						arg0 -= arg1 + arg0 - Draw2D.bottom;
 					}
-					if (arg4 < Draw2D.anInt532) {
-						local148 = Draw2D.anInt532 - arg4;
+					if (arg4 < Draw2D.left) {
+						local148 = Draw2D.left - arg4;
 						arg2 -= local148;
 						arg4 = 0;
 						local137 += local148;
 						local11 += local37 * local148;
 						local141 += local148;
 					}
-					if (arg4 + arg2 > Draw2D.anInt533) {
-						local148 = arg4 + arg2 - Draw2D.anInt533;
+					if (arg4 + arg2 > Draw2D.right) {
+						local148 = arg4 + arg2 - Draw2D.right;
 						arg2 -= local148;
 						local141 += local148;
 					}
-					this.method325(local11, local37, Draw2D.anIntArray178, 0, local43, local13, 0, this.pixels, local141, local137, arg0, local6, arg2);
+					this.scale(local11, local37, Draw2D.anIntArray178, 0, local43, local13, 0, this.pixels, local141, local137, arg0, local6, arg2);
 				} catch (@Pc(243) Exception local243) {
 					System.out.println("error in sprite clipping routine");
 				}
@@ -406,7 +406,7 @@ public final class Image24 extends Draw2D {
 	}
 
 	@OriginalMember(owner = "client!hb", name = "a", descriptor = "(II[IIIII[IIIIII)V")
-	private void method325(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int[] arg2, @OriginalArg(3) int arg3, @OriginalArg(4) int arg4, @OriginalArg(5) int arg5, @OriginalArg(6) int arg6, @OriginalArg(7) int[] arg7, @OriginalArg(8) int arg8, @OriginalArg(9) int arg9, @OriginalArg(10) int arg10, @OriginalArg(11) int arg11, @OriginalArg(12) int arg12) {
+	private void scale(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int[] arg2, @OriginalArg(3) int arg3, @OriginalArg(4) int arg4, @OriginalArg(5) int arg5, @OriginalArg(6) int arg6, @OriginalArg(7) int[] arg7, @OriginalArg(8) int arg8, @OriginalArg(9) int arg9, @OriginalArg(10) int arg10, @OriginalArg(11) int arg11, @OriginalArg(12) int arg12) {
 		try {
 			@Pc(5) int local5;
 			if (arg6 != 0) {
@@ -440,7 +440,7 @@ public final class Image24 extends Draw2D {
 	}
 
 	@OriginalMember(owner = "client!hb", name = "a", descriptor = "(IIIB)V")
-	public void method326(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2, @OriginalArg(3) byte arg3) {
+	public void draw(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2, @OriginalArg(3) byte arg3) {
 		try {
 			@Pc(4) int local4;
 			if (arg3 != -26) {
@@ -456,33 +456,33 @@ public final class Image24 extends Draw2D {
 			@Pc(37) int local37 = Draw2D.anInt528 - local33;
 			@Pc(39) int local39 = 0;
 			@Pc(46) int local46;
-			if (arg2 < Draw2D.anInt530) {
-				local46 = Draw2D.anInt530 - arg2;
+			if (arg2 < Draw2D.top) {
+				local46 = Draw2D.top - arg2;
 				local30 -= local46;
-				arg2 = Draw2D.anInt530;
+				arg2 = Draw2D.top;
 				local27 += local46 * local33;
 				local4 += local46 * Draw2D.anInt528;
 			}
-			if (arg2 + local30 > Draw2D.anInt531) {
-				local30 -= arg2 + local30 - Draw2D.anInt531;
+			if (arg2 + local30 > Draw2D.bottom) {
+				local30 -= arg2 + local30 - Draw2D.bottom;
 			}
-			if (arg1 < Draw2D.anInt532) {
-				local46 = Draw2D.anInt532 - arg1;
+			if (arg1 < Draw2D.left) {
+				local46 = Draw2D.left - arg1;
 				local33 -= local46;
-				arg1 = Draw2D.anInt532;
+				arg1 = Draw2D.left;
 				local27 += local46;
 				local4 += local46;
 				local39 += local46;
 				local37 += local46;
 			}
-			if (arg1 + local33 > Draw2D.anInt533) {
-				local46 = arg1 + local33 - Draw2D.anInt533;
+			if (arg1 + local33 > Draw2D.right) {
+				local46 = arg1 + local33 - Draw2D.right;
 				local33 -= local46;
 				local39 += local46;
 				local37 += local46;
 			}
 			if (local33 > 0 && local30 > 0) {
-				this.method327(local4, 0, this.pixels, arg0, local30, Draw2D.anIntArray178, local27, (byte) 8, local33, local37, local39);
+				this.copyPixelsAlpha(local4, 0, this.pixels, arg0, local30, Draw2D.anIntArray178, local27, (byte) 8, local33, local37, local39);
 			}
 		} catch (@Pc(150) RuntimeException local150) {
 			signlink.reporterror("1642, " + arg0 + ", " + arg1 + ", " + arg2 + ", " + arg3 + ", " + local150.toString());
@@ -491,7 +491,7 @@ public final class Image24 extends Draw2D {
 	}
 
 	@OriginalMember(owner = "client!hb", name = "a", descriptor = "(II[III[IIBIII)V")
-	private void method327(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int[] arg2, @OriginalArg(3) int arg3, @OriginalArg(4) int arg4, @OriginalArg(5) int[] arg5, @OriginalArg(6) int arg6, @OriginalArg(7) byte arg7, @OriginalArg(8) int arg8, @OriginalArg(9) int arg9, @OriginalArg(10) int arg10) {
+	private void copyPixelsAlpha(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int[] arg2, @OriginalArg(3) int arg3, @OriginalArg(4) int arg4, @OriginalArg(5) int[] arg5, @OriginalArg(6) int arg6, @OriginalArg(7) byte arg7, @OriginalArg(8) int arg8, @OriginalArg(9) int arg9, @OriginalArg(10) int arg10) {
 		try {
 			@Pc(5) int local5 = 256 - arg3;
 			if (arg7 != 8) {
@@ -517,7 +517,7 @@ public final class Image24 extends Draw2D {
 	}
 
 	@OriginalMember(owner = "client!hb", name = "a", descriptor = "(II[IIIIIIIZ[I)V")
-	public void method328(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int[] arg2, @OriginalArg(3) int arg3, @OriginalArg(4) int arg4, @OriginalArg(5) int arg5, @OriginalArg(6) int arg6, @OriginalArg(7) int arg7, @OriginalArg(8) int arg8, @OriginalArg(9) boolean arg9, @OriginalArg(10) int[] arg10) {
+	public void drawRotatedMasked(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int[] arg2, @OriginalArg(3) int arg3, @OriginalArg(4) int arg4, @OriginalArg(5) int arg5, @OriginalArg(6) int arg6, @OriginalArg(7) int arg7, @OriginalArg(8) int arg8, @OriginalArg(9) boolean arg9, @OriginalArg(10) int[] arg10) {
 		try {
 			if (arg9) {
 				this.flowObfuscator3 = !this.flowObfuscator3;
@@ -555,7 +555,7 @@ public final class Image24 extends Draw2D {
 	}
 
 	@OriginalMember(owner = "client!hb", name = "a", descriptor = "(Lclient!ib;IIB)V")
-	public void method329(@OriginalArg(0) Image8 arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2, @OriginalArg(3) byte arg3) {
+	public void drawMasked(@OriginalArg(0) Image8 arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2, @OriginalArg(3) byte arg3) {
 		try {
 			arg2 += this.cropX;
 			arg1 += this.cropY;
@@ -567,33 +567,33 @@ public final class Image24 extends Draw2D {
 				@Pc(31) int local31 = Draw2D.anInt528 - local27;
 				@Pc(33) int local33 = 0;
 				@Pc(40) int local40;
-				if (arg1 < Draw2D.anInt530) {
-					local40 = Draw2D.anInt530 - arg1;
+				if (arg1 < Draw2D.top) {
+					local40 = Draw2D.top - arg1;
 					local24 -= local40;
-					arg1 = Draw2D.anInt530;
+					arg1 = Draw2D.top;
 					local17 += local40 * local27;
 					local15 += local40 * Draw2D.anInt528;
 				}
-				if (arg1 + local24 > Draw2D.anInt531) {
-					local24 -= arg1 + local24 - Draw2D.anInt531;
+				if (arg1 + local24 > Draw2D.bottom) {
+					local24 -= arg1 + local24 - Draw2D.bottom;
 				}
-				if (arg2 < Draw2D.anInt532) {
-					local40 = Draw2D.anInt532 - arg2;
+				if (arg2 < Draw2D.left) {
+					local40 = Draw2D.left - arg2;
 					local27 -= local40;
-					arg2 = Draw2D.anInt532;
+					arg2 = Draw2D.left;
 					local17 += local40;
 					local15 += local40;
 					local33 += local40;
 					local31 += local40;
 				}
-				if (arg2 + local27 > Draw2D.anInt533) {
-					local40 = arg2 + local27 - Draw2D.anInt533;
+				if (arg2 + local27 > Draw2D.right) {
+					local40 = arg2 + local27 - Draw2D.right;
 					local27 -= local40;
 					local33 += local40;
 					local31 += local40;
 				}
 				if (local27 > 0 && local24 > 0) {
-					this.method330(local27, local33, 0, -478, local24, local17, Draw2D.anIntArray178, this.pixels, local15, arg0.pixels, local31);
+					this.copyPixelsMasked(local27, local33, 0, -478, local24, local17, Draw2D.anIntArray178, this.pixels, local15, arg0.pixels, local31);
 				}
 			}
 		} catch (@Pc(145) RuntimeException local145) {
@@ -603,7 +603,7 @@ public final class Image24 extends Draw2D {
 	}
 
 	@OriginalMember(owner = "client!hb", name = "a", descriptor = "(IIIIII[I[II[BI)V")
-	private void method330(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2, @OriginalArg(3) int arg3, @OriginalArg(4) int arg4, @OriginalArg(5) int arg5, @OriginalArg(6) int[] arg6, @OriginalArg(7) int[] arg7, @OriginalArg(8) int arg8, @OriginalArg(9) byte[] arg9, @OriginalArg(10) int arg10) {
+	private void copyPixelsMasked(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2, @OriginalArg(3) int arg3, @OriginalArg(4) int arg4, @OriginalArg(5) int arg5, @OriginalArg(6) int[] arg6, @OriginalArg(7) int[] arg7, @OriginalArg(8) int arg8, @OriginalArg(9) byte[] arg9, @OriginalArg(10) int arg10) {
 		try {
 			if (arg3 < 0) {
 				@Pc(9) int local9 = -(arg0 >> 2);

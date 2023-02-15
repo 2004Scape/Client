@@ -60,7 +60,7 @@ public final class SpotAnimEntity extends Entity {
 	}
 
 	@OriginalMember(owner = "client!bb", name = "a", descriptor = "(II)V")
-	public void method29(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1) {
+	public void update(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1) {
 		try {
 			if (arg1 != 0) {
 				this.flowObfuscator2 = -255;
@@ -74,8 +74,8 @@ public final class SpotAnimEntity extends Entity {
 						}
 						this.seqCycle -= this.type.seq.frameDelay[this.seqFrame] + 1;
 						this.seqFrame++;
-					} while (this.seqFrame < this.type.seq.frameCount);
-				} while (this.seqFrame >= 0 && this.seqFrame < this.type.seq.frameCount);
+					} while (this.seqFrame < this.type.seq.framecount);
+				} while (this.seqFrame >= 0 && this.seqFrame < this.type.seq.framecount);
 				this.seqFrame = 0;
 				this.seqComplete = true;
 			}
@@ -96,28 +96,28 @@ public final class SpotAnimEntity extends Entity {
 			}
 			if (!this.seqComplete) {
 				local19.createLabelReferences(4);
-				local19.applyTransform(-16599, this.type.seq.transformIds[this.seqFrame]);
+				local19.applyTransform(-16599, this.type.seq.primaryFrames[this.seqFrame]);
 				local19.labelFaces = null;
 				local19.labelVertices = null;
 			}
-			if (this.type.scaleXY != 128 || this.type.scaleZ != 128) {
-				local19.scale(this.type.scaleXY, 2, this.type.scaleZ, this.type.scaleXY);
+			if (this.type.resizeh != 128 || this.type.resizev != 128) {
+				local19.scale(this.type.resizeh, 2, this.type.resizev, this.type.resizeh);
 			}
-			if (this.type.rotation != 0) {
-				if (this.type.rotation == 90) {
+			if (this.type.orientation != 0) {
+				if (this.type.orientation == 90) {
 					local19.rotateY90(0);
 				}
-				if (this.type.rotation == 180) {
+				if (this.type.orientation == 180) {
 					local19.rotateY90(0);
 					local19.rotateY90(0);
 				}
-				if (this.type.rotation == 270) {
+				if (this.type.orientation == 270) {
 					local19.rotateY90(0);
 					local19.rotateY90(0);
 					local19.rotateY90(0);
 				}
 			}
-			local19.calculateNormals(this.type.lightAmbient + 64, this.type.lightAttenuation + 850, -30, -50, -30, true);
+			local19.calculateNormals(this.type.ambient + 64, this.type.contrast + 850, -30, -50, -30, true);
 			return local19;
 		} catch (@Pc(125) RuntimeException local125) {
 			signlink.reporterror("26048, " + arg0 + ", " + local125.toString());

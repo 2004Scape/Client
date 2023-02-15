@@ -17,16 +17,16 @@ public final class Stack {
 	private final boolean flowObfuscator3 = true;
 
 	@OriginalMember(owner = "client!pb", name = "d", descriptor = "Lclient!db;")
-	private final CacheableNode aClass1_Sub3_17 = new CacheableNode();
+	private final CacheableNode head = new CacheableNode();
 
 	@OriginalMember(owner = "client!pb", name = "<init>", descriptor = "(I)V")
 	public Stack(@OriginalArg(0) int arg0) {
 		try {
-			this.aClass1_Sub3_17.nextCacheable = this.aClass1_Sub3_17;
+			this.head.nextCacheable = this.head;
 			if (arg0 < 5 || arg0 > 5) {
 				this.flowObfuscator1 = -426;
 			}
-			this.aClass1_Sub3_17.prevCacheable = this.aClass1_Sub3_17;
+			this.head.prevCacheable = this.head;
 		} catch (@Pc(36) RuntimeException local36) {
 			signlink.reporterror("27606, " + arg0 + ", " + local36.toString());
 			throw new RuntimeException();
@@ -34,23 +34,23 @@ public final class Stack {
 	}
 
 	@OriginalMember(owner = "client!pb", name = "a", descriptor = "(Lclient!db;)V")
-	public void method461(@OriginalArg(0) CacheableNode arg0) {
+	public void push(@OriginalArg(0) CacheableNode arg0) {
 		if (arg0.prevCacheable != null) {
-			arg0.method377();
+			arg0.uncache();
 		}
-		arg0.prevCacheable = this.aClass1_Sub3_17.prevCacheable;
-		arg0.nextCacheable = this.aClass1_Sub3_17;
+		arg0.prevCacheable = this.head.prevCacheable;
+		arg0.nextCacheable = this.head;
 		arg0.prevCacheable.nextCacheable = arg0;
 		arg0.nextCacheable.prevCacheable = arg0;
 	}
 
 	@OriginalMember(owner = "client!pb", name = "a", descriptor = "()Lclient!db;")
-	public CacheableNode method462() {
-		@Pc(3) CacheableNode local3 = this.aClass1_Sub3_17.nextCacheable;
-		if (local3 == this.aClass1_Sub3_17) {
+	public CacheableNode pop() {
+		@Pc(3) CacheableNode local3 = this.head.nextCacheable;
+		if (local3 == this.head) {
 			return null;
 		} else {
-			local3.method377();
+			local3.uncache();
 			return local3;
 		}
 	}

@@ -20,10 +20,10 @@ public final class SpotAnimType {
 	public int index;
 
 	@OriginalMember(owner = "client!kc", name = "e", descriptor = "I")
-	private int modelId;
+	private int model;
 
 	@OriginalMember(owner = "client!kc", name = "f", descriptor = "I")
-	private int seqId = -1;
+	private int anim = -1;
 
 	@OriginalMember(owner = "client!kc", name = "g", descriptor = "Lclient!jc;")
 	public SeqType seq;
@@ -32,35 +32,35 @@ public final class SpotAnimType {
 	public boolean disposeAlpha = false;
 
 	@OriginalMember(owner = "client!kc", name = "i", descriptor = "[I")
-	private final int[] colorSrc = new int[6];
+	private final int[] recol_s = new int[6];
 
 	@OriginalMember(owner = "client!kc", name = "j", descriptor = "[I")
-	private final int[] colorDst = new int[6];
+	private final int[] recol_d = new int[6];
 
 	@OriginalMember(owner = "client!kc", name = "k", descriptor = "I")
-	public int scaleXY = 128;
+	public int resizeh = 128;
 
 	@OriginalMember(owner = "client!kc", name = "l", descriptor = "I")
-	public int scaleZ = 128;
+	public int resizev = 128;
 
 	@OriginalMember(owner = "client!kc", name = "m", descriptor = "I")
-	public int rotation;
+	public int orientation;
 
 	@OriginalMember(owner = "client!kc", name = "n", descriptor = "I")
-	public int lightAmbient;
+	public int ambient;
 
 	@OriginalMember(owner = "client!kc", name = "o", descriptor = "I")
-	public int lightAttenuation;
+	public int contrast;
 
 	@OriginalMember(owner = "client!kc", name = "p", descriptor = "Lclient!s;")
 	public static Cache modelCache = new Cache((byte) 0, 30);
 
 	@OriginalMember(owner = "client!kc", name = "a", descriptor = "(Lclient!ub;I)V")
-	public static void method407(@OriginalArg(0) FileArchive arg0, @OriginalArg(1) int arg1) {
+	public static void unpack(@OriginalArg(0) FileArchive arg0, @OriginalArg(1) int arg1) {
 		try {
 			@Pc(3) int local3 = 91 / arg1;
-			@Pc(13) Buffer local13 = new Buffer(363, arg0.method536("spotanim.dat", null, (byte) 2));
-			count = local13.method393();
+			@Pc(13) Buffer local13 = new Buffer(363, arg0.read("spotanim.dat", null, (byte) 2));
+			count = local13.g2();
 			if (instances == null) {
 				instances = new SpotAnimType[count];
 			}
@@ -69,7 +69,7 @@ public final class SpotAnimType {
 					instances[local23] = new SpotAnimType();
 				}
 				instances[local23].index = local23;
-				instances[local23].method408(false, local13);
+				instances[local23].decode(false, local13);
 			}
 		} catch (@Pc(52) RuntimeException local52) {
 			signlink.reporterror("26561, " + arg0 + ", " + arg1 + ", " + local52.toString());
@@ -78,49 +78,49 @@ public final class SpotAnimType {
 	}
 
 	@OriginalMember(owner = "client!kc", name = "a", descriptor = "(ZLclient!kb;)V")
-	public void method408(@OriginalArg(0) boolean arg0, @OriginalArg(1) Buffer arg1) {
+	public void decode(@OriginalArg(0) boolean arg0, @OriginalArg(1) Buffer buf) {
 		try {
-			@Pc(5) int local5;
+			@Pc(5) int opcode;
 			if (arg0) {
-				for (local5 = 1; local5 > 0; local5++) {
+				for (opcode = 1; opcode > 0; opcode++) {
 				}
 			}
 			while (true) {
 				while (true) {
-					local5 = arg1.method391();
-					if (local5 == 0) {
+					opcode = buf.g1();
+					if (opcode == 0) {
 						return;
 					}
-					if (local5 == 1) {
-						this.modelId = arg1.method393();
-					} else if (local5 == 2) {
-						this.seqId = arg1.method393();
+					if (opcode == 1) {
+						this.model = buf.g2();
+					} else if (opcode == 2) {
+						this.anim = buf.g2();
 						if (SeqType.instances != null) {
-							this.seq = SeqType.instances[this.seqId];
+							this.seq = SeqType.instances[this.anim];
 						}
-					} else if (local5 == 3) {
+					} else if (opcode == 3) {
 						this.disposeAlpha = true;
-					} else if (local5 == 4) {
-						this.scaleXY = arg1.method393();
-					} else if (local5 == 5) {
-						this.scaleZ = arg1.method393();
-					} else if (local5 == 6) {
-						this.rotation = arg1.method393();
-					} else if (local5 == 7) {
-						this.lightAmbient = arg1.method391();
-					} else if (local5 == 8) {
-						this.lightAttenuation = arg1.method391();
-					} else if (local5 >= 40 && local5 < 50) {
-						this.colorSrc[local5 - 40] = arg1.method393();
-					} else if (local5 >= 50 && local5 < 60) {
-						this.colorDst[local5 - 50] = arg1.method393();
+					} else if (opcode == 4) {
+						this.resizeh = buf.g2();
+					} else if (opcode == 5) {
+						this.resizev = buf.g2();
+					} else if (opcode == 6) {
+						this.orientation = buf.g2();
+					} else if (opcode == 7) {
+						this.ambient = buf.g1();
+					} else if (opcode == 8) {
+						this.contrast = buf.g1();
+					} else if (opcode >= 40 && opcode < 50) {
+						this.recol_s[opcode - 40] = buf.g2();
+					} else if (opcode >= 50 && opcode < 60) {
+						this.recol_d[opcode - 50] = buf.g2();
 					} else {
-						System.out.println("Error unrecognised spotanim config code: " + local5);
+						System.out.println("Error unrecognised spotanim config code: " + opcode);
 					}
 				}
 			}
 		} catch (@Pc(138) RuntimeException local138) {
-			signlink.reporterror("42060, " + arg0 + ", " + arg1 + ", " + local138.toString());
+			signlink.reporterror("42060, " + arg0 + ", " + buf + ", " + local138.toString());
 			throw new RuntimeException();
 		}
 	}
@@ -131,10 +131,10 @@ public final class SpotAnimType {
 		if (local6 != null) {
 			return local6;
 		}
-		local6 = new Model(false, this.modelId);
+		local6 = new Model(false, this.model);
 		for (@Pc(19) int local19 = 0; local19 < 6; local19++) {
-			if (this.colorSrc[0] != 0) {
-				local6.recolor(this.colorSrc[local19], this.colorDst[local19]);
+			if (this.recol_s[0] != 0) {
+				local6.recolor(this.recol_s[local19], this.recol_d[local19]);
 			}
 		}
 		modelCache.put(6, (long) this.index, local6);

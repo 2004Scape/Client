@@ -14,7 +14,7 @@ public class Node {
 	public Node next;
 
 	@OriginalMember(owner = "client!u", name = "a", descriptor = "()V")
-	public final void method567() {
+	public final void unlink() {
 		if (this.next != null) {
 			this.next.prev = this.prev;
 			this.prev.next = this.next;

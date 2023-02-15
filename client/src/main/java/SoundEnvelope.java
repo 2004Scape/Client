@@ -8,55 +8,55 @@ import sign.signlink;
 public final class SoundEnvelope {
 
 	@OriginalMember(owner = "client!xb", name = "a", descriptor = "I")
-	private int anInt818;
+	private int length;
 
 	@OriginalMember(owner = "client!xb", name = "b", descriptor = "[I")
-	private int[] anIntArray227;
+	private int[] shapeDelta;
 
 	@OriginalMember(owner = "client!xb", name = "c", descriptor = "[I")
-	private int[] anIntArray228;
+	private int[] shapePeak;
 
 	@OriginalMember(owner = "client!xb", name = "d", descriptor = "I")
-	public int anInt819;
+	public int start;
 
 	@OriginalMember(owner = "client!xb", name = "e", descriptor = "I")
-	public int anInt820;
+	public int end;
 
 	@OriginalMember(owner = "client!xb", name = "f", descriptor = "I")
-	public int anInt821;
+	public int form;
 
 	@OriginalMember(owner = "client!xb", name = "g", descriptor = "I")
-	private int anInt822;
+	private int threshold;
 
 	@OriginalMember(owner = "client!xb", name = "h", descriptor = "I")
-	private int anInt823;
+	private int position;
 
 	@OriginalMember(owner = "client!xb", name = "i", descriptor = "I")
-	private int anInt824;
+	private int delta;
 
 	@OriginalMember(owner = "client!xb", name = "j", descriptor = "I")
-	private int anInt825;
+	private int amplitude;
 
 	@OriginalMember(owner = "client!xb", name = "k", descriptor = "I")
-	private int anInt826;
+	private int ticks;
 
 	@OriginalMember(owner = "client!xb", name = "a", descriptor = "(ZLclient!kb;)V")
-	public void method552(@OriginalArg(0) boolean arg0, @OriginalArg(1) Buffer arg1) {
+	public void read(@OriginalArg(0) boolean arg0, @OriginalArg(1) Buffer arg1) {
 		try {
-			this.anInt821 = arg1.method391();
-			this.anInt819 = arg1.method396();
-			this.anInt820 = arg1.method396();
-			this.anInt818 = arg1.method391();
-			this.anIntArray227 = new int[this.anInt818];
-			this.anIntArray228 = new int[this.anInt818];
+			this.form = arg1.g1();
+			this.start = arg1.g4();
+			this.end = arg1.g4();
+			this.length = arg1.g1();
+			this.shapeDelta = new int[this.length];
+			this.shapePeak = new int[this.length];
 			@Pc(31) int local31;
 			if (arg0) {
 				for (local31 = 1; local31 > 0; local31++) {
 				}
 			}
-			for (local31 = 0; local31 < this.anInt818; local31++) {
-				this.anIntArray227[local31] = arg1.method393();
-				this.anIntArray228[local31] = arg1.method393();
+			for (local31 = 0; local31 < this.length; local31++) {
+				this.shapeDelta[local31] = arg1.g2();
+				this.shapePeak[local31] = arg1.g2();
 			}
 		} catch (@Pc(67) RuntimeException local67) {
 			signlink.reporterror("83915, " + arg0 + ", " + arg1 + ", " + local67.toString());
@@ -65,14 +65,14 @@ public final class SoundEnvelope {
 	}
 
 	@OriginalMember(owner = "client!xb", name = "a", descriptor = "(I)V")
-	public void method553(@OriginalArg(0) int arg0) {
+	public void reset(@OriginalArg(0) int arg0) {
 		try {
-			this.anInt822 = 0;
-			this.anInt823 = 0;
-			this.anInt824 = 0;
-			this.anInt825 = 0;
+			this.threshold = 0;
+			this.position = 0;
+			this.delta = 0;
+			this.amplitude = 0;
 			if (arg0 >= 8 && arg0 <= 8) {
-				this.anInt826 = 0;
+				this.ticks = 0;
 			}
 		} catch (@Pc(23) RuntimeException local23) {
 			signlink.reporterror("47965, " + arg0 + ", " + local23.toString());
@@ -81,25 +81,25 @@ public final class SoundEnvelope {
 	}
 
 	@OriginalMember(owner = "client!xb", name = "a", descriptor = "(ZI)I")
-	public int method554(@OriginalArg(0) boolean arg0, @OriginalArg(1) int arg1) {
+	public int evaluate(@OriginalArg(0) boolean arg0, @OriginalArg(1) int arg1) {
 		try {
 			if (!arg0) {
 				for (@Pc(3) int local3 = 1; local3 > 0; local3++) {
 				}
 			}
-			if (this.anInt826 >= this.anInt822) {
-				this.anInt825 = this.anIntArray228[this.anInt823++] << 15;
-				if (this.anInt823 >= this.anInt818) {
-					this.anInt823 = this.anInt818 - 1;
+			if (this.ticks >= this.threshold) {
+				this.amplitude = this.shapePeak[this.position++] << 15;
+				if (this.position >= this.length) {
+					this.position = this.length - 1;
 				}
-				this.anInt822 = (int) ((double) this.anIntArray227[this.anInt823] / 65536.0D * (double) arg1);
-				if (this.anInt822 > this.anInt826) {
-					this.anInt824 = ((this.anIntArray228[this.anInt823] << 15) - this.anInt825) / (this.anInt822 - this.anInt826);
+				this.threshold = (int) ((double) this.shapeDelta[this.position] / 65536.0D * (double) arg1);
+				if (this.threshold > this.ticks) {
+					this.delta = ((this.shapePeak[this.position] << 15) - this.amplitude) / (this.threshold - this.ticks);
 				}
 			}
-			this.anInt825 += this.anInt824;
-			this.anInt826++;
-			return this.anInt825 - this.anInt824 >> 15;
+			this.amplitude += this.delta;
+			this.ticks++;
+			return this.amplitude - this.delta >> 15;
 		} catch (@Pc(97) RuntimeException local97) {
 			signlink.reporterror("65731, " + arg0 + ", " + arg1 + ", " + local97.toString());
 			throw new RuntimeException();

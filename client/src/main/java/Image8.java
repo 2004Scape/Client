@@ -23,7 +23,7 @@ public final class Image8 extends Draw2D {
 	public byte[] pixels;
 
 	@OriginalMember(owner = "client!ib", name = "A", descriptor = "[I")
-	public final int[] anIntArray177;
+	public final int[] palette;
 
 	@OriginalMember(owner = "client!ib", name = "B", descriptor = "I")
 	public int width;
@@ -38,67 +38,67 @@ public final class Image8 extends Draw2D {
 	public int cropY;
 
 	@OriginalMember(owner = "client!ib", name = "F", descriptor = "I")
-	public int anInt517;
+	public int cropW;
 
 	@OriginalMember(owner = "client!ib", name = "G", descriptor = "I")
-	private int anInt518;
+	private int cropH;
 
 	@OriginalMember(owner = "client!ib", name = "<init>", descriptor = "(Lclient!ub;Ljava/lang/String;I)V")
 	public Image8(@OriginalArg(0) FileArchive arg0, @OriginalArg(1) String arg1, @OriginalArg(2) int arg2) {
-		@Pc(32) Buffer local32 = new Buffer(363, arg0.method536(arg1 + ".dat", null, (byte) 2));
-		@Pc(42) Buffer local42 = new Buffer(363, arg0.method536("index.dat", null, (byte) 2));
-		local42.position = local32.method393();
-		this.anInt517 = local42.method393();
-		this.anInt518 = local42.method393();
-		@Pc(57) int local57 = local42.method391();
-		this.anIntArray177 = new int[local57];
+		@Pc(32) Buffer local32 = new Buffer(363, arg0.read(arg1 + ".dat", null, (byte) 2));
+		@Pc(42) Buffer local42 = new Buffer(363, arg0.read("index.dat", null, (byte) 2));
+		local42.pos = local32.g2();
+		this.cropW = local42.g2();
+		this.cropH = local42.g2();
+		@Pc(57) int local57 = local42.g1();
+		this.palette = new int[local57];
 		for (@Pc(63) int local63 = 0; local63 < local57 - 1; local63++) {
-			this.anIntArray177[local63 + 1] = local42.method395();
+			this.palette[local63 + 1] = local42.g3();
 		}
 		for (@Pc(81) int local81 = 0; local81 < arg2; local81++) {
-			local42.position += 2;
-			local32.position += local42.method393() * local42.method393();
-			local42.position++;
+			local42.pos += 2;
+			local32.pos += local42.g2() * local42.g2();
+			local42.pos++;
 		}
-		this.cropX = local42.method391();
-		this.cropY = local42.method391();
-		this.width = local42.method393();
-		this.height = local42.method393();
-		@Pc(128) int local128 = local42.method391();
+		this.cropX = local42.g1();
+		this.cropY = local42.g1();
+		this.width = local42.g2();
+		this.height = local42.g2();
+		@Pc(128) int local128 = local42.g1();
 		@Pc(134) int local134 = this.width * this.height;
 		this.pixels = new byte[local134];
 		@Pc(142) int local142;
 		if (local128 == 0) {
 			for (local142 = 0; local142 < local134; local142++) {
-				this.pixels[local142] = local32.method392();
+				this.pixels[local142] = local32.g1b();
 			}
 		} else if (local128 == 1) {
 			for (local142 = 0; local142 < this.width; local142++) {
 				for (@Pc(164) int local164 = 0; local164 < this.height; local164++) {
-					this.pixels[local142 + local164 * this.width] = local32.method392();
+					this.pixels[local142 + local164 * this.width] = local32.g1b();
 				}
 			}
 		}
 	}
 
 	@OriginalMember(owner = "client!ib", name = "a", descriptor = "(Z)V")
-	public void method345(@OriginalArg(0) boolean arg0) {
+	public void shrink(@OriginalArg(0) boolean arg0) {
 		try {
-			this.anInt517 /= 2;
-			this.anInt518 /= 2;
-			@Pc(20) byte[] local20 = new byte[this.anInt517 * this.anInt518];
+			this.cropW /= 2;
+			this.cropH /= 2;
+			@Pc(20) byte[] local20 = new byte[this.cropW * this.cropH];
 			@Pc(22) int local22 = 0;
 			for (@Pc(24) int local24 = 0; local24 < this.height; local24++) {
 				for (@Pc(28) int local28 = 0; local28 < this.width; local28++) {
-					local20[(local28 + this.cropX >> 1) + (local24 + this.cropY >> 1) * this.anInt517] = this.pixels[local22++];
+					local20[(local28 + this.cropX >> 1) + (local24 + this.cropY >> 1) * this.cropW] = this.pixels[local22++];
 				}
 			}
 			if (arg0) {
 				this.flowObfuscator2 = 197;
 			}
 			this.pixels = local20;
-			this.width = this.anInt517;
-			this.height = this.anInt518;
+			this.width = this.cropW;
+			this.height = this.cropH;
 			this.cropX = 0;
 			this.cropY = 0;
 		} catch (@Pc(87) RuntimeException local87) {
@@ -108,22 +108,22 @@ public final class Image8 extends Draw2D {
 	}
 
 	@OriginalMember(owner = "client!ib", name = "c", descriptor = "(I)V")
-	public void method346(@OriginalArg(0) int arg0) {
+	public void crop(@OriginalArg(0) int arg0) {
 		try {
-			if (this.width != this.anInt517 || this.height != this.anInt518) {
-				@Pc(19) byte[] local19 = new byte[this.anInt517 * this.anInt518];
+			if (this.width != this.cropW || this.height != this.cropH) {
+				@Pc(19) byte[] local19 = new byte[this.cropW * this.cropH];
 				@Pc(21) int local21 = 0;
 				if (arg0 != 0) {
 					this.flowObfuscator1 = !this.flowObfuscator1;
 				}
 				for (@Pc(33) int local33 = 0; local33 < this.height; local33++) {
 					for (@Pc(37) int local37 = 0; local37 < this.width; local37++) {
-						local19[local37 + this.cropX + (local33 + this.cropY) * this.anInt517] = this.pixels[local21++];
+						local19[local37 + this.cropX + (local33 + this.cropY) * this.cropW] = this.pixels[local21++];
 					}
 				}
 				this.pixels = local19;
-				this.width = this.anInt517;
-				this.height = this.anInt518;
+				this.width = this.cropW;
+				this.height = this.cropH;
 				this.cropX = 0;
 				this.cropY = 0;
 			}
@@ -134,7 +134,7 @@ public final class Image8 extends Draw2D {
 	}
 
 	@OriginalMember(owner = "client!ib", name = "d", descriptor = "(I)V")
-	public void method347(@OriginalArg(0) int arg0) {
+	public void flipHorizontally(@OriginalArg(0) int arg0) {
 		try {
 			@Pc(8) byte[] local8 = new byte[this.width * this.height];
 			@Pc(10) int local10 = 0;
@@ -144,7 +144,7 @@ public final class Image8 extends Draw2D {
 				}
 			}
 			this.pixels = local8;
-			this.cropX = this.anInt517 - this.width - this.cropX;
+			this.cropX = this.cropW - this.width - this.cropX;
 			if (arg0 >= 0) {
 				;
 			}
@@ -155,7 +155,7 @@ public final class Image8 extends Draw2D {
 	}
 
 	@OriginalMember(owner = "client!ib", name = "a", descriptor = "(B)V")
-	public void method348(@OriginalArg(0) byte arg0) {
+	public void flipVertically(@OriginalArg(0) byte arg0) {
 		try {
 			@Pc(8) byte[] local8 = new byte[this.width * this.height];
 			@Pc(13) int local13;
@@ -170,7 +170,7 @@ public final class Image8 extends Draw2D {
 				}
 			}
 			this.pixels = local8;
-			this.cropY = this.anInt518 - this.height - this.cropY;
+			this.cropY = this.cropH - this.height - this.cropY;
 		} catch (@Pc(67) RuntimeException local67) {
 			signlink.reporterror("43769, " + arg0 + ", " + local67.toString());
 			throw new RuntimeException();
@@ -178,32 +178,32 @@ public final class Image8 extends Draw2D {
 	}
 
 	@OriginalMember(owner = "client!ib", name = "a", descriptor = "(IIIZ)V")
-	public void method349(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2, @OriginalArg(3) boolean arg3) {
+	public void translate(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2, @OriginalArg(3) boolean arg3) {
 		try {
 			@Pc(14) int local14;
-			for (@Pc(3) int local3 = 0; local3 < this.anIntArray177.length; local3++) {
-				local14 = this.anIntArray177[local3] >> 16 & 0xFF;
+			for (@Pc(3) int local3 = 0; local3 < this.palette.length; local3++) {
+				local14 = this.palette[local3] >> 16 & 0xFF;
 				local14 += arg0;
 				if (local14 < 0) {
 					local14 = 0;
 				} else if (local14 > 255) {
 					local14 = 255;
 				}
-				@Pc(38) int local38 = this.anIntArray177[local3] >> 8 & 0xFF;
+				@Pc(38) int local38 = this.palette[local3] >> 8 & 0xFF;
 				local38 += arg1;
 				if (local38 < 0) {
 					local38 = 0;
 				} else if (local38 > 255) {
 					local38 = 255;
 				}
-				@Pc(60) int local60 = this.anIntArray177[local3] & 0xFF;
+				@Pc(60) int local60 = this.palette[local3] & 0xFF;
 				local60 += arg2;
 				if (local60 < 0) {
 					local60 = 0;
 				} else if (local60 > 255) {
 					local60 = 255;
 				}
-				this.anIntArray177[local3] = (local14 << 16) + (local38 << 8) + local60;
+				this.palette[local3] = (local14 << 16) + (local38 << 8) + local60;
 			}
 			if (!arg3) {
 				for (local14 = 1; local14 > 0; local14++) {
@@ -216,7 +216,7 @@ public final class Image8 extends Draw2D {
 	}
 
 	@OriginalMember(owner = "client!ib", name = "a", descriptor = "(IIZ)V")
-	public void method350(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(2) boolean arg2) {
+	public void draw(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(2) boolean arg2) {
 		try {
 			arg1 += this.cropX;
 			arg0 += this.cropY;
@@ -227,33 +227,33 @@ public final class Image8 extends Draw2D {
 			@Pc(27) int local27 = Draw2D.anInt528 - local23;
 			@Pc(29) int local29 = 0;
 			@Pc(36) int local36;
-			if (arg0 < Draw2D.anInt530) {
-				local36 = Draw2D.anInt530 - arg0;
+			if (arg0 < Draw2D.top) {
+				local36 = Draw2D.top - arg0;
 				local20 -= local36;
-				arg0 = Draw2D.anInt530;
+				arg0 = Draw2D.top;
 				local17 += local36 * local23;
 				local15 += local36 * Draw2D.anInt528;
 			}
-			if (arg0 + local20 > Draw2D.anInt531) {
-				local20 -= arg0 + local20 - Draw2D.anInt531;
+			if (arg0 + local20 > Draw2D.bottom) {
+				local20 -= arg0 + local20 - Draw2D.bottom;
 			}
-			if (arg1 < Draw2D.anInt532) {
-				local36 = Draw2D.anInt532 - arg1;
+			if (arg1 < Draw2D.left) {
+				local36 = Draw2D.left - arg1;
 				local23 -= local36;
-				arg1 = Draw2D.anInt532;
+				arg1 = Draw2D.left;
 				local17 += local36;
 				local15 += local36;
 				local29 += local36;
 				local27 += local36;
 			}
-			if (arg1 + local23 > Draw2D.anInt533) {
-				local36 = arg1 + local23 - Draw2D.anInt533;
+			if (arg1 + local23 > Draw2D.right) {
+				local36 = arg1 + local23 - Draw2D.right;
 				local23 -= local36;
 				local29 += local36;
 				local27 += local36;
 			}
 			if (local23 > 0 && local20 > 0) {
-				this.method351(Draw2D.anIntArray178, local17, local29, this.pixels, local20, 0, local23, local15, local27, this.anIntArray177);
+				this.copyPixels(Draw2D.anIntArray178, local17, local29, this.pixels, local20, 0, local23, local15, local27, this.palette);
 				if (!arg2) {
 					;
 				}
@@ -265,7 +265,7 @@ public final class Image8 extends Draw2D {
 	}
 
 	@OriginalMember(owner = "client!ib", name = "a", descriptor = "([III[BIIIII[I)V")
-	private void method351(@OriginalArg(0) int[] arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2, @OriginalArg(3) byte[] arg3, @OriginalArg(4) int arg4, @OriginalArg(5) int arg5, @OriginalArg(6) int arg6, @OriginalArg(7) int arg7, @OriginalArg(8) int arg8, @OriginalArg(9) int[] arg9) {
+	private void copyPixels(@OriginalArg(0) int[] arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2, @OriginalArg(3) byte[] arg3, @OriginalArg(4) int arg4, @OriginalArg(5) int arg5, @OriginalArg(6) int arg6, @OriginalArg(7) int arg7, @OriginalArg(8) int arg8, @OriginalArg(9) int[] arg9) {
 		try {
 			@Pc(6) int local6 = -(arg6 >> 2);
 			@Pc(11) int local11 = -(arg6 & 0x3);

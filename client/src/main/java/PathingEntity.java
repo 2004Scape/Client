@@ -172,7 +172,7 @@ public class PathingEntity extends Entity {
 	@OriginalMember(owner = "client!x", name = "a", descriptor = "(ZZII)V")
 	public final void move(@OriginalArg(0) boolean arg0, @OriginalArg(1) boolean arg1, @OriginalArg(2) int arg2, @OriginalArg(3) int arg3) {
 		try {
-			if (this.primarySeqId != -1 && SeqType.instances[this.primarySeqId].idleStyle <= 1) {
+			if (this.primarySeqId != -1 && SeqType.instances[this.primarySeqId].priority <= 1) {
 				this.primarySeqId = -1;
 			}
 			if (!arg1) {
@@ -245,7 +245,7 @@ public class PathingEntity extends Entity {
 				local6++;
 				local11--;
 			}
-			if (this.primarySeqId != -1 && SeqType.instances[this.primarySeqId].idleStyle <= 1) {
+			if (this.primarySeqId != -1 && SeqType.instances[this.primarySeqId].priority <= 1) {
 				this.primarySeqId = -1;
 			}
 			if (this.pathLength < 9) {

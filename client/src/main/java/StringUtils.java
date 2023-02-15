@@ -21,13 +21,13 @@ public final class StringUtils {
 	private static int flowObfuscator5 = 629;
 
 	@OriginalMember(owner = "client!vb", name = "f", descriptor = "[C")
-	private static final char[] aCharArray1 = new char[12];
+	private static final char[] builder = new char[12];
 
 	@OriginalMember(owner = "client!vb", name = "g", descriptor = "[C")
-	private static final char[] aCharArray2 = new char[] { '_', 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z', '0', '1', '2', '3', '4', '5', '6', '7', '8', '9' };
+	private static final char[] BASE37_TABLE = new char[] { '_', 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z', '0', '1', '2', '3', '4', '5', '6', '7', '8', '9' };
 
 	@OriginalMember(owner = "client!vb", name = "a", descriptor = "(Ljava/lang/String;)J")
-	public static long method538(@OriginalArg(0) String arg0) {
+	public static long toBase37(@OriginalArg(0) String arg0) {
 		@Pc(3) long local3 = 0L;
 		for (@Pc(5) int local5 = 0; local5 < arg0.length() && local5 < 12; local5++) {
 			@Pc(11) char local11 = arg0.charAt(local5);
@@ -61,9 +61,9 @@ public final class StringUtils {
 				while (arg0 != 0L) {
 					@Pc(27) long local27 = arg0;
 					arg0 /= 37L;
-					aCharArray1[11 - local19++] = aCharArray2[(int) (local27 - arg0 * 37L)];
+					builder[11 - local19++] = BASE37_TABLE[(int) (local27 - arg0 * 37L)];
 				}
-				return new String(aCharArray1, 12 - local19, local19);
+				return new String(builder, 12 - local19, local19);
 			}
 		} catch (@Pc(59) RuntimeException local59) {
 			signlink.reporterror("15228, " + arg0 + ", " + arg1 + ", " + local59.toString());
@@ -72,7 +72,7 @@ public final class StringUtils {
 	}
 
 	@OriginalMember(owner = "client!vb", name = "a", descriptor = "(ILjava/lang/String;)J")
-	public static long method540(@OriginalArg(0) int arg0, @OriginalArg(1) String arg1) {
+	public static long hashCode(@OriginalArg(0) int arg0, @OriginalArg(1) String arg1) {
 		try {
 			if (arg0 != 0) {
 				throw new NullPointerException();
@@ -91,7 +91,7 @@ public final class StringUtils {
 	}
 
 	@OriginalMember(owner = "client!vb", name = "a", descriptor = "(II)Ljava/lang/String;")
-	public static String method541(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1) {
+	public static String formatIPv4(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1) {
 		try {
 			if (arg0 >= 0) {
 				flowObfuscator1 = !flowObfuscator1;
@@ -132,7 +132,7 @@ public final class StringUtils {
 	}
 
 	@OriginalMember(owner = "client!vb", name = "a", descriptor = "(Ljava/lang/String;I)Ljava/lang/String;")
-	public static String method543(@OriginalArg(0) String arg0, @OriginalArg(1) int arg1) {
+	public static String toSentenceCase(@OriginalArg(0) String arg0, @OriginalArg(1) int arg1) {
 		try {
 			@Pc(2) String local2 = arg0.toLowerCase();
 			if (arg1 != 0) {
@@ -159,7 +159,7 @@ public final class StringUtils {
 	}
 
 	@OriginalMember(owner = "client!vb", name = "c", descriptor = "(ILjava/lang/String;)Ljava/lang/String;")
-	public static String method544(@OriginalArg(0) int arg0, @OriginalArg(1) String arg1) {
+	public static String toAsterisks(@OriginalArg(0) int arg0, @OriginalArg(1) String arg1) {
 		try {
 			@Pc(1) String local1 = "";
 			if (arg0 != 7) {

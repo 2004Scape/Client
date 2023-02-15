@@ -55,10 +55,10 @@ public final class Censor {
 
 	@OriginalMember(owner = "client!mc", name = "a", descriptor = "(Lclient!ub;)V")
 	public static void method414(@OriginalArg(0) FileArchive arg0) {
-		@Pc(11) Buffer local11 = new Buffer(363, arg0.method536("fragmentsenc.txt", null, (byte) 2));
-		@Pc(21) Buffer local21 = new Buffer(363, arg0.method536("badenc.txt", null, (byte) 2));
-		@Pc(31) Buffer local31 = new Buffer(363, arg0.method536("domainenc.txt", null, (byte) 2));
-		@Pc(41) Buffer local41 = new Buffer(363, arg0.method536("tldlist.txt", null, (byte) 2));
+		@Pc(11) Buffer local11 = new Buffer(363, arg0.read("fragmentsenc.txt", null, (byte) 2));
+		@Pc(21) Buffer local21 = new Buffer(363, arg0.read("badenc.txt", null, (byte) 2));
+		@Pc(31) Buffer local31 = new Buffer(363, arg0.read("domainenc.txt", null, (byte) 2));
+		@Pc(41) Buffer local41 = new Buffer(363, arg0.read("tldlist.txt", null, (byte) 2));
 		method415(local11, local21, local31, local41);
 	}
 
@@ -73,15 +73,15 @@ public final class Censor {
 	@OriginalMember(owner = "client!mc", name = "a", descriptor = "(ZLclient!kb;)V")
 	private static void method416(@OriginalArg(0) boolean arg0, @OriginalArg(1) Buffer arg1) {
 		try {
-			@Pc(4) int local4 = arg1.method396();
+			@Pc(4) int local4 = arg1.g4();
 			aCharArrayArray3 = new char[local4][];
 			anIntArray196 = new int[local4];
 			if (arg0) {
 				for (@Pc(15) int local15 = 0; local15 < local4; local15++) {
-					anIntArray196[local15] = arg1.method391();
-					@Pc(26) char[] local26 = new char[arg1.method391()];
+					anIntArray196[local15] = arg1.g1();
+					@Pc(26) char[] local26 = new char[arg1.g1()];
 					for (@Pc(28) int local28 = 0; local28 < local26.length; local28++) {
-						local26[local28] = (char) arg1.method391();
+						local26[local28] = (char) arg1.g1();
 					}
 					aCharArrayArray3[local15] = local26;
 				}
@@ -95,7 +95,7 @@ public final class Censor {
 	@OriginalMember(owner = "client!mc", name = "a", descriptor = "(ILclient!kb;)V")
 	private static void method417(@OriginalArg(0) int arg0, @OriginalArg(1) Buffer arg1) {
 		try {
-			@Pc(2) int local2 = arg1.method396();
+			@Pc(2) int local2 = arg1.g4();
 			if (arg0 != -33152) {
 				for (@Pc(7) int local7 = 1; local7 > 0; local7++) {
 				}
@@ -112,7 +112,7 @@ public final class Censor {
 	@OriginalMember(owner = "client!mc", name = "a", descriptor = "(Lclient!kb;I)V")
 	private static void method418(@OriginalArg(0) Buffer arg0, @OriginalArg(1) int arg1) {
 		try {
-			@Pc(2) int local2 = arg0.method396();
+			@Pc(2) int local2 = arg0.g4();
 			if (arg1 < 0) {
 				aCharArrayArray2 = new char[local2][];
 				method421(-178, arg0, aCharArrayArray2);
@@ -126,9 +126,9 @@ public final class Censor {
 	@OriginalMember(owner = "client!mc", name = "b", descriptor = "(ILclient!kb;)V")
 	private static void method419(@OriginalArg(0) int arg0, @OriginalArg(1) Buffer arg1) {
 		try {
-			anIntArray195 = new int[arg1.method396()];
+			anIntArray195 = new int[arg1.g4()];
 			for (@Pc(5) int local5 = 0; local5 < anIntArray195.length; local5++) {
-				anIntArray195[local5] = arg1.method393();
+				anIntArray195[local5] = arg1.g2();
 			}
 			if (arg0 != flowObfuscator2) {
 				flowObfuscator1 = !flowObfuscator1;
@@ -145,15 +145,15 @@ public final class Censor {
 			if (arg3 == 1) {
 				@Pc(6) boolean local6 = false;
 				for (@Pc(10) int local10 = 0; local10 < arg1.length; local10++) {
-					@Pc(17) char[] local17 = new char[arg2.method391()];
+					@Pc(17) char[] local17 = new char[arg2.g1()];
 					for (@Pc(19) int local19 = 0; local19 < local17.length; local19++) {
-						local17[local19] = (char) arg2.method391();
+						local17[local19] = (char) arg2.g1();
 					}
 					arg1[local10] = local17;
-					@Pc(41) byte[][] local41 = new byte[arg2.method391()][2];
+					@Pc(41) byte[][] local41 = new byte[arg2.g1()][2];
 					for (@Pc(43) int local43 = 0; local43 < local41.length; local43++) {
-						local41[local43][0] = (byte) arg2.method391();
-						local41[local43][1] = (byte) arg2.method391();
+						local41[local43][0] = (byte) arg2.g1();
+						local41[local43][1] = (byte) arg2.g1();
 					}
 					if (local41.length > 0) {
 						arg0[local10] = local41;
@@ -181,9 +181,9 @@ public final class Censor {
 					}
 				}
 				for (local5 = 0; local5 < arg2.length; local5++) {
-					@Pc(20) char[] local20 = new char[arg1.method391()];
+					@Pc(20) char[] local20 = new char[arg1.g1()];
 					for (@Pc(22) int local22 = 0; local22 < local20.length; local22++) {
-						local20[local22] = (char) arg1.method391();
+						local20[local22] = (char) arg1.g1();
 					}
 					arg2[local5] = local20;
 				}

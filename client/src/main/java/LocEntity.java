@@ -43,8 +43,8 @@ public final class LocEntity extends Node {
 			}
 			this.anInt655 = arg1;
 			this.seq = arg5;
-			if (arg0 && arg5.loopFrameCount != -1) {
-				this.seqFrame = (int) (Math.random() * (double) this.seq.frameCount);
+			if (arg0 && arg5.replayoff != -1) {
+				this.seqFrame = (int) (Math.random() * (double) this.seq.framecount);
 				this.seqCycle = (int) (Math.random() * (double) this.seq.frameDelay[this.seqFrame]);
 			} else {
 				this.seqFrame = -1;
