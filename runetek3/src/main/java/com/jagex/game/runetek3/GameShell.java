@@ -102,6 +102,10 @@ public class GameShell extends Applet implements Runnable, MouseListener, MouseM
 	@OriginalMember(owner = "client!a", name = "C", descriptor = "I")
 	private int keyQueueWritePos;
 
+	private boolean mouseWheelDown = false;
+	private int mouseWheelX = 0;
+	private int mouseWheelY = 0;
+
 	@OriginalMember(owner = "client!a", name = "a", descriptor = "(III)V")
 	protected final void initApplication(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2) {
 		try {
@@ -310,13 +314,17 @@ public class GameShell extends Applet implements Runnable, MouseListener, MouseM
 		this.idleCycles = 0;
 		this.mouseClickX = local2;
 		this.mouseClickY = local5;
+
 		if ((arg0.getModifiersEx() & MouseEvent.BUTTON3_DOWN_MASK) != 0) {
 			this.mouseClickButton = 2;
 			this.mouseButton = 2;
 		} else if ((arg0.getModifiersEx() & MouseEvent.BUTTON1_DOWN_MASK) != 0) {
 			this.mouseClickButton = 1;
 			this.mouseButton = 1;
+		} else if ((arg0.getModifiersEx() & MouseEvent.BUTTON2_DOWN_MASK) != 0) {
+			this.mouseWheelDown = true;
 		}
+
 		if (InputTracking.enabled && ((arg0.getModifiersEx() & MouseEvent.BUTTON3_DOWN_MASK) != 0 || (arg0.getModifiersEx() & MouseEvent.BUTTON1_DOWN_MASK) != 0)) {
 			InputTracking.mousePressed(local2, (arg0.getModifiersEx() & MouseEvent.BUTTON3_DOWN_MASK) != 0 ? 1 : 0, local5, (byte) 4);
 		}
@@ -327,6 +335,8 @@ public class GameShell extends Applet implements Runnable, MouseListener, MouseM
 	public final void mouseReleased(@OriginalArg(0) MouseEvent arg0) {
 		this.idleCycles = 0;
 		this.mouseButton = 0;
+		this.mouseWheelDown = false;
+
 		if (InputTracking.enabled && ((arg0.getModifiersEx() & MouseEvent.BUTTON3_DOWN_MASK) != 0 || (arg0.getModifiersEx() & MouseEvent.BUTTON1_DOWN_MASK) != 0)) {
 			InputTracking.mouseReleased((arg0.getModifiersEx() & MouseEvent.BUTTON3_DOWN_MASK) != 0 ? 1 : 0, 0);
 		}
@@ -361,6 +371,13 @@ public class GameShell extends Applet implements Runnable, MouseListener, MouseM
 		this.idleCycles = 0;
 		this.mouseX = local2;
 		this.mouseY = local5;
+
+		if (this.mouseWheelDown) {
+			this.mouseWheelDragged(this.mouseWheelX - this.mouseX, -(this.mouseWheelY - this.mouseY));
+			this.mouseWheelX = local2;
+			this.mouseWheelY = local5;
+		}
+
 		if (InputTracking.enabled) {
 			InputTracking.mouseMoved(local5, true, local2);
 		}
@@ -677,6 +694,9 @@ public class GameShell extends Applet implements Runnable, MouseListener, MouseM
 	}
 
 	protected void mouseWheelMoved(int rotation) {
+	}
+
+	protected void mouseWheelDragged(int x, int y) {
 	}
 
 	@Override

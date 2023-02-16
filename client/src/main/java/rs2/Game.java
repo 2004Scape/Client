@@ -11756,8 +11756,41 @@ public final class Game extends GameShell {
 					this.minimapZoom = 300;
 				}
 			}*/
+		}
+	}
 
-			System.out.println(super.mouseX + " " + super.mouseY);
+	@Override
+	protected void mouseWheelDragged(int x, int y) {
+		if (this.sceneState == 2) {
+			// limit to viewport: super.mouseX > 8 && super.mouseY > 11 && super.mouseX < 520 && super.mouseY < 345
+			if (this.viewportInterfaceId == -1) {
+				x *= 3;
+				y <<= 1;
+				if (x > 3) {
+					x = 3;
+				}
+				if (x < -3) {
+					x = -3;
+				}
+				if (y > 3) {
+					y = 3;
+				}
+				if (y < -3) {
+					y = -3;
+				}
+
+				this.orbitCameraYaw += x;
+				this.orbitCameraPitch += y;
+
+				// sanity checks:
+				this.orbitCameraYaw = this.orbitCameraYaw & 0x7FFF;
+				if (this.orbitCameraPitch < 128) {
+					this.orbitCameraPitch = 128;
+				}
+				if (this.orbitCameraPitch > 383) {
+					this.orbitCameraPitch = 383;
+				}
+			}
 		}
 	}
 }
