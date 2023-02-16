@@ -169,17 +169,22 @@ public final class LocType {
 			}
 		}
 		cachePos = (cachePos + 1) % 10;
-		@Pc(27) LocType local27 = cache[cachePos];
+		@Pc(27) LocType loc = cache[cachePos];
 		dat.pos = offsets[arg0];
-		local27.index = arg0;
-		local27.reset();
-		local27.decode(dat);
+		loc.index = arg0;
+		loc.reset();
+		loc.decode(dat);
+
 		// hardcoded fixes to avoid touching the cache (for now)
-		if (local27.index == 899 || local27.index == 901 || local27.index == 1779) {
+		if (loc.index == 899 || loc.index == 901 || loc.index == 1779) {
 			// fixes black colors on hanging banners and windmill sails
-			local27.sharelight = false;
+			loc.sharelight = false;
+		} else if (loc.index == 228) {
+			// fixes ship part being offset incorrectly
+			loc.yoff = -120;
 		}
-		return local27;
+
+		return loc;
 	}
 
 	@OriginalMember(owner = "client!ac", name = "a", descriptor = "()V")
