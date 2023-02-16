@@ -309,15 +309,15 @@ public class GameShell extends Applet implements Runnable, MouseListener, MouseM
 		this.idleCycles = 0;
 		this.mouseClickX = local2;
 		this.mouseClickY = local5;
-		if (arg0.isMetaDown()) {
+		if ((arg0.getModifiersEx() & MouseEvent.BUTTON3_DOWN_MASK) != 0) {
 			this.mouseClickButton = 2;
 			this.mouseButton = 2;
-		} else {
+		} else if ((arg0.getModifiersEx() & MouseEvent.BUTTON1_DOWN_MASK) != 0) {
 			this.mouseClickButton = 1;
 			this.mouseButton = 1;
 		}
-		if (InputTracking.enabled) {
-			InputTracking.mousePressed(local2, arg0.isMetaDown() ? 1 : 0, local5, (byte) 4);
+		if (InputTracking.enabled && ((arg0.getModifiersEx() & MouseEvent.BUTTON3_DOWN_MASK) != 0 || (arg0.getModifiersEx() & MouseEvent.BUTTON1_DOWN_MASK) != 0)) {
+			InputTracking.mousePressed(local2, (arg0.getModifiersEx() & MouseEvent.BUTTON3_DOWN_MASK) != 0 ? 1 : 0, local5, (byte) 4);
 		}
 	}
 
@@ -326,8 +326,8 @@ public class GameShell extends Applet implements Runnable, MouseListener, MouseM
 	public final void mouseReleased(@OriginalArg(0) MouseEvent arg0) {
 		this.idleCycles = 0;
 		this.mouseButton = 0;
-		if (InputTracking.enabled) {
-			InputTracking.mouseReleased(arg0.isMetaDown() ? 1 : 0, 0);
+		if (InputTracking.enabled && ((arg0.getModifiersEx() & MouseEvent.BUTTON3_DOWN_MASK) != 0 || (arg0.getModifiersEx() & MouseEvent.BUTTON1_DOWN_MASK) != 0)) {
+			InputTracking.mouseReleased((arg0.getModifiersEx() & MouseEvent.BUTTON3_DOWN_MASK) != 0 ? 1 : 0, 0);
 		}
 	}
 
