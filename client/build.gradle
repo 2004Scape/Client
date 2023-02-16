@@ -3,7 +3,7 @@ plugins {
     id 'application'
 }
 
-mainClassName = 'Game'
+mainClassName = 'rs2.Game'
 version = '1.0.0'
 
 sourceCompatibility = 1.8
@@ -23,6 +23,7 @@ tasks.withType(Jar) {
 
 dependencies {
     compileOnly project(':deob-annotations')
+    implementation project(':runetek3')
 }
 
 jar {

@@ -11,5 +11,6 @@ dependencyResolutionManagement {
 
 include(
     "deob-annotations",
-    "client"
+    "client",
+    "runetek3"
 )
