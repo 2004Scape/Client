@@ -150,7 +150,7 @@ public final class Scene {
 	public static int[] levelOccluderCount = new int[LEVEL_COUNT];
 
 	@OriginalMember(owner = "client!r", name = "T", descriptor = "[[Lclient!m;")
-	public static SceneOccluder[][] levelOccluders = new SceneOccluder[LEVEL_COUNT][500];
+	public static SceneOccluder[][] levelOccluders = new SceneOccluder[LEVEL_COUNT][1000];
 
 	@OriginalMember(owner = "client!r", name = "U", descriptor = "I")
 	public static int activeOccluderCount;

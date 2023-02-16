@@ -17,6 +17,8 @@ import rs2.Signlink;
 @OriginalClass("client!c")
 public final class SceneBuilder {
 
+	public static int OCCLUDER_THRESHOLD = 8;
+
 	@OriginalMember(owner = "client!c", name = "a", descriptor = "Z")
 	private static boolean flowObfuscator1 = true;
 
@@ -784,8 +786,8 @@ public final class SceneBuilder {
 			if (randomLightnessOffset > 16) {
 				randomLightnessOffset = 16;
 			}
-			@Pc(133) int local133;
-			@Pc(139) int local139;
+			@Pc(133) int tileZ;
+			@Pc(139) int tileX;
 			@Pc(141) int local141;
 			@Pc(145) int local145;
 			@Pc(169) int local169;
@@ -803,8 +805,8 @@ public final class SceneBuilder {
 				@Pc(114) byte local114 = -50;
 				@Pc(116) byte local116 = -10;
 				@Pc(118) byte local118 = -50;
-				local133 = (int) Math.sqrt((double) (local114 * local114 + local116 * local116 + local118 * local118));
-				local139 = local112 * local133 >> 8;
+				tileZ = (int) Math.sqrt((double) (local114 * local114 + local116 * local116 + local118 * local118));
+				tileX = local112 * tileZ >> 8;
 				for (local141 = 1; local141 < this.maxTileZ - 1; local141++) {
 					for (local145 = 1; local145 < this.maxTileX - 1; local145++) {
 						local169 = this.levelHeightmap[local7][local145 + 1][local141] - this.levelHeightmap[local7][local145 - 1][local141];
@@ -813,7 +815,7 @@ public final class SceneBuilder {
 						local210 = (local169 << 8) / local204;
 						local214 = 65536 / local204;
 						local220 = (local191 << 8) / local204;
-						local236 = local110 + (local114 * local210 + local116 * local214 + local118 * local220) / local139;
+						local236 = local110 + (local114 * local210 + local116 * local214 + local118 * local220) / tileX;
 						local284 = (local108[local145 - 1][local141] >> 2) + (local108[local145 + 1][local141] >> 3) + (local108[local145][local141 - 1] >> 2) + (local108[local145][local141 + 1] >> 3) + (local108[local145][local141] >> 1);
 						this.levelLightmap[local145][local141] = local236 - local284;
 					}
@@ -970,113 +972,116 @@ public final class SceneBuilder {
 				}
 			}
 			if (!fullbright) {
-				local27 = 1;
-				@Pc(1123) int local1123 = 2;
-				@Pc(1125) int local1125 = 4;
-				for (@Pc(1127) int local1127 = 0; local1127 < 4; local1127++) {
-					if (local1127 > 0) {
-						local27 <<= 0x3;
-						local1123 <<= 0x3;
-						local1125 <<= 0x3;
+				int wall0 = 1;
+				@Pc(1123) int wall1 = 2;
+				@Pc(1125) int wall2 = 4;
+
+				for (@Pc(1127) int topLevel = 0; topLevel < 4; topLevel++) {
+					if (topLevel > 0) {
+						wall0 <<= 0x3;
+						wall1 <<= 0x3;
+						wall2 <<= 0x3;
 					}
-					for (@Pc(1145) int local1145 = 0; local1145 <= local1127; local1145++) {
-						for (local133 = 0; local133 <= this.maxTileZ; local133++) {
-							for (local139 = 0; local139 <= this.maxTileX; local139++) {
+
+					for (@Pc(1145) int level = 0; level <= topLevel; level++) {
+						for (tileZ = 0; tileZ <= this.maxTileZ; tileZ++) {
+							for (tileX = 0; tileX <= this.maxTileX; tileX++) {
 								@Pc(1284) short local1284;
-								if ((this.levelOccludemap[local1145][local139][local133] & local27) != 0) {
-									local141 = local133;
-									local145 = local133;
-									local169 = local1145;
-									local191 = local1145;
-									while (local141 > 0 && (this.levelOccludemap[local1145][local139][local141 - 1] & local27) != 0) {
+
+								if ((this.levelOccludemap[level][tileX][tileZ] & wall0) != 0) {
+									local141 = tileZ;
+									local145 = tileZ;
+									local169 = level;
+									local191 = level;
+									while (local141 > 0 && (this.levelOccludemap[level][tileX][local141 - 1] & wall0) != 0) {
 										local141--;
 									}
-									while (local145 < this.maxTileZ && (this.levelOccludemap[local1145][local139][local145 + 1] & local27) != 0) {
+									while (local145 < this.maxTileZ && (this.levelOccludemap[level][tileX][local145 + 1] & wall0) != 0) {
 										local145++;
 									}
 									label337: while (local169 > 0) {
 										for (local204 = local141; local204 <= local145; local204++) {
-											if ((this.levelOccludemap[local169 - 1][local139][local204] & local27) == 0) {
+											if ((this.levelOccludemap[local169 - 1][tileX][local204] & wall0) == 0) {
 												break label337;
 											}
 										}
 										local169--;
 									}
-									label326: while (local191 < local1127) {
+									label326: while (local191 < topLevel) {
 										for (local204 = local141; local204 <= local145; local204++) {
-											if ((this.levelOccludemap[local191 + 1][local139][local204] & local27) == 0) {
+											if ((this.levelOccludemap[local191 + 1][tileX][local204] & wall0) == 0) {
 												break label326;
 											}
 										}
 										local191++;
 									}
 									local204 = (local191 + 1 - local169) * (local145 + 1 - local141);
-									if (local204 >= 8) {
+									if (local204 >= OCCLUDER_THRESHOLD) {
 										local1284 = 240;
-										local214 = this.levelHeightmap[local191][local139][local141] - local1284;
-										local220 = this.levelHeightmap[local169][local139][local141];
-										Scene.addOccluder(local145 * 128 + 128, local139 * 128, -802, local220, 1, local139 * 128, local1127, local214, local141 * 128);
+										local214 = this.levelHeightmap[local191][tileX][local141] - local1284;
+										local220 = this.levelHeightmap[local169][tileX][local141];
+										Scene.addOccluder(local145 * 128 + 128, tileX * 128, -802, local220, 1, tileX * 128, topLevel, local214, local141 * 128);
 										for (local236 = local169; local236 <= local191; local236++) {
 											for (local284 = local141; local284 <= local145; local284++) {
-												this.levelOccludemap[local236][local139][local284] &= ~local27;
+												this.levelOccludemap[local236][tileX][local284] &= ~wall0;
 											}
 										}
 									}
 								}
-								if ((this.levelOccludemap[local1145][local139][local133] & local1123) != 0) {
-									local141 = local139;
-									local145 = local139;
-									local169 = local1145;
-									local191 = local1145;
-									while (local141 > 0 && (this.levelOccludemap[local1145][local141 - 1][local133] & local1123) != 0) {
+								if ((this.levelOccludemap[level][tileX][tileZ] & wall1) != 0) {
+									local141 = tileX;
+									local145 = tileX;
+									local169 = level;
+									local191 = level;
+									while (local141 > 0 && (this.levelOccludemap[level][local141 - 1][tileZ] & wall1) != 0) {
 										local141--;
 									}
-									while (local145 < this.maxTileX && (this.levelOccludemap[local1145][local145 + 1][local133] & local1123) != 0) {
+									while (local145 < this.maxTileX && (this.levelOccludemap[level][local145 + 1][tileZ] & wall1) != 0) {
 										local145++;
 									}
 									label390: while (local169 > 0) {
 										for (local204 = local141; local204 <= local145; local204++) {
-											if ((this.levelOccludemap[local169 - 1][local204][local133] & local1123) == 0) {
+											if ((this.levelOccludemap[local169 - 1][local204][tileZ] & wall1) == 0) {
 												break label390;
 											}
 										}
 										local169--;
 									}
-									label379: while (local191 < local1127) {
+									label379: while (local191 < topLevel) {
 										for (local204 = local141; local204 <= local145; local204++) {
-											if ((this.levelOccludemap[local191 + 1][local204][local133] & local1123) == 0) {
+											if ((this.levelOccludemap[local191 + 1][local204][tileZ] & wall1) == 0) {
 												break label379;
 											}
 										}
 										local191++;
 									}
 									local204 = (local191 + 1 - local169) * (local145 + 1 - local141);
-									if (local204 >= 8) {
+									if (local204 >= OCCLUDER_THRESHOLD) {
 										local1284 = 240;
-										local214 = this.levelHeightmap[local191][local141][local133] - local1284;
-										local220 = this.levelHeightmap[local169][local141][local133];
-										Scene.addOccluder(local133 * 128, local141 * 128, -802, local220, 2, local145 * 128 + 128, local1127, local214, local133 * 128);
+										local214 = this.levelHeightmap[local191][local141][tileZ] - local1284;
+										local220 = this.levelHeightmap[local169][local141][tileZ];
+										Scene.addOccluder(tileZ * 128, local141 * 128, -802, local220, 2, local145 * 128 + 128, topLevel, local214, tileZ * 128);
 										for (local236 = local169; local236 <= local191; local236++) {
 											for (local284 = local141; local284 <= local145; local284++) {
-												this.levelOccludemap[local236][local284][local133] &= ~local1123;
+												this.levelOccludemap[local236][local284][tileZ] &= ~wall1;
 											}
 										}
 									}
 								}
-								if ((this.levelOccludemap[local1145][local139][local133] & local1125) != 0) {
-									local141 = local139;
-									local145 = local139;
-									local169 = local133;
-									local191 = local133;
-									while (local169 > 0 && (this.levelOccludemap[local1145][local139][local169 - 1] & local1125) != 0) {
+								if ((this.levelOccludemap[level][tileX][tileZ] & wall2) != 0) {
+									local141 = tileX;
+									local145 = tileX;
+									local169 = tileZ;
+									local191 = tileZ;
+									while (local169 > 0 && (this.levelOccludemap[level][tileX][local169 - 1] & wall2) != 0) {
 										local169--;
 									}
-									while (local191 < this.maxTileZ && (this.levelOccludemap[local1145][local139][local191 + 1] & local1125) != 0) {
+									while (local191 < this.maxTileZ && (this.levelOccludemap[level][tileX][local191 + 1] & wall2) != 0) {
 										local191++;
 									}
 									label443: while (local141 > 0) {
 										for (local204 = local169; local204 <= local191; local204++) {
-											if ((this.levelOccludemap[local1145][local141 - 1][local204] & local1125) == 0) {
+											if ((this.levelOccludemap[level][local141 - 1][local204] & wall2) == 0) {
 												break label443;
 											}
 										}
@@ -1084,18 +1089,18 @@ public final class SceneBuilder {
 									}
 									label432: while (local145 < this.maxTileX) {
 										for (local204 = local169; local204 <= local191; local204++) {
-											if ((this.levelOccludemap[local1145][local145 + 1][local204] & local1125) == 0) {
+											if ((this.levelOccludemap[level][local145 + 1][local204] & wall2) == 0) {
 												break label432;
 											}
 										}
 										local145++;
 									}
 									if ((local145 + 1 - local141) * (local191 + 1 - local169) >= 4) {
-										local204 = this.levelHeightmap[local1145][local141][local169];
-										Scene.addOccluder(local191 * 128 + 128, local141 * 128, -802, local204, 4, local145 * 128 + 128, local1127, local204, local169 * 128);
+										local204 = this.levelHeightmap[level][local141][local169];
+										Scene.addOccluder(local191 * 128 + 128, local141 * 128, -802, local204, 4, local145 * 128 + 128, topLevel, local204, local169 * 128);
 										for (local210 = local141; local210 <= local145; local210++) {
 											for (local214 = local169; local214 <= local191; local214++) {
-												this.levelOccludemap[local1145][local210][local214] &= ~local1125;
+												this.levelOccludemap[level][local210][local214] &= ~wall2;
 											}
 										}
 									}

@@ -3328,6 +3328,11 @@ public final class Game extends GameShell {
 									this.showPerformance = !this.showPerformance;
 								} else if (this.chatTyped.equals("::occluders")) {
 									this.showOccluders = !this.showOccluders;
+								} else if (this.chatTyped.startsWith("::occludert")) {
+									try {
+										SceneBuilder.OCCLUDER_THRESHOLD = Integer.parseInt(this.chatTyped.substring(12));
+										this.buildScene(869);
+									} catch (Exception ignored) {}
 								} else if (this.chatTyped.startsWith("::")) {
 									this.out.p1isaac((byte) -34, 4);
 									this.out.p1(this.chatTyped.length() - 1);
