@@ -6156,6 +6156,9 @@ public final class Game extends GameShell {
 			@Pc(450) int local450;
 			try {
 				for (local450 = 0; local450 < 50; local450++) {
+					if (local450 == 22) {
+						continue;
+					}
 					this.imageMapscene[local450] = new Image8(local277, "mapscene", local450);
 				}
 			} catch (@Pc(468) Exception local468) {
