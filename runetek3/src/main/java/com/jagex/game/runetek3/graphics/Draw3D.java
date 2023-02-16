@@ -5,25 +5,9 @@ import org.openrs2.deob.annotation.OriginalArg;
 import org.openrs2.deob.annotation.OriginalClass;
 import org.openrs2.deob.annotation.OriginalMember;
 import org.openrs2.deob.annotation.Pc;
-import rs2.Signlink;
 
 @OriginalClass("client!gb")
 public final class Draw3D extends Draw2D {
-
-	@OriginalMember(owner = "client!gb", name = "v", descriptor = "Z")
-	private static boolean flowObfuscator1;
-
-	@OriginalMember(owner = "client!gb", name = "w", descriptor = "I")
-	private static final int flowObfuscator2 = 787;
-
-	@OriginalMember(owner = "client!gb", name = "x", descriptor = "Z")
-	private static boolean flowObfuscator3;
-
-	@OriginalMember(owner = "client!gb", name = "y", descriptor = "I")
-	private static int flowObfuscator4 = 473;
-
-	@OriginalMember(owner = "client!gb", name = "z", descriptor = "Z")
-	private static boolean flowObfuscator5 = true;
 
 	@OriginalMember(owner = "client!gb", name = "A", descriptor = "Z")
 	public static boolean lowMemory = true;
@@ -50,7 +34,7 @@ public final class Draw3D extends Draw2D {
 	public static int[] reciprocal15 = new int[512];
 
 	@OriginalMember(owner = "client!gb", name = "I", descriptor = "[I")
-	public static final int[] reciprocal16 = new int[2048];
+	public static int[] reciprocal16 = new int[2048];
 
 	@OriginalMember(owner = "client!gb", name = "J", descriptor = "[I")
 	public static int[] sin = new int[2048];
@@ -108,189 +92,111 @@ public final class Draw3D extends Draw2D {
 	}
 
 	@OriginalMember(owner = "client!gb", name = "a", descriptor = "(Z)V")
-	public static void unload(@OriginalArg(0) boolean arg0) {
-		try {
-			reciprocal15 = null;
-			reciprocal15 = null;
-			sin = null;
-			cos = null;
-			lineOffset = null;
-			textures = null;
-			textureTranslucent = null;
-			averageTextureRGB = null;
-			if (!arg0) {
-				flowObfuscator5 = !flowObfuscator5;
-			}
-			texelPool = null;
-			activeTexels = null;
-			textureCycle = null;
-			palette = null;
-			texturePalette = null;
-		} catch (@Pc(35) RuntimeException local35) {
-			Signlink.reporterror("90248, " + arg0 + ", " + local35.toString());
-			throw new RuntimeException();
-		}
+	public static void unload() {
+		reciprocal15 = null;
+		reciprocal16 = null;
+		sin = null;
+		cos = null;
+		lineOffset = null;
+		textures = null;
+		textureTranslucent = null;
+		averageTextureRGB = null;
+		texelPool = null;
+		activeTexels = null;
+		textureCycle = null;
+		palette = null;
+		texturePalette = null;
 	}
 
 	@OriginalMember(owner = "client!gb", name = "c", descriptor = "(I)V")
-	public static void init2D(@OriginalArg(0) int arg0) {
-		try {
-			label29: while (true) {
-				@Pc(5) int local5;
-				if (arg0 >= 0) {
-					local5 = 1;
-					while (true) {
-						if (local5 <= 0) {
-							continue label29;
-						}
-						local5++;
-					}
-				}
-				lineOffset = new int[height2d];
-				for (local5 = 0; local5 < height2d; local5++) {
-					lineOffset[local5] = width2d * local5;
-				}
-				centerX = width2d / 2;
-				centerY = height2d / 2;
-				return;
-			}
-		} catch (@Pc(39) RuntimeException local39) {
-			Signlink.reporterror("37605, " + arg0 + ", " + local39.toString());
-			throw new RuntimeException();
+	public static void init2D() {
+		lineOffset = new int[height2d];
+		for (@Pc(5) int local5 = 0; local5 < height2d; local5++) {
+			lineOffset[local5] = width2d * local5;
 		}
+		centerX = width2d / 2;
+		centerY = height2d / 2;
 	}
 
 	@OriginalMember(owner = "client!gb", name = "a", descriptor = "(III)V")
-	public static void init3D(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2) {
-		try {
-			if (arg2 != 0) {
-				flowObfuscator1 = !flowObfuscator1;
-			}
-			lineOffset = new int[arg0];
-			for (@Pc(12) int local12 = 0; local12 < arg0; local12++) {
-				lineOffset[local12] = arg1 * local12;
-			}
-			centerX = arg1 / 2;
-			centerY = arg0 / 2;
-		} catch (@Pc(34) RuntimeException local34) {
-			Signlink.reporterror("74604, " + arg0 + ", " + arg1 + ", " + arg2 + ", " + local34.toString());
-			throw new RuntimeException();
+	public static void init3D(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1) {
+		lineOffset = new int[arg0];
+		for (@Pc(12) int local12 = 0; local12 < arg0; local12++) {
+			lineOffset[local12] = arg1 * local12;
 		}
+		centerX = arg1 / 2;
+		centerY = arg0 / 2;
 	}
 
 	@OriginalMember(owner = "client!gb", name = "b", descriptor = "(Z)V")
-	public static void clearTexels(@OriginalArg(0) boolean arg0) {
-		try {
-			if (!arg0) {
-				texelPool = null;
-				for (@Pc(6) int local6 = 0; local6 < 50; local6++) {
-					activeTexels[local6] = null;
-				}
-			}
-		} catch (@Pc(18) RuntimeException local18) {
-			Signlink.reporterror("98638, " + arg0 + ", " + local18.toString());
-			throw new RuntimeException();
+	public static void clearTexels() {
+		texelPool = null;
+		for (@Pc(6) int local6 = 0; local6 < 50; local6++) {
+			activeTexels[local6] = null;
 		}
 	}
 
 	@OriginalMember(owner = "client!gb", name = "a", descriptor = "(II)V")
-	public static void initPool(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1) {
-		try {
-			label37: while (true) {
-				@Pc(5) int local5;
-				if (arg1 >= 0) {
-					local5 = 1;
-					while (true) {
-						if (local5 <= 0) {
-							continue label37;
-						}
-						local5++;
-					}
-				}
-				if (texelPool != null) {
-					return;
-				}
-				poolSize = arg0;
-				if (lowMemory) {
-					texelPool = new int[poolSize][16384];
-				} else {
-					texelPool = new int[poolSize][65536];
-				}
-				for (local5 = 0; local5 < 50; local5++) {
-					activeTexels[local5] = null;
-				}
-				return;
-			}
-		} catch (@Pc(42) RuntimeException local42) {
-			Signlink.reporterror("75782, " + arg0 + ", " + arg1 + ", " + local42.toString());
-			throw new RuntimeException();
+	public static void initPool(@OriginalArg(0) int arg0) {
+		if (texelPool != null) {
+			return;
+		}
+		poolSize = arg0;
+		if (lowMemory) {
+			texelPool = new int[poolSize][16384];
+		} else {
+			texelPool = new int[poolSize][65536];
+		}
+		for (@Pc(5) int local5 = 0; local5 < 50; local5++) {
+			activeTexels[local5] = null;
 		}
 	}
 
 	@OriginalMember(owner = "client!gb", name = "a", descriptor = "(BLclient!ub;)V")
-	public static void unpackTextures(@OriginalArg(0) byte arg0, @OriginalArg(1) FileArchive arg1) {
-		try {
-			if (arg0 == 2) {
-				textureCount = 0;
-				for (@Pc(9) int local9 = 0; local9 < 50; local9++) {
-					try {
-						textures[local9] = new Image8(arg1, String.valueOf(local9), 0);
-						if (lowMemory && textures[local9].cropW == 128) {
-							textures[local9].shrink(flowObfuscator3);
-						} else {
-							textures[local9].crop(0);
-						}
-						textureCount++;
-					} catch (@Pc(47) Exception local47) {
-					}
+	public static void unpackTextures(@OriginalArg(1) FileArchive arg1) {
+		textureCount = 0;
+		for (@Pc(9) int local9 = 0; local9 < 50; local9++) {
+			try {
+				textures[local9] = new Image8(arg1, String.valueOf(local9), 0);
+				if (lowMemory && textures[local9].cropW == 128) {
+					textures[local9].shrink();
+				} else {
+					textures[local9].crop();
 				}
+				textureCount++;
+			} catch (@Pc(47) Exception local47) {
 			}
-		} catch (@Pc(54) RuntimeException local54) {
-			Signlink.reporterror("24488, " + arg0 + ", " + arg1 + ", " + local54.toString());
-			throw new RuntimeException();
 		}
 	}
 
 	@OriginalMember(owner = "client!gb", name = "b", descriptor = "(II)I")
-	public static int getAverageTextureRGB(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1) {
-		try {
-			@Pc(3) int local3 = 25 / arg0;
-			if (averageTextureRGB[arg1] != 0) {
-				return averageTextureRGB[arg1];
-			}
-			@Pc(13) int local13 = 0;
-			@Pc(15) int local15 = 0;
-			@Pc(17) int local17 = 0;
-			@Pc(22) int local22 = texturePalette[arg1].length;
-			for (@Pc(24) int local24 = 0; local24 < local22; local24++) {
-				local13 += texturePalette[arg1][local24] >> 16 & 0xFF;
-				local15 += texturePalette[arg1][local24] >> 8 & 0xFF;
-				local17 += texturePalette[arg1][local24] & 0xFF;
-			}
-			@Pc(80) int local80 = (local13 / local22 << 16) + (local15 / local22 << 8) + local17 / local22;
-			local80 = setGamma(local80, 1.4D);
-			if (local80 == 0) {
-				local80 = 1;
-			}
-			averageTextureRGB[arg1] = local80;
-			return local80;
-		} catch (@Pc(95) RuntimeException local95) {
-			Signlink.reporterror("77363, " + arg0 + ", " + arg1 + ", " + local95.toString());
-			throw new RuntimeException();
+	public static int getAverageTextureRGB(@OriginalArg(1) int arg1) {
+		if (averageTextureRGB[arg1] != 0) {
+			return averageTextureRGB[arg1];
 		}
+		@Pc(13) int local13 = 0;
+		@Pc(15) int local15 = 0;
+		@Pc(17) int local17 = 0;
+		@Pc(22) int local22 = texturePalette[arg1].length;
+		for (@Pc(24) int local24 = 0; local24 < local22; local24++) {
+			local13 += texturePalette[arg1][local24] >> 16 & 0xFF;
+			local15 += texturePalette[arg1][local24] >> 8 & 0xFF;
+			local17 += texturePalette[arg1][local24] & 0xFF;
+		}
+		@Pc(80) int local80 = (local13 / local22 << 16) + (local15 / local22 << 8) + local17 / local22;
+		local80 = setGamma(local80, 1.4D);
+		if (local80 == 0) {
+			local80 = 1;
+		}
+		averageTextureRGB[arg1] = local80;
+		return local80;
 	}
 
 	@OriginalMember(owner = "client!gb", name = "c", descriptor = "(II)V")
-	public static void pushTexture(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1) {
-		try {
-			if (activeTexels[arg0] != null) {
-				texelPool[poolSize++] = activeTexels[arg0];
-				@Pc(18) int local18 = 11 / arg1;
-				activeTexels[arg0] = null;
-			}
-		} catch (@Pc(24) RuntimeException local24) {
-			Signlink.reporterror("15308, " + arg0 + ", " + arg1 + ", " + local24.toString());
-			throw new RuntimeException();
+	public static void pushTexture(@OriginalArg(0) int arg0) {
+		if (activeTexels[arg0] != null) {
+			texelPool[poolSize++] = activeTexels[arg0];
+			activeTexels[arg0] = null;
 		}
 	}
 
@@ -360,88 +266,80 @@ public final class Draw3D extends Draw2D {
 	}
 
 	@OriginalMember(owner = "client!gb", name = "a", descriptor = "(ZD)V")
-	public static void setBrightness(@OriginalArg(0) boolean arg0, @OriginalArg(1) double arg1) {
-		try {
-			@Pc(9) double local9 = arg1 + Math.random() * 0.03D - 0.015D;
-			@Pc(11) int local11 = 0;
-			for (@Pc(13) int local13 = 0; local13 < 512; local13++) {
-				@Pc(24) double local24 = (double) (local13 / 8) / 64.0D + 0.0078125D;
-				@Pc(33) double local33 = (double) (local13 & 0x7) / 8.0D + 0.0625D;
-				for (@Pc(35) int local35 = 0; local35 < 128; local35++) {
-					@Pc(42) double local42 = (double) local35 / 128.0D;
-					@Pc(44) double local44 = local42;
-					@Pc(46) double local46 = local42;
-					@Pc(48) double local48 = local42;
-					if (local33 != 0.0D) {
-						@Pc(62) double local62;
-						if (local42 < 0.5D) {
-							local62 = local42 * (local33 + 1.0D);
-						} else {
-							local62 = local42 + local33 - local42 * local33;
-						}
-						@Pc(78) double local78 = local42 * 2.0D - local62;
-						@Pc(82) double local82 = local24 + 0.3333333333333333D;
-						if (local82 > 1.0D) {
-							local82--;
-						}
-						@Pc(96) double local96 = local24 - 0.3333333333333333D;
-						if (local96 < 0.0D) {
-							local96++;
-						}
-						if (local82 * 6.0D < 1.0D) {
-							local44 = local78 + (local62 - local78) * 6.0D * local82;
-						} else if (local82 * 2.0D < 1.0D) {
-							local44 = local62;
-						} else if (local82 * 3.0D < 2.0D) {
-							local44 = local78 + (local62 - local78) * (0.6666666666666666D - local82) * 6.0D;
-						} else {
-							local44 = local78;
-						}
-						if (local24 * 6.0D < 1.0D) {
-							local46 = local78 + (local62 - local78) * 6.0D * local24;
-						} else if (local24 * 2.0D < 1.0D) {
-							local46 = local62;
-						} else if (local24 * 3.0D < 2.0D) {
-							local46 = local78 + (local62 - local78) * (0.6666666666666666D - local24) * 6.0D;
-						} else {
-							local46 = local78;
-						}
-						if (local96 * 6.0D < 1.0D) {
-							local48 = local78 + (local62 - local78) * 6.0D * local96;
-						} else if (local96 * 2.0D < 1.0D) {
-							local48 = local62;
-						} else if (local96 * 3.0D < 2.0D) {
-							local48 = local78 + (local62 - local78) * (0.6666666666666666D - local96) * 6.0D;
-						} else {
-							local48 = local78;
-						}
+	public static void setBrightness(@OriginalArg(1) double arg1) {
+		@Pc(9) double local9 = arg1 + Math.random() * 0.03D - 0.015D;
+		@Pc(11) int local11 = 0;
+		for (@Pc(13) int local13 = 0; local13 < 512; local13++) {
+			@Pc(24) double local24 = (double) (local13 / 8) / 64.0D + 0.0078125D;
+			@Pc(33) double local33 = (double) (local13 & 0x7) / 8.0D + 0.0625D;
+			for (@Pc(35) int local35 = 0; local35 < 128; local35++) {
+				@Pc(42) double local42 = (double) local35 / 128.0D;
+				@Pc(44) double local44 = local42;
+				@Pc(46) double local46 = local42;
+				@Pc(48) double local48 = local42;
+				if (local33 != 0.0D) {
+					@Pc(62) double local62;
+					if (local42 < 0.5D) {
+						local62 = local42 * (local33 + 1.0D);
+					} else {
+						local62 = local42 + local33 - local42 * local33;
 					}
-					@Pc(259) int local259 = (int) (local44 * 256.0D);
-					@Pc(264) int local264 = (int) (local46 * 256.0D);
-					@Pc(269) int local269 = (int) (local48 * 256.0D);
-					@Pc(279) int local279 = (local259 << 16) + (local264 << 8) + local269;
-					@Pc(283) int local283 = setGamma(local279, local9);
-					palette[local11++] = local283;
-				}
-			}
-			for (@Pc(298) int local298 = 0; local298 < 50; local298++) {
-				if (textures[local298] != null) {
-					@Pc(309) int[] local309 = textures[local298].palette;
-					texturePalette[local298] = new int[local309.length];
-					for (@Pc(317) int local317 = 0; local317 < local309.length; local317++) {
-						texturePalette[local298][local317] = setGamma(local309[local317], local9);
+					@Pc(78) double local78 = local42 * 2.0D - local62;
+					@Pc(82) double local82 = local24 + 0.3333333333333333D;
+					if (local82 > 1.0D) {
+						local82--;
+					}
+					@Pc(96) double local96 = local24 - 0.3333333333333333D;
+					if (local96 < 0.0D) {
+						local96++;
+					}
+					if (local82 * 6.0D < 1.0D) {
+						local44 = local78 + (local62 - local78) * 6.0D * local82;
+					} else if (local82 * 2.0D < 1.0D) {
+						local44 = local62;
+					} else if (local82 * 3.0D < 2.0D) {
+						local44 = local78 + (local62 - local78) * (0.6666666666666666D - local82) * 6.0D;
+					} else {
+						local44 = local78;
+					}
+					if (local24 * 6.0D < 1.0D) {
+						local46 = local78 + (local62 - local78) * 6.0D * local24;
+					} else if (local24 * 2.0D < 1.0D) {
+						local46 = local62;
+					} else if (local24 * 3.0D < 2.0D) {
+						local46 = local78 + (local62 - local78) * (0.6666666666666666D - local24) * 6.0D;
+					} else {
+						local46 = local78;
+					}
+					if (local96 * 6.0D < 1.0D) {
+						local48 = local78 + (local62 - local78) * 6.0D * local96;
+					} else if (local96 * 2.0D < 1.0D) {
+						local48 = local62;
+					} else if (local96 * 3.0D < 2.0D) {
+						local48 = local78 + (local62 - local78) * (0.6666666666666666D - local96) * 6.0D;
+					} else {
+						local48 = local78;
 					}
 				}
+				@Pc(259) int local259 = (int) (local44 * 256.0D);
+				@Pc(264) int local264 = (int) (local46 * 256.0D);
+				@Pc(269) int local269 = (int) (local48 * 256.0D);
+				@Pc(279) int local279 = (local259 << 16) + (local264 << 8) + local269;
+				@Pc(283) int local283 = setGamma(local279, local9);
+				palette[local11++] = local283;
 			}
-			if (!arg0) {
-				flowObfuscator4 = -352;
+		}
+		for (@Pc(298) int local298 = 0; local298 < 50; local298++) {
+			if (textures[local298] != null) {
+				@Pc(309) int[] local309 = textures[local298].palette;
+				texturePalette[local298] = new int[local309.length];
+				for (@Pc(317) int local317 = 0; local317 < local309.length; local317++) {
+					texturePalette[local298][local317] = setGamma(local309[local317], local9);
+				}
 			}
-			for (@Pc(344) int local344 = 0; local344 < 50; local344++) {
-				pushTexture(local344, 150);
-			}
-		} catch (@Pc(355) RuntimeException local355) {
-			Signlink.reporterror("9701, " + arg0 + ", " + arg1 + ", " + local355.toString());
-			throw new RuntimeException();
+		}
+		for (@Pc(344) int local344 = 0; local344 < 50; local344++) {
+			pushTexture(local344);
 		}
 	}
 

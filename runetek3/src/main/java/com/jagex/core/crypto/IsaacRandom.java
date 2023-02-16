@@ -4,7 +4,6 @@ import org.openrs2.deob.annotation.OriginalArg;
 import org.openrs2.deob.annotation.OriginalClass;
 import org.openrs2.deob.annotation.OriginalMember;
 import org.openrs2.deob.annotation.Pc;
-import rs2.Signlink;
 
 @OriginalClass("client!tb")
 public final class IsaacRandom {
@@ -28,22 +27,13 @@ public final class IsaacRandom {
 	private int c;
 
 	@OriginalMember(owner = "client!tb", name = "<init>", descriptor = "(B[I)V")
-	public IsaacRandom(@OriginalArg(0) byte arg0, @OriginalArg(1) int[] arg1) {
-		try {
-			this.mem = new int[256];
-			this.rsl = new int[256];
-			for (@Pc(13) int local13 = 0; local13 < arg1.length; local13++) {
-				this.rsl[local13] = arg1[local13];
-			}
-			if (arg0 != 1) {
-				throw new NullPointerException();
-			}
-			@Pc(32) boolean local32 = false;
-			this.init();
-		} catch (@Pc(42) RuntimeException local42) {
-			Signlink.reporterror("45225, " + arg0 + ", " + arg1 + ", " + local42.toString());
-			throw new RuntimeException();
+	public IsaacRandom(@OriginalArg(1) int[] arg1) {
+		this.mem = new int[256];
+		this.rsl = new int[256];
+		for (@Pc(13) int local13 = 0; local13 < arg1.length; local13++) {
+			this.rsl[local13] = arg1[local13];
 		}
+		this.init();
 	}
 
 	@OriginalMember(owner = "client!tb", name = "a", descriptor = "()I")

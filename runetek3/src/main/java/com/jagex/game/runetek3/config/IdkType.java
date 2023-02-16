@@ -7,19 +7,9 @@ import org.openrs2.deob.annotation.OriginalArg;
 import org.openrs2.deob.annotation.OriginalClass;
 import org.openrs2.deob.annotation.OriginalMember;
 import org.openrs2.deob.annotation.Pc;
-import rs2.Signlink;
 
 @OriginalClass("client!gc")
 public final class IdkType {
-
-	@OriginalMember(owner = "client!gc", name = "a", descriptor = "I")
-	public static int flowObfuscator1;
-
-	@OriginalMember(owner = "client!gc", name = "b", descriptor = "I")
-	private static final int flowObfuscator2 = 473;
-
-	@OriginalMember(owner = "client!gc", name = "c", descriptor = "Z")
-	private final boolean flowObfuscator3 = false;
 
 	@OriginalMember(owner = "client!gc", name = "d", descriptor = "I")
 	public static int count;
@@ -47,61 +37,46 @@ public final class IdkType {
 
 	@OriginalMember(owner = "client!gc", name = "a", descriptor = "(Lclient!ub;I)V")
 	public static void unpack(@OriginalArg(0) FileArchive arg0, @OriginalArg(1) int arg1) {
-		try {
-			@Pc(9) Buffer local9 = new Buffer(363, arg0.read("idk.dat", null, (byte) 2));
-			count = local9.g2();
-			if (instances == null) {
-				instances = new IdkType[count];
+		@Pc(9) Buffer local9 = new Buffer(arg0.read("idk.dat", null));
+		count = local9.g2();
+		if (instances == null) {
+			instances = new IdkType[count];
+		}
+		for (@Pc(19) int local19 = 0; local19 < count; local19++) {
+			if (instances[local19] == null) {
+				instances[local19] = new IdkType();
 			}
-			for (@Pc(19) int local19 = 0; local19 < count; local19++) {
-				if (instances[local19] == null) {
-					instances[local19] = new IdkType();
-				}
-				instances[local19].decode(false, local9);
-			}
-			@Pc(45) int local45 = 87 / arg1;
-		} catch (@Pc(47) RuntimeException local47) {
-			Signlink.reporterror("89502, " + arg0 + ", " + arg1 + ", " + local47.toString());
-			throw new RuntimeException();
+			instances[local19].decode(local9);
 		}
 	}
 
 	@OriginalMember(owner = "client!gc", name = "a", descriptor = "(ZLclient!kb;)V")
-	public void decode(@OriginalArg(0) boolean arg0, @OriginalArg(1) Buffer buf) {
-		try {
-			if (arg0) {
-				flowObfuscator1 = 65;
+	public void decode(@OriginalArg(1) Buffer buf) {
+		while (true) {
+			@Pc(8) int opcode = buf.g1();
+			if (opcode == 0) {
+				break;
 			}
-			while (true) {
-				while (true) {
-					@Pc(8) int opcode = buf.g1();
-					if (opcode == 0) {
-						return;
-					}
-					if (opcode == 1) {
-						this.type = buf.g1();
-					} else if (opcode == 2) {
-						@Pc(26) int local26 = buf.g1();
-						this.models = new int[local26];
-						for (@Pc(32) int local32 = 0; local32 < local26; local32++) {
-							this.models[local32] = buf.g2();
-						}
-					} else if (opcode == 3) {
-						this.disable = true;
-					} else if (opcode >= 40 && opcode < 50) {
-						this.recol_s[opcode - 40] = buf.g2();
-					} else if (opcode >= 50 && opcode < 60) {
-						this.recol_d[opcode - 50] = buf.g2();
-					} else if (opcode >= 60 && opcode < 70) {
-						this.heads[opcode - 60] = buf.g2();
-					} else {
-						System.out.println("Error unrecognised config code: " + opcode);
-					}
+
+			if (opcode == 1) {
+				this.type = buf.g1();
+			} else if (opcode == 2) {
+				@Pc(26) int local26 = buf.g1();
+				this.models = new int[local26];
+				for (@Pc(32) int local32 = 0; local32 < local26; local32++) {
+					this.models[local32] = buf.g2();
 				}
+			} else if (opcode == 3) {
+				this.disable = true;
+			} else if (opcode >= 40 && opcode < 50) {
+				this.recol_s[opcode - 40] = buf.g2();
+			} else if (opcode >= 50 && opcode < 60) {
+				this.recol_d[opcode - 50] = buf.g2();
+			} else if (opcode >= 60 && opcode < 70) {
+				this.heads[opcode - 60] = buf.g2();
+			} else {
+				System.out.println("Error unrecognised config code: " + opcode);
 			}
-		} catch (@Pc(113) RuntimeException local113) {
-			Signlink.reporterror("61151, " + arg0 + ", " + buf + ", " + local113.toString());
-			throw new RuntimeException();
 		}
 	}
 
@@ -112,13 +87,13 @@ public final class IdkType {
 		}
 		@Pc(11) Model[] local11 = new Model[this.models.length];
 		for (@Pc(13) int local13 = 0; local13 < this.models.length; local13++) {
-			local11[local13] = new Model(false, this.models[local13]);
+			local11[local13] = new Model(this.models[local13]);
 		}
 		@Pc(40) Model local40;
 		if (local11.length == 1) {
 			local40 = local11[0];
 		} else {
-			local40 = new Model(0, local11, local11.length);
+			local40 = new Model(local11, local11.length);
 		}
 		for (@Pc(52) int local52 = 0; local52 < 6 && this.recol_s[local52] != 0; local52++) {
 			local40.recolor(this.recol_s[local52], this.recol_d[local52]);
@@ -127,27 +102,18 @@ public final class IdkType {
 	}
 
 	@OriginalMember(owner = "client!gc", name = "a", descriptor = "(Z)Lclient!eb;")
-	public Model getHeadModel(@OriginalArg(0) boolean arg0) {
-		try {
-			@Pc(4) Model[] local4 = new Model[5];
-			@Pc(6) int local6 = 0;
-			for (@Pc(8) int local8 = 0; local8 < 5; local8++) {
-				if (this.heads[local8] != -1) {
-					local4[local6++] = new Model(false, this.heads[local8]);
-				}
+	public Model getHeadModel() {
+		@Pc(4) Model[] local4 = new Model[5];
+		@Pc(6) int local6 = 0;
+		for (@Pc(8) int local8 = 0; local8 < 5; local8++) {
+			if (this.heads[local8] != -1) {
+				local4[local6++] = new Model(this.heads[local8]);
 			}
-			@Pc(39) Model local39 = new Model(0, local4, local6);
-			for (@Pc(41) int local41 = 0; local41 < 6 && this.recol_s[local41] != 0; local41++) {
-				local39.recolor(this.recol_s[local41], this.recol_d[local41]);
-			}
-			if (arg0) {
-				for (@Pc(66) int local66 = 1; local66 > 0; local66++) {
-				}
-			}
-			return local39;
-		} catch (@Pc(74) RuntimeException local74) {
-			Signlink.reporterror("19364, " + arg0 + ", " + local74.toString());
-			throw new RuntimeException();
 		}
+		@Pc(39) Model local39 = new Model(local4, local6);
+		for (@Pc(41) int local41 = 0; local41 < 6 && this.recol_s[local41] != 0; local41++) {
+			local39.recolor(this.recol_s[local41], this.recol_d[local41]);
+		}
+		return local39;
 	}
 }

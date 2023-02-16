@@ -11,7 +11,6 @@ public final class BZip2InputStream {
 
 	@OriginalMember(owner = "client!rb", name = "a", descriptor = "([BI[BII)I")
 	public static int read(@OriginalArg(0) byte[] arg0, @OriginalArg(1) int arg1, @OriginalArg(2) byte[] arg2, @OriginalArg(3) int arg3, @OriginalArg(4) int arg4) {
-		@Pc(3) BZip2State local3 = state;
 		synchronized (state) {
 			state.stream = arg2;
 			state.next_in = arg4;

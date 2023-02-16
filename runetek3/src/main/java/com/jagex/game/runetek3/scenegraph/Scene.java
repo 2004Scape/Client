@@ -9,31 +9,9 @@ import org.openrs2.deob.annotation.OriginalArg;
 import org.openrs2.deob.annotation.OriginalClass;
 import org.openrs2.deob.annotation.OriginalMember;
 import org.openrs2.deob.annotation.Pc;
-import rs2.Signlink;
 
 @OriginalClass("client!r")
 public final class Scene {
-
-	@OriginalMember(owner = "client!r", name = "a", descriptor = "Z")
-	private boolean flowObfuscator1 = false;
-
-	@OriginalMember(owner = "client!r", name = "b", descriptor = "B")
-	private final byte flowObfuscator2 = 6;
-
-	@OriginalMember(owner = "client!r", name = "c", descriptor = "I")
-	private int flowObfuscator3;
-
-	@OriginalMember(owner = "client!r", name = "d", descriptor = "B")
-	private final byte flowObfuscator4 = 1;
-
-	@OriginalMember(owner = "client!r", name = "e", descriptor = "I")
-	public static int flowObfuscator5;
-
-	@OriginalMember(owner = "client!r", name = "f", descriptor = "I")
-	private static int flowObfuscator6 = -546;
-
-	@OriginalMember(owner = "client!r", name = "g", descriptor = "Z")
-	public static boolean flowObfuscator7 = true;
 
 	@OriginalMember(owner = "client!r", name = "h", descriptor = "Z")
 	public static boolean lowMemory = true;
@@ -159,7 +137,7 @@ public final class Scene {
 	public static final SceneOccluder[] activeOccluders = new SceneOccluder[500];
 
 	@OriginalMember(owner = "client!r", name = "W", descriptor = "Lclient!ob;")
-	public static DoublyLinkedList drawTileQueue = new DoublyLinkedList(0);
+	public static DoublyLinkedList drawTileQueue = new DoublyLinkedList();
 
 	@OriginalMember(owner = "client!r", name = "X", descriptor = "[I")
 	public static final int[] FRONT_WALL_TYPES = new int[] { 19, 55, 38, 155, 255, 110, 137, 205, 76 };
@@ -224,247 +202,184 @@ public final class Scene {
 	private static int viewportBottom;
 
 	@OriginalMember(owner = "client!r", name = "<init>", descriptor = "(I[[[IIII)V")
-	public Scene(@OriginalArg(0) int arg0, @OriginalArg(1) int[][][] arg1, @OriginalArg(2) int arg2, @OriginalArg(3) int arg3, @OriginalArg(4) int arg4) {
-		try {
-			this.maxLevel = arg3;
-			this.maxTileX = arg4;
-			this.maxTileZ = arg2;
-			this.levelTiles = new SceneTile[arg3][arg4][arg2];
-			this.levelTileOcclusionCycles = new int[arg3][arg4 + 1][arg2 + 1];
-			@Pc(834) int local834 = 27 / arg0;
-			this.levelHeightmaps = arg1;
-			this.reset(742);
-		} catch (@Pc(849) RuntimeException local849) {
-			Signlink.reporterror("40163, " + arg0 + ", " + arg1 + ", " + arg2 + ", " + arg3 + ", " + arg4 + ", " + local849.toString());
-			throw new RuntimeException();
-		}
+	public Scene(@OriginalArg(1) int[][][] arg1, @OriginalArg(2) int arg2, @OriginalArg(3) int arg3, @OriginalArg(4) int arg4) {
+		this.maxLevel = arg3;
+		this.maxTileX = arg4;
+		this.maxTileZ = arg2;
+		this.levelTiles = new SceneTile[arg3][arg4][arg2];
+		this.levelTileOcclusionCycles = new int[arg3][arg4 + 1][arg2 + 1];
+		this.levelHeightmaps = arg1;
+		this.reset();
 	}
 
 	@OriginalMember(owner = "client!r", name = "a", descriptor = "(Z)V")
-	public static void unload(@OriginalArg(0) boolean arg0) {
-		try {
-			locBuffer = null;
-			levelOccluderCount = null;
-			if (!arg0) {
-				flowObfuscator7 = !flowObfuscator7;
-			}
-			levelOccluders = null;
-			drawTileQueue = null;
-			visibilityMatrix = null;
-			visibilityMap = null;
-		} catch (@Pc(21) RuntimeException local21) {
-			Signlink.reporterror("22001, " + arg0 + ", " + local21.toString());
-			throw new RuntimeException();
-		}
+	public static void unload() {
+		locBuffer = null;
+		levelOccluderCount = null;
+		levelOccluders = null;
+		drawTileQueue = null;
+		visibilityMatrix = null;
+		visibilityMap = null;
 	}
 
 	@OriginalMember(owner = "client!r", name = "a", descriptor = "(IIIIIIIII)V")
-	public static void addOccluder(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2, @OriginalArg(3) int arg3, @OriginalArg(4) int arg4, @OriginalArg(5) int arg5, @OriginalArg(6) int arg6, @OriginalArg(7) int arg7, @OriginalArg(8) int arg8) {
-		try {
-			@Pc(3) SceneOccluder local3 = new SceneOccluder();
-			local3.minTileX = arg1 / 128;
-			local3.maxTileX = arg5 / 128;
-			local3.minTileZ = arg8 / 128;
-			local3.maxTileZ = arg0 / 128;
-			local3.type = arg4;
-			local3.minX = arg1;
-			local3.maxX = arg5;
-			local3.minZ = arg8;
-			while (arg2 >= 0) {
-				flowObfuscator6 = 127;
-			}
-			local3.maxZ = arg0;
-			local3.minY = arg7;
-			local3.maxY = arg3;
-			levelOccluders[arg6][levelOccluderCount[arg6]++] = local3;
-		} catch (@Pc(65) RuntimeException local65) {
-			Signlink.reporterror("341, " + arg0 + ", " + arg1 + ", " + arg2 + ", " + arg3 + ", " + arg4 + ", " + arg5 + ", " + arg6 + ", " + arg7 + ", " + arg8 + ", " + local65.toString());
-			throw new RuntimeException();
-		}
+	public static void addOccluder(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(3) int arg3, @OriginalArg(4) int arg4, @OriginalArg(5) int arg5, @OriginalArg(6) int arg6, @OriginalArg(7) int arg7, @OriginalArg(8) int arg8) {
+		@Pc(3) SceneOccluder local3 = new SceneOccluder();
+		local3.minTileX = arg1 / 128;
+		local3.maxTileX = arg5 / 128;
+		local3.minTileZ = arg8 / 128;
+		local3.maxTileZ = arg0 / 128;
+		local3.type = arg4;
+		local3.minX = arg1;
+		local3.maxX = arg5;
+		local3.minZ = arg8;
+		local3.maxZ = arg0;
+		local3.minY = arg7;
+		local3.maxY = arg3;
+		levelOccluders[arg6][levelOccluderCount[arg6]++] = local3;
 	}
 
 	@OriginalMember(owner = "client!r", name = "a", descriptor = "([IIIBII)V")
-	public static void init(@OriginalArg(0) int[] arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2, @OriginalArg(3) byte arg3, @OriginalArg(4) int arg4, @OriginalArg(5) int arg5) {
-		try {
-			viewportLeft = 0;
-			viewportTop = 0;
-			viewportRight = arg2;
-			viewportBottom = arg4;
-			viewportCenterX = arg2 / 2;
-			if (arg3 != 15) {
-				flowObfuscator5 = 29;
-			}
-			viewportCenterY = arg4 / 2;
-			@Pc(28) boolean[][][][] local28 = new boolean[9][32][53][53];
-			@Pc(34) int local34;
-			@Pc(58) int local58;
-			@Pc(62) int local62;
-			@Pc(64) int local64;
-			@Pc(74) int local74;
-			@Pc(78) int local78;
-			for (@Pc(30) int local30 = 128; local30 <= 384; local30 += 32) {
-				for (local34 = 0; local34 < 2048; local34 += 64) {
-					sinEyePitch = Model.sin[local30];
-					cosEyePitch = Model.cos[local30];
-					sinEyeYaw = Model.sin[local34];
-					cosEyeYaw = Model.cos[local34];
-					local58 = (local30 - 128) / 32;
-					local62 = local34 / 64;
-					for (local64 = -26; local64 <= 26; local64++) {
-						for (@Pc(68) int local68 = -26; local68 <= 26; local68++) {
-							local74 = local64 * 128;
-							local78 = local68 * 128;
-							@Pc(80) boolean local80 = false;
-							for (@Pc(83) int local83 = -arg5; local83 <= arg1; local83 += 128) {
-								if (testPoint(local74, local78, arg0[local58] + local83, -268)) {
-									local80 = true;
-									break;
-								}
+	public static void init(@OriginalArg(0) int[] arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2, @OriginalArg(4) int arg4, @OriginalArg(5) int arg5) {
+		viewportLeft = 0;
+		viewportTop = 0;
+		viewportRight = arg2;
+		viewportBottom = arg4;
+		viewportCenterX = arg2 / 2;
+		viewportCenterY = arg4 / 2;
+		@Pc(28) boolean[][][][] local28 = new boolean[9][32][53][53];
+		@Pc(34) int local34;
+		@Pc(58) int local58;
+		@Pc(62) int local62;
+		@Pc(64) int local64;
+		@Pc(74) int local74;
+		@Pc(78) int local78;
+		for (@Pc(30) int local30 = 128; local30 <= 384; local30 += 32) {
+			for (local34 = 0; local34 < 2048; local34 += 64) {
+				sinEyePitch = Model.sin[local30];
+				cosEyePitch = Model.cos[local30];
+				sinEyeYaw = Model.sin[local34];
+				cosEyeYaw = Model.cos[local34];
+				local58 = (local30 - 128) / 32;
+				local62 = local34 / 64;
+				for (local64 = -26; local64 <= 26; local64++) {
+					for (@Pc(68) int local68 = -26; local68 <= 26; local68++) {
+						local74 = local64 * 128;
+						local78 = local68 * 128;
+						@Pc(80) boolean local80 = false;
+						for (@Pc(83) int local83 = -arg5; local83 <= arg1; local83 += 128) {
+							if (testPoint(local74, local78, arg0[local58] + local83)) {
+								local80 = true;
+								break;
 							}
-							local28[local58][local62][local64 + 25 + 1][local68 + 25 + 1] = local80;
 						}
+						local28[local58][local62][local64 + 25 + 1][local68 + 25 + 1] = local80;
 					}
 				}
 			}
-			for (local34 = 0; local34 < 8; local34++) {
-				for (local58 = 0; local58 < 32; local58++) {
-					for (local62 = -25; local62 < 25; local62++) {
-						for (local64 = -25; local64 < 25; local64++) {
-							@Pc(155) boolean local155 = false;
-							label83: for (local74 = -1; local74 <= 1; local74++) {
-								for (local78 = -1; local78 <= 1; local78++) {
-									if (local28[local34][local58][local62 + local74 + 25 + 1][local64 + local78 + 25 + 1]) {
-										local155 = true;
-										break label83;
-									}
-									if (local28[local34][(local58 + 1) % 31][local62 + local74 + 25 + 1][local64 + local78 + 25 + 1]) {
-										local155 = true;
-										break label83;
-									}
-									if (local28[local34 + 1][local58][local62 + local74 + 25 + 1][local64 + local78 + 25 + 1]) {
-										local155 = true;
-										break label83;
-									}
-									if (local28[local34 + 1][(local58 + 1) % 31][local62 + local74 + 25 + 1][local64 + local78 + 25 + 1]) {
-										local155 = true;
-										break label83;
-									}
+		}
+		for (local34 = 0; local34 < 8; local34++) {
+			for (local58 = 0; local58 < 32; local58++) {
+				for (local62 = -25; local62 < 25; local62++) {
+					for (local64 = -25; local64 < 25; local64++) {
+						@Pc(155) boolean local155 = false;
+						label83: for (local74 = -1; local74 <= 1; local74++) {
+							for (local78 = -1; local78 <= 1; local78++) {
+								if (local28[local34][local58][local62 + local74 + 25 + 1][local64 + local78 + 25 + 1]) {
+									local155 = true;
+									break label83;
+								}
+								if (local28[local34][(local58 + 1) % 31][local62 + local74 + 25 + 1][local64 + local78 + 25 + 1]) {
+									local155 = true;
+									break label83;
+								}
+								if (local28[local34 + 1][local58][local62 + local74 + 25 + 1][local64 + local78 + 25 + 1]) {
+									local155 = true;
+									break label83;
+								}
+								if (local28[local34 + 1][(local58 + 1) % 31][local62 + local74 + 25 + 1][local64 + local78 + 25 + 1]) {
+									local155 = true;
+									break label83;
 								}
 							}
-							visibilityMatrix[local34][local58][local62 + 25][local64 + 25] = local155;
 						}
+						visibilityMatrix[local34][local58][local62 + 25][local64 + 25] = local155;
 					}
 				}
 			}
-		} catch (@Pc(319) RuntimeException local319) {
-			Signlink.reporterror("93644, " + arg0 + ", " + arg1 + ", " + arg2 + ", " + arg3 + ", " + arg4 + ", " + arg5 + ", " + local319.toString());
-			throw new RuntimeException();
 		}
 	}
 
 	@OriginalMember(owner = "client!r", name = "h", descriptor = "(IIII)Z")
-	private static boolean testPoint(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2, @OriginalArg(3) int arg3) {
-		try {
-			@Pc(11) int local11 = arg1 * sinEyeYaw + arg0 * cosEyeYaw >> 16;
-			@Pc(21) int local21 = arg1 * cosEyeYaw - arg0 * sinEyeYaw >> 16;
-			@Pc(31) int local31 = arg2 * sinEyePitch + local21 * cosEyePitch >> 16;
-			@Pc(41) int local41 = arg2 * cosEyePitch - local21 * sinEyePitch >> 16;
-			@Pc(45) int local45;
-			while (arg3 >= 0) {
-				for (local45 = 1; local45 > 0; local45++) {
-				}
-			}
-			if (local31 < 50 || local31 > 3500) {
-				return false;
-			}
-			local45 = viewportCenterX + (local11 << 9) / local31;
-			@Pc(76) int local76 = viewportCenterY + (local41 << 9) / local31;
-			if (local45 >= viewportLeft && local45 <= viewportRight && local76 >= viewportTop && local76 <= viewportBottom) {
-				return true;
-			} else {
-				return false;
-			}
-		} catch (@Pc(93) RuntimeException local93) {
-			Signlink.reporterror("61360, " + arg0 + ", " + arg1 + ", " + arg2 + ", " + arg3 + ", " + local93.toString());
-			throw new RuntimeException();
+	private static boolean testPoint(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2) {
+		@Pc(11) int local11 = arg1 * sinEyeYaw + arg0 * cosEyeYaw >> 16;
+		@Pc(21) int local21 = arg1 * cosEyeYaw - arg0 * sinEyeYaw >> 16;
+		@Pc(31) int local31 = arg2 * sinEyePitch + local21 * cosEyePitch >> 16;
+		@Pc(41) int local41 = arg2 * cosEyePitch - local21 * sinEyePitch >> 16;
+		@Pc(45) int local45;
+		if (local31 < 50 || local31 > 3500) {
+			return false;
+		}
+		local45 = viewportCenterX + (local11 << 9) / local31;
+		@Pc(76) int local76 = viewportCenterY + (local41 << 9) / local31;
+		if (local45 >= viewportLeft && local45 <= viewportRight && local76 >= viewportTop && local76 <= viewportBottom) {
+			return true;
+		} else {
+			return false;
 		}
 	}
 
 	@OriginalMember(owner = "client!r", name = "a", descriptor = "(I)V")
-	public void reset(@OriginalArg(0) int arg0) {
-		try {
-			@Pc(7) int local7;
-			@Pc(11) int local11;
-			for (@Pc(3) int local3 = 0; local3 < this.maxLevel; local3++) {
-				for (local7 = 0; local7 < this.maxTileX; local7++) {
-					for (local11 = 0; local11 < this.maxTileZ; local11++) {
-						this.levelTiles[local3][local7][local11] = null;
-					}
+	public void reset() {
+		@Pc(7) int local7;
+		@Pc(11) int local11;
+		for (@Pc(3) int local3 = 0; local3 < this.maxLevel; local3++) {
+			for (local7 = 0; local7 < this.maxTileX; local7++) {
+				for (local11 = 0; local11 < this.maxTileZ; local11++) {
+					this.levelTiles[local3][local7][local11] = null;
 				}
 			}
-			@Pc(41) int local41 = 38 / arg0;
-			for (local7 = 0; local7 < LEVEL_COUNT; local7++) {
-				for (local11 = 0; local11 < levelOccluderCount[local7]; local11++) {
-					levelOccluders[local7][local11] = null;
-				}
-				levelOccluderCount[local7] = 0;
+		}
+		for (local7 = 0; local7 < LEVEL_COUNT; local7++) {
+			for (local11 = 0; local11 < levelOccluderCount[local7]; local11++) {
+				levelOccluders[local7][local11] = null;
 			}
-			for (local11 = 0; local11 < this.temporaryLocCount; local11++) {
-				this.temporaryLocs[local11] = null;
-			}
-			this.temporaryLocCount = 0;
-			for (@Pc(88) int local88 = 0; local88 < locBuffer.length; local88++) {
-				locBuffer[local88] = null;
-			}
-		} catch (@Pc(101) RuntimeException local101) {
-			Signlink.reporterror("14196, " + arg0 + ", " + local101.toString());
-			throw new RuntimeException();
+			levelOccluderCount[local7] = 0;
+		}
+		for (local11 = 0; local11 < this.temporaryLocCount; local11++) {
+			this.temporaryLocs[local11] = null;
+		}
+		this.temporaryLocCount = 0;
+		for (@Pc(88) int local88 = 0; local88 < locBuffer.length; local88++) {
+			locBuffer[local88] = null;
 		}
 	}
 
 	@OriginalMember(owner = "client!r", name = "a", descriptor = "(II)V")
-	public void setMinLevel(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1) {
-		try {
-			this.minLevel = arg1;
-			@Pc(10) int local10;
-			for (@Pc(6) int local6 = 0; local6 < this.maxTileX; local6++) {
-				for (local10 = 0; local10 < this.maxTileZ; local10++) {
-					this.levelTiles[arg1][local6][local10] = new SceneTile(arg1, local6, local10);
-				}
+	public void setMinLevel(@OriginalArg(1) int arg1) {
+		this.minLevel = arg1;
+		@Pc(10) int local10;
+		for (@Pc(6) int local6 = 0; local6 < this.maxTileX; local6++) {
+			for (local10 = 0; local10 < this.maxTileZ; local10++) {
+				this.levelTiles[arg1][local6][local10] = new SceneTile(arg1, local6, local10);
 			}
-			if (arg0 != 0) {
-				for (local10 = 1; local10 > 0; local10++) {
-				}
-			}
-		} catch (@Pc(47) RuntimeException local47) {
-			Signlink.reporterror("95265, " + arg0 + ", " + arg1 + ", " + local47.toString());
-			throw new RuntimeException();
 		}
 	}
 
 	@OriginalMember(owner = "client!r", name = "a", descriptor = "(IIB)V")
-	public void setBridge(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(2) byte arg2) {
-		try {
-			@Pc(10) SceneTile local10 = this.levelTiles[0][arg1][arg0];
-			for (@Pc(12) int local12 = 0; local12 < 3; local12++) {
-				this.levelTiles[local12][arg1][arg0] = this.levelTiles[local12 + 1][arg1][arg0];
-				if (this.levelTiles[local12][arg1][arg0] != null) {
-					this.levelTiles[local12][arg1][arg0].level--;
-				}
+	public void setBridge(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1) {
+		@Pc(10) SceneTile local10 = this.levelTiles[0][arg1][arg0];
+		for (@Pc(12) int local12 = 0; local12 < 3; local12++) {
+			this.levelTiles[local12][arg1][arg0] = this.levelTiles[local12 + 1][arg1][arg0];
+			if (this.levelTiles[local12][arg1][arg0] != null) {
+				this.levelTiles[local12][arg1][arg0].level--;
 			}
-			if (this.levelTiles[0][arg1][arg0] == null) {
-				this.levelTiles[0][arg1][arg0] = new SceneTile(0, arg1, arg0);
-			}
-			this.levelTiles[0][arg1][arg0].bridge = local10;
-			this.levelTiles[3][arg1][arg0] = null;
-			if (arg2 != -41) {
-				for (@Pc(105) int local105 = 1; local105 > 0; local105++) {
-				}
-			}
-		} catch (@Pc(112) RuntimeException local112) {
-			Signlink.reporterror("30933, " + arg0 + ", " + arg1 + ", " + arg2 + ", " + local112.toString());
-			throw new RuntimeException();
 		}
+		if (this.levelTiles[0][arg1][arg0] == null) {
+			this.levelTiles[0][arg1][arg0] = new SceneTile(0, arg1, arg0);
+		}
+		this.levelTiles[0][arg1][arg0].bridge = local10;
+		this.levelTiles[3][arg1][arg0] = null;
 	}
 
 	@OriginalMember(owner = "client!r", name = "a", descriptor = "(IIII)V")
@@ -496,7 +411,7 @@ public final class Scene {
 			}
 			this.levelTiles[arg0][arg1][arg2].underlay = local14;
 		} else {
-			@Pc(145) SceneTileOverlay local145 = new SceneTileOverlay(arg1, arg3, arg15, arg7, arg12, arg4, arg10, arg9, arg19, arg14, arg5, arg17, arg18, arg8, arg16, arg13, 10659, arg6, arg2, arg11);
+			@Pc(145) SceneTileOverlay local145 = new SceneTileOverlay(arg1, arg3, arg15, arg7, arg12, arg4, arg10, arg9, arg19, arg14, arg5, arg17, arg18, arg8, arg16, arg13, arg6, arg2, arg11);
 			for (local16 = arg0; local16 >= 0; local16--) {
 				if (this.levelTiles[local16][arg1][arg2] == null) {
 					this.levelTiles[local16][arg1][arg2] = new SceneTile(local16, arg1, arg2);
@@ -507,187 +422,134 @@ public final class Scene {
 	}
 
 	@OriginalMember(owner = "client!r", name = "a", descriptor = "(Lclient!eb;BIIIIBI)V")
-	public void addGroundDecoration(@OriginalArg(0) Model arg0, @OriginalArg(1) byte arg1, @OriginalArg(2) int arg2, @OriginalArg(3) int arg3, @OriginalArg(4) int arg4, @OriginalArg(5) int arg5, @OriginalArg(6) byte arg6, @OriginalArg(7) int arg7) {
-		try {
-			@Pc(3) SceneGroundDecoration local3 = new SceneGroundDecoration();
-			local3.model = arg0;
-			local3.x = arg2 * 128 + 64;
-			local3.z = arg4 * 128 + 64;
-			local3.y = arg7;
-			local3.bitset = arg3;
-			local3.info = arg6;
-			if (this.levelTiles[arg5][arg2][arg4] == null) {
-				this.levelTiles[arg5][arg2][arg4] = new SceneTile(arg5, arg2, arg4);
-			}
-			this.levelTiles[arg5][arg2][arg4].groundDecoration = local3;
-			if (arg1 == this.flowObfuscator2) {
-				@Pc(68) boolean local68 = false;
-			} else {
-				flowObfuscator7 = !flowObfuscator7;
-			}
-		} catch (@Pc(77) RuntimeException local77) {
-			Signlink.reporterror("77662, " + arg0 + ", " + arg1 + ", " + arg2 + ", " + arg3 + ", " + arg4 + ", " + arg5 + ", " + arg6 + ", " + arg7 + ", " + local77.toString());
-			throw new RuntimeException();
+	public void addGroundDecoration(@OriginalArg(0) Model arg0, @OriginalArg(2) int arg2, @OriginalArg(3) int arg3, @OriginalArg(4) int arg4, @OriginalArg(5) int arg5, @OriginalArg(6) byte arg6, @OriginalArg(7) int arg7) {
+		@Pc(3) SceneGroundDecoration local3 = new SceneGroundDecoration();
+		local3.model = arg0;
+		local3.x = arg2 * 128 + 64;
+		local3.z = arg4 * 128 + 64;
+		local3.y = arg7;
+		local3.bitset = arg3;
+		local3.info = arg6;
+		if (this.levelTiles[arg5][arg2][arg4] == null) {
+			this.levelTiles[arg5][arg2][arg4] = new SceneTile(arg5, arg2, arg4);
 		}
+		this.levelTiles[arg5][arg2][arg4].groundDecoration = local3;
 	}
 
 	@OriginalMember(owner = "client!r", name = "a", descriptor = "(Lclient!eb;Lclient!eb;IIIIILclient!eb;I)V")
-	public void addObjStack(@OriginalArg(0) Model arg0, @OriginalArg(1) Model arg1, @OriginalArg(2) int arg2, @OriginalArg(3) int arg3, @OriginalArg(4) int arg4, @OriginalArg(5) int arg5, @OriginalArg(6) int arg6, @OriginalArg(7) Model arg7, @OriginalArg(8) int arg8) {
-		try {
-			@Pc(3) SceneObjStack local3 = new SceneObjStack();
-			local3.topObj = arg0;
-			@Pc(10) int local10 = 90 / arg8;
-			local3.x = arg6 * 128 + 64;
-			local3.z = arg5 * 128 + 64;
-			local3.y = arg2;
-			local3.bitset = arg4;
-			local3.middleObj = arg1;
-			local3.bottomObj = arg7;
-			@Pc(38) int local38 = 0;
-			@Pc(47) SceneTile local47 = this.levelTiles[arg3][arg6][arg5];
-			if (local47 != null) {
-				for (@Pc(51) int local51 = 0; local51 < local47.locCount; local51++) {
-					@Pc(60) int local60 = local47.locs[local51].model.objRaise;
-					if (local60 > local38) {
-						local38 = local60;
-					}
+	public void addObjStack(@OriginalArg(0) Model arg0, @OriginalArg(1) Model arg1, @OriginalArg(2) int arg2, @OriginalArg(3) int arg3, @OriginalArg(4) int arg4, @OriginalArg(5) int arg5, @OriginalArg(6) int arg6, @OriginalArg(7) Model arg7) {
+		@Pc(3) SceneObjStack local3 = new SceneObjStack();
+		local3.topObj = arg0;
+		local3.x = arg6 * 128 + 64;
+		local3.z = arg5 * 128 + 64;
+		local3.y = arg2;
+		local3.bitset = arg4;
+		local3.middleObj = arg1;
+		local3.bottomObj = arg7;
+		@Pc(38) int local38 = 0;
+		@Pc(47) SceneTile local47 = this.levelTiles[arg3][arg6][arg5];
+		if (local47 != null) {
+			for (@Pc(51) int local51 = 0; local51 < local47.locCount; local51++) {
+				@Pc(60) int local60 = local47.locs[local51].model.objRaise;
+				if (local60 > local38) {
+					local38 = local60;
 				}
 			}
-			local3.offset = local38;
-			if (this.levelTiles[arg3][arg6][arg5] == null) {
-				this.levelTiles[arg3][arg6][arg5] = new SceneTile(arg3, arg6, arg5);
-			}
-			this.levelTiles[arg3][arg6][arg5].objStack = local3;
-		} catch (@Pc(108) RuntimeException local108) {
-			Signlink.reporterror("55772, " + arg0 + ", " + arg1 + ", " + arg2 + ", " + arg3 + ", " + arg4 + ", " + arg5 + ", " + arg6 + ", " + arg7 + ", " + arg8 + ", " + local108.toString());
-			throw new RuntimeException();
 		}
+		local3.offset = local38;
+		if (this.levelTiles[arg3][arg6][arg5] == null) {
+			this.levelTiles[arg3][arg6][arg5] = new SceneTile(arg3, arg6, arg5);
+		}
+		this.levelTiles[arg3][arg6][arg5].objStack = local3;
 	}
 
 	@OriginalMember(owner = "client!r", name = "a", descriptor = "(IIIIILclient!eb;Lclient!eb;IIIB)V")
-	public void addWall(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2, @OriginalArg(3) int arg3, @OriginalArg(4) int arg4, @OriginalArg(5) Model arg5, @OriginalArg(6) Model arg6, @OriginalArg(7) int arg7, @OriginalArg(8) int arg8, @OriginalArg(9) int arg9, @OriginalArg(10) byte arg10) {
-		try {
-			if (arg5 != null || arg6 != null) {
-				@Pc(8) SceneWall local8 = new SceneWall();
-				local8.bitset = arg8;
-				local8.info = arg10;
-				local8.x = arg7 * 128 + 64;
-				local8.z = arg9 * 128 + 64;
-				local8.y = arg1;
-				local8.modelA = arg5;
-				if (arg4 != 8) {
-					flowObfuscator7 = !flowObfuscator7;
+	public void addWall(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2, @OriginalArg(3) int arg3, @OriginalArg(5) Model arg5, @OriginalArg(6) Model arg6, @OriginalArg(7) int arg7, @OriginalArg(8) int arg8, @OriginalArg(9) int arg9, @OriginalArg(10) byte arg10) {
+		if (arg5 != null || arg6 != null) {
+			@Pc(8) SceneWall local8 = new SceneWall();
+			local8.bitset = arg8;
+			local8.info = arg10;
+			local8.x = arg7 * 128 + 64;
+			local8.z = arg9 * 128 + 64;
+			local8.y = arg1;
+			local8.modelA = arg5;
+			local8.modelB = arg6;
+			local8.typeA = arg3;
+			local8.typeB = arg0;
+			for (@Pc(54) int local54 = arg2; local54 >= 0; local54--) {
+				if (this.levelTiles[local54][arg7][arg9] == null) {
+					this.levelTiles[local54][arg7][arg9] = new SceneTile(local54, arg7, arg9);
 				}
-				local8.modelB = arg6;
-				local8.typeA = arg3;
-				local8.typeB = arg0;
-				for (@Pc(54) int local54 = arg2; local54 >= 0; local54--) {
-					if (this.levelTiles[local54][arg7][arg9] == null) {
-						this.levelTiles[local54][arg7][arg9] = new SceneTile(local54, arg7, arg9);
-					}
-				}
-				this.levelTiles[arg2][arg7][arg9].wall = local8;
 			}
-		} catch (@Pc(94) RuntimeException local94) {
-			Signlink.reporterror("66047, " + arg0 + ", " + arg1 + ", " + arg2 + ", " + arg3 + ", " + arg4 + ", " + arg5 + ", " + arg6 + ", " + arg7 + ", " + arg8 + ", " + arg9 + ", " + arg10 + ", " + local94.toString());
-			throw new RuntimeException();
+			this.levelTiles[arg2][arg7][arg9].wall = local8;
 		}
 	}
 
 	@OriginalMember(owner = "client!r", name = "a", descriptor = "(IIIIIIIIILclient!eb;BI)V")
-	public void setWallDecoration(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2, @OriginalArg(3) int arg3, @OriginalArg(4) int arg4, @OriginalArg(5) int arg5, @OriginalArg(6) int arg6, @OriginalArg(7) int arg7, @OriginalArg(8) int arg8, @OriginalArg(9) Model arg9, @OriginalArg(10) byte arg10, @OriginalArg(11) int arg11) {
-		try {
-			@Pc(3) int local3 = 66 / arg6;
-			if (arg9 != null) {
-				@Pc(10) SceneWallDecoration local10 = new SceneWallDecoration();
-				local10.bitset = arg3;
-				local10.info = arg10;
-				local10.x = arg8 * 128 + arg7 + 64;
-				local10.z = arg1 * 128 + arg2 + 64;
-				local10.y = arg0;
-				local10.model = arg9;
-				local10.type = arg5;
-				local10.orientation = arg4;
-				for (@Pc(48) int local48 = arg11; local48 >= 0; local48--) {
-					if (this.levelTiles[local48][arg8][arg1] == null) {
-						this.levelTiles[local48][arg8][arg1] = new SceneTile(local48, arg8, arg1);
-					}
+	public void setWallDecoration(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2, @OriginalArg(3) int arg3, @OriginalArg(4) int arg4, @OriginalArg(5) int arg5, @OriginalArg(7) int arg7, @OriginalArg(8) int arg8, @OriginalArg(9) Model arg9, @OriginalArg(10) byte arg10, @OriginalArg(11) int arg11) {
+		if (arg9 != null) {
+			@Pc(10) SceneWallDecoration local10 = new SceneWallDecoration();
+			local10.bitset = arg3;
+			local10.info = arg10;
+			local10.x = arg8 * 128 + arg7 + 64;
+			local10.z = arg1 * 128 + arg2 + 64;
+			local10.y = arg0;
+			local10.model = arg9;
+			local10.type = arg5;
+			local10.orientation = arg4;
+			for (@Pc(48) int local48 = arg11; local48 >= 0; local48--) {
+				if (this.levelTiles[local48][arg8][arg1] == null) {
+					this.levelTiles[local48][arg8][arg1] = new SceneTile(local48, arg8, arg1);
 				}
-				this.levelTiles[arg11][arg8][arg1].wallDecoration = local10;
 			}
-		} catch (@Pc(88) RuntimeException local88) {
-			Signlink.reporterror("67649, " + arg0 + ", " + arg1 + ", " + arg2 + ", " + arg3 + ", " + arg4 + ", " + arg5 + ", " + arg6 + ", " + arg7 + ", " + arg8 + ", " + arg9 + ", " + arg10 + ", " + arg11 + ", " + local88.toString());
-			throw new RuntimeException();
+			this.levelTiles[arg11][arg8][arg1].wallDecoration = local10;
 		}
 	}
 
 	@OriginalMember(owner = "client!r", name = "a", descriptor = "(IIILclient!w;IIIIBLclient!eb;II)Z")
-	public boolean addLoc(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2, @OriginalArg(3) Entity arg3, @OriginalArg(4) int arg4, @OriginalArg(5) int arg5, @OriginalArg(6) int arg6, @OriginalArg(7) int arg7, @OriginalArg(8) byte arg8, @OriginalArg(9) Model arg9, @OriginalArg(10) int arg10, @OriginalArg(11) int arg11) {
-		try {
-			@Pc(3) int local3 = 79 / arg1;
-			if (arg9 == null && arg3 == null) {
-				return true;
-			} else {
-				@Pc(17) int local17 = arg6 * 128 + arg7 * 64;
-				@Pc(25) int local25 = arg5 * 128 + arg11 * 64;
-				return this.addLoc(arg2, arg6, arg5, arg7, arg11, local17, local25, arg0, arg9, arg3, arg10, false, arg4, arg8);
-			}
-		} catch (@Pc(43) RuntimeException local43) {
-			Signlink.reporterror("16055, " + arg0 + ", " + arg1 + ", " + arg2 + ", " + arg3 + ", " + arg4 + ", " + arg5 + ", " + arg6 + ", " + arg7 + ", " + arg8 + ", " + arg9 + ", " + arg10 + ", " + arg11 + ", " + local43.toString());
-			throw new RuntimeException();
+	public boolean addLoc(@OriginalArg(0) int arg0, @OriginalArg(2) int arg2, @OriginalArg(3) Entity arg3, @OriginalArg(4) int arg4, @OriginalArg(5) int arg5, @OriginalArg(6) int arg6, @OriginalArg(7) int arg7, @OriginalArg(8) byte arg8, @OriginalArg(9) Model arg9, @OriginalArg(10) int arg10, @OriginalArg(11) int arg11) {
+		if (arg9 == null && arg3 == null) {
+			return true;
+		} else {
+			@Pc(17) int local17 = arg6 * 128 + arg7 * 64;
+			@Pc(25) int local25 = arg5 * 128 + arg11 * 64;
+			return this.addLoc(arg2, arg6, arg5, arg7, arg11, local17, local25, arg0, arg9, arg3, arg10, false, arg4, arg8);
 		}
 	}
 
 	@OriginalMember(owner = "client!r", name = "a", descriptor = "(IIIIIIZLclient!eb;Lclient!w;II)Z")
-	public boolean addTemporary(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2, @OriginalArg(3) int arg3, @OriginalArg(4) int arg4, @OriginalArg(5) int arg5, @OriginalArg(6) boolean arg6, @OriginalArg(7) Model arg7, @OriginalArg(8) Entity arg8, @OriginalArg(9) int arg9, @OriginalArg(10) int arg10) {
-		try {
-			if (arg7 == null && arg8 == null) {
-				return true;
-			}
-			@Pc(9) int local9 = arg4 - arg2;
-			@Pc(13) int local13 = arg1 - arg2;
-			@Pc(17) int local17 = arg4 + arg2;
-			@Pc(21) int local21 = arg1 + arg2;
-			if (arg6) {
-				if (arg3 > 640 && arg3 < 1408) {
-					local21 += 128;
-				}
-				if (arg3 > 1152 && arg3 < 1920) {
-					local17 += 128;
-				}
-				if (arg3 > 1664 || arg3 < 384) {
-					local13 -= 128;
-				}
-				if (arg3 > 128 && arg3 < 896) {
-					local9 -= 128;
-				}
-			}
-			local9 /= 128;
-			if (arg0 != -44713) {
-				flowObfuscator7 = !flowObfuscator7;
-			}
-			local13 /= 128;
-			local17 /= 128;
-			local21 /= 128;
-			return this.addLoc(arg10, local9, local13, local17 + 1 - local9, local21 - local13 + 1, arg4, arg1, arg9, arg7, arg8, arg3, true, arg5, (byte) 0);
-		} catch (@Pc(102) RuntimeException local102) {
-			Signlink.reporterror("31031, " + arg0 + ", " + arg1 + ", " + arg2 + ", " + arg3 + ", " + arg4 + ", " + arg5 + ", " + arg6 + ", " + arg7 + ", " + arg8 + ", " + arg9 + ", " + arg10 + ", " + local102.toString());
-			throw new RuntimeException();
+	public boolean addTemporary(@OriginalArg(1) int arg1, @OriginalArg(2) int arg2, @OriginalArg(3) int arg3, @OriginalArg(4) int arg4, @OriginalArg(5) int arg5, @OriginalArg(6) boolean arg6, @OriginalArg(7) Model arg7, @OriginalArg(8) Entity arg8, @OriginalArg(9) int arg9, @OriginalArg(10) int arg10) {
+		if (arg7 == null && arg8 == null) {
+			return true;
 		}
+		@Pc(9) int local9 = arg4 - arg2;
+		@Pc(13) int local13 = arg1 - arg2;
+		@Pc(17) int local17 = arg4 + arg2;
+		@Pc(21) int local21 = arg1 + arg2;
+		if (arg6) {
+			if (arg3 > 640 && arg3 < 1408) {
+				local21 += 128;
+			}
+			if (arg3 > 1152 && arg3 < 1920) {
+				local17 += 128;
+			}
+			if (arg3 > 1664 || arg3 < 384) {
+				local13 -= 128;
+			}
+			if (arg3 > 128 && arg3 < 896) {
+				local9 -= 128;
+			}
+		}
+		local9 /= 128;
+		local13 /= 128;
+		local17 /= 128;
+		local21 /= 128;
+		return this.addLoc(arg10, local9, local13, local17 + 1 - local9, local21 - local13 + 1, arg4, arg1, arg9, arg7, arg8, arg3, true, arg5, (byte) 0);
 	}
 
 	@OriginalMember(owner = "client!r", name = "a", descriptor = "(IILclient!eb;IIIIIILclient!w;ZIII)Z")
-	public boolean addTemporary(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(2) Model arg2, @OriginalArg(3) int arg3, @OriginalArg(4) int arg4, @OriginalArg(5) int arg5, @OriginalArg(6) int arg6, @OriginalArg(7) int arg7, @OriginalArg(8) int arg8, @OriginalArg(9) Entity arg9, @OriginalArg(10) boolean arg10, @OriginalArg(11) int arg11, @OriginalArg(12) int arg12, @OriginalArg(13) int arg13) {
-		try {
-			if (arg10) {
-				for (@Pc(3) int local3 = 1; local3 > 0; local3++) {
-				}
-			}
-			return arg2 == null && arg9 == null ? true : this.addLoc(arg11, arg8, arg7, arg0 + 1 - arg8, arg12 - arg7 + 1, arg13, arg3, arg4, arg2, arg9, arg6, true, arg5, (byte) 0);
-		} catch (@Pc(40) RuntimeException local40) {
-			Signlink.reporterror("36303, " + arg0 + ", " + arg1 + ", " + arg2 + ", " + arg3 + ", " + arg4 + ", " + arg5 + ", " + arg6 + ", " + arg7 + ", " + arg8 + ", " + arg9 + ", " + arg10 + ", " + arg11 + ", " + arg12 + ", " + arg13 + ", " + local40.toString());
-			throw new RuntimeException();
-		}
+	public boolean addTemporary(@OriginalArg(0) int arg0, @OriginalArg(2) Model arg2, @OriginalArg(3) int arg3, @OriginalArg(4) int arg4, @OriginalArg(5) int arg5, @OriginalArg(6) int arg6, @OriginalArg(7) int arg7, @OriginalArg(8) int arg8, @OriginalArg(9) Entity arg9, @OriginalArg(11) int arg11, @OriginalArg(12) int arg12, @OriginalArg(13) int arg13) {
+		return arg2 == null && arg9 == null ? true : this.addLoc(arg11, arg8, arg7, arg0 + 1 - arg8, arg12 - arg7 + 1, arg13, arg3, arg4, arg2, arg9, arg6, true, arg5, (byte) 0);
 	}
 
 	@OriginalMember(owner = "client!r", name = "a", descriptor = "(IIIIIIIILclient!eb;Lclient!w;IZIB)Z")
@@ -754,253 +616,161 @@ public final class Scene {
 	}
 
 	@OriginalMember(owner = "client!r", name = "b", descriptor = "(I)V")
-	public void clearTemporaryLocs(@OriginalArg(0) int arg0) {
-		try {
-			for (@Pc(1) int local1 = 0; local1 < this.temporaryLocCount; local1++) {
-				@Pc(8) SceneLoc local8 = this.temporaryLocs[local1];
-				this.removeLoc(local8, (byte) 1);
-				this.temporaryLocs[local1] = null;
-			}
-			if (arg0 != 0) {
-				this.flowObfuscator1 = !this.flowObfuscator1;
-			}
-			this.temporaryLocCount = 0;
-		} catch (@Pc(37) RuntimeException local37) {
-			Signlink.reporterror("68923, " + arg0 + ", " + local37.toString());
-			throw new RuntimeException();
+	public void clearTemporaryLocs() {
+		for (@Pc(1) int local1 = 0; local1 < this.temporaryLocCount; local1++) {
+			@Pc(8) SceneLoc local8 = this.temporaryLocs[local1];
+			this.removeLoc(local8);
+			this.temporaryLocs[local1] = null;
 		}
+		this.temporaryLocCount = 0;
 	}
 
 	@OriginalMember(owner = "client!r", name = "a", descriptor = "(Lclient!p;B)V")
-	private void removeLoc(@OriginalArg(0) SceneLoc arg0, @OriginalArg(1) byte arg1) {
-		try {
-			for (@Pc(4) int local4 = arg0.minSceneTileX; local4 <= arg0.maxSceneTileX; local4++) {
-				for (@Pc(9) int local9 = arg0.minSceneTileZ; local9 <= arg0.maxSceneTileZ; local9++) {
-					@Pc(21) SceneTile local21 = this.levelTiles[arg0.level][local4][local9];
-					if (local21 != null) {
-						@Pc(41) int local41;
-						for (@Pc(25) int local25 = 0; local25 < local21.locCount; local25++) {
-							if (local21.locs[local25] == arg0) {
-								local21.locCount--;
-								for (local41 = local25; local41 < local21.locCount; local41++) {
-									local21.locs[local41] = local21.locs[local41 + 1];
-									local21.locSpan[local41] = local21.locSpan[local41 + 1];
-								}
-								local21.locs[local21.locCount] = null;
-								break;
+	private void removeLoc(@OriginalArg(0) SceneLoc arg0) {
+		for (@Pc(4) int local4 = arg0.minSceneTileX; local4 <= arg0.maxSceneTileX; local4++) {
+			for (@Pc(9) int local9 = arg0.minSceneTileZ; local9 <= arg0.maxSceneTileZ; local9++) {
+				@Pc(21) SceneTile local21 = this.levelTiles[arg0.level][local4][local9];
+				if (local21 != null) {
+					@Pc(41) int local41;
+					for (@Pc(25) int local25 = 0; local25 < local21.locCount; local25++) {
+						if (local21.locs[local25] == arg0) {
+							local21.locCount--;
+							for (local41 = local25; local41 < local21.locCount; local41++) {
+								local21.locs[local41] = local21.locs[local41 + 1];
+								local21.locSpan[local41] = local21.locSpan[local41 + 1];
 							}
+							local21.locs[local21.locCount] = null;
+							break;
 						}
-						local21.locSpans = 0;
-						for (local41 = 0; local41 < local21.locCount; local41++) {
-							local21.locSpans |= local21.locSpan[local41];
-						}
+					}
+					local21.locSpans = 0;
+					for (local41 = 0; local41 < local21.locCount; local41++) {
+						local21.locSpans |= local21.locSpan[local41];
 					}
 				}
 			}
-			if (arg1 == this.flowObfuscator4) {
-				@Pc(118) boolean local118 = false;
-			}
-		} catch (@Pc(121) RuntimeException local121) {
-			Signlink.reporterror("47347, " + arg0 + ", " + arg1 + ", " + local121.toString());
-			throw new RuntimeException();
 		}
 	}
 
 	@OriginalMember(owner = "client!r", name = "a", descriptor = "(ILclient!eb;III)V")
-	public void setLocModel(@OriginalArg(0) int arg0, @OriginalArg(1) Model arg1, @OriginalArg(2) int arg2, @OriginalArg(3) int arg3, @OriginalArg(4) int arg4) {
-		try {
-			if (arg1 != null) {
-				@Pc(13) SceneTile local13 = this.levelTiles[arg3][arg0][arg4];
-				@Pc(21) int local21;
-				if (arg2 < 1 || arg2 > 1) {
-					for (local21 = 1; local21 > 0; local21++) {
-					}
-				}
-				if (local13 != null) {
-					for (local21 = 0; local21 < local13.locCount; local21++) {
-						@Pc(38) SceneLoc local38 = local13.locs[local21];
-						if ((local38.bitset >> 29 & 0x3) == 2) {
-							local38.model = arg1;
-							return;
-						}
+	public void setLocModel(@OriginalArg(0) int arg0, @OriginalArg(1) Model arg1, @OriginalArg(3) int arg3, @OriginalArg(4) int arg4) {
+		if (arg1 != null) {
+			@Pc(13) SceneTile local13 = this.levelTiles[arg3][arg0][arg4];
+			@Pc(21) int local21;
+			if (local13 != null) {
+				for (local21 = 0; local21 < local13.locCount; local21++) {
+					@Pc(38) SceneLoc local38 = local13.locs[local21];
+					if ((local38.bitset >> 29 & 0x3) == 2) {
+						local38.model = arg1;
+						return;
 					}
 				}
 			}
-		} catch (@Pc(57) RuntimeException local57) {
-			Signlink.reporterror("18297, " + arg0 + ", " + arg1 + ", " + arg2 + ", " + arg3 + ", " + arg4 + ", " + local57.toString());
-			throw new RuntimeException();
 		}
 	}
 
 	@OriginalMember(owner = "client!r", name = "a", descriptor = "(IIIIB)V")
-	public void setWallDecorationOffset(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2, @OriginalArg(3) int arg3, @OriginalArg(4) byte arg4) {
-		try {
-			@Pc(8) SceneTile local8 = this.levelTiles[arg0][arg2][arg1];
-			if (arg4 != 6) {
-				for (@Pc(13) int local13 = 1; local13 > 0; local13++) {
-				}
+	public void setWallDecorationOffset(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2, @OriginalArg(3) int arg3) {
+		@Pc(8) SceneTile local8 = this.levelTiles[arg0][arg2][arg1];
+		if (local8 != null) {
+			@Pc(24) SceneWallDecoration local24 = local8.wallDecoration;
+			if (local24 != null) {
+				@Pc(33) int local33 = arg2 * 128 + 64;
+				@Pc(39) int local39 = arg1 * 128 + 64;
+				local24.x = local33 + (local24.x - local33) * arg3 / 16;
+				local24.z = local39 + (local24.z - local39) * arg3 / 16;
 			}
-			if (local8 != null) {
-				@Pc(24) SceneWallDecoration local24 = local8.wallDecoration;
-				if (local24 != null) {
-					@Pc(33) int local33 = arg2 * 128 + 64;
-					@Pc(39) int local39 = arg1 * 128 + 64;
-					local24.x = local33 + (local24.x - local33) * arg3 / 16;
-					local24.z = local39 + (local24.z - local39) * arg3 / 16;
-				}
-			}
-		} catch (@Pc(65) RuntimeException local65) {
-			Signlink.reporterror("94433, " + arg0 + ", " + arg1 + ", " + arg2 + ", " + arg3 + ", " + arg4 + ", " + local65.toString());
-			throw new RuntimeException();
 		}
 	}
 
 	@OriginalMember(owner = "client!r", name = "a", descriptor = "(IIILclient!eb;I)V")
-	public void setWallDecorationModel(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2, @OriginalArg(3) Model arg3, @OriginalArg(4) int arg4) {
-		try {
-			@Pc(3) int local3 = 34 / arg0;
-			if (arg3 != null) {
-				@Pc(15) SceneTile local15 = this.levelTiles[arg4][arg2][arg1];
-				if (local15 != null) {
-					@Pc(21) SceneWallDecoration local21 = local15.wallDecoration;
-					if (local21 != null) {
-						local21.model = arg3;
-					}
+	public void setWallDecorationModel(@OriginalArg(1) int arg1, @OriginalArg(2) int arg2, @OriginalArg(3) Model arg3, @OriginalArg(4) int arg4) {
+		if (arg3 != null) {
+			@Pc(15) SceneTile local15 = this.levelTiles[arg4][arg2][arg1];
+			if (local15 != null) {
+				@Pc(21) SceneWallDecoration local21 = local15.wallDecoration;
+				if (local21 != null) {
+					local21.model = arg3;
 				}
 			}
-		} catch (@Pc(29) RuntimeException local29) {
-			Signlink.reporterror("71881, " + arg0 + ", " + arg1 + ", " + arg2 + ", " + arg3 + ", " + arg4 + ", " + local29.toString());
-			throw new RuntimeException();
 		}
 	}
 
 	@OriginalMember(owner = "client!r", name = "a", descriptor = "(Lclient!eb;IIII)V")
-	public void setGroundDecorationModel(@OriginalArg(0) Model arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2, @OriginalArg(3) int arg3, @OriginalArg(4) int arg4) {
-		try {
-			if (arg2 == -48639 && arg0 != null) {
-				@Pc(15) SceneTile local15 = this.levelTiles[arg4][arg3][arg1];
-				if (local15 != null) {
-					@Pc(21) SceneGroundDecoration local21 = local15.groundDecoration;
-					if (local21 != null) {
-						local21.model = arg0;
-					}
+	public void setGroundDecorationModel(@OriginalArg(0) Model arg0, @OriginalArg(1) int arg1, @OriginalArg(3) int arg3, @OriginalArg(4) int arg4) {
+		if (arg0 != null) {
+			@Pc(15) SceneTile local15 = this.levelTiles[arg4][arg3][arg1];
+			if (local15 != null) {
+				@Pc(21) SceneGroundDecoration local21 = local15.groundDecoration;
+				if (local21 != null) {
+					local21.model = arg0;
 				}
 			}
-		} catch (@Pc(29) RuntimeException local29) {
-			Signlink.reporterror("41961, " + arg0 + ", " + arg1 + ", " + arg2 + ", " + arg3 + ", " + arg4 + ", " + local29.toString());
-			throw new RuntimeException();
 		}
 	}
 
 	@OriginalMember(owner = "client!r", name = "b", descriptor = "(ILclient!eb;III)V")
-	public void setWallModel(@OriginalArg(0) int arg0, @OriginalArg(1) Model arg1, @OriginalArg(2) int arg2, @OriginalArg(3) int arg3, @OriginalArg(4) int arg4) {
-		try {
-			if (arg0 != 35568) {
-				for (@Pc(4) int local4 = 1; local4 > 0; local4++) {
+	public void setWallModel(@OriginalArg(1) Model arg1, @OriginalArg(2) int arg2, @OriginalArg(3) int arg3, @OriginalArg(4) int arg4) {
+		if (arg1 != null) {
+			@Pc(21) SceneTile local21 = this.levelTiles[arg4][arg3][arg2];
+			if (local21 != null) {
+				@Pc(27) SceneWall local27 = local21.wall;
+				if (local27 != null) {
+					local27.modelA = arg1;
 				}
 			}
-			if (arg1 != null) {
-				@Pc(21) SceneTile local21 = this.levelTiles[arg4][arg3][arg2];
-				if (local21 != null) {
-					@Pc(27) SceneWall local27 = local21.wall;
-					if (local27 != null) {
-						local27.modelA = arg1;
-					}
-				}
-			}
-		} catch (@Pc(35) RuntimeException local35) {
-			Signlink.reporterror("32053, " + arg0 + ", " + arg1 + ", " + arg2 + ", " + arg3 + ", " + arg4 + ", " + local35.toString());
-			throw new RuntimeException();
 		}
 	}
 
 	@OriginalMember(owner = "client!r", name = "a", descriptor = "(Lclient!eb;Lclient!eb;IZII)V")
-	public void setWallModels(@OriginalArg(0) Model arg0, @OriginalArg(1) Model arg1, @OriginalArg(2) int arg2, @OriginalArg(3) boolean arg3, @OriginalArg(4) int arg4, @OriginalArg(5) int arg5) {
-		try {
-			if (arg0 != null) {
-				@Pc(11) SceneTile local11 = this.levelTiles[arg5][arg4][arg2];
-				if (local11 != null) {
-					@Pc(17) SceneWall local17 = local11.wall;
-					if (local17 != null) {
-						local17.modelA = arg0;
-						local17.modelB = arg1;
-						if (arg3) {
-							this.flowObfuscator1 = !this.flowObfuscator1;
-						}
-					}
+	public void setWallModels(@OriginalArg(0) Model arg0, @OriginalArg(1) Model arg1, @OriginalArg(2) int arg2, @OriginalArg(4) int arg4, @OriginalArg(5) int arg5) {
+		if (arg0 != null) {
+			@Pc(11) SceneTile local11 = this.levelTiles[arg5][arg4][arg2];
+			if (local11 != null) {
+				@Pc(17) SceneWall local17 = local11.wall;
+				if (local17 != null) {
+					local17.modelA = arg0;
+					local17.modelB = arg1;
 				}
 			}
-		} catch (@Pc(38) RuntimeException local38) {
-			Signlink.reporterror("56345, " + arg0 + ", " + arg1 + ", " + arg2 + ", " + arg3 + ", " + arg4 + ", " + arg5 + ", " + local38.toString());
-			throw new RuntimeException();
 		}
 	}
 
 	@OriginalMember(owner = "client!r", name = "b", descriptor = "(IIII)V")
 	public void removeWall(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2, @OriginalArg(3) int arg3) {
-		try {
-			@Pc(8) SceneTile local8 = this.levelTiles[arg1][arg0][arg2];
-			if (arg3 == 1 && local8 != null) {
-				local8.wall = null;
-			}
-		} catch (@Pc(20) RuntimeException local20) {
-			Signlink.reporterror("70237, " + arg0 + ", " + arg1 + ", " + arg2 + ", " + arg3 + ", " + local20.toString());
-			throw new RuntimeException();
+		@Pc(8) SceneTile local8 = this.levelTiles[arg1][arg0][arg2];
+		if (arg3 == 1 && local8 != null) {
+			local8.wall = null;
 		}
 	}
 
 	@OriginalMember(owner = "client!r", name = "c", descriptor = "(IIII)V")
-	public void removeWallDecoration(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2, @OriginalArg(3) int arg3) {
-		try {
-			@Pc(8) SceneTile local8 = this.levelTiles[arg0][arg3][arg1];
-			if (arg2 < 0 || arg2 > 0) {
-				this.flowObfuscator1 = !this.flowObfuscator1;
-			}
-			if (local8 != null) {
-				local8.wallDecoration = null;
-			}
-		} catch (@Pc(28) RuntimeException local28) {
-			Signlink.reporterror("83859, " + arg0 + ", " + arg1 + ", " + arg2 + ", " + arg3 + ", " + local28.toString());
-			throw new RuntimeException();
+	public void removeWallDecoration(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(3) int arg3) {
+		@Pc(8) SceneTile local8 = this.levelTiles[arg0][arg3][arg1];
+		if (local8 != null) {
+			local8.wallDecoration = null;
 		}
 	}
 
 	@OriginalMember(owner = "client!r", name = "d", descriptor = "(IIII)V")
-	public void removeLoc(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2, @OriginalArg(3) int arg3) {
-		try {
-			@Pc(10) SceneTile local10 = this.levelTiles[arg3][arg0][arg1];
-			if (local10 != null) {
-				for (@Pc(15) int local15 = 0; local15 < local10.locCount; local15++) {
-					@Pc(22) SceneLoc local22 = local10.locs[local15];
-					if ((local22.bitset >> 29 & 0x3) == 2 && local22.minSceneTileX == arg0 && local22.minSceneTileZ == arg1) {
-						this.removeLoc(local22, (byte) 1);
-						return;
-					}
-				}
-				if (arg2 >= 0) {
-					for (@Pc(52) int local52 = 1; local52 > 0; local52++) {
-					}
+	public void removeLoc(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(3) int arg3) {
+		@Pc(10) SceneTile local10 = this.levelTiles[arg3][arg0][arg1];
+		if (local10 != null) {
+			for (@Pc(15) int local15 = 0; local15 < local10.locCount; local15++) {
+				@Pc(22) SceneLoc local22 = local10.locs[local15];
+				if ((local22.bitset >> 29 & 0x3) == 2 && local22.minSceneTileX == arg0 && local22.minSceneTileZ == arg1) {
+					this.removeLoc(local22);
+					return;
 				}
 			}
-		} catch (@Pc(59) RuntimeException local59) {
-			Signlink.reporterror("77567, " + arg0 + ", " + arg1 + ", " + arg2 + ", " + arg3 + ", " + local59.toString());
-			throw new RuntimeException();
 		}
 	}
 
 	@OriginalMember(owner = "client!r", name = "e", descriptor = "(IIII)V")
-	public void removeGroundDecoration(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2, @OriginalArg(3) int arg3) {
-		try {
-			if (arg1 != 0) {
-				flowObfuscator7 = !flowObfuscator7;
-			}
-			@Pc(16) SceneTile local16 = this.levelTiles[arg0][arg2][arg3];
-			if (local16 != null) {
-				local16.groundDecoration = null;
-			}
-		} catch (@Pc(24) RuntimeException local24) {
-			Signlink.reporterror("17123, " + arg0 + ", " + arg1 + ", " + arg2 + ", " + arg3 + ", " + local24.toString());
-			throw new RuntimeException();
+	public void removeGroundDecoration(@OriginalArg(0) int arg0, @OriginalArg(2) int arg2, @OriginalArg(3) int arg3) {
+		@Pc(16) SceneTile local16 = this.levelTiles[arg0][arg2][arg3];
+		if (local16 != null) {
+			local16.groundDecoration = null;
 		}
 	}
 
@@ -1019,17 +789,9 @@ public final class Scene {
 	}
 
 	@OriginalMember(owner = "client!r", name = "f", descriptor = "(IIII)I")
-	public int getWallDecorationBitset(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2, @OriginalArg(3) int arg3) {
-		try {
-			if (arg2 != 3) {
-				this.flowObfuscator1 = !this.flowObfuscator1;
-			}
-			@Pc(19) SceneTile local19 = this.levelTiles[arg0][arg3][arg1];
-			return local19 == null || local19.wallDecoration == null ? 0 : local19.wallDecoration.bitset;
-		} catch (@Pc(31) RuntimeException local31) {
-			Signlink.reporterror("99919, " + arg0 + ", " + arg1 + ", " + arg2 + ", " + arg3 + ", " + local31.toString());
-			throw new RuntimeException();
-		}
+	public int getWallDecorationBitset(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(3) int arg3) {
+		@Pc(19) SceneTile local19 = this.levelTiles[arg0][arg3][arg1];
+		return local19 == null || local19.wallDecoration == null ? 0 : local19.wallDecoration.bitset;
 	}
 
 	@OriginalMember(owner = "client!r", name = "c", descriptor = "(III)I")
@@ -1075,133 +837,110 @@ public final class Scene {
 	}
 
 	@OriginalMember(owner = "client!r", name = "a", descriptor = "(IIIIIZ)V")
-	public void buildModels(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2, @OriginalArg(3) int arg3, @OriginalArg(4) int arg4, @OriginalArg(5) boolean arg5) {
-		try {
-			@Pc(16) int local16 = (int) Math.sqrt((double) (arg2 * arg2 + arg0 * arg0 + arg4 * arg4));
-			if (arg5) {
-				flowObfuscator5 = -77;
-			}
-			@Pc(26) int local26 = arg3 * local16 >> 8;
-			for (@Pc(28) int local28 = 0; local28 < this.maxLevel; local28++) {
-				for (@Pc(32) int local32 = 0; local32 < this.maxTileX; local32++) {
-					for (@Pc(36) int local36 = 0; local36 < this.maxTileZ; local36++) {
-						@Pc(47) SceneTile local47 = this.levelTiles[local28][local32][local36];
-						if (local47 != null) {
-							@Pc(52) SceneWall local52 = local47.wall;
-							if (local52 != null && local52.modelA != null && local52.modelA.vertexNormal != null) {
-								this.mergeLocNormals(local32, 1, 1, local28, 872, local52.modelA, local36);
-								if (local52.modelB != null && local52.modelB.vertexNormal != null) {
-									this.mergeLocNormals(local32, 1, 1, local28, 872, local52.modelB, local36);
-									this.mergeNormals(local52.modelA, local52.modelB, 0, 0, 0, false);
-									local52.modelB.applyLighting(arg1, local26, arg2, arg0, arg4);
-								}
-								local52.modelA.applyLighting(arg1, local26, arg2, arg0, arg4);
+	public void buildModels(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2, @OriginalArg(3) int arg3, @OriginalArg(4) int arg4) {
+		@Pc(16) int local16 = (int) Math.sqrt((double) (arg2 * arg2 + arg0 * arg0 + arg4 * arg4));
+		@Pc(26) int local26 = arg3 * local16 >> 8;
+		for (@Pc(28) int local28 = 0; local28 < this.maxLevel; local28++) {
+			for (@Pc(32) int local32 = 0; local32 < this.maxTileX; local32++) {
+				for (@Pc(36) int local36 = 0; local36 < this.maxTileZ; local36++) {
+					@Pc(47) SceneTile local47 = this.levelTiles[local28][local32][local36];
+					if (local47 != null) {
+						@Pc(52) SceneWall local52 = local47.wall;
+						if (local52 != null && local52.modelA != null && local52.modelA.vertexNormal != null) {
+							this.mergeLocNormals(local32, 1, 1, local28, local52.modelA, local36);
+							if (local52.modelB != null && local52.modelB.vertexNormal != null) {
+								this.mergeLocNormals(local32, 1, 1, local28, local52.modelB, local36);
+								this.mergeNormals(local52.modelA, local52.modelB, 0, 0, 0, false);
+								local52.modelB.applyLighting(arg1, local26, arg2, arg0, arg4);
 							}
-							for (@Pc(116) int local116 = 0; local116 < local47.locCount; local116++) {
-								@Pc(123) SceneLoc local123 = local47.locs[local116];
-								if (local123 != null && local123.model != null && local123.model.vertexNormal != null) {
-									this.mergeLocNormals(local32, local123.maxSceneTileX + 1 - local123.minSceneTileX, local123.maxSceneTileZ - local123.minSceneTileZ + 1, local28, 872, local123.model, local36);
-									local123.model.applyLighting(arg1, local26, arg2, arg0, arg4);
-								}
+							local52.modelA.applyLighting(arg1, local26, arg2, arg0, arg4);
+						}
+						for (@Pc(116) int local116 = 0; local116 < local47.locCount; local116++) {
+							@Pc(123) SceneLoc local123 = local47.locs[local116];
+							if (local123 != null && local123.model != null && local123.model.vertexNormal != null) {
+								this.mergeLocNormals(local32, local123.maxSceneTileX + 1 - local123.minSceneTileX, local123.maxSceneTileZ - local123.minSceneTileZ + 1, local28, local123.model, local36);
+								local123.model.applyLighting(arg1, local26, arg2, arg0, arg4);
 							}
-							@Pc(170) SceneGroundDecoration local170 = local47.groundDecoration;
-							if (local170 != null && local170.model.vertexNormal != null) {
-								this.mergeGroundDecorationNormals((byte) -70, local28, local36, local170.model, local32);
-								local170.model.applyLighting(arg1, local26, arg2, arg0, arg4);
-							}
+						}
+						@Pc(170) SceneGroundDecoration local170 = local47.groundDecoration;
+						if (local170 != null && local170.model.vertexNormal != null) {
+							this.mergeGroundDecorationNormals(local28, local36, local170.model, local32);
+							local170.model.applyLighting(arg1, local26, arg2, arg0, arg4);
 						}
 					}
 				}
 			}
-		} catch (@Pc(209) RuntimeException local209) {
-			Signlink.reporterror("44219, " + arg0 + ", " + arg1 + ", " + arg2 + ", " + arg3 + ", " + arg4 + ", " + arg5 + ", " + local209.toString());
-			throw new RuntimeException();
 		}
 	}
 
 	@OriginalMember(owner = "client!r", name = "a", descriptor = "(BIILclient!eb;I)V")
-	private void mergeGroundDecorationNormals(@OriginalArg(0) byte arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2, @OriginalArg(3) Model arg3, @OriginalArg(4) int arg4) {
-		try {
-			if (arg0 != -70) {
-				flowObfuscator5 = -417;
+	private void mergeGroundDecorationNormals(@OriginalArg(1) int arg1, @OriginalArg(2) int arg2, @OriginalArg(3) Model arg3, @OriginalArg(4) int arg4) {
+		@Pc(19) SceneTile local19;
+		if (arg4 < this.maxTileX) {
+			local19 = this.levelTiles[arg1][arg4 + 1][arg2];
+			if (local19 != null && local19.groundDecoration != null && local19.groundDecoration.model.vertexNormal != null) {
+				this.mergeNormals(arg3, local19.groundDecoration.model, 128, 0, 0, true);
 			}
-			@Pc(19) SceneTile local19;
-			if (arg4 < this.maxTileX) {
-				local19 = this.levelTiles[arg1][arg4 + 1][arg2];
-				if (local19 != null && local19.groundDecoration != null && local19.groundDecoration.model.vertexNormal != null) {
-					this.mergeNormals(arg3, local19.groundDecoration.model, 128, 0, 0, true);
-				}
+		}
+		if (arg2 < this.maxTileX) {
+			local19 = this.levelTiles[arg1][arg4][arg2 + 1];
+			if (local19 != null && local19.groundDecoration != null && local19.groundDecoration.model.vertexNormal != null) {
+				this.mergeNormals(arg3, local19.groundDecoration.model, 0, 0, 128, true);
 			}
-			if (arg2 < this.maxTileX) {
-				local19 = this.levelTiles[arg1][arg4][arg2 + 1];
-				if (local19 != null && local19.groundDecoration != null && local19.groundDecoration.model.vertexNormal != null) {
-					this.mergeNormals(arg3, local19.groundDecoration.model, 0, 0, 128, true);
-				}
+		}
+		if (arg4 < this.maxTileX && arg2 < this.maxTileZ) {
+			local19 = this.levelTiles[arg1][arg4 + 1][arg2 + 1];
+			if (local19 != null && local19.groundDecoration != null && local19.groundDecoration.model.vertexNormal != null) {
+				this.mergeNormals(arg3, local19.groundDecoration.model, 128, 0, 128, true);
 			}
-			if (arg4 < this.maxTileX && arg2 < this.maxTileZ) {
-				local19 = this.levelTiles[arg1][arg4 + 1][arg2 + 1];
-				if (local19 != null && local19.groundDecoration != null && local19.groundDecoration.model.vertexNormal != null) {
-					this.mergeNormals(arg3, local19.groundDecoration.model, 128, 0, 128, true);
-				}
+		}
+		if (arg4 < this.maxTileX && arg2 > 0) {
+			local19 = this.levelTiles[arg1][arg4 + 1][arg2 - 1];
+			if (local19 != null && local19.groundDecoration != null && local19.groundDecoration.model.vertexNormal != null) {
+				this.mergeNormals(arg3, local19.groundDecoration.model, 128, 0, -128, true);
 			}
-			if (arg4 < this.maxTileX && arg2 > 0) {
-				local19 = this.levelTiles[arg1][arg4 + 1][arg2 - 1];
-				if (local19 != null && local19.groundDecoration != null && local19.groundDecoration.model.vertexNormal != null) {
-					this.mergeNormals(arg3, local19.groundDecoration.model, 128, 0, -128, true);
-					return;
-				}
-			}
-		} catch (@Pc(156) RuntimeException local156) {
-			Signlink.reporterror("2423, " + arg0 + ", " + arg1 + ", " + arg2 + ", " + arg3 + ", " + arg4 + ", " + local156.toString());
-			throw new RuntimeException();
 		}
 	}
 
 	@OriginalMember(owner = "client!r", name = "a", descriptor = "(IIIIILclient!eb;I)V")
-	private void mergeLocNormals(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2, @OriginalArg(3) int arg3, @OriginalArg(4) int arg4, @OriginalArg(5) Model arg5, @OriginalArg(6) int arg6) {
-		try {
-			@Pc(5) int local5 = 21 / arg4;
-			@Pc(7) boolean local7 = true;
-			@Pc(9) int local9 = arg0;
-			@Pc(13) int local13 = arg0 + arg1;
-			@Pc(17) int local17 = arg6 - 1;
-			@Pc(21) int local21 = arg6 + arg2;
-			for (@Pc(23) int local23 = arg3; local23 <= arg3 + 1; local23++) {
-				if (local23 != this.maxLevel) {
-					for (@Pc(31) int local31 = local9; local31 <= local13; local31++) {
-						if (local31 >= 0 && local31 < this.maxTileX) {
-							for (@Pc(42) int local42 = local17; local42 <= local21; local42++) {
-								if (local42 >= 0 && local42 < this.maxTileZ && (!local7 || local31 >= local13 || local42 >= local21 || local42 < arg6 && local31 != arg0)) {
-									@Pc(75) SceneTile local75 = this.levelTiles[local23][local31][local42];
-									if (local75 != null) {
-										@Pc(169) int local169 = (this.levelHeightmaps[local23][local31][local42] + this.levelHeightmaps[local23][local31 + 1][local42] + this.levelHeightmaps[local23][local31][local42 + 1] + this.levelHeightmaps[local23][local31 + 1][local42 + 1]) / 4 - (this.levelHeightmaps[arg3][arg0][arg6] + this.levelHeightmaps[arg3][arg0 + 1][arg6] + this.levelHeightmaps[arg3][arg0][arg6 + 1] + this.levelHeightmaps[arg3][arg0 + 1][arg6 + 1]) / 4;
-										@Pc(172) SceneWall local172 = local75.wall;
-										if (local172 != null && local172.modelA != null && local172.modelA.vertexNormal != null) {
-											this.mergeNormals(arg5, local172.modelA, (local31 - arg0) * 128 + (1 - arg1) * 64, local169, (local42 - arg6) * 128 + (1 - arg2) * 64, local7);
-										}
-										if (local172 != null && local172.modelB != null && local172.modelB.vertexNormal != null) {
-											this.mergeNormals(arg5, local172.modelB, (local31 - arg0) * 128 + (1 - arg1) * 64, local169, (local42 - arg6) * 128 + (1 - arg2) * 64, local7);
-										}
-										for (@Pc(250) int local250 = 0; local250 < local75.locCount; local250++) {
-											@Pc(257) SceneLoc local257 = local75.locs[local250];
-											if (local257 != null && local257.model != null && local257.model.vertexNormal != null) {
-												@Pc(274) int local274 = local257.maxSceneTileX + 1 - local257.minSceneTileX;
-												@Pc(282) int local282 = local257.maxSceneTileZ + 1 - local257.minSceneTileZ;
-												this.mergeNormals(arg5, local257.model, (local257.minSceneTileX - arg0) * 128 + (local274 - arg1) * 64, local169, (local257.minSceneTileZ - arg6) * 128 + (local282 - arg2) * 64, local7);
-											}
+	private void mergeLocNormals(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2, @OriginalArg(3) int arg3, @OriginalArg(5) Model arg5, @OriginalArg(6) int arg6) {
+		@Pc(7) boolean local7 = true;
+		@Pc(9) int local9 = arg0;
+		@Pc(13) int local13 = arg0 + arg1;
+		@Pc(17) int local17 = arg6 - 1;
+		@Pc(21) int local21 = arg6 + arg2;
+		for (@Pc(23) int local23 = arg3; local23 <= arg3 + 1; local23++) {
+			if (local23 != this.maxLevel) {
+				for (@Pc(31) int local31 = local9; local31 <= local13; local31++) {
+					if (local31 >= 0 && local31 < this.maxTileX) {
+						for (@Pc(42) int local42 = local17; local42 <= local21; local42++) {
+							if (local42 >= 0 && local42 < this.maxTileZ && (!local7 || local31 >= local13 || local42 >= local21 || local42 < arg6 && local31 != arg0)) {
+								@Pc(75) SceneTile local75 = this.levelTiles[local23][local31][local42];
+								if (local75 != null) {
+									@Pc(169) int local169 = (this.levelHeightmaps[local23][local31][local42] + this.levelHeightmaps[local23][local31 + 1][local42] + this.levelHeightmaps[local23][local31][local42 + 1] + this.levelHeightmaps[local23][local31 + 1][local42 + 1]) / 4 - (this.levelHeightmaps[arg3][arg0][arg6] + this.levelHeightmaps[arg3][arg0 + 1][arg6] + this.levelHeightmaps[arg3][arg0][arg6 + 1] + this.levelHeightmaps[arg3][arg0 + 1][arg6 + 1]) / 4;
+									@Pc(172) SceneWall local172 = local75.wall;
+									if (local172 != null && local172.modelA != null && local172.modelA.vertexNormal != null) {
+										this.mergeNormals(arg5, local172.modelA, (local31 - arg0) * 128 + (1 - arg1) * 64, local169, (local42 - arg6) * 128 + (1 - arg2) * 64, local7);
+									}
+									if (local172 != null && local172.modelB != null && local172.modelB.vertexNormal != null) {
+										this.mergeNormals(arg5, local172.modelB, (local31 - arg0) * 128 + (1 - arg1) * 64, local169, (local42 - arg6) * 128 + (1 - arg2) * 64, local7);
+									}
+									for (@Pc(250) int local250 = 0; local250 < local75.locCount; local250++) {
+										@Pc(257) SceneLoc local257 = local75.locs[local250];
+										if (local257 != null && local257.model != null && local257.model.vertexNormal != null) {
+											@Pc(274) int local274 = local257.maxSceneTileX + 1 - local257.minSceneTileX;
+											@Pc(282) int local282 = local257.maxSceneTileZ + 1 - local257.minSceneTileZ;
+											this.mergeNormals(arg5, local257.model, (local257.minSceneTileX - arg0) * 128 + (local274 - arg1) * 64, local169, (local257.minSceneTileZ - arg6) * 128 + (local282 - arg2) * 64, local7);
 										}
 									}
 								}
 							}
 						}
 					}
-					local9--;
-					local7 = false;
 				}
+				local9--;
+				local7 = false;
 			}
-		} catch (@Pc(337) RuntimeException local337) {
-			Signlink.reporterror("85496, " + arg0 + ", " + arg1 + ", " + arg2 + ", " + arg3 + ", " + arg4 + ", " + arg5 + ", " + arg6 + ", " + local337.toString());
-			throw new RuntimeException();
 		}
 	}
 
@@ -1319,193 +1058,178 @@ public final class Scene {
 	}
 
 	@OriginalMember(owner = "client!r", name = "e", descriptor = "(III)V")
-	public void click(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2) {
-		try {
-			takingInput = true;
-			mouseX = arg2;
-			if (arg0 >= 4 && arg0 <= 4) {
-				mouseY = arg1;
-				clickTileX = -1;
-				clickTileZ = -1;
-			}
-		} catch (@Pc(18) RuntimeException local18) {
-			Signlink.reporterror("6259, " + arg0 + ", " + arg1 + ", " + arg2 + ", " + local18.toString());
-			throw new RuntimeException();
-		}
+	public void click(@OriginalArg(1) int arg1, @OriginalArg(2) int arg2) {
+		takingInput = true;
+		mouseX = arg2;
+		mouseY = arg1;
+		clickTileX = -1;
+		clickTileZ = -1;
 	}
 
 	@OriginalMember(owner = "client!r", name = "a", descriptor = "(IIIIIII)V")
-	public void draw(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2, @OriginalArg(3) int arg3, @OriginalArg(4) int arg4, @OriginalArg(5) int arg5, @OriginalArg(6) int arg6, int loopCycle) {
-		try {
-			if (arg1 < 0) {
-				arg1 = 0;
-			} else if (arg1 >= this.maxTileX * 128) {
-				arg1 = this.maxTileX * 128 - 1;
-			}
-			if (arg5 < 0) {
-				arg5 = 0;
-			} else if (arg5 >= this.maxTileZ * 128) {
-				arg5 = this.maxTileZ * 128 - 1;
-			}
-			cycle++;
-			sinEyePitch = Model.sin[arg3];
-			cosEyePitch = Model.cos[arg3];
-			sinEyeYaw = Model.sin[arg0];
-			cosEyeYaw = Model.cos[arg0];
-			visibilityMap = visibilityMatrix[(arg3 - 128) / 32][arg0 / 64];
-			eyeX = arg1;
-			eyeY = arg4;
-			eyeZ = arg5;
-			eyeTileX = arg1 / 128;
-			eyeTileZ = arg5 / 128;
-			topLevel = arg2;
-			minDrawTileX = eyeTileX - 25;
-			if (minDrawTileX < 0) {
-				minDrawTileX = 0;
-			}
-			minDrawTileZ = eyeTileZ - 25;
-			if (minDrawTileZ < 0) {
-				minDrawTileZ = 0;
-			}
-			maxDrawTileX = eyeTileX + 25;
-			if (arg6 != 0) {
-				this.flowObfuscator3 = -462;
-			}
-			if (maxDrawTileX > this.maxTileX) {
-				maxDrawTileX = this.maxTileX;
-			}
-			maxDrawTileZ = eyeTileZ + 25;
-			if (maxDrawTileZ > this.maxTileZ) {
-				maxDrawTileZ = this.maxTileZ;
-			}
-			this.updateActiveOccluders(false);
-			tilesRemaining = 0;
-			@Pc(147) int local147;
-			@Pc(151) int local151;
-			for (@Pc(138) int local138 = this.minLevel; local138 < this.maxLevel; local138++) {
-				@Pc(145) SceneTile[][] local145 = this.levelTiles[local138];
-				for (local147 = minDrawTileX; local147 < maxDrawTileX; local147++) {
-					for (local151 = minDrawTileZ; local151 < maxDrawTileZ; local151++) {
-						@Pc(159) SceneTile local159 = local145[local147][local151];
-						if (local159 != null) {
-							if (local159.drawLevel <= arg2 && (visibilityMap[local147 + 25 - eyeTileX][local151 + 25 - eyeTileZ] || this.levelHeightmaps[local138][local147][local151] - arg4 >= 2000)) {
-								local159.visible = true;
-								local159.update = true;
-								if (local159.locCount > 0) {
-									local159.containsLocs = true;
-								} else {
-									local159.containsLocs = false;
-								}
-								tilesRemaining++;
+	public void draw(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2, @OriginalArg(3) int arg3, @OriginalArg(4) int arg4, @OriginalArg(5) int arg5, int loopCycle) {
+		if (arg1 < 0) {
+			arg1 = 0;
+		} else if (arg1 >= this.maxTileX * 128) {
+			arg1 = this.maxTileX * 128 - 1;
+		}
+		if (arg5 < 0) {
+			arg5 = 0;
+		} else if (arg5 >= this.maxTileZ * 128) {
+			arg5 = this.maxTileZ * 128 - 1;
+		}
+		cycle++;
+		sinEyePitch = Model.sin[arg3];
+		cosEyePitch = Model.cos[arg3];
+		sinEyeYaw = Model.sin[arg0];
+		cosEyeYaw = Model.cos[arg0];
+		visibilityMap = visibilityMatrix[(arg3 - 128) / 32][arg0 / 64];
+		eyeX = arg1;
+		eyeY = arg4;
+		eyeZ = arg5;
+		eyeTileX = arg1 / 128;
+		eyeTileZ = arg5 / 128;
+		topLevel = arg2;
+		minDrawTileX = eyeTileX - 25;
+		if (minDrawTileX < 0) {
+			minDrawTileX = 0;
+		}
+		minDrawTileZ = eyeTileZ - 25;
+		if (minDrawTileZ < 0) {
+			minDrawTileZ = 0;
+		}
+		maxDrawTileX = eyeTileX + 25;
+		if (maxDrawTileX > this.maxTileX) {
+			maxDrawTileX = this.maxTileX;
+		}
+		maxDrawTileZ = eyeTileZ + 25;
+		if (maxDrawTileZ > this.maxTileZ) {
+			maxDrawTileZ = this.maxTileZ;
+		}
+		this.updateActiveOccluders();
+		tilesRemaining = 0;
+		@Pc(147) int local147;
+		@Pc(151) int local151;
+		for (@Pc(138) int local138 = this.minLevel; local138 < this.maxLevel; local138++) {
+			@Pc(145) SceneTile[][] local145 = this.levelTiles[local138];
+			for (local147 = minDrawTileX; local147 < maxDrawTileX; local147++) {
+				for (local151 = minDrawTileZ; local151 < maxDrawTileZ; local151++) {
+					@Pc(159) SceneTile local159 = local145[local147][local151];
+					if (local159 != null) {
+						if (local159.drawLevel <= arg2 && (visibilityMap[local147 + 25 - eyeTileX][local151 + 25 - eyeTileZ] || this.levelHeightmaps[local138][local147][local151] - arg4 >= 2000)) {
+							local159.visible = true;
+							local159.update = true;
+							if (local159.locCount > 0) {
+								local159.containsLocs = true;
 							} else {
-								local159.visible = false;
-								local159.update = false;
-								local159.checkLocSpans = 0;
+								local159.containsLocs = false;
 							}
+							tilesRemaining++;
+						} else {
+							local159.visible = false;
+							local159.update = false;
+							local159.checkLocSpans = 0;
 						}
 					}
 				}
 			}
-			@Pc(258) int local258;
-			@Pc(266) int local266;
-			@Pc(272) int local272;
-			@Pc(276) int local276;
-			@Pc(254) int local254;
-			for (@Pc(239) int local239 = this.minLevel; local239 < this.maxLevel; local239++) {
-				@Pc(246) SceneTile[][] local246 = this.levelTiles[local239];
-				for (local151 = -25; local151 <= 0; local151++) {
-					local254 = eyeTileX + local151;
-					local258 = eyeTileX - local151;
-					if (local254 >= minDrawTileX || local258 < maxDrawTileX) {
-						for (local266 = -25; local266 <= 0; local266++) {
-							local272 = eyeTileZ + local266;
-							local276 = eyeTileZ - local266;
-							@Pc(288) SceneTile local288;
-							if (local254 >= minDrawTileX) {
-								if (local272 >= minDrawTileZ) {
-									local288 = local246[local254][local272];
-									if (local288 != null && local288.visible) {
-										this.drawTile(local288, true, loopCycle);
-									}
-								}
-								if (local276 < maxDrawTileZ) {
-									local288 = local246[local254][local276];
-									if (local288 != null && local288.visible) {
-										this.drawTile(local288, true, loopCycle);
-									}
+		}
+		@Pc(258) int local258;
+		@Pc(266) int local266;
+		@Pc(272) int local272;
+		@Pc(276) int local276;
+		@Pc(254) int local254;
+		for (@Pc(239) int local239 = this.minLevel; local239 < this.maxLevel; local239++) {
+			@Pc(246) SceneTile[][] local246 = this.levelTiles[local239];
+			for (local151 = -25; local151 <= 0; local151++) {
+				local254 = eyeTileX + local151;
+				local258 = eyeTileX - local151;
+				if (local254 >= minDrawTileX || local258 < maxDrawTileX) {
+					for (local266 = -25; local266 <= 0; local266++) {
+						local272 = eyeTileZ + local266;
+						local276 = eyeTileZ - local266;
+						@Pc(288) SceneTile local288;
+						if (local254 >= minDrawTileX) {
+							if (local272 >= minDrawTileZ) {
+								local288 = local246[local254][local272];
+								if (local288 != null && local288.visible) {
+									this.drawTile(local288, true, loopCycle);
 								}
 							}
-							if (local258 < maxDrawTileX) {
-								if (local272 >= minDrawTileZ) {
-									local288 = local246[local258][local272];
-									if (local288 != null && local288.visible) {
-										this.drawTile(local288, true, loopCycle);
-									}
-								}
-								if (local276 < maxDrawTileZ) {
-									local288 = local246[local258][local276];
-									if (local288 != null && local288.visible) {
-										this.drawTile(local288, true, loopCycle);
-									}
+							if (local276 < maxDrawTileZ) {
+								local288 = local246[local254][local276];
+								if (local288 != null && local288.visible) {
+									this.drawTile(local288, true, loopCycle);
 								}
 							}
-							if (tilesRemaining == 0) {
-								takingInput = false;
-								return;
+						}
+						if (local258 < maxDrawTileX) {
+							if (local272 >= minDrawTileZ) {
+								local288 = local246[local258][local272];
+								if (local288 != null && local288.visible) {
+									this.drawTile(local288, true, loopCycle);
+								}
 							}
+							if (local276 < maxDrawTileZ) {
+								local288 = local246[local258][local276];
+								if (local288 != null && local288.visible) {
+									this.drawTile(local288, true, loopCycle);
+								}
+							}
+						}
+						if (tilesRemaining == 0) {
+							takingInput = false;
+							return;
 						}
 					}
 				}
 			}
-			for (local147 = this.minLevel; local147 < this.maxLevel; local147++) {
-				@Pc(380) SceneTile[][] local380 = this.levelTiles[local147];
-				for (local254 = -25; local254 <= 0; local254++) {
-					local258 = eyeTileX + local254;
-					local266 = eyeTileX - local254;
-					if (local258 >= minDrawTileX || local266 < maxDrawTileX) {
-						for (local272 = -25; local272 <= 0; local272++) {
-							local276 = eyeTileZ + local272;
-							@Pc(410) int local410 = eyeTileZ - local272;
-							@Pc(422) SceneTile local422;
-							if (local258 >= minDrawTileX) {
-								if (local276 >= minDrawTileZ) {
-									local422 = local380[local258][local276];
-									if (local422 != null && local422.visible) {
-										this.drawTile(local422, false, loopCycle);
-									}
-								}
-								if (local410 < maxDrawTileZ) {
-									local422 = local380[local258][local410];
-									if (local422 != null && local422.visible) {
-										this.drawTile(local422, false, loopCycle);
-									}
+		}
+		for (local147 = this.minLevel; local147 < this.maxLevel; local147++) {
+			@Pc(380) SceneTile[][] local380 = this.levelTiles[local147];
+			for (local254 = -25; local254 <= 0; local254++) {
+				local258 = eyeTileX + local254;
+				local266 = eyeTileX - local254;
+				if (local258 >= minDrawTileX || local266 < maxDrawTileX) {
+					for (local272 = -25; local272 <= 0; local272++) {
+						local276 = eyeTileZ + local272;
+						@Pc(410) int local410 = eyeTileZ - local272;
+						@Pc(422) SceneTile local422;
+						if (local258 >= minDrawTileX) {
+							if (local276 >= minDrawTileZ) {
+								local422 = local380[local258][local276];
+								if (local422 != null && local422.visible) {
+									this.drawTile(local422, false, loopCycle);
 								}
 							}
-							if (local266 < maxDrawTileX) {
-								if (local276 >= minDrawTileZ) {
-									local422 = local380[local266][local276];
-									if (local422 != null && local422.visible) {
-										this.drawTile(local422, false, loopCycle);
-									}
-								}
-								if (local410 < maxDrawTileZ) {
-									local422 = local380[local266][local410];
-									if (local422 != null && local422.visible) {
-										this.drawTile(local422, false, loopCycle);
-									}
+							if (local410 < maxDrawTileZ) {
+								local422 = local380[local258][local410];
+								if (local422 != null && local422.visible) {
+									this.drawTile(local422, false, loopCycle);
 								}
 							}
-							if (tilesRemaining == 0) {
-								takingInput = false;
-								return;
+						}
+						if (local266 < maxDrawTileX) {
+							if (local276 >= minDrawTileZ) {
+								local422 = local380[local266][local276];
+								if (local422 != null && local422.visible) {
+									this.drawTile(local422, false, loopCycle);
+								}
 							}
+							if (local410 < maxDrawTileZ) {
+								local422 = local380[local266][local410];
+								if (local422 != null && local422.visible) {
+									this.drawTile(local422, false, loopCycle);
+								}
+							}
+						}
+						if (tilesRemaining == 0) {
+							takingInput = false;
+							return;
 						}
 					}
 				}
 			}
-		} catch (@Pc(506) RuntimeException local506) {
-			Signlink.reporterror("14817, " + arg0 + ", " + arg1 + ", " + arg2 + ", " + arg3 + ", " + arg4 + ", " + arg5 + ", " + arg6 + ", " + local506.toString());
-			throw new RuntimeException();
 		}
 	}
 
@@ -1594,7 +1318,7 @@ public final class Scene {
 												local49 = local8.bridge;
 												if (local49.underlay == null) {
 													if (local49.overlay != null && !this.tileVisible(0, local17, local20)) {
-														this.drawTileOverlay(sinEyeYaw, local20, local49.overlay, local17, cosEyePitch, sinEyePitch, cosEyeYaw, true);
+														this.drawTileOverlay(sinEyeYaw, local20, local49.overlay, local17, cosEyePitch, sinEyePitch, cosEyeYaw);
 													}
 												} else if (!this.tileVisible(0, local17, local20)) {
 													this.drawTileUnderlay(local49.underlay, 0, sinEyePitch, cosEyePitch, sinEyeYaw, cosEyeYaw, local17, local20);
@@ -1608,7 +1332,7 @@ public final class Scene {
 													if (var12 != null) {
 														@Pc(265) Model local265 = var12.model;
 														if (local265 == null) {
-															local265 = var12.entity.draw(true, loopCycle);
+															local265 = var12.entity.draw(loopCycle);
 														}
 														local265.draw(var12.yaw, sinEyePitch, cosEyePitch, sinEyeYaw, cosEyeYaw, var12.x - eyeX, var12.y - eyeY, var12.z - eyeZ, var12.bitset);
 													}
@@ -1618,7 +1342,7 @@ public final class Scene {
 											if (local8.underlay == null) {
 												if (local8.overlay != null && !this.tileVisible(local26, local17, local20)) {
 													var23 = true;
-													this.drawTileOverlay(sinEyeYaw, local20, local8.overlay, local17, cosEyePitch, sinEyePitch, cosEyeYaw, true);
+													this.drawTileOverlay(sinEyeYaw, local20, local8.overlay, local17, cosEyePitch, sinEyePitch, cosEyeYaw);
 												}
 											} else if (!this.tileVisible(local26, local17, local20)) {
 												var23 = true;
@@ -1835,7 +1559,7 @@ public final class Scene {
 											local1154.cycle = cycle;
 											@Pc(1184) Model local1184 = local1154.model;
 											if (local1184 == null) {
-												local1184 = local1154.entity.draw(true, loopCycle);
+												local1184 = local1154.entity.draw(loopCycle);
 											}
 											if (!this.locVisible(local26, local1154.minSceneTileX, local1154.maxSceneTileX, local1154.minSceneTileZ, local1154.maxSceneTileZ, local1184.maxY)) {
 												local1184.draw(local1154.yaw, sinEyePitch, cosEyePitch, sinEyeYaw, cosEyeYaw, local1154.x - eyeX, local1154.y - eyeY, local1154.z - eyeZ, local1154.bitset);
@@ -2041,7 +1765,7 @@ public final class Scene {
 				}
 			} else if (lowMemory) {
 				local476 = TEXTURE_HSL[arg0.textureId];
-				Draw3D.fillGouraudTriangle(local321, local337, local305, local313, local329, local297, this.mulLightness(arg0.northeastColor, local476, 9), this.mulLightness(arg0.northwestColor, local476, 9), this.mulLightness(arg0.southeastColor, local476, 9));
+				Draw3D.fillGouraudTriangle(local321, local337, local305, local313, local329, local297, this.mulLightness(arg0.northeastColor, local476), this.mulLightness(arg0.northwestColor, local476), this.mulLightness(arg0.southeastColor, local476));
 			} else if (arg0.flat) {
 				Draw3D.fillTexturedTriangle(local321, local337, local305, local313, local329, local297, arg0.northeastColor, arg0.northwestColor, arg0.southeastColor, local103, local23, local247, local125, local53, local91, local123, local171, local267, arg0.textureId);
 			} else {
@@ -2065,7 +1789,7 @@ public final class Scene {
 				return;
 			}
 			local476 = TEXTURE_HSL[arg0.textureId];
-			Draw3D.fillGouraudTriangle(local289, local305, local337, local281, local297, local329, this.mulLightness(arg0.southwestColor, local476, 9), this.mulLightness(arg0.southeastColor, local476, 9), this.mulLightness(arg0.northwestColor, local476, 9));
+			Draw3D.fillGouraudTriangle(local289, local305, local337, local281, local297, local329, this.mulLightness(arg0.southwestColor, local476), this.mulLightness(arg0.southeastColor, local476), this.mulLightness(arg0.northwestColor, local476));
 		} else if (arg0.southwestColor != 12345678) {
 			Draw3D.fillGouraudTriangle(local289, local305, local337, local281, local297, local329, arg0.southwestColor, arg0.southeastColor, arg0.northwestColor);
 			return;
@@ -2073,93 +1797,78 @@ public final class Scene {
 	}
 
 	@OriginalMember(owner = "client!r", name = "a", descriptor = "(IILclient!i;IIIIZ)V")
-	private void drawTileOverlay(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(2) SceneTileOverlay arg2, @OriginalArg(3) int arg3, @OriginalArg(4) int arg4, @OriginalArg(5) int arg5, @OriginalArg(6) int arg6, @OriginalArg(7) boolean arg7) {
-		try {
-			@Pc(5) int local5 = arg2.vertexX.length;
-			@Pc(16) int local16;
-			@Pc(23) int local23;
-			@Pc(30) int local30;
-			@Pc(40) int local40;
-			for (@Pc(7) int local7 = 0; local7 < local5; local7++) {
-				local16 = arg2.vertexX[local7] - eyeX;
-				local23 = arg2.vertexY[local7] - eyeY;
-				local30 = arg2.vertexZ[local7] - eyeZ;
-				local40 = local30 * arg0 + local16 * arg6 >> 16;
-				@Pc(50) int local50 = local30 * arg6 - local16 * arg0 >> 16;
-				@Pc(62) int local62 = local23 * arg4 - local50 * arg5 >> 16;
-				@Pc(72) int local72 = local23 * arg5 + local50 * arg4 >> 16;
-				if (local72 < 50) {
-					return;
-				}
-				if (arg2.triangleTextureIds != null) {
-					SceneTileOverlay.tmpViewspaceX[local7] = local40;
-					SceneTileOverlay.tmpViewspaceY[local7] = local62;
-					SceneTileOverlay.tmpViewspaceZ[local7] = local72;
-				}
-				SceneTileOverlay.tmpScreenX[local7] = Draw3D.centerX + (local40 << 9) / local72;
-				SceneTileOverlay.tmpScreenY[local7] = Draw3D.centerY + (local62 << 9) / local72;
+	private void drawTileOverlay(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(2) SceneTileOverlay arg2, @OriginalArg(3) int arg3, @OriginalArg(4) int arg4, @OriginalArg(5) int arg5, @OriginalArg(6) int arg6) {
+		@Pc(5) int local5 = arg2.vertexX.length;
+		@Pc(16) int local16;
+		@Pc(23) int local23;
+		@Pc(30) int local30;
+		@Pc(40) int local40;
+		for (@Pc(7) int local7 = 0; local7 < local5; local7++) {
+			local16 = arg2.vertexX[local7] - eyeX;
+			local23 = arg2.vertexY[local7] - eyeY;
+			local30 = arg2.vertexZ[local7] - eyeZ;
+			local40 = local30 * arg0 + local16 * arg6 >> 16;
+			@Pc(50) int local50 = local30 * arg6 - local16 * arg0 >> 16;
+			@Pc(62) int local62 = local23 * arg4 - local50 * arg5 >> 16;
+			@Pc(72) int local72 = local23 * arg5 + local50 * arg4 >> 16;
+			if (local72 < 50) {
+				return;
 			}
-			Draw3D.alpha = 0;
-			local5 = arg2.triangleVertexA.length;
-			if (arg7) {
-				for (local16 = 0; local16 < local5; local16++) {
-					local23 = arg2.triangleVertexA[local16];
-					local30 = arg2.triangleVertexB[local16];
-					local40 = arg2.triangleVertexC[local16];
-					@Pc(149) int local149 = SceneTileOverlay.tmpScreenX[local23];
-					@Pc(153) int local153 = SceneTileOverlay.tmpScreenX[local30];
-					@Pc(157) int local157 = SceneTileOverlay.tmpScreenX[local40];
-					@Pc(161) int local161 = SceneTileOverlay.tmpScreenY[local23];
-					@Pc(165) int local165 = SceneTileOverlay.tmpScreenY[local30];
-					@Pc(169) int local169 = SceneTileOverlay.tmpScreenY[local40];
-					if ((local149 - local153) * (local169 - local165) - (local161 - local165) * (local157 - local153) > 0) {
-						Draw3D.clipX = false;
-						if (local149 < 0 || local153 < 0 || local157 < 0 || local149 > Draw2D.boundX || local153 > Draw2D.boundX || local157 > Draw2D.boundX) {
-							Draw3D.clipX = true;
-						}
-						if (takingInput && this.pointInsideTriangle(mouseX, mouseY, local161, local165, local169, local149, local153, local157)) {
-							clickTileX = arg3;
-							clickTileZ = arg1;
-						}
-						if (arg2.triangleTextureIds == null || arg2.triangleTextureIds[local16] == -1) {
-							if (arg2.triangleColorA[local16] != 12345678) {
-								Draw3D.fillGouraudTriangle(local161, local165, local169, local149, local153, local157, arg2.triangleColorA[local16], arg2.triangleColorB[local16], arg2.triangleColorC[local16]);
-							}
-						} else if (lowMemory) {
-							@Pc(373) int local373 = TEXTURE_HSL[arg2.triangleTextureIds[local16]];
-							Draw3D.fillGouraudTriangle(local161, local165, local169, local149, local153, local157, this.mulLightness(arg2.triangleColorA[local16], local373, 9), this.mulLightness(arg2.triangleColorB[local16], local373, 9), this.mulLightness(arg2.triangleColorC[local16], local373, 9));
-						} else if (arg2.flat) {
-							Draw3D.fillTexturedTriangle(local161, local165, local169, local149, local153, local157, arg2.triangleColorA[local16], arg2.triangleColorB[local16], arg2.triangleColorC[local16], SceneTileOverlay.tmpViewspaceX[0], SceneTileOverlay.tmpViewspaceX[1], SceneTileOverlay.tmpViewspaceX[3], SceneTileOverlay.tmpViewspaceY[0], SceneTileOverlay.tmpViewspaceY[1], SceneTileOverlay.tmpViewspaceY[3], SceneTileOverlay.tmpViewspaceZ[0], SceneTileOverlay.tmpViewspaceZ[1], SceneTileOverlay.tmpViewspaceZ[3], arg2.triangleTextureIds[local16]);
-						} else {
-							Draw3D.fillTexturedTriangle(local161, local165, local169, local149, local153, local157, arg2.triangleColorA[local16], arg2.triangleColorB[local16], arg2.triangleColorC[local16], SceneTileOverlay.tmpViewspaceX[local23], SceneTileOverlay.tmpViewspaceX[local30], SceneTileOverlay.tmpViewspaceX[local40], SceneTileOverlay.tmpViewspaceY[local23], SceneTileOverlay.tmpViewspaceY[local30], SceneTileOverlay.tmpViewspaceY[local40], SceneTileOverlay.tmpViewspaceZ[local23], SceneTileOverlay.tmpViewspaceZ[local30], SceneTileOverlay.tmpViewspaceZ[local40], arg2.triangleTextureIds[local16]);
-						}
+			if (arg2.triangleTextureIds != null) {
+				SceneTileOverlay.tmpViewspaceX[local7] = local40;
+				SceneTileOverlay.tmpViewspaceY[local7] = local62;
+				SceneTileOverlay.tmpViewspaceZ[local7] = local72;
+			}
+			SceneTileOverlay.tmpScreenX[local7] = Draw3D.centerX + (local40 << 9) / local72;
+			SceneTileOverlay.tmpScreenY[local7] = Draw3D.centerY + (local62 << 9) / local72;
+		}
+		Draw3D.alpha = 0;
+		local5 = arg2.triangleVertexA.length;
+		for (local16 = 0; local16 < local5; local16++) {
+			local23 = arg2.triangleVertexA[local16];
+			local30 = arg2.triangleVertexB[local16];
+			local40 = arg2.triangleVertexC[local16];
+			@Pc(149) int local149 = SceneTileOverlay.tmpScreenX[local23];
+			@Pc(153) int local153 = SceneTileOverlay.tmpScreenX[local30];
+			@Pc(157) int local157 = SceneTileOverlay.tmpScreenX[local40];
+			@Pc(161) int local161 = SceneTileOverlay.tmpScreenY[local23];
+			@Pc(165) int local165 = SceneTileOverlay.tmpScreenY[local30];
+			@Pc(169) int local169 = SceneTileOverlay.tmpScreenY[local40];
+			if ((local149 - local153) * (local169 - local165) - (local161 - local165) * (local157 - local153) > 0) {
+				Draw3D.clipX = false;
+				if (local149 < 0 || local153 < 0 || local157 < 0 || local149 > Draw2D.boundX || local153 > Draw2D.boundX || local157 > Draw2D.boundX) {
+					Draw3D.clipX = true;
+				}
+				if (takingInput && this.pointInsideTriangle(mouseX, mouseY, local161, local165, local169, local149, local153, local157)) {
+					clickTileX = arg3;
+					clickTileZ = arg1;
+				}
+				if (arg2.triangleTextureIds == null || arg2.triangleTextureIds[local16] == -1) {
+					if (arg2.triangleColorA[local16] != 12345678) {
+						Draw3D.fillGouraudTriangle(local161, local165, local169, local149, local153, local157, arg2.triangleColorA[local16], arg2.triangleColorB[local16], arg2.triangleColorC[local16]);
 					}
+				} else if (lowMemory) {
+					@Pc(373) int local373 = TEXTURE_HSL[arg2.triangleTextureIds[local16]];
+					Draw3D.fillGouraudTriangle(local161, local165, local169, local149, local153, local157, this.mulLightness(arg2.triangleColorA[local16], local373), this.mulLightness(arg2.triangleColorB[local16], local373), this.mulLightness(arg2.triangleColorC[local16], local373));
+				} else if (arg2.flat) {
+					Draw3D.fillTexturedTriangle(local161, local165, local169, local149, local153, local157, arg2.triangleColorA[local16], arg2.triangleColorB[local16], arg2.triangleColorC[local16], SceneTileOverlay.tmpViewspaceX[0], SceneTileOverlay.tmpViewspaceX[1], SceneTileOverlay.tmpViewspaceX[3], SceneTileOverlay.tmpViewspaceY[0], SceneTileOverlay.tmpViewspaceY[1], SceneTileOverlay.tmpViewspaceY[3], SceneTileOverlay.tmpViewspaceZ[0], SceneTileOverlay.tmpViewspaceZ[1], SceneTileOverlay.tmpViewspaceZ[3], arg2.triangleTextureIds[local16]);
+				} else {
+					Draw3D.fillTexturedTriangle(local161, local165, local169, local149, local153, local157, arg2.triangleColorA[local16], arg2.triangleColorB[local16], arg2.triangleColorC[local16], SceneTileOverlay.tmpViewspaceX[local23], SceneTileOverlay.tmpViewspaceX[local30], SceneTileOverlay.tmpViewspaceX[local40], SceneTileOverlay.tmpViewspaceY[local23], SceneTileOverlay.tmpViewspaceY[local30], SceneTileOverlay.tmpViewspaceY[local40], SceneTileOverlay.tmpViewspaceZ[local23], SceneTileOverlay.tmpViewspaceZ[local30], SceneTileOverlay.tmpViewspaceZ[local40], arg2.triangleTextureIds[local16]);
 				}
 			}
-		} catch (@Pc(410) RuntimeException local410) {
-			Signlink.reporterror("35054, " + arg0 + ", " + arg1 + ", " + arg2 + ", " + arg3 + ", " + arg4 + ", " + arg5 + ", " + arg6 + ", " + arg7 + ", " + local410.toString());
-			throw new RuntimeException();
 		}
 	}
 
 	@OriginalMember(owner = "client!r", name = "f", descriptor = "(III)I")
-	private int mulLightness(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2) {
-		try {
-			@Pc(3) int local3 = 127 - arg0;
-			if (arg2 < 9 || arg2 > 9) {
-				return 4;
-			}
-			arg0 = local3 * (arg1 & 0x7F) / 160;
-			if (arg0 < 2) {
-				arg0 = 2;
-			} else if (arg0 > 126) {
-				arg0 = 126;
-			}
-			return (arg1 & 0xFF80) + arg0;
-		} catch (@Pc(38) RuntimeException local38) {
-			Signlink.reporterror("2630, " + arg0 + ", " + arg1 + ", " + arg2 + ", " + local38.toString());
-			throw new RuntimeException();
+	private int mulLightness(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1) {
+		@Pc(3) int local3 = 127 - arg0;
+		arg0 = local3 * (arg1 & 0x7F) / 160;
+		if (arg0 < 2) {
+			arg0 = 2;
+		} else if (arg0 > 126) {
+			arg0 = 126;
 		}
+		return (arg1 & 0xFF80) + arg0;
 	}
 
 	@OriginalMember(owner = "client!r", name = "a", descriptor = "(IIIIIIII)Z")
@@ -2181,137 +1890,129 @@ public final class Scene {
 	}
 
 	@OriginalMember(owner = "client!r", name = "b", descriptor = "(Z)V")
-	private void updateActiveOccluders(@OriginalArg(0) boolean arg0) {
-		try {
-			@Pc(5) int local5 = levelOccluderCount[topLevel];
-			@Pc(9) SceneOccluder[] local9 = levelOccluders[topLevel];
-			activeOccluderCount = 0;
-			for (@Pc(13) int local13 = 0; local13 < local5; local13++) {
-				@Pc(19) SceneOccluder local19 = local9[local13];
-				@Pc(30) int local30;
-				@Pc(43) int local43;
-				@Pc(54) int local54;
-				@Pc(84) int local84;
-				@Pc(61) boolean local61;
-				if (local19.type == 1) {
-					local30 = local19.minTileX + 25 - eyeTileX;
-					if (local30 >= 0 && local30 <= 50) {
-						local43 = local19.minTileZ + 25 - eyeTileZ;
-						if (local43 < 0) {
-							local43 = 0;
-						}
-						local54 = local19.maxTileZ + 25 - eyeTileZ;
-						if (local54 > 50) {
-							local54 = 50;
-						}
-						local61 = false;
-						while (local43 <= local54) {
-							if (visibilityMap[local30][local43++]) {
-								local61 = true;
-								break;
-							}
-						}
-						if (local61) {
-							local84 = eyeX - local19.minX;
-							if (local84 > 32) {
-								local19.mode = 1;
-							} else {
-								if (local84 >= -32) {
-									continue;
-								}
-								local19.mode = 2;
-								local84 = -local84;
-							}
-							local19.minDeltaZ = (local19.minZ - eyeZ << 8) / local84;
-							local19.maxDeltaZ = (local19.maxZ - eyeZ << 8) / local84;
-							local19.minDeltaY = (local19.minY - eyeY << 8) / local84;
-							local19.maxDeltaY = (local19.maxY - eyeY << 8) / local84;
-							activeOccluders[activeOccluderCount++] = local19;
+	private void updateActiveOccluders() {
+		@Pc(5) int local5 = levelOccluderCount[topLevel];
+		@Pc(9) SceneOccluder[] local9 = levelOccluders[topLevel];
+		activeOccluderCount = 0;
+		for (@Pc(13) int local13 = 0; local13 < local5; local13++) {
+			@Pc(19) SceneOccluder local19 = local9[local13];
+			@Pc(30) int local30;
+			@Pc(43) int local43;
+			@Pc(54) int local54;
+			@Pc(84) int local84;
+			@Pc(61) boolean local61;
+			if (local19.type == 1) {
+				local30 = local19.minTileX + 25 - eyeTileX;
+				if (local30 >= 0 && local30 <= 50) {
+					local43 = local19.minTileZ + 25 - eyeTileZ;
+					if (local43 < 0) {
+						local43 = 0;
+					}
+					local54 = local19.maxTileZ + 25 - eyeTileZ;
+					if (local54 > 50) {
+						local54 = 50;
+					}
+					local61 = false;
+					while (local43 <= local54) {
+						if (visibilityMap[local30][local43++]) {
+							local61 = true;
+							break;
 						}
 					}
-				} else if (local19.type == 2) {
-					local30 = local19.minTileZ + 25 - eyeTileZ;
-					if (local30 >= 0 && local30 <= 50) {
-						local43 = local19.minTileX + 25 - eyeTileX;
-						if (local43 < 0) {
-							local43 = 0;
-						}
-						local54 = local19.maxTileX + 25 - eyeTileX;
-						if (local54 > 50) {
-							local54 = 50;
-						}
-						local61 = false;
-						while (local43 <= local54) {
-							if (visibilityMap[local43++][local30]) {
-								local61 = true;
-								break;
+					if (local61) {
+						local84 = eyeX - local19.minX;
+						if (local84 > 32) {
+							local19.mode = 1;
+						} else {
+							if (local84 >= -32) {
+								continue;
 							}
+							local19.mode = 2;
+							local84 = -local84;
 						}
-						if (local61) {
-							local84 = eyeZ - local19.minZ;
-							if (local84 > 32) {
-								local19.mode = 3;
-							} else {
-								if (local84 >= -32) {
-									continue;
-								}
-								local19.mode = 4;
-								local84 = -local84;
-							}
-							local19.minDeltaX = (local19.minX - eyeX << 8) / local84;
-							local19.maxDeltaX = (local19.maxX - eyeX << 8) / local84;
-							local19.minDeltaY = (local19.minY - eyeY << 8) / local84;
-							local19.maxDeltaY = (local19.maxY - eyeY << 8) / local84;
-							activeOccluders[activeOccluderCount++] = local19;
+						local19.minDeltaZ = (local19.minZ - eyeZ << 8) / local84;
+						local19.maxDeltaZ = (local19.maxZ - eyeZ << 8) / local84;
+						local19.minDeltaY = (local19.minY - eyeY << 8) / local84;
+						local19.maxDeltaY = (local19.maxY - eyeY << 8) / local84;
+						activeOccluders[activeOccluderCount++] = local19;
+					}
+				}
+			} else if (local19.type == 2) {
+				local30 = local19.minTileZ + 25 - eyeTileZ;
+				if (local30 >= 0 && local30 <= 50) {
+					local43 = local19.minTileX + 25 - eyeTileX;
+					if (local43 < 0) {
+						local43 = 0;
+					}
+					local54 = local19.maxTileX + 25 - eyeTileX;
+					if (local54 > 50) {
+						local54 = 50;
+					}
+					local61 = false;
+					while (local43 <= local54) {
+						if (visibilityMap[local43++][local30]) {
+							local61 = true;
+							break;
 						}
 					}
-				} else if (local19.type == 4) {
-					local30 = local19.minY - eyeY;
-					if (local30 > 128) {
-						local43 = local19.minTileZ + 25 - eyeTileZ;
-						if (local43 < 0) {
-							local43 = 0;
-						}
-						local54 = local19.maxTileZ + 25 - eyeTileZ;
-						if (local54 > 50) {
-							local54 = 50;
-						}
-						if (local43 <= local54) {
-							@Pc(330) int local330 = local19.minTileX + 25 - eyeTileX;
-							if (local330 < 0) {
-								local330 = 0;
+					if (local61) {
+						local84 = eyeZ - local19.minZ;
+						if (local84 > 32) {
+							local19.mode = 3;
+						} else {
+							if (local84 >= -32) {
+								continue;
 							}
-							local84 = local19.maxTileX + 25 - eyeTileX;
-							if (local84 > 50) {
-								local84 = 50;
-							}
-							@Pc(348) boolean local348 = false;
-							label149: for (@Pc(350) int local350 = local330; local350 <= local84; local350++) {
-								for (@Pc(354) int local354 = local43; local354 <= local54; local354++) {
-									if (visibilityMap[local350][local354]) {
-										local348 = true;
-										break label149;
-									}
+							local19.mode = 4;
+							local84 = -local84;
+						}
+						local19.minDeltaX = (local19.minX - eyeX << 8) / local84;
+						local19.maxDeltaX = (local19.maxX - eyeX << 8) / local84;
+						local19.minDeltaY = (local19.minY - eyeY << 8) / local84;
+						local19.maxDeltaY = (local19.maxY - eyeY << 8) / local84;
+						activeOccluders[activeOccluderCount++] = local19;
+					}
+				}
+			} else if (local19.type == 4) {
+				local30 = local19.minY - eyeY;
+				if (local30 > 128) {
+					local43 = local19.minTileZ + 25 - eyeTileZ;
+					if (local43 < 0) {
+						local43 = 0;
+					}
+					local54 = local19.maxTileZ + 25 - eyeTileZ;
+					if (local54 > 50) {
+						local54 = 50;
+					}
+					if (local43 <= local54) {
+						@Pc(330) int local330 = local19.minTileX + 25 - eyeTileX;
+						if (local330 < 0) {
+							local330 = 0;
+						}
+						local84 = local19.maxTileX + 25 - eyeTileX;
+						if (local84 > 50) {
+							local84 = 50;
+						}
+						@Pc(348) boolean local348 = false;
+						label149: for (@Pc(350) int local350 = local330; local350 <= local84; local350++) {
+							for (@Pc(354) int local354 = local43; local354 <= local54; local354++) {
+								if (visibilityMap[local350][local354]) {
+									local348 = true;
+									break label149;
 								}
 							}
-							if (local348) {
-								local19.mode = 5;
-								local19.minDeltaX = (local19.minX - eyeX << 8) / local30;
-								local19.maxDeltaX = (local19.maxX - eyeX << 8) / local30;
-								local19.minDeltaZ = (local19.minZ - eyeZ << 8) / local30;
-								local19.maxDeltaZ = (local19.maxZ - eyeZ << 8) / local30;
-								activeOccluders[activeOccluderCount++] = local19;
-							}
+						}
+						if (local348) {
+							local19.mode = 5;
+							local19.minDeltaX = (local19.minX - eyeX << 8) / local30;
+							local19.maxDeltaX = (local19.maxX - eyeX << 8) / local30;
+							local19.minDeltaZ = (local19.minZ - eyeZ << 8) / local30;
+							local19.maxDeltaZ = (local19.maxZ - eyeZ << 8) / local30;
+							activeOccluders[activeOccluderCount++] = local19;
 						}
 					}
 				}
 			}
-			if (!arg0) {
-				;
-			}
-		} catch (@Pc(436) RuntimeException local436) {
-			Signlink.reporterror("51205, " + arg0 + ", " + local436.toString());
-			throw new RuntimeException();
 		}
 	}
 

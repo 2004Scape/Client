@@ -6,16 +6,9 @@ import org.openrs2.deob.annotation.OriginalArg;
 import org.openrs2.deob.annotation.OriginalClass;
 import org.openrs2.deob.annotation.OriginalMember;
 import org.openrs2.deob.annotation.Pc;
-import rs2.Signlink;
 
 @OriginalClass("client!lc")
 public final class VarpType {
-
-	@OriginalMember(owner = "client!lc", name = "a", descriptor = "I")
-	private static final int flowObfuscator1 = 473;
-
-	@OriginalMember(owner = "client!lc", name = "b", descriptor = "I")
-	private static final int flowObfuscator2 = 13703;
 
 	@OriginalMember(owner = "client!lc", name = "c", descriptor = "I")
 	private static int count;
@@ -57,66 +50,53 @@ public final class VarpType {
 	private boolean opcode8 = false;
 
 	@OriginalMember(owner = "client!lc", name = "a", descriptor = "(Lclient!ub;I)V")
-	public static void unpack(@OriginalArg(0) FileArchive arg0, @OriginalArg(1) int arg1) {
-		try {
-			@Pc(9) Buffer local9 = new Buffer(363, arg0.read("varp.dat", null, (byte) 2));
-			opcode3Count = 0;
-			@Pc(15) int local15 = 28 / arg1;
-			count = local9.g2();
-			if (instances == null) {
-				instances = new VarpType[count];
+	public static void unpack(@OriginalArg(0) FileArchive arg0) {
+		@Pc(9) Buffer local9 = new Buffer(arg0.read("varp.dat", null));
+		opcode3Count = 0;
+		count = local9.g2();
+		if (instances == null) {
+			instances = new VarpType[count];
+		}
+		if (opcode3 == null) {
+			opcode3 = new int[count];
+		}
+		for (@Pc(30) int local30 = 0; local30 < count; local30++) {
+			if (instances[local30] == null) {
+				instances[local30] = new VarpType();
 			}
-			if (opcode3 == null) {
-				opcode3 = new int[count];
-			}
-			for (@Pc(30) int local30 = 0; local30 < count; local30++) {
-				if (instances[local30] == null) {
-					instances[local30] = new VarpType();
-				}
-				instances[local30].decode(flowObfuscator2, local30, local9);
-			}
-		} catch (@Pc(55) RuntimeException local55) {
-			Signlink.reporterror("45283, " + arg0 + ", " + arg1 + ", " + local55.toString());
-			throw new RuntimeException();
+			instances[local30].decode(local30, local9);
 		}
 	}
 
 	@OriginalMember(owner = "client!lc", name = "a", descriptor = "(IILclient!kb;)V")
-	public void decode(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(2) Buffer buf) {
-		try {
-			if (arg0 == 13703) {
-				while (true) {
-					@Pc(8) int opcode = buf.g1();
-					if (opcode == 0) {
-						return;
-					}
-					if (opcode == 1) {
-						this.opcode1 = buf.g1();
-					} else if (opcode == 2) {
-						this.opcode2 = buf.g1();
-					} else if (opcode == 3) {
-						this.hasOpcode3 = true;
-						opcode3[opcode3Count++] = arg1;
-					} else if (opcode == 4) {
-						this.opcode4 = false;
-					} else if (opcode == 5) {
-						this.clientcode = buf.g2();
-					} else if (opcode == 6) {
-						this.opcode6 = true;
-					} else if (opcode == 7) {
-						this.opcode7 = buf.g4();
-					} else if (opcode == 8) {
-						this.opcode8 = true;
-					} else if (opcode == 10) {
-						this.opcode10 = buf.gstr();
-					} else {
-						System.out.println("Error unrecognised config code: " + opcode);
-					}
-				}
+	public void decode(@OriginalArg(1) int arg1, @OriginalArg(2) Buffer buf) {
+		while (true) {
+			@Pc(8) int opcode = buf.g1();
+			if (opcode == 0) {
+				return;
 			}
-		} catch (@Pc(107) RuntimeException local107) {
-			Signlink.reporterror("67426, " + arg0 + ", " + arg1 + ", " + buf + ", " + local107.toString());
-			throw new RuntimeException();
+			if (opcode == 1) {
+				this.opcode1 = buf.g1();
+			} else if (opcode == 2) {
+				this.opcode2 = buf.g1();
+			} else if (opcode == 3) {
+				this.hasOpcode3 = true;
+				opcode3[opcode3Count++] = arg1;
+			} else if (opcode == 4) {
+				this.opcode4 = false;
+			} else if (opcode == 5) {
+				this.clientcode = buf.g2();
+			} else if (opcode == 6) {
+				this.opcode6 = true;
+			} else if (opcode == 7) {
+				this.opcode7 = buf.g4();
+			} else if (opcode == 8) {
+				this.opcode8 = true;
+			} else if (opcode == 10) {
+				this.opcode10 = buf.gstr();
+			} else {
+				System.out.println("Error unrecognised config code: " + opcode);
+			}
 		}
 	}
 }

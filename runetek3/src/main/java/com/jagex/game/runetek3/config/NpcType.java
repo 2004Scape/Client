@@ -8,13 +8,9 @@ import org.openrs2.deob.annotation.OriginalArg;
 import org.openrs2.deob.annotation.OriginalClass;
 import org.openrs2.deob.annotation.OriginalMember;
 import org.openrs2.deob.annotation.Pc;
-import rs2.Signlink;
 
 @OriginalClass("client!bc")
 public final class NpcType {
-
-	@OriginalMember(owner = "client!bc", name = "a", descriptor = "Z")
-	private final boolean flowObfuscator1 = false;
 
 	@OriginalMember(owner = "client!bc", name = "b", descriptor = "I")
 	private static int count;
@@ -98,12 +94,12 @@ public final class NpcType {
 	private int resizez = 128;
 
 	@OriginalMember(owner = "client!bc", name = "C", descriptor = "Lclient!s;")
-	public static Cache modelCache = new Cache((byte) 0, 30);
+	public static Cache modelCache = new Cache(30);
 
 	@OriginalMember(owner = "client!bc", name = "a", descriptor = "(Lclient!ub;)V")
 	public static void unpack(@OriginalArg(0) FileArchive arg0) {
-		dat = new Buffer(363, arg0.read("npc.dat", null, (byte) 2));
-		@Pc(21) Buffer local21 = new Buffer(363, arg0.read("npc.idx", null, (byte) 2));
+		dat = new Buffer(arg0.read("npc.dat", null));
+		@Pc(21) Buffer local21 = new Buffer(arg0.read("npc.idx", null));
 		count = local21.g2();
 		offsets = new int[count];
 		@Pc(29) int local29 = 2;
@@ -118,20 +114,11 @@ public final class NpcType {
 	}
 
 	@OriginalMember(owner = "client!bc", name = "a", descriptor = "(Z)V")
-	public static void unload(@OriginalArg(0) boolean arg0) {
-		try {
-			modelCache = null;
-			offsets = null;
-			cache = null;
-			if (!arg0) {
-				for (@Pc(9) int local9 = 1; local9 > 0; local9++) {
-				}
-			}
-			dat = null;
-		} catch (@Pc(18) RuntimeException local18) {
-			Signlink.reporterror("32991, " + arg0 + ", " + local18.toString());
-			throw new RuntimeException();
-		}
+	public static void unload() {
+		modelCache = null;
+		offsets = null;
+		cache = null;
+		dat = null;
 	}
 
 	@OriginalMember(owner = "client!bc", name = "a", descriptor = "(I)Lclient!bc;")
@@ -145,89 +132,80 @@ public final class NpcType {
 		@Pc(33) NpcType local33 = cache[cachePos] = new NpcType();
 		dat.pos = offsets[arg0];
 		local33.index = arg0;
-		local33.decode(false, dat);
+		local33.decode(dat);
 		return local33;
 	}
 
 	@OriginalMember(owner = "client!bc", name = "a", descriptor = "(ZLclient!kb;)V")
-	public void decode(@OriginalArg(0) boolean arg0, @OriginalArg(1) Buffer buf) {
-		try {
-			if (arg0) {
-				throw new NullPointerException();
+	public void decode(@OriginalArg(1) Buffer buf) {
+		while (true) {
+			@Pc(10) int opcode = buf.g1();
+			if (opcode == 0) {
+				break;
 			}
-			while (true) {
-				while (true) {
-					@Pc(10) int opcode = buf.g1();
-					if (opcode == 0) {
-						return;
-					}
-					@Pc(19) int local19;
-					@Pc(25) int local25;
-					if (opcode == 1) {
-						local19 = buf.g1();
-						this.models = new int[local19];
-						for (local25 = 0; local25 < local19; local25++) {
-							this.models[local25] = buf.g2();
-						}
-					} else if (opcode == 2) {
-						this.name = buf.gstr();
-					} else if (opcode == 3) {
-						this.desc = buf.gstrbyte((byte) 31);
-					} else if (opcode == 12) {
-						this.size = buf.g1b();
-					} else if (opcode == 13) {
-						this.readyanim = buf.g2();
-					} else if (opcode == 14) {
-						this.walkanim = buf.g2();
-					} else if (opcode == 16) {
-						this.disposeAlpha = true;
-					} else if (opcode == 17) {
-						this.walkanim = buf.g2();
-						this.walkanim_b = buf.g2();
-						this.walkanim_r = buf.g2();
-						this.walkanim_l = buf.g2();
-					} else if (opcode >= 30 && opcode < 40) {
-						if (this.ops == null) {
-							this.ops = new String[5];
-						}
-						this.ops[opcode - 30] = buf.gstr();
-						if (this.ops[opcode - 30].equalsIgnoreCase("hidden")) {
-							this.ops[opcode - 30] = null;
-						}
-					} else if (opcode == 40) {
-						local19 = buf.g1();
-						this.recol_s = new int[local19];
-						this.recol_d = new int[local19];
-						for (local25 = 0; local25 < local19; local25++) {
-							this.recol_s[local25] = buf.g2();
-							this.recol_d[local25] = buf.g2();
-						}
-					} else if (opcode == 60) {
-						local19 = buf.g1();
-						this.heads = new int[local19];
-						for (local25 = 0; local25 < local19; local25++) {
-							this.heads[local25] = buf.g2();
-						}
-					} else if (opcode == 90) {
-						this.opcode90 = buf.g2();
-					} else if (opcode == 91) {
-						this.opcode91 = buf.g2();
-					} else if (opcode == 92) {
-						this.opcode92 = buf.g2();
-					} else if (opcode == 93) {
-						this.visonmap = false;
-					} else if (opcode == 95) {
-						this.vislevel = buf.g2();
-					} else if (opcode == 97) {
-						this.resizex = buf.g2();
-					} else if (opcode == 98) {
-						this.resizez = buf.g2();
-					}
+
+			@Pc(19) int local19;
+			@Pc(25) int local25;
+			if (opcode == 1) {
+				local19 = buf.g1();
+				this.models = new int[local19];
+				for (local25 = 0; local25 < local19; local25++) {
+					this.models[local25] = buf.g2();
 				}
+			} else if (opcode == 2) {
+				this.name = buf.gstr();
+			} else if (opcode == 3) {
+				this.desc = buf.gstrbyte();
+			} else if (opcode == 12) {
+				this.size = buf.g1b();
+			} else if (opcode == 13) {
+				this.readyanim = buf.g2();
+			} else if (opcode == 14) {
+				this.walkanim = buf.g2();
+			} else if (opcode == 16) {
+				this.disposeAlpha = true;
+			} else if (opcode == 17) {
+				this.walkanim = buf.g2();
+				this.walkanim_b = buf.g2();
+				this.walkanim_r = buf.g2();
+				this.walkanim_l = buf.g2();
+			} else if (opcode >= 30 && opcode < 40) {
+				if (this.ops == null) {
+					this.ops = new String[5];
+				}
+				this.ops[opcode - 30] = buf.gstr();
+				if (this.ops[opcode - 30].equalsIgnoreCase("hidden")) {
+					this.ops[opcode - 30] = null;
+				}
+			} else if (opcode == 40) {
+				local19 = buf.g1();
+				this.recol_s = new int[local19];
+				this.recol_d = new int[local19];
+				for (local25 = 0; local25 < local19; local25++) {
+					this.recol_s[local25] = buf.g2();
+					this.recol_d[local25] = buf.g2();
+				}
+			} else if (opcode == 60) {
+				local19 = buf.g1();
+				this.heads = new int[local19];
+				for (local25 = 0; local25 < local19; local25++) {
+					this.heads[local25] = buf.g2();
+				}
+			} else if (opcode == 90) {
+				this.opcode90 = buf.g2();
+			} else if (opcode == 91) {
+				this.opcode91 = buf.g2();
+			} else if (opcode == 92) {
+				this.opcode92 = buf.g2();
+			} else if (opcode == 93) {
+				this.visonmap = false;
+			} else if (opcode == 95) {
+				this.vislevel = buf.g2();
+			} else if (opcode == 97) {
+				this.resizex = buf.g2();
+			} else if (opcode == 98) {
+				this.resizez = buf.g2();
 			}
-		} catch (@Pc(277) RuntimeException local277) {
-			Signlink.reporterror("30732, " + arg0 + ", " + buf + ", " + local277.toString());
-			throw new RuntimeException();
 		}
 	}
 
@@ -238,32 +216,32 @@ public final class NpcType {
 		if (local9 == null) {
 			@Pc(16) Model[] local16 = new Model[this.models.length];
 			for (@Pc(18) int local18 = 0; local18 < this.models.length; local18++) {
-				local16[local18] = new Model(false, this.models[local18]);
+				local16[local18] = new Model(this.models[local18]);
 			}
 			if (local16.length == 1) {
 				local9 = local16[0];
 			} else {
-				local9 = new Model(0, local16, local16.length);
+				local9 = new Model(local16, local16.length);
 			}
 			if (this.recol_s != null) {
 				for (@Pc(60) int local60 = 0; local60 < this.recol_s.length; local60++) {
 					local9.recolor(this.recol_s[local60], this.recol_d[local60]);
 				}
 			}
-			local9.createLabelReferences(4);
+			local9.createLabelReferences();
 			local9.calculateNormals(64, 850, -30, -50, -30, true);
-			modelCache.put(6, this.index, local9);
+			modelCache.put(this.index, local9);
 		}
-		local3 = new Model(0, local9, !this.disposeAlpha);
+		local3 = new Model(local9, !this.disposeAlpha);
 		if (arg0 != -1 && arg1 != -1) {
-			local3.applyTransforms(arg1, 3, arg0, arg2);
+			local3.applyTransforms(arg1, arg0, arg2);
 		} else if (arg0 != -1) {
-			local3.applyTransform(-16599, arg0);
+			local3.applyTransform(arg0);
 		}
 		if (this.resizex != 128 || this.resizez != 128) {
-			local3.scale(this.resizex, 2, this.resizez, this.resizex);
+			local3.scale(this.resizex, this.resizez, this.resizex);
 		}
-		local3.calculateBoundsCylinder(2992);
+		local3.calculateBoundsCylinder();
 		local3.labelFaces = null;
 		local3.labelVertices = null;
 		if (this.size == 1) {
@@ -273,33 +251,26 @@ public final class NpcType {
 	}
 
 	@OriginalMember(owner = "client!bc", name = "b", descriptor = "(Z)Lclient!eb;")
-	public Model getHeadModel(@OriginalArg(0) boolean arg0) {
-		try {
-			if (arg0) {
-				throw new NullPointerException();
-			} else if (this.heads == null) {
-				return null;
-			} else {
-				@Pc(17) Model[] local17 = new Model[this.heads.length];
-				for (@Pc(19) int local19 = 0; local19 < this.heads.length; local19++) {
-					local17[local19] = new Model(false, this.heads[local19]);
-				}
-				@Pc(46) Model local46;
-				if (local17.length == 1) {
-					local46 = local17[0];
-				} else {
-					local46 = new Model(0, local17, local17.length);
-				}
-				if (this.recol_s != null) {
-					for (@Pc(61) int local61 = 0; local61 < this.recol_s.length; local61++) {
-						local46.recolor(this.recol_s[local61], this.recol_d[local61]);
-					}
-				}
-				return local46;
+	public Model getHeadModel() {
+		if (this.heads == null) {
+			return null;
+		} else {
+			@Pc(17) Model[] local17 = new Model[this.heads.length];
+			for (@Pc(19) int local19 = 0; local19 < this.heads.length; local19++) {
+				local17[local19] = new Model(this.heads[local19]);
 			}
-		} catch (@Pc(82) RuntimeException local82) {
-			Signlink.reporterror("86097, " + arg0 + ", " + local82.toString());
-			throw new RuntimeException();
+			@Pc(46) Model local46;
+			if (local17.length == 1) {
+				local46 = local17[0];
+			} else {
+				local46 = new Model(local17, local17.length);
+			}
+			if (this.recol_s != null) {
+				for (@Pc(61) int local61 = 0; local61 < this.recol_s.length; local61++) {
+					local46.recolor(this.recol_s[local61], this.recol_d[local61]);
+				}
+			}
+			return local46;
 		}
 	}
 }

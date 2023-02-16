@@ -5,16 +5,9 @@ import org.openrs2.deob.annotation.OriginalArg;
 import org.openrs2.deob.annotation.OriginalClass;
 import org.openrs2.deob.annotation.OriginalMember;
 import org.openrs2.deob.annotation.Pc;
-import rs2.Signlink;
 
 @OriginalClass("client!x")
 public class PathingEntity extends Entity {
-
-	@OriginalMember(owner = "client!x", name = "e", descriptor = "I")
-	private int flowObfuscator1 = 332;
-
-	@OriginalMember(owner = "client!x", name = "f", descriptor = "Z")
-	private final boolean flowObfuscator2 = false;
 
 	@OriginalMember(owner = "client!x", name = "g", descriptor = "I")
 	public int x;
@@ -173,111 +166,86 @@ public class PathingEntity extends Entity {
 	public int seqPathLength;
 
 	@OriginalMember(owner = "client!x", name = "a", descriptor = "(ZZII)V")
-	public final void move(@OriginalArg(0) boolean arg0, @OriginalArg(1) boolean arg1, @OriginalArg(2) int arg2, @OriginalArg(3) int arg3) {
-		try {
-			if (this.primarySeqId != -1 && SeqType.instances[this.primarySeqId].priority <= 1) {
-				this.primarySeqId = -1;
-			}
-			if (!arg1) {
-				@Pc(22) int local22 = arg2 - this.pathTileX[0];
-				@Pc(29) int local29 = arg3 - this.pathTileZ[0];
-				if (local22 >= -8 && local22 <= 8 && local29 >= -8 && local29 <= 8) {
-					if (this.pathLength < 9) {
-						this.pathLength++;
-					}
-					for (@Pc(54) int local54 = this.pathLength; local54 > 0; local54--) {
-						this.pathTileX[local54] = this.pathTileX[local54 - 1];
-						this.pathTileZ[local54] = this.pathTileZ[local54 - 1];
-						this.pathRunning[local54] = this.pathRunning[local54 - 1];
-					}
-					this.pathTileX[0] = arg2;
-					this.pathTileZ[0] = arg3;
-					this.pathRunning[0] = false;
-					return;
-				}
-			}
-			this.pathLength = 0;
-			this.seqPathLength = 0;
-			this.pathTileX[0] = arg2;
-			if (!arg0) {
-				this.pathTileZ[0] = arg3;
-				this.x = this.pathTileX[0] * 128 + this.size * 64;
-				this.z = this.pathTileZ[0] * 128 + this.size * 64;
-			}
-		} catch (@Pc(152) RuntimeException local152) {
-			Signlink.reporterror("85707, " + arg0 + ", " + arg1 + ", " + arg2 + ", " + arg3 + ", " + local152.toString());
-			throw new RuntimeException();
+	public final void move(@OriginalArg(1) boolean arg1, @OriginalArg(2) int arg2, @OriginalArg(3) int arg3) {
+		if (this.primarySeqId != -1 && SeqType.instances[this.primarySeqId].priority <= 1) {
+			this.primarySeqId = -1;
 		}
+		if (!arg1) {
+			@Pc(22) int local22 = arg2 - this.pathTileX[0];
+			@Pc(29) int local29 = arg3 - this.pathTileZ[0];
+			if (local22 >= -8 && local22 <= 8 && local29 >= -8 && local29 <= 8) {
+				if (this.pathLength < 9) {
+					this.pathLength++;
+				}
+				for (@Pc(54) int local54 = this.pathLength; local54 > 0; local54--) {
+					this.pathTileX[local54] = this.pathTileX[local54 - 1];
+					this.pathTileZ[local54] = this.pathTileZ[local54 - 1];
+					this.pathRunning[local54] = this.pathRunning[local54 - 1];
+				}
+				this.pathTileX[0] = arg2;
+				this.pathTileZ[0] = arg3;
+				this.pathRunning[0] = false;
+				return;
+			}
+		}
+		this.pathLength = 0;
+		this.seqPathLength = 0;
+		this.pathTileX[0] = arg2;
+		this.pathTileZ[0] = arg3;
+		this.x = this.pathTileX[0] * 128 + this.size * 64;
+		this.z = this.pathTileZ[0] * 128 + this.size * 64;
 	}
 
 	@OriginalMember(owner = "client!x", name = "a", descriptor = "(ZIB)V")
-	public final void step(@OriginalArg(0) boolean arg0, @OriginalArg(1) int arg1, @OriginalArg(2) byte arg2) {
-		try {
-			@Pc(6) int local6 = this.pathTileX[0];
-			@Pc(11) int local11 = this.pathTileZ[0];
-			if (arg2 == 6) {
-				@Pc(16) boolean local16 = false;
-			} else {
-				this.flowObfuscator1 = 243;
-			}
-			if (arg1 == 0) {
-				local6--;
-				local11++;
-			}
-			if (arg1 == 1) {
-				local11++;
-			}
-			if (arg1 == 2) {
-				local6++;
-				local11++;
-			}
-			if (arg1 == 3) {
-				local6--;
-			}
-			if (arg1 == 4) {
-				local6++;
-			}
-			if (arg1 == 5) {
-				local6--;
-				local11--;
-			}
-			if (arg1 == 6) {
-				local11--;
-			}
-			if (arg1 == 7) {
-				local6++;
-				local11--;
-			}
-			if (this.primarySeqId != -1 && SeqType.instances[this.primarySeqId].priority <= 1) {
-				this.primarySeqId = -1;
-			}
-			if (this.pathLength < 9) {
-				this.pathLength++;
-			}
-			for (@Pc(83) int local83 = this.pathLength; local83 > 0; local83--) {
-				this.pathTileX[local83] = this.pathTileX[local83 - 1];
-				this.pathTileZ[local83] = this.pathTileZ[local83 - 1];
-				this.pathRunning[local83] = this.pathRunning[local83 - 1];
-			}
-			this.pathTileX[0] = local6;
-			this.pathTileZ[0] = local11;
-			this.pathRunning[0] = arg0;
-		} catch (@Pc(135) RuntimeException local135) {
-			Signlink.reporterror("18445, " + arg0 + ", " + arg1 + ", " + arg2 + ", " + local135.toString());
-			throw new RuntimeException();
+	public final void step(@OriginalArg(0) boolean arg0, @OriginalArg(1) int arg1) {
+		@Pc(6) int local6 = this.pathTileX[0];
+		@Pc(11) int local11 = this.pathTileZ[0];
+		if (arg1 == 0) {
+			local6--;
+			local11++;
 		}
+		if (arg1 == 1) {
+			local11++;
+		}
+		if (arg1 == 2) {
+			local6++;
+			local11++;
+		}
+		if (arg1 == 3) {
+			local6--;
+		}
+		if (arg1 == 4) {
+			local6++;
+		}
+		if (arg1 == 5) {
+			local6--;
+			local11--;
+		}
+		if (arg1 == 6) {
+			local11--;
+		}
+		if (arg1 == 7) {
+			local6++;
+			local11--;
+		}
+		if (this.primarySeqId != -1 && SeqType.instances[this.primarySeqId].priority <= 1) {
+			this.primarySeqId = -1;
+		}
+		if (this.pathLength < 9) {
+			this.pathLength++;
+		}
+		for (@Pc(83) int local83 = this.pathLength; local83 > 0; local83--) {
+			this.pathTileX[local83] = this.pathTileX[local83 - 1];
+			this.pathTileZ[local83] = this.pathTileZ[local83 - 1];
+			this.pathRunning[local83] = this.pathRunning[local83 - 1];
+		}
+		this.pathTileX[0] = local6;
+		this.pathTileZ[0] = local11;
+		this.pathRunning[0] = arg0;
 	}
 
 	@OriginalMember(owner = "client!x", name = "b", descriptor = "(Z)Z")
-	public boolean isVisible(@OriginalArg(0) boolean arg0) {
-		try {
-			if (arg0) {
-				throw new NullPointerException();
-			}
-			return false;
-		} catch (@Pc(8) RuntimeException local8) {
-			Signlink.reporterror("65424, " + arg0 + ", " + local8.toString());
-			throw new RuntimeException();
-		}
+	public boolean isVisible() {
+		return false;
 	}
 }

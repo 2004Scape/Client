@@ -7,28 +7,9 @@ import org.openrs2.deob.annotation.OriginalArg;
 import org.openrs2.deob.annotation.OriginalClass;
 import org.openrs2.deob.annotation.OriginalMember;
 import org.openrs2.deob.annotation.Pc;
-import rs2.Signlink;
 
 @OriginalClass("client!eb")
 public final class Model extends CacheableNode {
-
-	@OriginalMember(owner = "client!eb", name = "h", descriptor = "Z")
-	public static boolean flowObfuscator1;
-
-	@OriginalMember(owner = "client!eb", name = "i", descriptor = "I")
-	private int flowObfuscator2 = 45861;
-
-	@OriginalMember(owner = "client!eb", name = "j", descriptor = "B")
-	private final byte flowObfuscator3 = 47;
-
-	@OriginalMember(owner = "client!eb", name = "k", descriptor = "B")
-	private final byte flowObfuscator4 = 47;
-
-	@OriginalMember(owner = "client!eb", name = "l", descriptor = "I")
-	private int flowObfuscator5 = 5;
-
-	@OriginalMember(owner = "client!eb", name = "m", descriptor = "Z")
-	private boolean flowObfuscator6 = false;
 
 	@OriginalMember(owner = "client!eb", name = "n", descriptor = "I")
 	public int vertexCount;
@@ -277,753 +258,689 @@ public final class Model extends CacheableNode {
 	public static int[] reciprical16 = Draw3D.reciprocal16;
 
 	@OriginalMember(owner = "client!eb", name = "<init>", descriptor = "(ZI)V")
-	public Model(@OriginalArg(0) boolean arg0, @OriginalArg(1) int arg1) {
-		try {
-			if (metadata != null) {
-				@Pc(28) Metadata local28 = metadata[arg1];
-				if (local28 == null) {
-					System.out.println("Error model:" + arg1 + " not found!");
+	public Model(@OriginalArg(1) int arg1) {
+		if (metadata != null) {
+			@Pc(28) Metadata local28 = metadata[arg1];
+			if (local28 == null) {
+				System.out.println("Error model:" + arg1 + " not found!");
+			} else {
+				this.vertexCount = local28.vertexCount;
+				this.faceCount = local28.faceCount;
+				this.texturedFaceCount = local28.texturedFaceCount;
+				this.vertexX = new int[this.vertexCount];
+				this.vertexY = new int[this.vertexCount];
+				this.vertexZ = new int[this.vertexCount];
+				this.faceVertexA = new int[this.faceCount];
+				this.faceVertexB = new int[this.faceCount];
+				this.faceVertexC = new int[this.faceCount];
+				this.texturedVertexA = new int[this.texturedFaceCount];
+				this.texturedVertexB = new int[this.texturedFaceCount];
+				this.texturedVertexC = new int[this.texturedFaceCount];
+				if (local28.vertexLabelsOffset >= 0) {
+					this.vertexLabel = new int[this.vertexCount];
+				}
+				if (local28.faceInfosOffset >= 0) {
+					this.faceInfo = new int[this.faceCount];
+				}
+				if (local28.facePrioritiesOffset >= 0) {
+					this.facePriority = new int[this.faceCount];
 				} else {
-					this.vertexCount = local28.vertexCount;
-					this.faceCount = local28.faceCount;
-					this.texturedFaceCount = local28.texturedFaceCount;
-					this.vertexX = new int[this.vertexCount];
-					this.vertexY = new int[this.vertexCount];
-					this.vertexZ = new int[this.vertexCount];
-					this.faceVertexA = new int[this.faceCount];
-					this.faceVertexB = new int[this.faceCount];
-					this.faceVertexC = new int[this.faceCount];
-					this.texturedVertexA = new int[this.texturedFaceCount];
-					this.texturedVertexB = new int[this.texturedFaceCount];
-					this.texturedVertexC = new int[this.texturedFaceCount];
-					if (local28.vertexLabelsOffset >= 0) {
-						this.vertexLabel = new int[this.vertexCount];
-					}
-					if (local28.faceInfosOffset >= 0) {
-						this.faceInfo = new int[this.faceCount];
-					}
-					if (local28.facePrioritiesOffset >= 0) {
-						this.facePriority = new int[this.faceCount];
-					} else {
-						this.priority = -local28.facePrioritiesOffset - 1;
-					}
-					if (local28.faceAlphasOffset >= 0) {
-						this.faceAlpha = new int[this.faceCount];
-					}
-					if (local28.faceLabelsOffset >= 0) {
-						this.faceLabel = new int[this.faceCount];
-					}
-					this.faceColor = new int[this.faceCount];
-					point1.pos = local28.vertexFlagsOffset;
-					point2.pos = local28.vertexXOffset;
-					point3.pos = local28.vertexYOffset;
-					point4.pos = local28.vertexZOffset;
-					point5.pos = local28.vertexLabelsOffset;
-					@Pc(175) int local175 = 0;
-					@Pc(177) int local177 = 0;
-					@Pc(179) int local179 = 0;
-					@Pc(186) int local186;
-					@Pc(188) int local188;
-					@Pc(197) int local197;
-					@Pc(206) int local206;
-					for (@Pc(181) int local181 = 0; local181 < this.vertexCount; local181++) {
-						local186 = point1.g1();
-						local188 = 0;
-						if ((local186 & 0x1) != 0) {
-							local188 = point2.gsmart();
-						}
-						local197 = 0;
-						if ((local186 & 0x2) != 0) {
-							local197 = point3.gsmart();
-						}
-						local206 = 0;
-						if ((local186 & 0x4) != 0) {
-							local206 = point4.gsmart();
-						}
-						this.vertexX[local181] = local175 + local188;
-						this.vertexY[local181] = local177 + local197;
-						this.vertexZ[local181] = local179 + local206;
-						local175 = this.vertexX[local181];
-						local177 = this.vertexY[local181];
-						local179 = this.vertexZ[local181];
-						if (this.vertexLabel != null) {
-							this.vertexLabel[local181] = point5.g1();
-						}
-					}
-					face1.pos = local28.faceColorsOffset;
-					face2.pos = local28.faceInfosOffset;
-					face3.pos = local28.facePrioritiesOffset;
-					face4.pos = local28.faceAlphasOffset;
-					face5.pos = local28.faceLabelsOffset;
-					for (local186 = 0; local186 < this.faceCount; local186++) {
-						this.faceColor[local186] = face1.g2();
-						if (this.faceInfo != null) {
-							this.faceInfo[local186] = face2.g1();
-						}
-						if (this.facePriority != null) {
-							this.facePriority[local186] = face3.g1();
-						}
-						if (this.faceAlpha != null) {
-							this.faceAlpha[local186] = face4.g1();
-						}
-						if (this.faceLabel != null) {
-							this.faceLabel[local186] = face5.g1();
-						}
-					}
-					vertex1.pos = local28.faceVerticesOffset;
-					vertex2.pos = local28.faceOrientationsOffset;
+					this.priority = -local28.facePrioritiesOffset - 1;
+				}
+				if (local28.faceAlphasOffset >= 0) {
+					this.faceAlpha = new int[this.faceCount];
+				}
+				if (local28.faceLabelsOffset >= 0) {
+					this.faceLabel = new int[this.faceCount];
+				}
+				this.faceColor = new int[this.faceCount];
+				point1.pos = local28.vertexFlagsOffset;
+				point2.pos = local28.vertexXOffset;
+				point3.pos = local28.vertexYOffset;
+				point4.pos = local28.vertexZOffset;
+				point5.pos = local28.vertexLabelsOffset;
+				@Pc(175) int local175 = 0;
+				@Pc(177) int local177 = 0;
+				@Pc(179) int local179 = 0;
+				@Pc(186) int local186;
+				@Pc(188) int local188;
+				@Pc(197) int local197;
+				@Pc(206) int local206;
+				for (@Pc(181) int local181 = 0; local181 < this.vertexCount; local181++) {
+					local186 = point1.g1();
 					local188 = 0;
+					if ((local186 & 0x1) != 0) {
+						local188 = point2.gsmart();
+					}
 					local197 = 0;
+					if ((local186 & 0x2) != 0) {
+						local197 = point3.gsmart();
+					}
 					local206 = 0;
-					@Pc(350) int local350 = 0;
-					@Pc(357) int local357;
-					for (@Pc(352) int local352 = 0; local352 < this.faceCount; local352++) {
-						local357 = vertex2.g1();
-						if (local357 == 1) {
-							local188 = vertex1.gsmart() + local350;
-							local197 = vertex1.gsmart() + local188;
-							local206 = vertex1.gsmart() + local197;
-							local350 = local206;
-							this.faceVertexA[local352] = local188;
-							this.faceVertexB[local352] = local197;
-							this.faceVertexC[local352] = local206;
-						}
-						if (local357 == 2) {
-							local188 = local188;
-							local197 = local206;
-							local206 = vertex1.gsmart() + local350;
-							local350 = local206;
-							this.faceVertexA[local352] = local188;
-							this.faceVertexB[local352] = local197;
-							this.faceVertexC[local352] = local206;
-						}
-						if (local357 == 3) {
-							local188 = local206;
-							local197 = local197;
-							local206 = vertex1.gsmart() + local350;
-							local350 = local206;
-							this.faceVertexA[local352] = local188;
-							this.faceVertexB[local352] = local197;
-							this.faceVertexC[local352] = local206;
-						}
-						if (local357 == 4) {
-							@Pc(459) int local459 = local188;
-							local188 = local197;
-							local197 = local459;
-							local206 = vertex1.gsmart() + local350;
-							local350 = local206;
-							this.faceVertexA[local352] = local188;
-							this.faceVertexB[local352] = local459;
-							this.faceVertexC[local352] = local206;
-						}
+					if ((local186 & 0x4) != 0) {
+						local206 = point4.gsmart();
 					}
-					if (arg0) {
-						throw new NullPointerException();
-					}
-					axis.pos = local28.faceTextureAxisOffset * 6;
-					for (local357 = 0; local357 < this.texturedFaceCount; local357++) {
-						this.texturedVertexA[local357] = axis.g2();
-						this.texturedVertexB[local357] = axis.g2();
-						this.texturedVertexC[local357] = axis.g2();
+					this.vertexX[local181] = local175 + local188;
+					this.vertexY[local181] = local177 + local197;
+					this.vertexZ[local181] = local179 + local206;
+					local175 = this.vertexX[local181];
+					local177 = this.vertexY[local181];
+					local179 = this.vertexZ[local181];
+					if (this.vertexLabel != null) {
+						this.vertexLabel[local181] = point5.g1();
 					}
 				}
+				face1.pos = local28.faceColorsOffset;
+				face2.pos = local28.faceInfosOffset;
+				face3.pos = local28.facePrioritiesOffset;
+				face4.pos = local28.faceAlphasOffset;
+				face5.pos = local28.faceLabelsOffset;
+				for (local186 = 0; local186 < this.faceCount; local186++) {
+					this.faceColor[local186] = face1.g2();
+					if (this.faceInfo != null) {
+						this.faceInfo[local186] = face2.g1();
+					}
+					if (this.facePriority != null) {
+						this.facePriority[local186] = face3.g1();
+					}
+					if (this.faceAlpha != null) {
+						this.faceAlpha[local186] = face4.g1();
+					}
+					if (this.faceLabel != null) {
+						this.faceLabel[local186] = face5.g1();
+					}
+				}
+				vertex1.pos = local28.faceVerticesOffset;
+				vertex2.pos = local28.faceOrientationsOffset;
+				local188 = 0;
+				local197 = 0;
+				local206 = 0;
+				@Pc(350) int local350 = 0;
+				@Pc(357) int local357;
+				for (@Pc(352) int local352 = 0; local352 < this.faceCount; local352++) {
+					local357 = vertex2.g1();
+					if (local357 == 1) {
+						local188 = vertex1.gsmart() + local350;
+						local197 = vertex1.gsmart() + local188;
+						local206 = vertex1.gsmart() + local197;
+						local350 = local206;
+						this.faceVertexA[local352] = local188;
+						this.faceVertexB[local352] = local197;
+						this.faceVertexC[local352] = local206;
+					}
+					if (local357 == 2) {
+						local188 = local188;
+						local197 = local206;
+						local206 = vertex1.gsmart() + local350;
+						local350 = local206;
+						this.faceVertexA[local352] = local188;
+						this.faceVertexB[local352] = local197;
+						this.faceVertexC[local352] = local206;
+					}
+					if (local357 == 3) {
+						local188 = local206;
+						local197 = local197;
+						local206 = vertex1.gsmart() + local350;
+						local350 = local206;
+						this.faceVertexA[local352] = local188;
+						this.faceVertexB[local352] = local197;
+						this.faceVertexC[local352] = local206;
+					}
+					if (local357 == 4) {
+						@Pc(459) int local459 = local188;
+						local188 = local197;
+						local197 = local459;
+						local206 = vertex1.gsmart() + local350;
+						local350 = local206;
+						this.faceVertexA[local352] = local188;
+						this.faceVertexB[local352] = local459;
+						this.faceVertexC[local352] = local206;
+					}
+				}
+				axis.pos = local28.faceTextureAxisOffset * 6;
+				for (local357 = 0; local357 < this.texturedFaceCount; local357++) {
+					this.texturedVertexA[local357] = axis.g2();
+					this.texturedVertexB[local357] = axis.g2();
+					this.texturedVertexC[local357] = axis.g2();
+				}
 			}
-		} catch (@Pc(531) RuntimeException local531) {
-			Signlink.reporterror("23365, " + arg0 + ", " + arg1 + ", " + local531.toString());
-			throw new RuntimeException();
 		}
 	}
 
 	@OriginalMember(owner = "client!eb", name = "<init>", descriptor = "(I[Lclient!eb;I)V")
-	public Model(@OriginalArg(0) int arg0, @OriginalArg(1) Model[] arg1, @OriginalArg(2) int arg2) {
-		try {
-			@Pc(23) boolean local23 = false;
-			@Pc(25) boolean local25 = false;
-			@Pc(27) boolean local27 = false;
-			@Pc(29) boolean local29 = false;
-			this.vertexCount = 0;
-			this.faceCount = 0;
-			this.texturedFaceCount = 0;
-			this.priority = -1;
-			for (@Pc(43) int local43 = 0; local43 < arg2; local43++) {
-				@Pc(49) Model local49 = arg1[local43];
-				if (local49 != null) {
-					this.vertexCount += local49.vertexCount;
-					this.faceCount += local49.faceCount;
-					this.texturedFaceCount += local49.texturedFaceCount;
-					local23 |= local49.faceInfo != null;
-					if (local49.facePriority == null) {
-						if (this.priority == -1) {
-							this.priority = local49.priority;
-						}
-						if (this.priority != local49.priority) {
-							local25 = true;
-						}
-					} else {
+	public Model(@OriginalArg(1) Model[] arg1, @OriginalArg(2) int arg2) {
+		@Pc(23) boolean local23 = false;
+		@Pc(25) boolean local25 = false;
+		@Pc(27) boolean local27 = false;
+		@Pc(29) boolean local29 = false;
+		this.vertexCount = 0;
+		this.faceCount = 0;
+		this.texturedFaceCount = 0;
+		this.priority = -1;
+		for (@Pc(43) int local43 = 0; local43 < arg2; local43++) {
+			@Pc(49) Model local49 = arg1[local43];
+			if (local49 != null) {
+				this.vertexCount += local49.vertexCount;
+				this.faceCount += local49.faceCount;
+				this.texturedFaceCount += local49.texturedFaceCount;
+				local23 |= local49.faceInfo != null;
+				if (local49.facePriority == null) {
+					if (this.priority == -1) {
+						this.priority = local49.priority;
+					}
+					if (this.priority != local49.priority) {
 						local25 = true;
 					}
-					local27 |= local49.faceAlpha != null;
-					local29 |= local49.faceLabel != null;
+				} else {
+					local25 = true;
+				}
+				local27 |= local49.faceAlpha != null;
+				local29 |= local49.faceLabel != null;
+			}
+		}
+		this.vertexX = new int[this.vertexCount];
+		this.vertexY = new int[this.vertexCount];
+		this.vertexZ = new int[this.vertexCount];
+		this.vertexLabel = new int[this.vertexCount];
+		this.faceVertexA = new int[this.faceCount];
+		this.faceVertexB = new int[this.faceCount];
+		this.faceVertexC = new int[this.faceCount];
+		this.texturedVertexA = new int[this.texturedFaceCount];
+		this.texturedVertexB = new int[this.texturedFaceCount];
+		this.texturedVertexC = new int[this.texturedFaceCount];
+		if (local23) {
+			this.faceInfo = new int[this.faceCount];
+		}
+		if (local25) {
+			this.facePriority = new int[this.faceCount];
+		}
+		if (local27) {
+			this.faceAlpha = new int[this.faceCount];
+		}
+		if (local29) {
+			this.faceLabel = new int[this.faceCount];
+		}
+		this.faceColor = new int[this.faceCount];
+		this.vertexCount = 0;
+		this.faceCount = 0;
+		this.texturedFaceCount = 0;
+		for (@Pc(225) int local225 = 0; local225 < arg2; local225++) {
+			@Pc(231) Model local231 = arg1[local225];
+			if (local231 != null) {
+				for (@Pc(235) int local235 = 0; local235 < local231.faceCount; local235++) {
+					if (local23) {
+						if (local231.faceInfo == null) {
+							this.faceInfo[this.faceCount] = 0;
+						} else {
+							this.faceInfo[this.faceCount] = local231.faceInfo[local235];
+						}
+					}
+					if (local25) {
+						if (local231.facePriority == null) {
+							this.facePriority[this.faceCount] = local231.priority;
+						} else {
+							this.facePriority[this.faceCount] = local231.facePriority[local235];
+						}
+					}
+					if (local27) {
+						if (local231.faceAlpha == null) {
+							this.faceAlpha[this.faceCount] = 0;
+						} else {
+							this.faceAlpha[this.faceCount] = local231.faceAlpha[local235];
+						}
+					}
+					if (local29 && local231.faceLabel != null) {
+						this.faceLabel[this.faceCount] = local231.faceLabel[local235];
+					}
+					this.faceColor[this.faceCount] = local231.faceColor[local235];
+					this.faceVertexA[this.faceCount] = this.addVertex(local231, local231.faceVertexA[local235]);
+					this.faceVertexB[this.faceCount] = this.addVertex(local231, local231.faceVertexB[local235]);
+					this.faceVertexC[this.faceCount] = this.addVertex(local231, local231.faceVertexC[local235]);
+					this.faceCount++;
+				}
+				for (@Pc(376) int local376 = 0; local376 < local231.texturedFaceCount; local376++) {
+					this.texturedVertexA[this.texturedFaceCount] = this.addVertex(local231, local231.texturedVertexA[local376]);
+					this.texturedVertexB[this.texturedFaceCount] = this.addVertex(local231, local231.texturedVertexB[local376]);
+					this.texturedVertexC[this.texturedFaceCount] = this.addVertex(local231, local231.texturedVertexC[local376]);
+					this.texturedFaceCount++;
 				}
 			}
-			if (arg0 != 0) {
-				throw new NullPointerException();
-			}
-			this.vertexX = new int[this.vertexCount];
-			this.vertexY = new int[this.vertexCount];
-			this.vertexZ = new int[this.vertexCount];
-			this.vertexLabel = new int[this.vertexCount];
-			this.faceVertexA = new int[this.faceCount];
-			this.faceVertexB = new int[this.faceCount];
-			this.faceVertexC = new int[this.faceCount];
-			this.texturedVertexA = new int[this.texturedFaceCount];
-			this.texturedVertexB = new int[this.texturedFaceCount];
-			this.texturedVertexC = new int[this.texturedFaceCount];
-			if (local23) {
-				this.faceInfo = new int[this.faceCount];
-			}
-			if (local25) {
-				this.facePriority = new int[this.faceCount];
-			}
-			if (local27) {
-				this.faceAlpha = new int[this.faceCount];
-			}
-			if (local29) {
-				this.faceLabel = new int[this.faceCount];
-			}
-			this.faceColor = new int[this.faceCount];
-			this.vertexCount = 0;
-			this.faceCount = 0;
-			this.texturedFaceCount = 0;
-			for (@Pc(225) int local225 = 0; local225 < arg2; local225++) {
-				@Pc(231) Model local231 = arg1[local225];
-				if (local231 != null) {
-					for (@Pc(235) int local235 = 0; local235 < local231.faceCount; local235++) {
-						if (local23) {
-							if (local231.faceInfo == null) {
-								this.faceInfo[this.faceCount] = 0;
-							} else {
-								this.faceInfo[this.faceCount] = local231.faceInfo[local235];
-							}
-						}
-						if (local25) {
-							if (local231.facePriority == null) {
-								this.facePriority[this.faceCount] = local231.priority;
-							} else {
-								this.facePriority[this.faceCount] = local231.facePriority[local235];
-							}
-						}
-						if (local27) {
-							if (local231.faceAlpha == null) {
-								this.faceAlpha[this.faceCount] = 0;
-							} else {
-								this.faceAlpha[this.faceCount] = local231.faceAlpha[local235];
-							}
-						}
-						if (local29 && local231.faceLabel != null) {
-							this.faceLabel[this.faceCount] = local231.faceLabel[local235];
-						}
-						this.faceColor[this.faceCount] = local231.faceColor[local235];
-						this.faceVertexA[this.faceCount] = this.addVertex(local231, local231.faceVertexA[local235]);
-						this.faceVertexB[this.faceCount] = this.addVertex(local231, local231.faceVertexB[local235]);
-						this.faceVertexC[this.faceCount] = this.addVertex(local231, local231.faceVertexC[local235]);
-						this.faceCount++;
-					}
-					for (@Pc(376) int local376 = 0; local376 < local231.texturedFaceCount; local376++) {
-						this.texturedVertexA[this.texturedFaceCount] = this.addVertex(local231, local231.texturedVertexA[local376]);
-						this.texturedVertexB[this.texturedFaceCount] = this.addVertex(local231, local231.texturedVertexB[local376]);
-						this.texturedVertexC[this.texturedFaceCount] = this.addVertex(local231, local231.texturedVertexC[local376]);
-						this.texturedFaceCount++;
-					}
-				}
-			}
-		} catch (@Pc(431) RuntimeException local431) {
-			Signlink.reporterror("76712, " + arg0 + ", " + arg1 + ", " + arg2 + ", " + local431.toString());
-			throw new RuntimeException();
 		}
 	}
 
 	@OriginalMember(owner = "client!eb", name = "<init>", descriptor = "([Lclient!eb;BIZ)V")
-	public Model(@OriginalArg(0) Model[] arg0, @OriginalArg(1) byte arg1, @OriginalArg(2) int arg2, @OriginalArg(3) boolean arg3) {
-		try {
-			@Pc(23) boolean local23 = false;
-			@Pc(25) boolean local25 = false;
-			@Pc(27) boolean local27 = false;
-			@Pc(29) boolean local29 = false;
-			this.vertexCount = 0;
-			this.faceCount = 0;
-			this.texturedFaceCount = 0;
-			this.priority = -1;
-			for (@Pc(43) int local43 = 0; local43 < arg2; local43++) {
-				@Pc(49) Model local49 = arg0[local43];
-				if (local49 != null) {
-					this.vertexCount += local49.vertexCount;
-					this.faceCount += local49.faceCount;
-					this.texturedFaceCount += local49.texturedFaceCount;
-					local23 |= local49.faceInfo != null;
-					if (local49.facePriority == null) {
-						if (this.priority == -1) {
-							this.priority = local49.priority;
-						}
-						if (this.priority != local49.priority) {
-							local25 = true;
-						}
-					} else {
+	public Model(@OriginalArg(0) Model[] arg0, @OriginalArg(2) int arg2, @OriginalArg(3) boolean arg3) {
+		@Pc(23) boolean local23 = false;
+		@Pc(25) boolean local25 = false;
+		@Pc(27) boolean local27 = false;
+		@Pc(29) boolean local29 = false;
+		this.vertexCount = 0;
+		this.faceCount = 0;
+		this.texturedFaceCount = 0;
+		this.priority = -1;
+		for (@Pc(43) int local43 = 0; local43 < arg2; local43++) {
+			@Pc(49) Model local49 = arg0[local43];
+			if (local49 != null) {
+				this.vertexCount += local49.vertexCount;
+				this.faceCount += local49.faceCount;
+				this.texturedFaceCount += local49.texturedFaceCount;
+				local23 |= local49.faceInfo != null;
+				if (local49.facePriority == null) {
+					if (this.priority == -1) {
+						this.priority = local49.priority;
+					}
+					if (this.priority != local49.priority) {
 						local25 = true;
 					}
-					local27 |= local49.faceAlpha != null;
-					local29 |= local49.faceColor != null;
+				} else {
+					local25 = true;
 				}
+				local27 |= local49.faceAlpha != null;
+				local29 |= local49.faceColor != null;
 			}
-			this.vertexX = new int[this.vertexCount];
-			this.vertexY = new int[this.vertexCount];
-			this.vertexZ = new int[this.vertexCount];
-			this.faceVertexA = new int[this.faceCount];
-			this.faceVertexB = new int[this.faceCount];
-			this.faceVertexC = new int[this.faceCount];
-			this.faceColorA = new int[this.faceCount];
-			this.faceColorB = new int[this.faceCount];
-			this.faceColorC = new int[this.faceCount];
-			this.texturedVertexA = new int[this.texturedFaceCount];
-			this.texturedVertexB = new int[this.texturedFaceCount];
-			this.texturedVertexC = new int[this.texturedFaceCount];
-			if (local23) {
-				this.faceInfo = new int[this.faceCount];
-			}
-			if (local25) {
-				this.facePriority = new int[this.faceCount];
-			}
-			if (local27) {
-				this.faceAlpha = new int[this.faceCount];
-			}
-			if (local29) {
-				this.faceColor = new int[this.faceCount];
-			}
-			this.vertexCount = 0;
-			this.faceCount = 0;
-			this.texturedFaceCount = 0;
-			@Pc(227) int local227;
-			if (arg1 != -31) {
-				for (local227 = 1; local227 > 0; local227++) {
-				}
-			}
-			for (local227 = 0; local227 < arg2; local227++) {
-				@Pc(240) Model local240 = arg0[local227];
-				if (local240 != null) {
-					@Pc(245) int local245 = this.vertexCount;
-					for (@Pc(247) int local247 = 0; local247 < local240.vertexCount; local247++) {
-						this.vertexX[this.vertexCount] = local240.vertexX[local247];
-						this.vertexY[this.vertexCount] = local240.vertexY[local247];
-						this.vertexZ[this.vertexCount] = local240.vertexZ[local247];
-						this.vertexCount++;
-					}
-					for (@Pc(289) int local289 = 0; local289 < local240.faceCount; local289++) {
-						this.faceVertexA[this.faceCount] = local240.faceVertexA[local289] + local245;
-						this.faceVertexB[this.faceCount] = local240.faceVertexB[local289] + local245;
-						this.faceVertexC[this.faceCount] = local240.faceVertexC[local289] + local245;
-						this.faceColorA[this.faceCount] = local240.faceColorA[local289];
-						this.faceColorB[this.faceCount] = local240.faceColorB[local289];
-						this.faceColorC[this.faceCount] = local240.faceColorC[local289];
-						if (local23) {
-							if (local240.faceInfo == null) {
-								this.faceInfo[this.faceCount] = 0;
-							} else {
-								this.faceInfo[this.faceCount] = local240.faceInfo[local289];
-							}
-						}
-						if (local25) {
-							if (local240.facePriority == null) {
-								this.facePriority[this.faceCount] = local240.priority;
-							} else {
-								this.facePriority[this.faceCount] = local240.facePriority[local289];
-							}
-						}
-						if (local27) {
-							if (local240.faceAlpha == null) {
-								this.faceAlpha[this.faceCount] = 0;
-							} else {
-								this.faceAlpha[this.faceCount] = local240.faceAlpha[local289];
-							}
-						}
-						if (local29 && local240.faceColor != null) {
-							this.faceColor[this.faceCount] = local240.faceColor[local289];
-						}
-						this.faceCount++;
-					}
-					for (@Pc(445) int local445 = 0; local445 < local240.texturedFaceCount; local445++) {
-						this.texturedVertexA[this.texturedFaceCount] = local240.texturedVertexA[local445] + local245;
-						this.texturedVertexB[this.texturedFaceCount] = local240.texturedVertexB[local445] + local245;
-						this.texturedVertexC[this.texturedFaceCount] = local240.texturedVertexC[local445] + local245;
-						this.texturedFaceCount++;
-					}
-				}
-			}
-			this.calculateBoundsCylinder(2992);
-		} catch (@Pc(500) RuntimeException local500) {
-			Signlink.reporterror("4659, " + arg0 + ", " + arg1 + ", " + arg2 + ", " + arg3 + ", " + local500.toString());
-			throw new RuntimeException();
 		}
+		this.vertexX = new int[this.vertexCount];
+		this.vertexY = new int[this.vertexCount];
+		this.vertexZ = new int[this.vertexCount];
+		this.faceVertexA = new int[this.faceCount];
+		this.faceVertexB = new int[this.faceCount];
+		this.faceVertexC = new int[this.faceCount];
+		this.faceColorA = new int[this.faceCount];
+		this.faceColorB = new int[this.faceCount];
+		this.faceColorC = new int[this.faceCount];
+		this.texturedVertexA = new int[this.texturedFaceCount];
+		this.texturedVertexB = new int[this.texturedFaceCount];
+		this.texturedVertexC = new int[this.texturedFaceCount];
+		if (local23) {
+			this.faceInfo = new int[this.faceCount];
+		}
+		if (local25) {
+			this.facePriority = new int[this.faceCount];
+		}
+		if (local27) {
+			this.faceAlpha = new int[this.faceCount];
+		}
+		if (local29) {
+			this.faceColor = new int[this.faceCount];
+		}
+		this.vertexCount = 0;
+		this.faceCount = 0;
+		this.texturedFaceCount = 0;
+		@Pc(227) int local227;
+		for (local227 = 0; local227 < arg2; local227++) {
+			@Pc(240) Model local240 = arg0[local227];
+			if (local240 != null) {
+				@Pc(245) int local245 = this.vertexCount;
+				for (@Pc(247) int local247 = 0; local247 < local240.vertexCount; local247++) {
+					this.vertexX[this.vertexCount] = local240.vertexX[local247];
+					this.vertexY[this.vertexCount] = local240.vertexY[local247];
+					this.vertexZ[this.vertexCount] = local240.vertexZ[local247];
+					this.vertexCount++;
+				}
+				for (@Pc(289) int local289 = 0; local289 < local240.faceCount; local289++) {
+					this.faceVertexA[this.faceCount] = local240.faceVertexA[local289] + local245;
+					this.faceVertexB[this.faceCount] = local240.faceVertexB[local289] + local245;
+					this.faceVertexC[this.faceCount] = local240.faceVertexC[local289] + local245;
+					this.faceColorA[this.faceCount] = local240.faceColorA[local289];
+					this.faceColorB[this.faceCount] = local240.faceColorB[local289];
+					this.faceColorC[this.faceCount] = local240.faceColorC[local289];
+					if (local23) {
+						if (local240.faceInfo == null) {
+							this.faceInfo[this.faceCount] = 0;
+						} else {
+							this.faceInfo[this.faceCount] = local240.faceInfo[local289];
+						}
+					}
+					if (local25) {
+						if (local240.facePriority == null) {
+							this.facePriority[this.faceCount] = local240.priority;
+						} else {
+							this.facePriority[this.faceCount] = local240.facePriority[local289];
+						}
+					}
+					if (local27) {
+						if (local240.faceAlpha == null) {
+							this.faceAlpha[this.faceCount] = 0;
+						} else {
+							this.faceAlpha[this.faceCount] = local240.faceAlpha[local289];
+						}
+					}
+					if (local29 && local240.faceColor != null) {
+						this.faceColor[this.faceCount] = local240.faceColor[local289];
+					}
+					this.faceCount++;
+				}
+				for (@Pc(445) int local445 = 0; local445 < local240.texturedFaceCount; local445++) {
+					this.texturedVertexA[this.texturedFaceCount] = local240.texturedVertexA[local445] + local245;
+					this.texturedVertexB[this.texturedFaceCount] = local240.texturedVertexB[local445] + local245;
+					this.texturedVertexC[this.texturedFaceCount] = local240.texturedVertexC[local445] + local245;
+					this.texturedFaceCount++;
+				}
+			}
+		}
+		this.calculateBoundsCylinder();
 	}
 
 	@OriginalMember(owner = "client!eb", name = "<init>", descriptor = "(Lclient!eb;ZZIZ)V")
-	public Model(@OriginalArg(0) Model arg0, @OriginalArg(1) boolean arg1, @OriginalArg(2) boolean arg2, @OriginalArg(3) int arg3, @OriginalArg(4) boolean arg4) {
-		try {
-			this.vertexCount = arg0.vertexCount;
-			this.faceCount = arg0.faceCount;
-			this.texturedFaceCount = arg0.texturedFaceCount;
-			@Pc(66) int local66;
-			if (arg4) {
-				this.vertexX = arg0.vertexX;
-				this.vertexY = arg0.vertexY;
-				this.vertexZ = arg0.vertexZ;
-			} else {
-				this.vertexX = new int[this.vertexCount];
-				this.vertexY = new int[this.vertexCount];
-				this.vertexZ = new int[this.vertexCount];
-				for (local66 = 0; local66 < this.vertexCount; local66++) {
-					this.vertexX[local66] = arg0.vertexX[local66];
-					this.vertexY[local66] = arg0.vertexY[local66];
-					this.vertexZ[local66] = arg0.vertexZ[local66];
-				}
-			}
-			if (arg1) {
-				this.faceColor = arg0.faceColor;
-			} else {
-				this.faceColor = new int[this.faceCount];
-				for (local66 = 0; local66 < this.faceCount; local66++) {
-					this.faceColor[local66] = arg0.faceColor[local66];
-				}
-			}
-			if (arg2) {
-				this.faceAlpha = arg0.faceAlpha;
-			} else {
-				this.faceAlpha = new int[this.faceCount];
-				if (arg0.faceAlpha == null) {
-					for (local66 = 0; local66 < this.faceCount; local66++) {
-						this.faceAlpha[local66] = 0;
-					}
-				} else {
-					for (local66 = 0; local66 < this.faceCount; local66++) {
-						this.faceAlpha[local66] = arg0.faceAlpha[local66];
-					}
-				}
-			}
-			this.vertexLabel = arg0.vertexLabel;
-			this.faceLabel = arg0.faceLabel;
-			this.faceInfo = arg0.faceInfo;
-			if (arg3 != 0) {
-				flowObfuscator1 = !flowObfuscator1;
-			}
-			this.faceVertexA = arg0.faceVertexA;
-			this.faceVertexB = arg0.faceVertexB;
-			this.faceVertexC = arg0.faceVertexC;
-			this.facePriority = arg0.facePriority;
-			this.priority = arg0.priority;
-			this.texturedVertexA = arg0.texturedVertexA;
-			this.texturedVertexB = arg0.texturedVertexB;
-			this.texturedVertexC = arg0.texturedVertexC;
-		} catch (@Pc(229) RuntimeException local229) {
-			Signlink.reporterror("52705, " + arg0 + ", " + arg1 + ", " + arg2 + ", " + arg3 + ", " + arg4 + ", " + local229.toString());
-			throw new RuntimeException();
-		}
-	}
-
-	@OriginalMember(owner = "client!eb", name = "<init>", descriptor = "(Lclient!eb;BZZ)V")
-	public Model(@OriginalArg(0) Model arg0, @OriginalArg(1) byte arg1, @OriginalArg(2) boolean arg2, @OriginalArg(3) boolean arg3) {
-		try {
-			this.vertexCount = arg0.vertexCount;
-			this.faceCount = arg0.faceCount;
-			this.texturedFaceCount = arg0.texturedFaceCount;
-			@Pc(42) int local42;
-			if (arg2) {
-				this.vertexY = new int[this.vertexCount];
-				for (local42 = 0; local42 < this.vertexCount; local42++) {
-					this.vertexY[local42] = arg0.vertexY[local42];
-				}
-			} else {
-				this.vertexY = arg0.vertexY;
-			}
-			if (arg3) {
-				this.faceColorA = new int[this.faceCount];
-				this.faceColorB = new int[this.faceCount];
-				this.faceColorC = new int[this.faceCount];
-				for (local42 = 0; local42 < this.faceCount; local42++) {
-					this.faceColorA[local42] = arg0.faceColorA[local42];
-					this.faceColorB[local42] = arg0.faceColorB[local42];
-					this.faceColorC[local42] = arg0.faceColorC[local42];
-				}
-				this.faceInfo = new int[this.faceCount];
-				@Pc(122) int local122;
-				if (arg0.faceInfo == null) {
-					for (local122 = 0; local122 < this.faceCount; local122++) {
-						this.faceInfo[local122] = 0;
-					}
-				} else {
-					for (local122 = 0; local122 < this.faceCount; local122++) {
-						this.faceInfo[local122] = arg0.faceInfo[local122];
-					}
-				}
-				this.vertexNormal = new VertexNormal[this.vertexCount];
-				for (local122 = 0; local122 < this.vertexCount; local122++) {
-					@Pc(170) VertexNormal local170 = this.vertexNormal[local122] = new VertexNormal();
-					@Pc(175) VertexNormal local175 = arg0.vertexNormal[local122];
-					local170.x = local175.x;
-					local170.y = local175.y;
-					local170.z = local175.z;
-					local170.w = local175.w;
-				}
-				this.vertexNormalOriginal = arg0.vertexNormalOriginal;
-			} else {
-				this.faceColorA = arg0.faceColorA;
-				this.faceColorB = arg0.faceColorB;
-				this.faceColorC = arg0.faceColorC;
-				this.faceInfo = arg0.faceInfo;
-			}
+	public Model(@OriginalArg(0) Model arg0, @OriginalArg(1) boolean arg1, @OriginalArg(2) boolean arg2, @OriginalArg(4) boolean arg4) {
+		this.vertexCount = arg0.vertexCount;
+		this.faceCount = arg0.faceCount;
+		this.texturedFaceCount = arg0.texturedFaceCount;
+		@Pc(66) int local66;
+		if (arg4) {
 			this.vertexX = arg0.vertexX;
+			this.vertexY = arg0.vertexY;
 			this.vertexZ = arg0.vertexZ;
-			this.faceColor = arg0.faceColor;
-			this.faceAlpha = arg0.faceAlpha;
-			this.facePriority = arg0.facePriority;
-			this.priority = arg0.priority;
-			this.faceVertexA = arg0.faceVertexA;
-			this.faceVertexB = arg0.faceVertexB;
-			this.faceVertexC = arg0.faceVertexC;
-			this.texturedVertexA = arg0.texturedVertexA;
-			this.texturedVertexB = arg0.texturedVertexB;
-			this.texturedVertexC = arg0.texturedVertexC;
-			if (arg1 != -31) {
-				throw new NullPointerException();
-			}
-			this.maxY = arg0.maxY;
-			this.minY = arg0.minY;
-			this.radius = arg0.radius;
-			this.minDepth = arg0.minDepth;
-			this.maxDepth = arg0.maxDepth;
-			this.minX = arg0.minX;
-			this.maxZ = arg0.maxZ;
-			this.minZ = arg0.minZ;
-			this.maxX = arg0.maxX;
-		} catch (@Pc(311) RuntimeException local311) {
-			Signlink.reporterror("38920, " + arg0 + ", " + arg1 + ", " + arg2 + ", " + arg3 + ", " + local311.toString());
-			throw new RuntimeException();
-		}
-	}
-
-	@OriginalMember(owner = "client!eb", name = "<init>", descriptor = "(ILclient!eb;Z)V")
-	public Model(@OriginalArg(0) int arg0, @OriginalArg(1) Model arg1, @OriginalArg(2) boolean arg2) {
-		try {
-			this.vertexCount = arg1.vertexCount;
-			this.faceCount = arg1.faceCount;
-			this.texturedFaceCount = arg1.texturedFaceCount;
+		} else {
 			this.vertexX = new int[this.vertexCount];
 			this.vertexY = new int[this.vertexCount];
 			this.vertexZ = new int[this.vertexCount];
-			for (@Pc(50) int local50 = 0; local50 < this.vertexCount; local50++) {
-				this.vertexX[local50] = arg1.vertexX[local50];
-				this.vertexY[local50] = arg1.vertexY[local50];
-				this.vertexZ[local50] = arg1.vertexZ[local50];
+			for (local66 = 0; local66 < this.vertexCount; local66++) {
+				this.vertexX[local66] = arg0.vertexX[local66];
+				this.vertexY[local66] = arg0.vertexY[local66];
+				this.vertexZ[local66] = arg0.vertexZ[local66];
 			}
-			if (arg2) {
-				this.faceAlpha = arg1.faceAlpha;
+		}
+		if (arg1) {
+			this.faceColor = arg0.faceColor;
+		} else {
+			this.faceColor = new int[this.faceCount];
+			for (local66 = 0; local66 < this.faceCount; local66++) {
+				this.faceColor[local66] = arg0.faceColor[local66];
+			}
+		}
+		if (arg2) {
+			this.faceAlpha = arg0.faceAlpha;
+		} else {
+			this.faceAlpha = new int[this.faceCount];
+			if (arg0.faceAlpha == null) {
+				for (local66 = 0; local66 < this.faceCount; local66++) {
+					this.faceAlpha[local66] = 0;
+				}
 			} else {
-				this.faceAlpha = new int[this.faceCount];
-				@Pc(99) int local99;
-				if (arg1.faceAlpha == null) {
-					for (local99 = 0; local99 < this.faceCount; local99++) {
-						this.faceAlpha[local99] = 0;
-					}
-				} else {
-					for (local99 = 0; local99 < this.faceCount; local99++) {
-						this.faceAlpha[local99] = arg1.faceAlpha[local99];
-					}
+				for (local66 = 0; local66 < this.faceCount; local66++) {
+					this.faceAlpha[local66] = arg0.faceAlpha[local66];
 				}
 			}
-			this.faceInfo = arg1.faceInfo;
-			this.faceColor = arg1.faceColor;
-			this.facePriority = arg1.facePriority;
-			if (arg0 != 0) {
-				this.flowObfuscator5 = 213;
-			}
-			this.priority = arg1.priority;
-			this.labelFaces = arg1.labelFaces;
-			this.labelVertices = arg1.labelVertices;
-			this.faceVertexA = arg1.faceVertexA;
-			this.faceVertexB = arg1.faceVertexB;
-			this.faceVertexC = arg1.faceVertexC;
-			this.faceColorA = arg1.faceColorA;
-			this.faceColorB = arg1.faceColorB;
-			this.faceColorC = arg1.faceColorC;
-			this.texturedVertexA = arg1.texturedVertexA;
-			this.texturedVertexB = arg1.texturedVertexB;
-			this.texturedVertexC = arg1.texturedVertexC;
-		} catch (@Pc(196) RuntimeException local196) {
-			Signlink.reporterror("94709, " + arg0 + ", " + arg1 + ", " + arg2 + ", " + local196.toString());
-			throw new RuntimeException();
 		}
+		this.vertexLabel = arg0.vertexLabel;
+		this.faceLabel = arg0.faceLabel;
+		this.faceInfo = arg0.faceInfo;
+		this.faceVertexA = arg0.faceVertexA;
+		this.faceVertexB = arg0.faceVertexB;
+		this.faceVertexC = arg0.faceVertexC;
+		this.facePriority = arg0.facePriority;
+		this.priority = arg0.priority;
+		this.texturedVertexA = arg0.texturedVertexA;
+		this.texturedVertexB = arg0.texturedVertexB;
+		this.texturedVertexC = arg0.texturedVertexC;
+	}
+
+	@OriginalMember(owner = "client!eb", name = "<init>", descriptor = "(Lclient!eb;BZZ)V")
+	public Model(@OriginalArg(0) Model arg0, @OriginalArg(2) boolean arg2, @OriginalArg(3) boolean arg3) {
+		this.vertexCount = arg0.vertexCount;
+		this.faceCount = arg0.faceCount;
+		this.texturedFaceCount = arg0.texturedFaceCount;
+		@Pc(42) int local42;
+		if (arg2) {
+			this.vertexY = new int[this.vertexCount];
+			for (local42 = 0; local42 < this.vertexCount; local42++) {
+				this.vertexY[local42] = arg0.vertexY[local42];
+			}
+		} else {
+			this.vertexY = arg0.vertexY;
+		}
+		if (arg3) {
+			this.faceColorA = new int[this.faceCount];
+			this.faceColorB = new int[this.faceCount];
+			this.faceColorC = new int[this.faceCount];
+			for (local42 = 0; local42 < this.faceCount; local42++) {
+				this.faceColorA[local42] = arg0.faceColorA[local42];
+				this.faceColorB[local42] = arg0.faceColorB[local42];
+				this.faceColorC[local42] = arg0.faceColorC[local42];
+			}
+			this.faceInfo = new int[this.faceCount];
+			@Pc(122) int local122;
+			if (arg0.faceInfo == null) {
+				for (local122 = 0; local122 < this.faceCount; local122++) {
+					this.faceInfo[local122] = 0;
+				}
+			} else {
+				for (local122 = 0; local122 < this.faceCount; local122++) {
+					this.faceInfo[local122] = arg0.faceInfo[local122];
+				}
+			}
+			this.vertexNormal = new VertexNormal[this.vertexCount];
+			for (local122 = 0; local122 < this.vertexCount; local122++) {
+				@Pc(170) VertexNormal local170 = this.vertexNormal[local122] = new VertexNormal();
+				@Pc(175) VertexNormal local175 = arg0.vertexNormal[local122];
+				local170.x = local175.x;
+				local170.y = local175.y;
+				local170.z = local175.z;
+				local170.w = local175.w;
+			}
+			this.vertexNormalOriginal = arg0.vertexNormalOriginal;
+		} else {
+			this.faceColorA = arg0.faceColorA;
+			this.faceColorB = arg0.faceColorB;
+			this.faceColorC = arg0.faceColorC;
+			this.faceInfo = arg0.faceInfo;
+		}
+		this.vertexX = arg0.vertexX;
+		this.vertexZ = arg0.vertexZ;
+		this.faceColor = arg0.faceColor;
+		this.faceAlpha = arg0.faceAlpha;
+		this.facePriority = arg0.facePriority;
+		this.priority = arg0.priority;
+		this.faceVertexA = arg0.faceVertexA;
+		this.faceVertexB = arg0.faceVertexB;
+		this.faceVertexC = arg0.faceVertexC;
+		this.texturedVertexA = arg0.texturedVertexA;
+		this.texturedVertexB = arg0.texturedVertexB;
+		this.texturedVertexC = arg0.texturedVertexC;
+		this.maxY = arg0.maxY;
+		this.minY = arg0.minY;
+		this.radius = arg0.radius;
+		this.minDepth = arg0.minDepth;
+		this.maxDepth = arg0.maxDepth;
+		this.minX = arg0.minX;
+		this.maxZ = arg0.maxZ;
+		this.minZ = arg0.minZ;
+		this.maxX = arg0.maxX;
+	}
+
+	@OriginalMember(owner = "client!eb", name = "<init>", descriptor = "(ILclient!eb;Z)V")
+	public Model(@OriginalArg(1) Model arg1, @OriginalArg(2) boolean arg2) {
+		this.vertexCount = arg1.vertexCount;
+		this.faceCount = arg1.faceCount;
+		this.texturedFaceCount = arg1.texturedFaceCount;
+		this.vertexX = new int[this.vertexCount];
+		this.vertexY = new int[this.vertexCount];
+		this.vertexZ = new int[this.vertexCount];
+		for (@Pc(50) int local50 = 0; local50 < this.vertexCount; local50++) {
+			this.vertexX[local50] = arg1.vertexX[local50];
+			this.vertexY[local50] = arg1.vertexY[local50];
+			this.vertexZ[local50] = arg1.vertexZ[local50];
+		}
+		if (arg2) {
+			this.faceAlpha = arg1.faceAlpha;
+		} else {
+			this.faceAlpha = new int[this.faceCount];
+			@Pc(99) int local99;
+			if (arg1.faceAlpha == null) {
+				for (local99 = 0; local99 < this.faceCount; local99++) {
+					this.faceAlpha[local99] = 0;
+				}
+			} else {
+				for (local99 = 0; local99 < this.faceCount; local99++) {
+					this.faceAlpha[local99] = arg1.faceAlpha[local99];
+				}
+			}
+		}
+		this.faceInfo = arg1.faceInfo;
+		this.faceColor = arg1.faceColor;
+		this.facePriority = arg1.facePriority;
+		this.priority = arg1.priority;
+		this.labelFaces = arg1.labelFaces;
+		this.labelVertices = arg1.labelVertices;
+		this.faceVertexA = arg1.faceVertexA;
+		this.faceVertexB = arg1.faceVertexB;
+		this.faceVertexC = arg1.faceVertexC;
+		this.faceColorA = arg1.faceColorA;
+		this.faceColorB = arg1.faceColorB;
+		this.faceColorC = arg1.faceColorC;
+		this.texturedVertexA = arg1.texturedVertexA;
+		this.texturedVertexB = arg1.texturedVertexB;
+		this.texturedVertexC = arg1.texturedVertexC;
 	}
 
 	@OriginalMember(owner = "client!eb", name = "a", descriptor = "(Z)V")
-	public static void unload(@OriginalArg(0) boolean arg0) {
-		try {
-			metadata = null;
-			head = null;
-			face1 = null;
-			face2 = null;
-			face3 = null;
-			face4 = null;
-			face5 = null;
-			point1 = null;
-			point2 = null;
-			point3 = null;
-			point4 = null;
-			point5 = null;
-			vertex1 = null;
-			vertex2 = null;
-			axis = null;
-			faceClippedX = null;
-			if (!arg0) {
-				flowObfuscator1 = !flowObfuscator1;
-			}
-			faceNearClipped = null;
-			vertexScreenX = null;
-			vertexScreenY = null;
-			vertexScreenZ = null;
-			vertexViewSpaceX = null;
-			vertexViewSpaceY = null;
-			vertexViewSpaceZ = null;
-			tmpDepthFaceCount = null;
-			tmpDepthFaces = null;
-			tmpPriorityFaceCount = null;
-			tmpPriorityFaces = null;
-			tmpPriority10FaceDepth = null;
-			tmpPriority11FaceDepth = null;
-			tmpPriorityDepthSum = null;
-			sin = null;
-			cos = null;
-			palette = null;
-			reciprical16 = null;
-		} catch (@Pc(77) RuntimeException local77) {
-			Signlink.reporterror("40423, " + arg0 + ", " + local77.toString());
-			throw new RuntimeException();
-		}
+	public static void unload() {
+		metadata = null;
+		head = null;
+		face1 = null;
+		face2 = null;
+		face3 = null;
+		face4 = null;
+		face5 = null;
+		point1 = null;
+		point2 = null;
+		point3 = null;
+		point4 = null;
+		point5 = null;
+		vertex1 = null;
+		vertex2 = null;
+		axis = null;
+		faceClippedX = null;
+		faceNearClipped = null;
+		vertexScreenX = null;
+		vertexScreenY = null;
+		vertexScreenZ = null;
+		vertexViewSpaceX = null;
+		vertexViewSpaceY = null;
+		vertexViewSpaceZ = null;
+		tmpDepthFaceCount = null;
+		tmpDepthFaces = null;
+		tmpPriorityFaceCount = null;
+		tmpPriorityFaces = null;
+		tmpPriority10FaceDepth = null;
+		tmpPriority11FaceDepth = null;
+		tmpPriorityDepthSum = null;
+		sin = null;
+		cos = null;
+		palette = null;
+		reciprical16 = null;
 	}
 
 	@OriginalMember(owner = "client!eb", name = "a", descriptor = "(ILclient!ub;)V")
-	public static void unpack(@OriginalArg(0) int arg0, @OriginalArg(1) FileArchive arg1) {
+	public static void unpack(@OriginalArg(1) FileArchive arg1) {
 		try {
-			if (arg0 >= 3 && arg0 <= 3) {
-				try {
-					head = new Buffer(363, arg1.read("ob_head.dat", null, (byte) 2));
-					face1 = new Buffer(363, arg1.read("ob_face1.dat", null, (byte) 2));
-					face2 = new Buffer(363, arg1.read("ob_face2.dat", null, (byte) 2));
-					face3 = new Buffer(363, arg1.read("ob_face3.dat", null, (byte) 2));
-					face4 = new Buffer(363, arg1.read("ob_face4.dat", null, (byte) 2));
-					face5 = new Buffer(363, arg1.read("ob_face5.dat", null, (byte) 2));
-					point1 = new Buffer(363, arg1.read("ob_point1.dat", null, (byte) 2));
-					point2 = new Buffer(363, arg1.read("ob_point2.dat", null, (byte) 2));
-					point3 = new Buffer(363, arg1.read("ob_point3.dat", null, (byte) 2));
-					point4 = new Buffer(363, arg1.read("ob_point4.dat", null, (byte) 2));
-					point5 = new Buffer(363, arg1.read("ob_point5.dat", null, (byte) 2));
-					vertex1 = new Buffer(363, arg1.read("ob_vertex1.dat", null, (byte) 2));
-					vertex2 = new Buffer(363, arg1.read("ob_vertex2.dat", null, (byte) 2));
-					axis = new Buffer(363, arg1.read("ob_axis.dat", null, (byte) 2));
-					head.pos = 0;
-					point1.pos = 0;
-					point2.pos = 0;
-					point3.pos = 0;
-					point4.pos = 0;
-					vertex1.pos = 0;
-					vertex2.pos = 0;
-					@Pc(172) int local172 = head.g2();
-					metadata = new Metadata[local172 + 100];
-					@Pc(179) int local179 = 0;
-					@Pc(181) int local181 = 0;
-					@Pc(183) int local183 = 0;
-					@Pc(185) int local185 = 0;
-					@Pc(187) int local187 = 0;
-					@Pc(189) int local189 = 0;
-					@Pc(191) int local191 = 0;
-					for (@Pc(193) int local193 = 0; local193 < local172; local193++) {
-						@Pc(198) int local198 = head.g2();
-						@Pc(206) Metadata local206 = metadata[local198] = new Metadata();
-						local206.vertexCount = head.g2();
-						local206.faceCount = head.g2();
-						local206.texturedFaceCount = head.g1();
-						local206.vertexFlagsOffset = point1.pos;
-						local206.vertexXOffset = point2.pos;
-						local206.vertexYOffset = point3.pos;
-						local206.vertexZOffset = point4.pos;
-						local206.faceVerticesOffset = vertex1.pos;
-						local206.faceOrientationsOffset = vertex2.pos;
-						@Pc(245) int local245 = head.g1();
-						@Pc(248) int local248 = head.g1();
-						@Pc(251) int local251 = head.g1();
-						@Pc(254) int local254 = head.g1();
-						@Pc(257) int local257 = head.g1();
-						@Pc(264) int local264;
-						for (@Pc(259) int local259 = 0; local259 < local206.vertexCount; local259++) {
-							local264 = point1.g1();
-							if ((local264 & 0x1) != 0) {
-								point2.gsmart();
-							}
-							if ((local264 & 0x2) != 0) {
-								point3.gsmart();
-							}
-							if ((local264 & 0x4) != 0) {
-								point4.gsmart();
-							}
-						}
-						for (local264 = 0; local264 < local206.faceCount; local264++) {
-							@Pc(297) int local297 = vertex2.g1();
-							if (local297 == 1) {
-								vertex1.gsmart();
-								vertex1.gsmart();
-							}
-							vertex1.gsmart();
-						}
-						local206.faceColorsOffset = local183;
-						local183 += local206.faceCount * 2;
-						if (local245 == 1) {
-							local206.faceInfosOffset = local185;
-							local185 += local206.faceCount;
-						} else {
-							local206.faceInfosOffset = -1;
-						}
-						if (local248 == 255) {
-							local206.facePrioritiesOffset = local187;
-							local187 += local206.faceCount;
-						} else {
-							local206.facePrioritiesOffset = -local248 - 1;
-						}
-						if (local251 == 1) {
-							local206.faceAlphasOffset = local189;
-							local189 += local206.faceCount;
-						} else {
-							local206.faceAlphasOffset = -1;
-						}
-						if (local254 == 1) {
-							local206.faceLabelsOffset = local191;
-							local191 += local206.faceCount;
-						} else {
-							local206.faceLabelsOffset = -1;
-						}
-						if (local257 == 1) {
-							local206.vertexLabelsOffset = local181;
-							local181 += local206.vertexCount;
-						} else {
-							local206.vertexLabelsOffset = -1;
-						}
-						local206.faceTextureAxisOffset = local179;
-						local179 += local206.texturedFaceCount;
+			head = new Buffer(arg1.read("ob_head.dat", null));
+			face1 = new Buffer(arg1.read("ob_face1.dat", null));
+			face2 = new Buffer(arg1.read("ob_face2.dat", null));
+			face3 = new Buffer(arg1.read("ob_face3.dat", null));
+			face4 = new Buffer(arg1.read("ob_face4.dat", null));
+			face5 = new Buffer(arg1.read("ob_face5.dat", null));
+			point1 = new Buffer(arg1.read("ob_point1.dat", null));
+			point2 = new Buffer(arg1.read("ob_point2.dat", null));
+			point3 = new Buffer(arg1.read("ob_point3.dat", null));
+			point4 = new Buffer(arg1.read("ob_point4.dat", null));
+			point5 = new Buffer(arg1.read("ob_point5.dat", null));
+			vertex1 = new Buffer(arg1.read("ob_vertex1.dat", null));
+			vertex2 = new Buffer(arg1.read("ob_vertex2.dat", null));
+			axis = new Buffer(arg1.read("ob_axis.dat", null));
+			head.pos = 0;
+			point1.pos = 0;
+			point2.pos = 0;
+			point3.pos = 0;
+			point4.pos = 0;
+			vertex1.pos = 0;
+			vertex2.pos = 0;
+			@Pc(172) int local172 = head.g2();
+			metadata = new Metadata[local172 + 100];
+			@Pc(179) int local179 = 0;
+			@Pc(181) int local181 = 0;
+			@Pc(183) int local183 = 0;
+			@Pc(185) int local185 = 0;
+			@Pc(187) int local187 = 0;
+			@Pc(189) int local189 = 0;
+			@Pc(191) int local191 = 0;
+			for (@Pc(193) int local193 = 0; local193 < local172; local193++) {
+				@Pc(198) int local198 = head.g2();
+				@Pc(206) Metadata local206 = metadata[local198] = new Metadata();
+				local206.vertexCount = head.g2();
+				local206.faceCount = head.g2();
+				local206.texturedFaceCount = head.g1();
+				local206.vertexFlagsOffset = point1.pos;
+				local206.vertexXOffset = point2.pos;
+				local206.vertexYOffset = point3.pos;
+				local206.vertexZOffset = point4.pos;
+				local206.faceVerticesOffset = vertex1.pos;
+				local206.faceOrientationsOffset = vertex2.pos;
+				@Pc(245) int local245 = head.g1();
+				@Pc(248) int local248 = head.g1();
+				@Pc(251) int local251 = head.g1();
+				@Pc(254) int local254 = head.g1();
+				@Pc(257) int local257 = head.g1();
+				@Pc(264) int local264;
+				for (@Pc(259) int local259 = 0; local259 < local206.vertexCount; local259++) {
+					local264 = point1.g1();
+					if ((local264 & 0x1) != 0) {
+						point2.gsmart();
 					}
-				} catch (@Pc(421) Exception local421) {
-					System.out.println("Error loading model index");
-					local421.printStackTrace();
+					if ((local264 & 0x2) != 0) {
+						point3.gsmart();
+					}
+					if ((local264 & 0x4) != 0) {
+						point4.gsmart();
+					}
 				}
+				for (local264 = 0; local264 < local206.faceCount; local264++) {
+					@Pc(297) int local297 = vertex2.g1();
+					if (local297 == 1) {
+						vertex1.gsmart();
+						vertex1.gsmart();
+					}
+					vertex1.gsmart();
+				}
+				local206.faceColorsOffset = local183;
+				local183 += local206.faceCount * 2;
+				if (local245 == 1) {
+					local206.faceInfosOffset = local185;
+					local185 += local206.faceCount;
+				} else {
+					local206.faceInfosOffset = -1;
+				}
+				if (local248 == 255) {
+					local206.facePrioritiesOffset = local187;
+					local187 += local206.faceCount;
+				} else {
+					local206.facePrioritiesOffset = -local248 - 1;
+				}
+				if (local251 == 1) {
+					local206.faceAlphasOffset = local189;
+					local189 += local206.faceCount;
+				} else {
+					local206.faceAlphasOffset = -1;
+				}
+				if (local254 == 1) {
+					local206.faceLabelsOffset = local191;
+					local191 += local206.faceCount;
+				} else {
+					local206.faceLabelsOffset = -1;
+				}
+				if (local257 == 1) {
+					local206.vertexLabelsOffset = local181;
+					local181 += local206.vertexCount;
+				} else {
+					local206.vertexLabelsOffset = -1;
+				}
+				local206.faceTextureAxisOffset = local179;
+				local179 += local206.texturedFaceCount;
 			}
-		} catch (@Pc(428) RuntimeException local428) {
-			Signlink.reporterror("33624, " + arg0 + ", " + arg1 + ", " + local428.toString());
-			throw new RuntimeException();
+		} catch (@Pc(421) Exception local421) {
+			System.out.println("Error loading model index");
+			local421.printStackTrace();
 		}
 	}
 
@@ -1071,246 +988,198 @@ public final class Model extends CacheableNode {
 	}
 
 	@OriginalMember(owner = "client!eb", name = "a", descriptor = "(I)V")
-	public void calculateBoundsCylinder(@OriginalArg(0) int arg0) {
-		try {
-			this.maxY = 0;
-			if (arg0 == 2992) {
-				this.radius = 0;
-				this.minY = 0;
-				for (@Pc(14) int local14 = 0; local14 < this.vertexCount; local14++) {
-					@Pc(21) int local21 = this.vertexX[local14];
-					@Pc(26) int local26 = this.vertexY[local14];
-					@Pc(31) int local31 = this.vertexZ[local14];
-					if (-local26 > this.maxY) {
-						this.maxY = -local26;
-					}
-					if (local26 > this.minY) {
-						this.minY = local26;
-					}
-					@Pc(55) int local55 = local21 * local21 + local31 * local31;
-					if (local55 > this.radius) {
-						this.radius = local55;
-					}
-				}
-				this.radius = (int) (Math.sqrt((double) this.radius) + 0.99D);
-				this.minDepth = (int) (Math.sqrt((double) (this.radius * this.radius + this.maxY * this.maxY)) + 0.99D);
-				this.maxDepth = this.minDepth + (int) (Math.sqrt((double) (this.radius * this.radius + this.minY * this.minY)) + 0.99D);
+	public void calculateBoundsCylinder() {
+		this.maxY = 0;
+		this.radius = 0;
+		this.minY = 0;
+		for (@Pc(14) int local14 = 0; local14 < this.vertexCount; local14++) {
+			@Pc(21) int local21 = this.vertexX[local14];
+			@Pc(26) int local26 = this.vertexY[local14];
+			@Pc(31) int local31 = this.vertexZ[local14];
+			if (-local26 > this.maxY) {
+				this.maxY = -local26;
 			}
-		} catch (@Pc(117) RuntimeException local117) {
-			Signlink.reporterror("64225, " + arg0 + ", " + local117.toString());
-			throw new RuntimeException();
+			if (local26 > this.minY) {
+				this.minY = local26;
+			}
+			@Pc(55) int local55 = local21 * local21 + local31 * local31;
+			if (local55 > this.radius) {
+				this.radius = local55;
+			}
 		}
+		this.radius = (int) (Math.sqrt((double) this.radius) + 0.99D);
+		this.minDepth = (int) (Math.sqrt((double) (this.radius * this.radius + this.maxY * this.maxY)) + 0.99D);
+		this.maxDepth = this.minDepth + (int) (Math.sqrt((double) (this.radius * this.radius + this.minY * this.minY)) + 0.99D);
 	}
 
 	@OriginalMember(owner = "client!eb", name = "b", descriptor = "(I)V")
-	public void calculateBoundsY(@OriginalArg(0) int arg0) {
-		try {
-			this.maxY = 0;
-			@Pc(8) int local8;
-			if (arg0 != 0) {
-				for (local8 = 1; local8 > 0; local8++) {
-				}
+	public void calculateBoundsY() {
+		this.maxY = 0;
+		@Pc(8) int local8;
+		this.minY = 0;
+		for (local8 = 0; local8 < this.vertexCount; local8++) {
+			@Pc(25) int local25 = this.vertexY[local8];
+			if (-local25 > this.maxY) {
+				this.maxY = -local25;
 			}
-			this.minY = 0;
-			for (local8 = 0; local8 < this.vertexCount; local8++) {
-				@Pc(25) int local25 = this.vertexY[local8];
-				if (-local25 > this.maxY) {
-					this.maxY = -local25;
-				}
-				if (local25 > this.minY) {
-					this.minY = local25;
-				}
+			if (local25 > this.minY) {
+				this.minY = local25;
 			}
-			this.minDepth = (int) (Math.sqrt((double) (this.radius * this.radius + this.maxY * this.maxY)) + 0.99D);
-			this.maxDepth = this.minDepth + (int) (Math.sqrt((double) (this.radius * this.radius + this.minY * this.minY)) + 0.99D);
-		} catch (@Pc(87) RuntimeException local87) {
-			Signlink.reporterror("27954, " + arg0 + ", " + local87.toString());
-			throw new RuntimeException();
 		}
+		this.minDepth = (int) (Math.sqrt((double) (this.radius * this.radius + this.maxY * this.maxY)) + 0.99D);
+		this.maxDepth = this.minDepth + (int) (Math.sqrt((double) (this.radius * this.radius + this.minY * this.minY)) + 0.99D);
 	}
 
 	@OriginalMember(owner = "client!eb", name = "a", descriptor = "(B)V")
-	private void calculateBoundsAABB(@OriginalArg(0) byte arg0) {
-		try {
-			this.maxY = 0;
-			if (arg0 == this.flowObfuscator4) {
-				this.radius = 0;
-				this.minY = 0;
-				this.minX = 999999;
-				this.maxX = -999999;
-				this.maxZ = -99999;
-				this.minZ = 99999;
-				for (@Pc(27) int local27 = 0; local27 < this.vertexCount; local27++) {
-					@Pc(34) int local34 = this.vertexX[local27];
-					@Pc(39) int local39 = this.vertexY[local27];
-					@Pc(44) int local44 = this.vertexZ[local27];
-					if (local34 < this.minX) {
-						this.minX = local34;
-					}
-					if (local34 > this.maxX) {
-						this.maxX = local34;
-					}
-					if (local44 < this.minZ) {
-						this.minZ = local44;
-					}
-					if (local44 > this.maxZ) {
-						this.maxZ = local44;
-					}
-					if (-local39 > this.maxY) {
-						this.maxY = -local39;
-					}
-					if (local39 > this.minY) {
-						this.minY = local39;
-					}
-					@Pc(96) int local96 = local34 * local34 + local44 * local44;
-					if (local96 > this.radius) {
-						this.radius = local96;
-					}
-				}
-				this.radius = (int) Math.sqrt((double) this.radius);
-				this.minDepth = (int) Math.sqrt((double) (this.radius * this.radius + this.maxY * this.maxY));
-				this.maxDepth = this.minDepth + (int) Math.sqrt((double) (this.radius * this.radius + this.minY * this.minY));
+	private void calculateBoundsAABB() {
+		this.maxY = 0;
+		this.radius = 0;
+		this.minY = 0;
+		this.minX = 999999;
+		this.maxX = -999999;
+		this.maxZ = -99999;
+		this.minZ = 99999;
+		for (@Pc(27) int local27 = 0; local27 < this.vertexCount; local27++) {
+			@Pc(34) int local34 = this.vertexX[local27];
+			@Pc(39) int local39 = this.vertexY[local27];
+			@Pc(44) int local44 = this.vertexZ[local27];
+			if (local34 < this.minX) {
+				this.minX = local34;
 			}
-		} catch (@Pc(152) RuntimeException local152) {
-			Signlink.reporterror("62953, " + arg0 + ", " + local152.toString());
-			throw new RuntimeException();
+			if (local34 > this.maxX) {
+				this.maxX = local34;
+			}
+			if (local44 < this.minZ) {
+				this.minZ = local44;
+			}
+			if (local44 > this.maxZ) {
+				this.maxZ = local44;
+			}
+			if (-local39 > this.maxY) {
+				this.maxY = -local39;
+			}
+			if (local39 > this.minY) {
+				this.minY = local39;
+			}
+			@Pc(96) int local96 = local34 * local34 + local44 * local44;
+			if (local96 > this.radius) {
+				this.radius = local96;
+			}
 		}
+		this.radius = (int) Math.sqrt((double) this.radius);
+		this.minDepth = (int) Math.sqrt((double) (this.radius * this.radius + this.maxY * this.maxY));
+		this.maxDepth = this.minDepth + (int) Math.sqrt((double) (this.radius * this.radius + this.minY * this.minY));
 	}
 
 	@OriginalMember(owner = "client!eb", name = "c", descriptor = "(I)V")
-	public void createLabelReferences(@OriginalArg(0) int arg0) {
-		try {
-			if (arg0 == 4) {
-				@Pc(11) int[] local11;
-				@Pc(26) int local26;
-				@Pc(13) int local13;
-				@Pc(15) int local15;
-				@Pc(22) int local22;
-				@Pc(67) int local67;
-				@Pc(74) int local74;
-				if (this.vertexLabel != null) {
-					local11 = new int[256];
-					local13 = 0;
-					for (local15 = 0; local15 < this.vertexCount; local15++) {
-						local22 = this.vertexLabel[local15];
-						local26 = local11[local22]++;
-						if (local22 > local13) {
-							local13 = local22;
-						}
-					}
-					this.labelVertices = new int[local13 + 1][];
-					for (local22 = 0; local22 <= local13; local22++) {
-						this.labelVertices[local22] = new int[local11[local22]];
-						local11[local22] = 0;
-					}
-					local67 = 0;
-					while (local67 < this.vertexCount) {
-						local74 = this.vertexLabel[local67];
-						this.labelVertices[local74][local11[local74]++] = local67++;
-					}
-					this.vertexLabel = null;
-				}
-				if (this.faceLabel != null) {
-					local11 = new int[256];
-					local13 = 0;
-					for (local15 = 0; local15 < this.faceCount; local15++) {
-						local22 = this.faceLabel[local15];
-						local26 = local11[local22]++;
-						if (local22 > local13) {
-							local13 = local22;
-						}
-					}
-					this.labelFaces = new int[local13 + 1][];
-					for (local22 = 0; local22 <= local13; local22++) {
-						this.labelFaces[local22] = new int[local11[local22]];
-						local11[local22] = 0;
-					}
-					local67 = 0;
-					while (local67 < this.faceCount) {
-						local74 = this.faceLabel[local67];
-						this.labelFaces[local74][local11[local74]++] = local67++;
-					}
-					this.faceLabel = null;
+	public void createLabelReferences() {
+		@Pc(11) int[] local11;
+		@Pc(26) int local26;
+		@Pc(13) int local13;
+		@Pc(15) int local15;
+		@Pc(22) int local22;
+		@Pc(67) int local67;
+		@Pc(74) int local74;
+		if (this.vertexLabel != null) {
+			local11 = new int[256];
+			local13 = 0;
+			for (local15 = 0; local15 < this.vertexCount; local15++) {
+				local22 = this.vertexLabel[local15];
+				local26 = local11[local22]++;
+				if (local22 > local13) {
+					local13 = local22;
 				}
 			}
-		} catch (@Pc(189) RuntimeException local189) {
-			Signlink.reporterror("9753, " + arg0 + ", " + local189.toString());
-			throw new RuntimeException();
+			this.labelVertices = new int[local13 + 1][];
+			for (local22 = 0; local22 <= local13; local22++) {
+				this.labelVertices[local22] = new int[local11[local22]];
+				local11[local22] = 0;
+			}
+			local67 = 0;
+			while (local67 < this.vertexCount) {
+				local74 = this.vertexLabel[local67];
+				this.labelVertices[local74][local11[local74]++] = local67++;
+			}
+			this.vertexLabel = null;
+		}
+		if (this.faceLabel != null) {
+			local11 = new int[256];
+			local13 = 0;
+			for (local15 = 0; local15 < this.faceCount; local15++) {
+				local22 = this.faceLabel[local15];
+				local26 = local11[local22]++;
+				if (local22 > local13) {
+					local13 = local22;
+				}
+			}
+			this.labelFaces = new int[local13 + 1][];
+			for (local22 = 0; local22 <= local13; local22++) {
+				this.labelFaces[local22] = new int[local11[local22]];
+				local11[local22] = 0;
+			}
+			local67 = 0;
+			while (local67 < this.faceCount) {
+				local74 = this.faceLabel[local67];
+				this.labelFaces[local74][local11[local74]++] = local67++;
+			}
+			this.faceLabel = null;
 		}
 	}
 
 	@OriginalMember(owner = "client!eb", name = "a", descriptor = "(II)V")
-	public void applyTransform(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1) {
-		try {
-			if (this.labelVertices != null && arg1 != -1) {
-				@Pc(11) SeqFrame local11 = SeqFrame.instances[arg1];
-				@Pc(14) SeqBase local14 = local11.base;
-				baseX = 0;
-				baseY = 0;
-				baseZ = 0;
-				for (@Pc(22) int local22 = 0; local22 < local11.length; local22++) {
-					@Pc(29) int local29 = local11.bases[local22];
-					this.applyTransform(local14.types[local29], local14.labels[local29], local11.x[local22], local11.y[local22], local11.z[local22]);
-				}
-				if (arg0 == -16599) {
-					;
-				}
+	public void applyTransform(@OriginalArg(1) int arg1) {
+		if (this.labelVertices != null && arg1 != -1) {
+			@Pc(11) SeqFrame local11 = SeqFrame.instances[arg1];
+			@Pc(14) SeqBase local14 = local11.base;
+			baseX = 0;
+			baseY = 0;
+			baseZ = 0;
+			for (@Pc(22) int local22 = 0; local22 < local11.length; local22++) {
+				@Pc(29) int local29 = local11.bases[local22];
+				this.applyTransform(local14.types[local29], local14.labels[local29], local11.x[local22], local11.y[local22], local11.z[local22]);
 			}
-		} catch (@Pc(61) RuntimeException local61) {
-			Signlink.reporterror("30537, " + arg0 + ", " + arg1 + ", " + local61.toString());
-			throw new RuntimeException();
 		}
 	}
 
 	@OriginalMember(owner = "client!eb", name = "a", descriptor = "(III[I)V")
-	public void applyTransforms(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2, @OriginalArg(3) int[] arg3) {
-		try {
-			if (arg2 != -1) {
-				if (arg3 == null || arg0 == -1) {
-					this.applyTransform(-16599, arg2);
-				} else {
-					@Pc(19) SeqFrame local19 = SeqFrame.instances[arg2];
-					if (arg1 < 3 || arg1 > 3) {
-						this.flowObfuscator5 = -162;
-					}
-					@Pc(32) SeqFrame local32 = SeqFrame.instances[arg0];
-					@Pc(35) SeqBase local35 = local19.base;
-					baseX = 0;
-					baseY = 0;
-					baseZ = 0;
-					@Pc(43) byte local43 = 0;
-					@Pc(46) int local46 = local43 + 1;
-					@Pc(48) int local48 = arg3[local43];
-					@Pc(57) int local57;
-					for (@Pc(50) int local50 = 0; local50 < local19.length; local50++) {
-						local57 = local19.bases[local50];
-						while (local57 > local48) {
-							local48 = arg3[local46++];
-						}
-						if (local57 != local48 || local35.types[local57] == 0) {
-							this.applyTransform(local35.types[local57], local35.labels[local57], local19.x[local50], local19.y[local50], local19.z[local50]);
-						}
-					}
-					baseX = 0;
-					baseY = 0;
-					baseZ = 0;
-					local43 = 0;
-					local46 = local43 + 1;
-					local48 = arg3[local43];
-					for (local57 = 0; local57 < local32.length; local57++) {
-						@Pc(124) int local124 = local32.bases[local57];
-						while (local124 > local48) {
-							local48 = arg3[local46++];
-						}
-						if (local124 == local48 || local35.types[local124] == 0) {
-							this.applyTransform(local35.types[local124], local35.labels[local124], local32.x[local57], local32.y[local57], local32.z[local57]);
-						}
-					}
+	public void applyTransforms(@OriginalArg(0) int arg0, @OriginalArg(2) int arg2, @OriginalArg(3) int[] arg3) {
+		if (arg3 == null || arg0 == -1) {
+			this.applyTransform(arg2);
+		} else {
+			@Pc(19) SeqFrame local19 = SeqFrame.instances[arg2];
+			@Pc(32) SeqFrame local32 = SeqFrame.instances[arg0];
+			@Pc(35) SeqBase local35 = local19.base;
+			baseX = 0;
+			baseY = 0;
+			baseZ = 0;
+			@Pc(43) byte local43 = 0;
+			@Pc(46) int local46 = local43 + 1;
+			@Pc(48) int local48 = arg3[local43];
+			@Pc(57) int local57;
+			for (@Pc(50) int local50 = 0; local50 < local19.length; local50++) {
+				local57 = local19.bases[local50];
+				while (local57 > local48) {
+					local48 = arg3[local46++];
+				}
+				if (local57 != local48 || local35.types[local57] == 0) {
+					this.applyTransform(local35.types[local57], local35.labels[local57], local19.x[local50], local19.y[local50], local19.z[local50]);
 				}
 			}
-		} catch (@Pc(171) RuntimeException local171) {
-			Signlink.reporterror("37286, " + arg0 + ", " + arg1 + ", " + arg2 + ", " + arg3 + ", " + local171.toString());
-			throw new RuntimeException();
+			baseX = 0;
+			baseY = 0;
+			baseZ = 0;
+			local43 = 0;
+			local46 = local43 + 1;
+			local48 = arg3[local43];
+			for (local57 = 0; local57 < local32.length; local57++) {
+				@Pc(124) int local124 = local32.bases[local57];
+				while (local124 > local48) {
+					local48 = arg3[local46++];
+				}
+				if (local124 == local48 || local35.types[local124] == 0) {
+					this.applyTransform(local35.types[local124], local35.labels[local124], local32.x[local57], local32.y[local57], local32.z[local57]);
+				}
+			}
 		}
 	}
 
@@ -1448,55 +1317,31 @@ public final class Model extends CacheableNode {
 	}
 
 	@OriginalMember(owner = "client!eb", name = "d", descriptor = "(I)V")
-	public void rotateY90(@OriginalArg(0) int arg0) {
-		try {
-			if (arg0 != 0) {
-				this.flowObfuscator2 = 472;
-			}
-			for (@Pc(6) int local6 = 0; local6 < this.vertexCount; local6++) {
-				@Pc(13) int local13 = this.vertexX[local6];
-				this.vertexX[local6] = this.vertexZ[local6];
-				this.vertexZ[local6] = -local13;
-			}
-		} catch (@Pc(34) RuntimeException local34) {
-			Signlink.reporterror("87214, " + arg0 + ", " + local34.toString());
-			throw new RuntimeException();
+	public void rotateY90() {
+		for (@Pc(6) int local6 = 0; local6 < this.vertexCount; local6++) {
+			@Pc(13) int local13 = this.vertexX[local6];
+			this.vertexX[local6] = this.vertexZ[local6];
+			this.vertexZ[local6] = -local13;
 		}
 	}
 
 	@OriginalMember(owner = "client!eb", name = "a", descriptor = "(BI)V")
-	public void rotateX(@OriginalArg(0) byte arg0, @OriginalArg(1) int arg1) {
-		try {
-			@Pc(3) int local3 = sin[arg1];
-			@Pc(7) int local7 = cos[arg1];
-			for (@Pc(9) int local9 = 0; local9 < this.vertexCount; local9++) {
-				@Pc(27) int local27 = this.vertexY[local9] * local7 - this.vertexZ[local9] * local3 >> 16;
-				this.vertexZ[local9] = this.vertexY[local9] * local3 + this.vertexZ[local9] * local7 >> 16;
-				this.vertexY[local9] = local27;
-			}
-			if (arg0 == 7) {
-				@Pc(61) boolean local61 = false;
-			}
-		} catch (@Pc(64) RuntimeException local64) {
-			Signlink.reporterror("42556, " + arg0 + ", " + arg1 + ", " + local64.toString());
-			throw new RuntimeException();
+	public void rotateX(@OriginalArg(1) int arg1) {
+		@Pc(3) int local3 = sin[arg1];
+		@Pc(7) int local7 = cos[arg1];
+		for (@Pc(9) int local9 = 0; local9 < this.vertexCount; local9++) {
+			@Pc(27) int local27 = this.vertexY[local9] * local7 - this.vertexZ[local9] * local3 >> 16;
+			this.vertexZ[local9] = this.vertexY[local9] * local3 + this.vertexZ[local9] * local7 >> 16;
+			this.vertexY[local9] = local27;
 		}
 	}
 
 	@OriginalMember(owner = "client!eb", name = "a", descriptor = "(IIII)V")
-	public void translate(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2, @OriginalArg(3) int arg3) {
-		try {
-			if (arg2 >= 0) {
-				this.flowObfuscator6 = !this.flowObfuscator6;
-			}
-			for (@Pc(11) int local11 = 0; local11 < this.vertexCount; local11++) {
-				this.vertexX[local11] += arg1;
-				this.vertexY[local11] += arg0;
-				this.vertexZ[local11] += arg3;
-			}
-		} catch (@Pc(44) RuntimeException local44) {
-			Signlink.reporterror("79785, " + arg0 + ", " + arg1 + ", " + arg2 + ", " + arg3 + ", " + local44.toString());
-			throw new RuntimeException();
+	public void translate(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(3) int arg3) {
+		for (@Pc(11) int local11 = 0; local11 < this.vertexCount; local11++) {
+			this.vertexX[local11] += arg1;
+			this.vertexY[local11] += arg0;
+			this.vertexZ[local11] += arg3;
 		}
 	}
 
@@ -1510,41 +1355,24 @@ public final class Model extends CacheableNode {
 	}
 
 	@OriginalMember(owner = "client!eb", name = "e", descriptor = "(I)V")
-	public void rotateY180(@OriginalArg(0) int arg0) {
-		try {
-			for (@Pc(3) int local3 = 0; local3 < this.vertexCount; local3++) {
-				this.vertexZ[local3] = -this.vertexZ[local3];
-			}
-			@Pc(28) int local28;
-			for (@Pc(21) int local21 = 0; local21 < this.faceCount; local21++) {
-				local28 = this.faceVertexA[local21];
-				this.faceVertexA[local21] = this.faceVertexC[local21];
-				this.faceVertexC[local21] = local28;
-			}
-			if (arg0 >= 0) {
-				for (local28 = 1; local28 > 0; local28++) {
-				}
-			}
-		} catch (@Pc(57) RuntimeException local57) {
-			Signlink.reporterror("99608, " + arg0 + ", " + local57.toString());
-			throw new RuntimeException();
+	public void rotateY180() {
+		for (@Pc(3) int local3 = 0; local3 < this.vertexCount; local3++) {
+			this.vertexZ[local3] = -this.vertexZ[local3];
+		}
+		@Pc(28) int local28;
+		for (@Pc(21) int local21 = 0; local21 < this.faceCount; local21++) {
+			local28 = this.faceVertexA[local21];
+			this.faceVertexA[local21] = this.faceVertexC[local21];
+			this.faceVertexC[local21] = local28;
 		}
 	}
 
 	@OriginalMember(owner = "client!eb", name = "b", descriptor = "(IIII)V")
-	public void scale(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2, @OriginalArg(3) int arg3) {
-		try {
-			for (@Pc(1) int local1 = 0; local1 < this.vertexCount; local1++) {
-				this.vertexX[local1] = this.vertexX[local1] * arg3 / 128;
-				this.vertexY[local1] = this.vertexY[local1] * arg2 / 128;
-				this.vertexZ[local1] = this.vertexZ[local1] * arg0 / 128;
-			}
-			if (arg1 < 2 || arg1 > 2) {
-				;
-			}
-		} catch (@Pc(52) RuntimeException local52) {
-			Signlink.reporterror("99322, " + arg0 + ", " + arg1 + ", " + arg2 + ", " + arg3 + ", " + local52.toString());
-			throw new RuntimeException();
+	public void scale(@OriginalArg(0) int arg0, @OriginalArg(2) int arg2, @OriginalArg(3) int arg3) {
+		for (@Pc(1) int local1 = 0; local1 < this.vertexCount; local1++) {
+			this.vertexX[local1] = this.vertexX[local1] * arg3 / 128;
+			this.vertexY[local1] = this.vertexY[local1] * arg2 / 128;
+			this.vertexZ[local1] = this.vertexZ[local1] * arg0 / 128;
 		}
 	}
 
@@ -1624,9 +1452,9 @@ public final class Model extends CacheableNode {
 			}
 		}
 		if (arg5) {
-			this.calculateBoundsCylinder(2992);
+			this.calculateBoundsCylinder();
 		} else {
-			this.calculateBoundsAABB(this.flowObfuscator3);
+			this.calculateBoundsAABB();
 		}
 	}
 
