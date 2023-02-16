@@ -128,35 +128,39 @@ public class Draw2D extends CacheableNode {
 
 	@OriginalMember(owner = "client!fb", name = "b", descriptor = "(IIIII)V")
 	public static void drawHorizontalLine(@OriginalArg(0) int arg0, @OriginalArg(2) int arg2, @OriginalArg(3) int arg3, @OriginalArg(4) int arg4) {
-		if (arg2 >= top && arg2 < bottom) {
-			if (arg4 < left) {
-				arg3 -= left - arg4;
-				arg4 = left;
-			}
-			if (arg4 + arg3 > right) {
-				arg3 = right - arg4;
-			}
-			@Pc(32) int local32 = arg4 + arg2 * width2d;
-			for (@Pc(37) int local37 = 0; local37 < arg3; local37++) {
-				data[local32 + local37] = arg0;
-			}
+		if (arg2 < top || arg2 >= bottom) {
+			return;
+		}
+
+		if (arg4 < left) {
+			arg3 -= left - arg4;
+			arg4 = left;
+		}
+		if (arg4 + arg3 > right) {
+			arg3 = right - arg4;
+		}
+		@Pc(32) int local32 = arg4 + arg2 * width2d;
+		for (@Pc(37) int local37 = 0; local37 < arg3; local37++) {
+			data[local32 + local37] = arg0;
 		}
 	}
 
 	@OriginalMember(owner = "client!fb", name = "c", descriptor = "(IIIII)V")
 	public static void drawVerticalLine(@OriginalArg(0) int arg0, @OriginalArg(2) int arg2, @OriginalArg(3) int arg3, @OriginalArg(4) int arg4) {
-		if (arg4 >= left && arg4 < right) {
-			if (arg2 < top) {
-				arg3 -= top - arg2;
-				arg2 = top;
-			}
-			if (arg2 + arg3 > bottom) {
-				arg3 = bottom - arg2;
-			}
-			@Pc(32) int local32 = arg4 + arg2 * width2d;
-			for (@Pc(38) int local38 = 0; local38 < arg3; local38++) {
-				data[local32 + local38 * width2d] = arg0;
-			}
+		if (arg4 < left || arg4 >= right) {
+			return;
+		}
+
+		if (arg2 < top) {
+			arg3 -= top - arg2;
+			arg2 = top;
+		}
+		if (arg2 + arg3 > bottom) {
+			arg3 = bottom - arg2;
+		}
+		@Pc(32) int local32 = arg4 + arg2 * width2d;
+		for (@Pc(38) int local38 = 0; local38 < arg3; local38++) {
+			data[local32 + local38 * width2d] = arg0;
 		}
 	}
 

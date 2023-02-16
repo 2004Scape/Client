@@ -1329,12 +1329,14 @@ public final class Game extends GameShell {
 
 	@OriginalMember(owner = "client!client", name = "a", descriptor = "(ZILjava/lang/String;I)V")
 	private void setMidi(@OriginalArg(1) int arg1, @OriginalArg(2) String arg2, @OriginalArg(3) int arg3) {
-		if (arg2 != null) {
-			synchronized (this.midiSync) {
-				this.midiSyncName = arg2;
-				this.midiSyncCrc = arg1;
-				this.midiSyncLen = arg3;
-			}
+		if (arg2 == null) {
+			return;
+		}
+
+		synchronized (this.midiSync) {
+			this.midiSyncName = arg2;
+			this.midiSyncCrc = arg1;
+			this.midiSyncLen = arg3;
 		}
 	}
 
@@ -1580,42 +1582,44 @@ public final class Game extends GameShell {
 
 	@OriginalMember(owner = "client!client", name = "g", descriptor = "(I)V")
 	private void drawPrivateMessages() {
-		if (this.splitPrivateChat != 0) {
-			@Pc(9) BitmapFont local9 = this.fontPlain12;
-			@Pc(11) int local11 = 0;
-			if (this.systemUpdateTimer != 0) {
-				local11 = 1;
-			}
-			for (@Pc(18) int local18 = 0; local18 < 100; local18++) {
-				if (this.messageText[local18] != null) {
-					@Pc(30) int local30 = this.messageType[local18];
-					@Pc(60) int local60;
-					if ((local30 == 3 || local30 == 7) && (local30 == 7 || this.privateChatSetting == 0 || this.privateChatSetting == 1 && this.isFriend(this.messageSender[local18]))) {
-						local60 = 329 - local11 * 13;
-						local9.drawString(4, local60, 0, "From " + this.messageSender[local18] + ": " + this.messageText[local18]);
-						local9.drawString(4, local60 - 1, 65535, "From " + this.messageSender[local18] + ": " + this.messageText[local18]);
-						local11++;
-						if (local11 >= 5) {
-							return;
-						}
+		if (this.splitPrivateChat == 0) {
+			return;
+		}
+
+		@Pc(9) BitmapFont local9 = this.fontPlain12;
+		@Pc(11) int local11 = 0;
+		if (this.systemUpdateTimer != 0) {
+			local11 = 1;
+		}
+		for (@Pc(18) int local18 = 0; local18 < 100; local18++) {
+			if (this.messageText[local18] != null) {
+				@Pc(30) int local30 = this.messageType[local18];
+				@Pc(60) int local60;
+				if ((local30 == 3 || local30 == 7) && (local30 == 7 || this.privateChatSetting == 0 || this.privateChatSetting == 1 && this.isFriend(this.messageSender[local18]))) {
+					local60 = 329 - local11 * 13;
+					local9.drawString(4, local60, 0, "From " + this.messageSender[local18] + ": " + this.messageText[local18]);
+					local9.drawString(4, local60 - 1, 65535, "From " + this.messageSender[local18] + ": " + this.messageText[local18]);
+					local11++;
+					if (local11 >= 5) {
+						return;
 					}
-					if (local30 == 5 && this.privateChatSetting < 2) {
-						local60 = 329 - local11 * 13;
-						local9.drawString(4, local60, 0, this.messageText[local18]);
-						local9.drawString(4, local60 - 1, 65535, this.messageText[local18]);
-						local11++;
-						if (local11 >= 5) {
-							return;
-						}
+				}
+				if (local30 == 5 && this.privateChatSetting < 2) {
+					local60 = 329 - local11 * 13;
+					local9.drawString(4, local60, 0, this.messageText[local18]);
+					local9.drawString(4, local60 - 1, 65535, this.messageText[local18]);
+					local11++;
+					if (local11 >= 5) {
+						return;
 					}
-					if (local30 == 6 && this.privateChatSetting < 2) {
-						local60 = 329 - local11 * 13;
-						local9.drawString(4, local60, 0, "To " + this.messageSender[local18] + ": " + this.messageText[local18]);
-						local9.drawString(4, local60 - 1, 65535, "To " + this.messageSender[local18] + ": " + this.messageText[local18]);
-						local11++;
-						if (local11 >= 5) {
-							return;
-						}
+				}
+				if (local30 == 6 && this.privateChatSetting < 2) {
+					local60 = 329 - local11 * 13;
+					local9.drawString(4, local60, 0, "To " + this.messageSender[local18] + ": " + this.messageText[local18]);
+					local9.drawString(4, local60 - 1, 65535, "To " + this.messageSender[local18] + ": " + this.messageText[local18]);
+					local11++;
+					if (local11 >= 5) {
+						return;
 					}
 				}
 			}
@@ -1694,28 +1698,30 @@ public final class Game extends GameShell {
 
 	@OriginalMember(owner = "client!client", name = "a", descriptor = "(JB)V")
 	private void addIgnore(@OriginalArg(0) long arg0) {
-		if (arg0 != 0L) {
-			if (this.ignoreCount >= 100) {
-				this.addMessage(0, "Your ignore list is full. Max of 100 hit", "");
-			} else {
-				@Pc(23) String local23 = StringUtils.formatName(StringUtils.fromBase37(arg0));
-				for (@Pc(25) int local25 = 0; local25 < this.ignoreCount; local25++) {
-					if (this.ignoreName37[local25] == arg0) {
-						this.addMessage(0, local23 + " is already on your ignore list", "");
-						return;
-					}
+		if (arg0 == 0L) {
+			return;
+		}
+
+		if (this.ignoreCount >= 100) {
+			this.addMessage(0, "Your ignore list is full. Max of 100 hit", "");
+		} else {
+			@Pc(23) String local23 = StringUtils.formatName(StringUtils.fromBase37(arg0));
+			for (@Pc(25) int local25 = 0; local25 < this.ignoreCount; local25++) {
+				if (this.ignoreName37[local25] == arg0) {
+					this.addMessage(0, local23 + " is already on your ignore list", "");
+					return;
 				}
-				for (@Pc(55) int local55 = 0; local55 < this.friendCount; local55++) {
-					if (this.friendName37[local55] == arg0) {
-						this.addMessage(0, "Please remove " + local23 + " from your friend list first", "");
-						return;
-					}
-				}
-				this.ignoreName37[this.ignoreCount++] = arg0;
-				this.redrawSidebar = true;
-				this.out.p1isaac(79);
-				this.out.p8(arg0);
 			}
+			for (@Pc(55) int local55 = 0; local55 < this.friendCount; local55++) {
+				if (this.friendName37[local55] == arg0) {
+					this.addMessage(0, "Please remove " + local23 + " from your friend list first", "");
+					return;
+				}
+			}
+			this.ignoreName37[this.ignoreCount++] = arg0;
+			this.redrawSidebar = true;
+			this.out.p1isaac(79);
+			this.out.p8(arg0);
 		}
 	}
 
@@ -2457,194 +2463,196 @@ public final class Game extends GameShell {
 
 	@OriginalMember(owner = "client!client", name = "a", descriptor = "(IIILclient!hc;III)V")
 	private void handleInterfaceInput(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2, @OriginalArg(3) IfType arg3, @OriginalArg(5) int arg5, @OriginalArg(6) int arg6) {
-		if (arg3.type == 0 && arg3.childId != null && !arg3.hide && (arg1 >= arg5 && arg0 >= arg2 && arg1 <= arg5 + arg3.width && arg0 <= arg2 + arg3.height)) {
-			@Pc(34) int local34 = arg3.childId.length;
-			for (@Pc(44) int local44 = 0; local44 < local34; local44++) {
-				@Pc(53) int local53 = arg3.childX[local44] + arg5;
-				@Pc(62) int local62 = arg3.childY[local44] + arg2 - arg6;
-				@Pc(69) IfType local69 = IfType.instances[arg3.childId[local44]];
-				@Pc(74) int local74 = local53 + local69.x;
-				@Pc(79) int local79 = local62 + local69.y;
-				if ((local69.delegateHover >= 0 || local69.hoverColor != 0) && arg1 >= local74 && arg0 >= local79 && arg1 < local74 + local69.width && arg0 < local79 + local69.height) {
-					if (local69.delegateHover >= 0) {
-						this.lastHoveredInterfaceId = local69.delegateHover;
-					} else {
-						this.lastHoveredInterfaceId = local69.id;
+		if (arg3.type != 0 || arg3.childId == null || arg3.hide || (arg1 < arg5 || arg0 < arg2 || arg1 > arg5 + arg3.width || arg0 > arg2 + arg3.height)) {
+			return;
+		}
+
+		@Pc(34) int local34 = arg3.childId.length;
+		for (@Pc(44) int local44 = 0; local44 < local34; local44++) {
+			@Pc(53) int local53 = arg3.childX[local44] + arg5;
+			@Pc(62) int local62 = arg3.childY[local44] + arg2 - arg6;
+			@Pc(69) IfType local69 = IfType.instances[arg3.childId[local44]];
+			@Pc(74) int local74 = local53 + local69.x;
+			@Pc(79) int local79 = local62 + local69.y;
+			if ((local69.delegateHover >= 0 || local69.hoverColor != 0) && arg1 >= local74 && arg0 >= local79 && arg1 < local74 + local69.width && arg0 < local79 + local69.height) {
+				if (local69.delegateHover >= 0) {
+					this.lastHoveredInterfaceId = local69.delegateHover;
+				} else {
+					this.lastHoveredInterfaceId = local69.id;
+				}
+			}
+			if (local69.type == 0) {
+				this.handleInterfaceInput(arg0, arg1, local79, local69, local74, local69.scrollPosition);
+				if (local69.scrollableHeight > local69.height) {
+					this.handleScrollInput(arg1, arg0, local69.scrollableHeight, local69.height, true, local74 + local69.width, local79, local69);
+				}
+			} else {
+				if (local69.optionType == 1 && arg1 >= local74 && arg0 >= local79 && arg1 < local74 + local69.width && arg0 < local79 + local69.height) {
+					@Pc(176) boolean local176 = false;
+					if (local69.contentType != 0) {
+						local176 = this.handleSocialMenuOption(local69);
+					}
+					if (!local176) {
+						this.menuOption[this.menuSize] = local69.option;
+						this.menuAction[this.menuSize] = 951;
+						this.menuParamB[this.menuSize] = local69.id;
+						this.menuSize++;
 					}
 				}
-				if (local69.type == 0) {
-					this.handleInterfaceInput(arg0, arg1, local79, local69, local74, local69.scrollPosition);
-					if (local69.scrollableHeight > local69.height) {
-						this.handleScrollInput(arg1, arg0, local69.scrollableHeight, local69.height, true, local74 + local69.width, local79, local69);
+				if (local69.optionType == 2 && this.spellSelected == 0 && arg1 >= local74 && arg0 >= local79 && arg1 < local74 + local69.width && arg0 < local79 + local69.height) {
+					@Pc(240) String local240 = local69.spellAction;
+					if (local240.indexOf(" ") != -1) {
+						local240 = local240.substring(0, local240.indexOf(" "));
 					}
-				} else {
-					if (local69.optionType == 1 && arg1 >= local74 && arg0 >= local79 && arg1 < local74 + local69.width && arg0 < local79 + local69.height) {
-						@Pc(176) boolean local176 = false;
-						if (local69.contentType != 0) {
-							local176 = this.handleSocialMenuOption(local69);
-						}
-						if (!local176) {
-							this.menuOption[this.menuSize] = local69.option;
-							this.menuAction[this.menuSize] = 951;
-							this.menuParamB[this.menuSize] = local69.id;
-							this.menuSize++;
-						}
-					}
-					if (local69.optionType == 2 && this.spellSelected == 0 && arg1 >= local74 && arg0 >= local79 && arg1 < local74 + local69.width && arg0 < local79 + local69.height) {
-						@Pc(240) String local240 = local69.spellAction;
-						if (local240.indexOf(" ") != -1) {
-							local240 = local240.substring(0, local240.indexOf(" "));
-						}
-						this.menuOption[this.menuSize] = local240 + " @gre@" + local69.spellName;
-						this.menuAction[this.menuSize] = 930;
-						this.menuParamB[this.menuSize] = local69.id;
-						this.menuSize++;
-					}
-					if (local69.optionType == 3 && arg1 >= local74 && arg0 >= local79 && arg1 < local74 + local69.width && arg0 < local79 + local69.height) {
-						this.menuOption[this.menuSize] = "Close";
-						this.menuAction[this.menuSize] = 947;
-						this.menuParamB[this.menuSize] = local69.id;
-						this.menuSize++;
-					}
-					if (local69.optionType == 4 && arg1 >= local74 && arg0 >= local79 && arg1 < local74 + local69.width && arg0 < local79 + local69.height) {
-						this.menuOption[this.menuSize] = local69.option;
-						this.menuAction[this.menuSize] = 465;
-						this.menuParamB[this.menuSize] = local69.id;
-						this.menuSize++;
-					}
-					if (local69.optionType == 5 && arg1 >= local74 && arg0 >= local79 && arg1 < local74 + local69.width && arg0 < local79 + local69.height) {
-						this.menuOption[this.menuSize] = local69.option;
-						this.menuAction[this.menuSize] = 960;
-						this.menuParamB[this.menuSize] = local69.id;
-						this.menuSize++;
-					}
-					if (local69.optionType == 6 && !this.pressedContinueOption && arg1 >= local74 && arg0 >= local79 && arg1 < local74 + local69.width && arg0 < local79 + local69.height) {
-						this.menuOption[this.menuSize] = local69.option;
-						this.menuAction[this.menuSize] = 44;
-						this.menuParamB[this.menuSize] = local69.id;
-						this.menuSize++;
-					}
-					if (local69.type == 2) {
-						@Pc(488) int local488 = 0;
-						for (@Pc(490) int local490 = 0; local490 < local69.height; local490++) {
-							for (@Pc(494) int local494 = 0; local494 < local69.width; local494++) {
-								@Pc(505) int local505 = local74 + local494 * (local69.inventoryMarginX + 32);
-								@Pc(514) int local514 = local79 + local490 * (local69.inventoryMarginY + 32);
-								if (local488 < 20) {
-									local505 += local69.inventorySlotOffsetX[local488];
-									local514 += local69.inventorySlotOffsetY[local488];
-								}
-								if (arg1 >= local505 && arg0 >= local514 && arg1 < local505 + 32 && arg0 < local514 + 32) {
-									this.hoveredSlot = local488;
-									this.hoveredSlotParentId = local69.id;
-									if (local69.inventorySlotObjId[local488] > 0) {
-										@Pc(567) ObjType local567 = ObjType.get(local69.inventorySlotObjId[local488] - 1);
-										if (this.objSelected == 1 && local69.inventoryInteractable) {
-											if (local69.id != this.objSelectedInterface || local488 != this.objSelectedSlot) {
-												this.menuOption[this.menuSize] = "Use " + this.objSelectedName + " with @lre@" + local567.name;
-												this.menuAction[this.menuSize] = 881;
-												this.menuParamC[this.menuSize] = local567.index;
-												this.menuParamA[this.menuSize] = local488;
-												this.menuParamB[this.menuSize] = local69.id;
-												this.menuSize++;
-											}
-										} else if (this.spellSelected != 1 || !local69.inventoryInteractable) {
-											@Pc(704) int local704;
-											if (local69.inventoryInteractable) {
-												for (local704 = 4; local704 >= 3; local704--) {
-													if (local567.iops != null && local567.iops[local704] != null) {
-														this.menuOption[this.menuSize] = local567.iops[local704] + " @lre@" + local567.name;
-														if (local704 == 3) {
-															this.menuAction[this.menuSize] = 478;
-														}
-														if (local704 == 4) {
-															this.menuAction[this.menuSize] = 347;
-														}
-														this.menuParamC[this.menuSize] = local567.index;
-														this.menuParamA[this.menuSize] = local488;
-														this.menuParamB[this.menuSize] = local69.id;
-														this.menuSize++;
-													} else if (local704 == 4) {
-														this.menuOption[this.menuSize] = "Drop @lre@" + local567.name;
-														this.menuAction[this.menuSize] = 347;
-														this.menuParamC[this.menuSize] = local567.index;
-														this.menuParamA[this.menuSize] = local488;
-														this.menuParamB[this.menuSize] = local69.id;
-														this.menuSize++;
-													}
-												}
-											}
-											if (local69.inventoryUsable) {
-												this.menuOption[this.menuSize] = "Use @lre@" + local567.name;
-												this.menuAction[this.menuSize] = 188;
-												this.menuParamC[this.menuSize] = local567.index;
-												this.menuParamA[this.menuSize] = local488;
-												this.menuParamB[this.menuSize] = local69.id;
-												this.menuSize++;
-											}
-											if (local69.inventoryInteractable && local567.iops != null) {
-												for (local704 = 2; local704 >= 0; local704--) {
-													if (local567.iops[local704] != null) {
-														this.menuOption[this.menuSize] = local567.iops[local704] + " @lre@" + local567.name;
-														if (local704 == 0) {
-															this.menuAction[this.menuSize] = 405;
-														}
-														if (local704 == 1) {
-															this.menuAction[this.menuSize] = 38;
-														}
-														if (local704 == 2) {
-															this.menuAction[this.menuSize] = 422;
-														}
-														this.menuParamC[this.menuSize] = local567.index;
-														this.menuParamA[this.menuSize] = local488;
-														this.menuParamB[this.menuSize] = local69.id;
-														this.menuSize++;
-													}
-												}
-											}
-											if (local69.inventoryOptions != null) {
-												for (local704 = 4; local704 >= 0; local704--) {
-													if (local69.inventoryOptions[local704] != null) {
-														this.menuOption[this.menuSize] = local69.inventoryOptions[local704] + " @lre@" + local567.name;
-														if (local704 == 0) {
-															this.menuAction[this.menuSize] = 602;
-														}
-														if (local704 == 1) {
-															this.menuAction[this.menuSize] = 596;
-														}
-														if (local704 == 2) {
-															this.menuAction[this.menuSize] = 22;
-														}
-														if (local704 == 3) {
-															this.menuAction[this.menuSize] = 892;
-														}
-														if (local704 == 4) {
-															this.menuAction[this.menuSize] = 415;
-														}
-														this.menuParamC[this.menuSize] = local567.index;
-														this.menuParamA[this.menuSize] = local488;
-														this.menuParamB[this.menuSize] = local69.id;
-														this.menuSize++;
-													}
-												}
-											}
-											this.menuOption[this.menuSize] = "Examine @lre@" + local567.name;
-											this.menuAction[this.menuSize] = 1773;
-											this.menuParamC[this.menuSize] = local567.index;
-											this.menuParamB[this.menuSize] = local69.inventorySlotObjCount[local488];
-											this.menuSize++;
-										} else if ((this.activeSpellFlags & 0x10) == 16) {
-											this.menuOption[this.menuSize] = this.spellCaption + " @lre@" + local567.name;
-											this.menuAction[this.menuSize] = 391;
+					this.menuOption[this.menuSize] = local240 + " @gre@" + local69.spellName;
+					this.menuAction[this.menuSize] = 930;
+					this.menuParamB[this.menuSize] = local69.id;
+					this.menuSize++;
+				}
+				if (local69.optionType == 3 && arg1 >= local74 && arg0 >= local79 && arg1 < local74 + local69.width && arg0 < local79 + local69.height) {
+					this.menuOption[this.menuSize] = "Close";
+					this.menuAction[this.menuSize] = 947;
+					this.menuParamB[this.menuSize] = local69.id;
+					this.menuSize++;
+				}
+				if (local69.optionType == 4 && arg1 >= local74 && arg0 >= local79 && arg1 < local74 + local69.width && arg0 < local79 + local69.height) {
+					this.menuOption[this.menuSize] = local69.option;
+					this.menuAction[this.menuSize] = 465;
+					this.menuParamB[this.menuSize] = local69.id;
+					this.menuSize++;
+				}
+				if (local69.optionType == 5 && arg1 >= local74 && arg0 >= local79 && arg1 < local74 + local69.width && arg0 < local79 + local69.height) {
+					this.menuOption[this.menuSize] = local69.option;
+					this.menuAction[this.menuSize] = 960;
+					this.menuParamB[this.menuSize] = local69.id;
+					this.menuSize++;
+				}
+				if (local69.optionType == 6 && !this.pressedContinueOption && arg1 >= local74 && arg0 >= local79 && arg1 < local74 + local69.width && arg0 < local79 + local69.height) {
+					this.menuOption[this.menuSize] = local69.option;
+					this.menuAction[this.menuSize] = 44;
+					this.menuParamB[this.menuSize] = local69.id;
+					this.menuSize++;
+				}
+				if (local69.type == 2) {
+					@Pc(488) int local488 = 0;
+					for (@Pc(490) int local490 = 0; local490 < local69.height; local490++) {
+						for (@Pc(494) int local494 = 0; local494 < local69.width; local494++) {
+							@Pc(505) int local505 = local74 + local494 * (local69.inventoryMarginX + 32);
+							@Pc(514) int local514 = local79 + local490 * (local69.inventoryMarginY + 32);
+							if (local488 < 20) {
+								local505 += local69.inventorySlotOffsetX[local488];
+								local514 += local69.inventorySlotOffsetY[local488];
+							}
+							if (arg1 >= local505 && arg0 >= local514 && arg1 < local505 + 32 && arg0 < local514 + 32) {
+								this.hoveredSlot = local488;
+								this.hoveredSlotParentId = local69.id;
+								if (local69.inventorySlotObjId[local488] > 0) {
+									@Pc(567) ObjType local567 = ObjType.get(local69.inventorySlotObjId[local488] - 1);
+									if (this.objSelected == 1 && local69.inventoryInteractable) {
+										if (local69.id != this.objSelectedInterface || local488 != this.objSelectedSlot) {
+											this.menuOption[this.menuSize] = "Use " + this.objSelectedName + " with @lre@" + local567.name;
+											this.menuAction[this.menuSize] = 881;
 											this.menuParamC[this.menuSize] = local567.index;
 											this.menuParamA[this.menuSize] = local488;
 											this.menuParamB[this.menuSize] = local69.id;
 											this.menuSize++;
 										}
+									} else if (this.spellSelected != 1 || !local69.inventoryInteractable) {
+										@Pc(704) int local704;
+										if (local69.inventoryInteractable) {
+											for (local704 = 4; local704 >= 3; local704--) {
+												if (local567.iops != null && local567.iops[local704] != null) {
+													this.menuOption[this.menuSize] = local567.iops[local704] + " @lre@" + local567.name;
+													if (local704 == 3) {
+														this.menuAction[this.menuSize] = 478;
+													}
+													if (local704 == 4) {
+														this.menuAction[this.menuSize] = 347;
+													}
+													this.menuParamC[this.menuSize] = local567.index;
+													this.menuParamA[this.menuSize] = local488;
+													this.menuParamB[this.menuSize] = local69.id;
+													this.menuSize++;
+												} else if (local704 == 4) {
+													this.menuOption[this.menuSize] = "Drop @lre@" + local567.name;
+													this.menuAction[this.menuSize] = 347;
+													this.menuParamC[this.menuSize] = local567.index;
+													this.menuParamA[this.menuSize] = local488;
+													this.menuParamB[this.menuSize] = local69.id;
+													this.menuSize++;
+												}
+											}
+										}
+										if (local69.inventoryUsable) {
+											this.menuOption[this.menuSize] = "Use @lre@" + local567.name;
+											this.menuAction[this.menuSize] = 188;
+											this.menuParamC[this.menuSize] = local567.index;
+											this.menuParamA[this.menuSize] = local488;
+											this.menuParamB[this.menuSize] = local69.id;
+											this.menuSize++;
+										}
+										if (local69.inventoryInteractable && local567.iops != null) {
+											for (local704 = 2; local704 >= 0; local704--) {
+												if (local567.iops[local704] != null) {
+													this.menuOption[this.menuSize] = local567.iops[local704] + " @lre@" + local567.name;
+													if (local704 == 0) {
+														this.menuAction[this.menuSize] = 405;
+													}
+													if (local704 == 1) {
+														this.menuAction[this.menuSize] = 38;
+													}
+													if (local704 == 2) {
+														this.menuAction[this.menuSize] = 422;
+													}
+													this.menuParamC[this.menuSize] = local567.index;
+													this.menuParamA[this.menuSize] = local488;
+													this.menuParamB[this.menuSize] = local69.id;
+													this.menuSize++;
+												}
+											}
+										}
+										if (local69.inventoryOptions != null) {
+											for (local704 = 4; local704 >= 0; local704--) {
+												if (local69.inventoryOptions[local704] != null) {
+													this.menuOption[this.menuSize] = local69.inventoryOptions[local704] + " @lre@" + local567.name;
+													if (local704 == 0) {
+														this.menuAction[this.menuSize] = 602;
+													}
+													if (local704 == 1) {
+														this.menuAction[this.menuSize] = 596;
+													}
+													if (local704 == 2) {
+														this.menuAction[this.menuSize] = 22;
+													}
+													if (local704 == 3) {
+														this.menuAction[this.menuSize] = 892;
+													}
+													if (local704 == 4) {
+														this.menuAction[this.menuSize] = 415;
+													}
+													this.menuParamC[this.menuSize] = local567.index;
+													this.menuParamA[this.menuSize] = local488;
+													this.menuParamB[this.menuSize] = local69.id;
+													this.menuSize++;
+												}
+											}
+										}
+										this.menuOption[this.menuSize] = "Examine @lre@" + local567.name;
+										this.menuAction[this.menuSize] = 1773;
+										this.menuParamC[this.menuSize] = local567.index;
+										this.menuParamB[this.menuSize] = local69.inventorySlotObjCount[local488];
+										this.menuSize++;
+									} else if ((this.activeSpellFlags & 0x10) == 16) {
+										this.menuOption[this.menuSize] = this.spellCaption + " @lre@" + local567.name;
+										this.menuAction[this.menuSize] = 391;
+										this.menuParamC[this.menuSize] = local567.index;
+										this.menuParamA[this.menuSize] = local488;
+										this.menuParamB[this.menuSize] = local69.id;
+										this.menuSize++;
 									}
 								}
-								local488++;
 							}
+							local488++;
 						}
 					}
 				}
@@ -2654,46 +2662,48 @@ public final class Game extends GameShell {
 
 	@OriginalMember(owner = "client!client", name = "j", descriptor = "(I)V")
 	private void handleChatSettingsInput(@OriginalArg(0) int arg0) {
-		if (super.mouseClickButton == 1) {
-			if (super.mouseClickX >= 8 && super.mouseClickX <= 108 && super.mouseClickY >= 490 && super.mouseClickY <= 522) {
-				this.publicChatSetting = (this.publicChatSetting + 1) % 4;
-				this.redrawPrivacySettings = true;
-				this.redrawChatback = true;
-				this.out.p1isaac(244);
-				this.out.p1(this.publicChatSetting);
-				this.out.p1(this.privateChatSetting);
-				this.out.p1(this.tradeChatSetting);
-			}
-			if (super.mouseClickX >= 137 && super.mouseClickX <= 237 && super.mouseClickY >= 490 && super.mouseClickY <= 522) {
-				this.privateChatSetting = (this.privateChatSetting + 1) % 3;
-				this.redrawPrivacySettings = true;
-				this.redrawChatback = true;
-				this.out.p1isaac(244);
-				this.out.p1(this.publicChatSetting);
-				this.out.p1(this.privateChatSetting);
-				this.out.p1(this.tradeChatSetting);
-			}
-			if (super.mouseClickX >= 275 && super.mouseClickX <= 375 && super.mouseClickY >= 490 && super.mouseClickY <= 522) {
-				this.tradeChatSetting = (this.tradeChatSetting + 1) % 3;
-				this.redrawPrivacySettings = true;
-				this.redrawChatback = true;
-				this.out.p1isaac(244);
-				this.out.p1(this.publicChatSetting);
-				this.out.p1(this.privateChatSetting);
-				this.out.p1(this.tradeChatSetting);
-			}
-			if (super.mouseClickX >= 416 && super.mouseClickX <= 516 && super.mouseClickY >= 490 && super.mouseClickY <= 522) {
-				this.closeInterfaces();
-				this.reportAbuseInput = "";
-				this.reportAbuseMuteOption = false;
-				for (@Pc(186) int local186 = 0; local186 < IfType.instances.length; local186++) {
-					if (IfType.instances[local186] != null && IfType.instances[local186].contentType == 600) {
-						this.reportAbuseInterfaceID = this.viewportInterfaceId = IfType.instances[local186].parentId;
-						return;
-					}
+		if (super.mouseClickButton != 1) {
+			return;
+		}
+
+		if (super.mouseClickX >= 8 && super.mouseClickX <= 108 && super.mouseClickY >= 490 && super.mouseClickY <= 522) {
+			this.publicChatSetting = (this.publicChatSetting + 1) % 4;
+			this.redrawPrivacySettings = true;
+			this.redrawChatback = true;
+			this.out.p1isaac(244);
+			this.out.p1(this.publicChatSetting);
+			this.out.p1(this.privateChatSetting);
+			this.out.p1(this.tradeChatSetting);
+		}
+		if (super.mouseClickX >= 137 && super.mouseClickX <= 237 && super.mouseClickY >= 490 && super.mouseClickY <= 522) {
+			this.privateChatSetting = (this.privateChatSetting + 1) % 3;
+			this.redrawPrivacySettings = true;
+			this.redrawChatback = true;
+			this.out.p1isaac(244);
+			this.out.p1(this.publicChatSetting);
+			this.out.p1(this.privateChatSetting);
+			this.out.p1(this.tradeChatSetting);
+		}
+		if (super.mouseClickX >= 275 && super.mouseClickX <= 375 && super.mouseClickY >= 490 && super.mouseClickY <= 522) {
+			this.tradeChatSetting = (this.tradeChatSetting + 1) % 3;
+			this.redrawPrivacySettings = true;
+			this.redrawChatback = true;
+			this.out.p1isaac(244);
+			this.out.p1(this.publicChatSetting);
+			this.out.p1(this.privateChatSetting);
+			this.out.p1(this.tradeChatSetting);
+		}
+		if (super.mouseClickX >= 416 && super.mouseClickX <= 516 && super.mouseClickY >= 490 && super.mouseClickY <= 522) {
+			this.closeInterfaces();
+			this.reportAbuseInput = "";
+			this.reportAbuseMuteOption = false;
+			for (@Pc(186) int local186 = 0; local186 < IfType.instances.length; local186++) {
+				if (IfType.instances[local186] != null && IfType.instances[local186].contentType == 600) {
+					this.reportAbuseInterfaceID = this.viewportInterfaceId = IfType.instances[local186].parentId;
+					return;
 				}
-				return;
 			}
+			return;
 		}
 	}
 
@@ -2824,91 +2834,93 @@ public final class Game extends GameShell {
 
 	@OriginalMember(owner = "client!client", name = "a", descriptor = "(Lclient!bc;IIII)V")
 	private void addNpcOptions(@OriginalArg(0) NpcType arg0, @OriginalArg(2) int arg2, @OriginalArg(3) int arg3, @OriginalArg(4) int arg4) {
-		if (this.menuSize < 400) {
-			@Pc(16) String local16 = arg0.name;
-			if (arg0.vislevel != 0) {
-				local16 = local16 + getCombatLevelColorTag(this.localPlayer.combatLevel, arg0.vislevel) + " (level-" + arg0.vislevel + ")";
-			}
-			if (this.objSelected == 1) {
-				this.menuOption[this.menuSize] = "Use " + this.objSelectedName + " with @yel@" + local16;
-				this.menuAction[this.menuSize] = 900;
-				this.menuParamC[this.menuSize] = arg4;
-				this.menuParamA[this.menuSize] = arg3;
-				this.menuParamB[this.menuSize] = arg2;
-				this.menuSize++;
-			} else if (this.spellSelected != 1) {
-				@Pc(155) int local155;
-				if (arg0.ops != null) {
-					for (local155 = 4; local155 >= 0; local155--) {
-						if (arg0.ops[local155] != null && !arg0.ops[local155].equalsIgnoreCase("attack")) {
-							this.menuOption[this.menuSize] = arg0.ops[local155] + " @yel@" + local16;
-							if (local155 == 0) {
-								this.menuAction[this.menuSize] = 728;
-							}
-							if (local155 == 1) {
-								this.menuAction[this.menuSize] = 542;
-							}
-							if (local155 == 2) {
-								this.menuAction[this.menuSize] = 6;
-							}
-							if (local155 == 3) {
-								this.menuAction[this.menuSize] = 963;
-							}
-							if (local155 == 4) {
-								this.menuAction[this.menuSize] = 245;
-							}
-							this.menuParamC[this.menuSize] = arg4;
-							this.menuParamA[this.menuSize] = arg3;
-							this.menuParamB[this.menuSize] = arg2;
-							this.menuSize++;
+		if (this.menuSize >= 400) {
+			return;
+		}
+
+		@Pc(16) String local16 = arg0.name;
+		if (arg0.vislevel != 0) {
+			local16 = local16 + getCombatLevelColorTag(this.localPlayer.combatLevel, arg0.vislevel) + " (level-" + arg0.vislevel + ")";
+		}
+		if (this.objSelected == 1) {
+			this.menuOption[this.menuSize] = "Use " + this.objSelectedName + " with @yel@" + local16;
+			this.menuAction[this.menuSize] = 900;
+			this.menuParamC[this.menuSize] = arg4;
+			this.menuParamA[this.menuSize] = arg3;
+			this.menuParamB[this.menuSize] = arg2;
+			this.menuSize++;
+		} else if (this.spellSelected != 1) {
+			@Pc(155) int local155;
+			if (arg0.ops != null) {
+				for (local155 = 4; local155 >= 0; local155--) {
+					if (arg0.ops[local155] != null && !arg0.ops[local155].equalsIgnoreCase("attack")) {
+						this.menuOption[this.menuSize] = arg0.ops[local155] + " @yel@" + local16;
+						if (local155 == 0) {
+							this.menuAction[this.menuSize] = 728;
 						}
+						if (local155 == 1) {
+							this.menuAction[this.menuSize] = 542;
+						}
+						if (local155 == 2) {
+							this.menuAction[this.menuSize] = 6;
+						}
+						if (local155 == 3) {
+							this.menuAction[this.menuSize] = 963;
+						}
+						if (local155 == 4) {
+							this.menuAction[this.menuSize] = 245;
+						}
+						this.menuParamC[this.menuSize] = arg4;
+						this.menuParamA[this.menuSize] = arg3;
+						this.menuParamB[this.menuSize] = arg2;
+						this.menuSize++;
 					}
 				}
-				if (arg0.ops != null) {
-					for (local155 = 4; local155 >= 0; local155--) {
-						if (arg0.ops[local155] != null && arg0.ops[local155].equalsIgnoreCase("attack")) {
-							@Pc(279) short local279 = 0;
-							if (arg0.vislevel > this.localPlayer.combatLevel) {
-								local279 = 2000;
-							}
-							this.menuOption[this.menuSize] = arg0.ops[local155] + " @yel@" + local16;
-							if (local155 == 0) {
-								this.menuAction[this.menuSize] = local279 + 728;
-							}
-							if (local155 == 1) {
-								this.menuAction[this.menuSize] = local279 + 542;
-							}
-							if (local155 == 2) {
-								this.menuAction[this.menuSize] = local279 + 6;
-							}
-							if (local155 == 3) {
-								this.menuAction[this.menuSize] = local279 + 963;
-							}
-							if (local155 == 4) {
-								this.menuAction[this.menuSize] = local279 + 245;
-							}
-							this.menuParamC[this.menuSize] = arg4;
-							this.menuParamA[this.menuSize] = arg3;
-							this.menuParamB[this.menuSize] = arg2;
-							this.menuSize++;
+			}
+			if (arg0.ops != null) {
+				for (local155 = 4; local155 >= 0; local155--) {
+					if (arg0.ops[local155] != null && arg0.ops[local155].equalsIgnoreCase("attack")) {
+						@Pc(279) short local279 = 0;
+						if (arg0.vislevel > this.localPlayer.combatLevel) {
+							local279 = 2000;
 						}
+						this.menuOption[this.menuSize] = arg0.ops[local155] + " @yel@" + local16;
+						if (local155 == 0) {
+							this.menuAction[this.menuSize] = local279 + 728;
+						}
+						if (local155 == 1) {
+							this.menuAction[this.menuSize] = local279 + 542;
+						}
+						if (local155 == 2) {
+							this.menuAction[this.menuSize] = local279 + 6;
+						}
+						if (local155 == 3) {
+							this.menuAction[this.menuSize] = local279 + 963;
+						}
+						if (local155 == 4) {
+							this.menuAction[this.menuSize] = local279 + 245;
+						}
+						this.menuParamC[this.menuSize] = arg4;
+						this.menuParamA[this.menuSize] = arg3;
+						this.menuParamB[this.menuSize] = arg2;
+						this.menuSize++;
 					}
 				}
-				this.menuOption[this.menuSize] = "Examine @yel@" + local16;
-				this.menuAction[this.menuSize] = 1607;
-				this.menuParamC[this.menuSize] = arg4;
-				this.menuParamA[this.menuSize] = arg3;
-				this.menuParamB[this.menuSize] = arg2;
-				this.menuSize++;
-			} else if ((this.activeSpellFlags & 0x2) == 2) {
-				this.menuOption[this.menuSize] = this.spellCaption + " @yel@" + local16;
-				this.menuAction[this.menuSize] = 265;
-				this.menuParamC[this.menuSize] = arg4;
-				this.menuParamA[this.menuSize] = arg3;
-				this.menuParamB[this.menuSize] = arg2;
-				this.menuSize++;
-				return;
 			}
+			this.menuOption[this.menuSize] = "Examine @yel@" + local16;
+			this.menuAction[this.menuSize] = 1607;
+			this.menuParamC[this.menuSize] = arg4;
+			this.menuParamA[this.menuSize] = arg3;
+			this.menuParamB[this.menuSize] = arg2;
+			this.menuSize++;
+		} else if ((this.activeSpellFlags & 0x2) == 2) {
+			this.menuOption[this.menuSize] = this.spellCaption + " @yel@" + local16;
+			this.menuAction[this.menuSize] = 265;
+			this.menuParamC[this.menuSize] = arg4;
+			this.menuParamA[this.menuSize] = arg3;
+			this.menuParamB[this.menuSize] = arg2;
+			this.menuSize++;
+			return;
 		}
 	}
 
@@ -3124,14 +3136,15 @@ public final class Game extends GameShell {
 	protected void draw() {
 		if (this.errorStarted || this.errorLoading || this.errorHost) {
 			this.drawError();
-		} else {
-			if (this.ingame) {
-				this.drawGame();
-			} else {
-				this.drawTitleScreen();
-			}
-			this.dragCycles = 0;
+			return;
 		}
+
+		if (this.ingame) {
+			this.drawGame();
+		} else {
+			this.drawTitleScreen();
+		}
+		this.dragCycles = 0;
 	}
 
 	@OriginalMember(owner = "client!client", name = "e", descriptor = "(B)V")
@@ -3351,40 +3364,42 @@ public final class Game extends GameShell {
 
 	@OriginalMember(owner = "client!client", name = "a", descriptor = "(IZ)V")
 	private void updateTextures(@OriginalArg(0) int arg0) {
-		if (!lowMemory) {
-			@Pc(17) Image8 local17;
-			@Pc(25) int local25;
-			@Pc(33) int local33;
-			@Pc(36) byte[] local36;
-			@Pc(39) byte[] local39;
-			@Pc(41) int local41;
-			if (Draw3D.textureCycle[17] >= arg0) {
-				local17 = Draw3D.textures[17];
-				local25 = local17.width * local17.height - 1;
-				local33 = local17.width * this.sceneDelta * 2;
-				local36 = local17.pixels;
-				local39 = this.textureBuffer;
-				for (local41 = 0; local41 <= local25; local41++) {
-					local39[local41] = local36[local41 - local33 & local25];
-				}
-				local17.pixels = local39;
-				this.textureBuffer = local36;
-				Draw3D.pushTexture(17);
+		if (lowMemory) {
+			return;
+		}
+
+		@Pc(17) Image8 local17;
+		@Pc(25) int local25;
+		@Pc(33) int local33;
+		@Pc(36) byte[] local36;
+		@Pc(39) byte[] local39;
+		@Pc(41) int local41;
+		if (Draw3D.textureCycle[17] >= arg0) {
+			local17 = Draw3D.textures[17];
+			local25 = local17.width * local17.height - 1;
+			local33 = local17.width * this.sceneDelta * 2;
+			local36 = local17.pixels;
+			local39 = this.textureBuffer;
+			for (local41 = 0; local41 <= local25; local41++) {
+				local39[local41] = local36[local41 - local33 & local25];
 			}
-			if (Draw3D.textureCycle[24] >= arg0) {
-				local17 = Draw3D.textures[24];
-				local25 = local17.width * local17.height - 1;
-				local33 = local17.width * this.sceneDelta * 2;
-				local36 = local17.pixels;
-				local39 = this.textureBuffer;
-				for (local41 = 0; local41 <= local25; local41++) {
-					local39[local41] = local36[local41 - local33 & local25];
-				}
-				local17.pixels = local39;
-				this.textureBuffer = local36;
-				Draw3D.pushTexture(24);
-				return;
+			local17.pixels = local39;
+			this.textureBuffer = local36;
+			Draw3D.pushTexture(17);
+		}
+		if (Draw3D.textureCycle[24] >= arg0) {
+			local17 = Draw3D.textures[24];
+			local25 = local17.width * local17.height - 1;
+			local33 = local17.width * this.sceneDelta * 2;
+			local36 = local17.pixels;
+			local39 = this.textureBuffer;
+			for (local41 = 0; local41 <= local25; local41++) {
+				local39[local41] = local36[local41 - local33 & local25];
 			}
+			local17.pixels = local39;
+			this.textureBuffer = local36;
+			Draw3D.pushTexture(24);
+			return;
 		}
 	}
 
@@ -3524,18 +3539,20 @@ public final class Game extends GameShell {
 
 	@OriginalMember(owner = "client!client", name = "m", descriptor = "(I)V")
 	private void updateTemporaryLocs() {
-		if (this.sceneState == 2) {
-			for (@Pc(12) SceneLocSpawned local12 = (SceneLocSpawned) this.temporaryLocs.peekFront(); local12 != null; local12 = (SceneLocSpawned) this.temporaryLocs.prev()) {
-				if (loopCycle >= local12.lastCycle) {
-					this.addLoc(local12.orientation, local12.x, local12.z, local12.classType, local12.locIndex, local12.type, local12.plane);
-					local12.unlink();
-				}
+		if (this.sceneState != 2) {
+			return;
+		}
+
+		for (@Pc(12) SceneLocSpawned local12 = (SceneLocSpawned) this.temporaryLocs.peekFront(); local12 != null; local12 = (SceneLocSpawned) this.temporaryLocs.prev()) {
+			if (loopCycle >= local12.lastCycle) {
+				this.addLoc(local12.orientation, local12.x, local12.z, local12.classType, local12.locIndex, local12.type, local12.plane);
+				local12.unlink();
 			}
-			updateTemporaryLocsCounter++;
-			if (updateTemporaryLocsCounter > 85) {
-				updateTemporaryLocsCounter = 0;
-				this.out.p1isaac(85);
-			}
+		}
+		updateTemporaryLocsCounter++;
+		if (updateTemporaryLocsCounter > 85) {
+			updateTemporaryLocsCounter = 0;
+			this.out.p1isaac(85);
 		}
 	}
 
@@ -3792,7 +3809,7 @@ public final class Game extends GameShell {
 	}
 
 	@OriginalMember(owner = "client!client", name = "n", descriptor = "(I)V")
-	private void loadTitleImages(@OriginalArg(0) int arg0) {
+	private void loadTitleImages() {
 		this.imageTitlebox = new Image8(this.archiveTitle, "titlebox", 0);
 		this.imageTitlebutton = new Image8(this.archiveTitle, "titlebutton", 0);
 		this.imageRunes = new Image8[12];
@@ -4060,30 +4077,32 @@ public final class Game extends GameShell {
 
 	@OriginalMember(owner = "client!client", name = "p", descriptor = "(I)V")
 	private void prepareGameScreen() {
-		if (this.areaChatback == null) {
-			this.unloadTitle();
-			super.drawArea = null;
-			this.imageTitle2 = null;
-			this.imageTitle3 = null;
-			this.imageTitle4 = null;
-			this.imageTitle0 = null;
-			this.imageTitle1 = null;
-			this.imageTitle5 = null;
-			this.imageTitle6 = null;
-			this.imageTitle7 = null;
-			this.imageTitle8 = null;
-			this.areaChatback = new DrawArea(this.getBaseComponent(), 479, 96);
-			this.areaMapback = new DrawArea(this.getBaseComponent(), 168, 160);
-			Draw2D.clear();
-			this.imageMapback.draw(0, 0);
-			this.areaSidebar = new DrawArea(this.getBaseComponent(), 190, 261);
-			this.areaViewport = new DrawArea(this.getBaseComponent(), 512, 334);
-			Draw2D.clear();
-			this.areaBackbase1 = new DrawArea(this.getBaseComponent(), 501, 61);
-			this.areaBackbase2 = new DrawArea(this.getBaseComponent(), 288, 40);
-			this.areaBackhmid1 = new DrawArea(this.getBaseComponent(), 269, 66);
-			this.redrawTitleBackground = true;
+		if (this.areaChatback != null) {
+			return;
 		}
+
+		this.unloadTitle();
+		super.drawArea = null;
+		this.imageTitle2 = null;
+		this.imageTitle3 = null;
+		this.imageTitle4 = null;
+		this.imageTitle0 = null;
+		this.imageTitle1 = null;
+		this.imageTitle5 = null;
+		this.imageTitle6 = null;
+		this.imageTitle7 = null;
+		this.imageTitle8 = null;
+		this.areaChatback = new DrawArea(this.getBaseComponent(), 479, 96);
+		this.areaMapback = new DrawArea(this.getBaseComponent(), 168, 160);
+		Draw2D.clear();
+		this.imageMapback.draw(0, 0);
+		this.areaSidebar = new DrawArea(this.getBaseComponent(), 190, 261);
+		this.areaViewport = new DrawArea(this.getBaseComponent(), 512, 334);
+		Draw2D.clear();
+		this.areaBackbase1 = new DrawArea(this.getBaseComponent(), 501, 61);
+		this.areaBackbase2 = new DrawArea(this.getBaseComponent(), 288, 40);
+		this.areaBackhmid1 = new DrawArea(this.getBaseComponent(), 269, 66);
+		this.redrawTitleBackground = true;
 	}
 
 	@OriginalMember(owner = "client!client", name = "a", descriptor = "(IILclient!kb;)V")
@@ -4149,233 +4168,235 @@ public final class Game extends GameShell {
 
 	@OriginalMember(owner = "client!client", name = "a", descriptor = "(IIILclient!hc;I)V")
 	private void drawParentInterface(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(3) IfType arg3, @OriginalArg(4) int arg4) {
-		if (arg3.type == 0 && arg3.childId != null && (!arg3.hide || this.viewportHoveredInterfaceIndex == arg3.id || this.sidebarHoveredInterfaceIndex == arg3.id || this.chatHoveredInterfaceIndex == arg3.id)) {
-			@Pc(29) int local29 = Draw2D.left;
-			@Pc(31) int local31 = Draw2D.top;
-			@Pc(33) int local33 = Draw2D.right;
-			@Pc(35) int local35 = Draw2D.bottom;
-			Draw2D.setBounds(arg0 + arg3.height, arg0, arg1 + arg3.width, arg1);
-			@Pc(57) int local57 = arg3.childId.length;
-			for (@Pc(59) int local59 = 0; local59 < local57; local59++) {
-				@Pc(68) int local68 = arg3.childX[local59] + arg1;
-				@Pc(77) int local77 = arg3.childY[local59] + arg0 - arg4;
-				@Pc(84) IfType local84 = IfType.instances[arg3.childId[local59]];
-				@Pc(89) int local89 = local68 + local84.x;
-				@Pc(94) int local94 = local77 + local84.y;
-				if (local84.contentType > 0) {
-					this.updateInterfaceContent(local84);
+		if (arg3.type != 0 || arg3.childId == null || (arg3.hide && this.viewportHoveredInterfaceIndex != arg3.id && this.sidebarHoveredInterfaceIndex != arg3.id && this.chatHoveredInterfaceIndex != arg3.id)) {
+			return;
+		}
+
+		@Pc(29) int local29 = Draw2D.left;
+		@Pc(31) int local31 = Draw2D.top;
+		@Pc(33) int local33 = Draw2D.right;
+		@Pc(35) int local35 = Draw2D.bottom;
+		Draw2D.setBounds(arg0 + arg3.height, arg0, arg1 + arg3.width, arg1);
+		@Pc(57) int local57 = arg3.childId.length;
+		for (@Pc(59) int local59 = 0; local59 < local57; local59++) {
+			@Pc(68) int local68 = arg3.childX[local59] + arg1;
+			@Pc(77) int local77 = arg3.childY[local59] + arg0 - arg4;
+			@Pc(84) IfType local84 = IfType.instances[arg3.childId[local59]];
+			@Pc(89) int local89 = local68 + local84.x;
+			@Pc(94) int local94 = local77 + local84.y;
+			if (local84.contentType > 0) {
+				this.updateInterfaceContent(local84);
+			}
+			if (local84.type == 0) {
+				if (local84.scrollPosition > local84.scrollableHeight - local84.height) {
+					local84.scrollPosition = local84.scrollableHeight - local84.height;
 				}
-				if (local84.type == 0) {
-					if (local84.scrollPosition > local84.scrollableHeight - local84.height) {
-						local84.scrollPosition = local84.scrollableHeight - local84.height;
-					}
-					if (local84.scrollPosition < 0) {
-						local84.scrollPosition = 0;
-					}
-					this.drawParentInterface(local94, local89, local84, local84.scrollPosition);
-					if (local84.scrollableHeight > local84.height) {
-						this.drawScrollbar(local89 + local84.width, local94, local84.scrollPosition, local84.scrollableHeight, local84.height);
-					}
-				} else if (local84.type != 1) {
-					@Pc(167) int local167;
-					@Pc(171) int local171;
-					@Pc(182) int local182;
-					@Pc(217) int local217;
-					@Pc(224) int local224;
-					@Pc(165) int local165;
-					@Pc(191) int local191;
-					@Pc(215) int local215;
-					if (local84.type == 2) {
-						local165 = 0;
-						for (local167 = 0; local167 < local84.height; local167++) {
-							for (local171 = 0; local171 < local84.width; local171++) {
-								local182 = local89 + local171 * (local84.inventoryMarginX + 32);
-								local191 = local94 + local167 * (local84.inventoryMarginY + 32);
-								if (local165 < 20) {
-									local182 += local84.inventorySlotOffsetX[local165];
-									local191 += local84.inventorySlotOffsetY[local165];
-								}
-								if (local84.inventorySlotObjId[local165] > 0) {
-									local215 = 0;
-									local217 = 0;
-									local224 = local84.inventorySlotObjId[local165] - 1;
-									if (local182 >= -32 && local182 <= 512 && local191 >= -32 && local191 <= 334 || this.objDragArea != 0 && this.objDragSlot == local165) {
-										@Pc(251) Image24 local251 = ObjType.getIcon(local224, 24638, local84.inventorySlotObjCount[local165]);
-										if (this.objDragArea != 0 && this.objDragSlot == local165 && this.objDragInterfaceId == local84.id) {
-											local215 = super.mouseX - this.objGrabX;
-											local217 = super.mouseY - this.objGrabY;
-											if (local215 < 5 && local215 > -5) {
-												local215 = 0;
-											}
-											if (local217 < 5 && local217 > -5) {
-												local217 = 0;
-											}
-											if (this.objDragCycles < 5) {
-												local215 = 0;
-												local217 = 0;
-											}
-											local251.draw(128, local182 + local215, local191 + local217);
-										} else if (this.selectedArea != 0 && this.selectedItem == local165 && this.selectedInterface == local84.id) {
-											local251.draw(128, local182, local191);
-										} else {
-											local251.draw(local191, local182);
+				if (local84.scrollPosition < 0) {
+					local84.scrollPosition = 0;
+				}
+				this.drawParentInterface(local94, local89, local84, local84.scrollPosition);
+				if (local84.scrollableHeight > local84.height) {
+					this.drawScrollbar(local89 + local84.width, local94, local84.scrollPosition, local84.scrollableHeight, local84.height);
+				}
+			} else if (local84.type != 1) {
+				@Pc(167) int local167;
+				@Pc(171) int local171;
+				@Pc(182) int local182;
+				@Pc(217) int local217;
+				@Pc(224) int local224;
+				@Pc(165) int local165;
+				@Pc(191) int local191;
+				@Pc(215) int local215;
+				if (local84.type == 2) {
+					local165 = 0;
+					for (local167 = 0; local167 < local84.height; local167++) {
+						for (local171 = 0; local171 < local84.width; local171++) {
+							local182 = local89 + local171 * (local84.inventoryMarginX + 32);
+							local191 = local94 + local167 * (local84.inventoryMarginY + 32);
+							if (local165 < 20) {
+								local182 += local84.inventorySlotOffsetX[local165];
+								local191 += local84.inventorySlotOffsetY[local165];
+							}
+							if (local84.inventorySlotObjId[local165] > 0) {
+								local215 = 0;
+								local217 = 0;
+								local224 = local84.inventorySlotObjId[local165] - 1;
+								if (local182 >= -32 && local182 <= 512 && local191 >= -32 && local191 <= 334 || this.objDragArea != 0 && this.objDragSlot == local165) {
+									@Pc(251) Image24 local251 = ObjType.getIcon(local224, 24638, local84.inventorySlotObjCount[local165]);
+									if (this.objDragArea != 0 && this.objDragSlot == local165 && this.objDragInterfaceId == local84.id) {
+										local215 = super.mouseX - this.objGrabX;
+										local217 = super.mouseY - this.objGrabY;
+										if (local215 < 5 && local215 > -5) {
+											local215 = 0;
 										}
-										if (local251.cropW == 33 || local84.inventorySlotObjCount[local165] != 1) {
-											@Pc(351) int local351 = local84.inventorySlotObjCount[local165];
-											this.fontPlain11.drawString(local182 + local215 + 1, local191 + 10 + local217, 0, formatObjCount(local351));
-											this.fontPlain11.drawString(local182 + local215, local191 + 9 + local217, 16776960, formatObjCount(local351));
+										if (local217 < 5 && local217 > -5) {
+											local217 = 0;
 										}
+										if (this.objDragCycles < 5) {
+											local215 = 0;
+											local217 = 0;
+										}
+										local251.draw(128, local182 + local215, local191 + local217);
+									} else if (this.selectedArea != 0 && this.selectedItem == local165 && this.selectedInterface == local84.id) {
+										local251.draw(128, local182, local191);
+									} else {
+										local251.draw(local191, local182);
 									}
-								} else if (local84.inventorySlotImage != null && local165 < 20) {
-									@Pc(398) Image24 local398 = local84.inventorySlotImage[local165];
-									if (local398 != null) {
-										local398.draw(local191, local182);
+									if (local251.cropW == 33 || local84.inventorySlotObjCount[local165] != 1) {
+										@Pc(351) int local351 = local84.inventorySlotObjCount[local165];
+										this.fontPlain11.drawString(local182 + local215 + 1, local191 + 10 + local217, 0, formatObjCount(local351));
+										this.fontPlain11.drawString(local182 + local215, local191 + 9 + local217, 16776960, formatObjCount(local351));
 									}
 								}
-								local165++;
+							} else if (local84.inventorySlotImage != null && local165 < 20) {
+								@Pc(398) Image24 local398 = local84.inventorySlotImage[local165];
+								if (local398 != null) {
+									local398.draw(local191, local182);
+								}
+							}
+							local165++;
+						}
+					}
+				} else if (local84.type != 3) {
+					@Pc(456) BitmapFont local456;
+					if (local84.type == 4) {
+						local456 = local84.font;
+						local167 = local84.color;
+						@Pc(462) String local462 = local84.text;
+						if ((this.chatHoveredInterfaceIndex == local84.id || this.sidebarHoveredInterfaceIndex == local84.id || this.viewportHoveredInterfaceIndex == local84.id) && local84.hoverColor != 0) {
+							local167 = local84.hoverColor;
+						}
+						if (this.executeInterfaceScript(local84)) {
+							local167 = local84.activeColor;
+							if (local84.activeText.length() > 0) {
+								local462 = local84.activeText;
 							}
 						}
-					} else if (local84.type != 3) {
-						@Pc(456) BitmapFont local456;
-						if (local84.type == 4) {
-							local456 = local84.font;
+						if (local84.optionType == 6 && this.pressedContinueOption) {
+							local462 = "Please wait...";
 							local167 = local84.color;
-							@Pc(462) String local462 = local84.text;
-							if ((this.chatHoveredInterfaceIndex == local84.id || this.sidebarHoveredInterfaceIndex == local84.id || this.viewportHoveredInterfaceIndex == local84.id) && local84.hoverColor != 0) {
-								local167 = local84.hoverColor;
-							}
-							if (this.executeInterfaceScript(local84)) {
-								local167 = local84.activeColor;
-								if (local84.activeText.length() > 0) {
-									local462 = local84.activeText;
-								}
-							}
-							if (local84.optionType == 6 && this.pressedContinueOption) {
-								local462 = "Please wait...";
-								local167 = local84.color;
-							}
-							local191 = local94 + local456.height;
-							while (local462.length() > 0) {
-								if (local462.indexOf("%") != -1) {
-									label264: while (true) {
-										local215 = local462.indexOf("%1");
-										if (local215 == -1) {
-											while (true) {
-												local215 = local462.indexOf("%2");
-												if (local215 == -1) {
-													while (true) {
-														local215 = local462.indexOf("%3");
-														if (local215 == -1) {
-															while (true) {
-																local215 = local462.indexOf("%4");
-																if (local215 == -1) {
-																	while (true) {
-																		local215 = local462.indexOf("%5");
-																		if (local215 == -1) {
-																			break label264;
-																		}
-																		local462 = local462.substring(0, local215) + this.getIntString(this.executeClientscript1(local84, 4)) + local462.substring(local215 + 2);
+						}
+						local191 = local94 + local456.height;
+						while (local462.length() > 0) {
+							if (local462.indexOf("%") != -1) {
+								label264: while (true) {
+									local215 = local462.indexOf("%1");
+									if (local215 == -1) {
+										while (true) {
+											local215 = local462.indexOf("%2");
+											if (local215 == -1) {
+												while (true) {
+													local215 = local462.indexOf("%3");
+													if (local215 == -1) {
+														while (true) {
+															local215 = local462.indexOf("%4");
+															if (local215 == -1) {
+																while (true) {
+																	local215 = local462.indexOf("%5");
+																	if (local215 == -1) {
+																		break label264;
 																	}
+																	local462 = local462.substring(0, local215) + this.getIntString(this.executeClientscript1(local84, 4)) + local462.substring(local215 + 2);
 																}
-																local462 = local462.substring(0, local215) + this.getIntString(this.executeClientscript1(local84, 3)) + local462.substring(local215 + 2);
 															}
+															local462 = local462.substring(0, local215) + this.getIntString(this.executeClientscript1(local84, 3)) + local462.substring(local215 + 2);
 														}
-														local462 = local462.substring(0, local215) + this.getIntString(this.executeClientscript1(local84, 2)) + local462.substring(local215 + 2);
 													}
+													local462 = local462.substring(0, local215) + this.getIntString(this.executeClientscript1(local84, 2)) + local462.substring(local215 + 2);
 												}
-												local462 = local462.substring(0, local215) + this.getIntString(this.executeClientscript1(local84, 1)) + local462.substring(local215 + 2);
 											}
+											local462 = local462.substring(0, local215) + this.getIntString(this.executeClientscript1(local84, 1)) + local462.substring(local215 + 2);
 										}
-										local462 = local462.substring(0, local215) + this.getIntString(this.executeClientscript1(local84, 0)) + local462.substring(local215 + 2);
 									}
+									local462 = local462.substring(0, local215) + this.getIntString(this.executeClientscript1(local84, 0)) + local462.substring(local215 + 2);
 								}
-								local215 = local462.indexOf("\\n");
-								@Pc(704) String local704;
-								if (local215 == -1) {
-									local704 = local462;
-									local462 = "";
-								} else {
-									local704 = local462.substring(0, local215);
-									local462 = local462.substring(local215 + 2);
-								}
-								if (local84.center) {
-									local456.drawStringTaggableCenter(local89 + local84.width / 2, local167, local84.shadow, local191, local704);
-								} else {
-									local456.drawStringTaggable(local89, local191, local704, local84.shadow, local167);
-								}
-								local191 += local456.height;
 							}
-						} else if (local84.type == 5) {
-							@Pc(766) Image24 local766;
-							if (this.executeInterfaceScript(local84)) {
-								local766 = local84.activeImage;
-							} else {
-								local766 = local84.image;
-							}
-							if (local766 != null) {
-								local766.draw(local94, local89);
-							}
-						} else if (local84.type == 6) {
-							local165 = Draw3D.centerX;
-							local167 = Draw3D.centerY;
-							Draw3D.centerX = local89 + local84.width / 2;
-							Draw3D.centerY = local94 + local84.height / 2;
-							local171 = Draw3D.sin[local84.modelPitch] * local84.modelZoom >> 16;
-							local182 = Draw3D.cos[local84.modelPitch] * local84.modelZoom >> 16;
-							@Pc(827) boolean local827 = this.executeInterfaceScript(local84);
-							if (local827) {
-								local215 = local84.activeSeqId;
-							} else {
-								local215 = local84.seqId;
-							}
-							@Pc(846) Model local846;
+							local215 = local462.indexOf("\\n");
+							@Pc(704) String local704;
 							if (local215 == -1) {
-								local846 = local84.getModel(-1, -1, local827);
+								local704 = local462;
+								local462 = "";
 							} else {
-								@Pc(852) SeqType local852 = SeqType.instances[local215];
-								local846 = local84.getModel(local852.primaryFrames[local84.seqFrame], local852.secondaryFrames[local84.seqFrame], local827);
+								local704 = local462.substring(0, local215);
+								local462 = local462.substring(local215 + 2);
 							}
-							if (local846 != null) {
-								local846.drawSimple(0, local84.modelYaw, 0, local84.modelPitch, 0, local171, local182);
+							if (local84.center) {
+								local456.drawStringTaggableCenter(local89 + local84.width / 2, local167, local84.shadow, local191, local704);
+							} else {
+								local456.drawStringTaggable(local89, local191, local704, local84.shadow, local167);
 							}
-							Draw3D.centerX = local165;
-							Draw3D.centerY = local167;
-						} else if (local84.type == 7) {
-							local456 = local84.font;
-							local167 = 0;
-							for (local171 = 0; local171 < local84.height; local171++) {
-								for (local182 = 0; local182 < local84.width; local182++) {
-									if (local84.inventorySlotObjId[local167] > 0) {
-										@Pc(915) ObjType local915 = ObjType.get(local84.inventorySlotObjId[local167] - 1);
-										@Pc(918) String local918 = local915.name;
-										if (local915.stackable || local84.inventorySlotObjCount[local167] != 1) {
-											local918 = local918 + " x" + formatObjCountTagged(local84.inventorySlotObjCount[local167]);
-										}
-										local217 = local89 + local182 * (local84.inventoryMarginX + 115);
-										local224 = local94 + local171 * (local84.inventoryMarginY + 12);
-										if (local84.center) {
-											local456.drawStringTaggableCenter(local217 + local84.width / 2, local84.color, local84.shadow, local224, local918);
-										} else {
-											local456.drawStringTaggable(local217, local224, local918, local84.shadow, local84.color);
-										}
+							local191 += local456.height;
+						}
+					} else if (local84.type == 5) {
+						@Pc(766) Image24 local766;
+						if (this.executeInterfaceScript(local84)) {
+							local766 = local84.activeImage;
+						} else {
+							local766 = local84.image;
+						}
+						if (local766 != null) {
+							local766.draw(local94, local89);
+						}
+					} else if (local84.type == 6) {
+						local165 = Draw3D.centerX;
+						local167 = Draw3D.centerY;
+						Draw3D.centerX = local89 + local84.width / 2;
+						Draw3D.centerY = local94 + local84.height / 2;
+						local171 = Draw3D.sin[local84.modelPitch] * local84.modelZoom >> 16;
+						local182 = Draw3D.cos[local84.modelPitch] * local84.modelZoom >> 16;
+						@Pc(827) boolean local827 = this.executeInterfaceScript(local84);
+						if (local827) {
+							local215 = local84.activeSeqId;
+						} else {
+							local215 = local84.seqId;
+						}
+						@Pc(846) Model local846;
+						if (local215 == -1) {
+							local846 = local84.getModel(-1, -1, local827);
+						} else {
+							@Pc(852) SeqType local852 = SeqType.instances[local215];
+							local846 = local84.getModel(local852.primaryFrames[local84.seqFrame], local852.secondaryFrames[local84.seqFrame], local827);
+						}
+						if (local846 != null) {
+							local846.drawSimple(0, local84.modelYaw, 0, local84.modelPitch, 0, local171, local182);
+						}
+						Draw3D.centerX = local165;
+						Draw3D.centerY = local167;
+					} else if (local84.type == 7) {
+						local456 = local84.font;
+						local167 = 0;
+						for (local171 = 0; local171 < local84.height; local171++) {
+							for (local182 = 0; local182 < local84.width; local182++) {
+								if (local84.inventorySlotObjId[local167] > 0) {
+									@Pc(915) ObjType local915 = ObjType.get(local84.inventorySlotObjId[local167] - 1);
+									@Pc(918) String local918 = local915.name;
+									if (local915.stackable || local84.inventorySlotObjCount[local167] != 1) {
+										local918 = local918 + " x" + formatObjCountTagged(local84.inventorySlotObjCount[local167]);
 									}
-									local167++;
+									local217 = local89 + local182 * (local84.inventoryMarginX + 115);
+									local224 = local94 + local171 * (local84.inventoryMarginY + 12);
+									if (local84.center) {
+										local456.drawStringTaggableCenter(local217 + local84.width / 2, local84.color, local84.shadow, local224, local918);
+									} else {
+										local456.drawStringTaggable(local217, local224, local918, local84.shadow, local84.color);
+									}
 								}
+								local167++;
 							}
 						}
-					} else if (local84.fill) {
-						Draw2D.fillRect(local94, local89, local84.color, local84.width, local84.height);
-					} else {
-						Draw2D.drawRect(local89, local84.color, local84.height, local94, local84.width);
 					}
+				} else if (local84.fill) {
+					Draw2D.fillRect(local94, local89, local84.color, local84.width, local84.height);
+				} else {
+					Draw2D.drawRect(local89, local84.color, local84.height, local94, local84.width);
 				}
 			}
-			Draw2D.setBounds(local35, local31, local33, local29);
 		}
+		Draw2D.setBounds(local35, local31, local33, local29);
 	}
 
 	@OriginalMember(owner = "client!client", name = "a", descriptor = "(ZILclient!kb;)V")
-	private void readPlayerUpdates(@OriginalArg(0) boolean arg0, @OriginalArg(1) int arg1, @OriginalArg(2) Buffer arg2) {
+	private void readPlayerUpdates(@OriginalArg(1) int arg1, @OriginalArg(2) Buffer arg2) {
 		for (@Pc(1) int local1 = 0; local1 < this.entityUpdateCount; local1++) {
 			@Pc(8) int local8 = this.entityUpdateIds[local1];
 			@Pc(13) PlayerEntity local13 = this.players[local8];
@@ -4390,85 +4411,87 @@ public final class Game extends GameShell {
 	@OriginalMember(owner = "client!client", name = "d", descriptor = "(II)V")
 	private void updateVarp(@OriginalArg(0) int arg0) {
 		@Pc(8) int local8 = VarpType.instances[arg0].clientcode;
-		if (local8 != 0) {
-			@Pc(16) int local16 = this.varps[arg0];
-			if (local8 == 1) {
-				if (local16 == 1) {
-					Draw3D.setBrightness(0.9D);
-				}
-				if (local16 == 2) {
-					Draw3D.setBrightness(0.8D);
-				}
-				if (local16 == 3) {
-					Draw3D.setBrightness(0.7D);
-				}
-				if (local16 == 4) {
-					Draw3D.setBrightness(0.6D);
-				}
-				ObjType.iconCache.clear();
-				this.redrawTitleBackground = true;
+		if (local8 == 0) {
+			return;
+		}
+
+		@Pc(16) int local16 = this.varps[arg0];
+		if (local8 == 1) {
+			if (local16 == 1) {
+				Draw3D.setBrightness(0.9D);
 			}
-			if (local8 == 3) {
-				@Pc(54) boolean local54 = this.midiActive;
-				if (local16 == 0) {
-					this.setMidiVolume(0);
-					this.midiActive = true;
-				}
-				if (local16 == 1) {
-					this.setMidiVolume(-400);
-					this.midiActive = true;
-				}
-				if (local16 == 2) {
-					this.setMidiVolume(-800);
-					this.midiActive = true;
-				}
-				if (local16 == 3) {
-					this.setMidiVolume(-1200);
-					this.midiActive = true;
-				}
-				if (local16 == 4) {
-					this.midiActive = false;
-				}
-				if (this.midiActive != local54) {
-					if (this.midiActive) {
-						this.setMidi(this.midiCrc, this.currentMidi, this.midiSize);
-					} else {
-						this.stopMidi();
-					}
-					this.nextMusicDelay = 0;
-				}
+			if (local16 == 2) {
+				Draw3D.setBrightness(0.8D);
 			}
-			if (local8 == 4) {
-				if (local16 == 0) {
-					this.waveEnabled = true;
-					this.setWaveVolume(0);
-				}
-				if (local16 == 1) {
-					this.waveEnabled = true;
-					this.setWaveVolume(-400);
-				}
-				if (local16 == 2) {
-					this.waveEnabled = true;
-					this.setWaveVolume(-800);
-				}
-				if (local16 == 3) {
-					this.waveEnabled = true;
-					this.setWaveVolume(-1200);
-				}
-				if (local16 == 4) {
-					this.waveEnabled = false;
-				}
+			if (local16 == 3) {
+				Draw3D.setBrightness(0.7D);
 			}
-			if (local8 == 5) {
-				this.mouseButtonsOption = local16;
+			if (local16 == 4) {
+				Draw3D.setBrightness(0.6D);
 			}
-			if (local8 == 6) {
-				this.chatEffects = local16;
+			ObjType.iconCache.clear();
+			this.redrawTitleBackground = true;
+		}
+		if (local8 == 3) {
+			@Pc(54) boolean local54 = this.midiActive;
+			if (local16 == 0) {
+				this.setMidiVolume(0);
+				this.midiActive = true;
 			}
-			if (local8 == 8) {
-				this.splitPrivateChat = local16;
-				this.redrawChatback = true;
+			if (local16 == 1) {
+				this.setMidiVolume(-400);
+				this.midiActive = true;
 			}
+			if (local16 == 2) {
+				this.setMidiVolume(-800);
+				this.midiActive = true;
+			}
+			if (local16 == 3) {
+				this.setMidiVolume(-1200);
+				this.midiActive = true;
+			}
+			if (local16 == 4) {
+				this.midiActive = false;
+			}
+			if (this.midiActive != local54) {
+				if (this.midiActive) {
+					this.setMidi(this.midiCrc, this.currentMidi, this.midiSize);
+				} else {
+					this.stopMidi();
+				}
+				this.nextMusicDelay = 0;
+			}
+		}
+		if (local8 == 4) {
+			if (local16 == 0) {
+				this.waveEnabled = true;
+				this.setWaveVolume(0);
+			}
+			if (local16 == 1) {
+				this.waveEnabled = true;
+				this.setWaveVolume(-400);
+			}
+			if (local16 == 2) {
+				this.waveEnabled = true;
+				this.setWaveVolume(-800);
+			}
+			if (local16 == 3) {
+				this.waveEnabled = true;
+				this.setWaveVolume(-1200);
+			}
+			if (local16 == 4) {
+				this.waveEnabled = false;
+			}
+		}
+		if (local8 == 5) {
+			this.mouseButtonsOption = local16;
+		}
+		if (local8 == 6) {
+			this.chatEffects = local16;
+		}
+		if (local8 == 8) {
+			this.splitPrivateChat = local16;
+			this.redrawChatback = true;
 		}
 	}
 
@@ -4569,105 +4592,107 @@ public final class Game extends GameShell {
 		arg1.secondarySeqId = arg1.seqStandId;
 		if (arg1.pathLength == 0) {
 			arg1.seqPathLength = 0;
-		} else {
-			if (arg1.primarySeqId != -1 && arg1.primarySeqDelay == 0) {
-				@Pc(28) SeqType local28 = SeqType.instances[arg1.primarySeqId];
-				if (local28.mask == null) {
-					arg1.seqPathLength++;
-					return;
-				}
+			return;
+		}
+
+		if (arg1.primarySeqId != -1 && arg1.primarySeqDelay == 0) {
+			@Pc(28) SeqType local28 = SeqType.instances[arg1.primarySeqId];
+			if (local28.mask == null) {
+				arg1.seqPathLength++;
+				return;
 			}
-			@Pc(41) int local41 = arg1.x;
-			@Pc(44) int local44 = arg1.z;
-			@Pc(59) int local59 = arg1.pathTileX[arg1.pathLength - 1] * 128 + arg1.size * 64;
-			@Pc(74) int local74 = arg1.pathTileZ[arg1.pathLength - 1] * 128 + arg1.size * 64;
-			if (local59 - local41 <= 256 && local59 - local41 >= -256 && local74 - local44 <= 256 && local74 - local44 >= -256) {
-				if (local41 < local59) {
-					if (local44 < local74) {
-						arg1.dstYaw = 1280;
-					} else if (local44 > local74) {
-						arg1.dstYaw = 1792;
-					} else {
-						arg1.dstYaw = 1536;
-					}
-				} else if (local41 > local59) {
-					if (local44 < local74) {
-						arg1.dstYaw = 768;
-					} else if (local44 > local74) {
-						arg1.dstYaw = 256;
-					} else {
-						arg1.dstYaw = 512;
-					}
-				} else if (local44 < local74) {
-					arg1.dstYaw = 1024;
-				} else {
-					arg1.dstYaw = 0;
-				}
-				@Pc(168) int local168 = arg1.dstYaw - arg1.seqDelay & 0x7FF;
-				if (local168 > 1024) {
-					local168 -= 2048;
-				}
-				@Pc(175) int local175 = arg1.seqTurnAroundId;
-				if (local168 >= -256 && local168 <= 256) {
-					local175 = arg1.seqWalkId;
-				} else if (local168 >= 256 && local168 < 768) {
-					local175 = arg1.seqTurnRightId;
-				} else if (local168 >= -768 && local168 <= -256) {
-					local175 = arg1.seqTurnLeftId;
-				}
-				if (local175 == -1) {
-					local175 = arg1.seqWalkId;
-				}
-				arg1.secondarySeqId = local175;
-				@Pc(217) int local217 = 4;
-				if (arg1.seqDelay != arg1.dstYaw && arg1.targetId == -1) {
-					local217 = 2;
-				}
-				if (arg1.pathLength > 2) {
-					local217 = 6;
-				}
-				if (arg1.pathLength > 3) {
-					local217 = 8;
-				}
-				if (arg1.seqPathLength > 0 && arg1.pathLength > 1) {
-					local217 = 8;
-					arg1.seqPathLength--;
-				}
-				if (arg1.pathRunning[arg1.pathLength - 1]) {
-					local217 <<= 0x1;
-				}
-				if (local217 >= 8 && arg1.secondarySeqId == arg1.seqWalkId && arg1.seqRunId != -1) {
-					arg1.secondarySeqId = arg1.seqRunId;
-				}
-				if (local41 < local59) {
-					arg1.x += local217;
-					if (arg1.x > local59) {
-						arg1.x = local59;
-					}
-				} else if (local41 > local59) {
-					arg1.x -= local217;
-					if (arg1.x < local59) {
-						arg1.x = local59;
-					}
-				}
+		}
+
+		@Pc(41) int local41 = arg1.x;
+		@Pc(44) int local44 = arg1.z;
+		@Pc(59) int local59 = arg1.pathTileX[arg1.pathLength - 1] * 128 + arg1.size * 64;
+		@Pc(74) int local74 = arg1.pathTileZ[arg1.pathLength - 1] * 128 + arg1.size * 64;
+		if (local59 - local41 <= 256 && local59 - local41 >= -256 && local74 - local44 <= 256 && local74 - local44 >= -256) {
+			if (local41 < local59) {
 				if (local44 < local74) {
-					arg1.z += local217;
-					if (arg1.z > local74) {
-						arg1.z = local74;
-					}
+					arg1.dstYaw = 1280;
 				} else if (local44 > local74) {
-					arg1.z -= local217;
-					if (arg1.z < local74) {
-						arg1.z = local74;
-					}
+					arg1.dstYaw = 1792;
+				} else {
+					arg1.dstYaw = 1536;
 				}
-				if (arg1.x == local59 && arg1.z == local74) {
-					arg1.pathLength--;
+			} else if (local41 > local59) {
+				if (local44 < local74) {
+					arg1.dstYaw = 768;
+				} else if (local44 > local74) {
+					arg1.dstYaw = 256;
+				} else {
+					arg1.dstYaw = 512;
 				}
+			} else if (local44 < local74) {
+				arg1.dstYaw = 1024;
 			} else {
-				arg1.x = local59;
-				arg1.z = local74;
+				arg1.dstYaw = 0;
 			}
+			@Pc(168) int local168 = arg1.dstYaw - arg1.seqDelay & 0x7FF;
+			if (local168 > 1024) {
+				local168 -= 2048;
+			}
+			@Pc(175) int local175 = arg1.seqTurnAroundId;
+			if (local168 >= -256 && local168 <= 256) {
+				local175 = arg1.seqWalkId;
+			} else if (local168 >= 256 && local168 < 768) {
+				local175 = arg1.seqTurnRightId;
+			} else if (local168 >= -768 && local168 <= -256) {
+				local175 = arg1.seqTurnLeftId;
+			}
+			if (local175 == -1) {
+				local175 = arg1.seqWalkId;
+			}
+			arg1.secondarySeqId = local175;
+			@Pc(217) int local217 = 4;
+			if (arg1.seqDelay != arg1.dstYaw && arg1.targetId == -1) {
+				local217 = 2;
+			}
+			if (arg1.pathLength > 2) {
+				local217 = 6;
+			}
+			if (arg1.pathLength > 3) {
+				local217 = 8;
+			}
+			if (arg1.seqPathLength > 0 && arg1.pathLength > 1) {
+				local217 = 8;
+				arg1.seqPathLength--;
+			}
+			if (arg1.pathRunning[arg1.pathLength - 1]) {
+				local217 <<= 0x1;
+			}
+			if (local217 >= 8 && arg1.secondarySeqId == arg1.seqWalkId && arg1.seqRunId != -1) {
+				arg1.secondarySeqId = arg1.seqRunId;
+			}
+			if (local41 < local59) {
+				arg1.x += local217;
+				if (arg1.x > local59) {
+					arg1.x = local59;
+				}
+			} else if (local41 > local59) {
+				arg1.x -= local217;
+				if (arg1.x < local59) {
+					arg1.x = local59;
+				}
+			}
+			if (local44 < local74) {
+				arg1.z += local217;
+				if (arg1.z > local74) {
+					arg1.z = local74;
+				}
+			} else if (local44 > local74) {
+				arg1.z -= local217;
+				if (arg1.z < local74) {
+					arg1.z = local74;
+				}
+			}
+			if (arg1.x == local59 && arg1.z == local74) {
+				arg1.pathLength--;
+			}
+		} else {
+			arg1.x = local59;
+			arg1.z = local74;
 		}
 	}
 
@@ -5657,39 +5682,41 @@ public final class Game extends GameShell {
 
 	@OriginalMember(owner = "client!client", name = "c", descriptor = "(III)V")
 	private void handlePrivateChatInput(@OriginalArg(0) int arg0, @OriginalArg(2) int arg2) {
-		if (this.splitPrivateChat != 0) {
-			@Pc(5) int local5 = 0;
-			if (this.systemUpdateTimer != 0) {
-				local5 = 1;
-			}
-			for (@Pc(12) int local12 = 0; local12 < 100; local12++) {
-				if (this.messageText[local12] != null) {
-					@Pc(24) int local24 = this.messageType[local12];
-					if ((local24 == 3 || local24 == 7) && (local24 == 7 || this.privateChatSetting == 0 || this.privateChatSetting == 1 && this.isFriend(this.messageSender[local12]))) {
-						@Pc(54) int local54 = 329 - local5 * 13;
-						if (super.mouseX > 8 && super.mouseX < 520 && arg2 - 11 > local54 - 10 && arg2 - 11 <= local54 + 3) {
-							if (this.rights) {
-								this.menuOption[this.menuSize] = "Report abuse @whi@" + this.messageSender[local12];
-								this.menuAction[this.menuSize] = 2034;
-								this.menuSize++;
-							}
-							this.menuOption[this.menuSize] = "Add ignore @whi@" + this.messageSender[local12];
-							this.menuAction[this.menuSize] = 2436;
-							this.menuSize++;
-							this.menuOption[this.menuSize] = "Add friend @whi@" + this.messageSender[local12];
-							this.menuAction[this.menuSize] = 2406;
+		if (this.splitPrivateChat == 0) {
+			return;
+		}
+
+		@Pc(5) int local5 = 0;
+		if (this.systemUpdateTimer != 0) {
+			local5 = 1;
+		}
+		for (@Pc(12) int local12 = 0; local12 < 100; local12++) {
+			if (this.messageText[local12] != null) {
+				@Pc(24) int local24 = this.messageType[local12];
+				if ((local24 == 3 || local24 == 7) && (local24 == 7 || this.privateChatSetting == 0 || this.privateChatSetting == 1 && this.isFriend(this.messageSender[local12]))) {
+					@Pc(54) int local54 = 329 - local5 * 13;
+					if (super.mouseX > 8 && super.mouseX < 520 && arg2 - 11 > local54 - 10 && arg2 - 11 <= local54 + 3) {
+						if (this.rights) {
+							this.menuOption[this.menuSize] = "Report abuse @whi@" + this.messageSender[local12];
+							this.menuAction[this.menuSize] = 2034;
 							this.menuSize++;
 						}
-						local5++;
-						if (local5 >= 5) {
-							return;
-						}
+						this.menuOption[this.menuSize] = "Add ignore @whi@" + this.messageSender[local12];
+						this.menuAction[this.menuSize] = 2436;
+						this.menuSize++;
+						this.menuOption[this.menuSize] = "Add friend @whi@" + this.messageSender[local12];
+						this.menuAction[this.menuSize] = 2406;
+						this.menuSize++;
 					}
-					if ((local24 == 5 || local24 == 6) && this.privateChatSetting < 2) {
-						local5++;
-						if (local5 >= 5) {
-							return;
-						}
+					local5++;
+					if (local5 >= 5) {
+						return;
+					}
+				}
+				if ((local24 == 5 || local24 == 6) && this.privateChatSetting < 2) {
+					local5++;
+					if (local5 >= 5) {
+						return;
 					}
 				}
 			}
@@ -6127,7 +6154,7 @@ public final class Game extends GameShell {
 			this.fontBold12 = new BitmapFont(this.archiveTitle, "b12");
 			this.fontQuill8 = new BitmapFont(this.archiveTitle, "q8");
 			this.loadTitleBackground();
-			this.loadTitleImages(0);
+			this.loadTitleImages();
 			@Pc(255) FileArchive local255 = this.loadArchive("config", this.archiveChecksum[2], "config", 15);
 			@Pc(266) FileArchive local266 = this.loadArchive("interface", this.archiveChecksum[3], "interface", 20);
 			@Pc(277) FileArchive local277 = this.loadArchive("2d graphics", this.archiveChecksum[4], "media", 30);
@@ -6338,68 +6365,70 @@ public final class Game extends GameShell {
 
 	@OriginalMember(owner = "client!client", name = "v", descriptor = "(I)V")
 	private void handleInput() {
-		if (this.objDragArea == 0) {
-			this.menuOption[0] = "Cancel";
-			this.menuAction[0] = 1252;
-			this.menuSize = 1;
-			this.handlePrivateChatInput(super.mouseX, super.mouseY);
-			this.lastHoveredInterfaceId = 0;
-			if (super.mouseX > 8 && super.mouseY > 11 && super.mouseX < 520 && super.mouseY < 345) {
-				if (this.viewportInterfaceId == -1) {
-					this.handleViewportOptions();
-				} else {
-					this.handleInterfaceInput(super.mouseY, super.mouseX, 11, IfType.instances[this.viewportInterfaceId], 8, 0);
-				}
+		if (this.objDragArea != 0) {
+			return;
+		}
+
+		this.menuOption[0] = "Cancel";
+		this.menuAction[0] = 1252;
+		this.menuSize = 1;
+		this.handlePrivateChatInput(super.mouseX, super.mouseY);
+		this.lastHoveredInterfaceId = 0;
+		if (super.mouseX > 8 && super.mouseY > 11 && super.mouseX < 520 && super.mouseY < 345) {
+			if (this.viewportInterfaceId == -1) {
+				this.handleViewportOptions();
+			} else {
+				this.handleInterfaceInput(super.mouseY, super.mouseX, 11, IfType.instances[this.viewportInterfaceId], 8, 0);
 			}
-			if (this.lastHoveredInterfaceId != this.viewportHoveredInterfaceIndex) {
-				this.viewportHoveredInterfaceIndex = this.lastHoveredInterfaceId;
+		}
+		if (this.lastHoveredInterfaceId != this.viewportHoveredInterfaceIndex) {
+			this.viewportHoveredInterfaceIndex = this.lastHoveredInterfaceId;
+		}
+		this.lastHoveredInterfaceId = 0;
+		if (super.mouseX > 562 && super.mouseY > 231 && super.mouseX < 752 && super.mouseY < 492) {
+			if (this.sidebarInterfaceId != -1) {
+				this.handleInterfaceInput(super.mouseY, super.mouseX, 231, IfType.instances[this.sidebarInterfaceId], 562, 0);
+			} else if (this.tabInterfaceId[this.selectedTab] != -1) {
+				this.handleInterfaceInput(super.mouseY, super.mouseX, 231, IfType.instances[this.tabInterfaceId[this.selectedTab]], 562, 0);
 			}
-			this.lastHoveredInterfaceId = 0;
-			if (super.mouseX > 562 && super.mouseY > 231 && super.mouseX < 752 && super.mouseY < 492) {
-				if (this.sidebarInterfaceId != -1) {
-					this.handleInterfaceInput(super.mouseY, super.mouseX, 231, IfType.instances[this.sidebarInterfaceId], 562, 0);
-				} else if (this.tabInterfaceId[this.selectedTab] != -1) {
-					this.handleInterfaceInput(super.mouseY, super.mouseX, 231, IfType.instances[this.tabInterfaceId[this.selectedTab]], 562, 0);
-				}
+		}
+		if (this.lastHoveredInterfaceId != this.sidebarHoveredInterfaceIndex) {
+			this.redrawSidebar = true;
+			this.sidebarHoveredInterfaceIndex = this.lastHoveredInterfaceId;
+		}
+		this.lastHoveredInterfaceId = 0;
+		if (super.mouseX > 22 && super.mouseY > 375 && super.mouseX < 431 && super.mouseY < 471) {
+			if (this.chatInterfaceId == -1) {
+				this.handleChatMouseInput(super.mouseY - 375, super.mouseX - 22);
+			} else {
+				this.handleInterfaceInput(super.mouseY, super.mouseX, 375, IfType.instances[this.chatInterfaceId], 22, 0);
 			}
-			if (this.lastHoveredInterfaceId != this.sidebarHoveredInterfaceIndex) {
-				this.redrawSidebar = true;
-				this.sidebarHoveredInterfaceIndex = this.lastHoveredInterfaceId;
-			}
-			this.lastHoveredInterfaceId = 0;
-			if (super.mouseX > 22 && super.mouseY > 375 && super.mouseX < 431 && super.mouseY < 471) {
-				if (this.chatInterfaceId == -1) {
-					this.handleChatMouseInput(super.mouseY - 375, super.mouseX - 22);
-				} else {
-					this.handleInterfaceInput(super.mouseY, super.mouseX, 375, IfType.instances[this.chatInterfaceId], 22, 0);
-				}
-			}
-			if (this.chatInterfaceId != -1 && this.lastHoveredInterfaceId != this.chatHoveredInterfaceIndex) {
-				this.redrawChatback = true;
-				this.chatHoveredInterfaceIndex = this.lastHoveredInterfaceId;
-			}
-			@Pc(223) boolean local223 = false;
-			while (!local223) {
-				local223 = true;
-				for (@Pc(229) int local229 = 0; local229 < this.menuSize - 1; local229++) {
-					if (this.menuAction[local229] < 1000 && this.menuAction[local229 + 1] > 1000) {
-						@Pc(250) String local250 = this.menuOption[local229];
-						this.menuOption[local229] = this.menuOption[local229 + 1];
-						this.menuOption[local229 + 1] = local250;
-						@Pc(272) int local272 = this.menuAction[local229];
-						this.menuAction[local229] = this.menuAction[local229 + 1];
-						this.menuAction[local229 + 1] = local272;
-						@Pc(294) int local294 = this.menuParamA[local229];
-						this.menuParamA[local229] = this.menuParamA[local229 + 1];
-						this.menuParamA[local229 + 1] = local294;
-						@Pc(316) int local316 = this.menuParamB[local229];
-						this.menuParamB[local229] = this.menuParamB[local229 + 1];
-						this.menuParamB[local229 + 1] = local316;
-						@Pc(338) int local338 = this.menuParamC[local229];
-						this.menuParamC[local229] = this.menuParamC[local229 + 1];
-						this.menuParamC[local229 + 1] = local338;
-						local223 = false;
-					}
+		}
+		if (this.chatInterfaceId != -1 && this.lastHoveredInterfaceId != this.chatHoveredInterfaceIndex) {
+			this.redrawChatback = true;
+			this.chatHoveredInterfaceIndex = this.lastHoveredInterfaceId;
+		}
+		@Pc(223) boolean local223 = false;
+		while (!local223) {
+			local223 = true;
+			for (@Pc(229) int local229 = 0; local229 < this.menuSize - 1; local229++) {
+				if (this.menuAction[local229] < 1000 && this.menuAction[local229 + 1] > 1000) {
+					@Pc(250) String local250 = this.menuOption[local229];
+					this.menuOption[local229] = this.menuOption[local229 + 1];
+					this.menuOption[local229 + 1] = local250;
+					@Pc(272) int local272 = this.menuAction[local229];
+					this.menuAction[local229] = this.menuAction[local229 + 1];
+					this.menuAction[local229 + 1] = local272;
+					@Pc(294) int local294 = this.menuParamA[local229];
+					this.menuParamA[local229] = this.menuParamA[local229 + 1];
+					this.menuParamA[local229 + 1] = local294;
+					@Pc(316) int local316 = this.menuParamB[local229];
+					this.menuParamB[local229] = this.menuParamB[local229 + 1];
+					this.menuParamB[local229 + 1] = local316;
+					@Pc(338) int local338 = this.menuParamC[local229];
+					this.menuParamC[local229] = this.menuParamC[local229 + 1];
+					this.menuParamC[local229 + 1] = local338;
+					local223 = false;
 				}
 			}
 		}
@@ -6574,18 +6603,20 @@ public final class Game extends GameShell {
 	private void drawOnMinimap(@OriginalArg(0) int arg0, @OriginalArg(2) Image24 arg2, @OriginalArg(3) int arg3) {
 		@Pc(7) int local7 = this.orbitCameraYaw + this.minimapAnticheatAngle & 0x7FF;
 		@Pc(15) int local15 = arg3 * arg3 + arg0 * arg0;
-		if (local15 <= 6400) {
-			@Pc(34) int local34 = Model.sin[local7];
-			@Pc(38) int local38 = Model.cos[local7];
-			@Pc(47) int local47 = local34 * 256 / (this.minimapZoom + 256);
-			@Pc(56) int local56 = local38 * 256 / (this.minimapZoom + 256);
-			@Pc(66) int local66 = arg0 * local47 + arg3 * local56 >> 16;
-			@Pc(76) int local76 = arg0 * local56 - arg3 * local47 >> 16;
-			if (local15 > 2500) {
-				arg2.drawMasked(this.imageMapback, 83 - local76 - arg2.cropH / 2, local66 + 94 - arg2.cropW / 2);
-			} else {
-				arg2.draw(83 - local76 - arg2.cropH / 2, local66 + 94 - arg2.cropW / 2);
-			}
+		if (local15 > 6400) {
+			return;
+		}
+
+		@Pc(34) int local34 = Model.sin[local7];
+		@Pc(38) int local38 = Model.cos[local7];
+		@Pc(47) int local47 = local34 * 256 / (this.minimapZoom + 256);
+		@Pc(56) int local56 = local38 * 256 / (this.minimapZoom + 256);
+		@Pc(66) int local66 = arg0 * local47 + arg3 * local56 >> 16;
+		@Pc(76) int local76 = arg0 * local56 - arg3 * local47 >> 16;
+		if (local15 > 2500) {
+			arg2.drawMasked(this.imageMapback, 83 - local76 - arg2.cropH / 2, local66 + 94 - arg2.cropW / 2);
+		} else {
+			arg2.draw(83 - local76 - arg2.cropH / 2, local66 + 94 - arg2.cropW / 2);
 		}
 	}
 
@@ -6767,39 +6798,41 @@ public final class Game extends GameShell {
 
 	@OriginalMember(owner = "client!client", name = "j", descriptor = "(B)V")
 	private void loadTitle() {
-		if (this.imageTitle2 == null) {
-			super.drawArea = null;
-			this.areaChatback = null;
-			this.areaMapback = null;
-			this.areaSidebar = null;
-			this.areaViewport = null;
-			this.areaBackbase1 = null;
-			this.areaBackbase2 = null;
-			this.areaBackhmid1 = null;
-			this.imageTitle0 = new DrawArea(this.getBaseComponent(), 128, 265);
-			Draw2D.clear();
-			this.imageTitle1 = new DrawArea(this.getBaseComponent(), 128, 265);
-			Draw2D.clear();
-			this.imageTitle2 = new DrawArea(this.getBaseComponent(), 533, 186);
-			Draw2D.clear();
-			this.imageTitle3 = new DrawArea(this.getBaseComponent(), 360, 146);
-			Draw2D.clear();
-			this.imageTitle4 = new DrawArea(this.getBaseComponent(), 360, 200);
-			Draw2D.clear();
-			this.imageTitle5 = new DrawArea(this.getBaseComponent(), 214, 267);
-			Draw2D.clear();
-			this.imageTitle6 = new DrawArea(this.getBaseComponent(), 215, 267);
-			Draw2D.clear();
-			this.imageTitle7 = new DrawArea(this.getBaseComponent(), 86, 79);
-			Draw2D.clear();
-			this.imageTitle8 = new DrawArea(this.getBaseComponent(), 87, 79);
-			Draw2D.clear();
-			if (this.archiveTitle != null) {
-				this.loadTitleBackground();
-				this.loadTitleImages(0);
-			}
-			this.redrawTitleBackground = true;
+		if (this.imageTitle2 != null) {
+			return;
 		}
+
+		super.drawArea = null;
+		this.areaChatback = null;
+		this.areaMapback = null;
+		this.areaSidebar = null;
+		this.areaViewport = null;
+		this.areaBackbase1 = null;
+		this.areaBackbase2 = null;
+		this.areaBackhmid1 = null;
+		this.imageTitle0 = new DrawArea(this.getBaseComponent(), 128, 265);
+		Draw2D.clear();
+		this.imageTitle1 = new DrawArea(this.getBaseComponent(), 128, 265);
+		Draw2D.clear();
+		this.imageTitle2 = new DrawArea(this.getBaseComponent(), 533, 186);
+		Draw2D.clear();
+		this.imageTitle3 = new DrawArea(this.getBaseComponent(), 360, 146);
+		Draw2D.clear();
+		this.imageTitle4 = new DrawArea(this.getBaseComponent(), 360, 200);
+		Draw2D.clear();
+		this.imageTitle5 = new DrawArea(this.getBaseComponent(), 214, 267);
+		Draw2D.clear();
+		this.imageTitle6 = new DrawArea(this.getBaseComponent(), 215, 267);
+		Draw2D.clear();
+		this.imageTitle7 = new DrawArea(this.getBaseComponent(), 86, 79);
+		Draw2D.clear();
+		this.imageTitle8 = new DrawArea(this.getBaseComponent(), 87, 79);
+		Draw2D.clear();
+		if (this.archiveTitle != null) {
+			this.loadTitleBackground();
+			this.loadTitleImages();
+		}
+		this.redrawTitleBackground = true;
 	}
 
 	@OriginalMember(owner = "client!client", name = "z", descriptor = "(I)V")
@@ -7114,100 +7147,104 @@ public final class Game extends GameShell {
 
 	@OriginalMember(owner = "client!client", name = "a", descriptor = "(IIIIIIII)V")
 	private void addLoc(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2, @OriginalArg(3) int arg3, @OriginalArg(4) int arg4, @OriginalArg(5) int arg5, @OriginalArg(7) int arg7) {
-		if (arg1 >= 1 && arg2 >= 1 && arg1 <= 102 && arg2 <= 102) {
-			if (lowMemory && arg7 != this.currentLevel) {
-				return;
-			}
-			@Pc(25) int local25 = 0;
-			@Pc(27) boolean local27 = true;
-			@Pc(29) boolean local29 = false;
-			@Pc(31) boolean local31 = false;
+		if (arg1 < 1 || arg2 < 1 || arg1 > 102 || arg2 > 102) {
+			return;
+		}
+
+		if (lowMemory && arg7 != this.currentLevel) {
+			return;
+		}
+		@Pc(25) int local25 = 0;
+		@Pc(27) boolean local27 = true;
+		@Pc(29) boolean local29 = false;
+		@Pc(31) boolean local31 = false;
+		if (arg3 == 0) {
+			local25 = this.scene.getWallBitset(arg7, arg1, arg2);
+		}
+		if (arg3 == 1) {
+			local25 = this.scene.getWallDecorationBitset(arg7, arg2, arg1);
+		}
+		if (arg3 == 2) {
+			local25 = this.scene.getLocBitset(arg7, arg1, arg2);
+		}
+		if (arg3 == 3) {
+			local25 = this.scene.getGroundDecorationBitset(arg7, arg1, arg2);
+		}
+		@Pc(81) int local81;
+		if (local25 != 0) {
+			local81 = this.scene.getInfo(arg7, arg1, arg2, local25);
+			@Pc(87) int local87 = local25 >> 14 & 0x7FFF;
+			@Pc(91) int local91 = local81 & 0x1F;
+			@Pc(95) int local95 = local81 >> 6;
+			@Pc(107) LocType local107;
 			if (arg3 == 0) {
-				local25 = this.scene.getWallBitset(arg7, arg1, arg2);
+				this.scene.removeWall(arg1, arg7, arg2, 1);
+				local107 = LocType.get(local87);
+				if (local107.blockwalk) {
+					this.levelCollisionMap[arg7].removeWall(local107.blockrange, local95, arg1, arg2, local91);
+				}
 			}
 			if (arg3 == 1) {
-				local25 = this.scene.getWallDecorationBitset(arg7, arg2, arg1);
+				this.scene.removeWallDecoration(arg7, arg2, arg1);
 			}
 			if (arg3 == 2) {
-				local25 = this.scene.getLocBitset(arg7, arg1, arg2);
+				this.scene.removeLoc(arg1, arg2, arg7);
+				local107 = LocType.get(local87);
+				if (arg1 + local107.sizeX > 103 || arg2 + local107.sizeX > 103 || arg1 + local107.sizeZ > 103 || arg2 + local107.sizeZ > 103) {
+					return;
+				}
+				if (local107.blockwalk) {
+					this.levelCollisionMap[arg7].removeLoc(arg2, arg1, local95, local107.sizeX, local107.blockrange, local107.sizeZ);
+				}
 			}
 			if (arg3 == 3) {
-				local25 = this.scene.getGroundDecorationBitset(arg7, arg1, arg2);
-			}
-			@Pc(81) int local81;
-			if (local25 != 0) {
-				local81 = this.scene.getInfo(arg7, arg1, arg2, local25);
-				@Pc(87) int local87 = local25 >> 14 & 0x7FFF;
-				@Pc(91) int local91 = local81 & 0x1F;
-				@Pc(95) int local95 = local81 >> 6;
-				@Pc(107) LocType local107;
-				if (arg3 == 0) {
-					this.scene.removeWall(arg1, arg7, arg2, 1);
-					local107 = LocType.get(local87);
-					if (local107.blockwalk) {
-						this.levelCollisionMap[arg7].removeWall(local107.blockrange, local95, arg1, arg2, local91);
-					}
-				}
-				if (arg3 == 1) {
-					this.scene.removeWallDecoration(arg7, arg2, arg1);
-				}
-				if (arg3 == 2) {
-					this.scene.removeLoc(arg1, arg2, arg7);
-					local107 = LocType.get(local87);
-					if (arg1 + local107.sizeX > 103 || arg2 + local107.sizeX > 103 || arg1 + local107.sizeZ > 103 || arg2 + local107.sizeZ > 103) {
-						return;
-					}
-					if (local107.blockwalk) {
-						this.levelCollisionMap[arg7].removeLoc(arg2, arg1, local95, local107.sizeX, local107.blockrange, local107.sizeZ);
-					}
-				}
-				if (arg3 == 3) {
-					this.scene.removeGroundDecoration(arg7, arg1, arg2);
-					local107 = LocType.get(local87);
-					if (local107.blockwalk && local107.interactable) {
-						this.levelCollisionMap[arg7].removeBlocked(arg2, arg1);
-					}
+				this.scene.removeGroundDecoration(arg7, arg1, arg2);
+				local107 = LocType.get(local87);
+				if (local107.blockwalk && local107.interactable) {
+					this.levelCollisionMap[arg7].removeBlocked(arg2, arg1);
 				}
 			}
-			if (arg4 >= 0) {
-				local81 = arg7;
-				if (arg7 < 3 && (this.levelTileFlags[1][arg1][arg2] & 0x2) == 2) {
-					local81 = arg7 + 1;
-				}
-				SceneBuilder.addLoc(arg1, this.locList, this.levelCollisionMap[arg7], arg2, arg0, this.levelHeightmap, arg7, arg4, arg5, this.scene, local81);
-				return;
+		}
+		if (arg4 >= 0) {
+			local81 = arg7;
+			if (arg7 < 3 && (this.levelTileFlags[1][arg1][arg2] & 0x2) == 2) {
+				local81 = arg7 + 1;
 			}
+			SceneBuilder.addLoc(arg1, this.locList, this.levelCollisionMap[arg7], arg2, arg0, this.levelHeightmap, arg7, arg4, arg5, this.scene, local81);
+			return;
 		}
 	}
 
 	@OriginalMember(owner = "client!client", name = "a", descriptor = "(JI)V")
 	private void addFriend(@OriginalArg(0) long arg0) {
-		if (arg0 != 0L) {
-			if (this.friendCount >= 100) {
-				this.addMessage(0, "Your friends list is full. Max of 100 hit", "");
-			} else {
-				@Pc(23) String local23 = StringUtils.formatName(StringUtils.fromBase37(arg0));
-				for (@Pc(25) int local25 = 0; local25 < this.friendCount; local25++) {
-					if (this.friendName37[local25] == arg0) {
-						this.addMessage(0, local23 + " is already on your friend list", "");
-						return;
-					}
+		if (arg0 == 0L) {
+			return;
+		}
+
+		if (this.friendCount >= 100) {
+			this.addMessage(0, "Your friends list is full. Max of 100 hit", "");
+		} else {
+			@Pc(23) String local23 = StringUtils.formatName(StringUtils.fromBase37(arg0));
+			for (@Pc(25) int local25 = 0; local25 < this.friendCount; local25++) {
+				if (this.friendName37[local25] == arg0) {
+					this.addMessage(0, local23 + " is already on your friend list", "");
+					return;
 				}
-				for (@Pc(55) int local55 = 0; local55 < this.ignoreCount; local55++) {
-					if (this.ignoreName37[local55] == arg0) {
-						this.addMessage(0, "Please remove " + local23 + " from your ignore list first", "");
-						return;
-					}
+			}
+			for (@Pc(55) int local55 = 0; local55 < this.ignoreCount; local55++) {
+				if (this.ignoreName37[local55] == arg0) {
+					this.addMessage(0, "Please remove " + local23 + " from your ignore list first", "");
+					return;
 				}
-				if (!local23.equals(this.localPlayer.name)) {
-					this.friendName[this.friendCount] = local23;
-					this.friendName37[this.friendCount] = arg0;
-					this.friendWorld[this.friendCount] = 0;
-					this.friendCount++;
-					this.redrawSidebar = true;
-					this.out.p1isaac(118);
-					this.out.p8(arg0);
-				}
+			}
+			if (!local23.equals(this.localPlayer.name)) {
+				this.friendName[this.friendCount] = local23;
+				this.friendName37[this.friendCount] = arg0;
+				this.friendWorld[this.friendCount] = 0;
+				this.friendCount++;
+				this.redrawSidebar = true;
+				this.out.p1isaac(118);
+				this.out.p8(arg0);
 			}
 		}
 	}
@@ -7348,71 +7385,73 @@ public final class Game extends GameShell {
 
 	@OriginalMember(owner = "client!client", name = "a", descriptor = "(ZIILclient!z;I)V")
 	private void addPlayerOptions(@OriginalArg(1) int arg1, @OriginalArg(2) int arg2, @OriginalArg(3) PlayerEntity arg3, @OriginalArg(4) int arg4) {
-		if (arg3 != this.localPlayer && this.menuSize < 400) {
-			@Pc(41) String local41 = arg3.name + getCombatLevelColorTag(this.localPlayer.combatLevel, arg3.combatLevel) + " (level-" + arg3.combatLevel + ")";
-			if (this.objSelected == 1) {
-				this.menuOption[this.menuSize] = "Use " + this.objSelectedName + " with @whi@" + local41;
-				this.menuAction[this.menuSize] = 367;
-				this.menuParamC[this.menuSize] = arg2;
-				this.menuParamA[this.menuSize] = arg4;
-				this.menuParamB[this.menuSize] = arg1;
-				this.menuSize++;
-			} else if (this.spellSelected != 1) {
-				this.menuOption[this.menuSize] = "Follow @whi@" + local41;
-				this.menuAction[this.menuSize] = 1544;
-				this.menuParamC[this.menuSize] = arg2;
-				this.menuParamA[this.menuSize] = arg4;
-				this.menuParamB[this.menuSize] = arg1;
-				this.menuSize++;
-				if (this.overrideChat == 0) {
-					this.menuOption[this.menuSize] = "Trade with @whi@" + local41;
-					this.menuAction[this.menuSize] = 1373;
-					this.menuParamC[this.menuSize] = arg2;
-					this.menuParamA[this.menuSize] = arg4;
-					this.menuParamB[this.menuSize] = arg1;
-					this.menuSize++;
-				}
-				if (this.wildernessLevel > 0) {
-					this.menuOption[this.menuSize] = "Attack @whi@" + local41;
-					if (this.localPlayer.combatLevel >= arg3.combatLevel) {
-						this.menuAction[this.menuSize] = 151;
-					} else {
-						this.menuAction[this.menuSize] = 2151;
-					}
-					this.menuParamC[this.menuSize] = arg2;
-					this.menuParamA[this.menuSize] = arg4;
-					this.menuParamB[this.menuSize] = arg1;
-					this.menuSize++;
-				}
-				if (this.worldLocationState == 1) {
-					this.menuOption[this.menuSize] = "Fight @whi@" + local41;
-					this.menuAction[this.menuSize] = 151;
-					this.menuParamC[this.menuSize] = arg2;
-					this.menuParamA[this.menuSize] = arg4;
-					this.menuParamB[this.menuSize] = arg1;
-					this.menuSize++;
-				}
-				if (this.worldLocationState == 2) {
-					this.menuOption[this.menuSize] = "Duel-with @whi@" + local41;
-					this.menuAction[this.menuSize] = 1101;
-					this.menuParamC[this.menuSize] = arg2;
-					this.menuParamA[this.menuSize] = arg4;
-					this.menuParamB[this.menuSize] = arg1;
-					this.menuSize++;
-				}
-			} else if ((this.activeSpellFlags & 0x8) == 8) {
-				this.menuOption[this.menuSize] = this.spellCaption + " @whi@" + local41;
-				this.menuAction[this.menuSize] = 651;
+		if (arg3 == this.localPlayer || this.menuSize >= 400) {
+			return;
+		}
+
+		@Pc(41) String local41 = arg3.name + getCombatLevelColorTag(this.localPlayer.combatLevel, arg3.combatLevel) + " (level-" + arg3.combatLevel + ")";
+		if (this.objSelected == 1) {
+			this.menuOption[this.menuSize] = "Use " + this.objSelectedName + " with @whi@" + local41;
+			this.menuAction[this.menuSize] = 367;
+			this.menuParamC[this.menuSize] = arg2;
+			this.menuParamA[this.menuSize] = arg4;
+			this.menuParamB[this.menuSize] = arg1;
+			this.menuSize++;
+		} else if (this.spellSelected != 1) {
+			this.menuOption[this.menuSize] = "Follow @whi@" + local41;
+			this.menuAction[this.menuSize] = 1544;
+			this.menuParamC[this.menuSize] = arg2;
+			this.menuParamA[this.menuSize] = arg4;
+			this.menuParamB[this.menuSize] = arg1;
+			this.menuSize++;
+			if (this.overrideChat == 0) {
+				this.menuOption[this.menuSize] = "Trade with @whi@" + local41;
+				this.menuAction[this.menuSize] = 1373;
 				this.menuParamC[this.menuSize] = arg2;
 				this.menuParamA[this.menuSize] = arg4;
 				this.menuParamB[this.menuSize] = arg1;
 				this.menuSize++;
 			}
-			for (@Pc(392) int local392 = 0; local392 < this.menuSize; local392++) {
-				if (this.menuAction[local392] == 660) {
-					this.menuOption[local392] = "Walk here @whi@" + local41;
-					return;
+			if (this.wildernessLevel > 0) {
+				this.menuOption[this.menuSize] = "Attack @whi@" + local41;
+				if (this.localPlayer.combatLevel >= arg3.combatLevel) {
+					this.menuAction[this.menuSize] = 151;
+				} else {
+					this.menuAction[this.menuSize] = 2151;
 				}
+				this.menuParamC[this.menuSize] = arg2;
+				this.menuParamA[this.menuSize] = arg4;
+				this.menuParamB[this.menuSize] = arg1;
+				this.menuSize++;
+			}
+			if (this.worldLocationState == 1) {
+				this.menuOption[this.menuSize] = "Fight @whi@" + local41;
+				this.menuAction[this.menuSize] = 151;
+				this.menuParamC[this.menuSize] = arg2;
+				this.menuParamA[this.menuSize] = arg4;
+				this.menuParamB[this.menuSize] = arg1;
+				this.menuSize++;
+			}
+			if (this.worldLocationState == 2) {
+				this.menuOption[this.menuSize] = "Duel-with @whi@" + local41;
+				this.menuAction[this.menuSize] = 1101;
+				this.menuParamC[this.menuSize] = arg2;
+				this.menuParamA[this.menuSize] = arg4;
+				this.menuParamB[this.menuSize] = arg1;
+				this.menuSize++;
+			}
+		} else if ((this.activeSpellFlags & 0x8) == 8) {
+			this.menuOption[this.menuSize] = this.spellCaption + " @whi@" + local41;
+			this.menuAction[this.menuSize] = 651;
+			this.menuParamC[this.menuSize] = arg2;
+			this.menuParamA[this.menuSize] = arg4;
+			this.menuParamB[this.menuSize] = arg1;
+			this.menuSize++;
+		}
+		for (@Pc(392) int local392 = 0; local392 < this.menuSize; local392++) {
+			if (this.menuAction[local392] == 660) {
+				this.menuOption[local392] = "Walk here @whi@" + local41;
+				return;
 			}
 		}
 	}
@@ -7683,20 +7722,22 @@ public final class Game extends GameShell {
 
 	@OriginalMember(owner = "client!client", name = "k", descriptor = "(Z)V")
 	private void drawTooltip() {
-		if (this.menuSize >= 2 || this.objSelected != 0 || this.spellSelected != 0) {
-			@Pc(31) String local31;
-			if (this.objSelected == 1 && this.menuSize < 2) {
-				local31 = "Use " + this.objSelectedName + " with...";
-			} else if (this.spellSelected == 1 && this.menuSize < 2) {
-				local31 = this.spellCaption + "...";
-			} else {
-				local31 = this.menuOption[this.menuSize - 1];
-			}
-			if (this.menuSize > 2) {
-				local31 = local31 + "@whi@ / " + (this.menuSize - 2) + " more options";
-			}
-			this.fontBold12.drawStringTooltip(loopCycle / 1000, true, 15, 16777215, local31, 4);
+		if (this.menuSize < 2 && this.objSelected == 0 && this.spellSelected == 0) {
+			return;
 		}
+
+		@Pc(31) String local31;
+		if (this.objSelected == 1 && this.menuSize < 2) {
+			local31 = "Use " + this.objSelectedName + " with...";
+		} else if (this.spellSelected == 1 && this.menuSize < 2) {
+			local31 = this.spellCaption + "...";
+		} else {
+			local31 = this.menuOption[this.menuSize - 1];
+		}
+		if (this.menuSize > 2) {
+			local31 = local31 + "@whi@ / " + (this.menuSize - 2) + " more options";
+		}
+		this.fontBold12.drawStringTooltip(loopCycle / 1000, true, 15, 16777215, local31, 4);
 	}
 
 	@OriginalMember(owner = "client!client", name = "k", descriptor = "(B)V")
@@ -7937,7 +7978,7 @@ public final class Game extends GameShell {
 		this.readLocalPlayer(arg1, arg0);
 		this.readPlayers(arg1, arg0, 0);
 		this.readNewPlayers(arg1, arg0);
-		this.readPlayerUpdates(true, arg1, arg0);
+		this.readPlayerUpdates(arg1, arg0);
 		@Pc(36) int local36;
 		for (@Pc(29) int local29 = 0; local29 < this.entityRemovalCount; local29++) {
 			local36 = this.entityRemovalIds[local29];
@@ -8029,20 +8070,22 @@ public final class Game extends GameShell {
 	@OriginalMember(owner = "client!client", name = "a", descriptor = "(IJ)V")
 	private void removeFriend(@OriginalArg(1) long arg1) {
 		@Pc(6) int local6;
-		if (arg1 != 0L) {
-			for (local6 = 0; local6 < this.friendCount; local6++) {
-				if (this.friendName37[local6] == arg1) {
-					this.friendCount--;
-					this.redrawSidebar = true;
-					for (@Pc(38) int local38 = local6; local38 < this.friendCount; local38++) {
-						this.friendName[local38] = this.friendName[local38 + 1];
-						this.friendWorld[local38] = this.friendWorld[local38 + 1];
-						this.friendName37[local38] = this.friendName37[local38 + 1];
-					}
-					this.out.p1isaac(11);
-					this.out.p8(arg1);
-					return;
+		if (arg1 == 0L) {
+			return;
+		}
+
+		for (local6 = 0; local6 < this.friendCount; local6++) {
+			if (this.friendName37[local6] == arg1) {
+				this.friendCount--;
+				this.redrawSidebar = true;
+				for (@Pc(38) int local38 = local6; local38 < this.friendCount; local38++) {
+					this.friendName[local38] = this.friendName[local38 + 1];
+					this.friendWorld[local38] = this.friendWorld[local38 + 1];
+					this.friendName37[local38] = this.friendName37[local38 + 1];
 				}
+				this.out.p1isaac(11);
+				this.out.p8(arg1);
+				return;
 			}
 		}
 	}
@@ -8076,150 +8119,153 @@ public final class Game extends GameShell {
 
 	@OriginalMember(owner = "client!client", name = "l", descriptor = "(B)V")
 	private void drawOnMinimap() {
-		if (super.mouseClickButton == 1) {
-			@Pc(17) int local17 = super.mouseClickX - 21 - 561;
-			@Pc(24) int local24 = super.mouseClickY - 9 - 5;
-			if (local17 >= 0 && local24 >= 0 && local17 < 146 && local24 < 151) {
-				local17 -= 73;
-				local24 -= 75;
-				@Pc(44) int local44 = this.orbitCameraYaw + this.minimapAnticheatAngle & 0x7FF;
-				@Pc(48) int local48 = Draw3D.sin[local44];
-				@Pc(52) int local52 = Draw3D.cos[local44];
-				@Pc(61) int local61 = local48 * (this.minimapZoom + 256) >> 8;
-				@Pc(70) int local70 = local52 * (this.minimapZoom + 256) >> 8;
-				@Pc(80) int local80 = local24 * local61 + local17 * local70 >> 11;
-				@Pc(90) int local90 = local24 * local70 - local17 * local61 >> 11;
-				@Pc(98) int local98 = this.localPlayer.x + local80 >> 7;
-				@Pc(106) int local106 = this.localPlayer.z - local90 >> 7;
-				@Pc(129) boolean local129 = this.tryMove(this.localPlayer.pathTileX[0], 0, true, local98, this.localPlayer.pathTileZ[0], 0, 1, 0, local106, 0, 0, 0);
-				if (local129) {
-					// the additional 14-bytes in MOVE_MINIMAPCLICK
-					this.out.p1(local17);
-					this.out.p1(local24);
-					this.out.p2(this.orbitCameraYaw);
-					this.out.p1(57);
-					this.out.p1(this.minimapAnticheatAngle);
-					this.out.p1(this.minimapZoom);
-					this.out.p1(89);
-					this.out.p2(this.localPlayer.x);
-					this.out.p2(this.localPlayer.z);
-					this.out.p1(this.tryMoveNearest);
-					this.out.p1(63);
-					return;
-				}
+		if (super.mouseClickButton != 1) {
+			return;
+		}
+
+		@Pc(17) int local17 = super.mouseClickX - 21 - 561;
+		@Pc(24) int local24 = super.mouseClickY - 9 - 5;
+		if (local17 >= 0 && local24 >= 0 && local17 < 146 && local24 < 151) {
+			local17 -= 73;
+			local24 -= 75;
+			@Pc(44) int local44 = this.orbitCameraYaw + this.minimapAnticheatAngle & 0x7FF;
+			@Pc(48) int local48 = Draw3D.sin[local44];
+			@Pc(52) int local52 = Draw3D.cos[local44];
+			@Pc(61) int local61 = local48 * (this.minimapZoom + 256) >> 8;
+			@Pc(70) int local70 = local52 * (this.minimapZoom + 256) >> 8;
+			@Pc(80) int local80 = local24 * local61 + local17 * local70 >> 11;
+			@Pc(90) int local90 = local24 * local70 - local17 * local61 >> 11;
+			@Pc(98) int local98 = this.localPlayer.x + local80 >> 7;
+			@Pc(106) int local106 = this.localPlayer.z - local90 >> 7;
+			@Pc(129) boolean local129 = this.tryMove(this.localPlayer.pathTileX[0], 0, true, local98, this.localPlayer.pathTileZ[0], 0, 1, 0, local106, 0, 0, 0);
+			if (local129) {
+				// the additional 14-bytes in MOVE_MINIMAPCLICK
+				this.out.p1(local17);
+				this.out.p1(local24);
+				this.out.p2(this.orbitCameraYaw);
+				this.out.p1(57);
+				this.out.p1(this.minimapAnticheatAngle);
+				this.out.p1(this.minimapZoom);
+				this.out.p1(89);
+				this.out.p2(this.localPlayer.x);
+				this.out.p2(this.localPlayer.z);
+				this.out.p1(this.tryMoveNearest);
+				this.out.p1(63);
 			}
 		}
 	}
 
 	@OriginalMember(owner = "client!client", name = "m", descriptor = "(B)V")
 	private void handleObjDragging() {
-		if (this.objDragArea == 0) {
-			@Pc(14) int local14 = super.mouseClickButton;
-			if (this.spellSelected == 1 && super.mouseClickX >= 520 && super.mouseClickY >= 165 && super.mouseClickX <= 788 && super.mouseClickY <= 230) {
-				local14 = 0;
-			}
-			@Pc(45) int local45;
-			@Pc(48) int local48;
-			@Pc(124) int local124;
-			if (this.menuVisible) {
-				if (local14 != 1) {
-					local45 = super.mouseX;
-					local48 = super.mouseY;
-					if (this.menuArea == 0) {
-						local45 -= 8;
-						local48 -= 11;
-					}
-					if (this.menuArea == 1) {
-						local45 -= 562;
-						local48 -= 231;
-					}
-					if (this.menuArea == 2) {
-						local45 -= 22;
-						local48 -= 375;
-					}
-					if (local45 < this.menuX - 10 || local45 > this.menuX + this.menuWidth + 10 || local48 < this.menuY - 10 || local48 > this.menuY + this.menuHeight + 10) {
-						this.menuVisible = false;
-						if (this.menuArea == 1) {
-							this.redrawSidebar = true;
-						}
-						if (this.menuArea == 2) {
-							this.redrawChatback = true;
-						}
-					}
+		if (this.objDragArea != 0) {
+			return;
+		}
+
+		@Pc(14) int local14 = super.mouseClickButton;
+		if (this.spellSelected == 1 && super.mouseClickX >= 520 && super.mouseClickY >= 165 && super.mouseClickX <= 788 && super.mouseClickY <= 230) {
+			local14 = 0;
+		}
+		@Pc(45) int local45;
+		@Pc(48) int local48;
+		@Pc(124) int local124;
+		if (this.menuVisible) {
+			if (local14 != 1) {
+				local45 = super.mouseX;
+				local48 = super.mouseY;
+				if (this.menuArea == 0) {
+					local45 -= 8;
+					local48 -= 11;
 				}
-				if (local14 == 1) {
-					local45 = this.menuX;
-					local48 = this.menuY;
-					local124 = this.menuWidth;
-					@Pc(127) int local127 = super.mouseClickX;
-					@Pc(130) int local130 = super.mouseClickY;
-					if (this.menuArea == 0) {
-						local127 -= 8;
-						local130 -= 11;
-					}
-					if (this.menuArea == 1) {
-						local127 -= 562;
-						local130 -= 231;
-					}
-					if (this.menuArea == 2) {
-						local127 -= 22;
-						local130 -= 375;
-					}
-					@Pc(149) int local149 = -1;
-					for (@Pc(151) int local151 = 0; local151 < this.menuSize; local151++) {
-						@Pc(166) int local166 = local48 + (this.menuSize - 1 - local151) * 15 + 31;
-						if (local127 > local45 && local127 < local45 + local124 && local130 > local166 - 13 && local130 < local166 + 3) {
-							local149 = local151;
-						}
-					}
-					if (local149 != -1) {
-						this.useMenuOption(local149);
-					}
+				if (this.menuArea == 1) {
+					local45 -= 562;
+					local48 -= 231;
+				}
+				if (this.menuArea == 2) {
+					local45 -= 22;
+					local48 -= 375;
+				}
+				if (local45 < this.menuX - 10 || local45 > this.menuX + this.menuWidth + 10 || local48 < this.menuY - 10 || local48 > this.menuY + this.menuHeight + 10) {
 					this.menuVisible = false;
 					if (this.menuArea == 1) {
 						this.redrawSidebar = true;
 					}
 					if (this.menuArea == 2) {
 						this.redrawChatback = true;
+					}
+				}
+			}
+			if (local14 == 1) {
+				local45 = this.menuX;
+				local48 = this.menuY;
+				local124 = this.menuWidth;
+				@Pc(127) int local127 = super.mouseClickX;
+				@Pc(130) int local130 = super.mouseClickY;
+				if (this.menuArea == 0) {
+					local127 -= 8;
+					local130 -= 11;
+				}
+				if (this.menuArea == 1) {
+					local127 -= 562;
+					local130 -= 231;
+				}
+				if (this.menuArea == 2) {
+					local127 -= 22;
+					local130 -= 375;
+				}
+				@Pc(149) int local149 = -1;
+				for (@Pc(151) int local151 = 0; local151 < this.menuSize; local151++) {
+					@Pc(166) int local166 = local48 + (this.menuSize - 1 - local151) * 15 + 31;
+					if (local127 > local45 && local127 < local45 + local124 && local130 > local166 - 13 && local130 < local166 + 3) {
+						local149 = local151;
+					}
+				}
+				if (local149 != -1) {
+					this.useMenuOption(local149);
+				}
+				this.menuVisible = false;
+				if (this.menuArea == 1) {
+					this.redrawSidebar = true;
+				}
+				if (this.menuArea == 2) {
+					this.redrawChatback = true;
+					return;
+				}
+			}
+		} else {
+			if (local14 == 1 && this.menuSize > 0) {
+				local45 = this.menuAction[this.menuSize - 1];
+				if (local45 == 602 || local45 == 596 || local45 == 22 || local45 == 892 || local45 == 415 || local45 == 405 || local45 == 38 || local45 == 422 || local45 == 478 || local45 == 347 || local45 == 188) {
+					local48 = this.menuParamA[this.menuSize - 1];
+					local124 = this.menuParamB[this.menuSize - 1];
+					@Pc(283) IfType local283 = IfType.instances[local124];
+					if (local283.inventoryDraggable) {
+						this.objGrabThreshold = false;
+						this.objDragCycles = 0;
+						this.objDragInterfaceId = local124;
+						this.objDragSlot = local48;
+						this.objDragArea = 2;
+						this.objGrabX = super.mouseClickX;
+						this.objGrabY = super.mouseClickY;
+						if (IfType.instances[local124].parentId == this.viewportInterfaceId) {
+							this.objDragArea = 1;
+						}
+						if (IfType.instances[local124].parentId == this.chatInterfaceId) {
+							this.objDragArea = 3;
+						}
 						return;
 					}
 				}
-			} else {
-				if (local14 == 1 && this.menuSize > 0) {
-					local45 = this.menuAction[this.menuSize - 1];
-					if (local45 == 602 || local45 == 596 || local45 == 22 || local45 == 892 || local45 == 415 || local45 == 405 || local45 == 38 || local45 == 422 || local45 == 478 || local45 == 347 || local45 == 188) {
-						local48 = this.menuParamA[this.menuSize - 1];
-						local124 = this.menuParamB[this.menuSize - 1];
-						@Pc(283) IfType local283 = IfType.instances[local124];
-						if (local283.inventoryDraggable) {
-							this.objGrabThreshold = false;
-							this.objDragCycles = 0;
-							this.objDragInterfaceId = local124;
-							this.objDragSlot = local48;
-							this.objDragArea = 2;
-							this.objGrabX = super.mouseClickX;
-							this.objGrabY = super.mouseClickY;
-							if (IfType.instances[local124].parentId == this.viewportInterfaceId) {
-								this.objDragArea = 1;
-							}
-							if (IfType.instances[local124].parentId == this.chatInterfaceId) {
-								this.objDragArea = 3;
-							}
-							return;
-						}
-					}
-				}
-				if (local14 == 1 && (this.mouseButtonsOption == 1 || this.isAddFriendOption(this.menuSize - 1)) && this.menuSize > 2) {
-					local14 = 2;
-				}
-				if (local14 == 1 && this.menuSize > 0) {
-					this.useMenuOption(this.menuSize - 1);
-				}
-				if (local14 != 2 || this.menuSize <= 0) {
-					return;
-				}
-				this.showContextMenu();
 			}
+			if (local14 == 1 && (this.mouseButtonsOption == 1 || this.isAddFriendOption(this.menuSize - 1)) && this.menuSize > 2) {
+				local14 = 2;
+			}
+			if (local14 == 1 && this.menuSize > 0) {
+				this.useMenuOption(this.menuSize - 1);
+			}
+			if (local14 != 2 || this.menuSize <= 0) {
+				return;
+			}
+			this.showContextMenu();
 		}
 	}
 
@@ -8320,83 +8366,85 @@ public final class Game extends GameShell {
 
 	@OriginalMember(owner = "client!client", name = "C", descriptor = "(I)V")
 	private void handleTabInput() {
-		if (super.mouseClickButton == 1) {
-			if (super.mouseClickX >= 549 && super.mouseClickX <= 583 && super.mouseClickY >= 195 && super.mouseClickY < 231 && this.tabInterfaceId[0] != -1) {
-				this.redrawSidebar = true;
-				this.selectedTab = 0;
-				this.redrawSideicons = true;
-			}
-			if (super.mouseClickX >= 579 && super.mouseClickX <= 609 && super.mouseClickY >= 194 && super.mouseClickY < 231 && this.tabInterfaceId[1] != -1) {
-				this.redrawSidebar = true;
-				this.selectedTab = 1;
-				this.redrawSideicons = true;
-			}
-			if (super.mouseClickX >= 607 && super.mouseClickX <= 637 && super.mouseClickY >= 194 && super.mouseClickY < 231 && this.tabInterfaceId[2] != -1) {
-				this.redrawSidebar = true;
-				this.selectedTab = 2;
-				this.redrawSideicons = true;
-			}
-			if (super.mouseClickX >= 635 && super.mouseClickX <= 679 && super.mouseClickY >= 194 && super.mouseClickY < 229 && this.tabInterfaceId[3] != -1) {
-				this.redrawSidebar = true;
-				this.selectedTab = 3;
-				this.redrawSideicons = true;
-			}
-			if (super.mouseClickX >= 676 && super.mouseClickX <= 706 && super.mouseClickY >= 194 && super.mouseClickY < 231 && this.tabInterfaceId[4] != -1) {
-				this.redrawSidebar = true;
-				this.selectedTab = 4;
-				this.redrawSideicons = true;
-			}
-			if (super.mouseClickX >= 704 && super.mouseClickX <= 734 && super.mouseClickY >= 194 && super.mouseClickY < 231 && this.tabInterfaceId[5] != -1) {
-				this.redrawSidebar = true;
-				this.selectedTab = 5;
-				this.redrawSideicons = true;
-			}
-			if (super.mouseClickX >= 732 && super.mouseClickX <= 766 && super.mouseClickY >= 195 && super.mouseClickY < 231 && this.tabInterfaceId[6] != -1) {
-				this.redrawSidebar = true;
-				this.selectedTab = 6;
-				this.redrawSideicons = true;
-			}
-			if (super.mouseClickX >= 550 && super.mouseClickX <= 584 && super.mouseClickY >= 492 && super.mouseClickY < 528 && this.tabInterfaceId[7] != -1) {
-				this.redrawSidebar = true;
-				this.selectedTab = 7;
-				this.redrawSideicons = true;
-			}
-			if (super.mouseClickX >= 582 && super.mouseClickX <= 612 && super.mouseClickY >= 492 && super.mouseClickY < 529 && this.tabInterfaceId[8] != -1) {
-				this.redrawSidebar = true;
-				this.selectedTab = 8;
-				this.redrawSideicons = true;
-			}
-			if (super.mouseClickX >= 609 && super.mouseClickX <= 639 && super.mouseClickY >= 492 && super.mouseClickY < 529 && this.tabInterfaceId[9] != -1) {
-				this.redrawSidebar = true;
-				this.selectedTab = 9;
-				this.redrawSideicons = true;
-			}
-			if (super.mouseClickX >= 637 && super.mouseClickX <= 681 && super.mouseClickY >= 493 && super.mouseClickY < 528 && this.tabInterfaceId[10] != -1) {
-				this.redrawSidebar = true;
-				this.selectedTab = 10;
-				this.redrawSideicons = true;
-			}
-			if (super.mouseClickX >= 679 && super.mouseClickX <= 709 && super.mouseClickY >= 492 && super.mouseClickY < 529 && this.tabInterfaceId[11] != -1) {
-				this.redrawSidebar = true;
-				this.selectedTab = 11;
-				this.redrawSideicons = true;
-			}
-			if (super.mouseClickX >= 706 && super.mouseClickX <= 736 && super.mouseClickY >= 492 && super.mouseClickY < 529 && this.tabInterfaceId[12] != -1) {
-				this.redrawSidebar = true;
-				this.selectedTab = 12;
-				this.redrawSideicons = true;
-			}
-			if (super.mouseClickX >= 734 && super.mouseClickX <= 768 && super.mouseClickY >= 492 && super.mouseClickY < 528 && this.tabInterfaceId[13] != -1) {
-				this.redrawSidebar = true;
-				this.selectedTab = 13;
-				this.redrawSideicons = true;
-			}
-			handleTabInputCounter++;
-			if (handleTabInputCounter > 150) {
-				handleTabInputCounter = 0;
-				this.out.p1isaac(233);
-				this.out.p1(43);
-			}
+		if (super.mouseClickButton != 1) {
+			return;
+		}
+
+		if (super.mouseClickX >= 549 && super.mouseClickX <= 583 && super.mouseClickY >= 195 && super.mouseClickY < 231 && this.tabInterfaceId[0] != -1) {
+			this.redrawSidebar = true;
+			this.selectedTab = 0;
+			this.redrawSideicons = true;
+		}
+		if (super.mouseClickX >= 579 && super.mouseClickX <= 609 && super.mouseClickY >= 194 && super.mouseClickY < 231 && this.tabInterfaceId[1] != -1) {
+			this.redrawSidebar = true;
+			this.selectedTab = 1;
+			this.redrawSideicons = true;
+		}
+		if (super.mouseClickX >= 607 && super.mouseClickX <= 637 && super.mouseClickY >= 194 && super.mouseClickY < 231 && this.tabInterfaceId[2] != -1) {
+			this.redrawSidebar = true;
+			this.selectedTab = 2;
+			this.redrawSideicons = true;
+		}
+		if (super.mouseClickX >= 635 && super.mouseClickX <= 679 && super.mouseClickY >= 194 && super.mouseClickY < 229 && this.tabInterfaceId[3] != -1) {
+			this.redrawSidebar = true;
+			this.selectedTab = 3;
+			this.redrawSideicons = true;
+		}
+		if (super.mouseClickX >= 676 && super.mouseClickX <= 706 && super.mouseClickY >= 194 && super.mouseClickY < 231 && this.tabInterfaceId[4] != -1) {
+			this.redrawSidebar = true;
+			this.selectedTab = 4;
+			this.redrawSideicons = true;
+		}
+		if (super.mouseClickX >= 704 && super.mouseClickX <= 734 && super.mouseClickY >= 194 && super.mouseClickY < 231 && this.tabInterfaceId[5] != -1) {
+			this.redrawSidebar = true;
+			this.selectedTab = 5;
+			this.redrawSideicons = true;
+		}
+		if (super.mouseClickX >= 732 && super.mouseClickX <= 766 && super.mouseClickY >= 195 && super.mouseClickY < 231 && this.tabInterfaceId[6] != -1) {
+			this.redrawSidebar = true;
+			this.selectedTab = 6;
+			this.redrawSideicons = true;
+		}
+		if (super.mouseClickX >= 550 && super.mouseClickX <= 584 && super.mouseClickY >= 492 && super.mouseClickY < 528 && this.tabInterfaceId[7] != -1) {
+			this.redrawSidebar = true;
+			this.selectedTab = 7;
+			this.redrawSideicons = true;
+		}
+		if (super.mouseClickX >= 582 && super.mouseClickX <= 612 && super.mouseClickY >= 492 && super.mouseClickY < 529 && this.tabInterfaceId[8] != -1) {
+			this.redrawSidebar = true;
+			this.selectedTab = 8;
+			this.redrawSideicons = true;
+		}
+		if (super.mouseClickX >= 609 && super.mouseClickX <= 639 && super.mouseClickY >= 492 && super.mouseClickY < 529 && this.tabInterfaceId[9] != -1) {
+			this.redrawSidebar = true;
+			this.selectedTab = 9;
+			this.redrawSideicons = true;
+		}
+		if (super.mouseClickX >= 637 && super.mouseClickX <= 681 && super.mouseClickY >= 493 && super.mouseClickY < 528 && this.tabInterfaceId[10] != -1) {
+			this.redrawSidebar = true;
+			this.selectedTab = 10;
+			this.redrawSideicons = true;
+		}
+		if (super.mouseClickX >= 679 && super.mouseClickX <= 709 && super.mouseClickY >= 492 && super.mouseClickY < 529 && this.tabInterfaceId[11] != -1) {
+			this.redrawSidebar = true;
+			this.selectedTab = 11;
+			this.redrawSideicons = true;
+		}
+		if (super.mouseClickX >= 706 && super.mouseClickX <= 736 && super.mouseClickY >= 492 && super.mouseClickY < 529 && this.tabInterfaceId[12] != -1) {
+			this.redrawSidebar = true;
+			this.selectedTab = 12;
+			this.redrawSideicons = true;
+		}
+		if (super.mouseClickX >= 734 && super.mouseClickX <= 768 && super.mouseClickY >= 492 && super.mouseClickY < 528 && this.tabInterfaceId[13] != -1) {
+			this.redrawSidebar = true;
+			this.selectedTab = 13;
+			this.redrawSideicons = true;
+		}
+		handleTabInputCounter++;
+		if (handleTabInputCounter > 150) {
+			handleTabInputCounter = 0;
+			this.out.p1isaac(233);
+			this.out.p1(43);
 		}
 	}
 
@@ -8695,13 +8743,15 @@ public final class Game extends GameShell {
 	@OriginalMember(owner = "client!client", name = "b", descriptor = "(I)V")
 	@Override
 	protected void update() {
-		if (!this.errorStarted && !this.errorLoading && !this.errorHost) {
-			loopCycle++;
-			if (this.ingame) {
-				this.updateGame();
-			} else {
-				this.updateTitle();
-			}
+		if (this.errorStarted || this.errorLoading || this.errorHost) {
+			return;
+		}
+
+		loopCycle++;
+		if (this.ingame) {
+			this.updateGame();
+		} else {
+			this.updateTitle();
 		}
 	}
 
@@ -9024,18 +9074,20 @@ public final class Game extends GameShell {
 
 	@OriginalMember(owner = "client!client", name = "b", descriptor = "(IJ)V")
 	private void removeIgnore(@OriginalArg(1) long arg1) {
-		if (arg1 != 0L) {
-			for (@Pc(14) int local14 = 0; local14 < this.ignoreCount; local14++) {
-				if (this.ignoreName37[local14] == arg1) {
-					this.ignoreCount--;
-					this.redrawSidebar = true;
-					for (@Pc(34) int local34 = local14; local34 < this.ignoreCount; local34++) {
-						this.ignoreName37[local34] = this.ignoreName37[local34 + 1];
-					}
-					this.out.p1isaac(171);
-					this.out.p8(arg1);
-					return;
+		if (arg1 == 0L) {
+			return;
+		}
+
+		for (@Pc(14) int local14 = 0; local14 < this.ignoreCount; local14++) {
+			if (this.ignoreName37[local14] == arg1) {
+				this.ignoreCount--;
+				this.redrawSidebar = true;
+				for (@Pc(34) int local34 = local14; local34 < this.ignoreCount; local34++) {
+					this.ignoreName37[local34] = this.ignoreName37[local34 + 1];
 				}
+				this.out.p1isaac(171);
+				this.out.p8(arg1);
+				return;
 			}
 		}
 	}
@@ -9248,11 +9300,13 @@ public final class Game extends GameShell {
 
 	@OriginalMember(owner = "client!client", name = "r", descriptor = "(B)V")
 	private void drawTileHint() {
-		if (this.hintType == 2) {
-			this.project((this.hintTileX - this.sceneBaseTileX << 7) + this.hintOffsetX, this.hintHeight * 2, (this.hintTileZ - this.sceneBaseTileZ << 7) + this.hintOffsetZ);
-			if (this.projectX > -1 && loopCycle % 20 < 10) {
-				this.imageHeadicons[2].draw(this.projectY - 28, this.projectX - 12);
-			}
+		if (this.hintType != 2) {
+			return;
+		}
+
+		this.project((this.hintTileX - this.sceneBaseTileX << 7) + this.hintOffsetX, this.hintHeight * 2, (this.hintTileZ - this.sceneBaseTileZ << 7) + this.hintOffsetZ);
+		if (this.projectX > -1 && loopCycle % 20 < 10) {
+			this.imageHeadicons[2].draw(this.projectY - 28, this.projectX - 12);
 		}
 	}
 
@@ -9260,41 +9314,43 @@ public final class Game extends GameShell {
 	private void readLocalPlayer(@OriginalArg(1) int arg1, @OriginalArg(2) Buffer arg2) {
 		arg2.accessBits();
 		@Pc(7) int local7 = arg2.gBit(1);
-		if (local7 != 0) {
-			@Pc(21) int local21 = arg2.gBit(2);
-			if (local21 == 0) {
-				this.entityUpdateIds[this.entityUpdateCount++] = this.LOCAL_PLAYER_INDEX;
+		if (local7 == 0) {
+			return;
+		}
+
+		@Pc(21) int local21 = arg2.gBit(2);
+		if (local21 == 0) {
+			this.entityUpdateIds[this.entityUpdateCount++] = this.LOCAL_PLAYER_INDEX;
+		} else {
+			@Pc(44) int local44;
+			@Pc(55) int local55;
+			if (local21 == 1) {
+				local44 = arg2.gBit(3);
+				this.localPlayer.step(false, local44);
+				local55 = arg2.gBit(1);
+				if (local55 == 1) {
+					this.entityUpdateIds[this.entityUpdateCount++] = this.LOCAL_PLAYER_INDEX;
+				}
 			} else {
-				@Pc(44) int local44;
-				@Pc(55) int local55;
-				if (local21 == 1) {
+				@Pc(101) int local101;
+				if (local21 == 2) {
 					local44 = arg2.gBit(3);
-					this.localPlayer.step(false, local44);
-					local55 = arg2.gBit(1);
-					if (local55 == 1) {
+					this.localPlayer.step(true, local44);
+					local55 = arg2.gBit(3);
+					this.localPlayer.step(true, local55);
+					local101 = arg2.gBit(1);
+					if (local101 == 1) {
 						this.entityUpdateIds[this.entityUpdateCount++] = this.LOCAL_PLAYER_INDEX;
 					}
-				} else {
-					@Pc(101) int local101;
-					if (local21 == 2) {
-						local44 = arg2.gBit(3);
-						this.localPlayer.step(true, local44);
-						local55 = arg2.gBit(3);
-						this.localPlayer.step(true, local55);
-						local101 = arg2.gBit(1);
-						if (local101 == 1) {
-							this.entityUpdateIds[this.entityUpdateCount++] = this.LOCAL_PLAYER_INDEX;
-						}
-					} else if (local21 == 3) {
-						this.currentLevel = arg2.gBit(2);
-						local44 = arg2.gBit(7);
-						local55 = arg2.gBit(7);
-						local101 = arg2.gBit(1);
-						this.localPlayer.move(local101 == 1, local44, local55);
-						@Pc(158) int local158 = arg2.gBit(1);
-						if (local158 == 1) {
-							this.entityUpdateIds[this.entityUpdateCount++] = this.LOCAL_PLAYER_INDEX;
-						}
+				} else if (local21 == 3) {
+					this.currentLevel = arg2.gBit(2);
+					local44 = arg2.gBit(7);
+					local55 = arg2.gBit(7);
+					local101 = arg2.gBit(1);
+					this.localPlayer.move(local101 == 1, local44, local55);
+					@Pc(158) int local158 = arg2.gBit(1);
+					if (local158 == 1) {
+						this.entityUpdateIds[this.entityUpdateCount++] = this.LOCAL_PLAYER_INDEX;
 					}
 				}
 			}

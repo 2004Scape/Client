@@ -148,78 +148,86 @@ public final class BitmapFont extends Draw2D {
 
 	@OriginalMember(owner = "client!jb", name = "a", descriptor = "(IIZILjava/lang/String;)V")
 	public void drawString(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(3) int arg3, @OriginalArg(4) String arg4) {
-		if (arg4 != null) {
-			@Pc(7) int local7 = arg1 - this.height;
-			for (@Pc(19) int local19 = 0; local19 < arg4.length(); local19++) {
-				@Pc(27) int local27 = CHAR_LOOKUP[arg4.charAt(local19)];
-				if (local27 != 94) {
-					this.fillMaskedRect(this.charMask[local27], arg0 + this.charOffsetX[local27], local7 + this.charOffsetY[local27], this.charMaskWidth[local27], this.charMaskHeight[local27], arg3);
-				}
-				arg0 += this.charAdvance[local27];
+		if (arg4 == null) {
+			return;
+		}
+
+		@Pc(7) int local7 = arg1 - this.height;
+		for (@Pc(19) int local19 = 0; local19 < arg4.length(); local19++) {
+			@Pc(27) int local27 = CHAR_LOOKUP[arg4.charAt(local19)];
+			if (local27 != 94) {
+				this.fillMaskedRect(this.charMask[local27], arg0 + this.charOffsetX[local27], local7 + this.charOffsetY[local27], this.charMaskWidth[local27], this.charMaskHeight[local27], arg3);
 			}
+			arg0 += this.charAdvance[local27];
 		}
 	}
 
 	@OriginalMember(owner = "client!jb", name = "a", descriptor = "(IBIIILjava/lang/String;)V")
 	public void drawCenteredWave(@OriginalArg(0) int arg0, @OriginalArg(2) int arg2, @OriginalArg(3) int arg3, @OriginalArg(4) int arg4, @OriginalArg(5) String arg5) {
-		if (arg5 != null) {
-			arg2 -= this.stringWidth(arg5) / 2;
-			@Pc(18) int local18 = arg3 - this.height;
-			@Pc(24) int local24;
-			for (local24 = 0; local24 < arg5.length(); local24++) {
-				@Pc(39) int local39 = CHAR_LOOKUP[arg5.charAt(local24)];
-				if (local39 != 94) {
-					this.fillMaskedRect(this.charMask[local39], arg2 + this.charOffsetX[local39], local18 + this.charOffsetY[local39] + (int) (Math.sin((double) local24 / 2.0D + (double) arg0 / 5.0D) * 5.0D), this.charMaskWidth[local39], this.charMaskHeight[local39], arg4);
-				}
-				arg2 += this.charAdvance[local39];
+		if (arg5 == null) {
+			return;
+		}
+
+		arg2 -= this.stringWidth(arg5) / 2;
+		@Pc(18) int local18 = arg3 - this.height;
+		@Pc(24) int local24;
+		for (local24 = 0; local24 < arg5.length(); local24++) {
+			@Pc(39) int local39 = CHAR_LOOKUP[arg5.charAt(local24)];
+			if (local39 != 94) {
+				this.fillMaskedRect(this.charMask[local39], arg2 + this.charOffsetX[local39], local18 + this.charOffsetY[local39] + (int) (Math.sin((double) local24 / 2.0D + (double) arg0 / 5.0D) * 5.0D), this.charMaskWidth[local39], this.charMaskHeight[local39], arg4);
 			}
+			arg2 += this.charAdvance[local39];
 		}
 	}
 
 	@OriginalMember(owner = "client!jb", name = "a", descriptor = "(IIILjava/lang/String;ZI)V")
 	public void drawStringTaggable(@OriginalArg(0) int arg0, @OriginalArg(2) int arg2, @OriginalArg(3) String arg3, @OriginalArg(4) boolean arg4, @OriginalArg(5) int arg5) {
-		if (arg3 != null) {
-			@Pc(9) int local9 = arg2 - this.height;
-			for (@Pc(11) int local11 = 0; local11 < arg3.length(); local11++) {
-				if (arg3.charAt(local11) == '@' && local11 + 4 < arg3.length() && arg3.charAt(local11 + 4) == '@') {
-					arg5 = this.evaluateTag(arg3.substring(local11 + 1, local11 + 4));
-					local11 += 4;
-				} else {
-					@Pc(52) int local52 = CHAR_LOOKUP[arg3.charAt(local11)];
-					if (local52 != 94) {
-						if (arg4) {
-							this.fillMaskedRect(this.charMask[local52], arg0 + this.charOffsetX[local52] + 1, local9 + this.charOffsetY[local52] + 1, this.charMaskWidth[local52], this.charMaskHeight[local52], 0);
-						}
-						this.fillMaskedRect(this.charMask[local52], arg0 + this.charOffsetX[local52], local9 + this.charOffsetY[local52], this.charMaskWidth[local52], this.charMaskHeight[local52], arg5);
+		if (arg3 == null) {
+			return;
+		}
+
+		@Pc(9) int local9 = arg2 - this.height;
+		for (@Pc(11) int local11 = 0; local11 < arg3.length(); local11++) {
+			if (arg3.charAt(local11) == '@' && local11 + 4 < arg3.length() && arg3.charAt(local11 + 4) == '@') {
+				arg5 = this.evaluateTag(arg3.substring(local11 + 1, local11 + 4));
+				local11 += 4;
+			} else {
+				@Pc(52) int local52 = CHAR_LOOKUP[arg3.charAt(local11)];
+				if (local52 != 94) {
+					if (arg4) {
+						this.fillMaskedRect(this.charMask[local52], arg0 + this.charOffsetX[local52] + 1, local9 + this.charOffsetY[local52] + 1, this.charMaskWidth[local52], this.charMaskHeight[local52], 0);
 					}
-					arg0 += this.charAdvance[local52];
+					this.fillMaskedRect(this.charMask[local52], arg0 + this.charOffsetX[local52], local9 + this.charOffsetY[local52], this.charMaskWidth[local52], this.charMaskHeight[local52], arg5);
 				}
+				arg0 += this.charAdvance[local52];
 			}
 		}
 	}
 
 	@OriginalMember(owner = "client!jb", name = "a", descriptor = "(IZBIILjava/lang/String;I)V")
 	public void drawStringTooltip(@OriginalArg(0) int arg0, @OriginalArg(1) boolean arg1, @OriginalArg(3) int arg3, @OriginalArg(4) int arg4, @OriginalArg(5) String arg5, @OriginalArg(6) int arg6) {
-		if (arg5 != null) {
-			this.random.setSeed((long) arg0);
-			@Pc(17) int local17 = (this.random.nextInt() & 0x1F) + 192;
-			@Pc(22) int local22 = arg3 - this.height;
-			for (@Pc(30) int local30 = 0; local30 < arg5.length(); local30++) {
-				if (arg5.charAt(local30) == '@' && local30 + 4 < arg5.length() && arg5.charAt(local30 + 4) == '@') {
-					arg4 = this.evaluateTag(arg5.substring(local30 + 1, local30 + 4));
-					local30 += 4;
-				} else {
-					@Pc(71) int local71 = CHAR_LOOKUP[arg5.charAt(local30)];
-					if (local71 != 94) {
-						if (arg1) {
-							this.fillMaskedRect(this.charMask[local71], arg6 + this.charOffsetX[local71] + 1, this.charMaskHeight[local71], 0, local22 + this.charOffsetY[local71] + 1, 192, this.charMaskWidth[local71]);
-						}
-						this.fillMaskedRect(this.charMask[local71], arg6 + this.charOffsetX[local71], this.charMaskHeight[local71], arg4, local22 + this.charOffsetY[local71], local17, this.charMaskWidth[local71]);
+		if (arg5 == null) {
+			return;
+		}
+
+		this.random.setSeed((long) arg0);
+		@Pc(17) int local17 = (this.random.nextInt() & 0x1F) + 192;
+		@Pc(22) int local22 = arg3 - this.height;
+		for (@Pc(30) int local30 = 0; local30 < arg5.length(); local30++) {
+			if (arg5.charAt(local30) == '@' && local30 + 4 < arg5.length() && arg5.charAt(local30 + 4) == '@') {
+				arg4 = this.evaluateTag(arg5.substring(local30 + 1, local30 + 4));
+				local30 += 4;
+			} else {
+				@Pc(71) int local71 = CHAR_LOOKUP[arg5.charAt(local30)];
+				if (local71 != 94) {
+					if (arg1) {
+						this.fillMaskedRect(this.charMask[local71], arg6 + this.charOffsetX[local71] + 1, this.charMaskHeight[local71], 0, local22 + this.charOffsetY[local71] + 1, 192, this.charMaskWidth[local71]);
 					}
-					arg6 += this.charAdvance[local71];
-					if ((this.random.nextInt() & 0x3) == 0) {
-						arg6++;
-					}
+					this.fillMaskedRect(this.charMask[local71], arg6 + this.charOffsetX[local71], this.charMaskHeight[local71], arg4, local22 + this.charOffsetY[local71], local17, this.charMaskWidth[local71]);
+				}
+				arg6 += this.charAdvance[local71];
+				if ((this.random.nextInt() & 0x3) == 0) {
+					arg6++;
 				}
 			}
 		}

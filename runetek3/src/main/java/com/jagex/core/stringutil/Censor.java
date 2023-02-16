@@ -217,59 +217,61 @@ public final class Censor {
 
 	@OriginalMember(owner = "client!mc", name = "a", descriptor = "([CI[C[C[C)V")
 	private static void filterDomain(@OriginalArg(0) char[] arg0, @OriginalArg(2) char[] arg2, @OriginalArg(3) char[] arg3, @OriginalArg(4) char[] arg4) {
-		if (arg3.length <= arg4.length) {
-			@Pc(9) boolean local9 = true;
-			@Pc(23) int local23;
-			for (@Pc(15) int local15 = 0; local15 <= arg4.length - arg3.length; local15 += local23) {
-				@Pc(19) int local19 = local15;
-				@Pc(21) int local21 = 0;
-				local23 = 1;
-				@Pc(27) boolean var9;
-				label62: while (true) {
-					while (true) {
-						if (local19 >= arg4.length) {
+		if (arg3.length > arg4.length) {
+			return;
+		}
+
+		@Pc(9) boolean local9 = true;
+		@Pc(23) int local23;
+		for (@Pc(15) int local15 = 0; local15 <= arg4.length - arg3.length; local15 += local23) {
+			@Pc(19) int local19 = local15;
+			@Pc(21) int local21 = 0;
+			local23 = 1;
+			@Pc(27) boolean var9;
+			label62: while (true) {
+				while (true) {
+					if (local19 >= arg4.length) {
+						break label62;
+					}
+					var9 = false;
+					@Pc(31) char local31 = arg4[local19];
+					@Pc(33) char local33 = 0;
+					if (local19 + 1 < arg4.length) {
+						local33 = arg4[local19 + 1];
+					}
+					@Pc(58) int local58;
+					if (local21 < arg3.length && (local58 = getEmulatedDomainCharSize(local33, arg3[local21], local31)) > 0) {
+						local19 += local58;
+						local21++;
+					} else {
+						if (local21 == 0) {
 							break label62;
 						}
-						var9 = false;
-						@Pc(31) char local31 = arg4[local19];
-						@Pc(33) char local33 = 0;
-						if (local19 + 1 < arg4.length) {
-							local33 = arg4[local19 + 1];
-						}
-						@Pc(58) int local58;
-						if (local21 < arg3.length && (local58 = getEmulatedDomainCharSize(local33, arg3[local21], local31)) > 0) {
-							local19 += local58;
-							local21++;
+						@Pc(79) int local79;
+						if ((local79 = getEmulatedDomainCharSize(local33, arg3[local21 - 1], local31)) > 0) {
+							local19 += local79;
+							if (local21 == 1) {
+								local23++;
+							}
 						} else {
-							if (local21 == 0) {
+							if (local21 >= arg3.length || !isSymbol(local31)) {
 								break label62;
 							}
-							@Pc(79) int local79;
-							if ((local79 = getEmulatedDomainCharSize(local33, arg3[local21 - 1], local31)) > 0) {
-								local19 += local79;
-								if (local21 == 1) {
-									local23++;
-								}
-							} else {
-								if (local21 >= arg3.length || !isSymbol(local31)) {
-									break label62;
-								}
-								local19++;
-							}
+							local19++;
 						}
 					}
 				}
-				if (local21 >= arg3.length) {
-					var9 = false;
-					@Pc(116) int local116 = getDomainAtFilterStatus(local15, arg4, arg2);
-					@Pc(124) int local124 = getDomainDotFilterStatus(arg0, arg4, local19 - 1);
-					if (local116 > 2 || local124 > 2) {
-						var9 = true;
-					}
-					if (var9) {
-						for (@Pc(136) int local136 = local15; local136 < local19; local136++) {
-							arg4[local136] = '*';
-						}
+			}
+			if (local21 >= arg3.length) {
+				var9 = false;
+				@Pc(116) int local116 = getDomainAtFilterStatus(local15, arg4, arg2);
+				@Pc(124) int local124 = getDomainDotFilterStatus(arg0, arg4, local19 - 1);
+				if (local116 > 2 || local124 > 2) {
+					var9 = true;
+				}
+				if (var9) {
+					for (@Pc(136) int local136 = local15; local136 < local19; local136++) {
+						arg4[local136] = '*';
 					}
 				}
 			}
@@ -306,30 +308,30 @@ public final class Censor {
 	private static int getDomainDotFilterStatus(@OriginalArg(0) char[] arg0, @OriginalArg(1) char[] arg1, @OriginalArg(2) int arg2) {
 		if (arg2 + 1 == arg1.length) {
 			return 2;
-		} else {
-			@Pc(17) int local17 = arg2 + 1;
-			while (true) {
-				if (local17 < arg1.length && isSymbol(arg1[local17])) {
-					if (arg1[local17] != '.' && arg1[local17] != ',') {
-						local17++;
-						continue;
-					}
-					return 3;
+		}
+
+		@Pc(17) int local17 = arg2 + 1;
+		while (true) {
+			if (local17 < arg1.length && isSymbol(arg1[local17])) {
+				if (arg1[local17] != '.' && arg1[local17] != ',') {
+					local17++;
+					continue;
 				}
-				@Pc(44) int local44 = 0;
-				for (@Pc(48) int local48 = arg2 + 1; local48 < arg1.length && isSymbol(arg0[local48]); local48++) {
-					if (arg0[local48] == '*') {
-						local44++;
-					}
-				}
-				if (local44 >= 3) {
-					return 4;
-				}
-				if (isSymbol(arg1[arg2 + 1])) {
-					return 1;
-				}
-				return 0;
+				return 3;
 			}
+			@Pc(44) int local44 = 0;
+			for (@Pc(48) int local48 = arg2 + 1; local48 < arg1.length && isSymbol(arg0[local48]); local48++) {
+				if (arg0[local48] == '*') {
+					local44++;
+				}
+			}
+			if (local44 >= 3) {
+				return 4;
+			}
+			if (isSymbol(arg1[arg2 + 1])) {
+				return 1;
+			}
+			return 0;
 		}
 	}
 
@@ -349,130 +351,132 @@ public final class Censor {
 	@OriginalMember(owner = "client!mc", name = "a", descriptor = "([CIZ[C[C[C)V")
 	private static void filterTld(@OriginalArg(0) char[] arg0, @OriginalArg(1) int arg1, @OriginalArg(3) char[] arg3, @OriginalArg(4) char[] arg4, @OriginalArg(5) char[] arg5) {
 		@Pc(5) int local5;
-		if (arg4.length <= arg3.length) {
-			@Pc(18) boolean local18 = true;
-			for (@Pc(20) int local20 = 0; local20 <= arg3.length - arg4.length; local20 += local5) {
-				@Pc(24) int local24 = local20;
-				@Pc(26) int local26 = 0;
-				local5 = 1;
-				@Pc(32) boolean var10;
-				label124: while (true) {
-					while (true) {
-						if (local24 >= arg3.length) {
+		if (arg4.length > arg3.length) {
+			return;
+		}
+
+		@Pc(18) boolean local18 = true;
+		for (@Pc(20) int local20 = 0; local20 <= arg3.length - arg4.length; local20 += local5) {
+			@Pc(24) int local24 = local20;
+			@Pc(26) int local26 = 0;
+			local5 = 1;
+			@Pc(32) boolean var10;
+			label124: while (true) {
+				while (true) {
+					if (local24 >= arg3.length) {
+						break label124;
+					}
+					var10 = false;
+					@Pc(36) char local36 = arg3[local24];
+					@Pc(38) char local38 = 0;
+					if (local24 + 1 < arg3.length) {
+						local38 = arg3[local24 + 1];
+					}
+					@Pc(63) int local63;
+					if (local26 < arg4.length && (local63 = getEmulatedDomainCharSize(local38, arg4[local26], local36)) > 0) {
+						local24 += local63;
+						local26++;
+					} else {
+						if (local26 == 0) {
 							break label124;
 						}
-						var10 = false;
-						@Pc(36) char local36 = arg3[local24];
-						@Pc(38) char local38 = 0;
-						if (local24 + 1 < arg3.length) {
-							local38 = arg3[local24 + 1];
-						}
-						@Pc(63) int local63;
-						if (local26 < arg4.length && (local63 = getEmulatedDomainCharSize(local38, arg4[local26], local36)) > 0) {
-							local24 += local63;
-							local26++;
+						@Pc(84) int local84;
+						if ((local84 = getEmulatedDomainCharSize(local38, arg4[local26 - 1], local36)) > 0) {
+							local24 += local84;
+							if (local26 == 1) {
+								local5++;
+							}
 						} else {
-							if (local26 == 0) {
+							if (local26 >= arg4.length || !isSymbol(local36)) {
 								break label124;
 							}
-							@Pc(84) int local84;
-							if ((local84 = getEmulatedDomainCharSize(local38, arg4[local26 - 1], local36)) > 0) {
-								local24 += local84;
-								if (local26 == 1) {
-									local5++;
-								}
-							} else {
-								if (local26 >= arg4.length || !isSymbol(local36)) {
-									break label124;
-								}
-								local24++;
-							}
+							local24++;
 						}
 					}
 				}
-				if (local26 >= arg4.length) {
-					var10 = false;
-					@Pc(121) int local121 = getTldDotFilterStatus(arg3, arg5, local20);
-					@Pc(129) int local129 = getTldSlashFilterStatus(arg0, local24 - 1, arg3);
-					if (arg1 == 1 && local121 > 0 && local129 > 0) {
-						var10 = true;
-					}
-					if (arg1 == 2 && (local121 > 2 && local129 > 0 || local121 > 0 && local129 > 2)) {
-						var10 = true;
-					}
-					if (arg1 == 3 && local121 > 0 && local129 > 2) {
-						var10 = true;
-					}
-					@Pc(172) boolean local172;
-					if (arg1 == 3 && local121 > 2 && local129 > 0) {
-						local172 = true;
-					} else {
-						local172 = false;
-					}
-					if (var10) {
-						@Pc(179) int local179 = local20;
-						@Pc(183) int local183 = local24 - 1;
-						@Pc(191) boolean local191;
-						@Pc(195) int local195;
-						if (local121 > 2) {
-							if (local121 == 4) {
-								local191 = false;
-								for (local195 = local20 - 1; local195 >= 0; local195--) {
-									if (local191) {
-										if (arg5[local195] != '*') {
-											break;
-										}
-										local179 = local195;
-									} else if (arg5[local195] == '*') {
-										local179 = local195;
-										local191 = true;
-									}
-								}
-							}
+			}
+			if (local26 >= arg4.length) {
+				var10 = false;
+				@Pc(121) int local121 = getTldDotFilterStatus(arg3, arg5, local20);
+				@Pc(129) int local129 = getTldSlashFilterStatus(arg0, local24 - 1, arg3);
+				if (arg1 == 1 && local121 > 0 && local129 > 0) {
+					var10 = true;
+				}
+				if (arg1 == 2 && (local121 > 2 && local129 > 0 || local121 > 0 && local129 > 2)) {
+					var10 = true;
+				}
+				if (arg1 == 3 && local121 > 0 && local129 > 2) {
+					var10 = true;
+				}
+				@Pc(172) boolean local172;
+				if (arg1 == 3 && local121 > 2 && local129 > 0) {
+					local172 = true;
+				} else {
+					local172 = false;
+				}
+				if (var10) {
+					@Pc(179) int local179 = local20;
+					@Pc(183) int local183 = local24 - 1;
+					@Pc(191) boolean local191;
+					@Pc(195) int local195;
+					if (local121 > 2) {
+						if (local121 == 4) {
 							local191 = false;
-							for (local195 = local179 - 1; local195 >= 0; local195--) {
+							for (local195 = local20 - 1; local195 >= 0; local195--) {
 								if (local191) {
-									if (isSymbol(arg3[local195])) {
+									if (arg5[local195] != '*') {
 										break;
 									}
 									local179 = local195;
-								} else if (!isSymbol(arg3[local195])) {
-									local191 = true;
+								} else if (arg5[local195] == '*') {
 									local179 = local195;
+									local191 = true;
 								}
 							}
 						}
-						if (local129 > 2) {
-							if (local129 == 4) {
-								local191 = false;
-								for (local195 = local183 + 1; local195 < arg3.length; local195++) {
-									if (local191) {
-										if (arg0[local195] != '*') {
-											break;
-										}
-										local183 = local195;
-									} else if (arg0[local195] == '*') {
-										local183 = local195;
-										local191 = true;
-									}
+						local191 = false;
+						for (local195 = local179 - 1; local195 >= 0; local195--) {
+							if (local191) {
+								if (isSymbol(arg3[local195])) {
+									break;
 								}
+								local179 = local195;
+							} else if (!isSymbol(arg3[local195])) {
+								local191 = true;
+								local179 = local195;
 							}
+						}
+					}
+					if (local129 > 2) {
+						if (local129 == 4) {
 							local191 = false;
 							for (local195 = local183 + 1; local195 < arg3.length; local195++) {
 								if (local191) {
-									if (isSymbol(arg3[local195])) {
+									if (arg0[local195] != '*') {
 										break;
 									}
 									local183 = local195;
-								} else if (!isSymbol(arg3[local195])) {
-									local191 = true;
+								} else if (arg0[local195] == '*') {
 									local183 = local195;
+									local191 = true;
 								}
 							}
 						}
-						for (@Pc(329) int local329 = local179; local329 <= local183; local329++) {
-							arg3[local329] = '*';
+						local191 = false;
+						for (local195 = local183 + 1; local195 < arg3.length; local195++) {
+							if (local191) {
+								if (isSymbol(arg3[local195])) {
+									break;
+								}
+								local183 = local195;
+							} else if (!isSymbol(arg3[local195])) {
+								local191 = true;
+								local183 = local195;
+							}
 						}
+					}
+					for (@Pc(329) int local329 = local179; local329 <= local183; local329++) {
+						arg3[local329] = '*';
 					}
 				}
 			}
@@ -542,141 +546,143 @@ public final class Censor {
 
 	@OriginalMember(owner = "client!mc", name = "a", descriptor = "(B[[B[C[C)V")
 	private static void filter(@OriginalArg(1) byte[][] arg1, @OriginalArg(2) char[] arg2, @OriginalArg(3) char[] arg3) {
-		if (arg3.length <= arg2.length) {
-			@Pc(9) boolean local9 = true;
-			@Pc(26) int local26;
-			for (@Pc(16) int local16 = 0; local16 <= arg2.length - arg3.length; local16 += local26) {
-				@Pc(20) int local20 = local16;
-				@Pc(22) int local22 = 0;
-				@Pc(24) int local24 = 0;
-				local26 = 1;
-				@Pc(28) boolean local28 = false;
-				@Pc(30) boolean local30 = false;
-				@Pc(32) boolean local32 = false;
-				@Pc(36) boolean var12;
-				@Pc(40) char var13;
-				@Pc(42) char var14;
-				label163: while (true) {
-					while (true) {
-						if (local20 >= arg2.length || local30 && local32) {
+		if (arg3.length > arg2.length) {
+			return;
+		}
+
+		@Pc(9) boolean local9 = true;
+		@Pc(26) int local26;
+		for (@Pc(16) int local16 = 0; local16 <= arg2.length - arg3.length; local16 += local26) {
+			@Pc(20) int local20 = local16;
+			@Pc(22) int local22 = 0;
+			@Pc(24) int local24 = 0;
+			local26 = 1;
+			@Pc(28) boolean local28 = false;
+			@Pc(30) boolean local30 = false;
+			@Pc(32) boolean local32 = false;
+			@Pc(36) boolean var12;
+			@Pc(40) char var13;
+			@Pc(42) char var14;
+			label163: while (true) {
+				while (true) {
+					if (local20 >= arg2.length || local30 && local32) {
+						break label163;
+					}
+					var12 = false;
+					var13 = arg2[local20];
+					var14 = '\u0000';
+					if (local20 + 1 < arg2.length) {
+						var14 = arg2[local20 + 1];
+					}
+					@Pc(67) int local67;
+					if (local22 < arg3.length && (local67 = getEmulatedSize(var14, arg3[local22], var13)) > 0) {
+						if (local67 == 1 && isNumber(var13)) {
+							local30 = true;
+						}
+						if (local67 == 2 && (isNumber(var13) || isNumber(var14))) {
+							local30 = true;
+						}
+						local20 += local67;
+						local22++;
+					} else {
+						if (local22 == 0) {
 							break label163;
 						}
-						var12 = false;
-						var13 = arg2[local20];
-						var14 = '\u0000';
-						if (local20 + 1 < arg2.length) {
-							var14 = arg2[local20 + 1];
-						}
-						@Pc(67) int local67;
-						if (local22 < arg3.length && (local67 = getEmulatedSize(var14, arg3[local22], var13)) > 0) {
-							if (local67 == 1 && isNumber(var13)) {
-								local30 = true;
+						@Pc(110) int local110;
+						if ((local110 = getEmulatedSize(var14, arg3[local22 - 1], var13)) > 0) {
+							local20 += local110;
+							if (local22 == 1) {
+								local26++;
 							}
-							if (local67 == 2 && (isNumber(var13) || isNumber(var14))) {
-								local30 = true;
-							}
-							local20 += local67;
-							local22++;
 						} else {
-							if (local22 == 0) {
+							if (local22 >= arg3.length || !isLowerCaseAlpha(var13)) {
 								break label163;
 							}
-							@Pc(110) int local110;
-							if ((local110 = getEmulatedSize(var14, arg3[local22 - 1], var13)) > 0) {
-								local20 += local110;
-								if (local22 == 1) {
-									local26++;
-								}
-							} else {
-								if (local22 >= arg3.length || !isLowerCaseAlpha(var13)) {
-									break label163;
-								}
-								if (isSymbol(var13) && var13 != '\'') {
-									local28 = true;
-								}
-								if (isNumber(var13)) {
-									local32 = true;
-								}
-								local20++;
-								local24++;
-								if (local24 * 100 / (local20 - local16) > 90) {
-									break label163;
-								}
+							if (isSymbol(var13) && var13 != '\'') {
+								local28 = true;
+							}
+							if (isNumber(var13)) {
+								local32 = true;
+							}
+							local20++;
+							local24++;
+							if (local24 * 100 / (local20 - local16) > 90) {
+								break label163;
 							}
 						}
 					}
 				}
-				if (local22 >= arg3.length && (!local30 || !local32)) {
-					var12 = true;
-					@Pc(271) int local271;
-					if (local28) {
-						@Pc(221) boolean local221 = false;
-						@Pc(223) boolean local223 = false;
-						if (local16 - 1 < 0 || isSymbol(arg2[local16 - 1]) && arg2[local16 - 1] != '\'') {
-							local221 = true;
+			}
+			if (local22 >= arg3.length && (!local30 || !local32)) {
+				var12 = true;
+				@Pc(271) int local271;
+				if (local28) {
+					@Pc(221) boolean local221 = false;
+					@Pc(223) boolean local223 = false;
+					if (local16 - 1 < 0 || isSymbol(arg2[local16 - 1]) && arg2[local16 - 1] != '\'') {
+						local221 = true;
+					}
+					if (local20 >= arg2.length || isSymbol(arg2[local20]) && arg2[local20] != '\'') {
+						local223 = true;
+					}
+					if (!local221 || !local223) {
+						@Pc(267) boolean local267 = false;
+						local271 = local16 - 2;
+						if (local221) {
+							local271 = local16;
 						}
-						if (local20 >= arg2.length || isSymbol(arg2[local20]) && arg2[local20] != '\'') {
-							local223 = true;
-						}
-						if (!local221 || !local223) {
-							@Pc(267) boolean local267 = false;
-							local271 = local16 - 2;
-							if (local221) {
-								local271 = local16;
-							}
-							while (!local267 && local271 < local20) {
-								if (local271 >= 0 && (!isSymbol(arg2[local271]) || arg2[local271] == '\'')) {
-									@Pc(293) char[] local293 = new char[3];
-									@Pc(295) int local295;
-									for (local295 = 0; local295 < 3 && local271 + local295 < arg2.length && (!isSymbol(arg2[local271 + local295]) || arg2[local271 + local295] == '\''); local295++) {
-										local293[local295] = arg2[local271 + local295];
-									}
-									@Pc(333) boolean local333 = true;
-									if (local295 == 0) {
-										local333 = false;
-									}
-									if (local295 < 3 && local271 - 1 >= 0 && (!isSymbol(arg2[local271 - 1]) || arg2[local271 - 1] == '\'')) {
-										local333 = false;
-									}
-									if (local333 && !isBadFragment(local293)) {
-										local267 = true;
-									}
+						while (!local267 && local271 < local20) {
+							if (local271 >= 0 && (!isSymbol(arg2[local271]) || arg2[local271] == '\'')) {
+								@Pc(293) char[] local293 = new char[3];
+								@Pc(295) int local295;
+								for (local295 = 0; local295 < 3 && local271 + local295 < arg2.length && (!isSymbol(arg2[local271 + local295]) || arg2[local271 + local295] == '\''); local295++) {
+									local293[local295] = arg2[local271 + local295];
 								}
-								local271++;
+								@Pc(333) boolean local333 = true;
+								if (local295 == 0) {
+									local333 = false;
+								}
+								if (local295 < 3 && local271 - 1 >= 0 && (!isSymbol(arg2[local271 - 1]) || arg2[local271 - 1] == '\'')) {
+									local333 = false;
+								}
+								if (local333 && !isBadFragment(local293)) {
+									local267 = true;
+								}
 							}
-							if (!local267) {
-								var12 = false;
-							}
+							local271++;
 						}
-					} else {
-						var13 = ' ';
-						if (local16 - 1 >= 0) {
-							var13 = arg2[local16 - 1];
-						}
-						var14 = ' ';
-						if (local20 < arg2.length) {
-							var14 = arg2[local20];
-						}
-						@Pc(203) byte local203 = getIndex(var13);
-						@Pc(207) byte local207 = getIndex(var14);
-						if (arg1 != null && comboMatches(local203, arg1, local207)) {
+						if (!local267) {
 							var12 = false;
 						}
 					}
-					if (var12) {
-						@Pc(383) int local383 = 0;
-						@Pc(385) int local385 = 0;
-						for (@Pc(387) int local387 = local16; local387 < local20; local387++) {
-							if (isNumber(arg2[local387])) {
-								local383++;
-							} else if (isAlpha(arg2[local387])) {
-								local385++;
-							}
+				} else {
+					var13 = ' ';
+					if (local16 - 1 >= 0) {
+						var13 = arg2[local16 - 1];
+					}
+					var14 = ' ';
+					if (local20 < arg2.length) {
+						var14 = arg2[local20];
+					}
+					@Pc(203) byte local203 = getIndex(var13);
+					@Pc(207) byte local207 = getIndex(var14);
+					if (arg1 != null && comboMatches(local203, arg1, local207)) {
+						var12 = false;
+					}
+				}
+				if (var12) {
+					@Pc(383) int local383 = 0;
+					@Pc(385) int local385 = 0;
+					for (@Pc(387) int local387 = local16; local387 < local20; local387++) {
+						if (isNumber(arg2[local387])) {
+							local383++;
+						} else if (isAlpha(arg2[local387])) {
+							local385++;
 						}
-						if (local383 <= local385) {
-							for (local271 = local16; local271 < local20; local271++) {
-								arg2[local271] = '*';
-							}
+					}
+					if (local383 <= local385) {
+						for (local271 = local16; local271 < local20; local271++) {
+							arg2[local271] = '*';
 						}
 					}
 				}

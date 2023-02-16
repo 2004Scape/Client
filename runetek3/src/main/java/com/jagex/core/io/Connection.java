@@ -104,28 +104,30 @@ public final class Connection implements Runnable {
 
 	@OriginalMember(owner = "client!d", name = "a", descriptor = "([BIZI)V")
 	public void writer(@OriginalArg(0) byte[] arg0, @OriginalArg(1) int arg1, @OriginalArg(3) int arg3) throws IOException {
-		if (!this.closed) {
-			if (this.ioerror) {
-				this.ioerror = false;
-				throw new IOException("Error in writer thread");
-			}
-			if (this.buf == null) {
-				this.buf = new byte[5000];
-			}
-			synchronized (this) {
-				for (@Pc(31) int local31 = 0; local31 < arg1; local31++) {
-					this.buf[this.tnum] = arg0[local31 + arg3];
-					this.tnum = (this.tnum + 1) % 5000;
-					if (this.tnum == (this.tcyl + 4900) % 5000) {
-						throw new IOException("buffer overflow");
-					}
+		if (this.closed) {
+			return;
+		}
+
+		if (this.ioerror) {
+			this.ioerror = false;
+			throw new IOException("Error in writer thread");
+		}
+		if (this.buf == null) {
+			this.buf = new byte[5000];
+		}
+		synchronized (this) {
+			for (@Pc(31) int local31 = 0; local31 < arg1; local31++) {
+				this.buf[this.tnum] = arg0[local31 + arg3];
+				this.tnum = (this.tnum + 1) % 5000;
+				if (this.tnum == (this.tcyl + 4900) % 5000) {
+					throw new IOException("buffer overflow");
 				}
-				if (!this.writer) {
-					this.writer = true;
-					this.shell.startThread(this, 2);
-				}
-				this.notify();
 			}
+			if (!this.writer) {
+				this.writer = true;
+				this.shell.startThread(this, 2);
+			}
+			this.notify();
 		}
 	}
 

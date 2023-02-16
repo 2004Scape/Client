@@ -8,9 +8,6 @@ import org.openrs2.deob.annotation.Pc;
 @OriginalClass("client!s")
 public final class Cache {
 
-	@OriginalMember(owner = "client!s", name = "b", descriptor = "I")
-	public static final int CACHE_SIZE = 5;
-
 	@OriginalMember(owner = "client!s", name = "c", descriptor = "I")
 	private final int capacity;
 
