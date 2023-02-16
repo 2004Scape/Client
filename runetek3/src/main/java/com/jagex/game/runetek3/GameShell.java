@@ -13,7 +13,7 @@ import java.awt.*;
 import java.awt.event.*;
 
 @OriginalClass("client!a")
-public class GameShell extends Applet implements Runnable, MouseListener, MouseMotionListener, KeyListener, FocusListener, WindowListener {
+public class GameShell extends Applet implements Runnable, MouseListener, MouseMotionListener, MouseWheelListener, KeyListener, FocusListener, WindowListener {
 
 	@OriginalMember(owner = "client!a", name = "a", descriptor = "Z")
 	private boolean flowObfuscator1 = false;
@@ -143,6 +143,7 @@ public class GameShell extends Applet implements Runnable, MouseListener, MouseM
 	public void run() {
 		this.getBaseComponent(this.flowObfuscator5).addMouseListener(this);
 		this.getBaseComponent(this.flowObfuscator5).addMouseMotionListener(this);
+		this.getBaseComponent(this.flowObfuscator5).addMouseWheelListener(this);
 		this.getBaseComponent(this.flowObfuscator5).addKeyListener(this);
 		this.getBaseComponent(this.flowObfuscator5).addFocusListener(this);
 		if (this.frame != null) {
@@ -673,5 +674,13 @@ public class GameShell extends Applet implements Runnable, MouseListener, MouseM
 			Signlink.reporterror("55533, " + arg0 + ", " + arg1 + ", " + arg2 + ", " + local177.toString());
 			throw new RuntimeException();
 		}
+	}
+
+	protected void mouseWheelMoved(int rotation) {
+	}
+
+	@Override
+	public void mouseWheelMoved(MouseWheelEvent e) {
+		this.mouseWheelMoved(e.getWheelRotation());
 	}
 }

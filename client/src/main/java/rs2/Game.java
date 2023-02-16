@@ -772,7 +772,7 @@ public final class Game extends GameShell {
 	private String reportAbuseInput = "";
 
 	@OriginalMember(owner = "client!client", name = "sf", descriptor = "I")
-	private int viewportInterfaceID = -1;
+	private int viewportInterfaceId = -1;
 
 	@OriginalMember(owner = "client!client", name = "tf", descriptor = "I")
 	private int titleLoginField;
@@ -1696,7 +1696,7 @@ public final class Game extends GameShell {
 				this.redrawChatback = true;
 				this.pressedContinueOption = false;
 			}
-			this.viewportInterfaceID = -1;
+			this.viewportInterfaceId = -1;
 		} catch (@Pc(44) RuntimeException local44) {
 			Signlink.reporterror("46537, " + arg0 + ", " + local44.toString());
 			throw new RuntimeException();
@@ -2845,7 +2845,7 @@ public final class Game extends GameShell {
 					this.reportAbuseMuteOption = false;
 					for (@Pc(186) int local186 = 0; local186 < IfType.instances.length; local186++) {
 						if (IfType.instances[local186] != null && IfType.instances[local186].contentType == 600) {
-							this.reportAbuseInterfaceID = this.viewportInterfaceID = IfType.instances[local186].parentId;
+							this.reportAbuseInterfaceID = this.viewportInterfaceId = IfType.instances[local186].parentId;
 							return;
 						}
 					}
@@ -3117,7 +3117,7 @@ public final class Game extends GameShell {
 						if (local13 == -1) {
 							return;
 						}
-						if (this.viewportInterfaceID != -1 && this.viewportInterfaceID == this.reportAbuseInterfaceID) {
+						if (this.viewportInterfaceId != -1 && this.viewportInterfaceId == this.reportAbuseInterfaceID) {
 							if (local13 == 8 && this.reportAbuseInput.length() > 0) {
 								this.reportAbuseInput = this.reportAbuseInput.substring(0, this.reportAbuseInput.length() - 1);
 							}
@@ -4514,6 +4514,7 @@ public final class Game extends GameShell {
 			this.clearCaches(this.flowObfuscator13);
 			if (arg0 < 0) {
 				this.scene.reset(742);
+				this.sceneState = 0;
 				for (@Pc(41) int local41 = 0; local41 < 4; local41++) {
 					this.levelCollisionMap[local41].reset((byte) 74);
 				}
@@ -5590,7 +5591,7 @@ public final class Game extends GameShell {
 					this.selectedInterface = local23;
 					this.selectedItem = local18;
 					this.selectedArea = 2;
-					if (IfType.instances[local23].parentId == this.viewportInterfaceID) {
+					if (IfType.instances[local23].parentId == this.viewportInterfaceId) {
 						this.selectedArea = 1;
 					}
 					if (IfType.instances[local23].parentId == this.chatInterfaceId) {
@@ -5681,7 +5682,7 @@ public final class Game extends GameShell {
 					this.selectedInterface = local23;
 					this.selectedItem = local18;
 					this.selectedArea = 2;
-					if (IfType.instances[local23].parentId == this.viewportInterfaceID) {
+					if (IfType.instances[local23].parentId == this.viewportInterfaceId) {
 						this.selectedArea = 1;
 					}
 					if (IfType.instances[local23].parentId == this.chatInterfaceId) {
@@ -5698,7 +5699,7 @@ public final class Game extends GameShell {
 					this.selectedInterface = local23;
 					this.selectedItem = local18;
 					this.selectedArea = 2;
-					if (IfType.instances[local23].parentId == this.viewportInterfaceID) {
+					if (IfType.instances[local23].parentId == this.viewportInterfaceId) {
 						this.selectedArea = 1;
 					}
 					if (IfType.instances[local23].parentId == this.chatInterfaceId) {
@@ -5934,7 +5935,7 @@ public final class Game extends GameShell {
 							this.selectedInterface = local23;
 							this.selectedItem = local18;
 							this.selectedArea = 2;
-							if (IfType.instances[local23].parentId == this.viewportInterfaceID) {
+							if (IfType.instances[local23].parentId == this.viewportInterfaceId) {
 								this.selectedArea = 1;
 							}
 							if (IfType.instances[local23].parentId == this.chatInterfaceId) {
@@ -6008,7 +6009,7 @@ public final class Game extends GameShell {
 								this.reportAbuseMuteOption = false;
 								for (@Pc(1957) int local1957 = 0; local1957 < IfType.instances.length; local1957++) {
 									if (IfType.instances[local1957] != null && IfType.instances[local1957].contentType == 600) {
-										this.reportAbuseInterfaceID = this.viewportInterfaceID = IfType.instances[local1957].parentId;
+										this.reportAbuseInterfaceID = this.viewportInterfaceId = IfType.instances[local1957].parentId;
 										break;
 									}
 								}
@@ -6894,10 +6895,10 @@ public final class Game extends GameShell {
 				this.lastHoveredInterfaceId = 0;
 				@Pc(32) int local32 = 12 / arg0;
 				if (super.mouseX > 8 && super.mouseY > 11 && super.mouseX < 520 && super.mouseY < 345) {
-					if (this.viewportInterfaceID == -1) {
+					if (this.viewportInterfaceId == -1) {
 						this.handleViewportOptions((byte) 2);
 					} else {
-						this.handleInterfaceInput(super.mouseY, super.mouseX, 11, IfType.instances[this.viewportInterfaceID], 5082, 8, 0);
+						this.handleInterfaceInput(super.mouseY, super.mouseX, 11, IfType.instances[this.viewportInterfaceId], 5082, 8, 0);
 					}
 				}
 				if (this.lastHoveredInterfaceId != this.viewportHoveredInterfaceIndex) {
@@ -6994,9 +6995,9 @@ public final class Game extends GameShell {
 			if (this.crossMode == 2) {
 				this.imageCrosses[this.crossCycle / 100 + 4].draw(this.crossY - 8 - 11, this.crossX - 8 - 8, false);
 			}
-			if (this.viewportInterfaceID != -1) {
-				this.updateInterfaceAnimation(this.viewportInterfaceID, this.sceneDelta, 623);
-				this.drawParentInterface(0, 0, 38682, IfType.instances[this.viewportInterfaceID], 0);
+			if (this.viewportInterfaceId != -1) {
+				this.updateInterfaceAnimation(this.viewportInterfaceId, this.sceneDelta, 623);
+				this.drawParentInterface(0, 0, 38682, IfType.instances[this.viewportInterfaceId], 0);
 			}
 			this.drawWildyLevel(39734);
 			if (!this.menuVisible) {
@@ -7659,7 +7660,7 @@ public final class Game extends GameShell {
 				this.friendCount = 0;
 				this.stickyChatInterfaceId = -1;
 				this.chatInterfaceId = -1;
-				this.viewportInterfaceID = -1;
+				this.viewportInterfaceId = -1;
 				this.sidebarInterfaceId = -1;
 				this.pressedContinueOption = false;
 				this.selectedTab = 3;
@@ -8986,7 +8987,7 @@ public final class Game extends GameShell {
 								this.objDragArea = 2;
 								this.objGrabX = super.mouseClickX;
 								this.objGrabY = super.mouseClickY;
-								if (IfType.instances[local124].parentId == this.viewportInterfaceID) {
+								if (IfType.instances[local124].parentId == this.viewportInterfaceId) {
 									this.objDragArea = 1;
 								}
 								if (IfType.instances[local124].parentId == this.chatInterfaceId) {
@@ -10740,7 +10741,7 @@ public final class Game extends GameShell {
 						this.chatbackInputOpen = false;
 						this.redrawChatback = true;
 					}
-					this.viewportInterfaceID = local159;
+					this.viewportInterfaceId = local159;
 					this.sidebarInterfaceId = local462;
 					this.redrawSidebar = true;
 					this.redrawSideicons = true;
@@ -10862,7 +10863,7 @@ public final class Game extends GameShell {
 					this.daysSinceLastLogin = this.in.g2();
 					this.daysSinceRecoveriesChanged = this.in.g1();
 					this.unreadMessages = this.in.g2();
-					if (this.lastAddress != 0 && this.viewportInterfaceID == -1) {
+					if (this.lastAddress != 0 && this.viewportInterfaceId == -1) {
 						Signlink.dnslookup(StringUtils.formatIPv4(-946, this.lastAddress));
 						this.closeInterfaces((byte) -60);
 						@Pc(1915) short local1915 = 650;
@@ -10873,7 +10874,7 @@ public final class Game extends GameShell {
 						this.reportAbuseMuteOption = false;
 						for (local462 = 0; local462 < IfType.instances.length; local462++) {
 							if (IfType.instances[local462] != null && IfType.instances[local462].contentType == local1915) {
-								this.viewportInterfaceID = IfType.instances[local462].parentId;
+								this.viewportInterfaceId = IfType.instances[local462].parentId;
 								break;
 							}
 						}
@@ -10975,7 +10976,7 @@ public final class Game extends GameShell {
 					this.sidebarInterfaceId = local159;
 					this.redrawSidebar = true;
 					this.redrawSideicons = true;
-					this.viewportInterfaceID = -1;
+					this.viewportInterfaceId = -1;
 					this.pressedContinueOption = false;
 					this.packetType = -1;
 					return true;
@@ -10990,7 +10991,7 @@ public final class Game extends GameShell {
 					}
 					this.chatInterfaceId = local159;
 					this.redrawChatback = true;
-					this.viewportInterfaceID = -1;
+					this.viewportInterfaceId = -1;
 					this.pressedContinueOption = false;
 					this.packetType = -1;
 					return true;
@@ -11229,7 +11230,7 @@ public final class Game extends GameShell {
 						this.chatbackInputOpen = false;
 						this.redrawChatback = true;
 					}
-					this.viewportInterfaceID = local159;
+					this.viewportInterfaceId = local159;
 					this.pressedContinueOption = false;
 					this.packetType = -1;
 					return true;
@@ -11295,7 +11296,7 @@ public final class Game extends GameShell {
 						this.chatbackInputOpen = false;
 						this.redrawChatback = true;
 					}
-					this.viewportInterfaceID = -1;
+					this.viewportInterfaceId = -1;
 					this.pressedContinueOption = false;
 					this.packetType = -1;
 					return true;
@@ -11651,6 +11652,112 @@ public final class Game extends GameShell {
 		} catch (@Pc(210) RuntimeException local210) {
 			Signlink.reporterror("68527, " + arg0 + ", " + arg1 + ", " + arg2 + ", " + local210.toString());
 			throw new RuntimeException();
+		}
+	}
+
+	@Override
+	protected void mouseWheelMoved(int rotation) {
+		if (this.sceneState == 2) {
+			if (super.mouseX > 22 && super.mouseY > 375 && super.mouseX < 431 && super.mouseY < 471 && this.chatInterfaceId == -1) {
+				// chat scrolling
+				this.chatInterface.scrollPosition += rotation * 8;
+				int offset = this.chatScrollHeight - this.chatInterface.scrollPosition - 77;
+				if (offset < 0) {
+					offset = 0;
+				}
+				if (offset > this.chatScrollHeight - 77) {
+					offset = this.chatScrollHeight - 77;
+				}
+				if (this.chatScrollOffset != offset) {
+					this.chatScrollOffset = offset;
+					this.redrawChatback = true;
+				}
+			}
+
+			if (super.mouseX > 8 && super.mouseY > 11 && super.mouseX < 520 && super.mouseY < 345) {
+				if (this.viewportInterfaceId == -1) {
+					// viewport zooming
+				} else {
+					// viewport scrolling
+					IfType parent = IfType.instances[this.viewportInterfaceId];
+					if (parent.type == 0 && parent.childId != null && !parent.hide) {
+						for (int i = 0; i < parent.childId.length; i++) {
+							IfType child = IfType.instances[parent.childId[i]];
+
+							if (child.scrollableHeight > child.height) {
+								int offset = child.scrollPosition + (rotation * 8);
+								if (offset < 0) {
+									offset = 0;
+								} else if (offset > child.scrollableHeight) {
+									offset = child.scrollableHeight;
+								}
+								if (child.scrollPosition != offset) {
+									child.scrollPosition = offset;
+								}
+							}
+						}
+					}
+				}
+			}
+
+			if (super.mouseX > 562 && super.mouseY > 231 && super.mouseX < 752 && super.mouseY < 492) {
+				if (this.sidebarInterfaceId != -1) {
+					// sidebar interface scrolling
+					IfType parent = IfType.instances[this.sidebarInterfaceId];
+					if (parent.type == 0 && parent.childId != null && !parent.hide) {
+						for (int i = 0; i < parent.childId.length; i++) {
+							IfType child = IfType.instances[parent.childId[i]];
+
+							if (child.scrollableHeight > child.height) {
+								int offset = child.scrollPosition + (rotation * 8);
+								if (offset < 0) {
+									offset = 0;
+								} else if (offset > child.scrollableHeight) {
+									offset = child.scrollableHeight;
+								}
+								if (child.scrollPosition != offset) {
+									child.scrollPosition = offset;
+									this.redrawSidebar = true;
+								}
+							}
+						}
+					}
+				} else if (this.tabInterfaceId[this.selectedTab] != -1) {
+					// tab interface scrolling
+					IfType parent = IfType.instances[this.tabInterfaceId[this.selectedTab]];
+					if (parent.type == 0 && parent.childId != null && !parent.hide) {
+						for (int i = 0; i < parent.childId.length; i++) {
+							IfType child = IfType.instances[parent.childId[i]];
+
+							if (child.scrollableHeight > child.height) {
+								int offset = child.scrollPosition + (rotation * 8);
+								if (offset < 0) {
+									offset = 0;
+								} else if (offset > child.scrollableHeight) {
+									offset = child.scrollableHeight;
+								}
+								if (child.scrollPosition != offset) {
+									child.scrollPosition = offset;
+									this.redrawSidebar = true;
+								}
+							}
+						}
+					}
+				}
+			}
+
+			/*if (super.mouseX > 579 && super.mouseY > 12 && super.mouseX < 730 && super.mouseY < 167) {
+				// minimap zooming
+				this.minimapZoom += rotation * 8;
+				if (this.minimapZoom < -150) {
+					this.minimapZoom = -150;
+				}
+				if (this.minimapZoom > 300) {
+					this.minimapZoom = 300;
+				}
+			}*/
+
+			System.out.println(super.mouseX + " " + super.mouseY);
 		}
 	}
 }
