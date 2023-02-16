@@ -33,6 +33,9 @@ import java.util.zip.CRC32;
 @OriginalClass("client!client")
 public final class Game extends GameShell {
 
+	private boolean showPerformance = false;
+	private boolean showOccluders = false;
+
 	@OriginalMember(owner = "client!client", name = "E", descriptor = "I")
 	public static int opHeld1Counter;
 
@@ -1525,7 +1528,7 @@ public final class Game extends GameShell {
 						local63 = 30;
 						@Pc(66) PlayerEntity local66 = (PlayerEntity) local23;
 						if (local66.headicons != 0) {
-							this.projectFromGround(local23.height + 15, this.flowObfuscator16, local23);
+							this.projectFromGround(local23.height + 15, local23);
 							if (this.projectX > -1) {
 								for (local84 = 0; local84 < 8; local84++) {
 									if ((local66.headicons & 0x1 << local84) != 0) {
@@ -1536,19 +1539,19 @@ public final class Game extends GameShell {
 							}
 						}
 						if (local15 >= 0 && this.hintType == 10 && this.hintPlayer == this.playerIds[local15]) {
-							this.projectFromGround(local23.height + 15, this.flowObfuscator16, local23);
+							this.projectFromGround(local23.height + 15, local23);
 							if (this.projectX > -1) {
 								this.imageHeadicons[7].draw(this.projectY - local63, this.projectX - 12, false);
 							}
 						}
 					} else if (this.hintType == 1 && this.hintNpc == this.npcIds[local15 - this.playerCount] && loopCycle % 20 < 10) {
-						this.projectFromGround(local23.height + 15, this.flowObfuscator16, local23);
+						this.projectFromGround(local23.height + 15, local23);
 						if (this.projectX > -1) {
 							this.imageHeadicons[2].draw(this.projectY - 28, this.projectX - 12, false);
 						}
 					}
 					if (local23.chat != null && (local15 >= this.playerCount || this.publicChatSetting == 0 || this.publicChatSetting == 3 || this.publicChatSetting == 1 && this.isFriend(-20, ((PlayerEntity) local23).name))) {
-						this.projectFromGround(local23.height, this.flowObfuscator16, local23);
+						this.projectFromGround(local23.height, local23);
 						if (this.projectX > -1 && this.chatCount < this.MAX_CHATS) {
 							this.chatWidth[this.chatCount] = this.fontBold12.stringWidth(false, local23.chat) / 2;
 							this.chatHeight[this.chatCount] = this.fontBold12.height;
@@ -1568,7 +1571,7 @@ public final class Game extends GameShell {
 						}
 					}
 					if (local23.combatCycle > loopCycle + 100) {
-						this.projectFromGround(local23.height + 15, this.flowObfuscator16, local23);
+						this.projectFromGround(local23.height + 15, local23);
 						if (this.projectX > -1) {
 							local63 = local23.health * 30 / local23.totalHealth;
 							if (local63 > 30) {
@@ -1579,7 +1582,7 @@ public final class Game extends GameShell {
 						}
 					}
 					if (local23.combatCycle > loopCycle + 330) {
-						this.projectFromGround(local23.height / 2, this.flowObfuscator16, local23);
+						this.projectFromGround(local23.height / 2, local23);
 						if (this.projectX > -1) {
 							this.imageHitmarks[local23.damageType].draw(this.projectY - 12, this.projectX - 12, false);
 							this.fontPlain11.drawStringCenter(this.projectY + 4, (byte) 6, 0, String.valueOf(local23.damage), this.projectX);
@@ -2420,7 +2423,7 @@ public final class Game extends GameShell {
 			this.draw2DEntityElements(this.flowObfuscator11);
 			this.drawTileHint((byte) -11);
 			this.updateTextures(local264, true);
-			this.draw3DEntityElements(9);
+			this.drawViewportInterfaces(9);
 			this.areaViewport.draw(11, super.graphics, 8, 5193);
 			this.cameraX = local73;
 			this.cameraY = local122;
@@ -2430,6 +2433,120 @@ public final class Game extends GameShell {
 		} catch (@Pc(405) RuntimeException local405) {
 			Signlink.reporterror("36672, " + arg0 + ", " + local405.toString());
 			throw new RuntimeException();
+		}
+	}
+
+	public void drawDebug() {
+		if (showOccluders) {
+			for (int i = 0; i < Scene.levelOccluderCount[Scene.topLevel]; i++) {
+				SceneOccluder occluder = Scene.levelOccluders[Scene.topLevel][i];
+
+				boolean active = false;
+				for (int j = 0; j < Scene.activeOccluderCount; j++) {
+					if (occluder == Scene.activeOccluders[j]) {
+						active = true;
+						break;
+					}
+				}
+
+				if (!active) {
+					continue;
+				}
+
+				int color = 0xFF0000;
+				int x0 = -1, y0 = -1;
+				int x1 = -1, y1 = -1;
+				int x2 = -1, y2 = -1;
+				int x3 = -1, y3 = -1;
+
+				switch (occluder.type) {
+					case 1: {
+						color = 0xFF0000;
+						this.project(occluder.minX, occluder.minY, occluder.minZ);
+						x0 = projectX;
+						y0 = projectY;
+						this.project(occluder.minX, occluder.maxY, occluder.minZ);
+						x1 = projectX;
+						y1 = projectY;
+						this.project(occluder.minX, occluder.minY, occluder.minZ);
+						x2 = projectX;
+						y2 = projectY;
+						this.project(occluder.minX, occluder.maxY, occluder.minZ);
+						x3 = projectX;
+						y3 = projectY;
+						break;
+					}
+					case 2: {
+						color = 0xFF0000;
+						this.project(occluder.minX, occluder.minY, occluder.minZ);
+						x0 = projectX;
+						y0 = projectY;
+						this.project(occluder.maxX, occluder.minY, occluder.minZ);
+						x1 = projectX;
+						y1 = projectY;
+						this.project(occluder.minX, occluder.maxY, occluder.minZ);
+						x2 = projectX;
+						y2 = projectY;
+						this.project(occluder.maxX, occluder.maxY, occluder.minZ);
+						x3 = projectX;
+						y3 = projectY;
+						break;
+					}
+					case 4: { // Ground on XZ plane
+						color = 0x0000FF;
+						this.project(occluder.minX, occluder.minY, occluder.minZ);
+						x0 = projectX;
+						y0 = projectY;
+						this.project(occluder.maxX, occluder.minY, occluder.minZ);
+						x1 = projectX;
+						y1 = projectY;
+						this.project(occluder.minX, occluder.minY, occluder.maxZ);
+						x2 = projectX;
+						y2 = projectY;
+						this.project(occluder.maxX, occluder.minY, occluder.maxZ);
+						x3 = projectX;
+						y3 = projectY;
+						break;
+					}
+				}
+
+				// one of our points failed to project
+				if ((x0 == -1) || (x1 == -1) || (x2 == -1) || (x3 == -1)) {
+					continue;
+				}
+
+				Draw2D.drawLine(x0, y0, x1, y1, color);
+				Draw2D.drawLine(x0, y0, x2, y2, color);
+				Draw2D.drawLine(x0, y0, x3, y3, (color & 0xFEFEFE) >> 1);
+				Draw2D.drawLine(x1, y1, x2, y2, (color & 0xFEFEFE) >> 1);
+				Draw2D.drawLine(x1, y1, x3, y3, color);
+				Draw2D.drawLine(x2, y2, x3, y3, color);
+			}
+		}
+
+		int x = 507;
+		int y = 20;
+
+		if (showPerformance) {
+			this.fontPlain11.drawStringRight(String.format("FPS: %d", super.fps), x, y, 0xFFFF00);
+			y += 13;
+
+			double ft = 0;
+			for (double delta : super.frameTime) {
+				ft += delta;
+			}
+			ft /= super.frameTime.length;
+			this.fontPlain11.drawStringRight(String.format("%04.4f ms", ft), x, y, 0xFFFF00);
+			y += 13;
+
+			Runtime runtime = Runtime.getRuntime();
+			int mem = (int) ((runtime.totalMemory() - runtime.freeMemory()) / 1024L);
+			this.fontPlain11.drawStringRight(String.format("Mem: %d kB", mem), x, y, 0xFFFF00);
+			y += 13;
+		}
+
+		if (showOccluders) {
+			this.fontPlain11.drawStringRight(String.format("Occluders: %d Active: %d", Scene.levelOccluderCount[Scene.topLevel], Scene.activeOccluderCount), x, y, 0xFFFF00);
 		}
 	}
 
@@ -3207,6 +3324,10 @@ public final class Game extends GameShell {
 							if ((local13 == 13 || local13 == 10) && this.chatTyped.length() > 0) {
 								if (this.chatTyped.equals("::clientdrop") && (super.frame != null || this.getHost(-7437).indexOf("192.168.1.") != -1)) {
 									this.tryReconnect(false);
+								} else if (this.chatTyped.equals("::perf")) {
+									this.showPerformance = !this.showPerformance;
+								} else if (this.chatTyped.equals("::occluders")) {
+									this.showOccluders = !this.showOccluders;
 								} else if (this.chatTyped.startsWith("::")) {
 									this.out.p1isaac((byte) -34, 4);
 									this.out.p1(this.chatTyped.length() - 1);
@@ -6981,7 +7102,7 @@ public final class Game extends GameShell {
 	}
 
 	@OriginalMember(owner = "client!client", name = "w", descriptor = "(I)V")
-	private void draw3DEntityElements(@OriginalArg(0) int arg0) {
+	private void drawViewportInterfaces(@OriginalArg(0) int arg0) {
 		try {
 			@Pc(7) int local7;
 			if (arg0 != this.keepaliveCounter) {
@@ -7031,6 +7152,7 @@ public final class Game extends GameShell {
 					this.fontPlain12.drawString(4, 329, false, 16776960, "System update in: " + local196 + ":" + local7);
 				}
 			}
+			this.drawDebug();
 		} catch (@Pc(242) RuntimeException local242) {
 			Signlink.reporterror("17204, " + arg0 + ", " + local242.toString());
 			throw new RuntimeException();
@@ -7219,52 +7341,45 @@ public final class Game extends GameShell {
 	}
 
 	@OriginalMember(owner = "client!client", name = "a", descriptor = "(IZLclient!x;)V")
-	private void projectFromGround(@OriginalArg(0) int arg0, @OriginalArg(1) boolean arg1, @OriginalArg(2) PathingEntity arg2) {
-		try {
-			this.projectFromGround(arg2.z, arg2.x, this.flowObfuscator34, arg0);
-			if (arg1) {
-				this.packetType = -1;
-			}
-		} catch (@Pc(15) RuntimeException local15) {
-			Signlink.reporterror("52028, " + arg0 + ", " + arg1 + ", " + arg2 + ", " + local15.toString());
-			throw new RuntimeException();
+	private void projectFromGround(@OriginalArg(0) int height, @OriginalArg(2) PathingEntity entity) {
+		this.projectFromGround(entity.x, height, entity.z);
+	}
+
+	private void projectFromGround(int x, int height, int z) {
+		if ((x < 128) || (z < 128) || (x > 13056) || (z > 13056)) {
+			projectX = -1;
+			projectY = -1;
+			return;
 		}
+
+		this.project(x, this.getHeightmapY(this.currentLevel, x, (byte) 5, z) - height, z);
 	}
 
 	@OriginalMember(owner = "client!client", name = "b", descriptor = "(IIII)V")
-	private void projectFromGround(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2, @OriginalArg(3) int arg3) {
-		try {
-			if (arg1 >= 128 && arg0 >= 128 && arg1 <= 13056 && arg0 <= 13056) {
-				@Pc(28) int local28 = this.getHeightmapY(this.currentLevel, arg1, (byte) 5, arg0) - arg3;
-				@Pc(33) int local33 = arg1 - this.cameraX;
-				@Pc(38) int local38 = local28 - this.cameraY;
-				@Pc(43) int local43 = arg0 - this.cameraZ;
-				@Pc(48) int local48 = Model.sin[this.cameraPitch];
-				@Pc(53) int local53 = Model.cos[this.cameraPitch];
-				@Pc(58) int local58 = Model.sin[this.cameraYaw];
-				@Pc(63) int local63 = Model.cos[this.cameraYaw];
-				@Pc(73) int local73 = local43 * local58 + local33 * local63 >> 16;
-				@Pc(83) int local83 = local43 * local63 - local33 * local58 >> 16;
-				if (arg2 >= 0) {
-					this.out.p1(131);
-				}
-				local33 = local73;
-				local73 = local38 * local53 - local83 * local48 >> 16;
-				local43 = local38 * local48 + local83 * local53 >> 16;
-				if (local43 >= 50) {
-					this.projectX = Draw3D.centerX + (local33 << 9) / local43;
-					this.projectY = Draw3D.centerY + (local73 << 9) / local43;
-				} else {
-					this.projectX = -1;
-					this.projectY = -1;
-				}
-			} else {
-				this.projectX = -1;
-				this.projectY = -1;
-			}
-		} catch (@Pc(143) RuntimeException local143) {
-			Signlink.reporterror("27324, " + arg0 + ", " + arg1 + ", " + arg2 + ", " + arg3 + ", " + local143.toString());
-			throw new RuntimeException();
+	private void project(@OriginalArg(1) int x, @OriginalArg(3) int y, @OriginalArg(0) int z) {
+		x -= this.cameraX;
+		y -= this.cameraY;
+		z -= this.cameraZ;
+
+		@Pc(48) int sinPitch = Model.sin[this.cameraPitch];
+		@Pc(53) int cosPitch = Model.cos[this.cameraPitch];
+		@Pc(58) int sinYaw = Model.sin[this.cameraYaw];
+		@Pc(63) int cosYaw = Model.cos[this.cameraYaw];
+
+		int tmp = ((z * sinYaw) + (x * cosYaw)) >> 16;
+		z = ((z * cosYaw) - (x * sinYaw)) >> 16;
+		x = tmp;
+
+		tmp = ((y * cosPitch) - (z * sinPitch)) >> 16;
+		z = ((y * sinPitch) + (z * cosPitch)) >> 16;
+		y = tmp;
+
+		if (z >= 50) {
+			this.projectX = Draw3D.centerX + (x << 9) / z;
+			this.projectY = Draw3D.centerY + (y << 9) / z;
+		} else {
+			this.projectX = -1;
+			this.projectY = -1;
 		}
 	}
 
@@ -10166,7 +10281,7 @@ public final class Game extends GameShell {
 	private void drawTileHint(@OriginalArg(0) byte arg0) {
 		try {
 			if (this.hintType == 2) {
-				this.projectFromGround((this.hintTileZ - this.sceneBaseTileZ << 7) + this.hintOffsetZ, (this.hintTileX - this.sceneBaseTileX << 7) + this.hintOffsetX, this.flowObfuscator34, this.hintHeight * 2);
+				this.project((this.hintTileX - this.sceneBaseTileX << 7) + this.hintOffsetX, this.hintHeight * 2, (this.hintTileZ - this.sceneBaseTileZ << 7) + this.hintOffsetZ);
 				if (arg0 != -11) {
 					this.flowObfuscator40 = !this.flowObfuscator40;
 				}

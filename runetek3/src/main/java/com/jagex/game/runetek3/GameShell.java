@@ -15,6 +15,9 @@ import java.awt.event.*;
 @OriginalClass("client!a")
 public class GameShell extends Applet implements Runnable, MouseListener, MouseMotionListener, MouseWheelListener, KeyListener, FocusListener, WindowListener {
 
+	public final double[] frameTime = new double[100];
+	int fpos = 0;
+
 	@OriginalMember(owner = "client!a", name = "a", descriptor = "Z")
 	private boolean flowObfuscator1 = false;
 
@@ -46,7 +49,7 @@ public class GameShell extends Applet implements Runnable, MouseListener, MouseM
 	private final long[] otim = new long[10];
 
 	@OriginalMember(owner = "client!a", name = "k", descriptor = "I")
-	private int fps;
+	protected int fps;
 
 	@OriginalMember(owner = "client!a", name = "l", descriptor = "I")
 	protected int screenWidth;
@@ -153,16 +156,19 @@ public class GameShell extends Applet implements Runnable, MouseListener, MouseM
 		if (this.frame != null) {
 			this.frame.addWindowListener(this);
 		}
+
 		this.drawProgress(true, "Loading...", 0);
 		this.load();
-		@Pc(41) int local41 = 0;
-		@Pc(43) int local43 = 256;
-		@Pc(45) int local45 = 1;
-		@Pc(47) int local47 = 0;
+
+		@Pc(41) int opos = 0;
+		@Pc(43) int ratio = 256;
+		@Pc(45) int delta = 1;
+		@Pc(47) int count = 0;
 		for (@Pc(49) int local49 = 0; local49 < 10; local49++) {
 			this.otim[local49] = System.currentTimeMillis();
 		}
-		@Pc(62) long local62 = System.currentTimeMillis();
+
+		@Pc(62) long ntime = System.currentTimeMillis();
 		while (this.state >= 0) {
 			if (this.state > 0) {
 				this.state--;
@@ -171,52 +177,71 @@ public class GameShell extends Applet implements Runnable, MouseListener, MouseM
 					return;
 				}
 			}
-			@Pc(82) int local82 = local43;
-			@Pc(84) int local84 = local45;
-			local43 = 300;
-			local45 = 1;
-			local62 = System.currentTimeMillis();
-			if (this.otim[local41] == 0L) {
-				local43 = local82;
-				local45 = local84;
-			} else if (local62 > this.otim[local41]) {
-				local43 = (int) ((long) (this.deltime * 2560) / (local62 - this.otim[local41]));
+
+			@Pc(82) int local82 = ratio;
+			@Pc(84) int local84 = delta;
+			ratio = 300;
+			delta = 1;
+
+			ntime = System.currentTimeMillis();
+
+			if (this.otim[opos] == 0L) {
+				ratio = local82;
+				delta = local84;
+			} else if (ntime > this.otim[opos]) {
+				ratio = (int) ((long) (this.deltime * 2560) / (ntime - this.otim[opos]));
 			}
-			if (local43 < 25) {
-				local43 = 25;
+
+			if (ratio < 25) {
+				ratio = 25;
 			}
-			if (local43 > 256) {
-				local43 = 256;
-				local45 = (int) ((long) this.deltime - (local62 - this.otim[local41]) / 10L);
+
+			if (ratio > 256) {
+				ratio = 256;
+				delta = (int) ((long) this.deltime - (ntime - this.otim[opos]) / 10L);
 			}
-			this.otim[local41] = local62;
-			local41 = (local41 + 1) % 10;
-			if (local45 > 1) {
-				for (@Pc(164) int local164 = 0; local164 < 10; local164++) {
-					if (this.otim[local164] != 0L) {
-						this.otim[local164] += local45;
+
+			this.otim[opos] = ntime;
+			opos = (opos + 1) % 10;
+
+			if (delta > 1) {
+				for (@Pc(164) int i = 0; i < 10; i++) {
+					if (this.otim[i] != 0L) {
+						this.otim[i] += delta;
 					}
 				}
 			}
-			if (local45 < this.mindel) {
-				local45 = this.mindel;
+
+			if (delta < this.mindel) {
+				delta = this.mindel;
 			}
+
 			try {
-				Thread.sleep((long) local45);
-			} catch (@Pc(198) InterruptedException local198) {
+				Thread.sleep((long) delta);
+			} catch (@Pc(198) InterruptedException ignored) {
 			}
-			while (local47 < 256) {
+
+			long time = System.nanoTime();
+
+			while (count < 256) {
 				this.update(437);
 				this.mouseClickButton = 0;
 				this.keyQueueReadPos = this.keyQueueWritePos;
-				local47 += local43;
+				count += ratio;
 			}
-			local47 &= 0xFF;
+
+			count &= 0xFF;
+
 			if (this.deltime > 0) {
-				this.fps = local43 * 1000 / (this.deltime * 256);
+				this.fps = ratio * 1000 / (this.deltime * 256);
 			}
+
 			this.draw(false);
+
+			frameTime[fpos] = (double) (System.nanoTime() - time) / 1_000_000.0;
+			fpos = (fpos + 1) % frameTime.length;
 		}
+
 		if (this.state == -1) {
 			this.shutdown(-652);
 		}

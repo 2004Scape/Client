@@ -3,6 +3,8 @@ plugins {
     id 'application'
 }
 
+applicationDefaultJvmArgs = ["-Xms16m", "-Xmx128m"]
+
 mainClassName = 'rs2.Game'
 version = '1.0.0'
 
