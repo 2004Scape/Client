@@ -26,9 +26,13 @@ public final class GameFrame extends Frame {
 			this.shell = arg2;
 			this.setTitle("Jagex");
 			this.setResizable(false);
-			this.show();
+
+			this.setLayout(new BorderLayout());
+			this.add(shell);
+			this.pack();
+
+			this.setVisible(true);
 			this.toFront();
-			this.resize(arg3 + 8, arg0 + 28);
 		} catch (@Pc(33) RuntimeException local33) {
 			Signlink.reporterror("51818, " + arg0 + ", " + arg1 + ", " + arg2 + ", " + arg3 + ", " + local33.toString());
 			throw new RuntimeException();

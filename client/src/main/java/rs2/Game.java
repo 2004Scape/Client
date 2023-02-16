@@ -3777,7 +3777,7 @@ public final class Game extends GameShell {
 				this.flowObfuscator3 = 260;
 			}
 			if (Signlink.mainapp == null) {
-				return super.frame == null ? this : super.frame;
+				return this;
 			} else {
 				return Signlink.mainapp;
 			}

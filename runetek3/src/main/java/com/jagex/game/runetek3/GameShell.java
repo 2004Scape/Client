@@ -110,6 +110,7 @@ public class GameShell extends Applet implements Runnable, MouseListener, MouseM
 			}
 			this.screenWidth = arg1;
 			this.screenHeight = arg0;
+			this.setPreferredSize(new Dimension(this.screenWidth, this.screenHeight));
 			this.frame = new GameFrame(this.screenHeight, 35731, this, this.screenWidth);
 			this.graphics = this.getBaseComponent(this.flowObfuscator5).getGraphics();
 			this.drawArea = new DrawArea(this.getBaseComponent(this.flowObfuscator5), this.screenWidth, 299, this.screenHeight);
@@ -305,10 +306,6 @@ public class GameShell extends Applet implements Runnable, MouseListener, MouseM
 	public final void mousePressed(@OriginalArg(0) MouseEvent arg0) {
 		@Pc(2) int local2 = arg0.getX();
 		@Pc(5) int local5 = arg0.getY();
-		if (this.frame != null) {
-			local2 -= 4;
-			local5 -= 22;
-		}
 		this.idleCycles = 0;
 		this.mouseClickX = local2;
 		this.mouseClickY = local5;
@@ -360,10 +357,6 @@ public class GameShell extends Applet implements Runnable, MouseListener, MouseM
 	public final void mouseDragged(@OriginalArg(0) MouseEvent arg0) {
 		@Pc(2) int local2 = arg0.getX();
 		@Pc(5) int local5 = arg0.getY();
-		if (this.frame != null) {
-			local2 -= 4;
-			local5 -= 22;
-		}
 		this.idleCycles = 0;
 		this.mouseX = local2;
 		this.mouseY = local5;
@@ -377,10 +370,6 @@ public class GameShell extends Applet implements Runnable, MouseListener, MouseM
 	public final void mouseMoved(@OriginalArg(0) MouseEvent arg0) {
 		@Pc(2) int local2 = arg0.getX();
 		@Pc(5) int local5 = arg0.getY();
-		if (this.frame != null) {
-			local2 -= 4;
-			local5 -= 22;
-		}
 		this.idleCycles = 0;
 		this.mouseX = local2;
 		this.mouseY = local5;
@@ -631,7 +620,7 @@ public class GameShell extends Applet implements Runnable, MouseListener, MouseM
 			if (arg0 != 3) {
 				throw new NullPointerException();
 			}
-			return this.frame == null ? this : this.frame;
+			return this;
 		} catch (@Pc(15) RuntimeException local15) {
 			Signlink.reporterror("24145, " + arg0 + ", " + local15.toString());
 			throw new RuntimeException();
