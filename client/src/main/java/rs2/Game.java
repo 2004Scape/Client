@@ -2214,51 +2214,49 @@ public final class Game extends GameShell {
 
 				switch (occluder.type) {
 					case 1: {
-						color = 0xFF0000;
 						this.project(occluder.minX, occluder.minY, occluder.minZ);
-						x0 = projectX;
-						y0 = projectY;
+						x0 = this.projectX;
+						y0 = this.projectY;
 						this.project(occluder.minX, occluder.maxY, occluder.minZ);
-						x1 = projectX;
-						y1 = projectY;
-						this.project(occluder.minX, occluder.minY, occluder.minZ);
-						x2 = projectX;
-						y2 = projectY;
-						this.project(occluder.minX, occluder.maxY, occluder.minZ);
-						x3 = projectX;
-						y3 = projectY;
+						x1 = this.projectX;
+						y1 = this.projectY;
+						this.project(occluder.minX, occluder.minY, occluder.maxZ);
+						x2 = this.projectX;
+						y2 = this.projectY;
+						this.project(occluder.minX, occluder.maxY, occluder.maxZ);
+						x3 = this.projectX;
+						y3 = this.projectY;
 						break;
 					}
 					case 2: {
-						color = 0x00FF00;
 						this.project(occluder.minX, occluder.minY, occluder.minZ);
-						x0 = projectX;
-						y0 = projectY;
+						x0 = this.projectX;
+						y0 = this.projectY;
 						this.project(occluder.maxX, occluder.minY, occluder.minZ);
-						x1 = projectX;
-						y1 = projectY;
+						x1 = this.projectX;
+						y1 = this.projectY;
 						this.project(occluder.minX, occluder.maxY, occluder.minZ);
-						x2 = projectX;
-						y2 = projectY;
+						x2 = this.projectX;
+						y2 = this.projectY;
 						this.project(occluder.maxX, occluder.maxY, occluder.minZ);
-						x3 = projectX;
-						y3 = projectY;
+						x3 = this.projectX;
+						y3 = this.projectY;
 						break;
 					}
 					case 4: { // Ground on XZ plane
 						color = 0x0000FF;
 						this.project(occluder.minX, occluder.minY, occluder.minZ);
-						x0 = projectX;
-						y0 = projectY;
+						x0 = this.projectX;
+						y0 = this.projectY;
 						this.project(occluder.maxX, occluder.minY, occluder.minZ);
-						x1 = projectX;
-						y1 = projectY;
+						x1 = this.projectX;
+						y1 = this.projectY;
 						this.project(occluder.minX, occluder.minY, occluder.maxZ);
-						x2 = projectX;
-						y2 = projectY;
+						x2 = this.projectX;
+						y2 = this.projectY;
 						this.project(occluder.maxX, occluder.minY, occluder.maxZ);
-						x3 = projectX;
-						y3 = projectY;
+						x3 = this.projectX;
+						y3 = this.projectY;
 						break;
 					}
 				}
@@ -2281,7 +2279,7 @@ public final class Game extends GameShell {
 		int y = 20;
 
 		if (showPerformance) {
-			this.fontPlain11.drawStringRight(String.format("FPS: %d", super.fps), x, y, 0xFFFF00);
+			this.fontPlain11.drawStringRight(String.format("FPS: %d", super.fps), x, y, 0xFFFF00, true);
 			y += 13;
 
 			double ft = 0;
@@ -2289,17 +2287,17 @@ public final class Game extends GameShell {
 				ft += delta;
 			}
 			ft /= super.frameTime.length;
-			this.fontPlain11.drawStringRight(String.format("%04.4f ms", ft), x, y, 0xFFFF00);
+			this.fontPlain11.drawStringRight(String.format("%04.4f ms", ft), x, y, 0xFFFF00, true);
 			y += 13;
 
 			Runtime runtime = Runtime.getRuntime();
 			int mem = (int) ((runtime.totalMemory() - runtime.freeMemory()) / 1024L);
-			this.fontPlain11.drawStringRight(String.format("Mem: %d kB", mem), x, y, 0xFFFF00);
+			this.fontPlain11.drawStringRight(String.format("Mem: %d kB", mem), x, y, 0xFFFF00, true);
 			y += 13;
 		}
 
 		if (showOccluders) {
-			this.fontPlain11.drawStringRight(String.format("Occluders: %d Active: %d", Scene.levelOccluderCount[Scene.topLevel], Scene.activeOccluderCount), x, y, 0xFFFF00);
+			this.fontPlain11.drawStringRight(String.format("Occluders: %d Active: %d", Scene.levelOccluderCount[Scene.topLevel], Scene.activeOccluderCount), x, y, 0xFFFF00, true);
 		}
 	}
 

@@ -117,8 +117,12 @@ public final class BitmapFont extends Draw2D {
 		this.drawString(arg4 - this.stringWidth(arg3) / 2, arg0, arg2, arg3);
 	}
 
-	public void drawStringRight(@OriginalArg(3) String arg3, @OriginalArg(4) int arg4, @OriginalArg(0) int arg0, @OriginalArg(2) int arg2) {
-		this.drawString(arg4 - this.stringWidth(arg3), arg0, arg2, arg3);
+	public void drawStringRight(@OriginalArg(3) String str, @OriginalArg(4) int x, @OriginalArg(0) int y, @OriginalArg(2) int color, boolean shadowed) {
+		if (shadowed) {
+			this.drawString(x + 1 - this.stringWidth(str), y + 1, 0, str);
+		}
+
+		this.drawString(x - this.stringWidth(str), y, color, str);
 	}
 
 	@OriginalMember(owner = "client!jb", name = "a", descriptor = "(IIZILjava/lang/String;I)V")
