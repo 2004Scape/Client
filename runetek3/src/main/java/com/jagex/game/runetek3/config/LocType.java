@@ -70,7 +70,7 @@ public final class LocType {
 	private boolean hillskew;
 
 	@OriginalMember(owner = "client!ac", name = "v", descriptor = "Z")
-	private boolean computeVertexColors;
+	private boolean sharelight;
 
 	@OriginalMember(owner = "client!ac", name = "w", descriptor = "Z")
 	public boolean occlude;
@@ -174,6 +174,11 @@ public final class LocType {
 		local27.index = arg0;
 		local27.reset();
 		local27.decode(dat);
+		// hardcoded fixes to avoid touching the cache (for now)
+		if (local27.index == 899 || local27.index == 901 || local27.index == 1779) {
+			// fixes black colors on hanging banners and windmill sails
+			local27.sharelight = false;
+		}
 		return local27;
 	}
 
@@ -191,7 +196,7 @@ public final class LocType {
 		this.blockrange = true;
 		this.interactable = false;
 		this.hillskew = false;
-		this.computeVertexColors = false;
+		this.sharelight = false;
 		this.occlude = false;
 		this.anim = -1;
 		this.walloff = 16;
@@ -252,7 +257,7 @@ public final class LocType {
 			} else if (opcode == 21) {
 				this.hillskew = true;
 			} else if (opcode == 22) {
-				this.computeVertexColors = true;
+				this.sharelight = true;
 			} else if (opcode == 23) {
 				this.occlude = true;
 			} else if (opcode == 24) {
@@ -399,13 +404,13 @@ public final class LocType {
 			if (local250) {
 				local284.translate(this.yoff, this.xoff, this.zoff);
 			}
-			local284.calculateNormals(this.ambient + 64, this.contrast * 5 + 768, -50, -10, -50, !this.computeVertexColors);
+			local284.calculateNormals(this.ambient + 64, this.contrast * 5 + 768, -50, -10, -50, !this.sharelight);
 			if (this.blockwalk) {
 				local284.objRaise = local284.maxY;
 			}
 			modelCacheDynamic.put(local47, local284);
-			if (this.hillskew || this.computeVertexColors) {
-				local284 = new Model(local284, this.hillskew, this.computeVertexColors);
+			if (this.hillskew || this.sharelight) {
+				local284 = new Model(local284, this.hillskew, this.sharelight);
 			}
 			if (this.hillskew) {
 				local141 = (arg2 + arg3 + arg4 + arg5) / 4;
@@ -423,8 +428,8 @@ public final class LocType {
 		} else if (reset) {
 			return local56;
 		} else {
-			if (this.hillskew || this.computeVertexColors) {
-				local56 = new Model(local56, this.hillskew, this.computeVertexColors);
+			if (this.hillskew || this.sharelight) {
+				local56 = new Model(local56, this.hillskew, this.sharelight);
 			}
 			if (this.hillskew) {
 				local91 = (arg2 + arg3 + arg4 + arg5) / 4;
