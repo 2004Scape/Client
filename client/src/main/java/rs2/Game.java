@@ -35,6 +35,7 @@ public final class Game extends GameShell {
 
 	private boolean showPerformance = false;
 	private boolean showOccluders = false;
+	private boolean showDebug = false;
 
 	@OriginalMember(owner = "client!client", name = "E", descriptor = "I")
 	public static int opHeld1Counter;
@@ -2547,12 +2548,12 @@ public final class Game extends GameShell {
 								this.hoveredSlot = local488;
 								this.hoveredSlotParentId = local69.id;
 								if (local69.inventorySlotObjId[local488] > 0) {
-									@Pc(567) ObjType local567 = ObjType.get(local69.inventorySlotObjId[local488] - 1);
+									@Pc(567) ObjType obj = ObjType.get(local69.inventorySlotObjId[local488] - 1);
 									if (this.objSelected == 1 && local69.inventoryInteractable) {
 										if (local69.id != this.objSelectedInterface || local488 != this.objSelectedSlot) {
-											this.menuOption[this.menuSize] = "Use " + this.objSelectedName + " with @lre@" + local567.name;
+											this.menuOption[this.menuSize] = "Use " + this.objSelectedName + " with @lre@" + obj.name;
 											this.menuAction[this.menuSize] = 881;
-											this.menuParamC[this.menuSize] = local567.index;
+											this.menuParamC[this.menuSize] = obj.index;
 											this.menuParamA[this.menuSize] = local488;
 											this.menuParamB[this.menuSize] = local69.id;
 											this.menuSize++;
@@ -2561,22 +2562,22 @@ public final class Game extends GameShell {
 										@Pc(704) int local704;
 										if (local69.inventoryInteractable) {
 											for (local704 = 4; local704 >= 3; local704--) {
-												if (local567.iops != null && local567.iops[local704] != null) {
-													this.menuOption[this.menuSize] = local567.iops[local704] + " @lre@" + local567.name;
+												if (obj.iops != null && obj.iops[local704] != null) {
+													this.menuOption[this.menuSize] = obj.iops[local704] + " @lre@" + obj.name;
 													if (local704 == 3) {
 														this.menuAction[this.menuSize] = 478;
 													}
 													if (local704 == 4) {
 														this.menuAction[this.menuSize] = 347;
 													}
-													this.menuParamC[this.menuSize] = local567.index;
+													this.menuParamC[this.menuSize] = obj.index;
 													this.menuParamA[this.menuSize] = local488;
 													this.menuParamB[this.menuSize] = local69.id;
 													this.menuSize++;
 												} else if (local704 == 4) {
-													this.menuOption[this.menuSize] = "Drop @lre@" + local567.name;
+													this.menuOption[this.menuSize] = "Drop @lre@" + obj.name;
 													this.menuAction[this.menuSize] = 347;
-													this.menuParamC[this.menuSize] = local567.index;
+													this.menuParamC[this.menuSize] = obj.index;
 													this.menuParamA[this.menuSize] = local488;
 													this.menuParamB[this.menuSize] = local69.id;
 													this.menuSize++;
@@ -2584,17 +2585,17 @@ public final class Game extends GameShell {
 											}
 										}
 										if (local69.inventoryUsable) {
-											this.menuOption[this.menuSize] = "Use @lre@" + local567.name;
+											this.menuOption[this.menuSize] = "Use @lre@" + obj.name;
 											this.menuAction[this.menuSize] = 188;
-											this.menuParamC[this.menuSize] = local567.index;
+											this.menuParamC[this.menuSize] = obj.index;
 											this.menuParamA[this.menuSize] = local488;
 											this.menuParamB[this.menuSize] = local69.id;
 											this.menuSize++;
 										}
-										if (local69.inventoryInteractable && local567.iops != null) {
+										if (local69.inventoryInteractable && obj.iops != null) {
 											for (local704 = 2; local704 >= 0; local704--) {
-												if (local567.iops[local704] != null) {
-													this.menuOption[this.menuSize] = local567.iops[local704] + " @lre@" + local567.name;
+												if (obj.iops[local704] != null) {
+													this.menuOption[this.menuSize] = obj.iops[local704] + " @lre@" + obj.name;
 													if (local704 == 0) {
 														this.menuAction[this.menuSize] = 405;
 													}
@@ -2604,7 +2605,7 @@ public final class Game extends GameShell {
 													if (local704 == 2) {
 														this.menuAction[this.menuSize] = 422;
 													}
-													this.menuParamC[this.menuSize] = local567.index;
+													this.menuParamC[this.menuSize] = obj.index;
 													this.menuParamA[this.menuSize] = local488;
 													this.menuParamB[this.menuSize] = local69.id;
 													this.menuSize++;
@@ -2614,7 +2615,7 @@ public final class Game extends GameShell {
 										if (local69.inventoryOptions != null) {
 											for (local704 = 4; local704 >= 0; local704--) {
 												if (local69.inventoryOptions[local704] != null) {
-													this.menuOption[this.menuSize] = local69.inventoryOptions[local704] + " @lre@" + local567.name;
+													this.menuOption[this.menuSize] = local69.inventoryOptions[local704] + " @lre@" + obj.name;
 													if (local704 == 0) {
 														this.menuAction[this.menuSize] = 602;
 													}
@@ -2630,22 +2631,25 @@ public final class Game extends GameShell {
 													if (local704 == 4) {
 														this.menuAction[this.menuSize] = 415;
 													}
-													this.menuParamC[this.menuSize] = local567.index;
+													this.menuParamC[this.menuSize] = obj.index;
 													this.menuParamA[this.menuSize] = local488;
 													this.menuParamB[this.menuSize] = local69.id;
 													this.menuSize++;
 												}
 											}
 										}
-										this.menuOption[this.menuSize] = "Examine @lre@" + local567.name;
+										this.menuOption[this.menuSize] = "Examine @lre@" + obj.name;
+										if (this.showDebug) {
+											this.menuOption[this.menuSize] += "@whi@ (" + obj.index + ")";
+										}
 										this.menuAction[this.menuSize] = 1773;
-										this.menuParamC[this.menuSize] = local567.index;
+										this.menuParamC[this.menuSize] = obj.index;
 										this.menuParamB[this.menuSize] = local69.inventorySlotObjCount[local488];
 										this.menuSize++;
 									} else if ((this.activeSpellFlags & 0x10) == 16) {
-										this.menuOption[this.menuSize] = this.spellCaption + " @lre@" + local567.name;
+										this.menuOption[this.menuSize] = this.spellCaption + " @lre@" + obj.name;
 										this.menuAction[this.menuSize] = 391;
-										this.menuParamC[this.menuSize] = local567.index;
+										this.menuParamC[this.menuSize] = obj.index;
 										this.menuParamA[this.menuSize] = local488;
 										this.menuParamB[this.menuSize] = local69.id;
 										this.menuSize++;
@@ -2833,17 +2837,17 @@ public final class Game extends GameShell {
 	}
 
 	@OriginalMember(owner = "client!client", name = "a", descriptor = "(Lclient!bc;IIII)V")
-	private void addNpcOptions(@OriginalArg(0) NpcType arg0, @OriginalArg(2) int arg2, @OriginalArg(3) int arg3, @OriginalArg(4) int arg4) {
+	private void addNpcOptions(@OriginalArg(0) NpcType npc, @OriginalArg(2) int arg2, @OriginalArg(3) int arg3, @OriginalArg(4) int arg4) {
 		if (this.menuSize >= 400) {
 			return;
 		}
 
-		@Pc(16) String local16 = arg0.name;
-		if (arg0.vislevel != 0) {
-			local16 = local16 + getCombatLevelColorTag(this.localPlayer.combatLevel, arg0.vislevel) + " (level-" + arg0.vislevel + ")";
+		@Pc(16) String name = npc.name;
+		if (npc.vislevel != 0) {
+			name = name + getCombatLevelColorTag(this.localPlayer.combatLevel, npc.vislevel) + " (level-" + npc.vislevel + ")";
 		}
 		if (this.objSelected == 1) {
-			this.menuOption[this.menuSize] = "Use " + this.objSelectedName + " with @yel@" + local16;
+			this.menuOption[this.menuSize] = "Use " + this.objSelectedName + " with @yel@" + name;
 			this.menuAction[this.menuSize] = 900;
 			this.menuParamC[this.menuSize] = arg4;
 			this.menuParamA[this.menuSize] = arg3;
@@ -2851,10 +2855,10 @@ public final class Game extends GameShell {
 			this.menuSize++;
 		} else if (this.spellSelected != 1) {
 			@Pc(155) int local155;
-			if (arg0.ops != null) {
+			if (npc.ops != null) {
 				for (local155 = 4; local155 >= 0; local155--) {
-					if (arg0.ops[local155] != null && !arg0.ops[local155].equalsIgnoreCase("attack")) {
-						this.menuOption[this.menuSize] = arg0.ops[local155] + " @yel@" + local16;
+					if (npc.ops[local155] != null && !npc.ops[local155].equalsIgnoreCase("attack")) {
+						this.menuOption[this.menuSize] = npc.ops[local155] + " @yel@" + name;
 						if (local155 == 0) {
 							this.menuAction[this.menuSize] = 728;
 						}
@@ -2877,14 +2881,14 @@ public final class Game extends GameShell {
 					}
 				}
 			}
-			if (arg0.ops != null) {
+			if (npc.ops != null) {
 				for (local155 = 4; local155 >= 0; local155--) {
-					if (arg0.ops[local155] != null && arg0.ops[local155].equalsIgnoreCase("attack")) {
+					if (npc.ops[local155] != null && npc.ops[local155].equalsIgnoreCase("attack")) {
 						@Pc(279) short local279 = 0;
-						if (arg0.vislevel > this.localPlayer.combatLevel) {
+						if (npc.vislevel > this.localPlayer.combatLevel) {
 							local279 = 2000;
 						}
-						this.menuOption[this.menuSize] = arg0.ops[local155] + " @yel@" + local16;
+						this.menuOption[this.menuSize] = npc.ops[local155] + " @yel@" + name;
 						if (local155 == 0) {
 							this.menuAction[this.menuSize] = local279 + 728;
 						}
@@ -2907,14 +2911,17 @@ public final class Game extends GameShell {
 					}
 				}
 			}
-			this.menuOption[this.menuSize] = "Examine @yel@" + local16;
+			this.menuOption[this.menuSize] = "Examine @yel@" + name;
+			if (this.showDebug) {
+				this.menuOption[this.menuSize] += "@whi@ (" + npc.index + ")";
+			}
 			this.menuAction[this.menuSize] = 1607;
 			this.menuParamC[this.menuSize] = arg4;
 			this.menuParamA[this.menuSize] = arg3;
 			this.menuParamB[this.menuSize] = arg2;
 			this.menuSize++;
 		} else if ((this.activeSpellFlags & 0x2) == 2) {
-			this.menuOption[this.menuSize] = this.spellCaption + " @yel@" + local16;
+			this.menuOption[this.menuSize] = this.spellCaption + " @yel@" + name;
 			this.menuAction[this.menuSize] = 265;
 			this.menuParamC[this.menuSize] = arg4;
 			this.menuParamA[this.menuSize] = arg3;
@@ -3033,6 +3040,8 @@ public final class Game extends GameShell {
 									SceneBuilder.OCCLUDER_THRESHOLD = Integer.parseInt(this.chatTyped.substring(12));
 									this.buildScene();
 								} catch (Exception ignored) {}
+							} else if (this.chatTyped.equals("::debug")) {
+								this.showDebug = !this.showDebug;
 							} else if (this.chatTyped.startsWith("::")) {
 								this.out.p1isaac(4);
 								this.out.p1(this.chatTyped.length() - 1);
@@ -9112,19 +9121,19 @@ public final class Game extends GameShell {
 				local41 = local58;
 				@Pc(218) int local218;
 				if (local74 == 2 && this.scene.getInfo(this.currentLevel, local62, local68, local58) >= 0) {
-					@Pc(100) LocType local100 = LocType.get(local80);
+					@Pc(100) LocType loc = LocType.get(local80);
 					if (this.objSelected == 1) {
-						this.menuOption[this.menuSize] = "Use " + this.objSelectedName + " with @cya@" + local100.name;
+						this.menuOption[this.menuSize] = "Use " + this.objSelectedName + " with @cya@" + loc.name;
 						this.menuAction[this.menuSize] = 450;
 						this.menuParamC[this.menuSize] = local58;
 						this.menuParamA[this.menuSize] = local62;
 						this.menuParamB[this.menuSize] = local68;
 						this.menuSize++;
 					} else if (this.spellSelected != 1) {
-						if (local100.ops != null) {
+						if (loc.ops != null) {
 							for (local218 = 4; local218 >= 0; local218--) {
-								if (local100.ops[local218] != null) {
-									this.menuOption[this.menuSize] = local100.ops[local218] + " @cya@" + local100.name;
+								if (loc.ops[local218] != null) {
+									this.menuOption[this.menuSize] = loc.ops[local218] + " @cya@" + loc.name;
 									if (local218 == 0) {
 										this.menuAction[this.menuSize] = 285;
 									}
@@ -9147,14 +9156,17 @@ public final class Game extends GameShell {
 								}
 							}
 						}
-						this.menuOption[this.menuSize] = "Examine @cya@" + local100.name;
+						this.menuOption[this.menuSize] = "Examine @cya@" + loc.name;
+						if (this.showDebug) {
+							this.menuOption[this.menuSize] += "@whi@ (" + loc.index + ")";
+						}
 						this.menuAction[this.menuSize] = 1175;
 						this.menuParamC[this.menuSize] = local58;
 						this.menuParamA[this.menuSize] = local62;
 						this.menuParamB[this.menuSize] = local68;
 						this.menuSize++;
 					} else if ((this.activeSpellFlags & 0x4) == 4) {
-						this.menuOption[this.menuSize] = this.spellCaption + " @cya@" + local100.name;
+						this.menuOption[this.menuSize] = this.spellCaption + " @cya@" + loc.name;
 						this.menuAction[this.menuSize] = 55;
 						this.menuParamC[this.menuSize] = local58;
 						this.menuParamA[this.menuSize] = local62;
@@ -9197,9 +9209,9 @@ public final class Game extends GameShell {
 					@Pc(565) DoublyLinkedList local565 = this.levelObjStacks[this.currentLevel][local62][local68];
 					if (local565 != null) {
 						for (@Pc(572) ObjEntity local572 = (ObjEntity) local565.peekBack(); local572 != null; local572 = (ObjEntity) local565.next()) {
-							@Pc(578) ObjType local578 = ObjType.get(local572.index);
+							@Pc(578) ObjType obj = ObjType.get(local572.index);
 							if (this.objSelected == 1) {
-								this.menuOption[this.menuSize] = "Use " + this.objSelectedName + " with @lre@" + local578.name;
+								this.menuOption[this.menuSize] = "Use " + this.objSelectedName + " with @lre@" + obj.name;
 								this.menuAction[this.menuSize] = 217;
 								this.menuParamC[this.menuSize] = local572.index;
 								this.menuParamA[this.menuSize] = local62;
@@ -9207,8 +9219,8 @@ public final class Game extends GameShell {
 								this.menuSize++;
 							} else if (this.spellSelected != 1) {
 								for (@Pc(695) int local695 = 4; local695 >= 0; local695--) {
-									if (local578.ops != null && local578.ops[local695] != null) {
-										this.menuOption[this.menuSize] = local578.ops[local695] + " @lre@" + local578.name;
+									if (obj.ops != null && obj.ops[local695] != null) {
+										this.menuOption[this.menuSize] = obj.ops[local695] + " @lre@" + obj.name;
 										if (local695 == 0) {
 											this.menuAction[this.menuSize] = 224;
 										}
@@ -9229,7 +9241,7 @@ public final class Game extends GameShell {
 										this.menuParamB[this.menuSize] = local68;
 										this.menuSize++;
 									} else if (local695 == 2) {
-										this.menuOption[this.menuSize] = "Take @lre@" + local578.name;
+										this.menuOption[this.menuSize] = "Take @lre@" + obj.name;
 										this.menuAction[this.menuSize] = 99;
 										this.menuParamC[this.menuSize] = local572.index;
 										this.menuParamA[this.menuSize] = local62;
@@ -9237,14 +9249,17 @@ public final class Game extends GameShell {
 										this.menuSize++;
 									}
 								}
-								this.menuOption[this.menuSize] = "Examine @lre@" + local578.name;
+								this.menuOption[this.menuSize] = "Examine @lre@" + obj.name;
+								if (this.showDebug) {
+									this.menuOption[this.menuSize] += "@whi@ (" + obj.index + ")";
+								}
 								this.menuAction[this.menuSize] = 1102;
 								this.menuParamC[this.menuSize] = local572.index;
 								this.menuParamA[this.menuSize] = local62;
 								this.menuParamB[this.menuSize] = local68;
 								this.menuSize++;
 							} else if ((this.activeSpellFlags & 0x1) == 1) {
-								this.menuOption[this.menuSize] = this.spellCaption + " @lre@" + local578.name;
+								this.menuOption[this.menuSize] = this.spellCaption + " @lre@" + obj.name;
 								this.menuAction[this.menuSize] = 965;
 								this.menuParamC[this.menuSize] = local572.index;
 								this.menuParamA[this.menuSize] = local62;
