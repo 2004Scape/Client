@@ -1372,7 +1372,7 @@ public final class Game extends GameShell {
 
 	@OriginalMember(owner = "client!client", name = "a", descriptor = "(ZILjava/lang/String;I)V")
 	private void setMidi(@OriginalArg(1) int arg1, @OriginalArg(2) String arg2, @OriginalArg(3) int arg3) {
-		if (arg2 == null) {
+		if (arg2 == null || lowMemory) {
 			return;
 		}
 
@@ -4193,7 +4193,7 @@ public final class Game extends GameShell {
 			this.levelCollisionMap[local41].reset();
 		}
 		System.gc();
-		this.stopMidi();
+		this.setMidi(12345678, "scape_main", 40000);
 		this.currentMidi = null;
 		this.nextMusicDelay = 0;
 	}
