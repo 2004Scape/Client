@@ -5,7 +5,7 @@ import org.openrs2.deob.annotation.OriginalClass;
 import org.openrs2.deob.annotation.OriginalMember;
 
 @OriginalClass("client!o")
-public final class SceneTileUnderlay {
+public final class TileUnderlay {
 
 	@OriginalMember(owner = "client!o", name = "a", descriptor = "I")
 	public final int southwestColor;
@@ -29,7 +29,7 @@ public final class SceneTileUnderlay {
 	public final int rgb;
 
 	@OriginalMember(owner = "client!o", name = "<init>", descriptor = "(IIIIIIZ)V")
-	public SceneTileUnderlay(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2, @OriginalArg(3) int arg3, @OriginalArg(4) int arg4, @OriginalArg(5) int arg5, @OriginalArg(6) boolean arg6) {
+	public TileUnderlay(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2, @OriginalArg(3) int arg3, @OriginalArg(4) int arg4, @OriginalArg(5) int arg5, @OriginalArg(6) boolean arg6) {
 		this.southwestColor = arg0;
 		this.southeastColor = arg1;
 		this.northeastColor = arg2;

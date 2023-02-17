@@ -1753,8 +1753,8 @@ public final class Game extends GameShell {
 				local52 = arg1.g2();
 			}
 			if (local24 >= 0 && local31 >= 0 && local24 < 104 && local31 < 104) {
-				@Pc(69) SceneLocTemporary local69 = null;
-				for (@Pc(74) SceneLocTemporary local74 = (SceneLocTemporary) this.spawnedLocations.peekFront(); local74 != null; local74 = (SceneLocTemporary) this.spawnedLocations.prev()) {
+				@Pc(69) LocTemporary local69 = null;
+				for (@Pc(74) LocTemporary local74 = (LocTemporary) this.spawnedLocations.peekFront(); local74 != null; local74 = (LocTemporary) this.spawnedLocations.prev()) {
 					if (local74.plane == this.currentLevel && local74.x == local24 && local74.z == local31 && local74.classType == local47) {
 						local69 = local74;
 						break;
@@ -1783,7 +1783,7 @@ public final class Game extends GameShell {
 						local112 = local169 & 0x1F;
 						local114 = local169 >> 6;
 					}
-					local69 = new SceneLocTemporary();
+					local69 = new LocTemporary();
 					local69.plane = this.currentLevel;
 					local69.classType = local47;
 					local69.x = local24;
@@ -1943,9 +1943,9 @@ public final class Game extends GameShell {
 							local921 = this.players[local108];
 						}
 						if (local921 != null) {
-							@Pc(946) SceneLocSpawned local946 = new SceneLocSpawned(this.currentLevel, local42, local31, local572 + loopCycle, local38, -1, local24, local47);
+							@Pc(946) LocSpawned local946 = new LocSpawned(this.currentLevel, local42, local31, local572 + loopCycle, local38, -1, local24, local47);
 							this.temporaryLocs.pushBack(local946);
-							@Pc(966) SceneLocSpawned local966 = new SceneLocSpawned(this.currentLevel, local42, local31, local575 + loopCycle, local38, local52, local24, local47);
+							@Pc(966) LocSpawned local966 = new LocSpawned(this.currentLevel, local42, local31, local575 + loopCycle, local38, local52, local24, local47);
 							this.temporaryLocs.pushBack(local966);
 							@Pc(980) int local980 = this.levelHeightmap[this.currentLevel][local24][local31];
 							@Pc(992) int local992 = this.levelHeightmap[this.currentLevel][local24 + 1][local31];
@@ -2199,7 +2199,7 @@ public final class Game extends GameShell {
 	public void drawDebug() {
 		if (showOccluders) {
 			for (int i = 0; i < Scene.levelOccluderCount[Scene.topLevel]; i++) {
-				SceneOccluder occluder = Scene.levelOccluders[Scene.topLevel][i];
+				Occluder occluder = Scene.levelOccluders[Scene.topLevel][i];
 
 				boolean active = false;
 				for (int j = 0; j < Scene.activeOccluderCount; j++) {
@@ -3552,7 +3552,7 @@ public final class Game extends GameShell {
 			return;
 		}
 
-		for (@Pc(12) SceneLocSpawned local12 = (SceneLocSpawned) this.temporaryLocs.peekFront(); local12 != null; local12 = (SceneLocSpawned) this.temporaryLocs.prev()) {
+		for (@Pc(12) LocSpawned local12 = (LocSpawned) this.temporaryLocs.peekFront(); local12 != null; local12 = (LocSpawned) this.temporaryLocs.prev()) {
 			if (loopCycle >= local12.lastCycle) {
 				this.addLoc(local12.orientation, local12.x, local12.z, local12.classType, local12.locIndex, local12.type, local12.plane);
 				local12.unlink();
@@ -8739,7 +8739,7 @@ public final class Game extends GameShell {
 					this.sortObjStacks(local225, local157);
 				}
 			}
-			for (@Pc(361) SceneLocTemporary local361 = (SceneLocTemporary) this.spawnedLocations.peekFront(); local361 != null; local361 = (SceneLocTemporary) this.spawnedLocations.prev()) {
+			for (@Pc(361) LocTemporary local361 = (LocTemporary) this.spawnedLocations.peekFront(); local361 != null; local361 = (LocTemporary) this.spawnedLocations.prev()) {
 				this.addLoc(local361.orientation, local361.x, local361.z, local361.classType, local361.locIndex, local361.type, local361.plane);
 			}
 		} catch (@Pc(390) Exception local390) {
@@ -9749,7 +9749,7 @@ public final class Game extends GameShell {
 						}
 					}
 				}
-				for (@Pc(1066) SceneLocTemporary local1066 = (SceneLocTemporary) this.spawnedLocations.peekFront(); local1066 != null; local1066 = (SceneLocTemporary) this.spawnedLocations.prev()) {
+				for (@Pc(1066) LocTemporary local1066 = (LocTemporary) this.spawnedLocations.peekFront(); local1066 != null; local1066 = (LocTemporary) this.spawnedLocations.prev()) {
 					local1066.x -= local650;
 					local1066.z -= local321;
 					if (local1066.x < 0 || local1066.z < 0 || local1066.x >= 104 || local1066.z >= 104) {
@@ -10159,7 +10159,7 @@ public final class Game extends GameShell {
 						}
 					}
 				}
-				for (@Pc(2487) SceneLocTemporary local2487 = (SceneLocTemporary) this.spawnedLocations.peekFront(); local2487 != null; local2487 = (SceneLocTemporary) this.spawnedLocations.prev()) {
+				for (@Pc(2487) LocTemporary local2487 = (LocTemporary) this.spawnedLocations.peekFront(); local2487 != null; local2487 = (LocTemporary) this.spawnedLocations.prev()) {
 					if (local2487.x >= this.baseX && local2487.x < this.baseX + 8 && local2487.z >= this.baseZ && local2487.z < this.baseZ + 8 && local2487.plane == this.currentLevel) {
 						this.addLoc(local2487.lastOrientation, local2487.x, local2487.z, local2487.classType, local2487.lastLocIndex, local2487.lastType, local2487.plane);
 						local2487.unlink();

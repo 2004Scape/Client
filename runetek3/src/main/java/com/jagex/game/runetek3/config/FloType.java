@@ -61,6 +61,9 @@ public final class FloType {
 				instances[local23] = new FloType();
 			}
 			instances[local23].decode(local9);
+			// if (instances[local23].name.equals("mudfloor2")) {
+			// 	instances[local23].texture = 3;
+			// }
 		}
 	}
 

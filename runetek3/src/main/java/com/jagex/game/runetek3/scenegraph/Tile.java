@@ -6,7 +6,7 @@ import org.openrs2.deob.annotation.OriginalClass;
 import org.openrs2.deob.annotation.OriginalMember;
 
 @OriginalClass("client!cb")
-public final class SceneTile extends Node {
+public final class Tile extends Node {
 
 	@OriginalMember(owner = "client!cb", name = "e", descriptor = "I")
 	public int level;
@@ -21,28 +21,28 @@ public final class SceneTile extends Node {
 	public final int occludeLevel;
 
 	@OriginalMember(owner = "client!cb", name = "i", descriptor = "Lclient!o;")
-	public SceneTileUnderlay underlay;
+	public TileUnderlay underlay;
 
 	@OriginalMember(owner = "client!cb", name = "j", descriptor = "Lclient!i;")
-	public SceneTileOverlay overlay;
+	public TileOverlay overlay;
 
 	@OriginalMember(owner = "client!cb", name = "k", descriptor = "Lclient!q;")
-	public SceneWall wall;
+	public Wall wall;
 
 	@OriginalMember(owner = "client!cb", name = "l", descriptor = "Lclient!h;")
-	public SceneWallDecoration wallDecoration;
+	public WallDecoration wallDecoration;
 
 	@OriginalMember(owner = "client!cb", name = "m", descriptor = "Lclient!j;")
-	public SceneGroundDecoration groundDecoration;
+	public GroundDecoration groundDecoration;
 
 	@OriginalMember(owner = "client!cb", name = "n", descriptor = "Lclient!k;")
-	public SceneObjStack objStack;
+	public ObjStack objStack;
 
 	@OriginalMember(owner = "client!cb", name = "o", descriptor = "I")
 	public int locCount;
 
 	@OriginalMember(owner = "client!cb", name = "p", descriptor = "[Lclient!p;")
-	public final SceneLoc[] locs = new SceneLoc[5];
+	public final Loc[] locs = new Loc[5];
 
 	@OriginalMember(owner = "client!cb", name = "q", descriptor = "[I")
 	public final int[] locSpan = new int[5];
@@ -75,10 +75,10 @@ public final class SceneTile extends Node {
 	public int backWallTypes;
 
 	@OriginalMember(owner = "client!cb", name = "A", descriptor = "Lclient!cb;")
-	public SceneTile bridge;
+	public Tile bridge;
 
 	@OriginalMember(owner = "client!cb", name = "<init>", descriptor = "(III)V")
-	public SceneTile(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2) {
+	public Tile(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2) {
 		this.occludeLevel = this.level = arg0;
 		this.x = arg1;
 		this.z = arg2;

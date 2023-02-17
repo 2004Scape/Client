@@ -29,7 +29,7 @@ public final class Scene {
 	private final int[][][] levelHeightmaps;
 
 	@OriginalMember(owner = "client!r", name = "m", descriptor = "[[[Lclient!cb;")
-	private final SceneTile[][][] levelTiles;
+	private final Tile[][][] levelTiles;
 
 	@OriginalMember(owner = "client!r", name = "n", descriptor = "I")
 	private int minLevel;
@@ -38,7 +38,7 @@ public final class Scene {
 	private int temporaryLocCount;
 
 	@OriginalMember(owner = "client!r", name = "p", descriptor = "[Lclient!p;")
-	private final SceneLoc[] temporaryLocs = new SceneLoc[5000];
+	private final Loc[] temporaryLocs = new Loc[5000];
 
 	@OriginalMember(owner = "client!r", name = "q", descriptor = "[[[I")
 	private final int[][][] levelTileOcclusionCycles;
@@ -92,7 +92,7 @@ public final class Scene {
 	public static int cosEyeYaw;
 
 	@OriginalMember(owner = "client!r", name = "H", descriptor = "[Lclient!p;")
-	public static SceneLoc[] locBuffer = new SceneLoc[100];
+	public static Loc[] locBuffer = new Loc[100];
 
 	@OriginalMember(owner = "client!r", name = "I", descriptor = "[I")
 	public static final int[] WALL_DECORATION_INSET_X = new int[] { 53, -53, -53, 53 };
@@ -128,13 +128,13 @@ public final class Scene {
 	public static int[] levelOccluderCount = new int[LEVEL_COUNT];
 
 	@OriginalMember(owner = "client!r", name = "T", descriptor = "[[Lclient!m;")
-	public static SceneOccluder[][] levelOccluders = new SceneOccluder[LEVEL_COUNT][1000];
+	public static Occluder[][] levelOccluders = new Occluder[LEVEL_COUNT][1000];
 
 	@OriginalMember(owner = "client!r", name = "U", descriptor = "I")
 	public static int activeOccluderCount;
 
 	@OriginalMember(owner = "client!r", name = "V", descriptor = "[Lclient!m;")
-	public static final SceneOccluder[] activeOccluders = new SceneOccluder[500];
+	public static final Occluder[] activeOccluders = new Occluder[500];
 
 	@OriginalMember(owner = "client!r", name = "W", descriptor = "Lclient!ob;")
 	public static DoublyLinkedList drawTileQueue = new DoublyLinkedList();
@@ -206,7 +206,7 @@ public final class Scene {
 		this.maxLevel = arg3;
 		this.maxTileX = arg4;
 		this.maxTileZ = arg2;
-		this.levelTiles = new SceneTile[arg3][arg4][arg2];
+		this.levelTiles = new Tile[arg3][arg4][arg2];
 		this.levelTileOcclusionCycles = new int[arg3][arg4 + 1][arg2 + 1];
 		this.levelHeightmaps = arg1;
 		this.reset();
@@ -224,7 +224,7 @@ public final class Scene {
 
 	@OriginalMember(owner = "client!r", name = "a", descriptor = "(IIIIIIIII)V")
 	public static void addOccluder(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(3) int arg3, @OriginalArg(4) int arg4, @OriginalArg(5) int arg5, @OriginalArg(6) int arg6, @OriginalArg(7) int arg7, @OriginalArg(8) int arg8) {
-		@Pc(3) SceneOccluder local3 = new SceneOccluder();
+		@Pc(3) Occluder local3 = new Occluder();
 		local3.minTileX = arg1 / 128;
 		local3.maxTileX = arg5 / 128;
 		local3.minTileZ = arg8 / 128;
@@ -361,14 +361,14 @@ public final class Scene {
 		@Pc(10) int local10;
 		for (@Pc(6) int local6 = 0; local6 < this.maxTileX; local6++) {
 			for (local10 = 0; local10 < this.maxTileZ; local10++) {
-				this.levelTiles[arg1][local6][local10] = new SceneTile(arg1, local6, local10);
+				this.levelTiles[arg1][local6][local10] = new Tile(arg1, local6, local10);
 			}
 		}
 	}
 
 	@OriginalMember(owner = "client!r", name = "a", descriptor = "(IIB)V")
 	public void setBridge(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1) {
-		@Pc(10) SceneTile local10 = this.levelTiles[0][arg1][arg0];
+		@Pc(10) Tile local10 = this.levelTiles[0][arg1][arg0];
 		for (@Pc(12) int local12 = 0; local12 < 3; local12++) {
 			this.levelTiles[local12][arg1][arg0] = this.levelTiles[local12 + 1][arg1][arg0];
 			if (this.levelTiles[local12][arg1][arg0] != null) {
@@ -376,7 +376,7 @@ public final class Scene {
 			}
 		}
 		if (this.levelTiles[0][arg1][arg0] == null) {
-			this.levelTiles[0][arg1][arg0] = new SceneTile(0, arg1, arg0);
+			this.levelTiles[0][arg1][arg0] = new Tile(0, arg1, arg0);
 		}
 		this.levelTiles[0][arg1][arg0].bridge = local10;
 		this.levelTiles[3][arg1][arg0] = null;
@@ -384,7 +384,7 @@ public final class Scene {
 
 	@OriginalMember(owner = "client!r", name = "a", descriptor = "(IIII)V")
 	public void setDrawLevel(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2, @OriginalArg(3) int arg3) {
-		@Pc(8) SceneTile local8 = this.levelTiles[arg0][arg1][arg2];
+		@Pc(8) Tile local8 = this.levelTiles[arg0][arg1][arg2];
 		if (local8 != null) {
 			this.levelTiles[arg0][arg1][arg2].drawLevel = arg3;
 		}
@@ -392,29 +392,29 @@ public final class Scene {
 
 	@OriginalMember(owner = "client!r", name = "a", descriptor = "(IIIIIIIIIIIIIIIIIIII)V")
 	public void setTile(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2, @OriginalArg(3) int arg3, @OriginalArg(4) int arg4, @OriginalArg(5) int arg5, @OriginalArg(6) int arg6, @OriginalArg(7) int arg7, @OriginalArg(8) int arg8, @OriginalArg(9) int arg9, @OriginalArg(10) int arg10, @OriginalArg(11) int arg11, @OriginalArg(12) int arg12, @OriginalArg(13) int arg13, @OriginalArg(14) int arg14, @OriginalArg(15) int arg15, @OriginalArg(16) int arg16, @OriginalArg(17) int arg17, @OriginalArg(18) int arg18, @OriginalArg(19) int arg19) {
-		@Pc(14) SceneTileUnderlay local14;
+		@Pc(14) TileUnderlay local14;
 		@Pc(16) int local16;
 		if (arg3 == 0) {
-			local14 = new SceneTileUnderlay(arg10, arg11, arg12, arg13, -1, arg18, false);
+			local14 = new TileUnderlay(arg10, arg11, arg12, arg13, -1, arg18, false);
 			for (local16 = arg0; local16 >= 0; local16--) {
 				if (this.levelTiles[local16][arg1][arg2] == null) {
-					this.levelTiles[local16][arg1][arg2] = new SceneTile(local16, arg1, arg2);
+					this.levelTiles[local16][arg1][arg2] = new Tile(local16, arg1, arg2);
 				}
 			}
 			this.levelTiles[arg0][arg1][arg2].underlay = local14;
 		} else if (arg3 == 1) {
-			local14 = new SceneTileUnderlay(arg14, arg15, arg16, arg17, arg5, arg19, arg6 == arg7 && arg6 == arg8 && arg6 == arg9);
+			local14 = new TileUnderlay(arg14, arg15, arg16, arg17, arg5, arg19, arg6 == arg7 && arg6 == arg8 && arg6 == arg9);
 			for (local16 = arg0; local16 >= 0; local16--) {
 				if (this.levelTiles[local16][arg1][arg2] == null) {
-					this.levelTiles[local16][arg1][arg2] = new SceneTile(local16, arg1, arg2);
+					this.levelTiles[local16][arg1][arg2] = new Tile(local16, arg1, arg2);
 				}
 			}
 			this.levelTiles[arg0][arg1][arg2].underlay = local14;
 		} else {
-			@Pc(145) SceneTileOverlay local145 = new SceneTileOverlay(arg1, arg3, arg15, arg7, arg12, arg4, arg10, arg9, arg19, arg14, arg5, arg17, arg18, arg8, arg16, arg13, arg6, arg2, arg11);
+			@Pc(145) TileOverlay local145 = new TileOverlay(arg1, arg3, arg15, arg7, arg12, arg4, arg10, arg9, arg19, arg14, arg5, arg17, arg18, arg8, arg16, arg13, arg6, arg2, arg11);
 			for (local16 = arg0; local16 >= 0; local16--) {
 				if (this.levelTiles[local16][arg1][arg2] == null) {
-					this.levelTiles[local16][arg1][arg2] = new SceneTile(local16, arg1, arg2);
+					this.levelTiles[local16][arg1][arg2] = new Tile(local16, arg1, arg2);
 				}
 			}
 			this.levelTiles[arg0][arg1][arg2].overlay = local145;
@@ -423,7 +423,7 @@ public final class Scene {
 
 	@OriginalMember(owner = "client!r", name = "a", descriptor = "(Lclient!eb;BIIIIBI)V")
 	public void addGroundDecoration(@OriginalArg(0) Model arg0, @OriginalArg(2) int arg2, @OriginalArg(3) int arg3, @OriginalArg(4) int arg4, @OriginalArg(5) int arg5, @OriginalArg(6) byte arg6, @OriginalArg(7) int arg7) {
-		@Pc(3) SceneGroundDecoration local3 = new SceneGroundDecoration();
+		@Pc(3) GroundDecoration local3 = new GroundDecoration();
 		local3.model = arg0;
 		local3.x = arg2 * 128 + 64;
 		local3.z = arg4 * 128 + 64;
@@ -431,14 +431,14 @@ public final class Scene {
 		local3.bitset = arg3;
 		local3.info = arg6;
 		if (this.levelTiles[arg5][arg2][arg4] == null) {
-			this.levelTiles[arg5][arg2][arg4] = new SceneTile(arg5, arg2, arg4);
+			this.levelTiles[arg5][arg2][arg4] = new Tile(arg5, arg2, arg4);
 		}
 		this.levelTiles[arg5][arg2][arg4].groundDecoration = local3;
 	}
 
 	@OriginalMember(owner = "client!r", name = "a", descriptor = "(Lclient!eb;Lclient!eb;IIIIILclient!eb;I)V")
 	public void addObjStack(@OriginalArg(0) Model arg0, @OriginalArg(1) Model arg1, @OriginalArg(2) int arg2, @OriginalArg(3) int arg3, @OriginalArg(4) int arg4, @OriginalArg(5) int arg5, @OriginalArg(6) int arg6, @OriginalArg(7) Model arg7) {
-		@Pc(3) SceneObjStack local3 = new SceneObjStack();
+		@Pc(3) ObjStack local3 = new ObjStack();
 		local3.topObj = arg0;
 		local3.x = arg6 * 128 + 64;
 		local3.z = arg5 * 128 + 64;
@@ -447,7 +447,7 @@ public final class Scene {
 		local3.middleObj = arg1;
 		local3.bottomObj = arg7;
 		@Pc(38) int local38 = 0;
-		@Pc(47) SceneTile local47 = this.levelTiles[arg3][arg6][arg5];
+		@Pc(47) Tile local47 = this.levelTiles[arg3][arg6][arg5];
 		if (local47 != null) {
 			for (@Pc(51) int local51 = 0; local51 < local47.locCount; local51++) {
 				@Pc(60) int local60 = local47.locs[local51].model.objRaise;
@@ -458,7 +458,7 @@ public final class Scene {
 		}
 		local3.offset = local38;
 		if (this.levelTiles[arg3][arg6][arg5] == null) {
-			this.levelTiles[arg3][arg6][arg5] = new SceneTile(arg3, arg6, arg5);
+			this.levelTiles[arg3][arg6][arg5] = new Tile(arg3, arg6, arg5);
 		}
 		this.levelTiles[arg3][arg6][arg5].objStack = local3;
 	}
@@ -466,7 +466,7 @@ public final class Scene {
 	@OriginalMember(owner = "client!r", name = "a", descriptor = "(IIIIILclient!eb;Lclient!eb;IIIB)V")
 	public void addWall(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2, @OriginalArg(3) int arg3, @OriginalArg(5) Model arg5, @OriginalArg(6) Model arg6, @OriginalArg(7) int arg7, @OriginalArg(8) int arg8, @OriginalArg(9) int arg9, @OriginalArg(10) byte arg10) {
 		if (arg5 != null || arg6 != null) {
-			@Pc(8) SceneWall local8 = new SceneWall();
+			@Pc(8) Wall local8 = new Wall();
 			local8.bitset = arg8;
 			local8.info = arg10;
 			local8.x = arg7 * 128 + 64;
@@ -478,7 +478,7 @@ public final class Scene {
 			local8.typeB = arg0;
 			for (@Pc(54) int local54 = arg2; local54 >= 0; local54--) {
 				if (this.levelTiles[local54][arg7][arg9] == null) {
-					this.levelTiles[local54][arg7][arg9] = new SceneTile(local54, arg7, arg9);
+					this.levelTiles[local54][arg7][arg9] = new Tile(local54, arg7, arg9);
 				}
 			}
 			this.levelTiles[arg2][arg7][arg9].wall = local8;
@@ -488,7 +488,7 @@ public final class Scene {
 	@OriginalMember(owner = "client!r", name = "a", descriptor = "(IIIIIIIIILclient!eb;BI)V")
 	public void setWallDecoration(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2, @OriginalArg(3) int arg3, @OriginalArg(4) int arg4, @OriginalArg(5) int arg5, @OriginalArg(7) int arg7, @OriginalArg(8) int arg8, @OriginalArg(9) Model arg9, @OriginalArg(10) byte arg10, @OriginalArg(11) int arg11) {
 		if (arg9 != null) {
-			@Pc(10) SceneWallDecoration local10 = new SceneWallDecoration();
+			@Pc(10) WallDecoration local10 = new WallDecoration();
 			local10.bitset = arg3;
 			local10.info = arg10;
 			local10.x = arg8 * 128 + arg7 + 64;
@@ -499,7 +499,7 @@ public final class Scene {
 			local10.orientation = arg4;
 			for (@Pc(48) int local48 = arg11; local48 >= 0; local48--) {
 				if (this.levelTiles[local48][arg8][arg1] == null) {
-					this.levelTiles[local48][arg8][arg1] = new SceneTile(local48, arg8, arg1);
+					this.levelTiles[local48][arg8][arg1] = new Tile(local48, arg8, arg1);
 				}
 			}
 			this.levelTiles[arg11][arg8][arg1].wallDecoration = local10;
@@ -562,13 +562,13 @@ public final class Scene {
 				if (local9 < 0 || local13 < 0 || local9 >= this.maxTileX || local13 >= this.maxTileZ) {
 					return false;
 				}
-				@Pc(38) SceneTile local38 = this.levelTiles[arg0][local9][local13];
+				@Pc(38) Tile local38 = this.levelTiles[arg0][local9][local13];
 				if (local38 != null && local38.locCount >= 5) {
 					return false;
 				}
 			}
 		}
-		@Pc(62) SceneLoc local62 = new SceneLoc();
+		@Pc(62) Loc local62 = new Loc();
 		local62.bitset = arg12;
 		local62.info = arg13;
 		local62.level = arg0;
@@ -599,10 +599,10 @@ public final class Scene {
 				}
 				for (@Pc(145) int local145 = arg0; local145 >= 0; local145--) {
 					if (this.levelTiles[local145][local111][local115] == null) {
-						this.levelTiles[local145][local111][local115] = new SceneTile(local145, local111, local115);
+						this.levelTiles[local145][local111][local115] = new Tile(local145, local111, local115);
 					}
 				}
-				@Pc(182) SceneTile local182 = this.levelTiles[arg0][local111][local115];
+				@Pc(182) Tile local182 = this.levelTiles[arg0][local111][local115];
 				local182.locs[local182.locCount] = local62;
 				local182.locSpan[local182.locCount] = local119;
 				local182.locSpans |= local119;
@@ -618,7 +618,7 @@ public final class Scene {
 	@OriginalMember(owner = "client!r", name = "b", descriptor = "(I)V")
 	public void clearTemporaryLocs() {
 		for (@Pc(1) int local1 = 0; local1 < this.temporaryLocCount; local1++) {
-			@Pc(8) SceneLoc local8 = this.temporaryLocs[local1];
+			@Pc(8) Loc local8 = this.temporaryLocs[local1];
 			this.removeLoc(local8);
 			this.temporaryLocs[local1] = null;
 		}
@@ -626,10 +626,10 @@ public final class Scene {
 	}
 
 	@OriginalMember(owner = "client!r", name = "a", descriptor = "(Lclient!p;B)V")
-	private void removeLoc(@OriginalArg(0) SceneLoc arg0) {
+	private void removeLoc(@OriginalArg(0) Loc arg0) {
 		for (@Pc(4) int local4 = arg0.minSceneTileX; local4 <= arg0.maxSceneTileX; local4++) {
 			for (@Pc(9) int local9 = arg0.minSceneTileZ; local9 <= arg0.maxSceneTileZ; local9++) {
-				@Pc(21) SceneTile local21 = this.levelTiles[arg0.level][local4][local9];
+				@Pc(21) Tile local21 = this.levelTiles[arg0.level][local4][local9];
 				if (local21 != null) {
 					@Pc(41) int local41;
 					for (@Pc(25) int local25 = 0; local25 < local21.locCount; local25++) {
@@ -655,11 +655,11 @@ public final class Scene {
 	@OriginalMember(owner = "client!r", name = "a", descriptor = "(ILclient!eb;III)V")
 	public void setLocModel(@OriginalArg(0) int arg0, @OriginalArg(1) Model arg1, @OriginalArg(3) int arg3, @OriginalArg(4) int arg4) {
 		if (arg1 != null) {
-			@Pc(13) SceneTile local13 = this.levelTiles[arg3][arg0][arg4];
+			@Pc(13) Tile local13 = this.levelTiles[arg3][arg0][arg4];
 			@Pc(21) int local21;
 			if (local13 != null) {
 				for (local21 = 0; local21 < local13.locCount; local21++) {
-					@Pc(38) SceneLoc local38 = local13.locs[local21];
+					@Pc(38) Loc local38 = local13.locs[local21];
 					if ((local38.bitset >> 29 & 0x3) == 2) {
 						local38.model = arg1;
 						return;
@@ -671,9 +671,9 @@ public final class Scene {
 
 	@OriginalMember(owner = "client!r", name = "a", descriptor = "(IIIIB)V")
 	public void setWallDecorationOffset(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2, @OriginalArg(3) int arg3) {
-		@Pc(8) SceneTile local8 = this.levelTiles[arg0][arg2][arg1];
+		@Pc(8) Tile local8 = this.levelTiles[arg0][arg2][arg1];
 		if (local8 != null) {
-			@Pc(24) SceneWallDecoration local24 = local8.wallDecoration;
+			@Pc(24) WallDecoration local24 = local8.wallDecoration;
 			if (local24 != null) {
 				@Pc(33) int local33 = arg2 * 128 + 64;
 				@Pc(39) int local39 = arg1 * 128 + 64;
@@ -686,9 +686,9 @@ public final class Scene {
 	@OriginalMember(owner = "client!r", name = "a", descriptor = "(IIILclient!eb;I)V")
 	public void setWallDecorationModel(@OriginalArg(1) int arg1, @OriginalArg(2) int arg2, @OriginalArg(3) Model arg3, @OriginalArg(4) int arg4) {
 		if (arg3 != null) {
-			@Pc(15) SceneTile local15 = this.levelTiles[arg4][arg2][arg1];
+			@Pc(15) Tile local15 = this.levelTiles[arg4][arg2][arg1];
 			if (local15 != null) {
-				@Pc(21) SceneWallDecoration local21 = local15.wallDecoration;
+				@Pc(21) WallDecoration local21 = local15.wallDecoration;
 				if (local21 != null) {
 					local21.model = arg3;
 				}
@@ -699,9 +699,9 @@ public final class Scene {
 	@OriginalMember(owner = "client!r", name = "a", descriptor = "(Lclient!eb;IIII)V")
 	public void setGroundDecorationModel(@OriginalArg(0) Model arg0, @OriginalArg(1) int arg1, @OriginalArg(3) int arg3, @OriginalArg(4) int arg4) {
 		if (arg0 != null) {
-			@Pc(15) SceneTile local15 = this.levelTiles[arg4][arg3][arg1];
+			@Pc(15) Tile local15 = this.levelTiles[arg4][arg3][arg1];
 			if (local15 != null) {
-				@Pc(21) SceneGroundDecoration local21 = local15.groundDecoration;
+				@Pc(21) GroundDecoration local21 = local15.groundDecoration;
 				if (local21 != null) {
 					local21.model = arg0;
 				}
@@ -712,9 +712,9 @@ public final class Scene {
 	@OriginalMember(owner = "client!r", name = "b", descriptor = "(ILclient!eb;III)V")
 	public void setWallModel(@OriginalArg(1) Model arg1, @OriginalArg(2) int arg2, @OriginalArg(3) int arg3, @OriginalArg(4) int arg4) {
 		if (arg1 != null) {
-			@Pc(21) SceneTile local21 = this.levelTiles[arg4][arg3][arg2];
+			@Pc(21) Tile local21 = this.levelTiles[arg4][arg3][arg2];
 			if (local21 != null) {
-				@Pc(27) SceneWall local27 = local21.wall;
+				@Pc(27) Wall local27 = local21.wall;
 				if (local27 != null) {
 					local27.modelA = arg1;
 				}
@@ -725,9 +725,9 @@ public final class Scene {
 	@OriginalMember(owner = "client!r", name = "a", descriptor = "(Lclient!eb;Lclient!eb;IZII)V")
 	public void setWallModels(@OriginalArg(0) Model arg0, @OriginalArg(1) Model arg1, @OriginalArg(2) int arg2, @OriginalArg(4) int arg4, @OriginalArg(5) int arg5) {
 		if (arg0 != null) {
-			@Pc(11) SceneTile local11 = this.levelTiles[arg5][arg4][arg2];
+			@Pc(11) Tile local11 = this.levelTiles[arg5][arg4][arg2];
 			if (local11 != null) {
-				@Pc(17) SceneWall local17 = local11.wall;
+				@Pc(17) Wall local17 = local11.wall;
 				if (local17 != null) {
 					local17.modelA = arg0;
 					local17.modelB = arg1;
@@ -738,7 +738,7 @@ public final class Scene {
 
 	@OriginalMember(owner = "client!r", name = "b", descriptor = "(IIII)V")
 	public void removeWall(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2, @OriginalArg(3) int arg3) {
-		@Pc(8) SceneTile local8 = this.levelTiles[arg1][arg0][arg2];
+		@Pc(8) Tile local8 = this.levelTiles[arg1][arg0][arg2];
 		if (arg3 == 1 && local8 != null) {
 			local8.wall = null;
 		}
@@ -746,7 +746,7 @@ public final class Scene {
 
 	@OriginalMember(owner = "client!r", name = "c", descriptor = "(IIII)V")
 	public void removeWallDecoration(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(3) int arg3) {
-		@Pc(8) SceneTile local8 = this.levelTiles[arg0][arg3][arg1];
+		@Pc(8) Tile local8 = this.levelTiles[arg0][arg3][arg1];
 		if (local8 != null) {
 			local8.wallDecoration = null;
 		}
@@ -754,10 +754,10 @@ public final class Scene {
 
 	@OriginalMember(owner = "client!r", name = "d", descriptor = "(IIII)V")
 	public void removeLoc(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(3) int arg3) {
-		@Pc(10) SceneTile local10 = this.levelTiles[arg3][arg0][arg1];
+		@Pc(10) Tile local10 = this.levelTiles[arg3][arg0][arg1];
 		if (local10 != null) {
 			for (@Pc(15) int local15 = 0; local15 < local10.locCount; local15++) {
-				@Pc(22) SceneLoc local22 = local10.locs[local15];
+				@Pc(22) Loc local22 = local10.locs[local15];
 				if ((local22.bitset >> 29 & 0x3) == 2 && local22.minSceneTileX == arg0 && local22.minSceneTileZ == arg1) {
 					this.removeLoc(local22);
 					return;
@@ -768,7 +768,7 @@ public final class Scene {
 
 	@OriginalMember(owner = "client!r", name = "e", descriptor = "(IIII)V")
 	public void removeGroundDecoration(@OriginalArg(0) int arg0, @OriginalArg(2) int arg2, @OriginalArg(3) int arg3) {
-		@Pc(16) SceneTile local16 = this.levelTiles[arg0][arg2][arg3];
+		@Pc(16) Tile local16 = this.levelTiles[arg0][arg2][arg3];
 		if (local16 != null) {
 			local16.groundDecoration = null;
 		}
@@ -776,7 +776,7 @@ public final class Scene {
 
 	@OriginalMember(owner = "client!r", name = "a", descriptor = "(III)V")
 	public void removeObjStack(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2) {
-		@Pc(8) SceneTile local8 = this.levelTiles[arg0][arg1][arg2];
+		@Pc(8) Tile local8 = this.levelTiles[arg0][arg1][arg2];
 		if (local8 != null) {
 			local8.objStack = null;
 		}
@@ -784,24 +784,24 @@ public final class Scene {
 
 	@OriginalMember(owner = "client!r", name = "b", descriptor = "(III)I")
 	public int getWallBitset(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2) {
-		@Pc(8) SceneTile local8 = this.levelTiles[arg0][arg1][arg2];
+		@Pc(8) Tile local8 = this.levelTiles[arg0][arg1][arg2];
 		return local8 == null || local8.wall == null ? 0 : local8.wall.bitset;
 	}
 
 	@OriginalMember(owner = "client!r", name = "f", descriptor = "(IIII)I")
 	public int getWallDecorationBitset(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(3) int arg3) {
-		@Pc(19) SceneTile local19 = this.levelTiles[arg0][arg3][arg1];
+		@Pc(19) Tile local19 = this.levelTiles[arg0][arg3][arg1];
 		return local19 == null || local19.wallDecoration == null ? 0 : local19.wallDecoration.bitset;
 	}
 
 	@OriginalMember(owner = "client!r", name = "c", descriptor = "(III)I")
 	public int getLocBitset(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2) {
-		@Pc(8) SceneTile local8 = this.levelTiles[arg0][arg1][arg2];
+		@Pc(8) Tile local8 = this.levelTiles[arg0][arg1][arg2];
 		if (local8 == null) {
 			return 0;
 		}
 		for (@Pc(14) int local14 = 0; local14 < local8.locCount; local14++) {
-			@Pc(21) SceneLoc local21 = local8.locs[local14];
+			@Pc(21) Loc local21 = local8.locs[local14];
 			if ((local21.bitset >> 29 & 0x3) == 2 && local21.minSceneTileX == arg1 && local21.minSceneTileZ == arg2) {
 				return local21.bitset;
 			}
@@ -811,13 +811,13 @@ public final class Scene {
 
 	@OriginalMember(owner = "client!r", name = "d", descriptor = "(III)I")
 	public int getGroundDecorationBitset(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2) {
-		@Pc(8) SceneTile local8 = this.levelTiles[arg0][arg1][arg2];
+		@Pc(8) Tile local8 = this.levelTiles[arg0][arg1][arg2];
 		return local8 == null || local8.groundDecoration == null ? 0 : local8.groundDecoration.bitset;
 	}
 
 	@OriginalMember(owner = "client!r", name = "g", descriptor = "(IIII)I")
 	public int getInfo(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2, @OriginalArg(3) int arg3) {
-		@Pc(8) SceneTile local8 = this.levelTiles[arg0][arg1][arg2];
+		@Pc(8) Tile local8 = this.levelTiles[arg0][arg1][arg2];
 		if (local8 == null) {
 			return -1;
 		} else if (local8.wall != null && local8.wall.bitset == arg3) {
@@ -843,9 +843,9 @@ public final class Scene {
 		for (@Pc(28) int local28 = 0; local28 < this.maxLevel; local28++) {
 			for (@Pc(32) int local32 = 0; local32 < this.maxTileX; local32++) {
 				for (@Pc(36) int local36 = 0; local36 < this.maxTileZ; local36++) {
-					@Pc(47) SceneTile local47 = this.levelTiles[local28][local32][local36];
+					@Pc(47) Tile local47 = this.levelTiles[local28][local32][local36];
 					if (local47 != null) {
-						@Pc(52) SceneWall local52 = local47.wall;
+						@Pc(52) Wall local52 = local47.wall;
 						if (local52 != null && local52.modelA != null && local52.modelA.vertexNormal != null) {
 							this.mergeLocNormals(local32, 1, 1, local28, local52.modelA, local36);
 							if (local52.modelB != null && local52.modelB.vertexNormal != null) {
@@ -856,13 +856,13 @@ public final class Scene {
 							local52.modelA.applyLighting(arg1, local26, arg2, arg0, arg4);
 						}
 						for (@Pc(116) int local116 = 0; local116 < local47.locCount; local116++) {
-							@Pc(123) SceneLoc local123 = local47.locs[local116];
+							@Pc(123) Loc local123 = local47.locs[local116];
 							if (local123 != null && local123.model != null && local123.model.vertexNormal != null) {
 								this.mergeLocNormals(local32, local123.maxSceneTileX + 1 - local123.minSceneTileX, local123.maxSceneTileZ - local123.minSceneTileZ + 1, local28, local123.model, local36);
 								local123.model.applyLighting(arg1, local26, arg2, arg0, arg4);
 							}
 						}
-						@Pc(170) SceneGroundDecoration local170 = local47.groundDecoration;
+						@Pc(170) GroundDecoration local170 = local47.groundDecoration;
 						if (local170 != null && local170.model.vertexNormal != null) {
 							this.mergeGroundDecorationNormals(local28, local36, local170.model, local32);
 							local170.model.applyLighting(arg1, local26, arg2, arg0, arg4);
@@ -875,7 +875,7 @@ public final class Scene {
 
 	@OriginalMember(owner = "client!r", name = "a", descriptor = "(BIILclient!eb;I)V")
 	private void mergeGroundDecorationNormals(@OriginalArg(1) int arg1, @OriginalArg(2) int arg2, @OriginalArg(3) Model arg3, @OriginalArg(4) int arg4) {
-		@Pc(19) SceneTile local19;
+		@Pc(19) Tile local19;
 		if (arg4 < this.maxTileX) {
 			local19 = this.levelTiles[arg1][arg4 + 1][arg2];
 			if (local19 != null && local19.groundDecoration != null && local19.groundDecoration.model.vertexNormal != null) {
@@ -915,10 +915,10 @@ public final class Scene {
 					if (local31 >= 0 && local31 < this.maxTileX) {
 						for (@Pc(42) int local42 = local17; local42 <= local21; local42++) {
 							if (local42 >= 0 && local42 < this.maxTileZ && (!local7 || local31 >= local13 || local42 >= local21 || local42 < arg6 && local31 != arg0)) {
-								@Pc(75) SceneTile local75 = this.levelTiles[local23][local31][local42];
+								@Pc(75) Tile local75 = this.levelTiles[local23][local31][local42];
 								if (local75 != null) {
 									@Pc(169) int local169 = (this.levelHeightmaps[local23][local31][local42] + this.levelHeightmaps[local23][local31 + 1][local42] + this.levelHeightmaps[local23][local31][local42 + 1] + this.levelHeightmaps[local23][local31 + 1][local42 + 1]) / 4 - (this.levelHeightmaps[arg3][arg0][arg6] + this.levelHeightmaps[arg3][arg0 + 1][arg6] + this.levelHeightmaps[arg3][arg0][arg6 + 1] + this.levelHeightmaps[arg3][arg0 + 1][arg6 + 1]) / 4;
-									@Pc(172) SceneWall local172 = local75.wall;
+									@Pc(172) Wall local172 = local75.wall;
 									if (local172 != null && local172.modelA != null && local172.modelA.vertexNormal != null) {
 										this.mergeNormals(arg5, local172.modelA, (local31 - arg0) * 128 + (1 - arg1) * 64, local169, (local42 - arg6) * 128 + (1 - arg2) * 64, local7);
 									}
@@ -926,7 +926,7 @@ public final class Scene {
 										this.mergeNormals(arg5, local172.modelB, (local31 - arg0) * 128 + (1 - arg1) * 64, local169, (local42 - arg6) * 128 + (1 - arg2) * 64, local7);
 									}
 									for (@Pc(250) int local250 = 0; local250 < local75.locCount; local250++) {
-										@Pc(257) SceneLoc local257 = local75.locs[local250];
+										@Pc(257) Loc local257 = local75.locs[local250];
 										if (local257 != null && local257.model != null && local257.model.vertexNormal != null) {
 											@Pc(274) int local274 = local257.maxSceneTileX + 1 - local257.minSceneTileX;
 											@Pc(282) int local282 = local257.maxSceneTileZ + 1 - local257.minSceneTileZ;
@@ -999,11 +999,11 @@ public final class Scene {
 
 	@OriginalMember(owner = "client!r", name = "a", descriptor = "([IIIIII)V")
 	public void drawMinimapTile(@OriginalArg(0) int[] arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2, @OriginalArg(3) int arg3, @OriginalArg(4) int arg4, @OriginalArg(5) int arg5) {
-		@Pc(10) SceneTile local10 = this.levelTiles[arg3][arg4][arg5];
+		@Pc(10) Tile local10 = this.levelTiles[arg3][arg4][arg5];
 		if (local10 == null) {
 			return;
 		}
-		@Pc(16) SceneTileUnderlay local16 = local10.underlay;
+		@Pc(16) TileUnderlay local16 = local10.underlay;
 		@Pc(26) int local26;
 		if (local16 != null) {
 			@Pc(21) int local21 = local16.rgb;
@@ -1018,7 +1018,7 @@ public final class Scene {
 			}
 			return;
 		}
-		@Pc(62) SceneTileOverlay local62 = local10.overlay;
+		@Pc(62) TileOverlay local62 = local10.overlay;
 		if (local62 == null) {
 			return;
 		}
@@ -1111,10 +1111,10 @@ public final class Scene {
 		@Pc(147) int local147;
 		@Pc(151) int local151;
 		for (@Pc(138) int local138 = this.minLevel; local138 < this.maxLevel; local138++) {
-			@Pc(145) SceneTile[][] local145 = this.levelTiles[local138];
+			@Pc(145) Tile[][] local145 = this.levelTiles[local138];
 			for (local147 = minDrawTileX; local147 < maxDrawTileX; local147++) {
 				for (local151 = minDrawTileZ; local151 < maxDrawTileZ; local151++) {
-					@Pc(159) SceneTile local159 = local145[local147][local151];
+					@Pc(159) Tile local159 = local145[local147][local151];
 					if (local159 != null) {
 						if (local159.drawLevel <= arg2 && (visibilityMap[local147 + 25 - eyeTileX][local151 + 25 - eyeTileZ] || this.levelHeightmaps[local138][local147][local151] - arg4 >= 2000)) {
 							local159.visible = true;
@@ -1140,7 +1140,7 @@ public final class Scene {
 		@Pc(276) int local276;
 		@Pc(254) int local254;
 		for (@Pc(239) int local239 = this.minLevel; local239 < this.maxLevel; local239++) {
-			@Pc(246) SceneTile[][] local246 = this.levelTiles[local239];
+			@Pc(246) Tile[][] local246 = this.levelTiles[local239];
 			for (local151 = -25; local151 <= 0; local151++) {
 				local254 = eyeTileX + local151;
 				local258 = eyeTileX - local151;
@@ -1148,7 +1148,7 @@ public final class Scene {
 					for (local266 = -25; local266 <= 0; local266++) {
 						local272 = eyeTileZ + local266;
 						local276 = eyeTileZ - local266;
-						@Pc(288) SceneTile local288;
+						@Pc(288) Tile local288;
 						if (local254 >= minDrawTileX) {
 							if (local272 >= minDrawTileZ) {
 								local288 = local246[local254][local272];
@@ -1186,7 +1186,7 @@ public final class Scene {
 			}
 		}
 		for (local147 = this.minLevel; local147 < this.maxLevel; local147++) {
-			@Pc(380) SceneTile[][] local380 = this.levelTiles[local147];
+			@Pc(380) Tile[][] local380 = this.levelTiles[local147];
 			for (local254 = -25; local254 <= 0; local254++) {
 				local258 = eyeTileX + local254;
 				local266 = eyeTileX - local254;
@@ -1194,7 +1194,7 @@ public final class Scene {
 					for (local272 = -25; local272 <= 0; local272++) {
 						local276 = eyeTileZ + local272;
 						@Pc(410) int local410 = eyeTileZ - local272;
-						@Pc(422) SceneTile local422;
+						@Pc(422) Tile local422;
 						if (local258 >= minDrawTileX) {
 							if (local276 >= minDrawTileZ) {
 								local422 = local380[local258][local276];
@@ -1234,23 +1234,23 @@ public final class Scene {
 	}
 
 	@OriginalMember(owner = "client!r", name = "a", descriptor = "(Lclient!cb;Z)V")
-	private void drawTile(@OriginalArg(0) SceneTile arg0, @OriginalArg(1) boolean arg1, int loopCycle) {
+	private void drawTile(@OriginalArg(0) Tile arg0, @OriginalArg(1) boolean arg1, int loopCycle) {
 		drawTileQueue.pushBack(arg0);
 		while (true) {
-			@Pc(8) SceneTile local8;
+			@Pc(8) Tile local8;
 			@Pc(17) int local17;
 			@Pc(20) int local20;
 			@Pc(23) int local23;
 			@Pc(26) int local26;
-			@Pc(31) SceneTile[][] local31;
-			@Pc(49) SceneTile local49;
+			@Pc(31) Tile[][] local31;
+			@Pc(49) Tile local49;
 			@Pc(253) int local253;
 			@Pc(599) int local599;
 			@Pc(604) int local604;
 			@Pc(609) int local609;
 			@Pc(612) int local612;
 			@Pc(621) int local621;
-			@Pc(963) SceneWall local963;
+			@Pc(963) Wall local963;
 			@Pc(1144) int local1144;
 			@Pc(1023) int local1023;
 			do {
@@ -1260,13 +1260,13 @@ public final class Scene {
 							do {
 								do {
 									while (true) {
-										@Pc(260) SceneLoc var12;
+										@Pc(260) Loc var12;
 										@Pc(349) int var22;
 										@Pc(301) boolean var23;
-										@Pc(846) SceneTile var35;
+										@Pc(846) Tile var35;
 										while (true) {
 											do {
-												local8 = (SceneTile) drawTileQueue.pollFront();
+												local8 = (Tile) drawTileQueue.pollFront();
 												if (local8 == null) {
 													return;
 												}
@@ -1323,7 +1323,7 @@ public final class Scene {
 												} else if (!this.tileVisible(0, local17, local20)) {
 													this.drawTileUnderlay(local49.underlay, 0, sinEyePitch, cosEyePitch, sinEyeYaw, cosEyeYaw, local17, local20);
 												}
-												@Pc(227) SceneWall local227 = local49.wall;
+												@Pc(227) Wall local227 = local49.wall;
 												if (local227 != null) {
 													local227.modelA.draw(0, sinEyePitch, cosEyePitch, sinEyeYaw, cosEyeYaw, local227.x - eyeX, local227.y - eyeY, local227.z - eyeZ, local227.bitset);
 												}
@@ -1350,8 +1350,8 @@ public final class Scene {
 											}
 											var22 = 0;
 											local253 = 0;
-											@Pc(354) SceneWall local354 = local8.wall;
-											@Pc(357) SceneWallDecoration local357 = local8.wallDecoration;
+											@Pc(354) Wall local354 = local8.wall;
+											@Pc(357) WallDecoration local357 = local8.wallDecoration;
 											if (local354 != null || local357 != null) {
 												if (eyeTileX == local17) {
 													var22++;
@@ -1427,11 +1427,11 @@ public final class Scene {
 												}
 											}
 											if (var23) {
-												@Pc(719) SceneGroundDecoration local719 = local8.groundDecoration;
+												@Pc(719) GroundDecoration local719 = local8.groundDecoration;
 												if (local719 != null) {
 													local719.model.draw(0, sinEyePitch, cosEyePitch, sinEyeYaw, cosEyeYaw, local719.x - eyeX, local719.y - eyeY, local719.z - eyeZ, local719.bitset);
 												}
-												@Pc(746) SceneObjStack local746 = local8.objStack;
+												@Pc(746) ObjStack local746 = local8.objStack;
 												if (local746 != null && local746.offset == 0) {
 													if (local746.middleObj != null) {
 														local746.middleObj.draw(0, sinEyePitch, cosEyePitch, sinEyeYaw, cosEyeYaw, local746.x - eyeX, local746.y - eyeY, local746.z - eyeZ, local746.bitset);
@@ -1544,7 +1544,7 @@ public final class Scene {
 										while (var22 > 0) {
 											local1144 = -50;
 											local1023 = -1;
-											@Pc(1154) SceneLoc local1154;
+											@Pc(1154) Loc local1154;
 											for (local599 = 0; local599 < var22; local599++) {
 												local1154 = locBuffer[local599];
 												if (local1154.distance > local1144 && local1154.cycle != cycle) {
@@ -1566,7 +1566,7 @@ public final class Scene {
 											}
 											for (local612 = local1154.minSceneTileX; local612 <= local1154.maxSceneTileX; local612++) {
 												for (local621 = local1154.minSceneTileZ; local621 <= local1154.maxSceneTileZ; local621++) {
-													@Pc(1243) SceneTile local1243 = local31[local612][local621];
+													@Pc(1243) Tile local1243 = local31[local612][local621];
 													if (local1243.checkLocSpans != 0) {
 														drawTileQueue.pushBack(local1243);
 													} else if ((local612 != local17 || local621 != local20) && local1243.update) {
@@ -1603,7 +1603,7 @@ public final class Scene {
 			} while (local49 != null && local49.update);
 			local8.update = false;
 			tilesRemaining--;
-			@Pc(1379) SceneObjStack local1379 = local8.objStack;
+			@Pc(1379) ObjStack local1379 = local8.objStack;
 			if (local1379 != null && local1379.offset != 0) {
 				if (local1379.middleObj != null) {
 					local1379.middleObj.draw(0, sinEyePitch, cosEyePitch, sinEyeYaw, cosEyeYaw, local1379.x - eyeX, local1379.y - eyeY - local1379.offset, local1379.z - eyeZ, local1379.bitset);
@@ -1616,7 +1616,7 @@ public final class Scene {
 				}
 			}
 			if (local8.backWallTypes != 0) {
-				@Pc(1474) SceneWallDecoration local1474 = local8.wallDecoration;
+				@Pc(1474) WallDecoration local1474 = local8.wallDecoration;
 				if (local1474 != null && !this.visible(local26, local17, local20, local1474.model.maxY)) {
 					if ((local1474.type & local8.backWallTypes) != 0) {
 						local1474.model.draw(local1474.orientation, sinEyePitch, cosEyePitch, sinEyeYaw, cosEyeYaw, local1474.x - eyeX, local1474.y - eyeY, local1474.z - eyeZ, local1474.bitset);
@@ -1657,7 +1657,7 @@ public final class Scene {
 					}
 				}
 			}
-			@Pc(1735) SceneTile local1735;
+			@Pc(1735) Tile local1735;
 			if (local23 < this.maxLevel - 1) {
 				local1735 = this.levelTiles[local23 + 1][local17][local20];
 				if (local1735 != null && local1735.update) {
@@ -1692,7 +1692,7 @@ public final class Scene {
 	}
 
 	@OriginalMember(owner = "client!r", name = "a", descriptor = "(Lclient!o;IIIIIII)V")
-	private void drawTileUnderlay(@OriginalArg(0) SceneTileUnderlay arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2, @OriginalArg(3) int arg3, @OriginalArg(4) int arg4, @OriginalArg(5) int arg5, @OriginalArg(6) int arg6, @OriginalArg(7) int arg7) {
+	private void drawTileUnderlay(@OriginalArg(0) TileUnderlay arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2, @OriginalArg(3) int arg3, @OriginalArg(4) int arg4, @OriginalArg(5) int arg5, @OriginalArg(6) int arg6, @OriginalArg(7) int arg7) {
 		@Pc(8) int local8;
 		@Pc(9) int local9 = local8 = (arg6 << 7) - eyeX;
 		@Pc(16) int local16;
@@ -1797,7 +1797,7 @@ public final class Scene {
 	}
 
 	@OriginalMember(owner = "client!r", name = "a", descriptor = "(IILclient!i;IIIIZ)V")
-	private void drawTileOverlay(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(2) SceneTileOverlay arg2, @OriginalArg(3) int arg3, @OriginalArg(4) int arg4, @OriginalArg(5) int arg5, @OriginalArg(6) int arg6) {
+	private void drawTileOverlay(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(2) TileOverlay arg2, @OriginalArg(3) int arg3, @OriginalArg(4) int arg4, @OriginalArg(5) int arg5, @OriginalArg(6) int arg6) {
 		@Pc(5) int local5 = arg2.vertexX.length;
 		@Pc(16) int local16;
 		@Pc(23) int local23;
@@ -1815,12 +1815,12 @@ public final class Scene {
 				return;
 			}
 			if (arg2.triangleTextureIds != null) {
-				SceneTileOverlay.tmpViewspaceX[local7] = local40;
-				SceneTileOverlay.tmpViewspaceY[local7] = local62;
-				SceneTileOverlay.tmpViewspaceZ[local7] = local72;
+				TileOverlay.tmpViewspaceX[local7] = local40;
+				TileOverlay.tmpViewspaceY[local7] = local62;
+				TileOverlay.tmpViewspaceZ[local7] = local72;
 			}
-			SceneTileOverlay.tmpScreenX[local7] = Draw3D.centerX + (local40 << 9) / local72;
-			SceneTileOverlay.tmpScreenY[local7] = Draw3D.centerY + (local62 << 9) / local72;
+			TileOverlay.tmpScreenX[local7] = Draw3D.centerX + (local40 << 9) / local72;
+			TileOverlay.tmpScreenY[local7] = Draw3D.centerY + (local62 << 9) / local72;
 		}
 		Draw3D.alpha = 0;
 		local5 = arg2.triangleVertexA.length;
@@ -1828,12 +1828,12 @@ public final class Scene {
 			local23 = arg2.triangleVertexA[local16];
 			local30 = arg2.triangleVertexB[local16];
 			local40 = arg2.triangleVertexC[local16];
-			@Pc(149) int local149 = SceneTileOverlay.tmpScreenX[local23];
-			@Pc(153) int local153 = SceneTileOverlay.tmpScreenX[local30];
-			@Pc(157) int local157 = SceneTileOverlay.tmpScreenX[local40];
-			@Pc(161) int local161 = SceneTileOverlay.tmpScreenY[local23];
-			@Pc(165) int local165 = SceneTileOverlay.tmpScreenY[local30];
-			@Pc(169) int local169 = SceneTileOverlay.tmpScreenY[local40];
+			@Pc(149) int local149 = TileOverlay.tmpScreenX[local23];
+			@Pc(153) int local153 = TileOverlay.tmpScreenX[local30];
+			@Pc(157) int local157 = TileOverlay.tmpScreenX[local40];
+			@Pc(161) int local161 = TileOverlay.tmpScreenY[local23];
+			@Pc(165) int local165 = TileOverlay.tmpScreenY[local30];
+			@Pc(169) int local169 = TileOverlay.tmpScreenY[local40];
 			if ((local149 - local153) * (local169 - local165) - (local161 - local165) * (local157 - local153) > 0) {
 				Draw3D.clipX = false;
 				if (local149 < 0 || local153 < 0 || local157 < 0 || local149 > Draw2D.boundX || local153 > Draw2D.boundX || local157 > Draw2D.boundX) {
@@ -1851,9 +1851,9 @@ public final class Scene {
 					@Pc(373) int local373 = TEXTURE_HSL[arg2.triangleTextureIds[local16]];
 					Draw3D.fillGouraudTriangle(local161, local165, local169, local149, local153, local157, this.mulLightness(arg2.triangleColorA[local16], local373), this.mulLightness(arg2.triangleColorB[local16], local373), this.mulLightness(arg2.triangleColorC[local16], local373));
 				} else if (arg2.flat) {
-					Draw3D.fillTexturedTriangle(local161, local165, local169, local149, local153, local157, arg2.triangleColorA[local16], arg2.triangleColorB[local16], arg2.triangleColorC[local16], SceneTileOverlay.tmpViewspaceX[0], SceneTileOverlay.tmpViewspaceX[1], SceneTileOverlay.tmpViewspaceX[3], SceneTileOverlay.tmpViewspaceY[0], SceneTileOverlay.tmpViewspaceY[1], SceneTileOverlay.tmpViewspaceY[3], SceneTileOverlay.tmpViewspaceZ[0], SceneTileOverlay.tmpViewspaceZ[1], SceneTileOverlay.tmpViewspaceZ[3], arg2.triangleTextureIds[local16]);
+					Draw3D.fillTexturedTriangle(local161, local165, local169, local149, local153, local157, arg2.triangleColorA[local16], arg2.triangleColorB[local16], arg2.triangleColorC[local16], TileOverlay.tmpViewspaceX[0], TileOverlay.tmpViewspaceX[1], TileOverlay.tmpViewspaceX[3], TileOverlay.tmpViewspaceY[0], TileOverlay.tmpViewspaceY[1], TileOverlay.tmpViewspaceY[3], TileOverlay.tmpViewspaceZ[0], TileOverlay.tmpViewspaceZ[1], TileOverlay.tmpViewspaceZ[3], arg2.triangleTextureIds[local16]);
 				} else {
-					Draw3D.fillTexturedTriangle(local161, local165, local169, local149, local153, local157, arg2.triangleColorA[local16], arg2.triangleColorB[local16], arg2.triangleColorC[local16], SceneTileOverlay.tmpViewspaceX[local23], SceneTileOverlay.tmpViewspaceX[local30], SceneTileOverlay.tmpViewspaceX[local40], SceneTileOverlay.tmpViewspaceY[local23], SceneTileOverlay.tmpViewspaceY[local30], SceneTileOverlay.tmpViewspaceY[local40], SceneTileOverlay.tmpViewspaceZ[local23], SceneTileOverlay.tmpViewspaceZ[local30], SceneTileOverlay.tmpViewspaceZ[local40], arg2.triangleTextureIds[local16]);
+					Draw3D.fillTexturedTriangle(local161, local165, local169, local149, local153, local157, arg2.triangleColorA[local16], arg2.triangleColorB[local16], arg2.triangleColorC[local16], TileOverlay.tmpViewspaceX[local23], TileOverlay.tmpViewspaceX[local30], TileOverlay.tmpViewspaceX[local40], TileOverlay.tmpViewspaceY[local23], TileOverlay.tmpViewspaceY[local30], TileOverlay.tmpViewspaceY[local40], TileOverlay.tmpViewspaceZ[local23], TileOverlay.tmpViewspaceZ[local30], TileOverlay.tmpViewspaceZ[local40], arg2.triangleTextureIds[local16]);
 				}
 			}
 		}
@@ -1892,10 +1892,10 @@ public final class Scene {
 	@OriginalMember(owner = "client!r", name = "b", descriptor = "(Z)V")
 	private void updateActiveOccluders() {
 		@Pc(5) int local5 = levelOccluderCount[topLevel];
-		@Pc(9) SceneOccluder[] local9 = levelOccluders[topLevel];
+		@Pc(9) Occluder[] local9 = levelOccluders[topLevel];
 		activeOccluderCount = 0;
 		for (@Pc(13) int local13 = 0; local13 < local5; local13++) {
-			@Pc(19) SceneOccluder local19 = local9[local13];
+			@Pc(19) Occluder local19 = local9[local13];
 			@Pc(30) int local30;
 			@Pc(43) int local43;
 			@Pc(54) int local54;
@@ -2218,7 +2218,7 @@ public final class Scene {
 	@OriginalMember(owner = "client!r", name = "h", descriptor = "(III)Z")
 	private boolean occluded(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2) {
 		for (@Pc(1) int local1 = 0; local1 < activeOccluderCount; local1++) {
-			@Pc(7) SceneOccluder local7 = activeOccluders[local1];
+			@Pc(7) Occluder local7 = activeOccluders[local1];
 			@Pc(16) int local16;
 			@Pc(28) int local28;
 			@Pc(38) int local38;
