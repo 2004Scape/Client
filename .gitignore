@@ -2,5 +2,9 @@
 /.idea/
 
 build/
+target/
+bin/
 
 *.class
+*.iml
+dependency-reduced-pom.xml

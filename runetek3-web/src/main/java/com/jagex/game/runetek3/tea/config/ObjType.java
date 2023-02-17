@@ -5,7 +5,7 @@ import com.jagex.core.io.FileArchive;
 import com.jagex.core.util.Cache;
 import com.jagex.game.runetek3.graphics.Draw2D;
 import com.jagex.game.runetek3.graphics.Draw3D;
-import com.jagex.game.runetek3.graphics.Image24;
+import com.jagex.game.runetek3.tea.graphics.Image24;
 import com.jagex.game.runetek3.graphics.Model;
 import org.openrs2.deob.annotation.OriginalArg;
 import org.openrs2.deob.annotation.OriginalClass;

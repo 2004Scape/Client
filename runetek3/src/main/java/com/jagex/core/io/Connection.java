@@ -39,7 +39,7 @@ public final class Connection implements Runnable {
 	private int tnum;
 
 	@OriginalMember(owner = "client!d", name = "j", descriptor = "Z")
-	private boolean writer = false;
+	private boolean writing = false;
 
 	@OriginalMember(owner = "client!d", name = "k", descriptor = "Z")
 	private boolean ioerror = false;
@@ -70,7 +70,7 @@ public final class Connection implements Runnable {
 		} catch (@Pc(22) IOException local22) {
 			System.out.println("Error closing stream");
 		}
-		this.writer = false;
+		this.writing = false;
 		synchronized (this) {
 			this.notify();
 		}
@@ -103,7 +103,7 @@ public final class Connection implements Runnable {
 	}
 
 	@OriginalMember(owner = "client!d", name = "a", descriptor = "([BIZI)V")
-	public void writer(@OriginalArg(0) byte[] arg0, @OriginalArg(1) int arg1, @OriginalArg(3) int arg3) throws IOException {
+	public void write(@OriginalArg(0) byte[] arg0, @OriginalArg(1) int arg1, @OriginalArg(3) int arg3) throws IOException {
 		if (this.closed) {
 			return;
 		}
@@ -123,8 +123,8 @@ public final class Connection implements Runnable {
 					throw new IOException("buffer overflow");
 				}
 			}
-			if (!this.writer) {
-				this.writer = true;
+			if (!this.writing) {
+				this.writing = true;
 				this.shell.startThread(this, 2);
 			}
 			this.notify();
@@ -134,7 +134,7 @@ public final class Connection implements Runnable {
 	@OriginalMember(owner = "client!d", name = "run", descriptor = "()V")
 	@Override
 	public void run() {
-		while (this.writer) {
+		while (this.writing) {
 			@Pc(38) int local38;
 			@Pc(27) int local27;
 			synchronized (this) {
@@ -144,7 +144,7 @@ public final class Connection implements Runnable {
 					} catch (@Pc(16) InterruptedException local16) {
 					}
 				}
-				if (!this.writer) {
+				if (!this.writing) {
 					return;
 				}
 				local27 = this.tcyl;

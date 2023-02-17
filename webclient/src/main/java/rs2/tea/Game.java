@@ -3,35 +3,55 @@ package rs2.tea;
 import com.jagex.core.bzip2.BZip2InputStream;
 import com.jagex.core.crypto.IsaacRandom;
 import com.jagex.core.io.Buffer;
-import com.jagex.core.io.Connection;
 import com.jagex.core.io.FileArchive;
 import com.jagex.core.stringutil.Censor;
 import com.jagex.core.stringutil.ChatCompression;
 import com.jagex.core.stringutil.StringUtils;
+import com.jagex.core.tea.io.FileDownloadStream;
+import com.jagex.core.tea.io.WebSocket;
 import com.jagex.core.util.DoublyLinkedList;
-import com.jagex.game.runetek3.GameShell;
+import com.jagex.game.runetek3.tea.GameShell;
 import com.jagex.game.runetek3.InputTracking;
 import com.jagex.game.runetek3.audio.SoundTrack;
-import com.jagex.game.runetek3.config.*;
-import com.jagex.game.runetek3.graphics.*;
+import com.jagex.game.runetek3.tea.config.IfType;
+import com.jagex.game.runetek3.tea.config.ObjType;
+import com.jagex.game.runetek3.config.FloType;
+import com.jagex.game.runetek3.config.IdkType;
+import com.jagex.game.runetek3.config.LocType;
+import com.jagex.game.runetek3.config.NpcType;
+import com.jagex.game.runetek3.config.SeqType;
+import com.jagex.game.runetek3.config.SpotAnimType;
+import com.jagex.game.runetek3.config.VarpType;
+import com.jagex.game.runetek3.tea.graphics.DrawArea;
+import com.jagex.game.runetek3.tea.graphics.Image24;
+import com.jagex.game.runetek3.graphics.BitmapFont;
+import com.jagex.game.runetek3.graphics.Draw2D;
+import com.jagex.game.runetek3.graphics.Draw3D;
+import com.jagex.game.runetek3.graphics.Image8;
+import com.jagex.game.runetek3.graphics.Model;
+import com.jagex.game.runetek3.graphics.SeqBase;
+import com.jagex.game.runetek3.graphics.SeqFrame;
 import com.jagex.game.runetek3.scenegraph.*;
 import com.jagex.game.runetek3.scenegraph.entity.*;
 import org.openrs2.deob.annotation.OriginalArg;
 import org.openrs2.deob.annotation.OriginalClass;
 import org.openrs2.deob.annotation.OriginalMember;
 import org.openrs2.deob.annotation.Pc;
+import org.teavm.jso.JSBody;
+import org.teavm.jso.JSObject;
+import org.teavm.jso.typedarrays.Uint8Array;
+import rs2.Protocol;
 
-import java.awt.*;
-import java.io.DataInputStream;
 import java.io.IOException;
 import java.math.BigInteger;
-import java.net.InetAddress;
-import java.net.Socket;
-import java.net.URL;
 import java.util.zip.CRC32;
 
 @OriginalClass("client!client")
 public final class Game extends GameShell {
+
+	private static String SERVER_ADDRESS = "world2.runewiki.org";
+	private static String SERVER_WEB_SCHEMA = "http:";
+	private static int SERVER_WEB_PORT = 80;
 
 	private boolean showPerformance = false;
 	private boolean showOccluders = false;
@@ -347,7 +367,7 @@ public final class Game extends GameShell {
 	private int sceneCenterZoneZ;
 
 	@OriginalMember(owner = "client!client", name = "Qc", descriptor = "[[[B")
-	private byte[][][] levelTileFlags;
+	private int[][][] levelTileFlags;
 
 	@OriginalMember(owner = "client!client", name = "Rc", descriptor = "[I")
 	private int[] flameBuffer0;
@@ -779,7 +799,7 @@ public final class Game extends GameShell {
 	public static int updateGame;
 
 	@OriginalMember(owner = "client!client", name = "Uf", descriptor = "Lclient!d;")
-	private Connection connection;
+	private WebSocket connection;
 
 	@OriginalMember(owner = "client!client", name = "Vf", descriptor = "[[B")
 	private byte[][] sceneMapLocData;
@@ -1229,38 +1249,61 @@ public final class Game extends GameShell {
 		}
 	}
 
+	@JSBody(script = "return window.location.hostname;")
+	public static native String getWebHost();
+
+	@JSBody(script = "return window.location.port.length ? window.location.port : (window.location.protocol == 'http:' ? 80 : 443);")
+	public static native int getWebPort();
+
+	@JSBody(script = "return window.location.protocol;")
+	public static native String getWebSchema();
+
+	@JSBody(script = "return window.location.search;")
+	public static native String getWebQuery();
+
 	@OriginalMember(owner = "client!client", name = "main", descriptor = "([Ljava/lang/String;)V")
-	public static void main(@OriginalArg(0) String[] arg0) {
-		try {
-			System.out.println("RS2 user client - release #" + 225);
-			if (arg0.length == 4) {
-				nodeId = Integer.parseInt(arg0[0]);
-				portOffset = Integer.parseInt(arg0[1]);
-				if (arg0[2].equals("lowmem")) {
-					setLowMemory();
-				} else if (arg0[2].equals("highmem")) {
-					setHighMemory();
-				} else {
-					System.out.println("Usage: node-id, port-offset, [lowmem/highmem], [free/members]");
-					return;
-				}
-				if (arg0[3].equals("free")) {
-					members = false;
-				} else if (arg0[3].equals("members")) {
-					members = true;
-				} else {
-					System.out.println("Usage: node-id, port-offset, [lowmem/highmem], [free/members]");
-					return;
-				}
-				Signlink.startpriv(InetAddress.getByName("world2.runewiki.org"));
-				@Pc(82) Game local82 = new Game();
-				local82.initApplication(532, 789);
-			} else {
-				System.out.println("Usage: node-id, port-offset, [lowmem/highmem], [free/members]");
-			}
-		} catch (@Pc(89) Exception ex) {
-			ex.printStackTrace();
+	public static void main(@OriginalArg(0) String[] args) {
+		System.out.println("RS2 user client - release #" + Signlink.clientversion);
+
+		if (args != null && args.length > 0) {
+			nodeId = Integer.parseInt(args[0]);
+		} else {
+			nodeId = 10;
 		}
+
+		if (args != null && args.length > 1) {
+			portOffset = Integer.parseInt(args[1]);
+		} else {
+			portOffset = 0;
+		}
+
+		if (args != null && args.length > 2 && args[2].equals("lowmem")) {
+			setLowMemory();
+		} else {
+			setHighMemory();
+		}
+
+		if (args != null && args.length > 3 && args[3].equals("free")) {
+			members = false;
+		} else {
+			members = true;
+		}
+
+		if (args != null && args.length > 4 && args[4].equals("true")) {
+			// this argument describes whether the client should attempt to connect to the reference server,
+			// instead of whatever the current domain is. for the sake of index.html here we'll use the reference server
+			// and not do anything. this option should be used when a server isn't actually being ran
+			System.out.println("Connecting to reference server directly");
+		} else {
+			// but it's important so we don't have to rebuild for each domain
+			SERVER_ADDRESS = getWebHost();
+			SERVER_WEB_SCHEMA = getWebSchema();
+			SERVER_WEB_PORT = getWebPort(); // typically 80/443 is enough but we'll use the actual port just in case
+		}
+
+		Signlink.startpriv(SERVER_WEB_SCHEMA + "//" + SERVER_ADDRESS);
+		@Pc(82) Game game = new Game();
+		game.initApplet(532, 789);
 	}
 
 	@OriginalMember(owner = "client!client", name = "d", descriptor = "(Z)V")
@@ -2188,7 +2231,7 @@ public final class Game extends GameShell {
 		this.drawTileHint();
 		this.updateTextures(local264);
 		this.drawViewportInterfaces();
-		this.areaViewport.draw(11, super.graphics, 8);
+		this.areaViewport.draw(11, this.context, 8);
 		this.cameraX = local73;
 		this.cameraY = local122;
 		this.cameraZ = local209;
@@ -2288,19 +2331,6 @@ public final class Game extends GameShell {
 		if (showPerformance) {
 			this.fontPlain11.drawStringRight(String.format("FPS: %d", super.fps), x, y, 0xFFFF00, true);
 			y += 13;
-
-			double ft = 0;
-			for (double delta : super.frameTime) {
-				ft += delta;
-			}
-			ft /= super.frameTime.length;
-			this.fontPlain11.drawStringRight(String.format("%04.4f ms", ft), x, y, 0xFFFF00, true);
-			y += 13;
-
-			Runtime runtime = Runtime.getRuntime();
-			int mem = (int) ((runtime.totalMemory() - runtime.freeMemory()) / 1024L);
-			this.fontPlain11.drawStringRight(String.format("Mem: %d kB", mem), x, y, 0xFFFF00, true);
-			y += 13;
 		}
 
 		if (showOccluders) {
@@ -2341,11 +2371,11 @@ public final class Game extends GameShell {
 				}
 				if (local52 == null) {
 					try {
-						@Pc(91) DataInputStream local91 = this.openUrl(local19 + "_" + local22 + ".mid");
+						@Pc(91) FileDownloadStream local91 = this.openUrl(local19 + "_" + local22 + ".mid");
 						local52 = new byte[local25];
 						@Pc(106) int local106;
 						for (@Pc(96) int local96 = 0; local96 < local25; local96 += local106) {
-							local106 = local91.read(local52, local96, local25 - local96);
+							local106 = local91.readFully(local52, local96, local25 - local96);
 							if (local106 == -1) {
 								@Pc(112) byte[] local112 = new byte[local96];
 								for (@Pc(114) int local114 = 0; local114 < local96; local114++) {
@@ -2434,7 +2464,7 @@ public final class Game extends GameShell {
 			}
 			local183 += local202;
 		}
-		this.imageTitle0.draw(0, super.graphics, 0);
+		this.imageTitle0.draw(0, this.context, 0);
 		for (local198 = 0; local198 < 33920; local198++) {
 			this.imageTitle1.pixels[local198] = this.imageFlamesRight.pixels[local198];
 		}
@@ -2459,7 +2489,7 @@ public final class Game extends GameShell {
 			local181 += 128 - local220;
 			local183 += 128 - local220 - local212;
 		}
-		this.imageTitle1.draw(0, super.graphics, 661);
+		this.imageTitle1.draw(0, this.context, 661);
 	}
 
 	@OriginalMember(owner = "client!client", name = "a", descriptor = "(IIILclient!hc;III)V")
@@ -3029,7 +3059,7 @@ public final class Game extends GameShell {
 							this.redrawChatback = true;
 						}
 						if ((local13 == 13 || local13 == 10) && this.chatTyped.length() > 0) {
-							if (this.chatTyped.equals("::clientdrop") && (super.frame != null || this.getHost().indexOf("192.168.1.") != -1)) {
+							if (this.chatTyped.equals("::clientdrop")) {
 								this.tryReconnect();
 							} else if (this.chatTyped.equals("::perf")) {
 								this.showPerformance = !this.showPerformance;
@@ -3272,7 +3302,7 @@ public final class Game extends GameShell {
 			this.drawProgress("Requesting " + arg0, arg3);
 			try {
 				local20 = 0;
-				@Pc(60) DataInputStream local60 = this.openUrl(arg2 + arg1);
+				@Pc(60) FileDownloadStream local60 = this.openUrl(arg2 + arg1);
 				@Pc(63) byte[] local63 = new byte[6];
 				local60.readFully(local63, 0, 6);
 				@Pc(74) Buffer local74 = new Buffer(local63);
@@ -3288,7 +3318,7 @@ public final class Game extends GameShell {
 					if (local107 > 1000) {
 						local107 = 1000;
 					}
-					local84 += local60.read(local6, local84, local107);
+					local84 += local60.readFully(local6, local84, local107);
 					@Pc(126) int local126 = local84 * 100 / local82;
 					if (local126 != local20) {
 						this.drawProgress("Loading " + arg0 + " - " + local126 + "%", arg3);
@@ -3534,16 +3564,6 @@ public final class Game extends GameShell {
 		}
 		Draw2D.fillRect(82, 93, 16777215, 3, 3);
 		this.areaViewport.bind();
-	}
-
-	@OriginalMember(owner = "client!client", name = "b", descriptor = "(B)Ljava/awt/Component;")
-	@Override
-	protected Component getBaseComponent() {
-		if (Signlink.mainapp == null) {
-			return this;
-		} else {
-			return Signlink.mainapp;
-		}
 	}
 
 	@OriginalMember(owner = "client!client", name = "m", descriptor = "(I)V")
@@ -3810,11 +3830,7 @@ public final class Game extends GameShell {
 	@OriginalMember(owner = "client!client", name = "a", descriptor = "(Ljava/lang/Runnable;I)V")
 	@Override
 	public void startThread(@OriginalArg(0) Runnable arg0, @OriginalArg(1) int arg1) {
-		if (Signlink.mainapp == null) {
-			super.startThread(arg0, arg1);
-		} else {
-			Signlink.startthread(arg0, arg1);
-		}
+		Signlink.startthread(arg0, arg1);
 	}
 
 	@OriginalMember(owner = "client!client", name = "n", descriptor = "(I)V")
@@ -4072,15 +4088,15 @@ public final class Game extends GameShell {
 			this.imageTitlebutton.draw(local56 - 20, local50 - 73);
 			this.fontBold12.drawStringTaggableCenter(local50, 16777215, true, local56 + 5, "Cancel");
 		}
-		this.imageTitle4.draw(186, super.graphics, 214);
+		this.imageTitle4.draw(186, this.context, 214);
 		if (this.redrawTitleBackground) {
 			this.redrawTitleBackground = false;
-			this.imageTitle2.draw(0, super.graphics, 128);
-			this.imageTitle3.draw(386, super.graphics, 214);
-			this.imageTitle5.draw(265, super.graphics, 0);
-			this.imageTitle6.draw(265, super.graphics, 574);
-			this.imageTitle7.draw(186, super.graphics, 128);
-			this.imageTitle8.draw(186, super.graphics, 574);
+			this.imageTitle2.draw(0, this.context, 128);
+			this.imageTitle3.draw(386, this.context, 214);
+			this.imageTitle5.draw(265, this.context, 0);
+			this.imageTitle6.draw(265, this.context, 574);
+			this.imageTitle7.draw(186, this.context, 128);
+			this.imageTitle8.draw(186, this.context, 574);
 		}
 	}
 
@@ -4101,16 +4117,16 @@ public final class Game extends GameShell {
 		this.imageTitle6 = null;
 		this.imageTitle7 = null;
 		this.imageTitle8 = null;
-		this.areaChatback = new DrawArea(this.getBaseComponent(), 479, 96);
-		this.areaMapback = new DrawArea(this.getBaseComponent(), 168, 160);
+		this.areaChatback = new DrawArea(this.context, 479, 96);
+		this.areaMapback = new DrawArea(this.context, 168, 160);
 		Draw2D.clear();
 		this.imageMapback.draw(0, 0);
-		this.areaSidebar = new DrawArea(this.getBaseComponent(), 190, 261);
-		this.areaViewport = new DrawArea(this.getBaseComponent(), 512, 334);
+		this.areaSidebar = new DrawArea(this.context, 190, 261);
+		this.areaViewport = new DrawArea(this.context, 512, 334);
 		Draw2D.clear();
-		this.areaBackbase1 = new DrawArea(this.getBaseComponent(), 501, 61);
-		this.areaBackbase2 = new DrawArea(this.getBaseComponent(), 288, 40);
-		this.areaBackhmid1 = new DrawArea(this.getBaseComponent(), 269, 66);
+		this.areaBackbase1 = new DrawArea(this.context, 501, 61);
+		this.areaBackbase2 = new DrawArea(this.context, 288, 40);
+		this.areaBackhmid1 = new DrawArea(this.context, 269, 66);
 		this.redrawTitleBackground = true;
 	}
 
@@ -4823,23 +4839,23 @@ public final class Game extends GameShell {
 	private void drawGame() {
 		if (this.redrawTitleBackground) {
 			this.redrawTitleBackground = false;
-			this.areaBackleft1.draw(11, super.graphics, 0);
-			this.areaBackleft2.draw(375, super.graphics, 0);
-			this.areaBackright1.draw(5, super.graphics, 729);
-			this.areaBackright2.draw(231, super.graphics, 752);
-			this.areaBacktop1.draw(0, super.graphics, 0);
-			this.areaBacktop2.draw(0, super.graphics, 561);
-			this.areaBackvmid1.draw(11, super.graphics, 520);
-			this.areaBackvmid2.draw(231, super.graphics, 520);
-			this.areaBackvmid3.draw(375, super.graphics, 501);
-			this.areaBackhmid2.draw(345, super.graphics, 0);
+			this.areaBackleft1.draw(11, this.context, 0);
+			this.areaBackleft2.draw(375, this.context, 0);
+			this.areaBackright1.draw(5, this.context, 729);
+			this.areaBackright2.draw(231, this.context, 752);
+			this.areaBacktop1.draw(0, this.context, 0);
+			this.areaBacktop2.draw(0, this.context, 561);
+			this.areaBackvmid1.draw(11, this.context, 520);
+			this.areaBackvmid2.draw(231, this.context, 520);
+			this.areaBackvmid3.draw(375, this.context, 501);
+			this.areaBackhmid2.draw(345, this.context, 0);
 			this.redrawSidebar = true;
 			this.redrawChatback = true;
 			this.redrawSideicons = true;
 			this.redrawPrivacySettings = true;
 			if (this.sceneState != 2) {
-				this.areaViewport.draw(11, super.graphics, 8);
-				this.areaMapback.draw(5, super.graphics, 561);
+				this.areaViewport.draw(11, this.context, 8);
+				this.areaMapback.draw(5, this.context, 561);
 			}
 		}
 		if (this.sceneState == 2) {
@@ -4906,7 +4922,7 @@ public final class Game extends GameShell {
 		}
 		if (this.sceneState == 2) {
 			this.drawMinimap();
-			this.areaMapback.draw(5, super.graphics, 561);
+			this.areaMapback.draw(5, this.context, 561);
 		}
 		if (this.flashingTab != -1) {
 			this.redrawSideicons = true;
@@ -4966,7 +4982,7 @@ public final class Game extends GameShell {
 					this.imageSideicons[6].draw(34, 212);
 				}
 			}
-			this.areaBackhmid1.draw(165, super.graphics, 520);
+			this.areaBackhmid1.draw(165, this.context, 520);
 			this.areaBackbase2.bind();
 			this.imageBackbase2.draw(0, 0);
 			if (this.sidebarInterfaceId == -1) {
@@ -5012,7 +5028,7 @@ public final class Game extends GameShell {
 					this.imageSideicons[12].draw(2, 230);
 				}
 			}
-			this.areaBackbase2.draw(492, super.graphics, 501);
+			this.areaBackbase2.draw(492, this.context, 501);
 			this.areaViewport.bind();
 		}
 		if (this.redrawPrivacySettings) {
@@ -5053,7 +5069,7 @@ public final class Game extends GameShell {
 				this.fontPlain12.drawStringTaggableCenter(326, 16711680, true, 46, "Off");
 			}
 			this.fontPlain12.drawStringTaggableCenter(462, 16777215, true, 38, "Report abuse");
-			this.areaBackbase1.draw(471, super.graphics, 0);
+			this.areaBackbase1.draw(471, this.context, 0);
 			this.areaViewport.bind();
 		}
 		this.sceneDelta = 0;
@@ -5645,15 +5661,6 @@ public final class Game extends GameShell {
 		}
 	}
 
-	@OriginalMember(owner = "client!client", name = "s", descriptor = "(I)Ljava/lang/String;")
-	private String getHost() {
-		if (Signlink.mainapp == null) {
-			return super.frame == null ? super.getDocumentBase().getHost().toLowerCase() : "runescape.com";
-		} else {
-			return Signlink.mainapp.getDocumentBase().getHost().toLowerCase();
-		}
-	}
-
 	@OriginalMember(owner = "client!client", name = "t", descriptor = "(I)V")
 	private void drawMenu() {
 		@Pc(2) int local2 = this.menuX;
@@ -6086,9 +6093,6 @@ public final class Game extends GameShell {
 	@OriginalMember(owner = "client!client", name = "a", descriptor = "()V")
 	@Override
 	protected void load() {
-		if (Signlink.sunjava) {
-			super.mindel = 5;
-		}
 		if (!lowMemory) {
 			this.startMidiThread = true;
 			this.midiThreadActive = true;
@@ -6100,43 +6104,13 @@ public final class Game extends GameShell {
 			return;
 		}
 		started = true;
-		@Pc(34) boolean local34 = false;
-		@Pc(38) String local38 = this.getHost();
-		if (local38.endsWith("jagex.com")) {
-			local34 = true;
-		}
-		if (local38.endsWith("runescape.com")) {
-			local34 = true;
-		}
-		if (local38.endsWith("192.168.1.2")) {
-			local34 = true;
-		}
-		if (local38.endsWith("192.168.1.249")) {
-			local34 = true;
-		}
-		if (local38.endsWith("192.168.1.252")) {
-			local34 = true;
-		}
-		if (local38.endsWith("192.168.1.253")) {
-			local34 = true;
-		}
-		if (local38.endsWith("192.168.1.254")) {
-			local34 = true;
-		}
-		if (local38.endsWith("127.0.0.1")) {
-			local34 = true;
-		}
-		if (!local34) {
-			this.errorHost = true;
-			return;
-		}
 		try {
 			@Pc(94) int local94 = 5;
 			this.archiveChecksum[8] = 0;
 			while (this.archiveChecksum[8] == 0) {
 				this.drawProgress("Connecting to fileserver", 10);
 				try {
-					@Pc(119) DataInputStream local119 = this.openUrl("crc" + (int) (Math.random() * 9.9999999E7D));
+					@Pc(119) FileDownloadStream local119 = this.openUrl("crc" + (int) (Math.random() * 9.9999999E7D));
 					@Pc(126) Buffer local126 = new Buffer(new byte[36]);
 					local119.readFully(local126.data, 0, 36);
 					for (@Pc(134) int local134 = 0; local134 < 9; local134++) {
@@ -6171,7 +6145,7 @@ public final class Game extends GameShell {
 			@Pc(299) FileArchive local299 = this.loadArchive("textures", this.archiveChecksum[6], "textures", 60);
 			@Pc(310) FileArchive local310 = this.loadArchive("chat system", this.archiveChecksum[7], "wordenc", 65);
 			@Pc(321) FileArchive local321 = this.loadArchive("sound effects", this.archiveChecksum[8], "sounds", 70);
-			this.levelTileFlags = new byte[4][104][104];
+			this.levelTileFlags = new int[4][104][104];
 			this.levelHeightmap = new int[4][105][105];
 			this.scene = new Scene(this.levelHeightmap, 104, 4, 104);
 			for (@Pc(346) int local346 = 0; local346 < 4; local346++) {
@@ -6247,34 +6221,34 @@ public final class Game extends GameShell {
 			this.imageRedstone2hv.flipHorizontally();
 			this.imageRedstone2hv.flipVertically();
 			@Pc(725) Image24 local725 = new Image24(local277, "backleft1", 0);
-			this.areaBackleft1 = new DrawArea(this.getBaseComponent(), local725.width, local725.height);
+			this.areaBackleft1 = new DrawArea(this.context, local725.width, local725.height);
 			local725.blitOpaque(0, 0);
 			@Pc(750) Image24 local750 = new Image24(local277, "backleft2", 0);
-			this.areaBackleft2 = new DrawArea(this.getBaseComponent(), local750.width, local750.height);
+			this.areaBackleft2 = new DrawArea(this.context, local750.width, local750.height);
 			local750.blitOpaque(0, 0);
 			@Pc(775) Image24 local775 = new Image24(local277, "backright1", 0);
-			this.areaBackright1 = new DrawArea(this.getBaseComponent(), local775.width, local775.height);
+			this.areaBackright1 = new DrawArea(this.context, local775.width, local775.height);
 			local775.blitOpaque(0, 0);
 			@Pc(800) Image24 local800 = new Image24(local277, "backright2", 0);
-			this.areaBackright2 = new DrawArea(this.getBaseComponent(), local800.width, local800.height);
+			this.areaBackright2 = new DrawArea(this.context, local800.width, local800.height);
 			local800.blitOpaque(0, 0);
 			@Pc(825) Image24 local825 = new Image24(local277, "backtop1", 0);
-			this.areaBacktop1 = new DrawArea(this.getBaseComponent(), local825.width, local825.height);
+			this.areaBacktop1 = new DrawArea(this.context, local825.width, local825.height);
 			local825.blitOpaque(0, 0);
 			@Pc(850) Image24 local850 = new Image24(local277, "backtop2", 0);
-			this.areaBacktop2 = new DrawArea(this.getBaseComponent(), local850.width, local850.height);
+			this.areaBacktop2 = new DrawArea(this.context, local850.width, local850.height);
 			local850.blitOpaque(0, 0);
 			@Pc(875) Image24 local875 = new Image24(local277, "backvmid1", 0);
-			this.areaBackvmid1 = new DrawArea(this.getBaseComponent(), local875.width, local875.height);
+			this.areaBackvmid1 = new DrawArea(this.context, local875.width, local875.height);
 			local875.blitOpaque(0, 0);
 			@Pc(900) Image24 local900 = new Image24(local277, "backvmid2", 0);
-			this.areaBackvmid2 = new DrawArea(this.getBaseComponent(), local900.width, local900.height);
+			this.areaBackvmid2 = new DrawArea(this.context, local900.width, local900.height);
 			local900.blitOpaque(0, 0);
 			@Pc(925) Image24 local925 = new Image24(local277, "backvmid3", 0);
-			this.areaBackvmid3 = new DrawArea(this.getBaseComponent(), local925.width, local925.height);
+			this.areaBackvmid3 = new DrawArea(this.context, local925.width, local925.height);
 			local925.blitOpaque(0, 0);
 			@Pc(950) Image24 local950 = new Image24(local277, "backhmid2", 0);
-			this.areaBackhmid2 = new DrawArea(this.getBaseComponent(), local950.width, local950.height);
+			this.areaBackhmid2 = new DrawArea(this.context, local950.width, local950.height);
 			local950.blitOpaque(0, 0);
 			@Pc(975) int local975 = (int) (Math.random() * 21.0D) - 10;
 			@Pc(982) int local982 = (int) (Math.random() * 21.0D) - 10;
@@ -6801,8 +6775,8 @@ public final class Game extends GameShell {
 	}
 
 	@OriginalMember(owner = "client!client", name = "a", descriptor = "(Ljava/lang/String;)Ljava/io/DataInputStream;")
-	private DataInputStream openUrl(@OriginalArg(0) String arg0) throws IOException {
-		return Signlink.mainapp == null ? new DataInputStream((new URL(this.getCodeBase(), arg0)).openStream()) : Signlink.openurl(arg0);
+	private FileDownloadStream openUrl(@OriginalArg(0) String arg0) throws IOException {
+		return Signlink.openurl(SERVER_WEB_SCHEMA + "//" + SERVER_ADDRESS + ":" + SERVER_WEB_PORT + "/" + arg0);
 	}
 
 	@OriginalMember(owner = "client!client", name = "j", descriptor = "(B)V")
@@ -6819,23 +6793,23 @@ public final class Game extends GameShell {
 		this.areaBackbase1 = null;
 		this.areaBackbase2 = null;
 		this.areaBackhmid1 = null;
-		this.imageTitle0 = new DrawArea(this.getBaseComponent(), 128, 265);
+		this.imageTitle0 = new DrawArea(this.context, 128, 265);
 		Draw2D.clear();
-		this.imageTitle1 = new DrawArea(this.getBaseComponent(), 128, 265);
+		this.imageTitle1 = new DrawArea(this.context, 128, 265);
 		Draw2D.clear();
-		this.imageTitle2 = new DrawArea(this.getBaseComponent(), 533, 186);
+		this.imageTitle2 = new DrawArea(this.context, 533, 186);
 		Draw2D.clear();
-		this.imageTitle3 = new DrawArea(this.getBaseComponent(), 360, 146);
+		this.imageTitle3 = new DrawArea(this.context, 360, 146);
 		Draw2D.clear();
-		this.imageTitle4 = new DrawArea(this.getBaseComponent(), 360, 200);
+		this.imageTitle4 = new DrawArea(this.context, 360, 200);
 		Draw2D.clear();
-		this.imageTitle5 = new DrawArea(this.getBaseComponent(), 214, 267);
+		this.imageTitle5 = new DrawArea(this.context, 214, 267);
 		Draw2D.clear();
-		this.imageTitle6 = new DrawArea(this.getBaseComponent(), 215, 267);
+		this.imageTitle6 = new DrawArea(this.context, 215, 267);
 		Draw2D.clear();
-		this.imageTitle7 = new DrawArea(this.getBaseComponent(), 86, 79);
+		this.imageTitle7 = new DrawArea(this.context, 86, 79);
 		Draw2D.clear();
-		this.imageTitle8 = new DrawArea(this.getBaseComponent(), 87, 79);
+		this.imageTitle8 = new DrawArea(this.context, 87, 79);
 		Draw2D.clear();
 		if (this.archiveTitle != null) {
 			this.loadTitleBackground();
@@ -6930,7 +6904,7 @@ public final class Game extends GameShell {
 				this.loginMessage1 = "Connecting to server...";
 				this.drawTitleScreen();
 			}
-			this.connection = new Connection(this, this.openSocket(portOffset + 43594));
+			this.connection = this.openSocket(43594 + portOffset);
 			this.connection.read(this.in.data, 0, 8);
 			this.in.pos = 0;
 			this.serverSeed = this.in.g8();
@@ -6963,7 +6937,7 @@ public final class Game extends GameShell {
 				local47[local202] += 50;
 			}
 			this.randomIn = new IsaacRandom(local47);
-			this.connection.writer(this.login.data, this.login.pos, 0);
+			this.connection.write(this.login.data, this.login.pos, 0);
 			@Pc(237) int local237 = this.connection.read();
 			if (local237 == 1) {
 				try {
@@ -7148,6 +7122,7 @@ public final class Game extends GameShell {
 				this.loginMessage1 = "To play on this world move to a free area first";
 				return;
 			}
+			throw new IOException("");
 		} catch (@Pc(762) IOException local762) {
 			this.loginMessage0 = "";
 			this.loginMessage1 = "Error connecting to server.";
@@ -7388,8 +7363,8 @@ public final class Game extends GameShell {
 	}
 
 	@OriginalMember(owner = "client!client", name = "A", descriptor = "(I)Ljava/net/Socket;")
-	private Socket openSocket(@OriginalArg(0) int arg0) throws IOException {
-		return Signlink.mainapp == null ? new Socket(InetAddress.getByName(this.getCodeBase().getHost()), arg0) : Signlink.opensocket(arg0);
+	private WebSocket openSocket(@OriginalArg(0) int arg0) throws IOException {
+		return Signlink.opensocket(arg0);
 	}
 
 	@OriginalMember(owner = "client!client", name = "a", descriptor = "(ZIILclient!z;I)V")
@@ -7717,7 +7692,7 @@ public final class Game extends GameShell {
 			}
 			try {
 				if (this.connection != null && this.out.pos > 0) {
-					this.connection.writer(this.out.data, this.out.pos, 0);
+					this.connection.write(this.out.data, this.out.pos, 0);
 					this.out.pos = 0;
 					this.heartbeatTimer = 0;
 				}
@@ -7763,21 +7738,6 @@ public final class Game extends GameShell {
 				}
 			}
 		}
-	}
-
-	@OriginalMember(owner = "client!client", name = "getCodeBase", descriptor = "()Ljava/net/URL;")
-	@Override
-	public URL getCodeBase() {
-		if (Signlink.mainapp != null) {
-			return Signlink.mainapp.getCodeBase();
-		}
-		try {
-			if (super.frame != null) {
-				return new URL("http://world2.runewiki.org:" + (portOffset + 80));
-			}
-		} catch (@Pc(21) Exception local21) {
-		}
-		return super.getCodeBase();
 	}
 
 	@OriginalMember(owner = "client!client", name = "a", descriptor = "(IIZIIIIIIIII)Z")
@@ -8542,12 +8502,6 @@ public final class Game extends GameShell {
 		}
 	}
 
-	@OriginalMember(owner = "client!client", name = "getParameter", descriptor = "(Ljava/lang/String;)Ljava/lang/String;")
-	@Override
-	public String getParameter(@OriginalArg(0) String arg0) {
-		return Signlink.mainapp == null ? super.getParameter(arg0) : Signlink.mainapp.getParameter(arg0);
-	}
-
 	@OriginalMember(owner = "client!client", name = "l", descriptor = "(Z)V")
 	private void tryReconnect() {
 		if (this.idleTimeout > 0) {
@@ -8558,9 +8512,9 @@ public final class Game extends GameShell {
 			this.fontPlain12.drawStringCenter(143, 16777215, "Connection lost", 256);
 			this.fontPlain12.drawStringCenter(159, 0, "Please wait - attempting to reestablish", 257);
 			this.fontPlain12.drawStringCenter(158, 16777215, "Please wait - attempting to reestablish", 256);
-			this.areaViewport.draw(11, super.graphics, 8);
+			this.areaViewport.draw(11, this.context, 8);
 			this.flagSceneTileX = 0;
-			@Pc(60) Connection local60 = this.connection;
+			@Pc(60) WebSocket local60 = this.connection;
 			this.ingame = false;
 			this.login(this.username, this.password, true);
 			if (!this.ingame) {
@@ -8878,64 +8832,12 @@ public final class Game extends GameShell {
 
 	@OriginalMember(owner = "client!client", name = "m", descriptor = "(Z)V")
 	private void drawError() {
-		@Pc(4) Graphics local4 = this.getBaseComponent().getGraphics();
-		local4.setColor(Color.black);
-		local4.fillRect(0, 0, 789, 532);
-		this.setFramerate(1);
-		@Pc(40) byte local40;
-		@Pc(46) int local46;
-		if (this.errorLoading) {
-			this.flameActive = false;
-			local4.setFont(new Font("Helvetica", 1, 16));
-			local4.setColor(Color.yellow);
-			local40 = 35;
-			local4.drawString("Sorry, an error has occured whilst loading RuneScape", 30, local40);
-			local46 = local40 + 50;
-			local4.setColor(Color.white);
-			local4.drawString("To fix this try the following (in order):", 30, local46);
-			@Pc(55) int local55 = local46 + 50;
-			local4.setColor(Color.white);
-			local4.setFont(new Font("Helvetica", 1, 12));
-			local4.drawString("1: Try closing ALL open web-browser windows, and reloading", 30, local55);
-			@Pc(72) int local72 = local55 + 30;
-			local4.drawString("2: Try clearing your web-browsers cache from tools->internet options", 30, local72);
-			@Pc(78) int local78 = local72 + 30;
-			local4.drawString("3: Try using a different game-world", 30, local78);
-			@Pc(84) int local84 = local78 + 30;
-			local4.drawString("4: Try rebooting your computer", 30, local84);
-			@Pc(90) int local90 = local84 + 30;
-			local4.drawString("5: Try selecting a different version of Java from the play-game menu", 30, local90);
-		}
-		if (this.errorHost) {
-			this.flameActive = false;
-			local4.setFont(new Font("Helvetica", 1, 20));
-			local4.setColor(Color.white);
-			local4.drawString("Error - unable to load game!", 50, 50);
-			local4.drawString("To play RuneScape make sure you play from", 50, 100);
-			local4.drawString("http://www.runescape.com", 50, 150);
-		}
-		if (this.errorStarted) {
-			this.flameActive = false;
-			local4.setColor(Color.yellow);
-			local40 = 35;
-			local4.drawString("Error a copy of RuneScape already appears to be loaded", 30, local40);
-			local46 = local40 + 50;
-			local4.setColor(Color.white);
-			local4.drawString("To fix this try the following (in order):", 30, local46);
-			local46 += 50;
-			local4.setColor(Color.white);
-			local4.setFont(new Font("Helvetica", 1, 12));
-			local4.drawString("1: Try closing ALL open web-browser windows, and reloading", 30, local46);
-			local46 += 30;
-			local4.drawString("2: Try rebooting your computer, and reloading", 30, local46);
-			local46 += 30;
-		}
 	}
 
 	@OriginalMember(owner = "client!client", name = "p", descriptor = "(B)V")
 	private void loadTitleBackground() {
 		@Pc(8) byte[] local8 = this.archiveTitle.read("title.dat", null);
-		@Pc(14) Image24 local14 = new Image24(local8, this);
+		@Pc(14) Image24 local14 = new Image24(local8, this.context);
 		this.imageTitle0.bind();
 		local14.blitOpaque(0, 0);
 		this.imageTitle1.bind();
@@ -9465,7 +9367,7 @@ public final class Game extends GameShell {
 		if (this.menuVisible && this.menuArea == 2) {
 			this.drawMenu();
 		}
-		this.areaChatback.draw(375, super.graphics, 22);
+		this.areaChatback.draw(375, this.context, 22);
 		this.areaViewport.bind();
 		Draw3D.lineOffset = this.areaViewportOffsets;
 	}
@@ -9630,7 +9532,7 @@ public final class Game extends GameShell {
 				this.areaViewport.bind();
 				this.fontPlain12.drawStringCenter(151, 0, "Loading - please wait.", 257);
 				this.fontPlain12.drawStringCenter(150, 16777215, "Loading - please wait.", 256);
-				this.areaViewport.draw(11, super.graphics, 8);
+				this.areaViewport.draw(11, this.context, 8);
 				Signlink.looprate(5);
 				local211 = (this.packetSize - 2) / 10;
 				this.sceneMapLandData = new byte[local211][];
@@ -9693,7 +9595,7 @@ public final class Game extends GameShell {
 					this.fontPlain12.drawStringCenter(166, 0, "Map area updated since last visit, so load will take longer this time only", 257);
 					this.fontPlain12.drawStringCenter(165, 16777215, "Map area updated since last visit, so load will take longer this time only", 256);
 				}
-				this.areaViewport.draw(11, super.graphics, 8);
+				this.areaViewport.draw(11, this.context, 8);
 				local650 = this.sceneBaseTileX - this.mapLastBaseX;
 				local321 = this.sceneBaseTileZ - this.mapLastBaseZ;
 				this.mapLastBaseX = this.sceneBaseTileX;
@@ -10515,7 +10417,7 @@ public final class Game extends GameShell {
 					this.areaViewport.bind();
 					this.fontPlain12.drawStringCenter(151, 0, "Loading - please wait.", 257);
 					this.fontPlain12.drawStringCenter(150, 16777215, "Loading - please wait.", 256);
-					this.areaViewport.draw(11, super.graphics, 8);
+					this.areaViewport.draw(11, this.context, 8);
 					SceneBuilder.levelBuilt = this.currentLevel;
 					this.buildScene();
 				}
@@ -10528,6 +10430,7 @@ public final class Game extends GameShell {
 			}
 			Signlink.reporterror("T1 - " + this.packetType + "," + this.packetSize + " - " + this.lastPacketType1 + "," + this.lastPacketType2);
 			this.logout();
+			throw new IOException("");
 		} catch (@Pc(3862) IOException local3862) {
 			this.tryReconnect();
 		} catch (@Pc(3867) Exception local3867) {
@@ -10554,7 +10457,7 @@ public final class Game extends GameShell {
 		if (this.menuVisible && this.menuArea == 1) {
 			this.drawMenu();
 		}
-		this.areaSidebar.draw(231, super.graphics, 562);
+		this.areaSidebar.draw(231, this.context, 562);
 		this.areaViewport.bind();
 		Draw3D.lineOffset = this.areaViewportOffsets;
 	}
@@ -10574,26 +10477,6 @@ public final class Game extends GameShell {
 		} else {
 			return false;
 		}
-	}
-
-	@OriginalMember(owner = "client!client", name = "init", descriptor = "()V")
-	@Override
-	public void init() {
-		nodeId = Integer.parseInt(this.getParameter("nodeid"));
-		portOffset = Integer.parseInt(this.getParameter("portoff"));
-		@Pc(15) String local15 = this.getParameter("lowmem");
-		if (local15 != null && local15.equals("1")) {
-			setLowMemory();
-		} else {
-			setHighMemory();
-		}
-		@Pc(31) String local31 = this.getParameter("free");
-		if (local31 != null && local31.equals("1")) {
-			members = false;
-		} else {
-			members = true;
-		}
-		this.initApplet(532, 789);
 	}
 
 	@OriginalMember(owner = "client!client", name = "a", descriptor = "(ZIILclient!kb;Lclient!z;)V")
@@ -10713,9 +10596,14 @@ public final class Game extends GameShell {
 		}
 	}
 
+	@JSBody(params = {"message"}, script = "console.log(message);")
+	public static native JSObject log(String message);
+
 	@OriginalMember(owner = "client!client", name = "a", descriptor = "(ZLjava/lang/String;I)V")
 	@Override
 	protected void drawProgress(@OriginalArg(1) String arg1, @OriginalArg(2) int arg2) {
+		log(arg1);
+
 		this.loadTitle();
 		if (this.archiveTitle == null) {
 			super.drawProgress(arg1, arg2);
@@ -10731,19 +10619,19 @@ public final class Game extends GameShell {
 			Draw2D.fillRect(local51 + 2, local17 / 2 - 150, 9179409, arg2 * 3, 30);
 			Draw2D.fillRect(local51 + 2, local17 / 2 - 150 + arg2 * 3, 0, 300 - arg2 * 3, 30);
 			this.fontBold12.drawStringCenter(local19 / 2 + 5 - local21, 16777215, arg1, local17 / 2);
-			this.imageTitle4.draw(186, super.graphics, 214);
+			this.imageTitle4.draw(186, this.context, 214);
 			if (this.redrawTitleBackground) {
 				this.redrawTitleBackground = false;
 				if (!this.flameActive) {
-					this.imageTitle0.draw(0, super.graphics, 0);
-					this.imageTitle1.draw(0, super.graphics, 661);
+					this.imageTitle0.draw(0, this.context, 0);
+					this.imageTitle1.draw(0, this.context, 661);
 				}
-				this.imageTitle2.draw(0, super.graphics, 128);
-				this.imageTitle3.draw(386, super.graphics, 214);
-				this.imageTitle5.draw(265, super.graphics, 0);
-				this.imageTitle6.draw(265, super.graphics, 574);
-				this.imageTitle7.draw(186, super.graphics, 128);
-				this.imageTitle8.draw(186, super.graphics, 574);
+				this.imageTitle2.draw(0, this.context, 128);
+				this.imageTitle3.draw(386, this.context, 214);
+				this.imageTitle5.draw(265, this.context, 0);
+				this.imageTitle6.draw(265, this.context, 574);
+				this.imageTitle7.draw(186, this.context, 128);
+				this.imageTitle8.draw(186, this.context, 574);
 			}
 		}
 	}

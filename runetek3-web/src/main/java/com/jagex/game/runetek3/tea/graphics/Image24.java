@@ -2,13 +2,22 @@ package com.jagex.game.runetek3.tea.graphics;
 
 import com.jagex.core.io.Buffer;
 import com.jagex.core.io.FileArchive;
+import com.jagex.game.runetek3.graphics.Draw2D;
+import com.jagex.game.runetek3.graphics.Image8;
 import org.openrs2.deob.annotation.OriginalArg;
 import org.openrs2.deob.annotation.OriginalClass;
 import org.openrs2.deob.annotation.OriginalMember;
 import org.openrs2.deob.annotation.Pc;
-
-import java.awt.*;
-import java.awt.image.PixelGrabber;
+import org.teavm.interop.Async;
+import org.teavm.interop.AsyncCallback;
+import org.teavm.jso.JSBody;
+import org.teavm.jso.JSObject;
+import org.teavm.jso.browser.Window;
+import org.teavm.jso.canvas.CanvasRenderingContext2D;
+import org.teavm.jso.canvas.ImageData;
+import org.teavm.jso.dom.html.HTMLImageElement;
+import org.teavm.jso.typedarrays.Uint8Array;
+import org.teavm.jso.typedarrays.Uint8ClampedArray;
 
 @OriginalClass("client!hb")
 public final class Image24 extends Draw2D {
@@ -42,22 +51,49 @@ public final class Image24 extends Draw2D {
 		this.cropX = this.cropY = 0;
 	}
 
+	@JSBody(params = {"arr", "type"}, script = "return new Blob([arr], {type:type});")
+	public static native JSObject blobify(Uint8Array arr, String type);
+
+	@JSBody(params = {"blob"}, script = "return (window.URL || window.webkitURL).createObjectURL(blob);")
+	public static native String createObjectUrl(JSObject blob);
+
+	@JSBody(params = {"url"}, script = "return (window.URL || window.webkitURL).revokeObjectURL(url);")
+	public static native void revokeObjectURL(String url);
+
+	@Async
+	private static native HTMLImageElement load(String url);
+	private static void load(String url, AsyncCallback<HTMLImageElement> callback) {
+		HTMLImageElement img = Window.current().getDocument().createElement("img").cast();
+		img.addEventListener("load", evt -> callback.complete(img));
+		img.setSrc(url);
+	}
+
 	@OriginalMember(owner = "client!hb", name = "<init>", descriptor = "([BLjava/awt/Component;)V")
-	public Image24(@OriginalArg(0) byte[] arg0, @OriginalArg(1) Component arg1) {
+	public Image24(@OriginalArg(0) byte[] src, CanvasRenderingContext2D context) {
 		try {
-			@Pc(17) Image local17 = Toolkit.getDefaultToolkit().createImage(arg0);
-			@Pc(22) MediaTracker local22 = new MediaTracker(arg1);
-			local22.addImage(local17, 0);
-			local22.waitForAll();
-			this.width = local17.getWidth(arg1);
-			this.height = local17.getHeight(arg1);
+			Uint8Array arr = Uint8Array.create(src.length);
+			arr.set(src);
+			JSObject blob = blobify(arr, "image/jpeg");
+			String objUrl = createObjectUrl(blob);
+			HTMLImageElement img = load(objUrl);
+			context.drawImage(img, 0, 0);
+			ImageData rawData = context.getImageData(0, 0, img.getWidth(), img.getHeight());
+			revokeObjectURL(objUrl);
+			Uint8ClampedArray raw = rawData.getData();
+
+			this.width = img.getWidth();
+			this.height = img.getHeight();
 			this.cropW = this.width;
 			this.cropH = this.height;
 			this.cropX = 0;
 			this.cropY = 0;
 			this.pixels = new int[this.width * this.height];
-			@Pc(76) PixelGrabber local76 = new PixelGrabber(local17, 0, 0, this.width, this.height, this.pixels, 0, this.width);
-			local76.grabPixels();
+			for (int i = 0, off = 0; i < img.getWidth() * img.getHeight() * 4; i += 4) {
+				int r = raw.get(i);
+				int g = raw.get(i + 1);
+				int b = raw.get(i + 2);
+				this.pixels[off++] = (r << 16) | (g << 8) | b;
+			}
 		} catch (@Pc(81) Exception local81) {
 			System.out.println("Error converting jpg");
 		}

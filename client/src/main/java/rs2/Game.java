@@ -347,7 +347,7 @@ public final class Game extends GameShell {
 	private int sceneCenterZoneZ;
 
 	@OriginalMember(owner = "client!client", name = "Qc", descriptor = "[[[B")
-	private byte[][][] levelTileFlags;
+	private int[][][] levelTileFlags;
 
 	@OriginalMember(owner = "client!client", name = "Rc", descriptor = "[I")
 	private int[] flameBuffer0;
@@ -6171,7 +6171,7 @@ public final class Game extends GameShell {
 			@Pc(299) FileArchive local299 = this.loadArchive("textures", this.archiveChecksum[6], "textures", 60);
 			@Pc(310) FileArchive local310 = this.loadArchive("chat system", this.archiveChecksum[7], "wordenc", 65);
 			@Pc(321) FileArchive local321 = this.loadArchive("sound effects", this.archiveChecksum[8], "sounds", 70);
-			this.levelTileFlags = new byte[4][104][104];
+			this.levelTileFlags = new int[4][104][104];
 			this.levelHeightmap = new int[4][105][105];
 			this.scene = new Scene(this.levelHeightmap, 104, 4, 104);
 			for (@Pc(346) int local346 = 0; local346 < 4; local346++) {
@@ -6963,7 +6963,7 @@ public final class Game extends GameShell {
 				local47[local202] += 50;
 			}
 			this.randomIn = new IsaacRandom(local47);
-			this.connection.writer(this.login.data, this.login.pos, 0);
+			this.connection.write(this.login.data, this.login.pos, 0);
 			@Pc(237) int local237 = this.connection.read();
 			if (local237 == 1) {
 				try {
@@ -7717,7 +7717,7 @@ public final class Game extends GameShell {
 			}
 			try {
 				if (this.connection != null && this.out.pos > 0) {
-					this.connection.writer(this.out.data, this.out.pos, 0);
+					this.connection.write(this.out.data, this.out.pos, 0);
 					this.out.pos = 0;
 					this.heartbeatTimer = 0;
 				}

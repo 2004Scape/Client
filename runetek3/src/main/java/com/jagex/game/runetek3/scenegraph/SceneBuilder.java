@@ -37,22 +37,22 @@ public final class SceneBuilder {
 	private final int[][][] levelHeightmap;
 
 	@OriginalMember(owner = "client!c", name = "j", descriptor = "[[[B")
-	private final byte[][][] levelTileFlags;
+	private final int[][][] levelTileFlags;
 
 	@OriginalMember(owner = "client!c", name = "k", descriptor = "[[[B")
-	private final byte[][][] levelTileUnderlayIds;
+	private final int[][][] levelTileUnderlayIds;
 
 	@OriginalMember(owner = "client!c", name = "l", descriptor = "[[[B")
-	private final byte[][][] levelTileOverlayIds;
+	private final int[][][] levelTileOverlayIds;
 
 	@OriginalMember(owner = "client!c", name = "m", descriptor = "[[[B")
-	private final byte[][][] levelTileOverlayShape;
+	private final int[][][] levelTileOverlayShape;
 
 	@OriginalMember(owner = "client!c", name = "n", descriptor = "[[[B")
-	private final byte[][][] levelTileOverlayRotation;
+	private final int[][][] levelTileOverlayRotation;
 
 	@OriginalMember(owner = "client!c", name = "o", descriptor = "[[[B")
-	private final byte[][][] levelShademap;
+	private final int[][][] levelShademap;
 
 	@OriginalMember(owner = "client!c", name = "p", descriptor = "[[I")
 	private final int[][] levelLightmap;
@@ -94,17 +94,17 @@ public final class SceneBuilder {
 	public static int randomLightnessOffset = (int) (Math.random() * 33.0D) - 16;
 
 	@OriginalMember(owner = "client!c", name = "<init>", descriptor = "(I[[[BI[[[II)V")
-	public SceneBuilder(@OriginalArg(0) int arg0, @OriginalArg(1) byte[][][] arg1, @OriginalArg(2) int arg2, @OriginalArg(3) int[][][] arg3) {
+	public SceneBuilder(@OriginalArg(0) int arg0, @OriginalArg(1) int[][][] arg1, @OriginalArg(2) int arg2, @OriginalArg(3) int[][][] arg3) {
 		this.maxTileX = arg2;
 		this.maxTileZ = arg0;
 		this.levelHeightmap = arg3;
 		this.levelTileFlags = arg1;
-		this.levelTileUnderlayIds = new byte[4][this.maxTileX][this.maxTileZ];
-		this.levelTileOverlayIds = new byte[4][this.maxTileX][this.maxTileZ];
-		this.levelTileOverlayShape = new byte[4][this.maxTileX][this.maxTileZ];
-		this.levelTileOverlayRotation = new byte[4][this.maxTileX][this.maxTileZ];
+		this.levelTileUnderlayIds = new int[4][this.maxTileX][this.maxTileZ];
+		this.levelTileOverlayIds = new int[4][this.maxTileX][this.maxTileZ];
+		this.levelTileOverlayShape = new int[4][this.maxTileX][this.maxTileZ];
+		this.levelTileOverlayRotation = new int[4][this.maxTileX][this.maxTileZ];
 		this.levelOccludemap = new int[4][this.maxTileX + 1][this.maxTileZ + 1];
-		this.levelShademap = new byte[4][this.maxTileX + 1][this.maxTileZ + 1];
+		this.levelShademap = new int[4][this.maxTileX + 1][this.maxTileZ + 1];
 		this.levelLightmap = new int[this.maxTileX + 1][this.maxTileZ + 1];
 		this.blendChroma = new int[this.maxTileZ];
 		this.blendSaturation = new int[this.maxTileZ];
@@ -741,7 +741,7 @@ public final class SceneBuilder {
 		@Pc(236) int local236;
 		@Pc(284) int local284;
 		for (local7 = 0; local7 < 4; local7++) {
-			@Pc(108) byte[][] local108 = this.levelShademap[local7];
+			@Pc(108) int[][] local108 = this.levelShademap[local7];
 			@Pc(110) byte local110 = 96;
 			@Pc(112) short local112 = 768;
 			@Pc(114) byte local114 = -50;
@@ -870,7 +870,7 @@ public final class SceneBuilder {
 									arg0.setTile(local7, local169, local284, 0, 0, -1, local679, local690, local703, local714, mulHSL(local752, local721), mulHSL(local752, local730), mulHSL(local752, local741), mulHSL(local752, local750), 0, 0, 0, 0, local762, 0);
 								} else {
 									local766 = this.levelTileOverlayShape[local7][local169][local284] + 1;
-									@Pc(919) byte local919 = this.levelTileOverlayRotation[local7][local169][local284];
+									@Pc(919) int local919 = this.levelTileOverlayRotation[local7][local169][local284] & 0xFF;
 									@Pc(925) FloType local925 = FloType.instances[local666 - 1];
 									@Pc(928) int local928 = local925.texture;
 									@Pc(936) int local936;

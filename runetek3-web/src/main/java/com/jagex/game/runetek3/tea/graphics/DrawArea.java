@@ -1,14 +1,16 @@
 package com.jagex.game.runetek3.tea.graphics;
 
+import com.jagex.game.runetek3.graphics.Draw2D;
 import org.openrs2.deob.annotation.OriginalArg;
 import org.openrs2.deob.annotation.OriginalClass;
 import org.openrs2.deob.annotation.OriginalMember;
 
-import java.awt.*;
-import java.awt.image.*;
+import org.teavm.jso.canvas.CanvasRenderingContext2D;
+import org.teavm.jso.canvas.ImageData;
+import org.teavm.jso.typedarrays.Uint8ClampedArray;
 
 @OriginalClass("client!qb")
-public final class DrawArea implements ImageProducer, ImageObserver {
+public final class DrawArea {
 
 	@OriginalMember(owner = "client!qb", name = "b", descriptor = "[I")
 	public final int[] pixels;
@@ -19,28 +21,16 @@ public final class DrawArea implements ImageProducer, ImageObserver {
 	@OriginalMember(owner = "client!qb", name = "d", descriptor = "I")
 	private final int height;
 
-	@OriginalMember(owner = "client!qb", name = "e", descriptor = "Ljava/awt/image/ColorModel;")
-	private final ColorModel colorModel;
-
-	@OriginalMember(owner = "client!qb", name = "f", descriptor = "Ljava/awt/image/ImageConsumer;")
-	private ImageConsumer imageConsumer;
-
-	@OriginalMember(owner = "client!qb", name = "g", descriptor = "Ljava/awt/Image;")
-	private final Image image;
+	private final ImageData imageData;
+	private final Uint8ClampedArray rgbPixels;
 
 	@OriginalMember(owner = "client!qb", name = "<init>", descriptor = "(Ljava/awt/Component;III)V")
-	public DrawArea(@OriginalArg(0) Component arg0, @OriginalArg(1) int arg1, @OriginalArg(3) int arg3) {
+	public DrawArea(CanvasRenderingContext2D context, @OriginalArg(1) int arg1, @OriginalArg(3) int arg3) {
 		this.width = arg1;
 		this.height = arg3;
 		this.pixels = new int[arg1 * arg3];
-		this.colorModel = new DirectColorModel(32, 16711680, 65280, 255);
-		this.image = arg0.createImage(this);
-		this.setPixels();
-		arg0.prepareImage(this.image, this);
-		this.setPixels();
-		arg0.prepareImage(this.image, this);
-		this.setPixels();
-		arg0.prepareImage(this.image, this);
+		this.imageData = context.createImageData(width, height);
+		this.rgbPixels = this.imageData.getData();
 		this.bind();
 	}
 
@@ -50,58 +40,15 @@ public final class DrawArea implements ImageProducer, ImageObserver {
 	}
 
 	@OriginalMember(owner = "client!qb", name = "a", descriptor = "(ILjava/awt/Graphics;II)V")
-	public void draw(@OriginalArg(0) int arg0, @OriginalArg(1) Graphics arg1, @OriginalArg(2) int arg2) {
-		this.setPixels();
-		arg1.drawImage(this.image, arg2, arg0, this);
-	}
-
-	@OriginalMember(owner = "client!qb", name = "addConsumer", descriptor = "(Ljava/awt/image/ImageConsumer;)V")
-	@Override
-	public synchronized void addConsumer(@OriginalArg(0) ImageConsumer arg0) {
-		this.imageConsumer = arg0;
-		arg0.setDimensions(this.width, this.height);
-		arg0.setProperties(null);
-		arg0.setColorModel(this.colorModel);
-		arg0.setHints(14);
-	}
-
-	@OriginalMember(owner = "client!qb", name = "isConsumer", descriptor = "(Ljava/awt/image/ImageConsumer;)Z")
-	@Override
-	public synchronized boolean isConsumer(@OriginalArg(0) ImageConsumer arg0) {
-		return this.imageConsumer == arg0;
-	}
-
-	@OriginalMember(owner = "client!qb", name = "removeConsumer", descriptor = "(Ljava/awt/image/ImageConsumer;)V")
-	@Override
-	public synchronized void removeConsumer(@OriginalArg(0) ImageConsumer arg0) {
-		if (this.imageConsumer == arg0) {
-			this.imageConsumer = null;
+	public void draw(@OriginalArg(0) int arg0, CanvasRenderingContext2D context, @OriginalArg(2) int arg2) {
+		for (int i = 0; i < width * height * 4; i += 4) {
+			int pixel = this.pixels[i / 4];
+			this.rgbPixels.set(i, (pixel >> 16) & 255);
+			this.rgbPixels.set(i + 1, (pixel >> 8) & 255);
+			this.rgbPixels.set(i + 2, pixel & 255);
+			this.rgbPixels.set(i + 3, 255);
 		}
-	}
 
-	@OriginalMember(owner = "client!qb", name = "startProduction", descriptor = "(Ljava/awt/image/ImageConsumer;)V")
-	@Override
-	public void startProduction(@OriginalArg(0) ImageConsumer arg0) {
-		this.addConsumer(arg0);
-	}
-
-	@OriginalMember(owner = "client!qb", name = "requestTopDownLeftRightResend", descriptor = "(Ljava/awt/image/ImageConsumer;)V")
-	@Override
-	public void requestTopDownLeftRightResend(@OriginalArg(0) ImageConsumer arg0) {
-		System.out.println("TDLR");
-	}
-
-	@OriginalMember(owner = "client!qb", name = "a", descriptor = "()V")
-	private synchronized void setPixels() {
-		if (this.imageConsumer != null) {
-			this.imageConsumer.setPixels(0, 0, this.width, this.height, this.colorModel, this.pixels, 0, this.width);
-			this.imageConsumer.imageComplete(2);
-		}
-	}
-
-	@OriginalMember(owner = "client!qb", name = "imageUpdate", descriptor = "(Ljava/awt/Image;IIIII)Z")
-	@Override
-	public boolean imageUpdate(@OriginalArg(0) Image arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2, @OriginalArg(3) int arg3, @OriginalArg(4) int arg4, @OriginalArg(5) int arg5) {
-		return true;
+		context.putImageData(imageData, arg2, arg0);
 	}
 }

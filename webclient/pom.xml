@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 
+		 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <repositories>
+        <repository>
+            <id>teavm-dev</id>
+            <url>https://teavm.org/maven/repository</url>
+        </repository>
+    </repositories>
+    <pluginRepositories>
+        <pluginRepository>
+            <id>teavm-dev</id>
+            <url>https://teavm.org/maven/repository</url>
+        </pluginRepository>
+    </pluginRepositories>
+
+    <parent>
+        <groupId>com.jagex.game</groupId>
+        <artifactId>rs2</artifactId>
+        <version>1.0</version>
+    </parent>
+
+    <groupId>rs2</groupId>
+    <artifactId>webclient</artifactId>
+    <version>1.0</version>
+
+    <properties>
+        <teavm.version>0.7.0-dev-1208</teavm.version>
+    </properties>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.openrs2</groupId>
+            <artifactId>deob-annotations</artifactId>
+            <version>1.0</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.jagex.game</groupId>
+            <artifactId>runetek3</artifactId>
+            <version>1.0</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.jagex.game</groupId>
+            <artifactId>runetek3-web</artifactId>
+            <version>1.0</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.teavm</groupId>
+            <artifactId>teavm-classlib</artifactId>
+            <version>${teavm.version}</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.teavm</groupId>
+            <artifactId>teavm-jso-apis</artifactId>
+            <version>${teavm.version}</version>
+            <scope>provided</scope>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.teavm</groupId>
+                <artifactId>teavm-maven-plugin</artifactId>
+                <version>${teavm.version}</version>
+                <executions>
+                    <execution>
+                        <id>web-client</id>
+                        <goals>
+                            <goal>compile</goal>
+                        </goals>
+                        <configuration>
+                            <targetDirectory>${project.build.directory}/js</targetDirectory>
+                            <mainClass>rs2.tea.Game</mainClass>
+                            <!-- <minifying>false</minifying>
+                            <debugInformationGenerated>true</debugInformationGenerated>
+                            <sourceMapsGenerated>true</sourceMapsGenerated>
+                            <sourceFilesCopied>true</sourceFilesCopied>
+                            <optimizationLevel>SIMPLE</optimizationLevel>
+                            <runtime>SEPARATE</runtime> -->
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+</project>

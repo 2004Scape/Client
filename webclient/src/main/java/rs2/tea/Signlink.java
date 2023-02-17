@@ -1,30 +1,23 @@
 package rs2.tea;
 
+import com.jagex.core.tea.io.DatabaseStore;
+import com.jagex.core.tea.io.FileDownloadStream;
+import com.jagex.core.tea.io.WebSocket;
 import org.openrs2.deob.annotation.OriginalArg;
 import org.openrs2.deob.annotation.OriginalClass;
 import org.openrs2.deob.annotation.OriginalMember;
 import org.openrs2.deob.annotation.Pc;
 
-import java.applet.Applet;
-import java.io.*;
-import java.net.InetAddress;
-import java.net.Socket;
-import java.net.URL;
+import java.io.IOException;
 
 @OriginalClass("client!sign/signlink")
 public final class Signlink implements Runnable {
 
 	@OriginalMember(owner = "client!sign/signlink", name = "clientversion", descriptor = "I")
-	private static int clientversion;
+	public static int clientversion = 225;
 
 	@OriginalMember(owner = "client!sign/signlink", name = "uid", descriptor = "I")
 	public static int uid;
-
-	@OriginalMember(owner = "client!sign/signlink", name = "mainapp", descriptor = "Ljava/applet/Applet;")
-	public static Applet mainapp;
-
-	@OriginalMember(owner = "client!sign/signlink", name = "sunjava", descriptor = "Z")
-	public static boolean sunjava;
 
 	@OriginalMember(owner = "client!sign/signlink", name = "active", descriptor = "Z")
 	private static boolean active;
@@ -33,7 +26,7 @@ public final class Signlink implements Runnable {
 	private static int threadliveid;
 
 	@OriginalMember(owner = "client!sign/signlink", name = "socketip", descriptor = "Ljava/net/InetAddress;")
-	private static InetAddress socketip;
+	private static String socketip;
 
 	@OriginalMember(owner = "client!sign/signlink", name = "socketreq", descriptor = "I")
 	private static int socketreq;
@@ -63,7 +56,7 @@ public final class Signlink implements Runnable {
 	public static int wavevol;
 
 	@OriginalMember(owner = "client!sign/signlink", name = "socket", descriptor = "Ljava/net/Socket;")
-	private static Socket socket = null;
+	private static WebSocket socket = null;
 
 	@OriginalMember(owner = "client!sign/signlink", name = "threadreqpri", descriptor = "I")
 	private static int threadreqpri = 1;
@@ -93,7 +86,7 @@ public final class Signlink implements Runnable {
 	private static String urlreq = null;
 
 	@OriginalMember(owner = "client!sign/signlink", name = "urlstream", descriptor = "Ljava/io/DataInputStream;")
-	private static DataInputStream urlstream = null;
+	private static FileDownloadStream urlstream = null;
 
 	@OriginalMember(owner = "client!sign/signlink", name = "looprate", descriptor = "I")
 	private static int looprate = 50;
@@ -111,7 +104,7 @@ public final class Signlink implements Runnable {
 	public static String errorname = "";
 
 	@OriginalMember(owner = "client!sign/signlink", name = "startpriv", descriptor = "(Ljava/net/InetAddress;)V")
-	public static void startpriv(@OriginalArg(0) InetAddress arg0) {
+	public static void startpriv(@OriginalArg(0) String arg0) {
 		threadliveid = (int) (Math.random() * 9.9999999E7D);
 		if (active) {
 			try {
@@ -138,67 +131,9 @@ public final class Signlink implements Runnable {
 		}
 	}
 
-	@OriginalMember(owner = "client!sign/signlink", name = "findcachedir", descriptor = "()Ljava/lang/String;")
-	public static String findcachedir() {
-		@Pc(50) String[] local50 = new String[] { "c:/windows/", "c:/winnt/", "d:/windows/", "d:/winnt/", "e:/windows/", "e:/winnt/", "f:/windows/", "f:/winnt/", "c:/", "~/", "/tmp/", "" };
-		@Pc(52) String local52 = ".file_store_32";
-		for (@Pc(54) int local54 = 0; local54 < local50.length; local54++) {
-			try {
-				@Pc(59) String local59 = local50[local54];
-				@Pc(67) File local67;
-				if (local59.length() > 0) {
-					local67 = new File(local59);
-					if (!local67.exists()) {
-						continue;
-					}
-				}
-				local67 = new File(local59 + local52);
-				if (local67.exists() || local67.mkdir()) {
-					return local59 + local52 + "/";
-				}
-			} catch (@Pc(102) Exception local102) {
-			}
-		}
-		return null;
-	}
-
 	@OriginalMember(owner = "client!sign/signlink", name = "getuid", descriptor = "(Ljava/lang/String;)I")
-	public static int getuid(@OriginalArg(0) String arg0) {
-		try {
-			@Pc(11) File local11 = new File(arg0 + "uid.dat");
-			if (!local11.exists() || local11.length() < 4L) {
-				@Pc(34) DataOutputStream local34 = new DataOutputStream(new FileOutputStream(arg0 + "uid.dat"));
-				local34.writeInt((int) (Math.random() * 9.9999999E7D));
-				local34.close();
-			}
-		} catch (@Pc(44) Exception local44) {
-		}
-		try {
-			@Pc(59) DataInputStream local59 = new DataInputStream(new FileInputStream(arg0 + "uid.dat"));
-			@Pc(62) int local62 = local59.readInt();
-			local59.close();
-			return local62 + 1;
-		} catch (@Pc(69) Exception local69) {
-			return 0;
-		}
-	}
-
-	@OriginalMember(owner = "client!sign/signlink", name = "gethash", descriptor = "(Ljava/lang/String;)J")
-	public static long gethash(@OriginalArg(0) String arg0) {
-		@Pc(2) String local2 = arg0.trim();
-		@Pc(4) long local4 = 0L;
-		for (@Pc(6) int local6 = 0; local6 < local2.length() && local6 < 12; local6++) {
-			@Pc(11) char local11 = local2.charAt(local6);
-			local4 *= 37L;
-			if (local11 >= 'A' && local11 <= 'Z') {
-				local4 += local11 + 1 - 65;
-			} else if (local11 >= 'a' && local11 <= 'z') {
-				local4 += local11 + 1 - 97;
-			} else if (local11 >= '0' && local11 <= '9') {
-				local4 += local11 + 27 - 48;
-			}
-		}
-		return local4;
+	public static int getuid() {
+		return (int)(Math.random() * Integer.MAX_VALUE);
 	}
 
 	@OriginalMember(owner = "client!sign/signlink", name = "looprate", descriptor = "(I)V")
@@ -211,7 +146,7 @@ public final class Signlink implements Runnable {
 		if (!active) {
 			return null;
 		}
-		loadreq = String.valueOf(gethash(arg0));
+		loadreq = String.valueOf(arg0);
 		while (loadreq != null) {
 			try {
 				Thread.sleep(1L);
@@ -234,7 +169,7 @@ public final class Signlink implements Runnable {
 		}
 		savelen = arg1.length;
 		savebuf = arg1;
-		savereq = String.valueOf(gethash(arg0));
+		savereq = String.valueOf(arg0);
 		while (savereq != null) {
 			try {
 				Thread.sleep(1L);
@@ -244,7 +179,7 @@ public final class Signlink implements Runnable {
 	}
 
 	@OriginalMember(owner = "client!sign/signlink", name = "opensocket", descriptor = "(I)Ljava/net/Socket;")
-	public static synchronized Socket opensocket(@OriginalArg(0) int arg0) throws IOException {
+	public static synchronized WebSocket opensocket(@OriginalArg(0) int arg0) throws IOException {
 		socketreq = arg0;
 		while (socketreq != 0) {
 			try {
@@ -259,7 +194,7 @@ public final class Signlink implements Runnable {
 	}
 
 	@OriginalMember(owner = "client!sign/signlink", name = "openurl", descriptor = "(Ljava/lang/String;)Ljava/io/DataInputStream;")
-	public static synchronized DataInputStream openurl(@OriginalArg(0) String arg0) throws IOException {
+	public static synchronized FileDownloadStream openurl(@OriginalArg(0) String arg0) throws IOException {
 		urlreq = arg0;
 		while (urlreq != null) {
 			try {
@@ -335,24 +270,24 @@ public final class Signlink implements Runnable {
 			@Pc(19) String local19 = arg0.replace('@', '_');
 			@Pc(24) String local24 = local19.replace('&', '_');
 			@Pc(29) String local29 = local24.replace('#', '_');
-			@Pc(46) DataInputStream local46 = openurl("reporterror" + 225 + ".cgi?error=" + errorname + " " + local29);
-			local46.readLine();
-			local46.close();
-		} catch (@Pc(53) IOException local53) {
+			openurl("reporterror" + 225 + ".cgi?error=" + errorname + " " + local29);
+		} catch (IOException ex) {
 		}
 	}
 
 	@OriginalMember(owner = "client!sign/signlink", name = "run", descriptor = "()V")
 	@Override
 	public void run() {
+		DatabaseStore.initDb();
+
 		active = true;
-		@Pc(3) String local3 = findcachedir();
-		uid = getuid(local3);
+		uid = getuid();
 		@Pc(8) int local8 = threadliveid;
 		while (threadliveid == local8) {
 			if (socketreq != 0) {
 				try {
-					socket = new Socket(socketip, socketreq);
+					socket = new WebSocket(socketip, socketreq);
+					socket.connect();
 				} catch (@Pc(19) Exception local19) {
 					socket = null;
 				}
@@ -364,48 +299,42 @@ public final class Signlink implements Runnable {
 				local31.setPriority(threadreqpri);
 				threadreq = null;
 			} else if (dnsreq != null) {
-				try {
-					dns = InetAddress.getByName(dnsreq).getHostName();
-				} catch (@Pc(50) Exception local50) {
-					dns = "unknown";
-				}
+				dns = dnsreq;
 				dnsreq = null;
 			} else if (loadreq != null) {
 				loadbuf = null;
 				try {
-					@Pc(71) File local71 = new File(local3 + loadreq);
-					if (local71.exists()) {
-						@Pc(78) int local78 = (int) local71.length();
-						loadbuf = new byte[local78];
-						@Pc(96) DataInputStream local96 = new DataInputStream(new FileInputStream(local3 + loadreq));
-						local96.readFully(loadbuf, 0, local78);
-						local96.close();
+					loadbuf = DatabaseStore.getFile(loadreq);
+					if (loadbuf != null && loadbuf.length == 0) {
+						System.out.println("Failed to load " + loadreq);
+						loadbuf = null;
 					}
-				} catch (@Pc(105) Exception local105) {
+				} catch (@Pc(133) Exception ex) {
+					ex.printStackTrace();
 				}
 				loadreq = null;
 			} else if (savereq != null) {
 				if (savebuf != null) {
 					try {
-						@Pc(124) FileOutputStream local124 = new FileOutputStream(local3 + savereq);
-						local124.write(savebuf, 0, savelen);
-						local124.close();
-					} catch (@Pc(133) Exception local133) {
+						DatabaseStore.putFile(savereq, savebuf);
+					} catch (@Pc(133) Exception ex) {
+						ex.printStackTrace();
 					}
 				}
+
 				if (waveplay) {
-					wave = local3 + savereq;
+					wave = savereq;
 					waveplay = false;
 				}
 				if (midiplay) {
-					midi = local3 + savereq;
+					midi = savereq;
 					midiplay = false;
 				}
 				savereq = null;
 			} else if (urlreq != null) {
 				try {
-					urlstream = new DataInputStream((new URL(mainapp.getCodeBase(), urlreq)).openStream());
-				} catch (@Pc(178) Exception local178) {
+					urlstream = new FileDownloadStream(urlreq);
+				} catch (@Pc(178) Exception ignored) {
 					urlstream = null;
 				}
 				urlreq = null;

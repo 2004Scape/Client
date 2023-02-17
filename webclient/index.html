@@ -3,13 +3,64 @@
     <head>
         <title>RuneScape 2</title>
 
-        <script src="build/teavm/classes.js"></script>
+        <style>
+            body, td, p {
+                font-family: Arial, Helvetica, sans-serif;
+                font-size: 11px;
+            }
+
+            body {
+                margin: 0px;
+                overflow: auto;
+            }
+
+            canvas {
+                outline: none;
+                -webkit-tap-highlight-color: rgba(255, 255, 255, 0); /* mobile webkit */
+            }
+
+            a, a.visited {
+                color: white;
+                text-decoration: none;
+            }
+        </style>
+
+        <script src="target/js/classes.js"></script>
         <script>
-            window.onload = main;
+            window.onload = function() {
+                main(['10', '0', 'highmem', 'members', 'true']);
+            };
+
+            function toggleFullscreen() {
+                if (document.fullscreenElement || document.webkitFullscreenElement || document.mozFullScreenElement || document.msFullscreenElement) {
+                    if (document.exitFullscreen) {
+                        document.exitFullscreen();
+                    } else if (document.webkitExitFullscreen) {
+                        document.webkitExitFullscreen();
+                    } else if (document.mozCancelFullScreen) {
+                        document.mozCancelFullScreen();
+                    } else if (document.msExitFullscreen) {
+                        document.msExitFullscreen();
+                    }
+                } else {
+                    let element = document.getElementById('game');
+
+                    if (element.requestFullscreen) {
+                        element.requestFullscreen();
+                    } else if (element.webkitRequestFullscreen) {
+                        element.webkitRequestFullscreen();
+                    } else if (element.mozRequestFullScreen) {
+                        element.mozRequestFullScreen();
+                    } else if (element.msRequestFullscreen) {
+                        element.msRequestFullscreen();
+                    }
+                }
+            }
         </script>
     </head>
 
     <body style="background-color: black">
-        <canvas id="game" width="789" height="532"></canvas>
+        <canvas id="game" width="789" height="532"></canvas><br />
+        <a href="#" id="fullscreen" onclick="toggleFullscreen();">Go fullscreen</a>
     </body>
 </html>
