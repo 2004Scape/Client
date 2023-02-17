@@ -39,7 +39,9 @@ import org.openrs2.deob.annotation.OriginalMember;
 import org.openrs2.deob.annotation.Pc;
 import org.teavm.jso.JSBody;
 import org.teavm.jso.JSObject;
-import rs2.Protocol;
+import rs2.ClientProt;
+import rs2.ServerProt;
+import rs2.ZoneProt;
 
 import java.io.IOException;
 import java.math.BigInteger;
@@ -1553,7 +1555,7 @@ public final class Game extends GameShell {
 
 	@OriginalMember(owner = "client!client", name = "c", descriptor = "(B)V")
 	private void closeInterfaces() {
-		this.out.p1isaac(231);
+		this.out.p1isaac(ClientProt.CLOSE_MODAL);
 		if (this.sidebarInterfaceId != -1) {
 			this.sidebarInterfaceId = -1;
 			this.redrawSidebar = true;
@@ -1763,7 +1765,7 @@ public final class Game extends GameShell {
 			}
 			this.ignoreName37[this.ignoreCount++] = arg0;
 			this.redrawSidebar = true;
-			this.out.p1isaac(79);
+			this.out.p1isaac(ClientProt.IGNORELIST_ADD);
 			this.out.p8(arg0);
 		}
 	}
@@ -1781,7 +1783,7 @@ public final class Game extends GameShell {
 		@Pc(108) int local108;
 		@Pc(110) int local110;
 		@Pc(112) int local112;
-		if (arg2 == 59 || arg2 == 76) {
+		if (arg2 == ZoneProt.LOC_ADD || arg2 == ZoneProt.LOC_DEL) {
 			local15 = arg1.g1();
 			local24 = this.baseX + (local15 >> 4 & 0x7);
 			local31 = this.baseZ + (local15 & 0x7);
@@ -1789,7 +1791,7 @@ public final class Game extends GameShell {
 			local38 = local34 >> 2;
 			local42 = local34 & 0x3;
 			local47 = this.LOC_KIND_TO_CLASS_ID[local38];
-			if (arg2 == 76) {
+			if (arg2 == ZoneProt.LOC_DEL) {
 				local52 = -1;
 			} else {
 				local52 = arg1.g2();
@@ -1840,7 +1842,7 @@ public final class Game extends GameShell {
 				local69.orientation = local42;
 				this.addLoc(local42, local24, local31, local47, local52, local38, this.currentLevel);
 			}
-		} else if (arg2 == 42) {
+		} else if (arg2 == ZoneProt.LOC_ANIM) {
 			local15 = arg1.g1();
 			local24 = this.baseX + (local15 >> 4 & 0x7);
 			local31 = this.baseZ + (local15 & 0x7);
@@ -1869,7 +1871,7 @@ public final class Game extends GameShell {
 			}
 		} else {
 			@Pc(395) ObjEntity local395;
-			if (arg2 == 223) {
+			if (arg2 == ZoneProt.OBJ_REVEAL) {
 				local15 = arg1.g1();
 				local24 = this.baseX + (local15 >> 4 & 0x7);
 				local31 = this.baseZ + (local15 & 0x7);
@@ -1885,7 +1887,7 @@ public final class Game extends GameShell {
 					this.levelObjStacks[this.currentLevel][local24][local31].pushBack(local395);
 					this.sortObjStacks(local24, local31);
 				}
-			} else if (arg2 == 49) {
+			} else if (arg2 == ZoneProt.OBJ_DEL) {
 				local15 = arg1.g1();
 				local24 = this.baseX + (local15 >> 4 & 0x7);
 				local31 = this.baseZ + (local15 & 0x7);
@@ -1908,7 +1910,7 @@ public final class Game extends GameShell {
 			} else {
 				@Pc(572) int local572;
 				@Pc(575) int local575;
-				if (arg2 == 69) {
+				if (arg2 == ZoneProt.MAP_PROJANIM) {
 					local15 = arg1.g1();
 					local24 = this.baseX + (local15 >> 4 & 0x7);
 					local31 = this.baseZ + (local15 & 0x7);
@@ -1931,7 +1933,7 @@ public final class Game extends GameShell {
 						local657.updateVelocity(this.getHeightmapY(this.currentLevel, local34, local38) - local572, local38, local34, local575 + loopCycle);
 						this.projectiles.pushBack(local657);
 					}
-				} else if (arg2 == 191) {
+				} else if (arg2 == ZoneProt.SPOTANIM_SPECIFIC) {
 					local15 = arg1.g1();
 					local24 = this.baseX + (local15 >> 4 & 0x7);
 					local31 = this.baseZ + (local15 & 0x7);
@@ -1944,7 +1946,7 @@ public final class Game extends GameShell {
 						@Pc(753) SpotAnimEntity local753 = new SpotAnimEntity(local24, local34, local31, local42, this.getHeightmapY(this.currentLevel, local24, local31) - local38, this.currentLevel, loopCycle);
 						this.spotanims.pushBack(local753);
 					}
-				} else if (arg2 == 50) {
+				} else if (arg2 == ZoneProt.OBJ_ADD) {
 					local15 = arg1.g1();
 					local24 = this.baseX + (local15 >> 4 & 0x7);
 					local31 = this.baseZ + (local15 & 0x7);
@@ -1962,7 +1964,7 @@ public final class Game extends GameShell {
 						this.sortObjStacks(local24, local31);
 					}
 				} else {
-					if (arg2 == 23) {
+					if (arg2 == ZoneProt.LOC_ADD_CHANGE) {
 						local15 = arg1.g1();
 						local24 = this.baseX + (local15 >> 4 & 0x7);
 						local31 = this.baseZ + (local15 & 0x7);
@@ -2023,7 +2025,7 @@ public final class Game extends GameShell {
 							local921.maxTileZ = local31 + local914;
 						}
 					}
-					if (arg2 == 151) {
+					if (arg2 == ZoneProt.OBJ_COUNT) {
 						local15 = arg1.g1();
 						local24 = this.baseX + (local15 >> 4 & 0x7);
 						local31 = this.baseZ + (local15 & 0x7);
@@ -2161,7 +2163,7 @@ public final class Game extends GameShell {
 			drawSceneCounter++;
 			if (drawSceneCounter > 1802) {
 				drawSceneCounter = 0;
-				this.out.p1isaac(146);
+				this.out.p1isaac(ClientProt.ANTICHEAT_DRAW);
 				this.out.p1(0);
 				local122 = this.out.pos;
 				this.out.p2(29711);
@@ -2694,7 +2696,7 @@ public final class Game extends GameShell {
 	}
 
 	@OriginalMember(owner = "client!client", name = "j", descriptor = "(I)V")
-	private void handleChatSettingsInput(@OriginalArg(0) int arg0) {
+	private void handleChatSettingsInput() {
 		if (super.mouseClickButton != 1) {
 			return;
 		}
@@ -2703,7 +2705,7 @@ public final class Game extends GameShell {
 			this.publicChatSetting = (this.publicChatSetting + 1) % 4;
 			this.redrawPrivacySettings = true;
 			this.redrawChatback = true;
-			this.out.p1isaac(244);
+			this.out.p1isaac(ClientProt.CHAT_SETMODE);
 			this.out.p1(this.publicChatSetting);
 			this.out.p1(this.privateChatSetting);
 			this.out.p1(this.tradeChatSetting);
@@ -2712,7 +2714,7 @@ public final class Game extends GameShell {
 			this.privateChatSetting = (this.privateChatSetting + 1) % 3;
 			this.redrawPrivacySettings = true;
 			this.redrawChatback = true;
-			this.out.p1isaac(244);
+			this.out.p1isaac(ClientProt.CHAT_SETMODE);
 			this.out.p1(this.publicChatSetting);
 			this.out.p1(this.privateChatSetting);
 			this.out.p1(this.tradeChatSetting);
@@ -2721,7 +2723,7 @@ public final class Game extends GameShell {
 			this.tradeChatSetting = (this.tradeChatSetting + 1) % 3;
 			this.redrawPrivacySettings = true;
 			this.redrawChatback = true;
-			this.out.p1isaac(244);
+			this.out.p1isaac(ClientProt.CHAT_SETMODE);
 			this.out.p1(this.publicChatSetting);
 			this.out.p1(this.privateChatSetting);
 			this.out.p1(this.tradeChatSetting);
@@ -2736,7 +2738,6 @@ public final class Game extends GameShell {
 					return;
 				}
 			}
-			return;
 		}
 	}
 
@@ -2999,7 +3000,7 @@ public final class Game extends GameShell {
 								this.removeFriend(local153);
 							}
 							if (this.socialAction == 3 && this.socialInput.length() > 0) {
-								this.out.p1isaac(148);
+								this.out.p1isaac(ClientProt.MESSAGE_PRIVATE);
 								this.out.p1(0);
 								local193 = this.out.pos;
 								this.out.p8(this.socialName37);
@@ -3011,7 +3012,7 @@ public final class Game extends GameShell {
 								if (this.privateChatSetting == 2) {
 									this.privateChatSetting = 1;
 									this.redrawPrivacySettings = true;
-									this.out.p1isaac(244);
+									this.out.p1isaac(ClientProt.CHAT_SETMODE);
 									this.out.p1(this.publicChatSetting);
 									this.out.p1(this.privateChatSetting);
 									this.out.p1(this.tradeChatSetting);
@@ -3042,7 +3043,7 @@ public final class Game extends GameShell {
 									local193 = Integer.parseInt(this.chatbackInput);
 								} catch (@Pc(369) Exception local369) {
 								}
-								this.out.p1isaac(237);
+								this.out.p1isaac(ClientProt.RESUME_P_COUNTDIALOG);
 								this.out.p4(local193);
 							}
 							this.chatbackInputOpen = false;
@@ -3080,7 +3081,7 @@ public final class Game extends GameShell {
 								Image24.bilinearFiltering = true;
 								Draw2D.fullViewport = true;
 							} else if (this.chatTyped.startsWith("::")) {
-								this.out.p1isaac(4);
+								this.out.p1isaac(ClientProt.CLIENT_CHEAT);
 								this.out.p1(this.chatTyped.length() - 1);
 								this.out.pjstr(this.chatTyped.substring(2));
 							} else {
@@ -3142,7 +3143,7 @@ public final class Game extends GameShell {
 									local654 = 2;
 									this.chatTyped = this.chatTyped.substring(7);
 								}
-								this.out.p1isaac(158);
+								this.out.p1isaac(ClientProt.MESSAGE_PUBLIC);
 								this.out.p1(0);
 								@Pc(693) int local693 = this.out.pos;
 								this.out.p1(local496);
@@ -3159,7 +3160,7 @@ public final class Game extends GameShell {
 								if (this.publicChatSetting == 2) {
 									this.publicChatSetting = 3;
 									this.redrawPrivacySettings = true;
-									this.out.p1isaac(244);
+									this.out.p1isaac(ClientProt.CHAT_SETMODE);
 									this.out.p1(this.publicChatSetting);
 									this.out.p1(this.privateChatSetting);
 									this.out.p1(this.tradeChatSetting);
@@ -3588,7 +3589,7 @@ public final class Game extends GameShell {
 		updateTemporaryLocsCounter++;
 		if (updateTemporaryLocsCounter > 85) {
 			updateTemporaryLocsCounter = 0;
-			this.out.p1isaac(85);
+			this.out.p1isaac(ClientProt.ANTICHEAT_UPDATE_LOCS);
 		}
 	}
 
@@ -4938,7 +4939,7 @@ public final class Game extends GameShell {
 		if (this.redrawSideicons) {
 			if (this.flashingTab != -1 && this.flashingTab == this.selectedTab) {
 				this.flashingTab = -1;
-				this.out.p1isaac(175);
+				this.out.p1isaac(ClientProt.IF_FLASHING_TAB);
 				this.out.p1(this.selectedTab);
 			}
 			this.redrawSideicons = false;
@@ -5124,10 +5125,10 @@ public final class Game extends GameShell {
 					if (local83 != null && local83.name != null && local83.name.equalsIgnoreCase(local69)) {
 						this.tryMove(this.localPlayer.pathTileX[0], 1, false, local83.pathTileX[0], this.localPlayer.pathTileZ[0], 0, 2, 1, local83.pathTileZ[0], 0, 0, 0);
 						if (local28 == 903) {
-							this.out.p1isaac(206);
+							this.out.p1isaac(ClientProt.OPPLAYER4);
 						}
 						if (local28 == 363) {
-							this.out.p1isaac(164);
+							this.out.p1isaac(ClientProt.OPPLAYER1);
 						}
 						this.out.p2(this.playerIds[local73]);
 						local71 = true;
@@ -5139,7 +5140,7 @@ public final class Game extends GameShell {
 				}
 			}
 		}
-		if (local28 == 450 && this.interactWithLoc(75, local18, local23, local33)) {
+		if (local28 == 450 && this.interactWithLoc(ClientProt.OPLOCU, local18, local23, local33)) {
 			this.out.p2(this.objInterface);
 			this.out.p2(this.objSelectedSlot);
 			this.out.p2(this.objSelectedInterface);
@@ -5150,26 +5151,26 @@ public final class Game extends GameShell {
 					opHeld1Counter++;
 				}
 				if (opHeld1Counter >= 90) {
-					this.out.p1isaac(220);
+					this.out.p1isaac(ClientProt.ANTICHEAT_OPHELD4);
 				}
-				this.out.p1isaac(157);
+				this.out.p1isaac(ClientProt.OPHELD4);
 			}
 			if (local28 == 347) {
-				this.out.p1isaac(211);
+				this.out.p1isaac(ClientProt.OPHELD5);
 			}
 			if (local28 == 422) {
-				this.out.p1isaac(133);
+				this.out.p1isaac(ClientProt.OPHELD3);
 			}
 			if (local28 == 405) {
 				opHeld4Counter += local33;
 				if (opHeld4Counter >= 97) {
-					this.out.p1isaac(30);
+					this.out.p1isaac(ClientProt.ANTICHEAT_OPHELD1);
 					this.out.p3(14953816);
 				}
-				this.out.p1isaac(195);
+				this.out.p1isaac(ClientProt.OPHELD1);
 			}
 			if (local28 == 38) {
-				this.out.p1isaac(71);
+				this.out.p1isaac(ClientProt.OPHELD2);
 			}
 			this.out.p2(local33);
 			this.out.p2(local18);
@@ -5195,33 +5196,33 @@ public final class Game extends GameShell {
 				this.crossMode = 2;
 				this.crossCycle = 0;
 				if (local28 == 542) {
-					this.out.p1isaac(8);
+					this.out.p1isaac(ClientProt.OPNPC2);
 				}
 				if (local28 == 6) {
 					if ((local33 & 0x3) == 0) {
 						opNpc3Counter++;
 					}
 					if (opNpc3Counter >= 124) {
-						this.out.p1isaac(88);
+						this.out.p1isaac(ClientProt.ANTICHEAT_OPNPC3);
 						this.out.p4(0);
 					}
-					this.out.p1isaac(27);
+					this.out.p1isaac(ClientProt.OPNPC3);
 				}
 				if (local28 == 963) {
-					this.out.p1isaac(113);
+					this.out.p1isaac(ClientProt.OPNPC4);
 				}
 				if (local28 == 728) {
-					this.out.p1isaac(194);
+					this.out.p1isaac(ClientProt.OPNPC1);
 				}
 				if (local28 == 245) {
 					if ((local33 & 0x3) == 0) {
 						opNpc5Counter++;
 					}
 					if (opNpc5Counter >= 85) {
-						this.out.p1isaac(176);
+						this.out.p1isaac(ClientProt.ANTICHEAT_OPNPC5);
 						this.out.p2(39596);
 					}
-					this.out.p1isaac(100);
+					this.out.p1isaac(ClientProt.OPNPC5);
 				}
 				this.out.p2(local33);
 			}
@@ -5236,7 +5237,7 @@ public final class Game extends GameShell {
 			this.crossY = super.mouseClickY;
 			this.crossMode = 2;
 			this.crossCycle = 0;
-			this.out.p1isaac(239);
+			this.out.p1isaac(ClientProt.OPOBJU);
 			this.out.p2(local18 + this.sceneBaseTileX);
 			this.out.p2(local23 + this.sceneBaseTileZ);
 			this.out.p2(local33);
@@ -5255,10 +5256,10 @@ public final class Game extends GameShell {
 			this.addMessage(0, local69, "");
 		}
 		if (local28 == 285) {
-			this.interactWithLoc(245, local18, local23, local33);
+			this.interactWithLoc(ClientProt.OPLOC1, local18, local23, local33);
 		}
 		if (local28 == 881) {
-			this.out.p1isaac(130);
+			this.out.p1isaac(ClientProt.OPHELDU);
 			this.out.p2(local33);
 			this.out.p2(local18);
 			this.out.p2(local23);
@@ -5277,7 +5278,7 @@ public final class Game extends GameShell {
 			}
 		}
 		if (local28 == 391) {
-			this.out.p1isaac(48);
+			this.out.p1isaac(ClientProt.OPHELDT);
 			this.out.p2(local33);
 			this.out.p2(local18);
 			this.out.p2(local23);
@@ -5309,7 +5310,7 @@ public final class Game extends GameShell {
 			this.spellSelected = 0;
 		} else {
 			if (local28 == 44 && !this.pressedContinueOption) {
-				this.out.p1isaac(235);
+				this.out.p1isaac(ClientProt.RESUME_PAUSEBUTTON);
 				this.out.p2(local23);
 				this.pressedContinueOption = true;
 			}
@@ -5334,7 +5335,7 @@ public final class Game extends GameShell {
 					this.crossY = super.mouseClickY;
 					this.crossMode = 2;
 					this.crossCycle = 0;
-					this.out.p1isaac(202);
+					this.out.p1isaac(ClientProt.OPNPCU);
 					this.out.p2(local33);
 					this.out.p2(this.objInterface);
 					this.out.p2(this.objSelectedSlot);
@@ -5351,21 +5352,21 @@ public final class Game extends GameShell {
 					this.crossMode = 2;
 					this.crossCycle = 0;
 					if (local28 == 1101) {
-						this.out.p1isaac(164);
+						this.out.p1isaac(ClientProt.OPPLAYER1);
 					}
 					if (local28 == 151) {
 						opPlayer2Counter++;
 						if (opPlayer2Counter >= 90) {
-							this.out.p1isaac(2);
+							this.out.p1isaac(ClientProt.ANTICHEAT_OPPLAYER2);
 							this.out.p2(31114);
 						}
-						this.out.p1isaac(53);
+						this.out.p1isaac(ClientProt.OPPLAYER2);
 					}
 					if (local28 == 1373) {
-						this.out.p1isaac(206);
+						this.out.p1isaac(ClientProt.OPPLAYER4);
 					}
 					if (local28 == 1544) {
-						this.out.p1isaac(185);
+						this.out.p1isaac(ClientProt.OPPLAYER3);
 					}
 					this.out.p2(local33);
 				}
@@ -5378,7 +5379,7 @@ public final class Game extends GameShell {
 					this.crossY = super.mouseClickY;
 					this.crossMode = 2;
 					this.crossCycle = 0;
-					this.out.p1isaac(134);
+					this.out.p1isaac(ClientProt.OPNPCT);
 					this.out.p2(local33);
 					this.out.p2(this.activeSpellId);
 				}
@@ -5407,7 +5408,7 @@ public final class Game extends GameShell {
 					}
 				}
 			}
-			if (local28 == 55 && this.interactWithLoc(9, local18, local23, local33)) {
+			if (local28 == 55 && this.interactWithLoc(ClientProt.OPLOCT, local18, local23, local33)) {
 				this.out.p2(this.activeSpellId);
 			}
 			if (local28 == 224 || local28 == 993 || local28 == 99 || local28 == 746 || local28 == 877) {
@@ -5420,19 +5421,19 @@ public final class Game extends GameShell {
 				this.crossMode = 2;
 				this.crossCycle = 0;
 				if (local28 == 224) {
-					this.out.p1isaac(140);
+					this.out.p1isaac(ClientProt.OPOBJ1);
 				}
 				if (local28 == 746) {
-					this.out.p1isaac(178);
+					this.out.p1isaac(ClientProt.OPOBJ4);
 				}
 				if (local28 == 877) {
-					this.out.p1isaac(247);
+					this.out.p1isaac(ClientProt.OPOBJ5);
 				}
 				if (local28 == 99) {
-					this.out.p1isaac(200);
+					this.out.p1isaac(ClientProt.OPOBJ3);
 				}
 				if (local28 == 993) {
-					this.out.p1isaac(40);
+					this.out.p1isaac(ClientProt.OPOBJ2);
 				}
 				this.out.p2(local18 + this.sceneBaseTileX);
 				this.out.p2(local23 + this.sceneBaseTileZ);
@@ -5450,7 +5451,7 @@ public final class Game extends GameShell {
 				}
 			}
 			if (local28 == 504) {
-				this.interactWithLoc(172, local18, local23, local33);
+				this.interactWithLoc(ClientProt.OPLOC2, local18, local23, local33);
 			}
 			@Pc(1429) IfType local1429;
 			if (local28 == 930) {
@@ -5481,39 +5482,39 @@ public final class Game extends GameShell {
 						local1513 = this.handleInterfaceAction(local1429);
 					}
 					if (local1513) {
-						this.out.p1isaac(155);
+						this.out.p1isaac(ClientProt.IF_BUTTON);
 						this.out.p2(local23);
 					}
 				}
 				if (local28 == 602 || local28 == 596 || local28 == 22 || local28 == 892 || local28 == 415) {
 					if (local28 == 22) {
-						this.out.p1isaac(212);
+						this.out.p1isaac(ClientProt.IF_BUTTON3);
 					}
 					if (local28 == 415) {
 						if ((local23 & 0x3) == 0) {
 							ifButton5Counter++;
 						}
 						if (ifButton5Counter >= 55) {
-							this.out.p1isaac(17);
+							this.out.p1isaac(ClientProt.ANTICHEAT_IF_BUTTON5);
 							this.out.p4(0);
 						}
-						this.out.p1isaac(6);
+						this.out.p1isaac(ClientProt.IF_BUTTON5);
 					}
 					if (local28 == 602) {
-						this.out.p1isaac(31);
+						this.out.p1isaac(ClientProt.IF_BUTTON1);
 					}
 					if (local28 == 892) {
 						if ((local18 & 0x3) == 0) {
 							opHeld9Counter++;
 						}
 						if (opHeld9Counter >= 130) {
-							this.out.p1isaac(238);
+							this.out.p1isaac(ClientProt.ANTICHEAT_IF_BUTTON4);
 							this.out.p1(177);
 						}
-						this.out.p1isaac(38);
+						this.out.p1isaac(ClientProt.IF_BUTTON4);
 					}
 					if (local28 == 596) {
-						this.out.p1isaac(59);
+						this.out.p1isaac(ClientProt.IF_BUTTON2);
 					}
 					this.out.p2(local33);
 					this.out.p2(local18);
@@ -5534,10 +5535,10 @@ public final class Game extends GameShell {
 						opLoc4Counter++;
 					}
 					if (opLoc4Counter >= 99) {
-						this.out.p1isaac(7);
+						this.out.p1isaac(ClientProt.ANTICHEAT_OPLOC4);
 						this.out.p4(0);
 					}
-					this.interactWithLoc(97, local18, local23, local33);
+					this.interactWithLoc(ClientProt.OPLOC4, local18, local23, local33);
 				}
 				if (local28 == 965) {
 					local500 = this.tryMove(this.localPlayer.pathTileX[0], 0, false, local18, this.localPlayer.pathTileZ[0], 0, 2, 0, local23, 0, 0, 0);
@@ -5548,7 +5549,7 @@ public final class Game extends GameShell {
 					this.crossY = super.mouseClickY;
 					this.crossMode = 2;
 					this.crossCycle = 0;
-					this.out.p1isaac(138);
+					this.out.p1isaac(ClientProt.OPOBJT);
 					this.out.p2(local18 + this.sceneBaseTileX);
 					this.out.p2(local23 + this.sceneBaseTileZ);
 					this.out.p2(local33);
@@ -5557,13 +5558,13 @@ public final class Game extends GameShell {
 				if (local28 == 1501) {
 					opLoc5Counter += this.sceneBaseTileZ;
 					if (opLoc5Counter >= 92) {
-						this.out.p1isaac(66);
+						this.out.p1isaac(ClientProt.ANTICHEAT_OPLOC5);
 						this.out.p4(0);
 					}
-					this.interactWithLoc(116, local18, local23, local33);
+					this.interactWithLoc(ClientProt.OPLOC5, local18, local23, local33);
 				}
 				if (local28 == 364) {
-					this.interactWithLoc(96, local18, local23, local33);
+					this.interactWithLoc(ClientProt.OPLOC3, local18, local23, local33);
 				}
 				if (local28 == 1102) {
 					local830 = ObjType.get(local33);
@@ -5575,7 +5576,7 @@ public final class Game extends GameShell {
 					this.addMessage(0, local845, "");
 				}
 				if (local28 == 960) {
-					this.out.p1isaac(155);
+					this.out.p1isaac(ClientProt.IF_BUTTON);
 					this.out.p2(local23);
 					local1429 = IfType.instances[local23];
 					if (local1429.scripts != null && local1429.scripts[0][0] == 5) {
@@ -5613,7 +5614,7 @@ public final class Game extends GameShell {
 						this.crossY = super.mouseClickY;
 						this.crossMode = 2;
 						this.crossCycle = 0;
-						this.out.p1isaac(248);
+						this.out.p1isaac(ClientProt.OPPLAYERU);
 						this.out.p2(local33);
 						this.out.p2(this.objInterface);
 						this.out.p2(this.objSelectedSlot);
@@ -5621,7 +5622,7 @@ public final class Game extends GameShell {
 					}
 				}
 				if (local28 == 465) {
-					this.out.p1isaac(155);
+					this.out.p1isaac(ClientProt.IF_BUTTON);
 					this.out.p2(local23);
 					local1429 = IfType.instances[local23];
 					if (local1429.scripts != null && local1429.scripts[0][0] == 5) {
@@ -5658,7 +5659,7 @@ public final class Game extends GameShell {
 						this.crossY = super.mouseClickY;
 						this.crossMode = 2;
 						this.crossCycle = 0;
-						this.out.p1isaac(177);
+						this.out.p1isaac(ClientProt.OPPLAYERT);
 						this.out.p2(local33);
 						this.out.p2(this.activeSpellId);
 					}
@@ -6073,7 +6074,7 @@ public final class Game extends GameShell {
 			this.validateCharacterDesign();
 		}
 		if (local4 == 326) {
-			this.out.p1isaac(52);
+			this.out.p1isaac(ClientProt.IF_DESIGN);
 			this.out.p1(this.designGenderMale ? 0 : 1);
 			for (local112 = 0; local112 < 7; local112++) {
 				this.out.p1(this.designIdentikits[local112]);
@@ -6089,7 +6090,7 @@ public final class Game extends GameShell {
 		if (local4 >= 601 && local4 <= 612) {
 			this.closeInterfaces();
 			if (this.reportAbuseInput.length() > 0) {
-				this.out.p1isaac(190);
+				this.out.p1isaac(ClientProt.BUG_REPORT);
 				this.out.p8(StringUtils.toBase37(this.reportAbuseInput));
 				this.out.p1(local4 - 601);
 				this.out.p1(this.reportAbuseMuteOption ? 1 : 0);
@@ -7177,7 +7178,6 @@ public final class Game extends GameShell {
 				this.loginMessage1 = "To play on this world move to a free area first";
 				return;
 			}
-			throw new IOException("");
 		} catch (@Pc(762) IOException local762) {
 			this.loginMessage0 = "";
 			this.loginMessage1 = "Error connecting to server.";
@@ -7282,7 +7282,7 @@ public final class Game extends GameShell {
 				this.friendWorld[this.friendCount] = 0;
 				this.friendCount++;
 				this.redrawSidebar = true;
-				this.out.p1isaac(118);
+				this.out.p1isaac(ClientProt.FRIENDLIST_ADD);
 				this.out.p8(arg0);
 			}
 		}
@@ -7555,7 +7555,7 @@ public final class Game extends GameShell {
 			}
 			@Pc(250) Buffer local250 = InputTracking.flush();
 			if (local250 != null) {
-				this.out.p1isaac(81);
+				this.out.p1isaac(ClientProt.EVENT_TRACKING);
 				this.out.p2(local250.pos);
 				this.out.pdata(local250.data, local250.pos, 0);
 				local250.release();
@@ -7570,7 +7570,7 @@ public final class Game extends GameShell {
 			this.updateTemporaryLocs();
 			if ((super.actionKey[1] == 1 || super.actionKey[2] == 1 || super.actionKey[3] == 1 || super.actionKey[4] == 1) && this.cameraMovedWrite++ > 5) {
 				this.cameraMovedWrite = 0;
-				this.out.p1isaac(189);
+				this.out.p1isaac(ClientProt.EVENT_CAMERA_POSITION);
 				this.out.p2(this.orbitCameraPitch);
 				this.out.p2(this.orbitCameraYaw);
 				this.out.p1(this.minimapAnticheatAngle);
@@ -7620,7 +7620,7 @@ public final class Game extends GameShell {
 							@Pc(530) int local530 = local502.inventorySlotObjCount[this.hoveredSlot];
 							local502.inventorySlotObjCount[this.hoveredSlot] = local502.inventorySlotObjCount[this.objDragSlot];
 							local502.inventorySlotObjCount[this.objDragSlot] = local530;
-							this.out.p1isaac(159);
+							this.out.p1isaac(ClientProt.IF_BUTTOND);
 							this.out.p2(this.objDragInterfaceId);
 							this.out.p2(this.objDragSlot);
 							this.out.p2(this.hoveredSlot);
@@ -7637,7 +7637,7 @@ public final class Game extends GameShell {
 			updateGame++;
 			if (updateGame > 127) {
 				updateGame = 0;
-				this.out.p1isaac(215);
+				this.out.p1isaac(ClientProt.ANTICHEAT_UPDATE);
 				this.out.p3(4991788);
 			}
 			if (Scene.clickTileX != -1) {
@@ -7660,7 +7660,7 @@ public final class Game extends GameShell {
 			this.handleObjDragging();
 			this.drawOnMinimap();
 			this.handleTabInput();
-			this.handleChatSettingsInput(0);
+			this.handleChatSettingsInput();
 			if (super.mouseButton == 1 || super.mouseClickButton == 1) {
 				this.dragCycles++;
 			}
@@ -7678,7 +7678,7 @@ public final class Game extends GameShell {
 			if (super.idleCycles > 4500) {
 				this.idleTimeout = 250;
 				super.idleCycles -= 500;
-				this.out.p1isaac(70);
+				this.out.p1isaac(ClientProt.IDLE_TIMER);
 			}
 			this.cameraOffsetCycle++;
 			if (this.cameraOffsetCycle > 500) {
@@ -7738,12 +7738,12 @@ public final class Game extends GameShell {
 			updateGameCounter2++;
 			if (updateGameCounter2 > 110) {
 				updateGameCounter2 = 0;
-				this.out.p1isaac(236);
+				this.out.p1isaac(ClientProt.ANTICHEAT_UPDATE2);
 				this.out.p4(0);
 			}
 			this.heartbeatTimer++;
 			if (this.heartbeatTimer > 50) {
-				this.out.p1isaac(108);
+				this.out.p1isaac(ClientProt.NO_TIMEOUT);
 			}
 			try {
 				if (this.connection != null && this.out.pos > 0) {
@@ -7962,15 +7962,15 @@ public final class Game extends GameShell {
 			local815 = this.bfsStepX[local57];
 			local821 = this.bfsStepZ[local57];
 			if (arg6 == 0) {
-				this.out.p1isaac(181);
+				this.out.p1isaac(ClientProt.MOVE_GAMECLICK);
 				this.out.p1(local74 + local74 + 3);
 			}
 			if (arg6 == 1) {
-				this.out.p1isaac(165);
+				this.out.p1isaac(ClientProt.MOVE_MINIMAPCLICK);
 				this.out.p1(local74 + local74 + 3 + 14);
 			}
 			if (arg6 == 2) {
-				this.out.p1isaac(93);
+				this.out.p1isaac(ClientProt.MOVE_OPCLICK);
 				this.out.p1(local74 + local74 + 3);
 			}
 			if (super.actionKey[5] == 1) {
@@ -8107,7 +8107,7 @@ public final class Game extends GameShell {
 					this.friendWorld[local38] = this.friendWorld[local38 + 1];
 					this.friendName37[local38] = this.friendName37[local38 + 1];
 				}
-				this.out.p1isaac(11);
+				this.out.p1isaac(ClientProt.FRIENDLIST_DEL);
 				this.out.p8(arg1);
 				return;
 			}
@@ -8467,7 +8467,7 @@ public final class Game extends GameShell {
 		handleTabInputCounter++;
 		if (handleTabInputCounter > 150) {
 			handleTabInputCounter = 0;
-			this.out.p1isaac(233);
+			this.out.p1isaac(ClientProt.ANTICHEAT_SIDEBAR_INPUT);
 			this.out.p1(43);
 		}
 	}
@@ -8705,7 +8705,7 @@ public final class Game extends GameShell {
 			} else {
 				this.scene.setMinLevel(0);
 			}
-			this.out.p1isaac(108);
+			this.out.p1isaac(ClientProt.NO_TIMEOUT);
 			@Pc(157) int local157;
 			for (local73 = 0; local73 < local60; local73++) {
 				local80 = (this.sceneMapIndex[local73] >> 8) * 64 - this.sceneBaseTileX;
@@ -8719,7 +8719,7 @@ public final class Game extends GameShell {
 					local53.clearLandscape(local80, local143, 64, 64);
 				}
 			}
-			this.out.p1isaac(108);
+			this.out.p1isaac(ClientProt.NO_TIMEOUT);
 			@Pc(225) int local225;
 			for (local80 = 0; local80 < local60; local80++) {
 				@Pc(216) byte[] local216 = this.sceneMapLocData[local80];
@@ -8731,10 +8731,10 @@ public final class Game extends GameShell {
 					local53.readLocs(local56, this.scene, this.levelCollisionMap, this.locList, local259, local157);
 				}
 			}
-			this.out.p1isaac(108);
+			this.out.p1isaac(ClientProt.NO_TIMEOUT);
 			local53.build(this.scene, -270, this.levelCollisionMap);
 			this.areaViewport.bind();
-			this.out.p1isaac(108);
+			this.out.p1isaac(ClientProt.NO_TIMEOUT);
 			for (@Pc(301) LocEntity local301 = (LocEntity) this.locList.peekFront(); local301 != null; local301 = (LocEntity) this.locList.prev()) {
 				if ((this.levelTileFlags[1][local301.heightmapNE][local301.heightmapNW] & 0x2) == 2) {
 					local301.heightmapSW--;
@@ -9051,7 +9051,7 @@ public final class Game extends GameShell {
 				for (@Pc(34) int local34 = local14; local34 < this.ignoreCount; local34++) {
 					this.ignoreName37[local34] = this.ignoreName37[local34 + 1];
 				}
-				this.out.p1isaac(171);
+				this.out.p1isaac(ClientProt.IGNORELIST_DEL);
 				this.out.p8(arg1);
 				return;
 			}
@@ -9247,7 +9247,7 @@ public final class Game extends GameShell {
 		updatePlayersCounter++;
 		if (updatePlayersCounter > 1406) {
 			updatePlayersCounter = 0;
-			this.out.p1isaac(219);
+			this.out.p1isaac(ClientProt.ANTICHEAT_UPDATE_PLAYERS);
 			this.out.p1(0);
 			local17 = this.out.pos;
 			this.out.p1(162);
@@ -9445,7 +9445,7 @@ public final class Game extends GameShell {
 				if (this.randomIn != null) {
 					this.packetType = this.packetType - this.randomIn.nextInt() & 0xFF;
 				}
-				this.packetSize = Protocol.SERVERPROT_SIZES[this.packetType];
+				this.packetSize = ServerProt.PACKET_LENGTHS[this.packetType];
 				local15--;
 			}
 			if (this.packetSize == -1) {
@@ -9475,7 +9475,7 @@ public final class Game extends GameShell {
 			this.lastPacketType1 = this.lastPacketType0;
 			this.lastPacketType0 = this.packetType;
 			@Pc(159) int local159;
-			if (this.packetType == 150) {
+			if (this.packetType == ServerProt.VARP_SMALL) {
 				local159 = this.in.g2();
 				@Pc(163) byte local163 = this.in.g1b();
 				this.varCache[local159] = local163;
@@ -9495,7 +9495,7 @@ public final class Game extends GameShell {
 			@Pc(321) int local321;
 			@Pc(354) int local354;
 			@Pc(207) long local207;
-			if (this.packetType == 152) {
+			if (this.packetType == ServerProt.UPDATE_FRIENDLIST) {
 				local207 = this.in.g8();
 				local211 = this.in.g1();
 				@Pc(217) String local217 = StringUtils.formatName(StringUtils.fromBase37(local207));
@@ -9544,13 +9544,13 @@ public final class Game extends GameShell {
 				this.packetType = -1;
 				return true;
 			}
-			if (this.packetType == 43) {
+			if (this.packetType == ServerProt.UPDATE_REBOOT_TIMER) {
 				this.systemUpdateTimer = this.in.g2() * 30;
 				this.packetType = -1;
 				return true;
 			}
 			@Pc(466) int local466;
-			if (this.packetType == 80) {
+			if (this.packetType == ServerProt.DATA_LAND_DONE) {
 				local159 = this.in.g1();
 				local462 = this.in.g1();
 				local211 = -1;
@@ -9566,13 +9566,13 @@ public final class Game extends GameShell {
 				this.packetType = -1;
 				return true;
 			}
-			if (this.packetType == 1) {
+			if (this.packetType == ServerProt.NPC_INFO) {
 				this.readNpcInfo(this.in, this.packetSize, false);
 				this.packetType = -1;
 				return true;
 			}
 			@Pc(650) int local650;
-			if (this.packetType == 237) {
+			if (this.packetType == ServerProt.LOAD_AREA) {
 				local159 = this.in.g2();
 				local462 = this.in.g2();
 				if (this.sceneCenterZoneX == local159 && this.sceneCenterZoneZ == local462 && this.sceneState != 0) {
@@ -9593,7 +9593,7 @@ public final class Game extends GameShell {
 				this.sceneMapLandData = new byte[local211][];
 				this.sceneMapLocData = new byte[local211][];
 				this.sceneMapIndex = new int[local211];
-				this.out.p1isaac(150);
+				this.out.p1isaac(ClientProt.MAP_REQUEST_AREAS);
 				this.out.p1(0);
 				local466 = 0;
 				@Pc(662) int local662;
@@ -9721,13 +9721,13 @@ public final class Game extends GameShell {
 				this.packetType = -1;
 				return true;
 			}
-			if (this.packetType == 197) {
+			if (this.packetType == ServerProt.IF_SETPLAYERHEAD) {
 				local159 = this.in.g2();
 				IfType.instances[local159].model = this.localPlayer.getHeadModel();
 				this.packetType = -1;
 				return true;
 			}
-			if (this.packetType == 25) {
+			if (this.packetType == ServerProt.HINT_ARROW) {
 				this.hintType = this.in.g1();
 				if (this.hintType == 1) {
 					this.hintNpc = this.in.g2();
@@ -9764,7 +9764,7 @@ public final class Game extends GameShell {
 				this.packetType = -1;
 				return true;
 			}
-			if (this.packetType == 54) {
+			if (this.packetType == ServerProt.MIDI_SONG) {
 				local1264 = this.in.gstr();
 				local462 = this.in.g4();
 				local211 = this.in.g4();
@@ -9778,12 +9778,12 @@ public final class Game extends GameShell {
 				this.packetType = -1;
 				return true;
 			}
-			if (this.packetType == 142) {
+			if (this.packetType == ServerProt.LOGOUT) {
 				this.logout();
 				this.packetType = -1;
 				return false;
 			}
-			if (this.packetType == 20) {
+			if (this.packetType == ServerProt.DATA_LOC_DONE) {
 				local159 = this.in.g1();
 				local462 = this.in.g1();
 				local211 = -1;
@@ -9799,22 +9799,22 @@ public final class Game extends GameShell {
 				this.packetType = -1;
 				return true;
 			}
-			if (this.packetType == 19) {
+			if (this.packetType == ServerProt.CLEAR_WALKING_QUEUE) {
 				this.flagSceneTileX = 0;
 				this.packetType = -1;
 				return true;
 			}
-			if (this.packetType == 139) {
+			if (this.packetType == ServerProt.UPDATE_UID192) {
 				this.localPid = this.in.g2();
 				this.packetType = -1;
 				return true;
 			}
-			if (this.packetType == 151 || this.packetType == 23 || this.packetType == 50 || this.packetType == 191 || this.packetType == 69 || this.packetType == 49 || this.packetType == 223 || this.packetType == 42 || this.packetType == 76 || this.packetType == 59) {
+			if (this.packetType == ZoneProt.OBJ_COUNT || this.packetType == ZoneProt.LOC_ADD_CHANGE || this.packetType == ZoneProt.OBJ_ADD || this.packetType == ZoneProt.SPOTANIM_SPECIFIC || this.packetType == ZoneProt.MAP_PROJANIM || this.packetType == ZoneProt.OBJ_DEL || this.packetType == ZoneProt.OBJ_REVEAL || this.packetType == ZoneProt.LOC_ANIM || this.packetType == ZoneProt.LOC_DEL || this.packetType == ZoneProt.LOC_ADD) {
 				this.readZonePacket(this.in, this.packetType);
 				this.packetType = -1;
 				return true;
 			}
-			if (this.packetType == 28) {
+			if (this.packetType == ServerProt.IF_OPENSUB) {
 				local159 = this.in.g2();
 				local462 = this.in.g2();
 				if (this.chatInterfaceId != -1) {
@@ -9833,7 +9833,7 @@ public final class Game extends GameShell {
 				this.packetType = -1;
 				return true;
 			}
-			if (this.packetType == 175) {
+			if (this.packetType == ServerProt.VARP_LARGE) {
 				local159 = this.in.g2();
 				local462 = this.in.g4();
 				this.varCache[local159] = local462;
@@ -9848,14 +9848,14 @@ public final class Game extends GameShell {
 				this.packetType = -1;
 				return true;
 			}
-			if (this.packetType == 146) {
+			if (this.packetType == ServerProt.IF_SETANIM) {
 				local159 = this.in.g2();
 				local462 = this.in.g2();
 				IfType.instances[local159].seqId = local462;
 				this.packetType = -1;
 				return true;
 			}
-			if (this.packetType == 167) {
+			if (this.packetType == ServerProt.IF_SETTAB) {
 				local159 = this.in.g2();
 				local462 = this.in.g1();
 				if (local159 == 65535) {
@@ -9867,7 +9867,7 @@ public final class Game extends GameShell {
 				this.packetType = -1;
 				return true;
 			}
-			if (this.packetType == 220) {
+			if (this.packetType == ServerProt.DATA_LOC) {
 				local159 = this.in.g1();
 				local462 = this.in.g1();
 				local211 = this.in.g2();
@@ -9887,10 +9887,10 @@ public final class Game extends GameShell {
 				this.packetType = -1;
 				return true;
 			}
-			if (this.packetType == 133) {
+			if (this.packetType == ServerProt.FINISH_TRACKING) {
 				@Pc(1701) Buffer local1701 = InputTracking.stop();
 				if (local1701 != null) {
-					this.out.p1isaac(81);
+					this.out.p1isaac(ClientProt.EVENT_TRACKING);
 					this.out.p2(local1701.pos);
 					this.out.pdata(local1701.data, local1701.pos, 0);
 					local1701.release();
@@ -9899,7 +9899,7 @@ public final class Game extends GameShell {
 				return true;
 			}
 			@Pc(1745) IfType local1745;
-			if (this.packetType == 98) {
+			if (this.packetType == ServerProt.UPDATE_INV_FULL) {
 				this.redrawSidebar = true;
 				local159 = this.in.g2();
 				local1745 = IfType.instances[local159];
@@ -9919,12 +9919,12 @@ public final class Game extends GameShell {
 				this.packetType = -1;
 				return true;
 			}
-			if (this.packetType == 226) {
+			if (this.packetType == ServerProt.ENABLE_TRACKING) {
 				InputTracking.setEnabled();
 				this.packetType = -1;
 				return true;
 			}
-			if (this.packetType == 243) {
+			if (this.packetType == ServerProt.IF_IAMOUNT) {
 				this.showSocialInput = false;
 				this.chatbackInputOpen = true;
 				this.chatbackInput = "";
@@ -9932,7 +9932,7 @@ public final class Game extends GameShell {
 				this.packetType = -1;
 				return true;
 			}
-			if (this.packetType == 15) {
+			if (this.packetType == ServerProt.UPDATE_INV_CLEAR) {
 				local159 = this.in.g2();
 				local1745 = IfType.instances[local159];
 				for (local211 = 0; local211 < local1745.inventorySlotObjId.length; local211++) {
@@ -9942,7 +9942,7 @@ public final class Game extends GameShell {
 				this.packetType = -1;
 				return true;
 			}
-			if (this.packetType == 140) {
+			if (this.packetType == ServerProt.LAST_LOGIN_INFO) {
 				this.lastAddress = this.in.g4();
 				this.daysSinceLastLogin = this.in.g2();
 				this.daysSinceRecoveriesChanged = this.in.g1();
@@ -9966,7 +9966,7 @@ public final class Game extends GameShell {
 				this.packetType = -1;
 				return true;
 			}
-			if (this.packetType == 126) {
+			if (this.packetType == ServerProt.IF_SETTAB_FLASH) {
 				this.flashingTab = this.in.g1();
 				if (this.flashingTab == this.selectedTab) {
 					if (this.flashingTab == 3) {
@@ -9979,7 +9979,7 @@ public final class Game extends GameShell {
 				this.packetType = -1;
 				return true;
 			}
-			if (this.packetType == 212) {
+			if (this.packetType == ServerProt.MIDI_JINGLE) {
 				if (this.midiActive && !lowMemory) {
 					local159 = this.in.g2();
 					local462 = this.in.g4();
@@ -9992,12 +9992,12 @@ public final class Game extends GameShell {
 				this.packetType = -1;
 				return true;
 			}
-			if (this.packetType == 254) {
+			if (this.packetType == ServerProt.IF_MULTIZONE) {
 				this.inMultizone = this.in.g1();
 				this.packetType = -1;
 				return true;
 			}
-			if (this.packetType == 12) {
+			if (this.packetType == ServerProt.SYNTH_SOUND) {
 				local159 = this.in.g2();
 				local462 = this.in.g1();
 				local211 = this.in.g2();
@@ -10010,7 +10010,7 @@ public final class Game extends GameShell {
 				this.packetType = -1;
 				return true;
 			}
-			if (this.packetType == 204) {
+			if (this.packetType == ServerProt.IF_SETNPCHEAD) {
 				local159 = this.in.g2();
 				local462 = this.in.g2();
 				@Pc(2130) NpcType local2130 = NpcType.get(local462);
@@ -10018,14 +10018,14 @@ public final class Game extends GameShell {
 				this.packetType = -1;
 				return true;
 			}
-			if (this.packetType == 7) {
+			if (this.packetType == ServerProt.UPDATE_ZONE_PARTIAL_FOLLOWS) {
 				this.baseX = this.in.g1();
 				this.baseZ = this.in.g1();
 				this.packetType = -1;
 				return true;
 			}
 			@Pc(2181) IfType local2181;
-			if (this.packetType == 103) {
+			if (this.packetType == ServerProt.IF_SETMODEL_COLOUR) {
 				local159 = this.in.g2();
 				local462 = this.in.g2();
 				local211 = this.in.g2();
@@ -10037,7 +10037,7 @@ public final class Game extends GameShell {
 				this.packetType = -1;
 				return true;
 			}
-			if (this.packetType == 32) {
+			if (this.packetType == ServerProt.CHAT_FILTER_SETTINGS) {
 				this.publicChatSetting = this.in.g1();
 				this.privateChatSetting = this.in.g1();
 				this.tradeChatSetting = this.in.g1();
@@ -10046,7 +10046,7 @@ public final class Game extends GameShell {
 				this.packetType = -1;
 				return true;
 			}
-			if (this.packetType == 195) {
+			if (this.packetType == ServerProt.IF_OPENSIDEBAR) {
 				local159 = this.in.g2();
 				this.resetInterfaceAnimation(local159);
 				if (this.chatInterfaceId != -1) {
@@ -10065,7 +10065,7 @@ public final class Game extends GameShell {
 				this.packetType = -1;
 				return true;
 			}
-			if (this.packetType == 14) {
+			if (this.packetType == ServerProt.IF_OPENBOTTOM) {
 				local159 = this.in.g2();
 				this.resetInterfaceAnimation(local159);
 				if (this.sidebarInterfaceId != -1) {
@@ -10080,7 +10080,7 @@ public final class Game extends GameShell {
 				this.packetType = -1;
 				return true;
 			}
-			if (this.packetType == 209) {
+			if (this.packetType == ServerProt.IF_SETPOSITION) {
 				local159 = this.in.g2();
 				local462 = this.in.g2b();
 				local211 = this.in.g2b();
@@ -10090,7 +10090,7 @@ public final class Game extends GameShell {
 				this.packetType = -1;
 				return true;
 			}
-			if (this.packetType == 3) {
+			if (this.packetType == ServerProt.CAM_FORCEANGLE) {
 				this.cutscene = true;
 				this.cutsceneSrcLocalTileX = this.in.g1();
 				this.cutsceneSrcLocalTileZ = this.in.g1();
@@ -10105,7 +10105,7 @@ public final class Game extends GameShell {
 				this.packetType = -1;
 				return true;
 			}
-			if (this.packetType == 135) {
+			if (this.packetType == ServerProt.UPDATE_ZONE_FULL_FOLLOWS) {
 				this.baseX = this.in.g1();
 				this.baseZ = this.in.g1();
 				for (local159 = this.baseX; local159 < this.baseX + 8; local159++) {
@@ -10125,7 +10125,7 @@ public final class Game extends GameShell {
 				this.packetType = -1;
 				return true;
 			}
-			if (this.packetType == 132) {
+			if (this.packetType == ServerProt.DATA_LAND) {
 				local159 = this.in.g1();
 				local462 = this.in.g1();
 				local211 = this.in.g2();
@@ -10146,7 +10146,7 @@ public final class Game extends GameShell {
 				return true;
 			}
 			@Pc(2652) boolean local2652;
-			if (this.packetType == 41) {
+			if (this.packetType == ServerProt.MESSAGE_PRIVATE) {
 				local207 = this.in.g8();
 				local211 = this.in.g4();
 				local466 = this.in.g1();
@@ -10183,7 +10183,7 @@ public final class Game extends GameShell {
 				this.packetType = -1;
 				return true;
 			}
-			if (this.packetType == 193) {
+			if (this.packetType == ServerProt.RESET_CLIENT_VARCACHE) {
 				for (local159 = 0; local159 < this.varps.length; local159++) {
 					if (this.varps[local159] != this.varCache[local159]) {
 						this.varps[local159] = this.varCache[local159];
@@ -10194,21 +10194,21 @@ public final class Game extends GameShell {
 				this.packetType = -1;
 				return true;
 			}
-			if (this.packetType == 87) {
+			if (this.packetType == ServerProt.IF_SETMODEL) {
 				local159 = this.in.g2();
 				local462 = this.in.g2();
 				IfType.instances[local159].model = new Model(local462);
 				this.packetType = -1;
 				return true;
 			}
-			if (this.packetType == 185) {
+			if (this.packetType == ServerProt.IF_OPENSTICKY) {
 				local159 = this.in.g2b();
 				this.stickyChatInterfaceId = local159;
 				this.redrawChatback = true;
 				this.packetType = -1;
 				return true;
 			}
-			if (this.packetType == 68) {
+			if (this.packetType == ServerProt.UPDATE_RUNENERGY) {
 				if (this.selectedTab == 12) {
 					this.redrawSidebar = true;
 				}
@@ -10216,7 +10216,7 @@ public final class Game extends GameShell {
 				this.packetType = -1;
 				return true;
 			}
-			if (this.packetType == 74) {
+			if (this.packetType == ServerProt.CAM_MOVETO) {
 				this.cutscene = true;
 				this.cutsceneDstLocalTileX = this.in.g1();
 				this.cutsceneDstLocalTileZ = this.in.g1();
@@ -10243,7 +10243,7 @@ public final class Game extends GameShell {
 				this.packetType = -1;
 				return true;
 			}
-			if (this.packetType == 84) {
+			if (this.packetType == ServerProt.IF_SETTAB_ACTIVE) {
 				this.selectedTab = this.in.g1();
 				this.redrawSidebar = true;
 				this.redrawSideicons = true;
@@ -10251,7 +10251,7 @@ public final class Game extends GameShell {
 				return true;
 			}
 			@Pc(3040) String local3040;
-			if (this.packetType == 4) {
+			if (this.packetType == ServerProt.MESSAGE_GAME) {
 				local1264 = this.in.gstr();
 				@Pc(3043) long local3043;
 				if (local1264.endsWith(":tradereq:")) {
@@ -10286,7 +10286,7 @@ public final class Game extends GameShell {
 				this.packetType = -1;
 				return true;
 			}
-			if (this.packetType == 46) {
+			if (this.packetType == ServerProt.IF_SETOBJECT) {
 				local159 = this.in.g2();
 				local462 = this.in.g2();
 				local211 = this.in.g2();
@@ -10298,7 +10298,7 @@ public final class Game extends GameShell {
 				this.packetType = -1;
 				return true;
 			}
-			if (this.packetType == 168) {
+			if (this.packetType == ServerProt.IF_OPENTOP) {
 				local159 = this.in.g2();
 				this.resetInterfaceAnimation(local159);
 				if (this.sidebarInterfaceId != -1) {
@@ -10319,7 +10319,7 @@ public final class Game extends GameShell {
 				this.packetType = -1;
 				return true;
 			}
-			if (this.packetType == 2) {
+			if (this.packetType == ServerProt.IF_SETCOLOUR) {
 				local159 = this.in.g2();
 				local462 = this.in.g2();
 				local211 = local462 >> 10 & 0x1F;
@@ -10329,7 +10329,7 @@ public final class Game extends GameShell {
 				this.packetType = -1;
 				return true;
 			}
-			if (this.packetType == 136) {
+			if (this.packetType == ServerProt.RESET_ANIMS) {
 				for (local159 = 0; local159 < this.players.length; local159++) {
 					if (this.players[local159] != null) {
 						this.players[local159].primarySeqId = -1;
@@ -10343,14 +10343,14 @@ public final class Game extends GameShell {
 				this.packetType = -1;
 				return true;
 			}
-			if (this.packetType == 26) {
+			if (this.packetType == ServerProt.IF_SETHIDE) {
 				local159 = this.in.g2();
 				@Pc(3362) boolean local3362 = this.in.g1() == 1;
 				IfType.instances[local159].hide = local3362;
 				this.packetType = -1;
 				return true;
 			}
-			if (this.packetType == 21) {
+			if (this.packetType == ServerProt.UPDATE_IGNORELIST) {
 				this.ignoreCount = this.packetSize / 8;
 				for (local159 = 0; local159 < this.ignoreCount; local159++) {
 					this.ignoreName37[local159] = this.in.g8();
@@ -10358,7 +10358,7 @@ public final class Game extends GameShell {
 				this.packetType = -1;
 				return true;
 			}
-			if (this.packetType == 239) {
+			if (this.packetType == ServerProt.CAM_RESET) {
 				this.cutscene = false;
 				for (local159 = 0; local159 < 5; local159++) {
 					this.cameraModifierEnabled[local159] = false;
@@ -10366,7 +10366,7 @@ public final class Game extends GameShell {
 				this.packetType = -1;
 				return true;
 			}
-			if (this.packetType == 129) {
+			if (this.packetType == ServerProt.IF_CLOSESUB) {
 				if (this.sidebarInterfaceId != -1) {
 					this.sidebarInterfaceId = -1;
 					this.redrawSidebar = true;
@@ -10385,7 +10385,7 @@ public final class Game extends GameShell {
 				this.packetType = -1;
 				return true;
 			}
-			if (this.packetType == 201) {
+			if (this.packetType == ServerProt.IF_SETTEXT) {
 				local159 = this.in.g2();
 				local3040 = this.in.gstr();
 				IfType.instances[local159].text = local3040;
@@ -10395,7 +10395,7 @@ public final class Game extends GameShell {
 				this.packetType = -1;
 				return true;
 			}
-			if (this.packetType == 44) {
+			if (this.packetType == ServerProt.UPDATE_STAT) {
 				this.redrawSidebar = true;
 				local159 = this.in.g1();
 				local462 = this.in.g4();
@@ -10411,7 +10411,7 @@ public final class Game extends GameShell {
 				this.packetType = -1;
 				return true;
 			}
-			if (this.packetType == 162) {
+			if (this.packetType == ServerProt.UPDATE_ZONE_PARTIAL_ENCLOSED) {
 				this.baseX = this.in.g1();
 				this.baseZ = this.in.g1();
 				while (this.in.pos < this.packetSize) {
@@ -10421,7 +10421,7 @@ public final class Game extends GameShell {
 				this.packetType = -1;
 				return true;
 			}
-			if (this.packetType == 22) {
+			if (this.packetType == ServerProt.UPDATE_RUNWEIGHT) {
 				if (this.selectedTab == 12) {
 					this.redrawSidebar = true;
 				}
@@ -10429,7 +10429,7 @@ public final class Game extends GameShell {
 				this.packetType = -1;
 				return true;
 			}
-			if (this.packetType == 13) {
+			if (this.packetType == ServerProt.CAM_SHAKE) {
 				local159 = this.in.g1();
 				local462 = this.in.g1();
 				local211 = this.in.g1();
@@ -10442,7 +10442,7 @@ public final class Game extends GameShell {
 				this.packetType = -1;
 				return true;
 			}
-			if (this.packetType == 213) {
+			if (this.packetType == ServerProt.UPDATE_INV_PARTIAL) {
 				this.redrawSidebar = true;
 				local159 = this.in.g2();
 				local1745 = IfType.instances[local159];
@@ -10461,7 +10461,7 @@ public final class Game extends GameShell {
 				this.packetType = -1;
 				return true;
 			}
-			if (this.packetType == 184) {
+			if (this.packetType == ServerProt.PLAYER_INFO) {
 				this.readPlayerInfo(this.in, this.packetSize);
 				if (this.sceneState == 1) {
 					this.sceneState = 2;
@@ -10485,7 +10485,6 @@ public final class Game extends GameShell {
 			}
 			Signlink.reporterror("T1 - " + this.packetType + "," + this.packetSize + " - " + this.lastPacketType1 + "," + this.lastPacketType2);
 			this.logout();
-			throw new IOException("");
 		} catch (@Pc(3862) IOException local3862) {
 			this.tryReconnect();
 		} catch (@Pc(3867) Exception local3867) {
