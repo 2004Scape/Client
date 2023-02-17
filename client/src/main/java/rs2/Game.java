@@ -9488,7 +9488,7 @@ public final class Game extends GameShell {
 				if (this.randomIn != null) {
 					this.packetType = this.packetType - this.randomIn.nextInt() & 0xFF;
 				}
-				this.packetSize = Protocol.SERVERPROT_SIZES[this.packetType];
+				this.packetSize = ServerProt.PACKET_LENGTHS[this.packetType];
 				local15--;
 			}
 			if (this.packetSize == -1) {
