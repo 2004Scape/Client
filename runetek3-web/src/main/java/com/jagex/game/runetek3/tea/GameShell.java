@@ -218,7 +218,7 @@ public class GameShell implements Runnable {
 	@OriginalMember(owner = "client!a", name = "run", descriptor = "()V")
 	@Override
 	public void run() {
-		this.drawProgress("Loading...", 0);
+		this.drawProgress("Loading...", 0, true);
 		this.load();
 
 		@Pc(41) int opos = 0;
@@ -484,7 +484,7 @@ public class GameShell implements Runnable {
 	}
 
 	@OriginalMember(owner = "client!a", name = "a", descriptor = "(ZLjava/lang/String;I)V")
-	protected void drawProgress(@OriginalArg(1) String arg1, @OriginalArg(2) int arg2) {
+	protected void drawProgress(@OriginalArg(1) String arg1, @OriginalArg(2) int arg2, boolean printToConsole) {
 	}
 
 	protected void mouseWheelMoved(int rotation) {

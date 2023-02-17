@@ -39,7 +39,6 @@ import org.openrs2.deob.annotation.OriginalMember;
 import org.openrs2.deob.annotation.Pc;
 import org.teavm.jso.JSBody;
 import org.teavm.jso.JSObject;
-import org.teavm.jso.typedarrays.Uint8Array;
 import rs2.Protocol;
 
 import java.io.IOException;
@@ -1263,7 +1262,7 @@ public final class Game extends GameShell {
 
 	@OriginalMember(owner = "client!client", name = "main", descriptor = "([Ljava/lang/String;)V")
 	public static void main(@OriginalArg(0) String[] args) {
-		System.out.println("RS2 user client - release #" + Signlink.clientversion);
+		log("RS2 user client - release #" + Signlink.clientversion);
 
 		if (args != null && args.length > 0) {
 			nodeId = Integer.parseInt(args[0]);
@@ -1293,12 +1292,12 @@ public final class Game extends GameShell {
 			// this argument describes whether the client should attempt to connect to the reference server,
 			// instead of whatever the current domain is. for the sake of index.html here we'll use the reference server
 			// and not do anything. this option should be used when a server isn't actually being ran
-			System.out.println("Connecting to reference server directly");
+			log("Connecting to reference server");
 		} else {
-			// but it's important so we don't have to rebuild for each domain
+			// but it's important, so we don't have to rebuild for each domain
 			SERVER_ADDRESS = getWebHost();
 			SERVER_WEB_SCHEMA = getWebSchema();
-			SERVER_WEB_PORT = getWebPort(); // typically 80/443 is enough but we'll use the actual port just in case
+			SERVER_WEB_PORT = getWebPort(); // typically 80/443 is enough, but we'll use the actual port just in case
 		}
 
 		Signlink.startpriv(SERVER_WEB_SCHEMA + "//" + SERVER_ADDRESS);
@@ -3299,7 +3298,7 @@ public final class Game extends GameShell {
 			return new FileArchive(local6);
 		}
 		while (local6 == null) {
-			this.drawProgress("Requesting " + arg0, arg3);
+			this.drawProgress("Requesting " + arg0, arg3, true);
 			try {
 				local20 = 0;
 				@Pc(60) FileDownloadStream local60 = this.openUrl(arg2 + arg1);
@@ -3321,7 +3320,7 @@ public final class Game extends GameShell {
 					local84 += local60.readFully(local6, local84, local107);
 					@Pc(126) int local126 = local84 * 100 / local82;
 					if (local126 != local20) {
-						this.drawProgress("Loading " + arg0 + " - " + local126 + "%", arg3);
+						this.drawProgress("Loading " + arg0 + " - " + local126 + "%", arg3, false);
 					}
 					local20 = local126;
 				}
@@ -3329,7 +3328,7 @@ public final class Game extends GameShell {
 			} catch (@Pc(155) IOException local155) {
 				local6 = null;
 				for (local20 = local3; local20 > 0; local20--) {
-					this.drawProgress("Error loading - Will retry in " + local20 + " secs.", arg3);
+					this.drawProgress("Error loading - Will retry in " + local20 + " secs.", arg3, false);
 					try {
 						Thread.sleep(1000L);
 					} catch (@Pc(178) Exception local178) {
@@ -3894,7 +3893,7 @@ public final class Game extends GameShell {
 		this.updateFlameBuffer(null);
 		this.flameBuffer3 = new int[32768];
 		this.flameBuffer2 = new int[32768];
-		this.drawProgress("Connecting to fileserver", 10);
+		this.drawProgress("Connecting to fileserver", 10, true);
 		if (!this.flameActive) {
 			this.flamesThread = true;
 			this.flameActive = true;
@@ -6108,7 +6107,7 @@ public final class Game extends GameShell {
 			@Pc(94) int local94 = 5;
 			this.archiveChecksum[8] = 0;
 			while (this.archiveChecksum[8] == 0) {
-				this.drawProgress("Connecting to fileserver", 10);
+				this.drawProgress("Connecting to fileserver", 10, true);
 				try {
 					@Pc(119) FileDownloadStream local119 = this.openUrl("crc" + (int) (Math.random() * 9.9999999E7D));
 					@Pc(126) Buffer local126 = new Buffer(new byte[36]);
@@ -6119,7 +6118,7 @@ public final class Game extends GameShell {
 					local119.close();
 				} catch (@Pc(150) IOException local150) {
 					for (@Pc(152) int local152 = local94; local152 > 0; local152--) {
-						this.drawProgress("Error loading - Will retry in " + local152 + " secs.", 10);
+						this.drawProgress("Error loading - Will retry in " + local152 + " secs.", 10, true);
 						try {
 							Thread.sleep(1000L);
 						} catch (@Pc(171) Exception local171) {
@@ -6152,7 +6151,7 @@ public final class Game extends GameShell {
 				this.levelCollisionMap[local346] = new CollisionMap(104, -708, 104);
 			}
 			this.imageMinimap = new Image24(512, 512);
-			this.drawProgress("Unpacking media", 75);
+			this.drawProgress("Unpacking media", 75, true);
 			this.imageInvback = new Image8(local277, "invback", 0);
 			this.imageChatback = new Image8(local277, "chatback", 0);
 			this.imageMapback = new Image8(local277, "mapback", 0);
@@ -6262,15 +6261,15 @@ public final class Game extends GameShell {
 					this.imageMapscene[local998].translate(local975 + local996, local982 + local996, local989 + local996);
 				}
 			}
-			this.drawProgress("Unpacking textures", 80);
+			this.drawProgress("Unpacking textures", 80, true);
 			Draw3D.unpackTextures(local299);
 			Draw3D.setBrightness(0.8D);
 			Draw3D.initPool(20);
-			this.drawProgress("Unpacking models", 83);
+			this.drawProgress("Unpacking models", 83, true);
 			Model.unpack(local288);
 			SeqBase.unpack(local288);
 			SeqFrame.unpack(local288);
-			this.drawProgress("Unpacking config", 86);
+			this.drawProgress("Unpacking config", 86, true);
 			SeqType.unpack(local255);
 			LocType.unpack(local255);
 			FloType.unpack(local255);
@@ -6281,15 +6280,15 @@ public final class Game extends GameShell {
 			VarpType.unpack(local255);
 			ObjType.membersWorld = members;
 			if (!lowMemory) {
-				this.drawProgress("Unpacking sounds", 90);
+				this.drawProgress("Unpacking sounds", 90, true);
 				@Pc(1113) byte[] local1113 = local321.read("sounds.dat", null);
 				@Pc(1119) Buffer local1119 = new Buffer(local1113);
 				SoundTrack.unpack(local1119);
 			}
-			this.drawProgress("Unpacking interfaces", 92);
+			this.drawProgress("Unpacking interfaces", 92, true);
 			@Pc(1150) BitmapFont[] local1150 = new BitmapFont[] { this.fontPlain11, this.fontPlain12, this.fontBold12, this.fontQuill8 };
 			IfType.unpack(local277, local1150, local266);
-			this.drawProgress("Preparing game engine", 97);
+			this.drawProgress("Preparing game engine", 97, true);
 			@Pc(1166) int local1166;
 			@Pc(1168) int local1168;
 			@Pc(1170) int local1170;
@@ -10601,12 +10600,14 @@ public final class Game extends GameShell {
 
 	@OriginalMember(owner = "client!client", name = "a", descriptor = "(ZLjava/lang/String;I)V")
 	@Override
-	protected void drawProgress(@OriginalArg(1) String arg1, @OriginalArg(2) int arg2) {
-		log(arg1);
+	protected void drawProgress(@OriginalArg(1) String arg1, @OriginalArg(2) int arg2, boolean printToConsole) {
+		if (printToConsole) {
+			log(arg1);
+		}
 
 		this.loadTitle();
 		if (this.archiveTitle == null) {
-			super.drawProgress(arg1, arg2);
+			super.drawProgress(arg1, arg2, printToConsole);
 		} else {
 			this.imageTitle4.bind();
 			@Pc(17) short local17 = 360;
