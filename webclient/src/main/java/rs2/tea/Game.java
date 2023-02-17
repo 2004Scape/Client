@@ -3233,7 +3233,7 @@ public final class Game extends GameShell {
 			local24 = super.screenWidth / 2 + 80;
 			if (super.mouseClickButton == 1 && super.mouseClickX >= local24 - 75 && super.mouseClickX <= local24 + 75 && super.mouseClickY >= local171 - 20 && super.mouseClickY <= local171 + 20) {
 				this.titleScreenState = 0;
-				this.username = "";
+				// this.username = "";
 				this.password = "";
 			}
 			while (true) {
@@ -4183,7 +4183,7 @@ public final class Game extends GameShell {
 		this.connection = null;
 		this.ingame = false;
 		this.titleScreenState = 0;
-		this.username = "";
+		// this.username = "";
 		this.password = "";
 		InputTracking.setDisabled();
 		this.clearCaches();
@@ -4192,10 +4192,11 @@ public final class Game extends GameShell {
 		for (@Pc(41) int local41 = 0; local41 < 4; local41++) {
 			this.levelCollisionMap[local41].reset();
 		}
-		System.gc();
-		this.setMidi(12345678, "scape_main", 40000);
+		System.gc(); System.gc();
+		this.stopMidi();
 		this.currentMidi = null;
 		this.nextMusicDelay = 0;
+		this.setMidi(12345678, "scape_main", 40000);
 	}
 
 	@OriginalMember(owner = "client!client", name = "a", descriptor = "(IIILclient!hc;I)V")
