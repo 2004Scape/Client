@@ -40,12 +40,6 @@
 
         <dependency>
             <groupId>com.jagex.game</groupId>
-            <artifactId>runetek3</artifactId>
-            <version>1.0</version>
-        </dependency>
-
-        <dependency>
-            <groupId>com.jagex.game</groupId>
             <artifactId>runetek3-web</artifactId>
             <version>1.0</version>
         </dependency>
@@ -80,10 +74,10 @@
                         <configuration>
                             <targetDirectory>${project.build.directory}/js</targetDirectory>
                             <mainClass>rs2.tea.Game</mainClass>
-                            <!-- <minifying>false</minifying>
+                            <minifying>false</minifying>
                             <debugInformationGenerated>true</debugInformationGenerated>
                             <sourceMapsGenerated>true</sourceMapsGenerated>
-                            <sourceFilesCopied>true</sourceFilesCopied>
+                            <!--sourceFilesCopied>true</sourceFilesCopied>
                             <optimizationLevel>SIMPLE</optimizationLevel>
                             <runtime>SEPARATE</runtime> -->
                         </configuration>

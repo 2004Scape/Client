@@ -1,7 +1,7 @@
-package com.jagex.game.runetek3.tea;
+package com.jagex.game.runetek3;
 
 import com.jagex.game.runetek3.InputTracking;
-import com.jagex.game.runetek3.tea.graphics.DrawArea;
+import com.jagex.game.runetek3.graphics.DrawArea;
 import org.openrs2.deob.annotation.OriginalArg;
 import org.openrs2.deob.annotation.OriginalClass;
 import org.openrs2.deob.annotation.OriginalMember;

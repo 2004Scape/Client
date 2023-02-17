@@ -1,4 +1,4 @@
-package com.jagex.game.runetek3.tea.graphics;
+package com.jagex.game.runetek3.graphics;
 
 import com.jagex.core.io.Buffer;
 import com.jagex.core.io.FileArchive;
