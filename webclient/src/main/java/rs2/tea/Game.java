@@ -4196,7 +4196,7 @@ public final class Game extends GameShell {
 		this.stopMidi();
 		this.currentMidi = null;
 		this.nextMusicDelay = 0;
-		this.setMidi(12345678, "scape_main", 40000);
+		// this.setMidi(12345678, "scape_main", 40000);
 	}
 
 	@OriginalMember(owner = "client!client", name = "a", descriptor = "(IIILclient!hc;I)V")
