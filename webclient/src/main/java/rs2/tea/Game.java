@@ -3071,6 +3071,14 @@ public final class Game extends GameShell {
 								} catch (Exception ignored) {}
 							} else if (this.chatTyped.equals("::debug")) {
 								this.showDebug = !this.showDebug;
+							} else if (this.chatTyped.equals("::authentic")) {
+								Draw3D.fixTransparency = false;
+								Image24.bilinearFiltering = false;
+								Draw2D.fullViewport = false;
+							} else if (this.chatTyped.equals("::qol")) {
+								Draw3D.fixTransparency = true;
+								Image24.bilinearFiltering = true;
+								Draw2D.fullViewport = true;
 							} else if (this.chatTyped.startsWith("::")) {
 								this.out.p1isaac(4);
 								this.out.p1(this.chatTyped.length() - 1);

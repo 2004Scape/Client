@@ -9,6 +9,8 @@ import org.openrs2.deob.annotation.Pc;
 @OriginalClass("client!fb")
 public class Draw2D extends CacheableNode {
 
+	public static boolean fullViewport = true;
+
 	@OriginalMember(owner = "client!fb", name = "k", descriptor = "[I")
 	public static int[] data;
 
@@ -57,7 +59,11 @@ public class Draw2D extends CacheableNode {
 		top = 0;
 		right = width2d;
 		bottom = height2d;
-		boundX = right - 1;
+		if (fullViewport) {
+			boundX = right;
+		} else {
+			boundX = right - 1;
+		}
 		centerX2d = right / 2;
 	}
 
@@ -79,7 +85,11 @@ public class Draw2D extends CacheableNode {
 		top = arg1;
 		right = arg2;
 		bottom = arg0;
-		boundX = right - 1;
+		if (fullViewport) {
+			boundX = right;
+		} else {
+			boundX = right - 1;
+		}
 		centerX2d = right / 2;
 		centerY2d = bottom / 2;
 	}
