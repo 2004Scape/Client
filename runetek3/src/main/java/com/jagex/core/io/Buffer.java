@@ -182,7 +182,7 @@ public final class Buffer extends CacheableNode {
 
 	@OriginalMember(owner = "client!kb", name = "a", descriptor = "(Ljava/lang/String;)V")
 	public void pjstr(@OriginalArg(0) String arg0) {
-		arg0.getBytes(0, arg0.length(), this.data, this.pos);
+		System.arraycopy(arg0.getBytes(), 0, this.data, this.pos, arg0.length());
 		this.pos += arg0.length();
 		this.data[this.pos++] = 10;
 	}

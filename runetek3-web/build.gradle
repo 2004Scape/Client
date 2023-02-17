@@ -1,0 +1,21 @@
+plugins {
+    id 'java'
+    id 'java-library'
+}
+
+version = '1.0.0'
+
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
+tasks.withType(JavaCompile) {
+    options.encoding = 'UTF-8'
+}
+
+dependencies {
+    compileOnly project(':deob-annotations')
+    implementation project(':runetek3')
+
+    compileOnly 'org.teavm:teavm-classlib:0.7.0-dev-1208'
+    compileOnly 'org.teavm:teavm-jso-apis:0.7.0-dev-1208'
+}
