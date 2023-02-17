@@ -33,7 +33,8 @@ public class DatabaseStore {
 		IDBOpenDBRequest req = IDBFactory.getInstance().open("lostcity", 1);
 
 		req.setOnError(() -> {
-			callback.error(new Exception("Error opening IndexedDB"));
+			// callback.error(new Exception("Error opening IndexedDB"));
+			callback.complete(null);
 		});
 
 		req.setOnUpgradeNeeded(evt -> {
@@ -52,7 +53,8 @@ public class DatabaseStore {
 
 	public static void getFile(String name, AsyncCallback<byte[]> callback) {
 		if (db == null) {
-			callback.error(new Exception("Database not initialized"));
+			// callback.error(new Exception("Database not initialized"));
+			callback.complete(null);
 			return;
 		}
 
@@ -83,7 +85,8 @@ public class DatabaseStore {
 
 	public static void putFile(String name, byte[] data, AsyncCallback<NullType> callback) {
 		if (db == null) {
-			callback.error(new Exception("Database not initialized"));
+			// callback.error(new Exception("Database not initialized"));
+			callback.complete(null);
 			return;
 		}
 
