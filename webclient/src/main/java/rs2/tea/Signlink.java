@@ -7,8 +7,10 @@ import org.openrs2.deob.annotation.OriginalArg;
 import org.openrs2.deob.annotation.OriginalClass;
 import org.openrs2.deob.annotation.OriginalMember;
 import org.openrs2.deob.annotation.Pc;
+import org.teavm.jso.JSBody;
 
 import java.io.IOException;
+import java.util.Objects;
 
 @OriginalClass("client!sign/signlink")
 public final class Signlink implements Runnable {
@@ -41,10 +43,10 @@ public final class Signlink implements Runnable {
 	private static int midipos;
 
 	@OriginalMember(owner = "client!sign/signlink", name = "midivol", descriptor = "I")
-	public static int midivol;
+	public static int midivol = 192;
 
 	@OriginalMember(owner = "client!sign/signlink", name = "midifade", descriptor = "I")
-	public static int midifade;
+	public static boolean midifade;
 
 	@OriginalMember(owner = "client!sign/signlink", name = "waveplay", descriptor = "Z")
 	private static boolean waveplay;
@@ -53,7 +55,7 @@ public final class Signlink implements Runnable {
 	private static int wavepos;
 
 	@OriginalMember(owner = "client!sign/signlink", name = "wavevol", descriptor = "I")
-	public static int wavevol;
+	public static int wavevol = 192;
 
 	@OriginalMember(owner = "client!sign/signlink", name = "socket", descriptor = "Ljava/net/Socket;")
 	private static WebSocket socket = null;
@@ -92,10 +94,10 @@ public final class Signlink implements Runnable {
 	private static int looprate = 50;
 
 	@OriginalMember(owner = "client!sign/signlink", name = "midi", descriptor = "Ljava/lang/String;")
-	public static String midi = null;
+	public static String midi = "none";
 
 	@OriginalMember(owner = "client!sign/signlink", name = "wave", descriptor = "Ljava/lang/String;")
-	private static String wave = null;
+	private static String wave = "none";
 
 	@OriginalMember(owner = "client!sign/signlink", name = "reporterror", descriptor = "Z")
 	public static boolean reporterror = true;
@@ -275,6 +277,58 @@ public final class Signlink implements Runnable {
 		}
 	}
 
+	@JSBody(params = { "data", "vol" }, script = "playWave(data, vol)")
+	public static native void jsPlayWave(byte[] data, int vol);
+
+	@JSBody(params = { "vol" }, script = "setWaveVolume(vol)")
+	public static native void jsSetWaveVolume(int vol);
+
+	@JSBody(params = { "data", "vol", "fade" }, script = "playMidi(data, vol, fade)")
+	public static native void jsPlayMidi(byte[] data, int vol, boolean fade);
+
+	@JSBody(script = "stopMidi()")
+	public static native void jsStopMidi();
+
+	@JSBody(params = { "vol" }, script = "setMidiVolume(vol)")
+	public static native void jsSetMidiVolume(int vol);
+
+	// adapted from play_members.html's JS loop
+	private void audioLoop() {
+		try {
+			if (!Objects.equals(midi, "none")) {
+				if (Objects.equals(midi, "stop")) {
+					jsStopMidi();
+				} else if (Objects.equals(midi, "voladjust")) {
+					jsSetMidiVolume(midivol);
+				} else {
+					byte[] data = DatabaseStore.getFile(midi);
+					if (data == null) {
+						data = savebuf; // no caching, we hope it's the right file
+					}
+					jsPlayMidi(data, midivol, midifade);
+				}
+			}
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		}
+
+		midi = "none";
+
+		try {
+			if (!Objects.equals(wave, "none")) {
+				byte[] data = DatabaseStore.getFile(wave);
+				if (data == null) {
+					data = savebuf; // no caching, we hope it's the right file
+				}
+				jsPlayWave(data, wavevol);
+			}
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		}
+
+		wave = "none";
+	}
+
 	@OriginalMember(owner = "client!sign/signlink", name = "run", descriptor = "()V")
 	@Override
 	public void run() {
@@ -284,6 +338,8 @@ public final class Signlink implements Runnable {
 		uid = getuid();
 		@Pc(8) int local8 = threadliveid;
 		while (threadliveid == local8) {
+			audioLoop();
+
 			if (socketreq != 0) {
 				try {
 					socket = new WebSocket(socketip, socketreq);

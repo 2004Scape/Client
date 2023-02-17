@@ -25,11 +25,55 @@
             }
         </style>
 
-        <script src="target/js/classes.js"></script>
+        <script type="module" src="/midi.js"></script>
+
         <script>
             window.onload = function() {
                 main(['10', '0', 'highmem', 'members', 'true']);
             };
+            
+            let waveGain;
+
+            async function playWave(data, vol) {
+                this.setWaveVolume(vol);
+
+                try {
+                    const audioBuffer = await window.audioContext.decodeAudioData(Uint8Array.from(data).buffer);
+                    let bufferSource = window.audioContext.createBufferSource();
+                    bufferSource.buffer = audioBuffer;
+                    bufferSource.connect(waveGain);
+                    bufferSource.start();
+                } catch (err) {
+                    console.log(err);
+                }
+            }
+
+            function setWaveVolume(vol) {
+                if (!waveGain) {
+                    waveGain = window.audioContext.createGain();
+                    waveGain.connect(window.audioContext.destination);
+                }
+
+                waveGain.gain.value = vol / 256;
+            }
+
+            function playMidi(data, vol, fade) {
+                if (window._tinyMidiPlay) {
+                    window._tinyMidiPlay(data, vol / 256);
+                }
+            }
+
+            function setMidiVolume(vol) {
+                if (window._tinyMidiVolume) {
+                    window._tinyMidiVolume(vol / 256);
+                }
+            }
+
+            function stopMidi() {
+                if (window._tinyMidiStop) {
+                    window._tinyMidiStop();
+                }
+            }
 
             function toggleFullscreen() {
                 if (document.fullscreenElement || document.webkitFullscreenElement || document.mozFullScreenElement || document.msFullscreenElement) {
@@ -57,6 +101,8 @@
                 }
             }
         </script>
+
+        <script src="target/js/classes.js"></script>
     </head>
 
     <body style="background-color: black">

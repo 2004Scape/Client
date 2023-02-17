@@ -1291,8 +1291,8 @@ public final class Game extends GameShell {
 		if (args != null && args.length > 4 && args[4].equals("true")) {
 			// this argument describes whether the client should attempt to connect to the reference server,
 			// instead of whatever the current domain is. for the sake of index.html here we'll use the reference server
-			// and not do anything. this option should be used when a server isn't actually being ran
-			log("Connecting to reference server");
+			// and not do anything. this option should be used when a server isn't actually running
+			log("Using reference server");
 		} else {
 			// but it's important, so we don't have to rebuild for each domain
 			SERVER_ADDRESS = getWebHost();
@@ -1570,7 +1570,7 @@ public final class Game extends GameShell {
 
 	@OriginalMember(owner = "client!client", name = "e", descriptor = "(I)V")
 	private void stopMidi() {
-		Signlink.midifade = 0;
+		Signlink.midifade = false;
 		Signlink.midi = "stop";
 	}
 
@@ -3996,7 +3996,7 @@ public final class Game extends GameShell {
 
 	@OriginalMember(owner = "client!client", name = "a", descriptor = "([BIIZ)V")
 	private void saveMidi(@OriginalArg(0) byte[] arg0, @OriginalArg(2) int arg2, @OriginalArg(3) boolean arg3) {
-		Signlink.midifade = arg3 ? 1 : 0;
+		Signlink.midifade = arg3;
 		Signlink.midisave(arg0, arg2);
 	}
 
@@ -4459,19 +4459,19 @@ public final class Game extends GameShell {
 		if (local8 == 3) {
 			@Pc(54) boolean local54 = this.midiActive;
 			if (local16 == 0) {
-				this.setMidiVolume(0);
+				this.setMidiVolume(256);
 				this.midiActive = true;
 			}
 			if (local16 == 1) {
-				this.setMidiVolume(-400);
+				this.setMidiVolume(192);
 				this.midiActive = true;
 			}
 			if (local16 == 2) {
-				this.setMidiVolume(-800);
+				this.setMidiVolume(128);
 				this.midiActive = true;
 			}
 			if (local16 == 3) {
-				this.setMidiVolume(-1200);
+				this.setMidiVolume(64);
 				this.midiActive = true;
 			}
 			if (local16 == 4) {
@@ -4489,19 +4489,19 @@ public final class Game extends GameShell {
 		if (local8 == 4) {
 			if (local16 == 0) {
 				this.waveEnabled = true;
-				this.setWaveVolume(0);
+				this.setWaveVolume(256);
 			}
 			if (local16 == 1) {
 				this.waveEnabled = true;
-				this.setWaveVolume(-400);
+				this.setWaveVolume(192);
 			}
 			if (local16 == 2) {
 				this.waveEnabled = true;
-				this.setWaveVolume(-800);
+				this.setWaveVolume(128);
 			}
 			if (local16 == 3) {
 				this.waveEnabled = true;
-				this.setWaveVolume(-1200);
+				this.setWaveVolume(64);
 			}
 			if (local16 == 4) {
 				this.waveEnabled = false;
