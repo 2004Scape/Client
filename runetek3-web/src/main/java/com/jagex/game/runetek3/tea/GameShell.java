@@ -212,7 +212,8 @@ public class GameShell implements Runnable {
 		});
 		this.drawArea = new DrawArea(this.context, this.screenWidth, this.screenHeight);
 
-		this.startThread(this, 1);
+		this.run();
+		// this.startThread(this, 1);
 	}
 
 	@OriginalMember(owner = "client!a", name = "run", descriptor = "()V")
