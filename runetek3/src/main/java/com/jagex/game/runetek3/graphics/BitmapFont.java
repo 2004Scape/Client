@@ -42,6 +42,10 @@ public final class BitmapFont extends Draw2D {
 	@OriginalMember(owner = "client!jb", name = "K", descriptor = "[I")
 	private static final int[] CHAR_LOOKUP = new int[256];
 
+	private static int randomCycle = -1;
+	private static int randomAlpha = 0;
+	private static int randomSpacing = 0;
+
 	static {
 		@Pc(4) String local4 = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!\"£$%^&*()-_=+[{]};:'@#~,<.>/?\\| ";
 		for (@Pc(6) int local6 = 0; local6 < 256; local6++) {
@@ -210,8 +214,14 @@ public final class BitmapFont extends Draw2D {
 			return;
 		}
 
-		// this.random.setSeed((long) arg0); // disabled until we have a seedable generator for the webclient
-		@Pc(17) int local17 = 192; // (this.random.nextInt() & 0x1F) + 192;
+		if (randomCycle != arg0) {
+			randomCycle = arg0;
+			this.random.setSeed((long) arg0);
+			randomAlpha = this.random.nextInt();
+			randomSpacing = this.random.nextInt();
+		}
+
+		@Pc(17) int local17 = 192 + (randomAlpha & 0x1F);
 		@Pc(22) int local22 = arg3 - this.height;
 		for (@Pc(30) int local30 = 0; local30 < arg5.length(); local30++) {
 			if (arg5.charAt(local30) == '@' && local30 + 4 < arg5.length() && arg5.charAt(local30 + 4) == '@') {
@@ -226,9 +236,9 @@ public final class BitmapFont extends Draw2D {
 					this.fillMaskedRect(this.charMask[local71], arg6 + this.charOffsetX[local71], this.charMaskHeight[local71], arg4, local22 + this.charOffsetY[local71], local17, this.charMaskWidth[local71]);
 				}
 				arg6 += this.charAdvance[local71];
-				// if ((this.random.nextInt() & 0x3) == 0) {
-				//	 arg6++;
-				// }
+				if ((randomSpacing & 0x3) == 0) {
+					 arg6++;
+				}
 			}
 		}
 	}
