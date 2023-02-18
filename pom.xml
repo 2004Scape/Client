@@ -12,6 +12,7 @@
     <modules>
         <module>deob-annotations</module>
         <module>runetek3</module>
+        <module>client</module>
         <module>runetek3-web</module>
         <module>webclient</module>
     </modules>
