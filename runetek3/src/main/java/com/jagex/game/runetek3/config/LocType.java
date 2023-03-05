@@ -176,13 +176,13 @@ public final class LocType {
 		loc.decode(dat);
 
 		// hardcoded fixes to avoid touching the cache (for now)
-		if (loc.index == 899 || loc.index == 901 || loc.index == 1779) {
-			// fixes black colors on hanging banners and windmill sails
-			loc.sharelight = false;
-		} else if (loc.index == 228) {
-			// fixes ship part being offset incorrectly
-			loc.yoff = -120;
-		}
+		// if (loc.index == 899 || loc.index == 901 || loc.index == 1779) {
+		// 	// fixes black colors on hanging banners and windmill sails
+		// 	loc.sharelight = false;
+		// } else if (loc.index == 228) {
+		// 	// fixes ship part being offset incorrectly
+		// 	loc.yoff = -120;
+		// }
 
 		return loc;
 	}
