@@ -10,7 +10,7 @@ public class ZoneProt {
 	public static final int MAP_PROJANIM = 69;
 	public static final int LOC_DEL = 76;
 	public static final int OBJ_COUNT = 151;
-	public static final int SPOTANIM_SPECIFIC = 191;
+	public static final int MAP_ANIM = 191;
 	public static final int OBJ_REVEAL = 223;
 
 	static {
@@ -22,7 +22,7 @@ public class ZoneProt {
 		ServerProt.PACKET_LENGTHS[MAP_PROJANIM] = 15;
 		ServerProt.PACKET_LENGTHS[LOC_DEL] = 2;
 		ServerProt.PACKET_LENGTHS[OBJ_COUNT] = 7;
-		ServerProt.PACKET_LENGTHS[SPOTANIM_SPECIFIC] = 6;
+		ServerProt.PACKET_LENGTHS[MAP_ANIM] = 6;
 		ServerProt.PACKET_LENGTHS[OBJ_REVEAL] = 5;
 	}
 

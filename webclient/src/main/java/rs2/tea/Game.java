@@ -1917,7 +1917,7 @@ public final class Game extends GameShell {
 						local657.updateVelocity(this.getHeightmapY(this.currentLevel, local34, local38) - local572, local38, local34, local575 + loopCycle);
 						this.projectiles.pushBack(local657);
 					}
-				} else if (arg2 == ZoneProt.SPOTANIM_SPECIFIC) {
+				} else if (arg2 == ZoneProt.MAP_ANIM) {
 					local15 = arg1.g1();
 					local24 = this.baseX + (local15 >> 4 & 0x7);
 					local31 = this.baseZ + (local15 & 0x7);
@@ -9793,7 +9793,7 @@ public final class Game extends GameShell {
 				this.packetType = -1;
 				return true;
 			}
-			if (this.packetType == ZoneProt.OBJ_COUNT || this.packetType == ZoneProt.LOC_ADD_CHANGE || this.packetType == ZoneProt.OBJ_ADD || this.packetType == ZoneProt.SPOTANIM_SPECIFIC || this.packetType == ZoneProt.MAP_PROJANIM || this.packetType == ZoneProt.OBJ_DEL || this.packetType == ZoneProt.OBJ_REVEAL || this.packetType == ZoneProt.LOC_ANIM || this.packetType == ZoneProt.LOC_DEL || this.packetType == ZoneProt.LOC_ADD) {
+			if (this.packetType == ZoneProt.OBJ_COUNT || this.packetType == ZoneProt.LOC_ADD_CHANGE || this.packetType == ZoneProt.OBJ_ADD || this.packetType == ZoneProt.MAP_ANIM || this.packetType == ZoneProt.MAP_PROJANIM || this.packetType == ZoneProt.OBJ_DEL || this.packetType == ZoneProt.OBJ_REVEAL || this.packetType == ZoneProt.LOC_ANIM || this.packetType == ZoneProt.LOC_DEL || this.packetType == ZoneProt.LOC_ADD) {
 				this.readZonePacket(this.in, this.packetType);
 				this.packetType = -1;
 				return true;
