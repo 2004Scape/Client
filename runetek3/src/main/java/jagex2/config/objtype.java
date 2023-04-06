@@ -3,7 +3,7 @@ package jagex2.config;
 import jagex2.datastruct.cache;
 import jagex2.graphics.Draw2D;
 import jagex2.graphics.Draw3D;
-import jagex2.graphics.Image24;
+import jagex2.graphics.pix24;
 import jagex2.graphics.Model;
 import jagex2.io.jagfile;
 import jagex2.io.packet;
@@ -196,8 +196,8 @@ public final class objtype {
 	}
 
 	@OriginalMember(owner = "client!cc", name = "a", descriptor = "(III)Lclient!hb;")
-	public static Image24 getIcon(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2) {
-		@Pc(7) Image24 local7 = (Image24) iconCache.get((long) arg0);
+	public static pix24 getIcon(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2) {
+		@Pc(7) pix24 local7 = (pix24) iconCache.get((long) arg0);
 		if (local7 != null && local7.cropH != arg2 && local7.cropH != -1) {
 			local7.unlink();
 			local7 = null;
@@ -222,7 +222,7 @@ public final class objtype {
 				local28 = get(local38);
 			}
 		}
-		local7 = new Image24(32, 32);
+		local7 = new pix24(32, 32);
 		local38 = Draw3D.centerX;
 		local40 = Draw3D.centerY;
 		@Pc(80) int[] local80 = Draw3D.lineOffset;
@@ -267,7 +267,7 @@ public final class objtype {
 			}
 		}
 		if (local28.certtemplate != -1) {
-			@Pc(348) Image24 local348 = getIcon(local28.certlink, 24638, 10);
+			@Pc(348) pix24 local348 = getIcon(local28.certlink, 24638, 10);
 			@Pc(351) int local351 = local348.cropW;
 			@Pc(354) int local354 = local348.cropH;
 			local348.cropW = 32;

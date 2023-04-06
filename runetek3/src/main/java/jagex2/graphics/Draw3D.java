@@ -51,7 +51,7 @@ public final class Draw3D extends Draw2D {
 	private static int textureCount;
 
 	@OriginalMember(owner = "client!gb", name = "N", descriptor = "[Lclient!ib;")
-	public static Image8[] textures = new Image8[50];
+	public static pix8[] textures = new pix8[50];
 
 	@OriginalMember(owner = "client!gb", name = "O", descriptor = "[Z")
 	private static boolean[] textureTranslucent = new boolean[50];
@@ -159,7 +159,7 @@ public final class Draw3D extends Draw2D {
 		textureCount = 0;
 		for (@Pc(9) int local9 = 0; local9 < 50; local9++) {
 			try {
-				textures[local9] = new Image8(arg1, String.valueOf(local9), 0);
+				textures[local9] = new pix8(arg1, String.valueOf(local9), 0);
 				if (lowMemory && textures[local9].cropW == 128) {
 					textures[local9].shrink();
 				} else {
@@ -226,7 +226,7 @@ public final class Draw3D extends Draw2D {
 			activeTexels[local37] = null;
 		}
 		activeTexels[arg0] = local27;
-		@Pc(79) Image8 local79 = textures[arg0];
+		@Pc(79) pix8 local79 = textures[arg0];
 		@Pc(83) int[] local83 = texturePalette[arg0];
 		@Pc(106) int local106;
 		if (lowMemory) {

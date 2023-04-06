@@ -3,7 +3,7 @@ package jagex2.config;
 import jagex2.datastruct.cache;
 import jagex2.datastruct.jstring;
 import jagex2.graphics.BitmapFont;
-import jagex2.graphics.Image24;
+import jagex2.graphics.pix24;
 import jagex2.graphics.Model;
 import jagex2.io.jagfile;
 import jagex2.io.packet;
@@ -109,7 +109,7 @@ public final class iftype {
 	public int inventoryMarginY;
 
 	@OriginalMember(owner = "client!hc", name = "H", descriptor = "[Lclient!hb;")
-	public Image24[] inventorySlotImage;
+	public pix24[] inventorySlotImage;
 
 	@OriginalMember(owner = "client!hc", name = "I", descriptor = "[I")
 	public int[] inventorySlotOffsetX;
@@ -148,10 +148,10 @@ public final class iftype {
 	public int hoverColor;
 
 	@OriginalMember(owner = "client!hc", name = "U", descriptor = "Lclient!hb;")
-	public Image24 image;
+	public pix24 image;
 
 	@OriginalMember(owner = "client!hc", name = "V", descriptor = "Lclient!hb;")
-	public Image24 activeImage;
+	public pix24 activeImage;
 
 	@OriginalMember(owner = "client!hc", name = "W", descriptor = "Lclient!eb;")
 	public Model model;
@@ -277,7 +277,7 @@ public final class iftype {
 					local62.inventoryMarginY = buf.g1();
 					local62.inventorySlotOffsetX = new int[20];
 					local62.inventorySlotOffsetY = new int[20];
-					local62.inventorySlotImage = new Image24[20];
+					local62.inventorySlotImage = new pix24[20];
 					for (local155 = 0; local155 < 20; local155++) {
 						local160 = buf.g1();
 						if (local160 == 1) {
@@ -403,12 +403,12 @@ public final class iftype {
 	}
 
 	@OriginalMember(owner = "client!hc", name = "a", descriptor = "(Lclient!ub;ILjava/lang/String;I)Lclient!hb;")
-	private static Image24 getImage(@OriginalArg(0) jagfile arg0, @OriginalArg(1) int arg1, @OriginalArg(2) String arg2) {
+	private static pix24 getImage(@OriginalArg(0) jagfile arg0, @OriginalArg(1) int arg1, @OriginalArg(2) String arg2) {
 		@Pc(8) long local8 = (jstring.hashCode(arg2) << 8) + (long) arg1;
-		@Pc(13) Image24 local13 = (Image24) imageCache.get(local8);
+		@Pc(13) pix24 local13 = (pix24) imageCache.get(local8);
 		if (local13 == null) {
 			try {
-				local13 = new Image24(arg0, arg2, arg1);
+				local13 = new pix24(arg0, arg2, arg1);
 				imageCache.put(local8, local13);
 				return local13;
 			} catch (@Pc(38) Exception local38) {

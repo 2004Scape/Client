@@ -8,7 +8,7 @@ import org.openrs2.deob.annotation.OriginalMember;
 import org.openrs2.deob.annotation.Pc;
 
 @OriginalClass("client!ib")
-public final class Image8 extends Draw2D {
+public final class pix8 extends Draw2D {
 
 	@OriginalMember(owner = "client!ib", name = "z", descriptor = "[B")
 	public byte[] pixels;
@@ -35,7 +35,7 @@ public final class Image8 extends Draw2D {
 	private int cropH;
 
 	@OriginalMember(owner = "client!ib", name = "<init>", descriptor = "(Lclient!ub;Ljava/lang/String;I)V")
-	public Image8(@OriginalArg(0) jagfile arg0, @OriginalArg(1) String arg1, @OriginalArg(2) int arg2) {
+	public pix8(@OriginalArg(0) jagfile arg0, @OriginalArg(1) String arg1, @OriginalArg(2) int arg2) {
 		@Pc(32) packet local32 = new packet(arg0.read(arg1 + ".dat", null));
 		@Pc(42) packet local42 = new packet(arg0.read("index.dat", null));
 		local42.pos = local32.g2();

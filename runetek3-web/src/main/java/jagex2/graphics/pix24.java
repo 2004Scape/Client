@@ -18,7 +18,7 @@ import org.teavm.jso.typedarrays.Uint8Array;
 import org.teavm.jso.typedarrays.Uint8ClampedArray;
 
 @OriginalClass("client!hb")
-public final class Image24 extends Draw2D {
+public final class pix24 extends Draw2D {
 
 	public static boolean bilinearFiltering = true;
 
@@ -44,7 +44,7 @@ public final class Image24 extends Draw2D {
 	public int cropH;
 
 	@OriginalMember(owner = "client!hb", name = "<init>", descriptor = "(II)V")
-	public Image24(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1) {
+	public pix24(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1) {
 		this.pixels = new int[arg0 * arg1];
 		this.width = this.cropW = arg0;
 		this.height = this.cropH = arg1;
@@ -69,7 +69,7 @@ public final class Image24 extends Draw2D {
 	}
 
 	@OriginalMember(owner = "client!hb", name = "<init>", descriptor = "([BLjava/awt/Component;)V")
-	public Image24(@OriginalArg(0) byte[] src, CanvasRenderingContext2D context) {
+	public pix24(@OriginalArg(0) byte[] src, CanvasRenderingContext2D context) {
 		try {
 			Uint8Array arr = Uint8Array.create(src.length);
 			arr.set(src);
@@ -100,7 +100,7 @@ public final class Image24 extends Draw2D {
 	}
 
 	@OriginalMember(owner = "client!hb", name = "<init>", descriptor = "(Lclient!ub;Ljava/lang/String;I)V")
-	public Image24(@OriginalArg(0) jagfile arg0, @OriginalArg(1) String arg1, @OriginalArg(2) int arg2) {
+	public pix24(@OriginalArg(0) jagfile arg0, @OriginalArg(1) String arg1, @OriginalArg(2) int arg2) {
 		@Pc(32) packet local32 = new packet(arg0.read(arg1 + ".dat", null));
 		@Pc(42) packet local42 = new packet(arg0.read("index.dat", null));
 		local42.pos = local32.g2();
@@ -517,7 +517,7 @@ public final class Image24 extends Draw2D {
 	}
 
 	@OriginalMember(owner = "client!hb", name = "a", descriptor = "(Lclient!ib;IIB)V")
-	public void drawMasked(@OriginalArg(0) Image8 arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2) {
+	public void drawMasked(@OriginalArg(0) pix8 arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2) {
 		arg2 += this.cropX;
 		arg1 += this.cropY;
 		@Pc(15) int local15 = arg2 + arg1 * Draw2D.width2d;

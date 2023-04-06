@@ -174,7 +174,7 @@ public final class client extends gameshell {
 	private String socialMessage = "";
 
 	@OriginalMember(owner = "client!client", name = "Eb", descriptor = "[Lclient!hb;")
-	private Image24[] imageHitmarks = new Image24[20];
+	private pix24[] imageHitmarks = new pix24[20];
 
 	@OriginalMember(owner = "client!client", name = "Fb", descriptor = "J")
 	private long lastWaveStartTime;
@@ -210,7 +210,7 @@ public final class client extends gameshell {
 	private final int[] designIdentikits = new int[7];
 
 	@OriginalMember(owner = "client!client", name = "Tb", descriptor = "[Lclient!hb;")
-	private Image24[] activeMapFunctions = new Image24[1000];
+	private pix24[] activeMapFunctions = new pix24[1000];
 
 	@OriginalMember(owner = "client!client", name = "Ub", descriptor = "I")
 	private int chatScrollHeight = 78;
@@ -267,7 +267,7 @@ public final class client extends gameshell {
 	private boolean midiThreadActive = true;
 
 	@OriginalMember(owner = "client!client", name = "qc", descriptor = "[Lclient!ib;")
-	private Image8[] imageSideicons = new Image8[13];
+	private pix8[] imageSideicons = new pix8[13];
 
 	@OriginalMember(owner = "client!client", name = "rc", descriptor = "I")
 	private int lastWaveLength;
@@ -471,19 +471,19 @@ public final class client extends gameshell {
 	public static int opPlayer2Counter;
 
 	@OriginalMember(owner = "client!client", name = "Pd", descriptor = "Lclient!ib;")
-	private Image8 imageRedstone1;
+	private pix8 imageRedstone1;
 
 	@OriginalMember(owner = "client!client", name = "Qd", descriptor = "Lclient!ib;")
-	private Image8 imageRedstone2;
+	private pix8 imageRedstone2;
 
 	@OriginalMember(owner = "client!client", name = "Rd", descriptor = "Lclient!ib;")
-	private Image8 imageRedstone3;
+	private pix8 imageRedstone3;
 
 	@OriginalMember(owner = "client!client", name = "Sd", descriptor = "Lclient!ib;")
-	private Image8 imageRedstone1h;
+	private pix8 imageRedstone1h;
 
 	@OriginalMember(owner = "client!client", name = "Td", descriptor = "Lclient!ib;")
-	private Image8 imageRedstone2h;
+	private pix8 imageRedstone2h;
 
 	@OriginalMember(owner = "client!client", name = "Ud", descriptor = "[I")
 	private final int[] messageType = new int[100];
@@ -519,13 +519,13 @@ public final class client extends gameshell {
 	private int reportAbuseInterfaceID = -1;
 
 	@OriginalMember(owner = "client!client", name = "ge", descriptor = "Lclient!ib;")
-	private Image8 imageBackbase1;
+	private pix8 imageBackbase1;
 
 	@OriginalMember(owner = "client!client", name = "he", descriptor = "Lclient!ib;")
-	private Image8 imageBackbase2;
+	private pix8 imageBackbase2;
 
 	@OriginalMember(owner = "client!client", name = "ie", descriptor = "Lclient!ib;")
-	private Image8 imageBackhmid1;
+	private pix8 imageBackhmid1;
 
 	@OriginalMember(owner = "client!client", name = "je", descriptor = "I")
 	private int hintType;
@@ -654,7 +654,7 @@ public final class client extends gameshell {
 	public static int loopCycle;
 
 	@OriginalMember(owner = "client!client", name = "cf", descriptor = "[Lclient!hb;")
-	private Image24[] imageHeadicons = new Image24[20];
+	private pix24[] imageHeadicons = new pix24[20];
 
 	@OriginalMember(owner = "client!client", name = "df", descriptor = "I")
 	private int systemUpdateTimer;
@@ -666,10 +666,10 @@ public final class client extends gameshell {
 	private boolean objGrabThreshold = false;
 
 	@OriginalMember(owner = "client!client", name = "hf", descriptor = "Lclient!hb;")
-	private Image24 genderButtonImage0;
+	private pix24 genderButtonImage0;
 
 	@OriginalMember(owner = "client!client", name = "jf", descriptor = "Lclient!hb;")
-	private Image24 genderButtonImage1;
+	private pix24 genderButtonImage1;
 
 	@OriginalMember(owner = "client!client", name = "kf", descriptor = "I")
 	private int midiSyncCrc;
@@ -702,7 +702,7 @@ public final class client extends gameshell {
 	private int titleLoginField;
 
 	@OriginalMember(owner = "client!client", name = "uf", descriptor = "[Lclient!ib;")
-	private Image8[] imageRunes;
+	private pix8[] imageRunes;
 
 	@OriginalMember(owner = "client!client", name = "vf", descriptor = "Z")
 	private boolean ingame = false;
@@ -717,22 +717,22 @@ public final class client extends gameshell {
 	private int chatScrollOffset;
 
 	@OriginalMember(owner = "client!client", name = "zf", descriptor = "Lclient!hb;")
-	private Image24 imageFlamesLeft;
+	private pix24 imageFlamesLeft;
 
 	@OriginalMember(owner = "client!client", name = "Af", descriptor = "Lclient!hb;")
-	private Image24 imageFlamesRight;
+	private pix24 imageFlamesRight;
 
 	@OriginalMember(owner = "client!client", name = "Bf", descriptor = "I")
 	private final int SCROLLBAR_GRIP_LOWLIGHT = 3353893;
 
 	@OriginalMember(owner = "client!client", name = "Cf", descriptor = "Lclient!ib;")
-	private Image8 imageInvback;
+	private pix8 imageInvback;
 
 	@OriginalMember(owner = "client!client", name = "Df", descriptor = "Lclient!ib;")
-	private Image8 imageMapback;
+	private pix8 imageMapback;
 
 	@OriginalMember(owner = "client!client", name = "Ef", descriptor = "Lclient!ib;")
-	private Image8 imageChatback;
+	private pix8 imageChatback;
 
 	@OriginalMember(owner = "client!client", name = "Ff", descriptor = "I")
 	private int inMultizone;
@@ -771,7 +771,7 @@ public final class client extends gameshell {
 	private final CRC32 crc32 = new CRC32();
 
 	@OriginalMember(owner = "client!client", name = "Sf", descriptor = "Lclient!hb;")
-	private Image24 imageMapflag;
+	private pix24 imageMapflag;
 
 	@OriginalMember(owner = "client!client", name = "Tf", descriptor = "I")
 	public static int updateGame;
@@ -888,22 +888,22 @@ public final class client extends gameshell {
 	private DrawArea imageTitle8;
 
 	@OriginalMember(owner = "client!client", name = "Hg", descriptor = "[Lclient!ib;")
-	private Image8[] imageMapscene = new Image8[50];
+	private pix8[] imageMapscene = new pix8[50];
 
 	@OriginalMember(owner = "client!client", name = "Jg", descriptor = "Lclient!ib;")
-	private Image8 imageRedstone1v;
+	private pix8 imageRedstone1v;
 
 	@OriginalMember(owner = "client!client", name = "Kg", descriptor = "Lclient!ib;")
-	private Image8 imageRedstone2v;
+	private pix8 imageRedstone2v;
 
 	@OriginalMember(owner = "client!client", name = "Lg", descriptor = "Lclient!ib;")
-	private Image8 imageRedstone3v;
+	private pix8 imageRedstone3v;
 
 	@OriginalMember(owner = "client!client", name = "Mg", descriptor = "Lclient!ib;")
-	private Image8 imageRedstone1hv;
+	private pix8 imageRedstone1hv;
 
 	@OriginalMember(owner = "client!client", name = "Ng", descriptor = "Lclient!ib;")
-	private Image8 imageRedstone2hv;
+	private pix8 imageRedstone2hv;
 
 	@OriginalMember(owner = "client!client", name = "Og", descriptor = "[I")
 	private final int[] CHAT_COLORS = new int[] { 16776960, 16711680, 65280, 65535, 16711935, 16777215 };
@@ -930,7 +930,7 @@ public final class client extends gameshell {
 	private int flagSceneTileZ;
 
 	@OriginalMember(owner = "client!client", name = "Wg", descriptor = "Lclient!hb;")
-	private Image24 imageMinimap;
+	private pix24 imageMinimap;
 
 	@OriginalMember(owner = "client!client", name = "Xg", descriptor = "I")
 	private int unreadMessages;
@@ -942,16 +942,16 @@ public final class client extends gameshell {
 	private linkablelist spotanims = new linkablelist();
 
 	@OriginalMember(owner = "client!client", name = "ah", descriptor = "Lclient!hb;")
-	private Image24 imageMapdot0;
+	private pix24 imageMapdot0;
 
 	@OriginalMember(owner = "client!client", name = "bh", descriptor = "Lclient!hb;")
-	private Image24 imageMapdot1;
+	private pix24 imageMapdot1;
 
 	@OriginalMember(owner = "client!client", name = "ch", descriptor = "Lclient!hb;")
-	private Image24 imageMapdot2;
+	private pix24 imageMapdot2;
 
 	@OriginalMember(owner = "client!client", name = "dh", descriptor = "Lclient!hb;")
-	private Image24 imageMapdot3;
+	private pix24 imageMapdot3;
 
 	@OriginalMember(owner = "client!client", name = "eh", descriptor = "I")
 	private int lastAddress;
@@ -1002,10 +1002,10 @@ public final class client extends gameshell {
 	private boolean redrawSideicons = false;
 
 	@OriginalMember(owner = "client!client", name = "yh", descriptor = "Lclient!ib;")
-	private Image8 imageScrollbar0;
+	private pix8 imageScrollbar0;
 
 	@OriginalMember(owner = "client!client", name = "zh", descriptor = "Lclient!ib;")
-	private Image8 imageScrollbar1;
+	private pix8 imageScrollbar1;
 
 	@OriginalMember(owner = "client!client", name = "Ah", descriptor = "Ljava/lang/String;")
 	private String loginMessage0 = "";
@@ -1068,10 +1068,10 @@ public final class client extends gameshell {
 	public static boolean started;
 
 	@OriginalMember(owner = "client!client", name = "Uh", descriptor = "Lclient!ib;")
-	private Image8 imageTitlebox;
+	private pix8 imageTitlebox;
 
 	@OriginalMember(owner = "client!client", name = "Vh", descriptor = "Lclient!ib;")
-	private Image8 imageTitlebutton;
+	private pix8 imageTitlebutton;
 
 	@OriginalMember(owner = "client!client", name = "Yh", descriptor = "[I")
 	private final int[] LOC_KIND_TO_CLASS_ID = new int[] { 0, 0, 0, 0, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 3 };
@@ -1110,7 +1110,7 @@ public final class client extends gameshell {
 	private String currentMidi;
 
 	@OriginalMember(owner = "client!client", name = "li", descriptor = "[Lclient!hb;")
-	private Image24[] imageCrosses = new Image24[8];
+	private pix24[] imageCrosses = new pix24[8];
 
 	@OriginalMember(owner = "client!client", name = "mi", descriptor = "Z")
 	private boolean flameThread = false;
@@ -1158,7 +1158,7 @@ public final class client extends gameshell {
 	private String chatTyped = "";
 
 	@OriginalMember(owner = "client!client", name = "Di", descriptor = "[Lclient!hb;")
-	private Image24[] imageMapfunction = new Image24[50];
+	private pix24[] imageMapfunction = new pix24[50];
 
 	@OriginalMember(owner = "client!client", name = "Ei", descriptor = "[I")
 	private int[] menuParamA = new int[500];
@@ -1176,7 +1176,7 @@ public final class client extends gameshell {
 	private boolean scrollGrabbed = false;
 
 	@OriginalMember(owner = "client!client", name = "Ki", descriptor = "Lclient!hb;")
-	private Image24 imageCompass;
+	private pix24 imageCompass;
 
 	@OriginalMember(owner = "client!client", name = "Li", descriptor = "J")
 	private long serverSeed;
@@ -3375,7 +3375,7 @@ public final class client extends gameshell {
 			return;
 		}
 
-		@Pc(17) Image8 local17;
+		@Pc(17) pix8 local17;
 		@Pc(25) int local25;
 		@Pc(33) int local33;
 		@Pc(36) byte[] local36;
@@ -3719,7 +3719,7 @@ public final class client extends gameshell {
 					}
 				}
 			} else {
-				@Pc(71) Image8 local71 = this.imageMapscene[local61.mapscene];
+				@Pc(71) pix8 local71 = this.imageMapscene[local61.mapscene];
 				if (local71 != null) {
 					@Pc(83) int local83 = (local61.sizeX * 4 - local71.width) / 2;
 					@Pc(93) int local93 = (local61.sizeZ * 4 - local71.height) / 2;
@@ -3736,7 +3736,7 @@ public final class client extends gameshell {
 			@Pc(451) loctype local451 = loctype.get(local30);
 			@Pc(483) int local483;
 			if (local451.mapscene != -1) {
-				@Pc(461) Image8 local461 = this.imageMapscene[local451.mapscene];
+				@Pc(461) pix8 local461 = this.imageMapscene[local451.mapscene];
 				if (local461 != null) {
 					local58 = (local451.sizeX * 4 - local461.width) / 2;
 					local483 = (local451.sizeZ * 4 - local461.height) / 2;
@@ -3767,7 +3767,7 @@ public final class client extends gameshell {
 			local18 = local8 >> 14 & 0x7FFF;
 			@Pc(615) loctype local615 = loctype.get(local18);
 			if (local615.mapscene != -1) {
-				@Pc(625) Image8 local625 = this.imageMapscene[local615.mapscene];
+				@Pc(625) pix8 local625 = this.imageMapscene[local615.mapscene];
 				if (local625 != null) {
 					local30 = (local615.sizeX * 4 - local625.width) / 2;
 					@Pc(647) int local647 = (local615.sizeZ * 4 - local625.height) / 2;
@@ -3817,14 +3817,14 @@ public final class client extends gameshell {
 
 	@OriginalMember(owner = "client!client", name = "n", descriptor = "(I)V")
 	private void loadTitleImages() {
-		this.imageTitlebox = new Image8(this.archiveTitle, "titlebox", 0);
-		this.imageTitlebutton = new Image8(this.archiveTitle, "titlebutton", 0);
-		this.imageRunes = new Image8[12];
+		this.imageTitlebox = new pix8(this.archiveTitle, "titlebox", 0);
+		this.imageTitlebutton = new pix8(this.archiveTitle, "titlebutton", 0);
+		this.imageRunes = new pix8[12];
 		for (@Pc(32) int local32 = 0; local32 < 12; local32++) {
-			this.imageRunes[local32] = new Image8(this.archiveTitle, "runes", local32);
+			this.imageRunes[local32] = new pix8(this.archiveTitle, "runes", local32);
 		}
-		this.imageFlamesLeft = new Image24(128, 265);
-		this.imageFlamesRight = new Image24(128, 265);
+		this.imageFlamesLeft = new pix24(128, 265);
+		this.imageFlamesRight = new pix24(128, 265);
 		for (@Pc(65) int local65 = 0; local65 < 33920; local65++) {
 			this.imageFlamesLeft.pixels[local65] = this.imageTitle0.pixels[local65];
 		}
@@ -4229,7 +4229,7 @@ public final class client extends gameshell {
 								local217 = 0;
 								local224 = local84.inventorySlotObjId[local165] - 1;
 								if (local182 >= -32 && local182 <= 512 && local191 >= -32 && local191 <= 334 || this.objDragArea != 0 && this.objDragSlot == local165) {
-									@Pc(251) Image24 local251 = objtype.getIcon(local224, 24638, local84.inventorySlotObjCount[local165]);
+									@Pc(251) pix24 local251 = objtype.getIcon(local224, 24638, local84.inventorySlotObjCount[local165]);
 									if (this.objDragArea != 0 && this.objDragSlot == local165 && this.objDragInterfaceId == local84.id) {
 										local215 = super.mouseX - this.objGrabX;
 										local217 = super.mouseY - this.objGrabY;
@@ -4256,7 +4256,7 @@ public final class client extends gameshell {
 									}
 								}
 							} else if (local84.inventorySlotImage != null && local165 < 20) {
-								@Pc(398) Image24 local398 = local84.inventorySlotImage[local165];
+								@Pc(398) pix24 local398 = local84.inventorySlotImage[local165];
 								if (local398 != null) {
 									local398.draw(local191, local182);
 								}
@@ -4335,7 +4335,7 @@ public final class client extends gameshell {
 							local191 += local456.height;
 						}
 					} else if (local84.type == 5) {
-						@Pc(766) Image24 local766;
+						@Pc(766) pix24 local766;
 						if (this.executeInterfaceScript(local84)) {
 							local766 = local84.activeImage;
 						} else {
@@ -6175,103 +6175,103 @@ public final class client extends gameshell {
 			for (@Pc(346) int local346 = 0; local346 < 4; local346++) {
 				this.levelCollisionMap[local346] = new CollisionMap(104, -708, 104);
 			}
-			this.imageMinimap = new Image24(512, 512);
+			this.imageMinimap = new pix24(512, 512);
 			this.drawProgress("Unpacking media", 75);
-			this.imageInvback = new Image8(local277, "invback", 0);
-			this.imageChatback = new Image8(local277, "chatback", 0);
-			this.imageMapback = new Image8(local277, "mapback", 0);
-			this.imageBackbase1 = new Image8(local277, "backbase1", 0);
-			this.imageBackbase2 = new Image8(local277, "backbase2", 0);
-			this.imageBackhmid1 = new Image8(local277, "backhmid1", 0);
+			this.imageInvback = new pix8(local277, "invback", 0);
+			this.imageChatback = new pix8(local277, "chatback", 0);
+			this.imageMapback = new pix8(local277, "mapback", 0);
+			this.imageBackbase1 = new pix8(local277, "backbase1", 0);
+			this.imageBackbase2 = new pix8(local277, "backbase2", 0);
+			this.imageBackhmid1 = new pix8(local277, "backhmid1", 0);
 			for (@Pc(424) int local424 = 0; local424 < 13; local424++) {
-				this.imageSideicons[local424] = new Image8(local277, "sideicons", local424);
+				this.imageSideicons[local424] = new pix8(local277, "sideicons", local424);
 			}
-			this.imageCompass = new Image24(local277, "compass", 0);
+			this.imageCompass = new pix24(local277, "compass", 0);
 			@Pc(450) int local450;
 			try {
 				for (local450 = 0; local450 < 50; local450++) {
 					if (local450 == 22) {
 						continue;
 					}
-					this.imageMapscene[local450] = new Image8(local277, "mapscene", local450);
+					this.imageMapscene[local450] = new pix8(local277, "mapscene", local450);
 				}
 			} catch (@Pc(468) Exception local468) {
 			}
 			try {
 				for (local450 = 0; local450 < 50; local450++) {
-					this.imageMapfunction[local450] = new Image24(local277, "mapfunction", local450);
+					this.imageMapfunction[local450] = new pix24(local277, "mapfunction", local450);
 				}
 			} catch (@Pc(488) Exception local488) {
 			}
 			try {
 				for (local450 = 0; local450 < 20; local450++) {
-					this.imageHitmarks[local450] = new Image24(local277, "hitmarks", local450);
+					this.imageHitmarks[local450] = new pix24(local277, "hitmarks", local450);
 				}
 			} catch (@Pc(508) Exception local508) {
 			}
 			try {
 				for (local450 = 0; local450 < 20; local450++) {
-					this.imageHeadicons[local450] = new Image24(local277, "headicons", local450);
+					this.imageHeadicons[local450] = new pix24(local277, "headicons", local450);
 				}
 			} catch (@Pc(528) Exception local528) {
 			}
-			this.imageMapflag = new Image24(local277, "mapflag", 0);
+			this.imageMapflag = new pix24(local277, "mapflag", 0);
 			for (local450 = 0; local450 < 8; local450++) {
-				this.imageCrosses[local450] = new Image24(local277, "cross", local450);
+				this.imageCrosses[local450] = new pix24(local277, "cross", local450);
 			}
-			this.imageMapdot0 = new Image24(local277, "mapdots", 0);
-			this.imageMapdot1 = new Image24(local277, "mapdots", 1);
-			this.imageMapdot2 = new Image24(local277, "mapdots", 2);
-			this.imageMapdot3 = new Image24(local277, "mapdots", 3);
-			this.imageScrollbar0 = new Image8(local277, "scrollbar", 0);
-			this.imageScrollbar1 = new Image8(local277, "scrollbar", 1);
-			this.imageRedstone1 = new Image8(local277, "redstone1", 0);
-			this.imageRedstone2 = new Image8(local277, "redstone2", 0);
-			this.imageRedstone3 = new Image8(local277, "redstone3", 0);
-			this.imageRedstone1h = new Image8(local277, "redstone1", 0);
+			this.imageMapdot0 = new pix24(local277, "mapdots", 0);
+			this.imageMapdot1 = new pix24(local277, "mapdots", 1);
+			this.imageMapdot2 = new pix24(local277, "mapdots", 2);
+			this.imageMapdot3 = new pix24(local277, "mapdots", 3);
+			this.imageScrollbar0 = new pix8(local277, "scrollbar", 0);
+			this.imageScrollbar1 = new pix8(local277, "scrollbar", 1);
+			this.imageRedstone1 = new pix8(local277, "redstone1", 0);
+			this.imageRedstone2 = new pix8(local277, "redstone2", 0);
+			this.imageRedstone3 = new pix8(local277, "redstone3", 0);
+			this.imageRedstone1h = new pix8(local277, "redstone1", 0);
 			this.imageRedstone1h.flipHorizontally();
-			this.imageRedstone2h = new Image8(local277, "redstone2", 0);
+			this.imageRedstone2h = new pix8(local277, "redstone2", 0);
 			this.imageRedstone2h.flipHorizontally();
-			this.imageRedstone1v = new Image8(local277, "redstone1", 0);
+			this.imageRedstone1v = new pix8(local277, "redstone1", 0);
 			this.imageRedstone1v.flipVertically();
-			this.imageRedstone2v = new Image8(local277, "redstone2", 0);
+			this.imageRedstone2v = new pix8(local277, "redstone2", 0);
 			this.imageRedstone2v.flipVertically();
-			this.imageRedstone3v = new Image8(local277, "redstone3", 0);
+			this.imageRedstone3v = new pix8(local277, "redstone3", 0);
 			this.imageRedstone3v.flipVertically();
-			this.imageRedstone1hv = new Image8(local277, "redstone1", 0);
+			this.imageRedstone1hv = new pix8(local277, "redstone1", 0);
 			this.imageRedstone1hv.flipHorizontally();
 			this.imageRedstone1hv.flipVertically();
-			this.imageRedstone2hv = new Image8(local277, "redstone2", 0);
+			this.imageRedstone2hv = new pix8(local277, "redstone2", 0);
 			this.imageRedstone2hv.flipHorizontally();
 			this.imageRedstone2hv.flipVertically();
-			@Pc(725) Image24 local725 = new Image24(local277, "backleft1", 0);
+			@Pc(725) pix24 local725 = new pix24(local277, "backleft1", 0);
 			this.areaBackleft1 = new DrawArea(this.getBaseComponent(), local725.width, local725.height);
 			local725.blitOpaque(0, 0);
-			@Pc(750) Image24 local750 = new Image24(local277, "backleft2", 0);
+			@Pc(750) pix24 local750 = new pix24(local277, "backleft2", 0);
 			this.areaBackleft2 = new DrawArea(this.getBaseComponent(), local750.width, local750.height);
 			local750.blitOpaque(0, 0);
-			@Pc(775) Image24 local775 = new Image24(local277, "backright1", 0);
+			@Pc(775) pix24 local775 = new pix24(local277, "backright1", 0);
 			this.areaBackright1 = new DrawArea(this.getBaseComponent(), local775.width, local775.height);
 			local775.blitOpaque(0, 0);
-			@Pc(800) Image24 local800 = new Image24(local277, "backright2", 0);
+			@Pc(800) pix24 local800 = new pix24(local277, "backright2", 0);
 			this.areaBackright2 = new DrawArea(this.getBaseComponent(), local800.width, local800.height);
 			local800.blitOpaque(0, 0);
-			@Pc(825) Image24 local825 = new Image24(local277, "backtop1", 0);
+			@Pc(825) pix24 local825 = new pix24(local277, "backtop1", 0);
 			this.areaBacktop1 = new DrawArea(this.getBaseComponent(), local825.width, local825.height);
 			local825.blitOpaque(0, 0);
-			@Pc(850) Image24 local850 = new Image24(local277, "backtop2", 0);
+			@Pc(850) pix24 local850 = new pix24(local277, "backtop2", 0);
 			this.areaBacktop2 = new DrawArea(this.getBaseComponent(), local850.width, local850.height);
 			local850.blitOpaque(0, 0);
-			@Pc(875) Image24 local875 = new Image24(local277, "backvmid1", 0);
+			@Pc(875) pix24 local875 = new pix24(local277, "backvmid1", 0);
 			this.areaBackvmid1 = new DrawArea(this.getBaseComponent(), local875.width, local875.height);
 			local875.blitOpaque(0, 0);
-			@Pc(900) Image24 local900 = new Image24(local277, "backvmid2", 0);
+			@Pc(900) pix24 local900 = new pix24(local277, "backvmid2", 0);
 			this.areaBackvmid2 = new DrawArea(this.getBaseComponent(), local900.width, local900.height);
 			local900.blitOpaque(0, 0);
-			@Pc(925) Image24 local925 = new Image24(local277, "backvmid3", 0);
+			@Pc(925) pix24 local925 = new pix24(local277, "backvmid3", 0);
 			this.areaBackvmid3 = new DrawArea(this.getBaseComponent(), local925.width, local925.height);
 			local925.blitOpaque(0, 0);
-			@Pc(950) Image24 local950 = new Image24(local277, "backhmid2", 0);
+			@Pc(950) pix24 local950 = new pix24(local277, "backhmid2", 0);
 			this.areaBackhmid2 = new DrawArea(this.getBaseComponent(), local950.width, local950.height);
 			local950.blitOpaque(0, 0);
 			@Pc(975) int local975 = (int) (Math.random() * 21.0D) - 10;
@@ -6607,7 +6607,7 @@ public final class client extends gameshell {
 	}
 
 	@OriginalMember(owner = "client!client", name = "a", descriptor = "(IILclient!hb;I)V")
-	private void drawOnMinimap(@OriginalArg(0) int arg0, @OriginalArg(2) Image24 arg2, @OriginalArg(3) int arg3) {
+	private void drawOnMinimap(@OriginalArg(0) int arg0, @OriginalArg(2) pix24 arg2, @OriginalArg(3) int arg3) {
 		@Pc(7) int local7 = this.orbitCameraYaw + this.minimapAnticheatAngle & 0x7FF;
 		@Pc(15) int local15 = arg3 * arg3 + arg0 * arg0;
 		if (local15 > 6400) {
@@ -8572,7 +8572,7 @@ public final class client extends gameshell {
 	}
 
 	@OriginalMember(owner = "client!client", name = "a", descriptor = "(ILclient!ib;)V")
-	private void updateFlameBuffer(@OriginalArg(1) Image8 arg1) {
+	private void updateFlameBuffer(@OriginalArg(1) pix8 arg1) {
 		@Pc(3) short local3 = 256;
 		for (@Pc(5) int local5 = 0; local5 < this.flameBuffer0.length; local5++) {
 			this.flameBuffer0[local5] = 0;
@@ -8933,7 +8933,7 @@ public final class client extends gameshell {
 	@OriginalMember(owner = "client!client", name = "p", descriptor = "(B)V")
 	private void loadTitleBackground() {
 		@Pc(8) byte[] local8 = this.archiveTitle.read("title.dat", null);
-		@Pc(14) Image24 local14 = new Image24(local8, this);
+		@Pc(14) pix24 local14 = new pix24(local8, this);
 		this.imageTitle0.bind();
 		local14.blitOpaque(0, 0);
 		this.imageTitle1.bind();
@@ -8979,7 +8979,7 @@ public final class client extends gameshell {
 		local14.blitOpaque(212, -186);
 		this.imageTitle8.bind();
 		local14.blitOpaque(-180, -186);
-		local14 = new Image24(this.archiveTitle, "logo", 0);
+		local14 = new pix24(this.archiveTitle, "logo", 0);
 		this.imageTitle2.bind();
 		local14.draw(18, super.screenWidth / 2 - local14.width / 2 - 128);
 		local14 = null;
