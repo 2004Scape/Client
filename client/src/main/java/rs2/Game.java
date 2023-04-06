@@ -33,6 +33,10 @@ import java.util.zip.CRC32;
 @OriginalClass("client!client")
 public final class Game extends GameShell {
 
+	private static String SERVER_ADDRESS = "world2.runewiki.org";
+	private static String SERVER_WEB_SCHEMA = "http:";
+	private static int SERVER_WEB_PORT = 80;
+
 	private boolean showPerformance = false;
 	private boolean showOccluders = false;
 	private boolean showDebug = false;
@@ -1252,7 +1256,7 @@ public final class Game extends GameShell {
 					System.out.println("Usage: node-id, port-offset, [lowmem/highmem], [free/members]");
 					return;
 				}
-				Signlink.startpriv(InetAddress.getByName("world2.runewiki.org"));
+				Signlink.startpriv(InetAddress.getByName(Game.SERVER_ADDRESS));
 				@Pc(82) Game local82 = new Game();
 				local82.initApplication(532, 789);
 			} else {
@@ -7773,7 +7777,7 @@ public final class Game extends GameShell {
 		}
 		try {
 			if (super.frame != null) {
-				return new URL("http://world2.runewiki.org:" + (portOffset + 80));
+				return new URL(Game.SERVER_WEB_SCHEMA + "//" + Game.SERVER_ADDRESS + ":" + (portOffset + Game.SERVER_WEB_PORT));
 			}
 		} catch (@Pc(21) Exception local21) {
 		}
