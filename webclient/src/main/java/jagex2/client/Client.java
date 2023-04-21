@@ -4,6 +4,7 @@ import jagex2.*;
 import jagex2.config.*;
 import jagex2.dash3d.entity.*;
 import jagex2.datastruct.JString;
+import jagex2.datastruct.Linkable;
 import jagex2.datastruct.LinkList;
 import jagex2.dash3d.CollisionMap;
 import jagex2.dash3d.Occluder;
@@ -1283,6 +1284,14 @@ public final class Client extends GameShell {
 		Signlink.startpriv(SERVER_WEB_SCHEMA + "//" + SERVER_ADDRESS);
 		@Pc(82) Client game = new Client();
 		game.initApplet(532, 789);
+
+		// this is so TeaVM actually generates LinkList functions...
+		LinkList list = new LinkList();
+		Linkable test1 = new Linkable();
+		Linkable test2 = new Linkable();
+		list.pushFront(test1);
+		list.peekBack();
+		list.next();
 	}
 
 	@OriginalMember(owner = "client!client", name = "d", descriptor = "(Z)V")
