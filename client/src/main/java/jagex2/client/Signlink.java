@@ -7,7 +7,9 @@ import org.openrs2.deob.annotation.Pc;
 
 import java.io.*;
 import java.net.InetAddress;
-import java.net.Socket;
+import java.util.Objects;
+import javax.sound.midi.MidiSystem;
+import javax.sound.sampled.*;
 
 @OriginalClass("client!sign/signlink")
 public final class Signlink implements Runnable {
@@ -37,10 +39,10 @@ public final class Signlink implements Runnable {
 	private static int midipos;
 
 	@OriginalMember(owner = "client!sign/signlink", name = "midivol", descriptor = "I")
-	public static int midivol;
+	public static int midivol = 128;
 
 	@OriginalMember(owner = "client!sign/signlink", name = "midifade", descriptor = "I")
-	public static int midifade;
+	public static boolean midifade;
 
 	@OriginalMember(owner = "client!sign/signlink", name = "waveplay", descriptor = "Z")
 	private static boolean waveplay;
@@ -73,10 +75,10 @@ public final class Signlink implements Runnable {
 	private static int looprate = 50;
 
 	@OriginalMember(owner = "client!sign/signlink", name = "midi", descriptor = "Ljava/lang/String;")
-	public static String midi = null;
+	public static String midi = "none";
 
 	@OriginalMember(owner = "client!sign/signlink", name = "wave", descriptor = "Ljava/lang/String;")
-	private static String wave = null;
+	private static String wave = "none";
 
 	@OriginalMember(owner = "client!sign/signlink", name = "errorname", descriptor = "Ljava/lang/String;")
 	public static String errorname = "";
@@ -97,9 +99,9 @@ public final class Signlink implements Runnable {
 		loadreq = null;
 		savereq = null;
 
-		@Pc(33) Thread local33 = new Thread(new Signlink());
-		local33.setDaemon(true);
-		local33.start();
+		@Pc(33) Thread thread = new Thread(new Signlink());
+		thread.setDaemon(true);
+		thread.start();
 
 		while (!active) {
 			try {
@@ -260,14 +262,147 @@ public final class Signlink implements Runnable {
 		savereq = "jingle" + midipos + ".mid";
 	}
 
+	private MidiPlayer midiPlayer;
+	public boolean midiFadingIn = false;
+	public boolean midiFadingOut = false;
+	public int midiFadeVol = 0;
+	private final Position curPosition = Position.NORMAL;
+
+	enum Position {
+		LEFT, RIGHT, NORMAL
+	}
+
+	public void playMidi(String music) {
+		if (midiFadingOut) {
+			return;
+		} else if (!midiFadingIn && midifade && midiPlayer.running()) {
+			midiFadingOut = true;
+			midiFadeVol = midivol;
+			return;
+		}
+
+		try {
+			if (midifade && midiFadingIn) {
+				midiFadingOut = false;
+				midiFadeVol = 0;
+				midiPlayer.play(MidiSystem.getSequence(new File(music)), midifade, midiFadeVol);
+			} else {
+				midiPlayer.play(MidiSystem.getSequence(new File(music)), midifade, midivol);
+			}
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		}
+	}
+
+	// adapted from play_members.html's JS loop
+	private void audioLoop() {
+		if (midiFadingIn) {
+			midiFadeVol += 8;
+			if (midiFadeVol > midivol) {
+				midiFadeVol = midivol;
+			}
+			midiPlayer.setVolume(0, midiFadeVol);
+			if (midiFadeVol == midivol) {
+				midiFadingIn = false;
+			}
+		} else if (midiFadingOut) {
+			midiFadeVol -= 8;
+			if (midiFadeVol < 0) {
+				midiFadeVol = 0;
+			}
+			midiPlayer.setVolume(0, midiFadeVol);
+			if (midiFadeVol == 0) {
+				midiFadingOut = false;
+				midiFadingIn = true;
+			}
+		}
+
+		if (!Objects.equals(midi, "none")) {
+			if (Objects.equals(midi, "stop")) {
+				midiPlayer.stop();
+			} else if (Objects.equals(midi, "voladjust")) {
+				midiPlayer.setVolume(0, midivol);
+			} else {
+				playMidi(midi);
+			}
+
+			if (!midiFadingOut) {
+				midi = "none";
+			}
+		}
+
+		if (!Objects.equals(wave, "none")) {
+			AudioInputStream audioInputStream;
+
+			try {
+				audioInputStream = AudioSystem.getAudioInputStream(new File(wave));
+			} catch (Exception e1) {
+				e1.printStackTrace();
+				return;
+			}
+
+			AudioFormat format = audioInputStream.getFormat();
+			SourceDataLine auline;
+			DataLine.Info info = new DataLine.Info(SourceDataLine.class, format);
+
+			try {
+				auline = (SourceDataLine) AudioSystem.getLine(info);
+				auline.open(format);
+			} catch (Exception e) {
+				e.printStackTrace();
+				return;
+			}
+
+			if (auline.isControlSupported(FloatControl.Type.PAN)) {
+				FloatControl pan = (FloatControl) auline.getControl(FloatControl.Type.PAN);
+				if (curPosition == Position.RIGHT) {
+					pan.setValue(1.0f);
+				} else if (curPosition == Position.LEFT) {
+					pan.setValue(-1.0f);
+				}
+			}
+
+			auline.start();
+			int nBytesRead = 0;
+			int EXTERNAL_BUFFER_SIZE = 524288;
+			byte[] abData = new byte[EXTERNAL_BUFFER_SIZE];
+
+			try {
+				while (nBytesRead != -1) {
+					nBytesRead = audioInputStream.read(abData, 0, abData.length);
+					if (nBytesRead >= 0) {
+						auline.write(abData, 0, nBytesRead);
+					}
+				}
+			} catch (IOException e) {
+				e.printStackTrace();
+			} finally {
+				auline.drain();
+				auline.close();
+			}
+
+			wave = "none";
+		}
+	}
+
 	@OriginalMember(owner = "client!sign/signlink", name = "run", descriptor = "()V")
 	@Override
 	public void run() {
 		active = true;
-		@Pc(3) String local3 = findcachedir();
-		uid = getuid(local3);
-		@Pc(8) int local8 = threadliveid;
-		while (threadliveid == local8) {
+
+		@Pc(3) String cachedir = findcachedir();
+		uid = getuid(cachedir);
+
+		try {
+			midiPlayer = new MidiPlayer();
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		}
+
+		@Pc(8) int threadid = threadliveid;
+		while (threadliveid == threadid) {
+			audioLoop();
+
 			if (dnsreq != null) {
 				try {
 					dns = InetAddress.getByName(dnsreq).getHostName();
@@ -278,11 +413,11 @@ public final class Signlink implements Runnable {
 			} else if (loadreq != null) {
 				loadbuf = null;
 				try {
-					@Pc(71) File local71 = new File(local3 + loadreq);
+					@Pc(71) File local71 = new File(cachedir + loadreq);
 					if (local71.exists()) {
 						@Pc(78) int local78 = (int) local71.length();
 						loadbuf = new byte[local78];
-						@Pc(96) DataInputStream local96 = new DataInputStream(new FileInputStream(local3 + loadreq));
+						@Pc(96) DataInputStream local96 = new DataInputStream(new FileInputStream(cachedir + loadreq));
 						local96.readFully(loadbuf, 0, local78);
 						local96.close();
 					}
@@ -292,18 +427,18 @@ public final class Signlink implements Runnable {
 			} else if (savereq != null) {
 				if (savebuf != null) {
 					try {
-						@Pc(124) FileOutputStream local124 = new FileOutputStream(local3 + savereq);
+						@Pc(124) FileOutputStream local124 = new FileOutputStream(cachedir + savereq);
 						local124.write(savebuf, 0, savelen);
 						local124.close();
 					} catch (@Pc(133) Exception local133) {
 					}
 				}
 				if (waveplay) {
-					wave = local3 + savereq;
+					wave = cachedir + savereq;
 					waveplay = false;
 				}
 				if (midiplay) {
-					midi = local3 + savereq;
+					midi = cachedir + savereq;
 					midiplay = false;
 				}
 				savereq = null;

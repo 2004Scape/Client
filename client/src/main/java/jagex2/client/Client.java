@@ -1540,7 +1540,7 @@ public final class Client extends GameShell {
 
 	@OriginalMember(owner = "client!client", name = "e", descriptor = "(I)V")
 	private void stopMidi() {
-		Signlink.midifade = 0;
+		Signlink.midifade = false;
 		Signlink.midi = "stop";
 	}
 
@@ -3983,7 +3983,7 @@ public final class Client extends GameShell {
 
 	@OriginalMember(owner = "client!client", name = "a", descriptor = "([BIIZ)V")
 	private void saveMidi(@OriginalArg(0) byte[] arg0, @OriginalArg(2) int arg2, @OriginalArg(3) boolean arg3) {
-		Signlink.midifade = arg3 ? 1 : 0;
+		Signlink.midifade = arg3;
 		Signlink.midisave(arg0, arg2);
 	}
 
@@ -4446,19 +4446,19 @@ public final class Client extends GameShell {
 		if (local8 == 3) {
 			@Pc(54) boolean local54 = this.midiActive;
 			if (local16 == 0) {
-				this.setMidiVolume(0);
+				this.setMidiVolume(192);
 				this.midiActive = true;
 			}
 			if (local16 == 1) {
-				this.setMidiVolume(-400);
+				this.setMidiVolume(128);
 				this.midiActive = true;
 			}
 			if (local16 == 2) {
-				this.setMidiVolume(-800);
+				this.setMidiVolume(64);
 				this.midiActive = true;
 			}
 			if (local16 == 3) {
-				this.setMidiVolume(-1200);
+				this.setMidiVolume(32);
 				this.midiActive = true;
 			}
 			if (local16 == 4) {
