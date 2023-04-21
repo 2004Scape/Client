@@ -13,17 +13,4 @@ public class zoneprot {
 	public static final int MAP_ANIM = 191;
 	public static final int OBJ_REVEAL = 223;
 
-	static {
-		serverprot.PACKET_LENGTHS[LOC_ADD_CHANGE] = 14;
-		serverprot.PACKET_LENGTHS[LOC_ANIM] = 4;
-		serverprot.PACKET_LENGTHS[OBJ_DEL] = 3;
-		serverprot.PACKET_LENGTHS[OBJ_ADD] = 7;
-		serverprot.PACKET_LENGTHS[LOC_ADD] = 4;
-		serverprot.PACKET_LENGTHS[MAP_PROJANIM] = 15;
-		serverprot.PACKET_LENGTHS[LOC_DEL] = 2;
-		serverprot.PACKET_LENGTHS[OBJ_COUNT] = 7;
-		serverprot.PACKET_LENGTHS[MAP_ANIM] = 6;
-		serverprot.PACKET_LENGTHS[OBJ_REVEAL] = 5;
-	}
-
 }
