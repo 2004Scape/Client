@@ -10,4 +10,4 @@ Run `./mvnw package` to build.
 To run the Java client, run `java -jar client/target/client-1.0.jar 10 0 highmem members`.  
 To run the webclient, start a web server in the webclient folder (e.g. `npx http-server` or `python3 -m http.server`)
 
-The main class name is `jagex2.client.client` if you use an IDE.
+The main class name is `jagex2.client.Client` if you use an IDE.

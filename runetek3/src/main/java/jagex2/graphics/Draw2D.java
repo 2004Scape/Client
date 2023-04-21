@@ -1,13 +1,13 @@
 package jagex2.graphics;
 
-import jagex2.datastruct.cacheable;
+import jagex2.datastruct.Hashable;
 import org.openrs2.deob.annotation.OriginalArg;
 import org.openrs2.deob.annotation.OriginalClass;
 import org.openrs2.deob.annotation.OriginalMember;
 import org.openrs2.deob.annotation.Pc;
 
 @OriginalClass("client!fb")
-public class Draw2D extends cacheable {
+public class Draw2D extends Hashable {
 
 	public static boolean fullViewport = true;
 

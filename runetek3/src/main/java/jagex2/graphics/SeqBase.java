@@ -1,12 +1,13 @@
 package jagex2.graphics;
 
-import jagex2.io.jagfile;
-import jagex2.io.packet;
+import jagex2.io.Jagfile;
+import jagex2.io.Packet;
 import org.openrs2.deob.annotation.OriginalArg;
 import org.openrs2.deob.annotation.OriginalClass;
 import org.openrs2.deob.annotation.OriginalMember;
 import org.openrs2.deob.annotation.Pc;
 
+// Sequence Base: Animation skeleton
 @OriginalClass("client!f")
 public final class SeqBase {
 
@@ -23,10 +24,10 @@ public final class SeqBase {
 	public int[][] labels;
 
 	@OriginalMember(owner = "client!f", name = "a", descriptor = "(ZLclient!ub;)V")
-	public static void unpack(@OriginalArg(1) jagfile arg1) {
-		@Pc(11) packet local11 = new packet(arg1.read("base_head.dat", null));
-		@Pc(21) packet local21 = new packet(arg1.read("base_type.dat", null));
-		@Pc(31) packet local31 = new packet(arg1.read("base_label.dat", null));
+	public static void unpack(@OriginalArg(1) Jagfile arg1) {
+		@Pc(11) Packet local11 = new Packet(arg1.read("base_head.dat", null));
+		@Pc(21) Packet local21 = new Packet(arg1.read("base_type.dat", null));
+		@Pc(31) Packet local31 = new Packet(arg1.read("base_label.dat", null));
 		@Pc(34) int local34 = local11.g2();
 		@Pc(37) int local37 = local11.g2();
 		instances = new SeqBase[local37 + 1];

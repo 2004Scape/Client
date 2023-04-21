@@ -73,7 +73,7 @@
                         </goals>
                         <configuration>
                             <targetDirectory>${project.build.directory}/js</targetDirectory>
-                            <mainClass>jagex2.client.client</mainClass>
+                            <mainClass>jagex2.client.Client</mainClass>
                             <!--minifying>false</minifying>
                             <debugInformationGenerated>true</debugInformationGenerated>
                             <sourceMapsGenerated>true</sourceMapsGenerated>

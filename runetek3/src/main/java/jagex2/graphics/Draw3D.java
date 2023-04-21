@@ -1,6 +1,6 @@
 package jagex2.graphics;
 
-import jagex2.io.jagfile;
+import jagex2.io.Jagfile;
 import org.openrs2.deob.annotation.OriginalArg;
 import org.openrs2.deob.annotation.OriginalClass;
 import org.openrs2.deob.annotation.OriginalMember;
@@ -51,7 +51,7 @@ public final class Draw3D extends Draw2D {
 	private static int textureCount;
 
 	@OriginalMember(owner = "client!gb", name = "N", descriptor = "[Lclient!ib;")
-	public static pix8[] textures = new pix8[50];
+	public static Pix8[] textures = new Pix8[50];
 
 	@OriginalMember(owner = "client!gb", name = "O", descriptor = "[Z")
 	private static boolean[] textureTranslucent = new boolean[50];
@@ -155,11 +155,11 @@ public final class Draw3D extends Draw2D {
 	}
 
 	@OriginalMember(owner = "client!gb", name = "a", descriptor = "(BLclient!ub;)V")
-	public static void unpackTextures(@OriginalArg(1) jagfile arg1) {
+	public static void unpackTextures(@OriginalArg(1) Jagfile arg1) {
 		textureCount = 0;
 		for (@Pc(9) int local9 = 0; local9 < 50; local9++) {
 			try {
-				textures[local9] = new pix8(arg1, String.valueOf(local9), 0);
+				textures[local9] = new Pix8(arg1, String.valueOf(local9), 0);
 				if (lowMemory && textures[local9].cropW == 128) {
 					textures[local9].shrink();
 				} else {
@@ -226,7 +226,7 @@ public final class Draw3D extends Draw2D {
 			activeTexels[local37] = null;
 		}
 		activeTexels[arg0] = local27;
-		@Pc(79) pix8 local79 = textures[arg0];
+		@Pc(79) Pix8 local79 = textures[arg0];
 		@Pc(83) int[] local83 = texturePalette[arg0];
 		@Pc(106) int local106;
 		if (lowMemory) {

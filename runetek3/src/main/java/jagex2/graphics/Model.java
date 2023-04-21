@@ -1,15 +1,15 @@
 package jagex2.graphics;
 
-import jagex2.datastruct.cacheable;
-import jagex2.io.jagfile;
-import jagex2.io.packet;
+import jagex2.datastruct.Hashable;
+import jagex2.io.Jagfile;
+import jagex2.io.Packet;
 import org.openrs2.deob.annotation.OriginalArg;
 import org.openrs2.deob.annotation.OriginalClass;
 import org.openrs2.deob.annotation.OriginalMember;
 import org.openrs2.deob.annotation.Pc;
 
 @OriginalClass("client!eb")
-public final class Model extends cacheable {
+public final class Model extends Hashable {
 
 	@OriginalMember(owner = "client!eb", name = "n", descriptor = "I")
 	public int vertexCount;
@@ -126,46 +126,46 @@ public final class Model extends cacheable {
 	public static Metadata[] metadata;
 
 	@OriginalMember(owner = "client!eb", name = "Z", descriptor = "Lclient!kb;")
-	private static packet head;
+	private static Packet head;
 
 	@OriginalMember(owner = "client!eb", name = "ab", descriptor = "Lclient!kb;")
-	public static packet face1;
+	public static Packet face1;
 
 	@OriginalMember(owner = "client!eb", name = "bb", descriptor = "Lclient!kb;")
-	public static packet face2;
+	public static Packet face2;
 
 	@OriginalMember(owner = "client!eb", name = "cb", descriptor = "Lclient!kb;")
-	public static packet face3;
+	public static Packet face3;
 
 	@OriginalMember(owner = "client!eb", name = "db", descriptor = "Lclient!kb;")
-	public static packet face4;
+	public static Packet face4;
 
 	@OriginalMember(owner = "client!eb", name = "eb", descriptor = "Lclient!kb;")
-	public static packet face5;
+	public static Packet face5;
 
 	@OriginalMember(owner = "client!eb", name = "fb", descriptor = "Lclient!kb;")
-	public static packet point1;
+	public static Packet point1;
 
 	@OriginalMember(owner = "client!eb", name = "gb", descriptor = "Lclient!kb;")
-	public static packet point2;
+	public static Packet point2;
 
 	@OriginalMember(owner = "client!eb", name = "hb", descriptor = "Lclient!kb;")
-	public static packet point3;
+	public static Packet point3;
 
 	@OriginalMember(owner = "client!eb", name = "ib", descriptor = "Lclient!kb;")
-	public static packet point4;
+	public static Packet point4;
 
 	@OriginalMember(owner = "client!eb", name = "jb", descriptor = "Lclient!kb;")
-	public static packet point5;
+	public static Packet point5;
 
 	@OriginalMember(owner = "client!eb", name = "kb", descriptor = "Lclient!kb;")
-	public static packet vertex1;
+	public static Packet vertex1;
 
 	@OriginalMember(owner = "client!eb", name = "lb", descriptor = "Lclient!kb;")
-	public static packet vertex2;
+	public static Packet vertex2;
 
 	@OriginalMember(owner = "client!eb", name = "mb", descriptor = "Lclient!kb;")
-	public static packet axis;
+	public static Packet axis;
 
 	@OriginalMember(owner = "client!eb", name = "nb", descriptor = "[Z")
 	public static boolean[] faceClippedX = new boolean[4096];
@@ -833,22 +833,22 @@ public final class Model extends cacheable {
 	}
 
 	@OriginalMember(owner = "client!eb", name = "a", descriptor = "(ILclient!ub;)V")
-	public static void unpack(@OriginalArg(1) jagfile arg1) {
+	public static void unpack(@OriginalArg(1) Jagfile arg1) {
 		try {
-			head = new packet(arg1.read("ob_head.dat", null));
-			face1 = new packet(arg1.read("ob_face1.dat", null));
-			face2 = new packet(arg1.read("ob_face2.dat", null));
-			face3 = new packet(arg1.read("ob_face3.dat", null));
-			face4 = new packet(arg1.read("ob_face4.dat", null));
-			face5 = new packet(arg1.read("ob_face5.dat", null));
-			point1 = new packet(arg1.read("ob_point1.dat", null));
-			point2 = new packet(arg1.read("ob_point2.dat", null));
-			point3 = new packet(arg1.read("ob_point3.dat", null));
-			point4 = new packet(arg1.read("ob_point4.dat", null));
-			point5 = new packet(arg1.read("ob_point5.dat", null));
-			vertex1 = new packet(arg1.read("ob_vertex1.dat", null));
-			vertex2 = new packet(arg1.read("ob_vertex2.dat", null));
-			axis = new packet(arg1.read("ob_axis.dat", null));
+			head = new Packet(arg1.read("ob_head.dat", null));
+			face1 = new Packet(arg1.read("ob_face1.dat", null));
+			face2 = new Packet(arg1.read("ob_face2.dat", null));
+			face3 = new Packet(arg1.read("ob_face3.dat", null));
+			face4 = new Packet(arg1.read("ob_face4.dat", null));
+			face5 = new Packet(arg1.read("ob_face5.dat", null));
+			point1 = new Packet(arg1.read("ob_point1.dat", null));
+			point2 = new Packet(arg1.read("ob_point2.dat", null));
+			point3 = new Packet(arg1.read("ob_point3.dat", null));
+			point4 = new Packet(arg1.read("ob_point4.dat", null));
+			point5 = new Packet(arg1.read("ob_point5.dat", null));
+			vertex1 = new Packet(arg1.read("ob_vertex1.dat", null));
+			vertex2 = new Packet(arg1.read("ob_vertex2.dat", null));
+			axis = new Packet(arg1.read("ob_axis.dat", null));
 			head.pos = 0;
 			point1.pos = 0;
 			point2.pos = 0;

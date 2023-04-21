@@ -1,7 +1,7 @@
 package jagex2.graphics;
 
-import jagex2.io.jagfile;
-import jagex2.io.packet;
+import jagex2.io.Jagfile;
+import jagex2.io.Packet;
 import org.openrs2.deob.annotation.OriginalArg;
 import org.openrs2.deob.annotation.OriginalClass;
 import org.openrs2.deob.annotation.OriginalMember;
@@ -58,9 +58,9 @@ public final class BitmapFont extends Draw2D {
 	}
 
 	@OriginalMember(owner = "client!jb", name = "<init>", descriptor = "(Lclient!ub;Ljava/lang/String;I)V")
-	public BitmapFont(@OriginalArg(0) jagfile arg0, @OriginalArg(1) String arg1) {
-		@Pc(71) packet local71 = new packet(arg0.read(arg1 + ".dat", null));
-		@Pc(81) packet local81 = new packet(arg0.read("index.dat", null));
+	public BitmapFont(@OriginalArg(0) Jagfile arg0, @OriginalArg(1) String arg1) {
+		@Pc(71) Packet local71 = new Packet(arg0.read(arg1 + ".dat", null));
+		@Pc(81) Packet local81 = new Packet(arg0.read("index.dat", null));
 		local81.pos = local71.g2() + 4;
 		@Pc(90) int local90 = local81.g1();
 		if (local90 > 0) {

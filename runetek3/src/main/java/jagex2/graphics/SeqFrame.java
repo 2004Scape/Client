@@ -1,12 +1,13 @@
 package jagex2.graphics;
 
-import jagex2.io.jagfile;
-import jagex2.io.packet;
+import jagex2.io.Jagfile;
+import jagex2.io.Packet;
 import org.openrs2.deob.annotation.OriginalArg;
 import org.openrs2.deob.annotation.OriginalClass;
 import org.openrs2.deob.annotation.OriginalMember;
 import org.openrs2.deob.annotation.Pc;
 
+// Sequence Frame: Animation frame
 @OriginalClass("client!g")
 public final class SeqFrame {
 
@@ -35,11 +36,11 @@ public final class SeqFrame {
 	public int[] z;
 
 	@OriginalMember(owner = "client!g", name = "a", descriptor = "(ZLclient!ub;)V")
-	public static void unpack(@OriginalArg(1) jagfile arg1) {
-		@Pc(17) packet local17 = new packet(arg1.read("frame_head.dat", null));
-		@Pc(27) packet local27 = new packet(arg1.read("frame_tran1.dat", null));
-		@Pc(37) packet local37 = new packet(arg1.read("frame_tran2.dat", null));
-		@Pc(47) packet local47 = new packet(arg1.read("frame_del.dat", null));
+	public static void unpack(@OriginalArg(1) Jagfile arg1) {
+		@Pc(17) Packet local17 = new Packet(arg1.read("frame_head.dat", null));
+		@Pc(27) Packet local27 = new Packet(arg1.read("frame_tran1.dat", null));
+		@Pc(37) Packet local37 = new Packet(arg1.read("frame_tran2.dat", null));
+		@Pc(47) Packet local47 = new Packet(arg1.read("frame_del.dat", null));
 		@Pc(50) int local50 = local17.g2();
 		@Pc(53) int local53 = local17.g2();
 		instances = new SeqFrame[local53 + 1];
