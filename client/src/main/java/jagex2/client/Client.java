@@ -1232,34 +1232,44 @@ public final class Client extends GameShell {
 	}
 
 	@OriginalMember(owner = "client!client", name = "main", descriptor = "([Ljava/lang/String;)V")
-	public static void main(@OriginalArg(0) String[] arg0) {
+	public static void main(@OriginalArg(0) String[] args) {
 		try {
-			System.out.println("RS2 user client - release #" + 225);
-			if (arg0.length == 4) {
-				nodeId = Integer.parseInt(arg0[0]);
-				portOffset = Integer.parseInt(arg0[1]);
-				if (arg0[2].equals("lowmem")) {
-					setLowMemory();
-				} else if (arg0[2].equals("highmem")) {
-					setHighMemory();
-				} else {
-					System.out.println("Usage: node-id, port-offset, [lowmem/highmem], [free/members]");
-					return;
-				}
-				if (arg0[3].equals("free")) {
-					members = false;
-				} else if (arg0[3].equals("members")) {
-					members = true;
-				} else {
-					System.out.println("Usage: node-id, port-offset, [lowmem/highmem], [free/members]");
-					return;
-				}
-				Signlink.startpriv(InetAddress.getByName(Client.SERVER_ADDRESS));
-				@Pc(82) Client local82 = new Client();
-				local82.initApplication(532, 789);
-			} else {
-				System.out.println("Usage: node-id, port-offset, [lowmem/highmem], [free/members]");
+			System.out.println("RS2 user client - release #" + Signlink.clientversion);
+
+			// sane defaults
+			nodeId = 10;
+			portOffset = 0;
+			setHighMemory();
+			members = true;
+
+			if (args.length > 0) {
+				nodeId = Integer.parseInt(args[0]);
 			}
+
+			if (args.length > 1) {
+				portOffset = Integer.parseInt(args[1]);
+			}
+
+			if (args.length > 2) {
+				if (args[2].equals("lowmem")) {
+					setLowMemory();
+				} else if (args[2].equals("highmem")) {
+					setHighMemory();
+				}
+			}
+
+			if (args.length > 3) {
+				if (args[3].equals("free")) {
+					members = false;
+				} else if (args[3].equals("members")) {
+					members = true;
+				}
+			}
+
+			Signlink.startpriv();
+
+			@Pc(82) Client local82 = new Client();
+			local82.initApplication(532, 789);
 		} catch (@Pc(89) Exception ex) {
 			ex.printStackTrace();
 		}
@@ -3031,9 +3041,7 @@ public final class Client extends GameShell {
 							this.redrawChatback = true;
 						}
 						if ((local13 == 13 || local13 == 10) && this.chatTyped.length() > 0) {
-							if (this.chatTyped.equals("::clientdrop") && (super.frame != null || this.getHost().indexOf("192.168.1.") != -1)) {
-								this.tryReconnect();
-							} else if (this.chatTyped.equals("::perf")) {
+							if (this.chatTyped.equals("::perf")) {
 								this.showPerformance = !this.showPerformance;
 							} else if (this.chatTyped.equals("::occluders")) {
 								this.showOccluders = !this.showOccluders;
@@ -3541,11 +3549,7 @@ public final class Client extends GameShell {
 	@OriginalMember(owner = "client!client", name = "b", descriptor = "(B)Ljava/awt/Component;")
 	@Override
 	protected Component getBaseComponent() {
-		if (Signlink.mainapp == null) {
-			return this;
-		} else {
-			return Signlink.mainapp;
-		}
+		return this;
 	}
 
 	@OriginalMember(owner = "client!client", name = "m", descriptor = "(I)V")
@@ -3798,12 +3802,12 @@ public final class Client extends GameShell {
 			}
 		}
 		if (arg0.pos != arg1) {
-			Signlink.reporterror(this.username + " size mismatch in getnpcpos - pos:" + arg0.pos + " psize:" + arg1);
+			System.err.println(this.username + " size mismatch in getnpcpos - pos:" + arg0.pos + " psize:" + arg1);
 			throw new RuntimeException("eek");
 		}
 		for (local36 = 0; local36 < this.npcCount; local36++) {
 			if (this.npcs[this.npcIds[local36]] == null) {
-				Signlink.reporterror(this.username + " null entry in npc list - pos:" + local36 + " size:" + this.npcCount);
+				System.err.println(this.username + " null entry in npc list - pos:" + local36 + " size:" + this.npcCount);
 				throw new RuntimeException("eek");
 			}
 		}
@@ -3812,11 +3816,7 @@ public final class Client extends GameShell {
 	@OriginalMember(owner = "client!client", name = "a", descriptor = "(Ljava/lang/Runnable;I)V")
 	@Override
 	public void startThread(@OriginalArg(0) Runnable arg0, @OriginalArg(1) int arg1) {
-		if (Signlink.mainapp == null) {
-			super.startThread(arg0, arg1);
-		} else {
-			Signlink.startthread(arg0, arg1);
-		}
+		super.startThread(arg0, arg1);
 	}
 
 	@OriginalMember(owner = "client!client", name = "n", descriptor = "(I)V")
@@ -3898,7 +3898,7 @@ public final class Client extends GameShell {
 			}
 		}
 		if (local6 > this.playerCount) {
-			Signlink.reporterror(this.username + " Too many players");
+			System.err.println(this.username + " Too many players");
 			throw new RuntimeException("eek");
 		}
 		this.playerCount = 0;
@@ -5647,15 +5647,6 @@ public final class Client extends GameShell {
 		}
 	}
 
-	@OriginalMember(owner = "client!client", name = "s", descriptor = "(I)Ljava/lang/String;")
-	private String getHost() {
-		if (Signlink.mainapp == null) {
-			return super.frame == null ? super.getDocumentBase().getHost().toLowerCase() : "runescape.com";
-		} else {
-			return Signlink.mainapp.getDocumentBase().getHost().toLowerCase();
-		}
-	}
-
 	@OriginalMember(owner = "client!client", name = "t", descriptor = "(I)V")
 	private void drawMenu() {
 		@Pc(2) int local2 = this.menuX;
@@ -6102,36 +6093,6 @@ public final class Client extends GameShell {
 			return;
 		}
 		started = true;
-		@Pc(34) boolean local34 = false;
-		@Pc(38) String local38 = this.getHost();
-		if (local38.endsWith("jagex.com")) {
-			local34 = true;
-		}
-		if (local38.endsWith("runescape.com")) {
-			local34 = true;
-		}
-		if (local38.endsWith("192.168.1.2")) {
-			local34 = true;
-		}
-		if (local38.endsWith("192.168.1.249")) {
-			local34 = true;
-		}
-		if (local38.endsWith("192.168.1.252")) {
-			local34 = true;
-		}
-		if (local38.endsWith("192.168.1.253")) {
-			local34 = true;
-		}
-		if (local38.endsWith("192.168.1.254")) {
-			local34 = true;
-		}
-		if (local38.endsWith("127.0.0.1")) {
-			local34 = true;
-		}
-		if (!local34) {
-			this.errorHost = true;
-			return;
-		}
 		try {
 			@Pc(94) int local94 = 5;
 			this.archiveChecksum[8] = 0;
@@ -6804,7 +6765,7 @@ public final class Client extends GameShell {
 
 	@OriginalMember(owner = "client!client", name = "a", descriptor = "(Ljava/lang/String;)Ljava/io/DataInputStream;")
 	private DataInputStream openUrl(@OriginalArg(0) String arg0) throws IOException {
-		return Signlink.mainapp == null ? new DataInputStream((new URL(this.getCodeBase(), arg0)).openStream()) : Signlink.openurl(arg0);
+		return new DataInputStream((new URL(this.getCodeBase(), arg0)).openStream());
 	}
 
 	@OriginalMember(owner = "client!client", name = "j", descriptor = "(B)V")
@@ -6954,7 +6915,7 @@ public final class Client extends GameShell {
 				this.login.p1(16);
 			}
 			this.login.p1(this.out.pos + 36 + 1 + 1);
-			this.login.p1(225);
+			this.login.p1(Signlink.clientversion);
 			this.login.p1(lowMemory ? 1 : 0);
 			for (@Pc(168) int local168 = 0; local168 < 9; local168++) {
 				this.login.p4(this.archiveChecksum[local168]);
@@ -7263,7 +7224,6 @@ public final class Client extends GameShell {
 	@OriginalMember(owner = "client!client", name = "a", descriptor = "(B)V")
 	@Override
 	protected void unload() {
-		Signlink.reporterror = false;
 		try {
 			if (this.connection != null) {
 				this.connection.close();
@@ -7391,7 +7351,7 @@ public final class Client extends GameShell {
 
 	@OriginalMember(owner = "client!client", name = "A", descriptor = "(I)Ljava/net/Socket;")
 	private Socket openSocket(@OriginalArg(0) int arg0) throws IOException {
-		return Signlink.mainapp == null ? new Socket(InetAddress.getByName(this.getCodeBase().getHost()), arg0) : Signlink.opensocket(arg0);
+		return new Socket(InetAddress.getByName(this.getCodeBase().getHost()), arg0);
 	}
 
 	@OriginalMember(owner = "client!client", name = "a", descriptor = "(ZIILclient!z;I)V")
@@ -7768,18 +7728,12 @@ public final class Client extends GameShell {
 	}
 
 	@OriginalMember(owner = "client!client", name = "getCodeBase", descriptor = "()Ljava/net/URL;")
-	@Override
 	public URL getCodeBase() {
-		if (Signlink.mainapp != null) {
-			return Signlink.mainapp.getCodeBase();
-		}
 		try {
-			if (super.frame != null) {
-				return new URL(Client.SERVER_WEB_SCHEMA + "//" + Client.SERVER_ADDRESS + ":" + (portOffset + Client.SERVER_WEB_PORT));
-			}
-		} catch (@Pc(21) Exception local21) {
+			return new URL(Client.SERVER_WEB_SCHEMA + "//" + Client.SERVER_ADDRESS + ":" + (portOffset + Client.SERVER_WEB_PORT));
+		} catch (Exception ex) {
+			return null;
 		}
-		return super.getCodeBase();
 	}
 
 	@OriginalMember(owner = "client!client", name = "a", descriptor = "(IIZIIIIIIIII)Z")
@@ -7998,12 +7952,12 @@ public final class Client extends GameShell {
 			}
 		}
 		if (arg0.pos != arg1) {
-			Signlink.reporterror("Error packet size mismatch in getplayer pos:" + arg0.pos + " psize:" + arg1);
+			System.err.println("Error packet size mismatch in getplayer pos:" + arg0.pos + " psize:" + arg1);
 			throw new RuntimeException("eek");
 		}
 		for (local36 = 0; local36 < this.playerCount; local36++) {
 			if (this.players[this.playerIds[local36]] == null) {
-				Signlink.reporterror(this.username + " null entry in pl list - pos:" + local36 + " size:" + this.playerCount);
+				System.err.println(this.username + " null entry in pl list - pos:" + local36 + " size:" + this.playerCount);
 				throw new RuntimeException("eek");
 			}
 		}
@@ -8496,7 +8450,7 @@ public final class Client extends GameShell {
 			}
 		}
 		if (local14 > this.npcCount) {
-			Signlink.reporterror(this.username + " Too many npcs");
+			System.err.println(this.username + " Too many npcs");
 			throw new RuntimeException("eek");
 		}
 		this.npcCount = 0;
@@ -8542,12 +8496,6 @@ public final class Client extends GameShell {
 				}
 			}
 		}
-	}
-
-	@OriginalMember(owner = "client!client", name = "getParameter", descriptor = "(Ljava/lang/String;)Ljava/lang/String;")
-	@Override
-	public String getParameter(@OriginalArg(0) String arg0) {
-		return Signlink.mainapp == null ? super.getParameter(arg0) : Signlink.mainapp.getParameter(arg0);
 	}
 
 	@OriginalMember(owner = "client!client", name = "l", descriptor = "(Z)V")
@@ -10222,7 +10170,7 @@ public final class Client extends GameShell {
 							this.addMessage(3, local2725, JString.formatName(JString.fromBase37(local207)));
 						}
 					} catch (@Pc(2752) Exception local2752) {
-						Signlink.reporterror("cde1");
+						System.err.println("cde1");
 					}
 				}
 				this.packetType = -1;
@@ -10528,7 +10476,7 @@ public final class Client extends GameShell {
 				this.packetType = -1;
 				return true;
 			}
-			Signlink.reporterror("T1 - " + this.packetType + "," + this.packetSize + " - " + this.lastPacketType1 + "," + this.lastPacketType2);
+			System.err.println("T1 - " + this.packetType + "," + this.packetSize + " - " + this.lastPacketType1 + "," + this.lastPacketType2);
 			this.logout();
 		} catch (@Pc(3862) IOException local3862) {
 			this.tryReconnect();
@@ -10537,7 +10485,7 @@ public final class Client extends GameShell {
 			for (local462 = 0; local462 < this.packetSize && local462 < 50; local462++) {
 				local1264 = local1264 + this.in.data[local462] + ",";
 			}
-			Signlink.reporterror(local1264);
+			System.err.println(local1264);
 			this.logout();
 		}
 		return true;
@@ -10576,26 +10524,6 @@ public final class Client extends GameShell {
 		} else {
 			return false;
 		}
-	}
-
-	@OriginalMember(owner = "client!client", name = "init", descriptor = "()V")
-	@Override
-	public void init() {
-		nodeId = Integer.parseInt(this.getParameter("nodeid"));
-		portOffset = Integer.parseInt(this.getParameter("portoff"));
-		@Pc(15) String local15 = this.getParameter("lowmem");
-		if (local15 != null && local15.equals("1")) {
-			setLowMemory();
-		} else {
-			setHighMemory();
-		}
-		@Pc(31) String local31 = this.getParameter("free");
-		if (local31 != null && local31.equals("1")) {
-			members = false;
-		} else {
-			members = true;
-		}
-		this.initApplet(532, 789);
 	}
 
 	@OriginalMember(owner = "client!client", name = "a", descriptor = "(ZIILclient!kb;Lclient!z;)V")
@@ -10681,7 +10609,7 @@ public final class Client extends GameShell {
 							this.addMessage(2, local248, arg4.name);
 						}
 					} catch (@Pc(285) Exception local285) {
-						Signlink.reporterror("cde2");
+						System.err.println("cde2");
 					}
 				}
 			}

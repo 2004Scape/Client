@@ -11,7 +11,7 @@ import java.awt.*;
 import java.awt.event.*;
 
 @OriginalClass("client!a")
-public class GameShell extends Applet implements Runnable, MouseListener, MouseMotionListener, MouseWheelListener, KeyListener, FocusListener, WindowListener {
+public class GameShell extends Canvas implements Runnable, MouseListener, MouseMotionListener, MouseWheelListener, KeyListener, FocusListener, WindowListener {
 
 	public final double[] frameTime = new double[100];
 	int fpos = 0;
@@ -227,24 +227,7 @@ public class GameShell extends Applet implements Runnable, MouseListener, MouseM
 		this.deltime = 1000 / arg1;
 	}
 
-	@OriginalMember(owner = "client!a", name = "start", descriptor = "()V")
-	@Override
-	public final void start() {
-		if (this.state >= 0) {
-			this.state = 0;
-		}
-	}
-
-	@OriginalMember(owner = "client!a", name = "stop", descriptor = "()V")
-	@Override
-	public final void stop() {
-		if (this.state >= 0) {
-			this.state = 4000 / this.deltime;
-		}
-	}
-
 	@OriginalMember(owner = "client!a", name = "destroy", descriptor = "()V")
-	@Override
 	public final void destroy() {
 		this.state = -1;
 		try {

@@ -5,23 +5,18 @@ import org.openrs2.deob.annotation.OriginalClass;
 import org.openrs2.deob.annotation.OriginalMember;
 import org.openrs2.deob.annotation.Pc;
 
-import java.applet.Applet;
 import java.io.*;
 import java.net.InetAddress;
 import java.net.Socket;
-import java.net.URL;
 
 @OriginalClass("client!sign/signlink")
 public final class Signlink implements Runnable {
 
 	@OriginalMember(owner = "client!sign/signlink", name = "clientversion", descriptor = "I")
-	private static int clientversion;
+	public static final int clientversion = 225;
 
 	@OriginalMember(owner = "client!sign/signlink", name = "uid", descriptor = "I")
 	public static int uid;
-
-	@OriginalMember(owner = "client!sign/signlink", name = "mainapp", descriptor = "Ljava/applet/Applet;")
-	public static Applet mainapp;
 
 	@OriginalMember(owner = "client!sign/signlink", name = "sunjava", descriptor = "Z")
 	public static boolean sunjava;
@@ -31,12 +26,6 @@ public final class Signlink implements Runnable {
 
 	@OriginalMember(owner = "client!sign/signlink", name = "threadliveid", descriptor = "I")
 	private static int threadliveid;
-
-	@OriginalMember(owner = "client!sign/signlink", name = "socketip", descriptor = "Ljava/net/InetAddress;")
-	private static InetAddress socketip;
-
-	@OriginalMember(owner = "client!sign/signlink", name = "socketreq", descriptor = "I")
-	private static int socketreq;
 
 	@OriginalMember(owner = "client!sign/signlink", name = "savelen", descriptor = "I")
 	private static int savelen;
@@ -62,15 +51,6 @@ public final class Signlink implements Runnable {
 	@OriginalMember(owner = "client!sign/signlink", name = "wavevol", descriptor = "I")
 	public static int wavevol;
 
-	@OriginalMember(owner = "client!sign/signlink", name = "socket", descriptor = "Ljava/net/Socket;")
-	private static Socket socket = null;
-
-	@OriginalMember(owner = "client!sign/signlink", name = "threadreqpri", descriptor = "I")
-	private static int threadreqpri = 1;
-
-	@OriginalMember(owner = "client!sign/signlink", name = "threadreq", descriptor = "Ljava/lang/Runnable;")
-	private static Runnable threadreq = null;
-
 	@OriginalMember(owner = "client!sign/signlink", name = "dnsreq", descriptor = "Ljava/lang/String;")
 	private static String dnsreq = null;
 
@@ -89,12 +69,6 @@ public final class Signlink implements Runnable {
 	@OriginalMember(owner = "client!sign/signlink", name = "savebuf", descriptor = "[B")
 	private static byte[] savebuf = null;
 
-	@OriginalMember(owner = "client!sign/signlink", name = "urlreq", descriptor = "Ljava/lang/String;")
-	private static String urlreq = null;
-
-	@OriginalMember(owner = "client!sign/signlink", name = "urlstream", descriptor = "Ljava/io/DataInputStream;")
-	private static DataInputStream urlstream = null;
-
 	@OriginalMember(owner = "client!sign/signlink", name = "looprate", descriptor = "I")
 	private static int looprate = 50;
 
@@ -104,15 +78,13 @@ public final class Signlink implements Runnable {
 	@OriginalMember(owner = "client!sign/signlink", name = "wave", descriptor = "Ljava/lang/String;")
 	private static String wave = null;
 
-	@OriginalMember(owner = "client!sign/signlink", name = "reporterror", descriptor = "Z")
-	public static boolean reporterror = true;
-
 	@OriginalMember(owner = "client!sign/signlink", name = "errorname", descriptor = "Ljava/lang/String;")
 	public static String errorname = "";
 
 	@OriginalMember(owner = "client!sign/signlink", name = "startpriv", descriptor = "(Ljava/net/InetAddress;)V")
-	public static void startpriv(@OriginalArg(0) InetAddress arg0) {
+	public static void startpriv() {
 		threadliveid = (int) (Math.random() * 9.9999999E7D);
+
 		if (active) {
 			try {
 				Thread.sleep(500L);
@@ -120,16 +92,15 @@ public final class Signlink implements Runnable {
 			}
 			active = false;
 		}
-		socketreq = 0;
-		threadreq = null;
+
 		dnsreq = null;
 		loadreq = null;
 		savereq = null;
-		urlreq = null;
-		socketip = arg0;
+
 		@Pc(33) Thread local33 = new Thread(new Signlink());
 		local33.setDaemon(true);
 		local33.start();
+
 		while (!active) {
 			try {
 				Thread.sleep(50L);
@@ -243,46 +214,10 @@ public final class Signlink implements Runnable {
 		}
 	}
 
-	@OriginalMember(owner = "client!sign/signlink", name = "opensocket", descriptor = "(I)Ljava/net/Socket;")
-	public static synchronized Socket opensocket(@OriginalArg(0) int arg0) throws IOException {
-		socketreq = arg0;
-		while (socketreq != 0) {
-			try {
-				Thread.sleep(50L);
-			} catch (@Pc(6) Exception local6) {
-			}
-		}
-		if (socket == null) {
-			throw new IOException("could not open socket");
-		}
-		return socket;
-	}
-
-	@OriginalMember(owner = "client!sign/signlink", name = "openurl", descriptor = "(Ljava/lang/String;)Ljava/io/DataInputStream;")
-	public static synchronized DataInputStream openurl(@OriginalArg(0) String arg0) throws IOException {
-		urlreq = arg0;
-		while (urlreq != null) {
-			try {
-				Thread.sleep(50L);
-			} catch (@Pc(6) Exception local6) {
-			}
-		}
-		if (urlstream == null) {
-			throw new IOException("could not open: " + arg0);
-		}
-		return urlstream;
-	}
-
 	@OriginalMember(owner = "client!sign/signlink", name = "dnslookup", descriptor = "(Ljava/lang/String;)V")
 	public static synchronized void dnslookup(@OriginalArg(0) String arg0) {
 		dns = arg0;
 		dnsreq = arg0;
-	}
-
-	@OriginalMember(owner = "client!sign/signlink", name = "startthread", descriptor = "(Ljava/lang/Runnable;I)V")
-	public static synchronized void startthread(@OriginalArg(0) Runnable arg0, @OriginalArg(1) int arg1) {
-		threadreqpri = arg1;
-		threadreq = arg0;
 	}
 
 	@OriginalMember(owner = "client!sign/signlink", name = "wavesave", descriptor = "([BI)Z")
@@ -325,23 +260,6 @@ public final class Signlink implements Runnable {
 		savereq = "jingle" + midipos + ".mid";
 	}
 
-	@OriginalMember(owner = "client!sign/signlink", name = "reporterror", descriptor = "(Ljava/lang/String;)V")
-	public static void reporterror(@OriginalArg(0) String arg0) {
-		if (!reporterror || !active) {
-			return;
-		}
-		System.out.println("Error: " + arg0);
-		try {
-			@Pc(19) String local19 = arg0.replace('@', '_');
-			@Pc(24) String local24 = local19.replace('&', '_');
-			@Pc(29) String local29 = local24.replace('#', '_');
-			@Pc(46) DataInputStream local46 = openurl("reporterror" + 225 + ".cgi?error=" + errorname + " " + local29);
-			local46.readLine();
-			local46.close();
-		} catch (@Pc(53) IOException local53) {
-		}
-	}
-
 	@OriginalMember(owner = "client!sign/signlink", name = "run", descriptor = "()V")
 	@Override
 	public void run() {
@@ -350,20 +268,7 @@ public final class Signlink implements Runnable {
 		uid = getuid(local3);
 		@Pc(8) int local8 = threadliveid;
 		while (threadliveid == local8) {
-			if (socketreq != 0) {
-				try {
-					socket = new Socket(socketip, socketreq);
-				} catch (@Pc(19) Exception local19) {
-					socket = null;
-				}
-				socketreq = 0;
-			} else if (threadreq != null) {
-				@Pc(31) Thread local31 = new Thread(threadreq);
-				local31.setDaemon(true);
-				local31.start();
-				local31.setPriority(threadreqpri);
-				threadreq = null;
-			} else if (dnsreq != null) {
+			if (dnsreq != null) {
 				try {
 					dns = InetAddress.getByName(dnsreq).getHostName();
 				} catch (@Pc(50) Exception local50) {
@@ -402,16 +307,10 @@ public final class Signlink implements Runnable {
 					midiplay = false;
 				}
 				savereq = null;
-			} else if (urlreq != null) {
-				try {
-					urlstream = new DataInputStream((new URL(mainapp.getCodeBase(), urlreq)).openStream());
-				} catch (@Pc(178) Exception local178) {
-					urlstream = null;
-				}
-				urlreq = null;
 			}
+
 			try {
-				Thread.sleep((long) looprate);
+				Thread.sleep(looprate);
 			} catch (@Pc(187) Exception local187) {
 			}
 		}
