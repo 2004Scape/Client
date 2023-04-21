@@ -14,6 +14,8 @@ import java.awt.image.PixelGrabber;
 @OriginalClass("client!hb")
 public final class Pix24 extends Draw2D {
 
+	public static boolean bilinearFiltering = true;
+
 	@OriginalMember(owner = "client!hb", name = "A", descriptor = "[I")
 	public int[] pixels;
 
@@ -446,7 +448,30 @@ public final class Pix24 extends Draw2D {
 				@Pc(99) int local99 = local63 + local51 * local89;
 				@Pc(105) int local105 = local75 - local45 * local89;
 				for (@Pc(110) int local110 = -arg10[local83]; local110 < 0; local110++) {
-					Draw2D.data[local93++] = this.pixels[(local99 >> 16) + (local105 >> 16) * this.width];
+					if (bilinearFiltering) {
+						int x1 = local99 >> 16;
+						int y1 = local105 >> 16;
+						int x2 = x1 + 1;
+						int y2 = y1 + 1;
+						int sampleColor1 = pixels[x1 + y1 * this.width];
+						int sampleColor2 = pixels[x2 + y1 * this.width];
+						int sampleColor3 = pixels[x1 + y2 * this.width];
+						int sampleColor4 = pixels[x2 + y2 * this.width];
+						int x1Distance = (local99 >> 8) - (x1 << 8);
+						int y1Distance = (local105 >> 8) - (y1 << 8);
+						int x2Distance = (x2 << 8) - (local99 >> 8);
+						int y2Distance = (y2 << 8) - (local105 >> 8);
+						int sampleAlpha1 = x2Distance * y2Distance;
+						int sampleAlpha2 = x1Distance * y2Distance;
+						int sampleAlpha3 = x2Distance * y1Distance;
+						int sampleAlpha4 = x1Distance * y1Distance;
+						int red = (sampleColor1 >> 16 & 0xff) * sampleAlpha1 + (sampleColor2 >> 16 & 0xff) * sampleAlpha2 + (sampleColor3 >> 16 & 0xff) * sampleAlpha3 + (sampleColor4 >> 16 & 0xff) * sampleAlpha4 & 0xff0000;
+						int green = (sampleColor1 >> 8 & 0xff) * sampleAlpha1 + (sampleColor2 >> 8 & 0xff) * sampleAlpha2 + (sampleColor3 >> 8 & 0xff) * sampleAlpha3 + (sampleColor4 >> 8 & 0xff) * sampleAlpha4 >> 8 & 0xff00;
+						int blue = (sampleColor1 & 0xff) * sampleAlpha1 + (sampleColor2 & 0xff) * sampleAlpha2 + (sampleColor3 & 0xff) * sampleAlpha3 + (sampleColor4 & 0xff) * sampleAlpha4 >> 16;
+						Draw2D.data[local93++] = red | green | blue;
+					} else {
+						Draw2D.data[local93++] = this.pixels[(local99 >> 16) + (local105 >> 16) * this.width];
+					}
 					local99 += local51;
 					local105 -= local45;
 				}

@@ -3052,6 +3052,14 @@ public final class Client extends GameShell {
 								} catch (Exception ignored) {}
 							} else if (this.chatTyped.equals("::debug")) {
 								this.showDebug = !this.showDebug;
+							} else if (this.chatTyped.equals("::authentic")) {
+								Draw3D.fixTransparency = false;
+								Pix24.bilinearFiltering = false;
+								Draw2D.fullViewport = false;
+							} else if (this.chatTyped.equals("::qol")) {
+								Draw3D.fixTransparency = true;
+								Pix24.bilinearFiltering = true;
+								Draw2D.fullViewport = true;
 							} else if (this.chatTyped.startsWith("::")) {
 								this.out.p1isaac(4);
 								this.out.p1(this.chatTyped.length() - 1);
@@ -6133,25 +6141,26 @@ public final class Client extends GameShell {
 			@Pc(288) Jagfile local288 = this.loadArchive("3d graphics", this.archiveChecksum[5], "models", 40);
 			@Pc(299) Jagfile local299 = this.loadArchive("textures", this.archiveChecksum[6], "textures", 60);
 			@Pc(310) Jagfile local310 = this.loadArchive("chat system", this.archiveChecksum[7], "wordenc", 65);
-			@Pc(321) Jagfile local321 = this.loadArchive("sound effects", this.archiveChecksum[8], "sounds", 70);
-			this.levelTileFlags = new int[4][104][104];
-			this.levelHeightmap = new int[4][105][105];
-			this.world3D = new World3D(this.levelHeightmap, 104, 4, 104);
-			for (@Pc(346) int local346 = 0; local346 < 4; local346++) {
-				this.levelCollisionMap[local346] = new CollisionMap(104, -708, 104);
+			@Pc(321) Jagfile local321 = null;
+			if (!lowMemory) {
+				local321 = this.loadArchive("sound effects", this.archiveChecksum[8], "sounds", 70);
 			}
-			this.imageMinimap = new Pix24(512, 512);
+
 			this.drawProgress("Unpacking media", 75);
+
 			this.imageInvback = new Pix8(local277, "invback", 0);
 			this.imageChatback = new Pix8(local277, "chatback", 0);
 			this.imageMapback = new Pix8(local277, "mapback", 0);
 			this.imageBackbase1 = new Pix8(local277, "backbase1", 0);
 			this.imageBackbase2 = new Pix8(local277, "backbase2", 0);
 			this.imageBackhmid1 = new Pix8(local277, "backhmid1", 0);
+
 			for (@Pc(424) int local424 = 0; local424 < 13; local424++) {
 				this.imageSideicons[local424] = new Pix8(local277, "sideicons", local424);
 			}
+
 			this.imageCompass = new Pix24(local277, "compass", 0);
+
 			@Pc(450) int local450;
 			try {
 				for (local450 = 0; local450 < 50; local450++) {
@@ -6162,28 +6171,34 @@ public final class Client extends GameShell {
 				}
 			} catch (@Pc(468) Exception local468) {
 			}
+
 			try {
 				for (local450 = 0; local450 < 50; local450++) {
 					this.imageMapfunction[local450] = new Pix24(local277, "mapfunction", local450);
 				}
 			} catch (@Pc(488) Exception local488) {
 			}
+
 			try {
 				for (local450 = 0; local450 < 20; local450++) {
 					this.imageHitmarks[local450] = new Pix24(local277, "hitmarks", local450);
 				}
 			} catch (@Pc(508) Exception local508) {
 			}
+
 			try {
-				for (local450 = 0; local450 < 20; local450++) {
+				for (local450 = 0; local450 < 8; local450++) {
 					this.imageHeadicons[local450] = new Pix24(local277, "headicons", local450);
 				}
 			} catch (@Pc(528) Exception local528) {
 			}
+
 			this.imageMapflag = new Pix24(local277, "mapflag", 0);
+
 			for (local450 = 0; local450 < 8; local450++) {
 				this.imageCrosses[local450] = new Pix24(local277, "cross", local450);
 			}
+
 			this.imageMapdot0 = new Pix24(local277, "mapdots", 0);
 			this.imageMapdot1 = new Pix24(local277, "mapdots", 1);
 			this.imageMapdot2 = new Pix24(local277, "mapdots", 2);
@@ -6193,6 +6208,7 @@ public final class Client extends GameShell {
 			this.imageRedstone1 = new Pix8(local277, "redstone1", 0);
 			this.imageRedstone2 = new Pix8(local277, "redstone2", 0);
 			this.imageRedstone3 = new Pix8(local277, "redstone3", 0);
+
 			this.imageRedstone1h = new Pix8(local277, "redstone1", 0);
 			this.imageRedstone1h.flipHorizontally();
 			this.imageRedstone2h = new Pix8(local277, "redstone2", 0);
@@ -6209,6 +6225,21 @@ public final class Client extends GameShell {
 			this.imageRedstone2hv = new Pix8(local277, "redstone2", 0);
 			this.imageRedstone2hv.flipHorizontally();
 			this.imageRedstone2hv.flipVertically();
+
+			@Pc(975) int local975 = (int) (Math.random() * 21.0D) - 10;
+			@Pc(982) int local982 = (int) (Math.random() * 21.0D) - 10;
+			@Pc(989) int local989 = (int) (Math.random() * 21.0D) - 10;
+			@Pc(996) int local996 = (int) (Math.random() * 41.0D) - 20;
+			for (@Pc(998) int local998 = 0; local998 < 50; local998++) {
+				if (this.imageMapfunction[local998] != null) {
+					this.imageMapfunction[local998].translate(local975 + local996, local982 + local996, local989 + local996);
+				}
+
+				if (this.imageMapscene[local998] != null) {
+					this.imageMapscene[local998].translate(local975 + local996, local982 + local996, local989 + local996);
+				}
+			}
+
 			@Pc(725) Pix24 local725 = new Pix24(local277, "backleft1", 0);
 			this.areaBackleft1 = new PixMap(this.getBaseComponent(), local725.width, local725.height);
 			local725.blitOpaque(0, 0);
@@ -6239,26 +6270,17 @@ public final class Client extends GameShell {
 			@Pc(950) Pix24 local950 = new Pix24(local277, "backhmid2", 0);
 			this.areaBackhmid2 = new PixMap(this.getBaseComponent(), local950.width, local950.height);
 			local950.blitOpaque(0, 0);
-			@Pc(975) int local975 = (int) (Math.random() * 21.0D) - 10;
-			@Pc(982) int local982 = (int) (Math.random() * 21.0D) - 10;
-			@Pc(989) int local989 = (int) (Math.random() * 21.0D) - 10;
-			@Pc(996) int local996 = (int) (Math.random() * 41.0D) - 20;
-			for (@Pc(998) int local998 = 0; local998 < 50; local998++) {
-				if (this.imageMapfunction[local998] != null) {
-					this.imageMapfunction[local998].translate(local975 + local996, local982 + local996, local989 + local996);
-				}
-				if (this.imageMapscene[local998] != null) {
-					this.imageMapscene[local998].translate(local975 + local996, local982 + local996, local989 + local996);
-				}
-			}
+
 			this.drawProgress("Unpacking textures", 80);
 			Draw3D.unpackTextures(local299);
 			Draw3D.setBrightness(0.8D);
 			Draw3D.initPool(20);
+
 			this.drawProgress("Unpacking models", 83);
 			Model.unpack(local288);
 			SeqBase.unpack(local288);
 			SeqFrame.unpack(local288);
+
 			this.drawProgress("Unpacking config", 86);
 			SeqType.unpack(local255);
 			LocType.unpack(local255);
@@ -6269,16 +6291,22 @@ public final class Client extends GameShell {
 			SpotAnimType.unpack(local255);
 			VarpType.unpack(local255);
 			ObjType.membersWorld = members;
+
 			if (!lowMemory) {
 				this.drawProgress("Unpacking sounds", 90);
 				@Pc(1113) byte[] local1113 = local321.read("sounds.dat", null);
 				@Pc(1119) Packet local1119 = new Packet(local1113);
 				Wave.unpack(local1119);
 			}
+
 			this.drawProgress("Unpacking interfaces", 92);
 			@Pc(1150) BitmapFont[] local1150 = new BitmapFont[] { this.fontPlain11, this.fontPlain12, this.fontBold12, this.fontQuill8 };
 			IfType.unpack(local277, local1150, local266);
+
 			this.drawProgress("Preparing game engine", 97);
+			WordFilter.unpack(local310);
+			this.imageMinimap = new Pix24(512, 512);
+
 			@Pc(1166) int local1166;
 			@Pc(1168) int local1168;
 			@Pc(1170) int local1170;
@@ -6298,6 +6326,7 @@ public final class Client extends GameShell {
 				this.compassMaskLineOffsets[local1162] = local1166;
 				this.compassMaskLineLengths[local1162] = local1168 - local1166;
 			}
+
 			@Pc(1228) int local1228;
 			for (local1166 = 9; local1166 < 160; local1166++) {
 				local1168 = 999;
@@ -6315,12 +6344,21 @@ public final class Client extends GameShell {
 				this.minimapMaskLineOffsets[local1166 - 9] = local1168 - 21;
 				this.minimapMaskLineLengths[local1166 - 9] = local1170 - local1168;
 			}
+
 			Draw3D.init3D(96, 479);
 			this.areaChatbackOffsets = Draw3D.lineOffset;
 			Draw3D.init3D(261, 190);
 			this.areaSidebarOffsets = Draw3D.lineOffset;
 			Draw3D.init3D(334, 512);
 			this.areaViewportOffsets = Draw3D.lineOffset;
+
+			this.levelTileFlags = new int[4][104][104];
+			this.levelHeightmap = new int[4][105][105];
+			this.world3D = new World3D(this.levelHeightmap, 104, 4, 104);
+			for (@Pc(346) int local346 = 0; local346 < 4; local346++) {
+				this.levelCollisionMap[local346] = new CollisionMap(104, -708, 104);
+			}
+
 			@Pc(1312) int[] local1312 = new int[9];
 			for (local1170 = 0; local1170 < 9; local1170++) {
 				local1228 = local1170 * 32 + 128 + 15;
@@ -6328,8 +6366,8 @@ public final class Client extends GameShell {
 				@Pc(1334) int local1334 = Draw3D.sin[local1228];
 				local1312[local1170] = local1330 * local1334 >> 16;
 			}
+
 			World3D.init(local1312, 800, 512, 334, 500);
-			WordFilter.unpack(local310);
 		} catch (@Pc(1357) Exception local1357) {
 			this.errorLoading = true;
 		}
