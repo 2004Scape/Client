@@ -12,7 +12,6 @@ public final class BZip2 {
 
 	@OriginalMember(owner = "client!rb", name = "a", descriptor = "([BI[BII)I")
 	public static int read(@OriginalArg(0) byte[] arg0, @OriginalArg(1) int arg1, @OriginalArg(2) byte[] arg2, @OriginalArg(3) int arg3, @OriginalArg(4) int arg4) {
-		@Pc(3) BZip2State local3 = state;
 		synchronized (state) {
 			state.stream = arg2;
 			state.next_in = arg4;
@@ -179,246 +178,170 @@ public final class BZip2 {
 			BZip2State.tt = new int[arg0.blockSize100k * 100000];
 		}
 		@Pc(60) boolean local60 = true;
-		while (true) {
-			while (local60) {
-				@Pc(64) byte local64 = getUnsignedChar(arg0);
-				if (local64 == 23) {
-					return;
-				}
-				local64 = getUnsignedChar(arg0);
-				local64 = getUnsignedChar(arg0);
-				local64 = getUnsignedChar(arg0);
-				local64 = getUnsignedChar(arg0);
-				local64 = getUnsignedChar(arg0);
-				arg0.currBlockNo++;
-				local64 = getUnsignedChar(arg0);
-				local64 = getUnsignedChar(arg0);
-				local64 = getUnsignedChar(arg0);
-				local64 = getUnsignedChar(arg0);
+		while (local60) {
+			@Pc(64) byte local64 = getUnsignedChar(arg0);
+			if (local64 == 23) {
+				return;
+			}
+			local64 = getUnsignedChar(arg0);
+			local64 = getUnsignedChar(arg0);
+			local64 = getUnsignedChar(arg0);
+			local64 = getUnsignedChar(arg0);
+			local64 = getUnsignedChar(arg0);
+			arg0.currBlockNo++;
+			local64 = getUnsignedChar(arg0);
+			local64 = getUnsignedChar(arg0);
+			local64 = getUnsignedChar(arg0);
+			local64 = getUnsignedChar(arg0);
+			local64 = getBit(arg0);
+			if (local64 == 0) {
+				arg0.blockRandomized = false;
+			} else {
+				arg0.blockRandomized = true;
+			}
+			if (arg0.blockRandomized) {
+				System.out.println("PANIC! RANDOMISED BLOCK!");
+			}
+			arg0.origPtr = 0;
+			local64 = getUnsignedChar(arg0);
+			arg0.origPtr = arg0.origPtr << 8 | local64 & 0xFF;
+			local64 = getUnsignedChar(arg0);
+			arg0.origPtr = arg0.origPtr << 8 | local64 & 0xFF;
+			local64 = getUnsignedChar(arg0);
+			arg0.origPtr = arg0.origPtr << 8 | local64 & 0xFF;
+			@Pc(164) int local164;
+			for (local164 = 0; local164 < 16; local164++) {
 				local64 = getBit(arg0);
-				if (local64 == 0) {
-					arg0.blockRandomized = false;
+				if (local64 == 1) {
+					arg0.inUse16[local164] = true;
 				} else {
-					arg0.blockRandomized = true;
+					arg0.inUse16[local164] = false;
 				}
-				if (arg0.blockRandomized) {
-					System.out.println("PANIC! RANDOMISED BLOCK!");
-				}
-				arg0.origPtr = 0;
-				local64 = getUnsignedChar(arg0);
-				arg0.origPtr = arg0.origPtr << 8 | local64 & 0xFF;
-				local64 = getUnsignedChar(arg0);
-				arg0.origPtr = arg0.origPtr << 8 | local64 & 0xFF;
-				local64 = getUnsignedChar(arg0);
-				arg0.origPtr = arg0.origPtr << 8 | local64 & 0xFF;
-				@Pc(164) int local164;
-				for (local164 = 0; local164 < 16; local164++) {
-					local64 = getBit(arg0);
-					if (local64 == 1) {
-						arg0.inUse16[local164] = true;
-					} else {
-						arg0.inUse16[local164] = false;
-					}
-				}
-				for (local164 = 0; local164 < 256; local164++) {
-					arg0.inUse[local164] = false;
-				}
-				@Pc(212) int local212;
-				for (local164 = 0; local164 < 16; local164++) {
-					if (arg0.inUse16[local164]) {
-						for (local212 = 0; local212 < 16; local212++) {
-							local64 = getBit(arg0);
-							if (local64 == 1) {
-								arg0.inUse[local164 * 16 + local212] = true;
-							}
+			}
+			for (local164 = 0; local164 < 256; local164++) {
+				arg0.inUse[local164] = false;
+			}
+			@Pc(212) int local212;
+			for (local164 = 0; local164 < 16; local164++) {
+				if (arg0.inUse16[local164]) {
+					for (local212 = 0; local212 < 16; local212++) {
+						local64 = getBit(arg0);
+						if (local64 == 1) {
+							arg0.inUse[local164 * 16 + local212] = true;
 						}
 					}
 				}
-				makeMaps(arg0);
-				@Pc(244) int local244 = arg0.nInUse + 2;
-				@Pc(248) int local248 = getBits(3, arg0);
-				@Pc(252) int local252 = getBits(15, arg0);
-				for (local164 = 0; local164 < local252; local164++) {
-					local212 = 0;
+			}
+			makeMaps(arg0);
+			@Pc(244) int local244 = arg0.nInUse + 2;
+			@Pc(248) int local248 = getBits(3, arg0);
+			@Pc(252) int local252 = getBits(15, arg0);
+			for (local164 = 0; local164 < local252; local164++) {
+				local212 = 0;
+				while (true) {
+					local64 = getBit(arg0);
+					if (local64 == 0) {
+						arg0.selectorMtf[local164] = (byte) local212;
+						break;
+					}
+					local212++;
+				}
+			}
+			@Pc(279) byte[] local279 = new byte[6];
+			@Pc(281) byte local281 = 0;
+			while (local281 < local248) {
+				local279[local281] = local281++;
+			}
+			for (local164 = 0; local164 < local252; local164++) {
+				local281 = arg0.selectorMtf[local164];
+				@Pc(308) byte local308 = local279[local281];
+				while (local281 > 0) {
+					local279[local281] = local279[local281 - 1];
+					local281--;
+				}
+				local279[0] = local308;
+				arg0.selector[local164] = local308;
+			}
+			@Pc(340) int local340;
+			for (local340 = 0; local340 < local248; local340++) {
+				@Pc(346) int local346 = getBits(5, arg0);
+				for (local164 = 0; local164 < local244; local164++) {
 					while (true) {
 						local64 = getBit(arg0);
 						if (local64 == 0) {
-							arg0.selectorMtf[local164] = (byte) local212;
+							arg0.len[local340][local164] = (byte) local346;
 							break;
 						}
-						local212++;
-					}
-				}
-				@Pc(279) byte[] local279 = new byte[6];
-				@Pc(281) byte local281 = 0;
-				while (local281 < local248) {
-					local279[local281] = local281++;
-				}
-				for (local164 = 0; local164 < local252; local164++) {
-					local281 = arg0.selectorMtf[local164];
-					@Pc(308) byte local308 = local279[local281];
-					while (local281 > 0) {
-						local279[local281] = local279[local281 - 1];
-						local281--;
-					}
-					local279[0] = local308;
-					arg0.selector[local164] = local308;
-				}
-				@Pc(340) int local340;
-				for (local340 = 0; local340 < local248; local340++) {
-					@Pc(346) int local346 = getBits(5, arg0);
-					for (local164 = 0; local164 < local244; local164++) {
-						while (true) {
-							local64 = getBit(arg0);
-							if (local64 == 0) {
-								arg0.len[local340][local164] = (byte) local346;
-								break;
-							}
-							local64 = getBit(arg0);
-							if (local64 == 0) {
-								local346++;
-							} else {
-								local346--;
-							}
-						}
-					}
-				}
-				for (local340 = 0; local340 < local248; local340++) {
-					@Pc(388) byte local388 = 32;
-					@Pc(390) byte local390 = 0;
-					for (local164 = 0; local164 < local244; local164++) {
-						if (arg0.len[local340][local164] > local390) {
-							local390 = arg0.len[local340][local164];
-						}
-						if (arg0.len[local340][local164] < local388) {
-							local388 = arg0.len[local340][local164];
-						}
-					}
-					createDecodeTables(arg0.limit[local340], arg0.base[local340], arg0.perm[local340], arg0.len[local340], local388, local390, local244);
-					arg0.minLens[local340] = local388;
-				}
-				@Pc(462) int local462 = arg0.nInUse + 1;
-				@Pc(467) int local467 = arg0.blockSize100k * 100000;
-				@Pc(469) int local469 = -1;
-				@Pc(471) byte local471 = 0;
-				for (local164 = 0; local164 <= 255; local164++) {
-					arg0.unzftab[local164] = 0;
-				}
-				@Pc(486) int local486 = 4095;
-				for (@Pc(488) int local488 = 15; local488 >= 0; local488--) {
-					for (@Pc(492) int local492 = 15; local492 >= 0; local492--) {
-						arg0.mtfa[local486] = (byte) (local488 * 16 + local492);
-						local486--;
-					}
-					arg0.mtfbase[local488] = local486 + 1;
-				}
-				@Pc(520) int local520 = 0;
-				@Pc(530) byte local530;
-				if (local471 == 0) {
-					local469++;
-					local471 = 50;
-					local530 = arg0.selector[local469];
-					local41 = arg0.minLens[local530];
-					local43 = arg0.limit[local530];
-					local47 = arg0.perm[local530];
-					local45 = arg0.base[local530];
-				}
-				@Pc(551) int local551 = local471 - 1;
-				@Pc(553) int local553 = local41;
-				@Pc(557) int local557;
-				@Pc(566) byte local566;
-				for (local557 = getBits(local41, arg0); local557 > local43[local553]; local557 = local557 << 1 | local566) {
-					local553++;
-					local566 = getBit(arg0);
-				}
-				@Pc(582) int local582 = local47[local557 - local45[local553]];
-				while (true) {
-					while (local582 != local462) {
-						if (local582 == 0 || local582 == 1) {
-							@Pc(592) int local592 = -1;
-							@Pc(594) int local594 = 1;
-							do {
-								if (local582 == 0) {
-									local592 += local594;
-								} else if (local582 == 1) {
-									local592 += local594 * 2;
-								}
-								local594 *= 2;
-								if (local551 == 0) {
-									local469++;
-									local551 = 50;
-									local530 = arg0.selector[local469];
-									local41 = arg0.minLens[local530];
-									local43 = arg0.limit[local530];
-									local47 = arg0.perm[local530];
-									local45 = arg0.base[local530];
-								}
-								local551--;
-								local553 = local41;
-								for (local557 = getBits(local41, arg0); local557 > local43[local553]; local557 = local557 << 1 | local566) {
-									local553++;
-									local566 = getBit(arg0);
-								}
-								local582 = local47[local557 - local45[local553]];
-							} while (local582 == 0 || local582 == 1);
-							local592++;
-							local64 = arg0.seqToUnseq[arg0.mtfa[arg0.mtfbase[0]] & 0xFF];
-							arg0.unzftab[local64 & 0xFF] += local592;
-							while (local592 > 0) {
-								BZip2State.tt[local520] = local64 & 0xFF;
-								local520++;
-								local592--;
-							}
+						local64 = getBit(arg0);
+						if (local64 == 0) {
+							local346++;
 						} else {
-							@Pc(724) int local724 = local582 - 1;
-							@Pc(732) int local732;
-							if (local724 < 16) {
-								local732 = arg0.mtfbase[0];
-								local64 = arg0.mtfa[local732 + local724];
-								while (local724 > 3) {
-									@Pc(745) int local745 = local732 + local724;
-									arg0.mtfa[local745] = arg0.mtfa[local745 - 1];
-									arg0.mtfa[local745 - 1] = arg0.mtfa[local745 - 2];
-									arg0.mtfa[local745 - 2] = arg0.mtfa[local745 - 3];
-									arg0.mtfa[local745 - 3] = arg0.mtfa[local745 - 4];
-									local724 -= 4;
-								}
-								while (local724 > 0) {
-									arg0.mtfa[local732 + local724] = arg0.mtfa[local732 + local724 - 1];
-									local724--;
-								}
-								arg0.mtfa[local732] = local64;
-							} else {
-								@Pc(825) int local825 = local724 / 16;
-								@Pc(829) int local829 = local724 % 16;
-								local732 = arg0.mtfbase[local825] + local829;
-								local64 = arg0.mtfa[local732];
-								while (local732 > arg0.mtfbase[local825]) {
-									arg0.mtfa[local732] = arg0.mtfa[local732 - 1];
-									local732--;
-								}
-								@Pc(865) int local865 = arg0.mtfbase[local825]++;
-								while (local825 > 0) {
-									local865 = arg0.mtfbase[local825]--;
-									arg0.mtfa[arg0.mtfbase[local825]] = arg0.mtfa[arg0.mtfbase[local825 - 1] + 16 - 1];
-									local825--;
-								}
-								local865 = arg0.mtfbase[0]--;
-								arg0.mtfa[arg0.mtfbase[0]] = local64;
-								if (arg0.mtfbase[0] == 0) {
-									@Pc(924) int local924 = 4095;
-									for (@Pc(926) int local926 = 15; local926 >= 0; local926--) {
-										for (@Pc(930) int local930 = 15; local930 >= 0; local930--) {
-											arg0.mtfa[local924] = arg0.mtfa[arg0.mtfbase[local926] + local930];
-											local924--;
-										}
-										arg0.mtfbase[local926] = local924 + 1;
-									}
-								}
+							local346--;
+						}
+					}
+				}
+			}
+			for (local340 = 0; local340 < local248; local340++) {
+				@Pc(388) byte local388 = 32;
+				@Pc(390) byte local390 = 0;
+				for (local164 = 0; local164 < local244; local164++) {
+					if (arg0.len[local340][local164] > local390) {
+						local390 = arg0.len[local340][local164];
+					}
+					if (arg0.len[local340][local164] < local388) {
+						local388 = arg0.len[local340][local164];
+					}
+				}
+				createDecodeTables(arg0.limit[local340], arg0.base[local340], arg0.perm[local340], arg0.len[local340], local388, local390, local244);
+				arg0.minLens[local340] = local388;
+			}
+			@Pc(462) int local462 = arg0.nInUse + 1;
+			@Pc(467) int local467 = arg0.blockSize100k * 100000;
+			@Pc(469) int local469 = -1;
+			@Pc(471) byte local471 = 0;
+			for (local164 = 0; local164 <= 255; local164++) {
+				arg0.unzftab[local164] = 0;
+			}
+			@Pc(486) int local486 = 4095;
+			for (@Pc(488) int local488 = 15; local488 >= 0; local488--) {
+				for (@Pc(492) int local492 = 15; local492 >= 0; local492--) {
+					arg0.mtfa[local486] = (byte) (local488 * 16 + local492);
+					local486--;
+				}
+				arg0.mtfbase[local488] = local486 + 1;
+			}
+			@Pc(520) int local520 = 0;
+			@Pc(530) byte local530;
+			if (local471 == 0) {
+				local469++;
+				local471 = 50;
+				local530 = arg0.selector[local469];
+				local41 = arg0.minLens[local530];
+				local43 = arg0.limit[local530];
+				local47 = arg0.perm[local530];
+				local45 = arg0.base[local530];
+			}
+			@Pc(551) int local551 = local471 - 1;
+			@Pc(553) int local553 = local41;
+			@Pc(557) int local557;
+			@Pc(566) byte local566;
+			for (local557 = getBits(local41, arg0); local557 > local43[local553]; local557 = local557 << 1 | local566) {
+				local553++;
+				local566 = getBit(arg0);
+			}
+			@Pc(582) int local582 = local47[local557 - local45[local553]];
+			while (true) {
+				while (local582 != local462) {
+					if (local582 == 0 || local582 == 1) {
+						@Pc(592) int local592 = -1;
+						@Pc(594) int local594 = 1;
+						do {
+							if (local582 == 0) {
+								local592 += local594;
+							} else if (local582 == 1) {
+								local592 += local594 * 2;
 							}
-							arg0.unzftab[arg0.seqToUnseq[local64 & 0xFF] & 0xFF]++;
-							BZip2State.tt[local520] = arg0.seqToUnseq[local64 & 0xFF] & 0xFF;
-							local520++;
+							local594 *= 2;
 							if (local551 == 0) {
 								local469++;
 								local551 = 50;
@@ -435,39 +358,112 @@ public final class BZip2 {
 								local566 = getBit(arg0);
 							}
 							local582 = local47[local557 - local45[local553]];
+						} while (local582 == 0 || local582 == 1);
+						local592++;
+						local64 = arg0.seqToUnseq[arg0.mtfa[arg0.mtfbase[0]] & 0xFF];
+						arg0.unzftab[local64 & 0xFF] += local592;
+						while (local592 > 0) {
+							BZip2State.tt[local520] = local64 & 0xFF;
+							local520++;
+							local592--;
 						}
+					} else {
+						@Pc(724) int local724 = local582 - 1;
+						@Pc(732) int local732;
+						if (local724 < 16) {
+							local732 = arg0.mtfbase[0];
+							local64 = arg0.mtfa[local732 + local724];
+							while (local724 > 3) {
+								@Pc(745) int local745 = local732 + local724;
+								arg0.mtfa[local745] = arg0.mtfa[local745 - 1];
+								arg0.mtfa[local745 - 1] = arg0.mtfa[local745 - 2];
+								arg0.mtfa[local745 - 2] = arg0.mtfa[local745 - 3];
+								arg0.mtfa[local745 - 3] = arg0.mtfa[local745 - 4];
+								local724 -= 4;
+							}
+							while (local724 > 0) {
+								arg0.mtfa[local732 + local724] = arg0.mtfa[local732 + local724 - 1];
+								local724--;
+							}
+							arg0.mtfa[local732] = local64;
+						} else {
+							@Pc(825) int local825 = local724 / 16;
+							@Pc(829) int local829 = local724 % 16;
+							local732 = arg0.mtfbase[local825] + local829;
+							local64 = arg0.mtfa[local732];
+							while (local732 > arg0.mtfbase[local825]) {
+								arg0.mtfa[local732] = arg0.mtfa[local732 - 1];
+								local732--;
+							}
+							@Pc(865) int local865 = arg0.mtfbase[local825]++;
+							while (local825 > 0) {
+								local865 = arg0.mtfbase[local825]--;
+								arg0.mtfa[arg0.mtfbase[local825]] = arg0.mtfa[arg0.mtfbase[local825 - 1] + 16 - 1];
+								local825--;
+							}
+							local865 = arg0.mtfbase[0]--;
+							arg0.mtfa[arg0.mtfbase[0]] = local64;
+							if (arg0.mtfbase[0] == 0) {
+								@Pc(924) int local924 = 4095;
+								for (@Pc(926) int local926 = 15; local926 >= 0; local926--) {
+									for (@Pc(930) int local930 = 15; local930 >= 0; local930--) {
+										arg0.mtfa[local924] = arg0.mtfa[arg0.mtfbase[local926] + local930];
+										local924--;
+									}
+									arg0.mtfbase[local926] = local924 + 1;
+								}
+							}
+						}
+						arg0.unzftab[arg0.seqToUnseq[local64 & 0xFF] & 0xFF]++;
+						BZip2State.tt[local520] = arg0.seqToUnseq[local64 & 0xFF] & 0xFF;
+						local520++;
+						if (local551 == 0) {
+							local469++;
+							local551 = 50;
+							local530 = arg0.selector[local469];
+							local41 = arg0.minLens[local530];
+							local43 = arg0.limit[local530];
+							local47 = arg0.perm[local530];
+							local45 = arg0.base[local530];
+						}
+						local551--;
+						local553 = local41;
+						for (local557 = getBits(local41, arg0); local557 > local43[local553]; local557 = local557 << 1 | local566) {
+							local553++;
+							local566 = getBit(arg0);
+						}
+						local582 = local47[local557 - local45[local553]];
 					}
-					arg0.state_out_len = 0;
-					arg0.state_out_ch = 0;
-					arg0.cftab[0] = 0;
-					for (local164 = 1; local164 <= 256; local164++) {
-						arg0.cftab[local164] = arg0.unzftab[local164 - 1];
-					}
-					for (local164 = 1; local164 <= 256; local164++) {
-						arg0.cftab[local164] += arg0.cftab[local164 - 1];
-					}
-					for (local164 = 0; local164 < local520; local164++) {
-						local64 = (byte) (BZip2State.tt[local164] & 0xFF);
-						BZip2State.tt[arg0.cftab[local64 & 0xFF]] |= local164 << 8;
-						arg0.cftab[local64 & 0xFF]++;
-					}
-					arg0.tPos = BZip2State.tt[arg0.origPtr] >> 8;
-					arg0.c_nblock_used = 0;
-					arg0.tPos = BZip2State.tt[arg0.tPos];
-					arg0.k0 = (byte) (arg0.tPos & 0xFF);
-					arg0.tPos >>= 0x8;
-					arg0.c_nblock_used++;
-					arg0.save_nblock = local520;
-					finish(arg0);
-					if (arg0.c_nblock_used == arg0.save_nblock + 1 && arg0.state_out_len == 0) {
-						local60 = true;
-						break;
-					}
-					local60 = false;
+				}
+				arg0.state_out_len = 0;
+				arg0.state_out_ch = 0;
+				arg0.cftab[0] = 0;
+				for (local164 = 1; local164 <= 256; local164++) {
+					arg0.cftab[local164] = arg0.unzftab[local164 - 1];
+				}
+				for (local164 = 1; local164 <= 256; local164++) {
+					arg0.cftab[local164] += arg0.cftab[local164 - 1];
+				}
+				for (local164 = 0; local164 < local520; local164++) {
+					local64 = (byte) (BZip2State.tt[local164] & 0xFF);
+					BZip2State.tt[arg0.cftab[local64 & 0xFF]] |= local164 << 8;
+					arg0.cftab[local64 & 0xFF]++;
+				}
+				arg0.tPos = BZip2State.tt[arg0.origPtr] >> 8;
+				arg0.c_nblock_used = 0;
+				arg0.tPos = BZip2State.tt[arg0.tPos];
+				arg0.k0 = (byte) (arg0.tPos & 0xFF);
+				arg0.tPos >>= 0x8;
+				arg0.c_nblock_used++;
+				arg0.save_nblock = local520;
+				finish(arg0);
+				if (arg0.c_nblock_used == arg0.save_nblock + 1 && arg0.state_out_len == 0) {
+					local60 = true;
 					break;
 				}
+				local60 = false;
+				break;
 			}
-			return;
 		}
 	}
 

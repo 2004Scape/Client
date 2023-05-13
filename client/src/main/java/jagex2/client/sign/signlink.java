@@ -15,7 +15,7 @@ import java.net.URL;
 public final class signlink implements Runnable {
 
 	@OriginalMember(owner = "client!sign/signlink", name = "clientversion", descriptor = "I")
-	private static int clientversion;
+	public static final int clientversion = 225;
 
 	@OriginalMember(owner = "client!sign/signlink", name = "uid", descriptor = "I")
 	public static int uid;
@@ -411,7 +411,7 @@ public final class signlink implements Runnable {
 				urlreq = null;
 			}
 			try {
-				Thread.sleep((long) looprate);
+				Thread.sleep(looprate);
 			} catch (@Pc(187) Exception local187) {
 			}
 		}

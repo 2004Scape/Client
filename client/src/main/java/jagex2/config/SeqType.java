@@ -1,6 +1,5 @@
 package jagex2.config;
 
-import jagex2.client.sign.signlink;
 import jagex2.graphics.SeqFrame;
 import jagex2.io.Jagfile;
 import jagex2.io.Packet;
@@ -11,12 +10,6 @@ import org.openrs2.deob.annotation.Pc;
 
 @OriginalClass("client!jc")
 public final class SeqType {
-
-	@OriginalMember(owner = "client!jc", name = "a", descriptor = "Z")
-	private static boolean flowObfuscator1 = true;
-
-	@OriginalMember(owner = "client!jc", name = "b", descriptor = "I")
-	private static final int flowObfuscator2 = 473;
 
 	@OriginalMember(owner = "client!jc", name = "c", descriptor = "I")
 	private static int count;
@@ -58,99 +51,80 @@ public final class SeqType {
 	public int replaycount = 99;
 
 	@OriginalMember(owner = "client!jc", name = "a", descriptor = "(Lclient!ub;I)V")
-	public static void unpack(@OriginalArg(0) Jagfile arg0, @OriginalArg(1) int arg1) {
-		try {
-			@Pc(9) Packet local9 = new Packet(363, arg0.read("seq.dat", null, (byte) 2));
-			if (arg1 <= 0) {
-				flowObfuscator1 = !flowObfuscator1;
+	public static void unpack(@OriginalArg(0) Jagfile config) {
+		@Pc(9) Packet dat = new Packet(config.read("seq.dat", null));
+		count = dat.g2();
+		if (instances == null) {
+			instances = new SeqType[count];
+		}
+		for (@Pc(27) int id = 0; id < count; id++) {
+			if (instances[id] == null) {
+				instances[id] = new SeqType();
 			}
-			count = local9.g2();
-			if (instances == null) {
-				instances = new SeqType[count];
-			}
-			for (@Pc(27) int local27 = 0; local27 < count; local27++) {
-				if (instances[local27] == null) {
-					instances[local27] = new SeqType();
-				}
-				instances[local27].decode(false, local9);
-			}
-		} catch (@Pc(51) RuntimeException local51) {
-			signlink.reporterror("35892, " + arg0 + ", " + arg1 + ", " + local51.toString());
-			throw new RuntimeException();
+			instances[id].decode(dat);
 		}
 	}
 
 	@OriginalMember(owner = "client!jc", name = "a", descriptor = "(ZLclient!kb;)V")
-	public void decode(@OriginalArg(0) boolean arg0, @OriginalArg(1) Packet arg1) {
-		try {
-			@Pc(5) int local5;
-			if (arg0) {
-				for (local5 = 1; local5 > 0; local5++) {
-				}
+	public void decode(@OriginalArg(1) Packet dat) {
+		while (true) {
+			@Pc(5) int code = dat.g1();
+			if (code == 0) {
+				break;
 			}
-			while (true) {
-				while (true) {
-					local5 = arg1.g1();
-					if (local5 == 0) {
-						if (this.framecount == 0) {
-							this.framecount = 1;
-							this.primaryFrames = new int[1];
-							this.primaryFrames[0] = -1;
-							this.secondaryFrames = new int[1];
-							this.secondaryFrames[0] = -1;
-							this.frameDelay = new int[1];
-							this.frameDelay[0] = -1;
-							return;
-						}
-						return;
+
+			@Pc(40) int local40;
+			if (code == 1) {
+				this.framecount = dat.g1();
+				this.primaryFrames = new int[this.framecount];
+				this.secondaryFrames = new int[this.framecount];
+				this.frameDelay = new int[this.framecount];
+				for (local40 = 0; local40 < this.framecount; local40++) {
+					this.primaryFrames[local40] = dat.g2();
+					this.secondaryFrames[local40] = dat.g2();
+					if (this.secondaryFrames[local40] == 65535) {
+						this.secondaryFrames[local40] = -1;
 					}
-					@Pc(40) int local40;
-					if (local5 == 1) {
-						this.framecount = arg1.g1();
-						this.primaryFrames = new int[this.framecount];
-						this.secondaryFrames = new int[this.framecount];
-						this.frameDelay = new int[this.framecount];
-						for (local40 = 0; local40 < this.framecount; local40++) {
-							this.primaryFrames[local40] = arg1.g2();
-							this.secondaryFrames[local40] = arg1.g2();
-							if (this.secondaryFrames[local40] == 65535) {
-								this.secondaryFrames[local40] = -1;
-							}
-							this.frameDelay[local40] = arg1.g2();
-							if (this.frameDelay[local40] == 0) {
-								this.frameDelay[local40] = SeqFrame.instances[this.primaryFrames[local40]].delay;
-							}
-							if (this.frameDelay[local40] == 0) {
-								this.frameDelay[local40] = 1;
-							}
-						}
-					} else if (local5 == 2) {
-						this.replayoff = arg1.g2();
-					} else if (local5 == 3) {
-						local40 = arg1.g1();
-						this.mask = new int[local40 + 1];
-						for (@Pc(127) int local127 = 0; local127 < local40; local127++) {
-							this.mask[local127] = arg1.g1();
-						}
-						this.mask[local40] = 9999999;
-					} else if (local5 == 4) {
-						this.stretches = true;
-					} else if (local5 == 5) {
-						this.priority = arg1.g1();
-					} else if (local5 == 6) {
-						this.mainhand = arg1.g2();
-					} else if (local5 == 7) {
-						this.offhand = arg1.g2();
-					} else if (local5 == 8) {
-						this.replaycount = arg1.g1();
-					} else {
-						System.out.println("Error unrecognised seq config code: " + local5);
+					this.frameDelay[local40] = dat.g2();
+					if (this.frameDelay[local40] == 0) {
+						this.frameDelay[local40] = SeqFrame.instances[this.primaryFrames[local40]].delay;
+					}
+					if (this.frameDelay[local40] == 0) {
+						this.frameDelay[local40] = 1;
 					}
 				}
+			} else if (code == 2) {
+				this.replayoff = dat.g2();
+			} else if (code == 3) {
+				local40 = dat.g1();
+				this.mask = new int[local40 + 1];
+				for (@Pc(127) int local127 = 0; local127 < local40; local127++) {
+					this.mask[local127] = dat.g1();
+				}
+				this.mask[local40] = 9999999;
+			} else if (code == 4) {
+				this.stretches = true;
+			} else if (code == 5) {
+				this.priority = dat.g1();
+			} else if (code == 6) {
+				this.mainhand = dat.g2();
+			} else if (code == 7) {
+				this.offhand = dat.g2();
+			} else if (code == 8) {
+				this.replaycount = dat.g1();
+			} else {
+				System.out.println("Error unrecognised seq config code: " + code);
 			}
-		} catch (@Pc(236) RuntimeException local236) {
-			signlink.reporterror("38080, " + arg0 + ", " + arg1 + ", " + local236.toString());
-			throw new RuntimeException();
+		}
+
+		if (this.framecount == 0) {
+			this.framecount = 1;
+			this.primaryFrames = new int[1];
+			this.primaryFrames[0] = -1;
+			this.secondaryFrames = new int[1];
+			this.secondaryFrames[0] = -1;
+			this.frameDelay = new int[1];
+			this.frameDelay[0] = -1;
 		}
 	}
 }

@@ -1,6 +1,5 @@
 package jagex2.config;
 
-import jagex2.client.sign.signlink;
 import jagex2.datastruct.LruCache;
 import jagex2.graphics.Model;
 import jagex2.io.Jagfile;
@@ -12,9 +11,6 @@ import org.openrs2.deob.annotation.Pc;
 
 @OriginalClass("client!kc")
 public final class SpotAnimType {
-
-	@OriginalMember(owner = "client!kc", name = "a", descriptor = "I")
-	private static final int flowObfuscator1 = 473;
 
 	@OriginalMember(owner = "client!kc", name = "b", descriptor = "I")
 	private static int count;
@@ -59,91 +55,74 @@ public final class SpotAnimType {
 	public int contrast;
 
 	@OriginalMember(owner = "client!kc", name = "p", descriptor = "Lclient!s;")
-	public static LruCache modelCache = new LruCache((byte) 0, 30);
+	public static LruCache modelCache = new LruCache(30);
 
 	@OriginalMember(owner = "client!kc", name = "a", descriptor = "(Lclient!ub;I)V")
-	public static void unpack(@OriginalArg(0) Jagfile arg0, @OriginalArg(1) int arg1) {
-		try {
-			@Pc(3) int local3 = 91 / arg1;
-			@Pc(13) Packet local13 = new Packet(363, arg0.read("spotanim.dat", null, (byte) 2));
-			count = local13.g2();
-			if (instances == null) {
-				instances = new SpotAnimType[count];
+	public static void unpack(@OriginalArg(0) Jagfile config) {
+		@Pc(13) Packet dat = new Packet(config.read("spotanim.dat", null));
+		count = dat.g2();
+		if (instances == null) {
+			instances = new SpotAnimType[count];
+		}
+		for (@Pc(23) int id = 0; id < count; id++) {
+			if (instances[id] == null) {
+				instances[id] = new SpotAnimType();
 			}
-			for (@Pc(23) int local23 = 0; local23 < count; local23++) {
-				if (instances[local23] == null) {
-					instances[local23] = new SpotAnimType();
-				}
-				instances[local23].index = local23;
-				instances[local23].decode(false, local13);
-			}
-		} catch (@Pc(52) RuntimeException local52) {
-			signlink.reporterror("26561, " + arg0 + ", " + arg1 + ", " + local52.toString());
-			throw new RuntimeException();
+			instances[id].index = id;
+			instances[id].decode(dat);
 		}
 	}
 
 	@OriginalMember(owner = "client!kc", name = "a", descriptor = "(ZLclient!kb;)V")
-	public void decode(@OriginalArg(0) boolean arg0, @OriginalArg(1) Packet buf) {
-		try {
-			@Pc(5) int opcode;
-			if (arg0) {
-				for (opcode = 1; opcode > 0; opcode++) {
-				}
+	public void decode(@OriginalArg(1) Packet dat) {
+		while (true) {
+			@Pc(5) int code = dat.g1();
+			if (code == 0) {
+				break;
 			}
-			while (true) {
-				while (true) {
-					opcode = buf.g1();
-					if (opcode == 0) {
-						return;
-					}
-					if (opcode == 1) {
-						this.model = buf.g2();
-					} else if (opcode == 2) {
-						this.anim = buf.g2();
-						if (SeqType.instances != null) {
-							this.seq = SeqType.instances[this.anim];
-						}
-					} else if (opcode == 3) {
-						this.disposeAlpha = true;
-					} else if (opcode == 4) {
-						this.resizeh = buf.g2();
-					} else if (opcode == 5) {
-						this.resizev = buf.g2();
-					} else if (opcode == 6) {
-						this.orientation = buf.g2();
-					} else if (opcode == 7) {
-						this.ambient = buf.g1();
-					} else if (opcode == 8) {
-						this.contrast = buf.g1();
-					} else if (opcode >= 40 && opcode < 50) {
-						this.recol_s[opcode - 40] = buf.g2();
-					} else if (opcode >= 50 && opcode < 60) {
-						this.recol_d[opcode - 50] = buf.g2();
-					} else {
-						System.out.println("Error unrecognised spotanim config code: " + opcode);
-					}
+
+			if (code == 1) {
+				this.model = dat.g2();
+			} else if (code == 2) {
+				this.anim = dat.g2();
+				if (SeqType.instances != null) {
+					this.seq = SeqType.instances[this.anim];
 				}
+			} else if (code == 3) {
+				this.disposeAlpha = true;
+			} else if (code == 4) {
+				this.resizeh = dat.g2();
+			} else if (code == 5) {
+				this.resizev = dat.g2();
+			} else if (code == 6) {
+				this.orientation = dat.g2();
+			} else if (code == 7) {
+				this.ambient = dat.g1();
+			} else if (code == 8) {
+				this.contrast = dat.g1();
+			} else if (code >= 40 && code < 50) {
+				this.recol_s[code - 40] = dat.g2();
+			} else if (code >= 50 && code < 60) {
+				this.recol_d[code - 50] = dat.g2();
+			} else {
+				System.out.println("Error unrecognised spotanim config code: " + code);
 			}
-		} catch (@Pc(138) RuntimeException local138) {
-			signlink.reporterror("42060, " + arg0 + ", " + buf + ", " + local138.toString());
-			throw new RuntimeException();
 		}
 	}
 
 	@OriginalMember(owner = "client!kc", name = "a", descriptor = "()Lclient!eb;")
 	public Model getModel() {
-		@Pc(6) Model local6 = (Model) modelCache.get((long) this.index);
+		@Pc(6) Model local6 = (Model) modelCache.get(this.index);
 		if (local6 != null) {
 			return local6;
 		}
-		local6 = new Model(false, this.model);
+		local6 = new Model(this.model);
 		for (@Pc(19) int local19 = 0; local19 < 6; local19++) {
 			if (this.recol_s[0] != 0) {
 				local6.recolor(this.recol_s[local19], this.recol_d[local19]);
 			}
 		}
-		modelCache.put(6, (long) this.index, local6);
+		modelCache.put(this.index, local6);
 		return local6;
 	}
 }
