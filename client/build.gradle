@@ -3,7 +3,7 @@ plugins {
     id 'application'
 }
 
-mainClassName = 'Game'
+mainClassName = 'jagex2.client.client'
 version = '1.0.0'
 
 sourceCompatibility = 1.8
