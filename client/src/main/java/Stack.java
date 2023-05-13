@@ -17,7 +17,7 @@ public final class Stack {
 	private final boolean flowObfuscator3 = true;
 
 	@OriginalMember(owner = "client!pb", name = "d", descriptor = "Lclient!db;")
-	private final CacheableNode head = new CacheableNode();
+	private final Hashable head = new Hashable();
 
 	@OriginalMember(owner = "client!pb", name = "<init>", descriptor = "(I)V")
 	public Stack(@OriginalArg(0) int arg0) {
@@ -34,7 +34,7 @@ public final class Stack {
 	}
 
 	@OriginalMember(owner = "client!pb", name = "a", descriptor = "(Lclient!db;)V")
-	public void push(@OriginalArg(0) CacheableNode arg0) {
+	public void push(@OriginalArg(0) Hashable arg0) {
 		if (arg0.prevCacheable != null) {
 			arg0.uncache();
 		}
@@ -45,8 +45,8 @@ public final class Stack {
 	}
 
 	@OriginalMember(owner = "client!pb", name = "a", descriptor = "()Lclient!db;")
-	public CacheableNode pop() {
-		@Pc(3) CacheableNode local3 = this.head.nextCacheable;
+	public Hashable pop() {
+		@Pc(3) Hashable local3 = this.head.nextCacheable;
 		if (local3 == this.head) {
 			return null;
 		} else {

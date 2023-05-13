@@ -5,7 +5,7 @@ import org.openrs2.deob.annotation.Pc;
 import sign.signlink;
 
 @OriginalClass("client!mb")
-public final class SceneLocSpawned extends Node {
+public final class SceneLocSpawned extends Linkable {
 
 	@OriginalMember(owner = "client!mb", name = "e", descriptor = "I")
 	private int flowObfuscator1 = 27808;

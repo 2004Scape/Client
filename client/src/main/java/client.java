@@ -16,7 +16,7 @@ import org.openrs2.deob.annotation.Pc;
 import sign.signlink;
 
 @OriginalClass("client!client")
-public final class Game extends GameShell {
+public final class client extends GameShell {
 
 	@OriginalMember(owner = "client!client", name = "E", descriptor = "I")
 	public static int opHeld1Counter;
@@ -76,7 +76,7 @@ public final class Game extends GameShell {
 	private final int[] designColors = new int[5];
 
 	@OriginalMember(owner = "client!client", name = "X", descriptor = "Lclient!kb;")
-	private Buffer login = Buffer.alloc(1, -737);
+	private Packet login = Packet.alloc(1, -737);
 
 	@OriginalMember(owner = "client!client", name = "Y", descriptor = "I")
 	private int nextMusicDelay;
@@ -103,10 +103,10 @@ public final class Game extends GameShell {
 	private boolean redrawTitleBackground = false;
 
 	@OriginalMember(owner = "client!client", name = "gb", descriptor = "Lclient!ob;")
-	private DoublyLinkedList locList = new DoublyLinkedList(0);
+	private LinkList locList = new LinkList(0);
 
 	@OriginalMember(owner = "client!client", name = "hb", descriptor = "Lclient!tb;")
-	private IsaacRandom randomIn;
+	private Isaac randomIn;
 
 	@OriginalMember(owner = "client!client", name = "ib", descriptor = "[Z")
 	private final boolean[] cameraModifierEnabled = new boolean[5];
@@ -148,7 +148,7 @@ public final class Game extends GameShell {
 	private final byte flowObfuscator4 = 106;
 
 	@OriginalMember(owner = "client!client", name = "vb", descriptor = "Lclient!ob;")
-	private DoublyLinkedList temporaryLocs = new DoublyLinkedList(0);
+	private LinkList temporaryLocs = new LinkList(0);
 
 	@OriginalMember(owner = "client!client", name = "wb", descriptor = "[J")
 	private final long[] ignoreName37 = new long[100];
@@ -175,7 +175,7 @@ public final class Game extends GameShell {
 	private String socialMessage = "";
 
 	@OriginalMember(owner = "client!client", name = "Eb", descriptor = "[Lclient!hb;")
-	private Image24[] imageHitmarks = new Image24[20];
+	private Pix24[] imageHitmarks = new Pix24[20];
 
 	@OriginalMember(owner = "client!client", name = "Fb", descriptor = "J")
 	private long lastWaveStartTime;
@@ -220,7 +220,7 @@ public final class Game extends GameShell {
 	private final byte flowObfuscator8 = 8;
 
 	@OriginalMember(owner = "client!client", name = "Tb", descriptor = "[Lclient!hb;")
-	private Image24[] activeMapFunctions = new Image24[1000];
+	private Pix24[] activeMapFunctions = new Pix24[1000];
 
 	@OriginalMember(owner = "client!client", name = "Ub", descriptor = "I")
 	private int chatScrollHeight = 78;
@@ -232,7 +232,7 @@ public final class Game extends GameShell {
 	private int[][][] levelHeightmap;
 
 	@OriginalMember(owner = "client!client", name = "Xb", descriptor = "Lclient!kb;")
-	private Buffer in = Buffer.alloc(1, -737);
+	private Packet in = Packet.alloc(1, -737);
 
 	@OriginalMember(owner = "client!client", name = "Yb", descriptor = "I")
 	private int flowObfuscator9;
@@ -241,7 +241,7 @@ public final class Game extends GameShell {
 	public static int opNpc5Counter;
 
 	@OriginalMember(owner = "client!client", name = "ac", descriptor = "Lclient!kb;")
-	private Buffer out = Buffer.alloc(1, -737);
+	private Packet out = Packet.alloc(1, -737);
 
 	@OriginalMember(owner = "client!client", name = "bc", descriptor = "Z")
 	private boolean startMidiThread = false;
@@ -289,7 +289,7 @@ public final class Game extends GameShell {
 	private final int flowObfuscator12 = 4277;
 
 	@OriginalMember(owner = "client!client", name = "qc", descriptor = "[Lclient!ib;")
-	private Image8[] imageSideicons = new Image8[13];
+	private Pix8[] imageSideicons = new Pix8[13];
 
 	@OriginalMember(owner = "client!client", name = "rc", descriptor = "I")
 	private int lastWaveLength;
@@ -328,7 +328,7 @@ public final class Game extends GameShell {
 	private int[] entityUpdateIds = new int[this.MAX_PLAYER_COUNT];
 
 	@OriginalMember(owner = "client!client", name = "Dc", descriptor = "[Lclient!kb;")
-	private Buffer[] playerAppearanceBuffer = new Buffer[this.MAX_PLAYER_COUNT];
+	private Packet[] playerAppearanceBuffer = new Packet[this.MAX_PLAYER_COUNT];
 
 	@OriginalMember(owner = "client!client", name = "Ec", descriptor = "I")
 	private int lastPacketType0;
@@ -340,10 +340,10 @@ public final class Game extends GameShell {
 	private int lastPacketType2;
 
 	@OriginalMember(owner = "client!client", name = "Hc", descriptor = "Lclient!r;")
-	private Scene scene;
+	private World3D scene;
 
 	@OriginalMember(owner = "client!client", name = "Ic", descriptor = "Lclient!ob;")
-	private DoublyLinkedList projectiles = new DoublyLinkedList(0);
+	private LinkList projectiles = new LinkList(0);
 
 	@OriginalMember(owner = "client!client", name = "Jc", descriptor = "I")
 	private int splitPrivateChat;
@@ -403,13 +403,13 @@ public final class Game extends GameShell {
 	private final byte flowObfuscator15 = 2;
 
 	@OriginalMember(owner = "client!client", name = "cd", descriptor = "Lclient!qb;")
-	private DrawArea areaBackbase1;
+	private PixMap areaBackbase1;
 
 	@OriginalMember(owner = "client!client", name = "dd", descriptor = "Lclient!qb;")
-	private DrawArea areaBackbase2;
+	private PixMap areaBackbase2;
 
 	@OriginalMember(owner = "client!client", name = "ed", descriptor = "Lclient!qb;")
-	private DrawArea areaBackhmid1;
+	private PixMap areaBackhmid1;
 
 	@OriginalMember(owner = "client!client", name = "fd", descriptor = "I")
 	private int privateMessageCount;
@@ -499,7 +499,7 @@ public final class Game extends GameShell {
 	private int flowObfuscator22 = -655;
 
 	@OriginalMember(owner = "client!client", name = "Id", descriptor = "Lclient!ob;")
-	private DoublyLinkedList spawnedLocations = new DoublyLinkedList(0);
+	private LinkList spawnedLocations = new LinkList(0);
 
 	@OriginalMember(owner = "client!client", name = "Jd", descriptor = "I")
 	private int tradeChatSetting;
@@ -520,19 +520,19 @@ public final class Game extends GameShell {
 	public static int opPlayer2Counter;
 
 	@OriginalMember(owner = "client!client", name = "Pd", descriptor = "Lclient!ib;")
-	private Image8 imageRedstone1;
+	private Pix8 imageRedstone1;
 
 	@OriginalMember(owner = "client!client", name = "Qd", descriptor = "Lclient!ib;")
-	private Image8 imageRedstone2;
+	private Pix8 imageRedstone2;
 
 	@OriginalMember(owner = "client!client", name = "Rd", descriptor = "Lclient!ib;")
-	private Image8 imageRedstone3;
+	private Pix8 imageRedstone3;
 
 	@OriginalMember(owner = "client!client", name = "Sd", descriptor = "Lclient!ib;")
-	private Image8 imageRedstone1h;
+	private Pix8 imageRedstone1h;
 
 	@OriginalMember(owner = "client!client", name = "Td", descriptor = "Lclient!ib;")
-	private Image8 imageRedstone2h;
+	private Pix8 imageRedstone2h;
 
 	@OriginalMember(owner = "client!client", name = "Ud", descriptor = "[I")
 	private final int[] messageType = new int[100];
@@ -571,13 +571,13 @@ public final class Game extends GameShell {
 	private int reportAbuseInterfaceID = -1;
 
 	@OriginalMember(owner = "client!client", name = "ge", descriptor = "Lclient!ib;")
-	private Image8 imageBackbase1;
+	private Pix8 imageBackbase1;
 
 	@OriginalMember(owner = "client!client", name = "he", descriptor = "Lclient!ib;")
-	private Image8 imageBackbase2;
+	private Pix8 imageBackbase2;
 
 	@OriginalMember(owner = "client!client", name = "ie", descriptor = "Lclient!ib;")
-	private Image8 imageBackhmid1;
+	private Pix8 imageBackhmid1;
 
 	@OriginalMember(owner = "client!client", name = "je", descriptor = "I")
 	private int hintType;
@@ -712,7 +712,7 @@ public final class Game extends GameShell {
 	public static int loopCycle;
 
 	@OriginalMember(owner = "client!client", name = "cf", descriptor = "[Lclient!hb;")
-	private Image24[] imageHeadicons = new Image24[20];
+	private Pix24[] imageHeadicons = new Pix24[20];
 
 	@OriginalMember(owner = "client!client", name = "df", descriptor = "I")
 	private int systemUpdateTimer;
@@ -727,10 +727,10 @@ public final class Game extends GameShell {
 	private boolean objGrabThreshold = false;
 
 	@OriginalMember(owner = "client!client", name = "hf", descriptor = "Lclient!hb;")
-	private Image24 genderButtonImage0;
+	private Pix24 genderButtonImage0;
 
 	@OriginalMember(owner = "client!client", name = "jf", descriptor = "Lclient!hb;")
-	private Image24 genderButtonImage1;
+	private Pix24 genderButtonImage1;
 
 	@OriginalMember(owner = "client!client", name = "kf", descriptor = "I")
 	private int midiSyncCrc;
@@ -763,7 +763,7 @@ public final class Game extends GameShell {
 	private int titleLoginField;
 
 	@OriginalMember(owner = "client!client", name = "uf", descriptor = "[Lclient!ib;")
-	private Image8[] imageRunes;
+	private Pix8[] imageRunes;
 
 	@OriginalMember(owner = "client!client", name = "vf", descriptor = "Z")
 	private boolean ingame = false;
@@ -778,37 +778,37 @@ public final class Game extends GameShell {
 	private int chatScrollOffset;
 
 	@OriginalMember(owner = "client!client", name = "zf", descriptor = "Lclient!hb;")
-	private Image24 imageFlamesLeft;
+	private Pix24 imageFlamesLeft;
 
 	@OriginalMember(owner = "client!client", name = "Af", descriptor = "Lclient!hb;")
-	private Image24 imageFlamesRight;
+	private Pix24 imageFlamesRight;
 
 	@OriginalMember(owner = "client!client", name = "Bf", descriptor = "I")
 	private final int SCROLLBAR_GRIP_LOWLIGHT = 3353893;
 
 	@OriginalMember(owner = "client!client", name = "Cf", descriptor = "Lclient!ib;")
-	private Image8 imageInvback;
+	private Pix8 imageInvback;
 
 	@OriginalMember(owner = "client!client", name = "Df", descriptor = "Lclient!ib;")
-	private Image8 imageMapback;
+	private Pix8 imageMapback;
 
 	@OriginalMember(owner = "client!client", name = "Ef", descriptor = "Lclient!ib;")
-	private Image8 imageChatback;
+	private Pix8 imageChatback;
 
 	@OriginalMember(owner = "client!client", name = "Ff", descriptor = "I")
 	private int inMultizone;
 
 	@OriginalMember(owner = "client!client", name = "Gf", descriptor = "Lclient!jb;")
-	private BitmapFont fontPlain11;
+	private PixFont fontPlain11;
 
 	@OriginalMember(owner = "client!client", name = "Hf", descriptor = "Lclient!jb;")
-	private BitmapFont fontPlain12;
+	private PixFont fontPlain12;
 
 	@OriginalMember(owner = "client!client", name = "If", descriptor = "Lclient!jb;")
-	private BitmapFont fontBold12;
+	private PixFont fontBold12;
 
 	@OriginalMember(owner = "client!client", name = "Jf", descriptor = "Lclient!jb;")
-	private BitmapFont fontQuill8;
+	private PixFont fontQuill8;
 
 	@OriginalMember(owner = "client!client", name = "Kf", descriptor = "I")
 	private int tryMoveNearest;
@@ -835,13 +835,13 @@ public final class Game extends GameShell {
 	private final CRC32 crc32 = new CRC32();
 
 	@OriginalMember(owner = "client!client", name = "Sf", descriptor = "Lclient!hb;")
-	private Image24 imageMapflag;
+	private Pix24 imageMapflag;
 
 	@OriginalMember(owner = "client!client", name = "Tf", descriptor = "I")
 	public static int updateCounter;
 
 	@OriginalMember(owner = "client!client", name = "Uf", descriptor = "Lclient!d;")
-	private Connection connection;
+	private ClientStream stream;
 
 	@OriginalMember(owner = "client!client", name = "Vf", descriptor = "[[B")
 	private byte[][] sceneMapLocData;
@@ -865,34 +865,34 @@ public final class Game extends GameShell {
 	private String objSelectedName;
 
 	@OriginalMember(owner = "client!client", name = "cg", descriptor = "Lclient!qb;")
-	private DrawArea areaBackleft1;
+	private PixMap areaBackleft1;
 
 	@OriginalMember(owner = "client!client", name = "dg", descriptor = "Lclient!qb;")
-	private DrawArea areaBackleft2;
+	private PixMap areaBackleft2;
 
 	@OriginalMember(owner = "client!client", name = "eg", descriptor = "Lclient!qb;")
-	private DrawArea areaBackright1;
+	private PixMap areaBackright1;
 
 	@OriginalMember(owner = "client!client", name = "fg", descriptor = "Lclient!qb;")
-	private DrawArea areaBackright2;
+	private PixMap areaBackright2;
 
 	@OriginalMember(owner = "client!client", name = "gg", descriptor = "Lclient!qb;")
-	private DrawArea areaBacktop1;
+	private PixMap areaBacktop1;
 
 	@OriginalMember(owner = "client!client", name = "hg", descriptor = "Lclient!qb;")
-	private DrawArea areaBacktop2;
+	private PixMap areaBacktop2;
 
 	@OriginalMember(owner = "client!client", name = "ig", descriptor = "Lclient!qb;")
-	private DrawArea areaBackvmid1;
+	private PixMap areaBackvmid1;
 
 	@OriginalMember(owner = "client!client", name = "jg", descriptor = "Lclient!qb;")
-	private DrawArea areaBackvmid2;
+	private PixMap areaBackvmid2;
 
 	@OriginalMember(owner = "client!client", name = "kg", descriptor = "Lclient!qb;")
-	private DrawArea areaBackvmid3;
+	private PixMap areaBackvmid3;
 
 	@OriginalMember(owner = "client!client", name = "lg", descriptor = "Lclient!qb;")
-	private DrawArea areaBackhmid2;
+	private PixMap areaBackhmid2;
 
 	@OriginalMember(owner = "client!client", name = "ng", descriptor = "I")
 	private int waveCount;
@@ -928,67 +928,67 @@ public final class Game extends GameShell {
 	private String spellCaption;
 
 	@OriginalMember(owner = "client!client", name = "yg", descriptor = "Lclient!qb;")
-	private DrawArea imageTitle2;
+	private PixMap imageTitle2;
 
 	@OriginalMember(owner = "client!client", name = "zg", descriptor = "Lclient!qb;")
-	private DrawArea imageTitle3;
+	private PixMap imageTitle3;
 
 	@OriginalMember(owner = "client!client", name = "Ag", descriptor = "Lclient!qb;")
-	private DrawArea imageTitle4;
+	private PixMap imageTitle4;
 
 	@OriginalMember(owner = "client!client", name = "Bg", descriptor = "Lclient!qb;")
-	private DrawArea imageTitle0;
+	private PixMap imageTitle0;
 
 	@OriginalMember(owner = "client!client", name = "Cg", descriptor = "Lclient!qb;")
-	private DrawArea imageTitle1;
+	private PixMap imageTitle1;
 
 	@OriginalMember(owner = "client!client", name = "Dg", descriptor = "Lclient!qb;")
-	private DrawArea imageTitle5;
+	private PixMap imageTitle5;
 
 	@OriginalMember(owner = "client!client", name = "Eg", descriptor = "Lclient!qb;")
-	private DrawArea imageTitle6;
+	private PixMap imageTitle6;
 
 	@OriginalMember(owner = "client!client", name = "Fg", descriptor = "Lclient!qb;")
-	private DrawArea imageTitle7;
+	private PixMap imageTitle7;
 
 	@OriginalMember(owner = "client!client", name = "Gg", descriptor = "Lclient!qb;")
-	private DrawArea imageTitle8;
+	private PixMap imageTitle8;
 
 	@OriginalMember(owner = "client!client", name = "Hg", descriptor = "[Lclient!ib;")
-	private Image8[] imageMapscene = new Image8[50];
+	private Pix8[] imageMapscene = new Pix8[50];
 
 	@OriginalMember(owner = "client!client", name = "Ig", descriptor = "I")
 	private int flowObfuscator30 = 27808;
 
 	@OriginalMember(owner = "client!client", name = "Jg", descriptor = "Lclient!ib;")
-	private Image8 imageRedstone1v;
+	private Pix8 imageRedstone1v;
 
 	@OriginalMember(owner = "client!client", name = "Kg", descriptor = "Lclient!ib;")
-	private Image8 imageRedstone2v;
+	private Pix8 imageRedstone2v;
 
 	@OriginalMember(owner = "client!client", name = "Lg", descriptor = "Lclient!ib;")
-	private Image8 imageRedstone3v;
+	private Pix8 imageRedstone3v;
 
 	@OriginalMember(owner = "client!client", name = "Mg", descriptor = "Lclient!ib;")
-	private Image8 imageRedstone1hv;
+	private Pix8 imageRedstone1hv;
 
 	@OriginalMember(owner = "client!client", name = "Ng", descriptor = "Lclient!ib;")
-	private Image8 imageRedstone2hv;
+	private Pix8 imageRedstone2hv;
 
 	@OriginalMember(owner = "client!client", name = "Og", descriptor = "[I")
 	private final int[] CHAT_COLORS = new int[] { 16776960, 16711680, 65280, 65535, 16711935, 16777215 };
 
 	@OriginalMember(owner = "client!client", name = "Pg", descriptor = "Lclient!qb;")
-	private DrawArea areaSidebar;
+	private PixMap areaSidebar;
 
 	@OriginalMember(owner = "client!client", name = "Qg", descriptor = "Lclient!qb;")
-	private DrawArea areaMapback;
+	private PixMap areaMapback;
 
 	@OriginalMember(owner = "client!client", name = "Rg", descriptor = "Lclient!qb;")
-	private DrawArea areaViewport;
+	private PixMap areaViewport;
 
 	@OriginalMember(owner = "client!client", name = "Sg", descriptor = "Lclient!qb;")
-	private DrawArea areaChatback;
+	private PixMap areaChatback;
 
 	@OriginalMember(owner = "client!client", name = "Tg", descriptor = "I")
 	private final int SCROLLBAR_TRACK = 2301979;
@@ -1000,7 +1000,7 @@ public final class Game extends GameShell {
 	private int flagSceneTileZ;
 
 	@OriginalMember(owner = "client!client", name = "Wg", descriptor = "Lclient!hb;")
-	private Image24 imageMinimap;
+	private Pix24 imageMinimap;
 
 	@OriginalMember(owner = "client!client", name = "Xg", descriptor = "I")
 	private int unreadMessages;
@@ -1009,19 +1009,19 @@ public final class Game extends GameShell {
 	private boolean chatbackInputOpen = false;
 
 	@OriginalMember(owner = "client!client", name = "Zg", descriptor = "Lclient!ob;")
-	private DoublyLinkedList spotanims = new DoublyLinkedList(0);
+	private LinkList spotanims = new LinkList(0);
 
 	@OriginalMember(owner = "client!client", name = "ah", descriptor = "Lclient!hb;")
-	private Image24 imageMapdot0;
+	private Pix24 imageMapdot0;
 
 	@OriginalMember(owner = "client!client", name = "bh", descriptor = "Lclient!hb;")
-	private Image24 imageMapdot1;
+	private Pix24 imageMapdot1;
 
 	@OriginalMember(owner = "client!client", name = "ch", descriptor = "Lclient!hb;")
-	private Image24 imageMapdot2;
+	private Pix24 imageMapdot2;
 
 	@OriginalMember(owner = "client!client", name = "dh", descriptor = "Lclient!hb;")
-	private Image24 imageMapdot3;
+	private Pix24 imageMapdot3;
 
 	@OriginalMember(owner = "client!client", name = "eh", descriptor = "I")
 	private int lastAddress;
@@ -1081,10 +1081,10 @@ public final class Game extends GameShell {
 	private boolean redrawSideicons = false;
 
 	@OriginalMember(owner = "client!client", name = "yh", descriptor = "Lclient!ib;")
-	private Image8 imageScrollbar0;
+	private Pix8 imageScrollbar0;
 
 	@OriginalMember(owner = "client!client", name = "zh", descriptor = "Lclient!ib;")
-	private Image8 imageScrollbar1;
+	private Pix8 imageScrollbar1;
 
 	@OriginalMember(owner = "client!client", name = "Ah", descriptor = "Ljava/lang/String;")
 	private String loginMessage0 = "";
@@ -1147,10 +1147,10 @@ public final class Game extends GameShell {
 	public static boolean started;
 
 	@OriginalMember(owner = "client!client", name = "Uh", descriptor = "Lclient!ib;")
-	private Image8 imageTitlebox;
+	private Pix8 imageTitlebox;
 
 	@OriginalMember(owner = "client!client", name = "Vh", descriptor = "Lclient!ib;")
-	private Image8 imageTitlebutton;
+	private Pix8 imageTitlebutton;
 
 	@OriginalMember(owner = "client!client", name = "Wh", descriptor = "I")
 	private final int flowObfuscator34 = -986;
@@ -1198,7 +1198,7 @@ public final class Game extends GameShell {
 	private String currentMidi;
 
 	@OriginalMember(owner = "client!client", name = "li", descriptor = "[Lclient!hb;")
-	private Image24[] imageCrosses = new Image24[8];
+	private Pix24[] imageCrosses = new Pix24[8];
 
 	@OriginalMember(owner = "client!client", name = "mi", descriptor = "Z")
 	private boolean flameThread = false;
@@ -1246,13 +1246,13 @@ public final class Game extends GameShell {
 	private int cameraOffsetYawModifier = 1;
 
 	@OriginalMember(owner = "client!client", name = "Bi", descriptor = "Lclient!ub;")
-	private FileArchive archiveTitle;
+	private Jagfile archiveTitle;
 
 	@OriginalMember(owner = "client!client", name = "Ci", descriptor = "Ljava/lang/String;")
 	private String chatTyped = "";
 
 	@OriginalMember(owner = "client!client", name = "Di", descriptor = "[Lclient!hb;")
-	private Image24[] imageMapfunction = new Image24[50];
+	private Pix24[] imageMapfunction = new Pix24[50];
 
 	@OriginalMember(owner = "client!client", name = "Ei", descriptor = "[I")
 	private int[] menuParamB = new int[500];
@@ -1273,7 +1273,7 @@ public final class Game extends GameShell {
 	private boolean scrollGrabbed = false;
 
 	@OriginalMember(owner = "client!client", name = "Ki", descriptor = "Lclient!hb;")
-	private Image24 imageCompass;
+	private Pix24 imageCompass;
 
 	@OriginalMember(owner = "client!client", name = "Li", descriptor = "J")
 	private long serverSeed;
@@ -1309,7 +1309,7 @@ public final class Game extends GameShell {
 	private int flameCycle0;
 
 	@OriginalMember(owner = "client!client", name = "Wi", descriptor = "[[[Lclient!ob;")
-	private DoublyLinkedList[][][] levelObjStacks = new DoublyLinkedList[4][104][104];
+	private LinkList[][][] levelObjStacks = new LinkList[4][104][104];
 
 	@OriginalMember(owner = "client!client", name = "Xi", descriptor = "I")
 	private final int SCROLLBAR_GRIP_FOREGROUND = 5063219;
@@ -1354,7 +1354,7 @@ public final class Game extends GameShell {
 					return;
 				}
 				signlink.startpriv(InetAddress.getByName("world2.runewiki.org"));
-				@Pc(82) Game local82 = new Game();
+				@Pc(82) client local82 = new client();
 				local82.initApplication(532, 789, 0);
 			} else {
 				System.out.println("Usage: node-id, port-offset, [lowmem/highmem], [free/members]");
@@ -1369,10 +1369,10 @@ public final class Game extends GameShell {
 			if (!arg0) {
 				flowObfuscator19 = !flowObfuscator19;
 			}
-			Scene.lowMemory = true;
+			World3D.lowMemory = true;
 			Draw3D.lowMemory = true;
 			lowMemory = true;
-			SceneBuilder.lowMemory = true;
+			World.lowMemory = true;
 		} catch (@Pc(17) RuntimeException local17) {
 			signlink.reporterror("70501, " + arg0 + ", " + local17.toString());
 			throw new RuntimeException();
@@ -1436,11 +1436,11 @@ public final class Game extends GameShell {
 	@OriginalMember(owner = "client!client", name = "B", descriptor = "(I)V")
 	public static void setHighMemory(@OriginalArg(0) int arg0) {
 		try {
-			Scene.lowMemory = false;
+			World3D.lowMemory = false;
 			Draw3D.lowMemory = false;
 			if (arg0 == 9) {
 				lowMemory = false;
-				SceneBuilder.lowMemory = false;
+				World.lowMemory = false;
 			}
 		} catch (@Pc(13) RuntimeException local13) {
 			signlink.reporterror("39707, " + arg0 + ", " + local13.toString());
@@ -1763,7 +1763,7 @@ public final class Game extends GameShell {
 	private void drawPrivateMessages(@OriginalArg(0) int arg0) {
 		try {
 			if (arg0 > 0 && this.splitPrivateChat != 0) {
-				@Pc(9) BitmapFont local9 = this.fontPlain12;
+				@Pc(9) PixFont local9 = this.fontPlain12;
 				@Pc(11) int local11 = 0;
 				if (this.systemUpdateTimer != 0) {
 					local11 = 1;
@@ -1809,7 +1809,7 @@ public final class Game extends GameShell {
 	}
 
 	@OriginalMember(owner = "client!client", name = "a", descriptor = "(Lclient!kb;II)V")
-	private void readNpcUpdates(@OriginalArg(0) Buffer arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2) {
+	private void readNpcUpdates(@OriginalArg(0) Packet arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2) {
 		try {
 			for (@Pc(1) int local1 = 0; local1 < this.entityUpdateCount; local1++) {
 				@Pc(8) int local8 = this.entityUpdateIds[local1];
@@ -1893,7 +1893,7 @@ public final class Game extends GameShell {
 				if (this.ignoreCount >= 100) {
 					this.addMessage(0, "Your ignore list is full. Max of 100 hit", (byte) 4, "");
 				} else {
-					@Pc(23) String local23 = StringUtils.formatName(0, StringUtils.fromBase37(arg0, false));
+					@Pc(23) String local23 = JString.formatName(0, JString.fromBase37(arg0, false));
 					for (@Pc(25) int local25 = 0; local25 < this.ignoreCount; local25++) {
 						if (this.ignoreName37[local25] == arg0) {
 							this.addMessage(0, local23 + " is already on your ignore list", (byte) 4, "");
@@ -1921,7 +1921,7 @@ public final class Game extends GameShell {
 	}
 
 	@OriginalMember(owner = "client!client", name = "a", descriptor = "(BLclient!kb;I)V")
-	private void readZonePacket(@OriginalArg(0) byte arg0, @OriginalArg(1) Buffer arg1, @OriginalArg(2) int arg2) {
+	private void readZonePacket(@OriginalArg(0) byte arg0, @OriginalArg(1) Packet arg1, @OriginalArg(2) int arg2) {
 		try {
 			if (arg0 != -45) {
 				this.load();
@@ -2036,7 +2036,7 @@ public final class Game extends GameShell {
 						local395.index = local34;
 						local395.count = local38;
 						if (this.levelObjStacks[this.currentLevel][local24][local31] == null) {
-							this.levelObjStacks[this.currentLevel][local24][local31] = new DoublyLinkedList(0);
+							this.levelObjStacks[this.currentLevel][local24][local31] = new LinkList(0);
 						}
 						this.levelObjStacks[this.currentLevel][local24][local31].pushBack(local395);
 						this.sortObjStacks(local24, local31);
@@ -2047,7 +2047,7 @@ public final class Game extends GameShell {
 					local31 = this.baseZ + (local15 & 0x7);
 					local34 = arg1.g2();
 					if (local24 >= 0 && local31 >= 0 && local24 < 104 && local31 < 104) {
-						@Pc(485) DoublyLinkedList local485 = this.levelObjStacks[this.currentLevel][local24][local31];
+						@Pc(485) LinkList local485 = this.levelObjStacks[this.currentLevel][local24][local31];
 						if (local485 != null) {
 							for (local395 = (ObjEntity) local485.peekFront(); local395 != null; local395 = (ObjEntity) local485.prev(551)) {
 								if (local395.index == (local34 & 0x7FFF)) {
@@ -2112,7 +2112,7 @@ public final class Game extends GameShell {
 							local807.index = local34;
 							local807.count = local38;
 							if (this.levelObjStacks[this.currentLevel][local24][local31] == null) {
-								this.levelObjStacks[this.currentLevel][local24][local31] = new DoublyLinkedList(0);
+								this.levelObjStacks[this.currentLevel][local24][local31] = new LinkList(0);
 							}
 							this.levelObjStacks[this.currentLevel][local24][local31].pushBack(local807);
 							this.sortObjStacks(local24, local31);
@@ -2187,7 +2187,7 @@ public final class Game extends GameShell {
 							local38 = arg1.g2();
 							local42 = arg1.g2();
 							if (local24 >= 0 && local31 >= 0 && local24 < 104 && local31 < 104) {
-								@Pc(1178) DoublyLinkedList local1178 = this.levelObjStacks[this.currentLevel][local24][local31];
+								@Pc(1178) LinkList local1178 = this.levelObjStacks[this.currentLevel][local24][local31];
 								if (local1178 != null) {
 									for (@Pc(1184) ObjEntity local1184 = (ObjEntity) local1178.peekFront(); local1184 != null; local1184 = (ObjEntity) local1178.prev(551)) {
 										if (local1184.index == (local34 & 0x7FFF) && local1184.count == local38) {
@@ -2476,9 +2476,9 @@ public final class Game extends GameShell {
 						if (local52 == null) {
 							return;
 						}
-						local69 = (new Buffer(363, local52)).g4();
+						local69 = (new Packet(363, local52)).g4();
 						@Pc(167) byte[] local167 = new byte[local69];
-						BZip2InputStream.read(local167, local69, local52, local25, 4);
+						BZip2.read(local167, local69, local52, local25, 4);
 						this.saveMidi(local167, 625, local69, true);
 					}
 				}
@@ -3123,11 +3123,11 @@ public final class Game extends GameShell {
 								this.redrawChatback = true;
 								@Pc(153) long local153;
 								if (this.socialAction == 1) {
-									local153 = StringUtils.toBase37(this.socialInput);
+									local153 = JString.toBase37(this.socialInput);
 									this.addFriend(local153, -460);
 								}
 								if (this.socialAction == 2 && this.friendCount > 0) {
-									local153 = StringUtils.toBase37(this.socialInput);
+									local153 = JString.toBase37(this.socialInput);
 									this.removeFriend(43808, local153);
 								}
 								if (this.socialAction == 3 && this.socialInput.length() > 0) {
@@ -3135,11 +3135,11 @@ public final class Game extends GameShell {
 									this.out.p1(0);
 									local193 = this.out.pos;
 									this.out.p8(true, this.socialName37);
-									ChatCompression.pack(this.out, true, this.socialInput);
+									WordPack.pack(this.out, true, this.socialInput);
 									this.out.psize1(0, this.out.pos - local193);
-									this.socialInput = StringUtils.toSentenceCase(this.socialInput, 0);
-									this.socialInput = Censor.filter(this.socialInput, 0);
-									this.addMessage(6, this.socialInput, (byte) 4, StringUtils.formatName(0, StringUtils.fromBase37(this.socialName37, false)));
+									this.socialInput = JString.toSentenceCase(this.socialInput, 0);
+									this.socialInput = WordFilter.filter(this.socialInput, 0);
+									this.addMessage(6, this.socialInput, (byte) 4, JString.formatName(0, JString.fromBase37(this.socialName37, false)));
 									if (this.privateChatSetting == 2) {
 										this.privateChatSetting = 1;
 										this.redrawPrivacySettings = true;
@@ -3150,11 +3150,11 @@ public final class Game extends GameShell {
 									}
 								}
 								if (this.socialAction == 4 && this.ignoreCount < 100) {
-									local153 = StringUtils.toBase37(this.socialInput);
+									local153 = JString.toBase37(this.socialInput);
 									this.addIgnore(local153, (byte) 3);
 								}
 								if (this.socialAction == 5 && this.ignoreCount > 0) {
-									local153 = StringUtils.toBase37(this.socialInput);
+									local153 = JString.toBase37(this.socialInput);
 									this.removeIgnore(1, local153);
 								}
 							}
@@ -3260,10 +3260,10 @@ public final class Game extends GameShell {
 									@Pc(693) int local693 = this.out.pos;
 									this.out.p1(local496);
 									this.out.p1(local654);
-									ChatCompression.pack(this.out, true, this.chatTyped);
+									WordPack.pack(this.out, true, this.chatTyped);
 									this.out.psize1(0, this.out.pos - local693);
-									this.chatTyped = StringUtils.toSentenceCase(this.chatTyped, 0);
-									this.chatTyped = Censor.filter(this.chatTyped, 0);
+									this.chatTyped = JString.toSentenceCase(this.chatTyped, 0);
+									this.chatTyped = WordFilter.filter(this.chatTyped, 0);
 									this.localPlayer.chat = this.chatTyped;
 									this.localPlayer.chatColor = local496;
 									this.localPlayer.chatStyle = local654;
@@ -3422,7 +3422,7 @@ public final class Game extends GameShell {
 	}
 
 	@OriginalMember(owner = "client!client", name = "a", descriptor = "(Ljava/lang/String;ILjava/lang/String;II)Lclient!ub;")
-	private FileArchive loadArchive(@OriginalArg(0) String arg0, @OriginalArg(1) int arg1, @OriginalArg(2) String arg2, @OriginalArg(3) int arg3, @OriginalArg(4) int arg4) {
+	private Jagfile loadArchive(@OriginalArg(0) String arg0, @OriginalArg(1) int arg1, @OriginalArg(2) String arg2, @OriginalArg(3) int arg3, @OriginalArg(4) int arg4) {
 		try {
 			@Pc(3) int local3 = 5;
 			@Pc(6) byte[] local6 = signlink.cacheload(arg2);
@@ -3436,7 +3436,7 @@ public final class Game extends GameShell {
 				}
 			}
 			if (local6 != null) {
-				return new FileArchive(local6, this.flowObfuscator24);
+				return new Jagfile(local6, this.flowObfuscator24);
 			}
 			while (local6 == null) {
 				this.drawProgress(true, "Requesting " + arg0, arg3);
@@ -3445,7 +3445,7 @@ public final class Game extends GameShell {
 					@Pc(60) DataInputStream local60 = this.openUrl(arg2 + arg1);
 					@Pc(63) byte[] local63 = new byte[6];
 					local60.readFully(local63, 0, 6);
-					@Pc(74) Buffer local74 = new Buffer(363, local63);
+					@Pc(74) Packet local74 = new Packet(363, local63);
 					local74.pos = 3;
 					@Pc(82) int local82 = local74.g3() + 6;
 					@Pc(84) int local84 = 6;
@@ -3486,7 +3486,7 @@ public final class Game extends GameShell {
 				for (local20 = 1; local20 > 0; local20++) {
 				}
 			}
-			return new FileArchive(local6, this.flowObfuscator24);
+			return new Jagfile(local6, this.flowObfuscator24);
 		} catch (@Pc(216) RuntimeException local216) {
 			signlink.reporterror("37683, " + arg0 + ", " + arg1 + ", " + arg2 + ", " + arg3 + ", " + arg4 + ", " + local216.toString());
 			throw new RuntimeException();
@@ -3573,7 +3573,7 @@ public final class Game extends GameShell {
 				this.packetType = -1;
 			}
 			if (!lowMemory) {
-				@Pc(17) Image8 local17;
+				@Pc(17) Pix8 local17;
 				@Pc(25) int local25;
 				@Pc(33) int local33;
 				@Pc(36) byte[] local36;
@@ -3705,7 +3705,7 @@ public final class Game extends GameShell {
 			@Pc(124) int local124;
 			for (@Pc(120) int local120 = 0; local120 < 104; local120++) {
 				for (local124 = 0; local124 < 104; local124++) {
-					@Pc(136) DoublyLinkedList local136 = this.levelObjStacks[this.currentLevel][local120][local124];
+					@Pc(136) LinkList local136 = this.levelObjStacks[this.currentLevel][local120][local124];
 					if (local136 != null) {
 						local26 = local120 * 4 + 2 - this.localPlayer.x / 32;
 						local34 = local124 * 4 + 2 - this.localPlayer.z / 32;
@@ -3727,7 +3727,7 @@ public final class Game extends GameShell {
 					local26 = local245.x / 32 - this.localPlayer.x / 32;
 					local34 = local245.z / 32 - this.localPlayer.z / 32;
 					@Pc(275) boolean local275 = false;
-					@Pc(279) long local279 = StringUtils.toBase37(local245.name);
+					@Pc(279) long local279 = JString.toBase37(local245.name);
 					for (@Pc(281) int local281 = 0; local281 < this.friendCount; local281++) {
 						if (local279 == this.friendName37[local281] && this.friendWorld[local281] != 0) {
 							local275 = true;
@@ -3962,7 +3962,7 @@ public final class Game extends GameShell {
 						}
 					}
 				} else {
-					@Pc(71) Image8 local71 = this.imageMapscene[local61.mapscene];
+					@Pc(71) Pix8 local71 = this.imageMapscene[local61.mapscene];
 					if (local71 != null) {
 						@Pc(83) int local83 = (local61.sizeX * 4 - local71.width) / 2;
 						@Pc(93) int local93 = (local61.sizeZ * 4 - local71.height) / 2;
@@ -3980,7 +3980,7 @@ public final class Game extends GameShell {
 				@Pc(451) LocType local451 = LocType.get(local30);
 				@Pc(483) int local483;
 				if (local451.mapscene != -1) {
-					@Pc(461) Image8 local461 = this.imageMapscene[local451.mapscene];
+					@Pc(461) Pix8 local461 = this.imageMapscene[local451.mapscene];
 					if (local461 != null) {
 						local58 = (local451.sizeX * 4 - local461.width) / 2;
 						local483 = (local451.sizeZ * 4 - local461.height) / 2;
@@ -4011,7 +4011,7 @@ public final class Game extends GameShell {
 				local18 = local8 >> 14 & 0x7FFF;
 				@Pc(615) LocType local615 = LocType.get(local18);
 				if (local615.mapscene != -1) {
-					@Pc(625) Image8 local625 = this.imageMapscene[local615.mapscene];
+					@Pc(625) Pix8 local625 = this.imageMapscene[local615.mapscene];
 					if (local625 != null) {
 						local30 = (local615.sizeX * 4 - local625.width) / 2;
 						@Pc(647) int local647 = (local615.sizeZ * 4 - local625.height) / 2;
@@ -4027,7 +4027,7 @@ public final class Game extends GameShell {
 	}
 
 	@OriginalMember(owner = "client!client", name = "a", descriptor = "(Lclient!kb;IZ)V")
-	private void readNpcInfo(@OriginalArg(0) Buffer arg0, @OriginalArg(1) int arg1, @OriginalArg(2) boolean arg2) {
+	private void readNpcInfo(@OriginalArg(0) Packet arg0, @OriginalArg(1) int arg1, @OriginalArg(2) boolean arg2) {
 		try {
 			this.entityRemovalCount = 0;
 			this.entityUpdateCount = 0;
@@ -4074,17 +4074,17 @@ public final class Game extends GameShell {
 	@OriginalMember(owner = "client!client", name = "n", descriptor = "(I)V")
 	private void loadTitleImages(@OriginalArg(0) int arg0) {
 		try {
-			this.imageTitlebox = new Image8(this.archiveTitle, "titlebox", 0);
-			this.imageTitlebutton = new Image8(this.archiveTitle, "titlebutton", 0);
+			this.imageTitlebox = new Pix8(this.archiveTitle, "titlebox", 0);
+			this.imageTitlebutton = new Pix8(this.archiveTitle, "titlebutton", 0);
 			if (arg0 != 0) {
 				this.packetType = this.in.g1();
 			}
-			this.imageRunes = new Image8[12];
+			this.imageRunes = new Pix8[12];
 			for (@Pc(32) int local32 = 0; local32 < 12; local32++) {
-				this.imageRunes[local32] = new Image8(this.archiveTitle, "runes", local32);
+				this.imageRunes[local32] = new Pix8(this.archiveTitle, "runes", local32);
 			}
-			this.imageFlamesLeft = new Image24(128, 265);
-			this.imageFlamesRight = new Image24(128, 265);
+			this.imageFlamesLeft = new Pix24(128, 265);
+			this.imageFlamesRight = new Pix24(128, 265);
 			for (@Pc(65) int local65 = 0; local65 < 33920; local65++) {
 				this.imageFlamesLeft.pixels[local65] = this.imageTitle0.pixels[local65];
 			}
@@ -4149,7 +4149,7 @@ public final class Game extends GameShell {
 	}
 
 	@OriginalMember(owner = "client!client", name = "a", descriptor = "(ILclient!kb;I)V")
-	private void readPlayers(@OriginalArg(0) int arg0, @OriginalArg(1) Buffer arg1, @OriginalArg(2) int arg2) {
+	private void readPlayers(@OriginalArg(0) int arg0, @OriginalArg(1) Packet arg1, @OriginalArg(2) int arg2) {
 		try {
 			@Pc(6) int local6 = arg1.gBit(9, 8);
 			@Pc(10) int local10;
@@ -4359,7 +4359,7 @@ public final class Game extends GameShell {
 					}
 					this.fontBold12.drawStringTaggable(local21 / 2 - 90, 6, local32, "Username: " + this.username + (this.titleLoginField == 0 & loopCycle % 40 < 20 ? "@yel@|" : ""), true, 16777215);
 					local32 += 15;
-					this.fontBold12.drawStringTaggable(local21 / 2 - 88, 6, local32, "Password: " + StringUtils.toAsterisks(7, this.password) + (this.titleLoginField == 1 & loopCycle % 40 < 20 ? "@yel@|" : ""), true, 16777215);
+					this.fontBold12.drawStringTaggable(local21 / 2 - 88, 6, local32, "Password: " + JString.toAsterisks(7, this.password) + (this.titleLoginField == 1 & loopCycle % 40 < 20 ? "@yel@|" : ""), true, 16777215);
 					local32 += 15;
 					local50 = local21 / 2 - 80;
 					local56 = local23 / 2 + 50;
@@ -4418,16 +4418,16 @@ public final class Game extends GameShell {
 					this.imageTitle6 = null;
 					this.imageTitle7 = null;
 					this.imageTitle8 = null;
-					this.areaChatback = new DrawArea(this.getBaseComponent(flowObfuscator36), 479, 299, 96);
-					this.areaMapback = new DrawArea(this.getBaseComponent(flowObfuscator36), 168, 299, 160);
+					this.areaChatback = new PixMap(this.getBaseComponent(flowObfuscator36), 479, 299, 96);
+					this.areaMapback = new PixMap(this.getBaseComponent(flowObfuscator36), 168, 299, 160);
 					Draw2D.clear(this.flowObfuscator39);
 					this.imageMapback.draw(0, 0, false);
-					this.areaSidebar = new DrawArea(this.getBaseComponent(flowObfuscator36), 190, 299, 261);
-					this.areaViewport = new DrawArea(this.getBaseComponent(flowObfuscator36), 512, 299, 334);
+					this.areaSidebar = new PixMap(this.getBaseComponent(flowObfuscator36), 190, 299, 261);
+					this.areaViewport = new PixMap(this.getBaseComponent(flowObfuscator36), 512, 299, 334);
 					Draw2D.clear(this.flowObfuscator39);
-					this.areaBackbase1 = new DrawArea(this.getBaseComponent(flowObfuscator36), 501, 299, 61);
-					this.areaBackbase2 = new DrawArea(this.getBaseComponent(flowObfuscator36), 288, 299, 40);
-					this.areaBackhmid1 = new DrawArea(this.getBaseComponent(flowObfuscator36), 269, 299, 66);
+					this.areaBackbase1 = new PixMap(this.getBaseComponent(flowObfuscator36), 501, 299, 61);
+					this.areaBackbase2 = new PixMap(this.getBaseComponent(flowObfuscator36), 288, 299, 40);
+					this.areaBackhmid1 = new PixMap(this.getBaseComponent(flowObfuscator36), 269, 299, 66);
 					this.redrawTitleBackground = true;
 				}
 			}
@@ -4438,7 +4438,7 @@ public final class Game extends GameShell {
 	}
 
 	@OriginalMember(owner = "client!client", name = "a", descriptor = "(IILclient!kb;)V")
-	private void readNewPlayers(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(2) Buffer arg2) {
+	private void readNewPlayers(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(2) Packet arg2) {
 		try {
 			@Pc(9) int local9;
 			if (arg0 < 2 || arg0 > 2) {
@@ -4485,12 +4485,12 @@ public final class Game extends GameShell {
 	private void logout(@OriginalArg(0) int arg0) {
 		try {
 			try {
-				if (this.connection != null) {
-					this.connection.close();
+				if (this.stream != null) {
+					this.stream.close();
 				}
 			} catch (@Pc(9) Exception local9) {
 			}
-			this.connection = null;
+			this.stream = null;
 			this.ingame = false;
 			this.titleScreenState = 0;
 			this.username = "";
@@ -4570,7 +4570,7 @@ public final class Game extends GameShell {
 										local217 = 0;
 										local224 = local84.inventorySlotObjId[local165] - 1;
 										if (local182 >= -32 && local182 <= 512 && local191 >= -32 && local191 <= 334 || this.objDragArea != 0 && this.objDragSlot == local165) {
-											@Pc(251) Image24 local251 = ObjType.getIcon(local224, 24638, local84.inventorySlotObjCount[local165]);
+											@Pc(251) Pix24 local251 = ObjType.getIcon(local224, 24638, local84.inventorySlotObjCount[local165]);
 											if (this.objDragArea != 0 && this.objDragSlot == local165 && this.objDragInterfaceId == local84.id) {
 												local215 = super.mouseX - this.objGrabX;
 												local217 = super.mouseY - this.objGrabY;
@@ -4597,7 +4597,7 @@ public final class Game extends GameShell {
 											}
 										}
 									} else if (local84.inventorySlotImage != null && local165 < 20) {
-										@Pc(398) Image24 local398 = local84.inventorySlotImage[local165];
+										@Pc(398) Pix24 local398 = local84.inventorySlotImage[local165];
 										if (local398 != null) {
 											local398.draw(local191, local182, false);
 										}
@@ -4606,7 +4606,7 @@ public final class Game extends GameShell {
 								}
 							}
 						} else if (local84.type != 3) {
-							@Pc(456) BitmapFont local456;
+							@Pc(456) PixFont local456;
 							if (local84.type == 4) {
 								local456 = local84.font;
 								local167 = local84.color;
@@ -4676,7 +4676,7 @@ public final class Game extends GameShell {
 									local191 += local456.height;
 								}
 							} else if (local84.type == 5) {
-								@Pc(766) Image24 local766;
+								@Pc(766) Pix24 local766;
 								if (this.executeInterfaceScript(local84, 65)) {
 									local766 = local84.activeImage;
 								} else {
@@ -4749,7 +4749,7 @@ public final class Game extends GameShell {
 	}
 
 	@OriginalMember(owner = "client!client", name = "a", descriptor = "(ZILclient!kb;)V")
-	private void readPlayerUpdates(@OriginalArg(0) boolean arg0, @OriginalArg(1) int arg1, @OriginalArg(2) Buffer arg2) {
+	private void readPlayerUpdates(@OriginalArg(0) boolean arg0, @OriginalArg(1) int arg1, @OriginalArg(2) Packet arg2) {
 		try {
 			for (@Pc(1) int local1 = 0; local1 < this.entityUpdateCount; local1++) {
 				@Pc(8) int local8 = this.entityUpdateIds[local1];
@@ -5514,7 +5514,7 @@ public final class Game extends GameShell {
 					local52 = local48.indexOf("@whi@");
 					if (local52 != -1) {
 						local48 = local48.substring(local52 + 5).trim();
-						local69 = StringUtils.formatName(0, StringUtils.fromBase37(StringUtils.toBase37(local48), false));
+						local69 = JString.formatName(0, JString.fromBase37(JString.toBase37(local48), false));
 						@Pc(71) boolean local71 = false;
 						for (local73 = 0; local73 < this.playerCount; local73++) {
 							@Pc(83) PlayerEntity local83 = this.players[this.playerIds[local73]];
@@ -5785,7 +5785,7 @@ public final class Game extends GameShell {
 						local48 = this.menuOption[arg1];
 						local52 = local48.indexOf("@whi@");
 						if (local52 != -1) {
-							local1156 = StringUtils.toBase37(local48.substring(local52 + 5).trim());
+							local1156 = JString.toBase37(local48.substring(local52 + 5).trim());
 							local73 = -1;
 							for (@Pc(1160) int local1160 = 0; local1160 < this.friendCount; local1160++) {
 								if (this.friendName37[local1160] == local1156) {
@@ -6032,7 +6032,7 @@ public final class Game extends GameShell {
 							local48 = this.menuOption[arg1];
 							local52 = local48.indexOf("@whi@");
 							if (local52 != -1) {
-								local1156 = StringUtils.toBase37(local48.substring(local52 + 5).trim());
+								local1156 = JString.toBase37(local48.substring(local52 + 5).trim());
 								if (local28 == 406) {
 									this.addFriend(local1156, -460);
 								}
@@ -6225,7 +6225,7 @@ public final class Game extends GameShell {
 					arg1.text = "";
 					arg1.optionType = 0;
 				} else {
-					arg1.text = StringUtils.formatName(0, StringUtils.fromBase37(this.ignoreName37[local4], false));
+					arg1.text = JString.formatName(0, JString.fromBase37(this.ignoreName37[local4], false));
 					arg1.optionType = 1;
 				}
 			} else if (local4 == 503) {
@@ -6409,7 +6409,7 @@ public final class Game extends GameShell {
 	}
 
 	@OriginalMember(owner = "client!client", name = "a", descriptor = "(ZLclient!kb;I)V")
-	private void readNewNpcs(@OriginalArg(0) boolean arg0, @OriginalArg(1) Buffer arg1, @OriginalArg(2) int arg2) {
+	private void readNewNpcs(@OriginalArg(0) boolean arg0, @OriginalArg(1) Packet arg1, @OriginalArg(2) int arg2) {
 		try {
 			if (arg0) {
 				this.load();
@@ -6570,7 +6570,7 @@ public final class Game extends GameShell {
 				this.closeInterfaces((byte) -60);
 				if (this.reportAbuseInput.length() > 0) {
 					this.out.p1isaac((byte) -34, 190);
-					this.out.p8(true, StringUtils.toBase37(this.reportAbuseInput));
+					this.out.p8(true, JString.toBase37(this.reportAbuseInput));
 					this.out.p1(local4 - 601);
 					this.out.p1(this.reportAbuseMuteOption ? 1 : 0);
 				}
@@ -6636,7 +6636,7 @@ public final class Game extends GameShell {
 				this.drawProgress(true, "Connecting to fileserver", 10);
 				try {
 					@Pc(119) DataInputStream local119 = this.openUrl("crc" + (int) (Math.random() * 9.9999999E7D));
-					@Pc(126) Buffer local126 = new Buffer(363, new byte[36]);
+					@Pc(126) Packet local126 = new Packet(363, new byte[36]);
 					local119.readFully(local126.data, 0, 36);
 					for (@Pc(134) int local134 = 0; local134 < 9; local134++) {
 						this.archiveChecksum[local134] = local126.g4();
@@ -6657,120 +6657,120 @@ public final class Game extends GameShell {
 				}
 			}
 			this.archiveTitle = this.loadArchive("title screen", this.archiveChecksum[1], "title", 10, 0);
-			this.fontPlain11 = new BitmapFont(this.archiveTitle, "p11", 530);
-			this.fontPlain12 = new BitmapFont(this.archiveTitle, "p12", 530);
-			this.fontBold12 = new BitmapFont(this.archiveTitle, "b12", 530);
-			this.fontQuill8 = new BitmapFont(this.archiveTitle, "q8", 530);
+			this.fontPlain11 = new PixFont(this.archiveTitle, "p11", 530);
+			this.fontPlain12 = new PixFont(this.archiveTitle, "p12", 530);
+			this.fontBold12 = new PixFont(this.archiveTitle, "b12", 530);
+			this.fontQuill8 = new PixFont(this.archiveTitle, "q8", 530);
 			this.loadTitleBackground((byte) 5);
 			this.loadTitleImages(0);
-			@Pc(255) FileArchive local255 = this.loadArchive("config", this.archiveChecksum[2], "config", 15, 0);
-			@Pc(266) FileArchive local266 = this.loadArchive("interface", this.archiveChecksum[3], "interface", 20, 0);
-			@Pc(277) FileArchive local277 = this.loadArchive("2d graphics", this.archiveChecksum[4], "media", 30, 0);
-			@Pc(288) FileArchive local288 = this.loadArchive("3d graphics", this.archiveChecksum[5], "models", 40, 0);
-			@Pc(299) FileArchive local299 = this.loadArchive("textures", this.archiveChecksum[6], "textures", 60, 0);
-			@Pc(310) FileArchive local310 = this.loadArchive("chat system", this.archiveChecksum[7], "wordenc", 65, 0);
-			@Pc(321) FileArchive local321 = this.loadArchive("sound effects", this.archiveChecksum[8], "sounds", 70, 0);
+			@Pc(255) Jagfile local255 = this.loadArchive("config", this.archiveChecksum[2], "config", 15, 0);
+			@Pc(266) Jagfile local266 = this.loadArchive("interface", this.archiveChecksum[3], "interface", 20, 0);
+			@Pc(277) Jagfile local277 = this.loadArchive("2d graphics", this.archiveChecksum[4], "media", 30, 0);
+			@Pc(288) Jagfile local288 = this.loadArchive("3d graphics", this.archiveChecksum[5], "models", 40, 0);
+			@Pc(299) Jagfile local299 = this.loadArchive("textures", this.archiveChecksum[6], "textures", 60, 0);
+			@Pc(310) Jagfile local310 = this.loadArchive("chat system", this.archiveChecksum[7], "wordenc", 65, 0);
+			@Pc(321) Jagfile local321 = this.loadArchive("sound effects", this.archiveChecksum[8], "sounds", 70, 0);
 			this.levelTileFlags = new byte[4][104][104];
 			this.levelHeightmap = new int[4][105][105];
-			this.scene = new Scene(415, this.levelHeightmap, 104, 4, 104);
+			this.scene = new World3D(415, this.levelHeightmap, 104, 4, 104);
 			for (@Pc(346) int local346 = 0; local346 < 4; local346++) {
 				this.levelCollisionMap[local346] = new CollisionMap(104, -708, 104);
 			}
-			this.imageMinimap = new Image24(512, 512);
+			this.imageMinimap = new Pix24(512, 512);
 			this.drawProgress(true, "Unpacking media", 75);
-			this.imageInvback = new Image8(local277, "invback", 0);
-			this.imageChatback = new Image8(local277, "chatback", 0);
-			this.imageMapback = new Image8(local277, "mapback", 0);
-			this.imageBackbase1 = new Image8(local277, "backbase1", 0);
-			this.imageBackbase2 = new Image8(local277, "backbase2", 0);
-			this.imageBackhmid1 = new Image8(local277, "backhmid1", 0);
+			this.imageInvback = new Pix8(local277, "invback", 0);
+			this.imageChatback = new Pix8(local277, "chatback", 0);
+			this.imageMapback = new Pix8(local277, "mapback", 0);
+			this.imageBackbase1 = new Pix8(local277, "backbase1", 0);
+			this.imageBackbase2 = new Pix8(local277, "backbase2", 0);
+			this.imageBackhmid1 = new Pix8(local277, "backhmid1", 0);
 			for (@Pc(424) int local424 = 0; local424 < 13; local424++) {
-				this.imageSideicons[local424] = new Image8(local277, "sideicons", local424);
+				this.imageSideicons[local424] = new Pix8(local277, "sideicons", local424);
 			}
-			this.imageCompass = new Image24(local277, "compass", 0);
+			this.imageCompass = new Pix24(local277, "compass", 0);
 			@Pc(450) int local450;
 			try {
 				for (local450 = 0; local450 < 50; local450++) {
-					this.imageMapscene[local450] = new Image8(local277, "mapscene", local450);
+					this.imageMapscene[local450] = new Pix8(local277, "mapscene", local450);
 				}
 			} catch (@Pc(468) Exception local468) {
 			}
 			try {
 				for (local450 = 0; local450 < 50; local450++) {
-					this.imageMapfunction[local450] = new Image24(local277, "mapfunction", local450);
+					this.imageMapfunction[local450] = new Pix24(local277, "mapfunction", local450);
 				}
 			} catch (@Pc(488) Exception local488) {
 			}
 			try {
 				for (local450 = 0; local450 < 20; local450++) {
-					this.imageHitmarks[local450] = new Image24(local277, "hitmarks", local450);
+					this.imageHitmarks[local450] = new Pix24(local277, "hitmarks", local450);
 				}
 			} catch (@Pc(508) Exception local508) {
 			}
 			try {
 				for (local450 = 0; local450 < 20; local450++) {
-					this.imageHeadicons[local450] = new Image24(local277, "headicons", local450);
+					this.imageHeadicons[local450] = new Pix24(local277, "headicons", local450);
 				}
 			} catch (@Pc(528) Exception local528) {
 			}
-			this.imageMapflag = new Image24(local277, "mapflag", 0);
+			this.imageMapflag = new Pix24(local277, "mapflag", 0);
 			for (local450 = 0; local450 < 8; local450++) {
-				this.imageCrosses[local450] = new Image24(local277, "cross", local450);
+				this.imageCrosses[local450] = new Pix24(local277, "cross", local450);
 			}
-			this.imageMapdot0 = new Image24(local277, "mapdots", 0);
-			this.imageMapdot1 = new Image24(local277, "mapdots", 1);
-			this.imageMapdot2 = new Image24(local277, "mapdots", 2);
-			this.imageMapdot3 = new Image24(local277, "mapdots", 3);
-			this.imageScrollbar0 = new Image8(local277, "scrollbar", 0);
-			this.imageScrollbar1 = new Image8(local277, "scrollbar", 1);
-			this.imageRedstone1 = new Image8(local277, "redstone1", 0);
-			this.imageRedstone2 = new Image8(local277, "redstone2", 0);
-			this.imageRedstone3 = new Image8(local277, "redstone3", 0);
-			this.imageRedstone1h = new Image8(local277, "redstone1", 0);
+			this.imageMapdot0 = new Pix24(local277, "mapdots", 0);
+			this.imageMapdot1 = new Pix24(local277, "mapdots", 1);
+			this.imageMapdot2 = new Pix24(local277, "mapdots", 2);
+			this.imageMapdot3 = new Pix24(local277, "mapdots", 3);
+			this.imageScrollbar0 = new Pix8(local277, "scrollbar", 0);
+			this.imageScrollbar1 = new Pix8(local277, "scrollbar", 1);
+			this.imageRedstone1 = new Pix8(local277, "redstone1", 0);
+			this.imageRedstone2 = new Pix8(local277, "redstone2", 0);
+			this.imageRedstone3 = new Pix8(local277, "redstone3", 0);
+			this.imageRedstone1h = new Pix8(local277, "redstone1", 0);
 			this.imageRedstone1h.flipHorizontally(-725);
-			this.imageRedstone2h = new Image8(local277, "redstone2", 0);
+			this.imageRedstone2h = new Pix8(local277, "redstone2", 0);
 			this.imageRedstone2h.flipHorizontally(-725);
-			this.imageRedstone1v = new Image8(local277, "redstone1", 0);
+			this.imageRedstone1v = new Pix8(local277, "redstone1", 0);
 			this.imageRedstone1v.flipVertically((byte) -74);
-			this.imageRedstone2v = new Image8(local277, "redstone2", 0);
+			this.imageRedstone2v = new Pix8(local277, "redstone2", 0);
 			this.imageRedstone2v.flipVertically((byte) -74);
-			this.imageRedstone3v = new Image8(local277, "redstone3", 0);
+			this.imageRedstone3v = new Pix8(local277, "redstone3", 0);
 			this.imageRedstone3v.flipVertically((byte) -74);
-			this.imageRedstone1hv = new Image8(local277, "redstone1", 0);
+			this.imageRedstone1hv = new Pix8(local277, "redstone1", 0);
 			this.imageRedstone1hv.flipHorizontally(-725);
 			this.imageRedstone1hv.flipVertically((byte) -74);
-			this.imageRedstone2hv = new Image8(local277, "redstone2", 0);
+			this.imageRedstone2hv = new Pix8(local277, "redstone2", 0);
 			this.imageRedstone2hv.flipHorizontally(-725);
 			this.imageRedstone2hv.flipVertically((byte) -74);
-			@Pc(725) Image24 local725 = new Image24(local277, "backleft1", 0);
-			this.areaBackleft1 = new DrawArea(this.getBaseComponent(flowObfuscator36), local725.width, 299, local725.height);
+			@Pc(725) Pix24 local725 = new Pix24(local277, "backleft1", 0);
+			this.areaBackleft1 = new PixMap(this.getBaseComponent(flowObfuscator36), local725.width, 299, local725.height);
 			local725.blitOpaque(34676, 0, 0);
-			@Pc(750) Image24 local750 = new Image24(local277, "backleft2", 0);
-			this.areaBackleft2 = new DrawArea(this.getBaseComponent(flowObfuscator36), local750.width, 299, local750.height);
+			@Pc(750) Pix24 local750 = new Pix24(local277, "backleft2", 0);
+			this.areaBackleft2 = new PixMap(this.getBaseComponent(flowObfuscator36), local750.width, 299, local750.height);
 			local750.blitOpaque(34676, 0, 0);
-			@Pc(775) Image24 local775 = new Image24(local277, "backright1", 0);
-			this.areaBackright1 = new DrawArea(this.getBaseComponent(flowObfuscator36), local775.width, 299, local775.height);
+			@Pc(775) Pix24 local775 = new Pix24(local277, "backright1", 0);
+			this.areaBackright1 = new PixMap(this.getBaseComponent(flowObfuscator36), local775.width, 299, local775.height);
 			local775.blitOpaque(34676, 0, 0);
-			@Pc(800) Image24 local800 = new Image24(local277, "backright2", 0);
-			this.areaBackright2 = new DrawArea(this.getBaseComponent(flowObfuscator36), local800.width, 299, local800.height);
+			@Pc(800) Pix24 local800 = new Pix24(local277, "backright2", 0);
+			this.areaBackright2 = new PixMap(this.getBaseComponent(flowObfuscator36), local800.width, 299, local800.height);
 			local800.blitOpaque(34676, 0, 0);
-			@Pc(825) Image24 local825 = new Image24(local277, "backtop1", 0);
-			this.areaBacktop1 = new DrawArea(this.getBaseComponent(flowObfuscator36), local825.width, 299, local825.height);
+			@Pc(825) Pix24 local825 = new Pix24(local277, "backtop1", 0);
+			this.areaBacktop1 = new PixMap(this.getBaseComponent(flowObfuscator36), local825.width, 299, local825.height);
 			local825.blitOpaque(34676, 0, 0);
-			@Pc(850) Image24 local850 = new Image24(local277, "backtop2", 0);
-			this.areaBacktop2 = new DrawArea(this.getBaseComponent(flowObfuscator36), local850.width, 299, local850.height);
+			@Pc(850) Pix24 local850 = new Pix24(local277, "backtop2", 0);
+			this.areaBacktop2 = new PixMap(this.getBaseComponent(flowObfuscator36), local850.width, 299, local850.height);
 			local850.blitOpaque(34676, 0, 0);
-			@Pc(875) Image24 local875 = new Image24(local277, "backvmid1", 0);
-			this.areaBackvmid1 = new DrawArea(this.getBaseComponent(flowObfuscator36), local875.width, 299, local875.height);
+			@Pc(875) Pix24 local875 = new Pix24(local277, "backvmid1", 0);
+			this.areaBackvmid1 = new PixMap(this.getBaseComponent(flowObfuscator36), local875.width, 299, local875.height);
 			local875.blitOpaque(34676, 0, 0);
-			@Pc(900) Image24 local900 = new Image24(local277, "backvmid2", 0);
-			this.areaBackvmid2 = new DrawArea(this.getBaseComponent(flowObfuscator36), local900.width, 299, local900.height);
+			@Pc(900) Pix24 local900 = new Pix24(local277, "backvmid2", 0);
+			this.areaBackvmid2 = new PixMap(this.getBaseComponent(flowObfuscator36), local900.width, 299, local900.height);
 			local900.blitOpaque(34676, 0, 0);
-			@Pc(925) Image24 local925 = new Image24(local277, "backvmid3", 0);
-			this.areaBackvmid3 = new DrawArea(this.getBaseComponent(flowObfuscator36), local925.width, 299, local925.height);
+			@Pc(925) Pix24 local925 = new Pix24(local277, "backvmid3", 0);
+			this.areaBackvmid3 = new PixMap(this.getBaseComponent(flowObfuscator36), local925.width, 299, local925.height);
 			local925.blitOpaque(34676, 0, 0);
-			@Pc(950) Image24 local950 = new Image24(local277, "backhmid2", 0);
-			this.areaBackhmid2 = new DrawArea(this.getBaseComponent(flowObfuscator36), local950.width, 299, local950.height);
+			@Pc(950) Pix24 local950 = new Pix24(local277, "backhmid2", 0);
+			this.areaBackhmid2 = new PixMap(this.getBaseComponent(flowObfuscator36), local950.width, 299, local950.height);
 			local950.blitOpaque(34676, 0, 0);
 			@Pc(975) int local975 = (int) (Math.random() * 21.0D) - 10;
 			@Pc(982) int local982 = (int) (Math.random() * 21.0D) - 10;
@@ -6805,11 +6805,11 @@ public final class Game extends GameShell {
 			if (!lowMemory) {
 				this.drawProgress(true, "Unpacking sounds", 90);
 				@Pc(1113) byte[] local1113 = local321.read("sounds.dat", null, (byte) 2);
-				@Pc(1119) Buffer local1119 = new Buffer(363, local1113);
-				SoundTrack.unpack(local1119, 473);
+				@Pc(1119) Packet local1119 = new Packet(363, local1113);
+				Wave.unpack(local1119, 473);
 			}
 			this.drawProgress(true, "Unpacking interfaces", 92);
-			@Pc(1150) BitmapFont[] local1150 = new BitmapFont[] { this.fontPlain11, this.fontPlain12, this.fontBold12, this.fontQuill8 };
+			@Pc(1150) PixFont[] local1150 = new PixFont[] { this.fontPlain11, this.fontPlain12, this.fontBold12, this.fontQuill8 };
 			IfType.unpack(local277, local1150, 30, local266);
 			this.drawProgress(true, "Preparing game engine", 97);
 			@Pc(1166) int local1166;
@@ -6861,8 +6861,8 @@ public final class Game extends GameShell {
 				@Pc(1334) int local1334 = Draw3D.sin[local1228];
 				local1312[local1170] = local1330 * local1334 >> 16;
 			}
-			Scene.init(local1312, 800, 512, flowObfuscator20, 334, 500);
-			Censor.unpack(local310);
+			World3D.init(local1312, 800, 512, flowObfuscator20, 334, 500);
+			WordFilter.unpack(local310);
 		} catch (@Pc(1357) Exception local1357) {
 			this.errorLoading = true;
 		}
@@ -7149,7 +7149,7 @@ public final class Game extends GameShell {
 	}
 
 	@OriginalMember(owner = "client!client", name = "a", descriptor = "(IILclient!hb;I)V")
-	private void drawOnMinimap(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(2) Image24 arg2, @OriginalArg(3) int arg3) {
+	private void drawOnMinimap(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(2) Pix24 arg2, @OriginalArg(3) int arg3) {
 		try {
 			@Pc(7) int local7 = this.orbitCameraYaw + this.minimapAnticheatAngle & 0x7FF;
 			@Pc(15) int local15 = arg3 * arg3 + arg0 * arg0;
@@ -7401,26 +7401,26 @@ public final class Game extends GameShell {
 				this.areaBackbase1 = null;
 				this.areaBackbase2 = null;
 				this.areaBackhmid1 = null;
-				this.imageTitle0 = new DrawArea(this.getBaseComponent(flowObfuscator36), 128, 299, 265);
+				this.imageTitle0 = new PixMap(this.getBaseComponent(flowObfuscator36), 128, 299, 265);
 				Draw2D.clear(this.flowObfuscator39);
-				this.imageTitle1 = new DrawArea(this.getBaseComponent(flowObfuscator36), 128, 299, 265);
+				this.imageTitle1 = new PixMap(this.getBaseComponent(flowObfuscator36), 128, 299, 265);
 				Draw2D.clear(this.flowObfuscator39);
-				this.imageTitle2 = new DrawArea(this.getBaseComponent(flowObfuscator36), 533, 299, 186);
+				this.imageTitle2 = new PixMap(this.getBaseComponent(flowObfuscator36), 533, 299, 186);
 				Draw2D.clear(this.flowObfuscator39);
-				this.imageTitle3 = new DrawArea(this.getBaseComponent(flowObfuscator36), 360, 299, 146);
+				this.imageTitle3 = new PixMap(this.getBaseComponent(flowObfuscator36), 360, 299, 146);
 				Draw2D.clear(this.flowObfuscator39);
-				this.imageTitle4 = new DrawArea(this.getBaseComponent(flowObfuscator36), 360, 299, 200);
+				this.imageTitle4 = new PixMap(this.getBaseComponent(flowObfuscator36), 360, 299, 200);
 				Draw2D.clear(this.flowObfuscator39);
-				this.imageTitle5 = new DrawArea(this.getBaseComponent(flowObfuscator36), 214, 299, 267);
+				this.imageTitle5 = new PixMap(this.getBaseComponent(flowObfuscator36), 214, 299, 267);
 				Draw2D.clear(this.flowObfuscator39);
-				this.imageTitle6 = new DrawArea(this.getBaseComponent(flowObfuscator36), 215, 299, 267);
+				this.imageTitle6 = new PixMap(this.getBaseComponent(flowObfuscator36), 215, 299, 267);
 				Draw2D.clear(this.flowObfuscator39);
-				this.imageTitle7 = new DrawArea(this.getBaseComponent(flowObfuscator36), 86, 299, 79);
+				this.imageTitle7 = new PixMap(this.getBaseComponent(flowObfuscator36), 86, 299, 79);
 				if (arg0 != this.flowObfuscator17) {
 					this.out.p1(73);
 				}
 				Draw2D.clear(this.flowObfuscator39);
-				this.imageTitle8 = new DrawArea(this.getBaseComponent(flowObfuscator36), 87, 299, 79);
+				this.imageTitle8 = new PixMap(this.getBaseComponent(flowObfuscator36), 87, 299, 79);
 				Draw2D.clear(this.flowObfuscator39);
 				if (this.archiveTitle != null) {
 					this.loadTitleBackground((byte) 5);
@@ -7538,8 +7538,8 @@ public final class Game extends GameShell {
 				this.loginMessage1 = "Connecting to server...";
 				this.drawTitleScreen(4);
 			}
-			this.connection = new Connection(this, (byte) 2, this.openSocket(portOffset + 43594));
-			this.connection.read(this.in.data, 0, 8);
+			this.stream = new ClientStream(this, (byte) 2, this.openSocket(portOffset + 43594));
+			this.stream.read(this.in.data, 0, 8);
 			this.in.pos = 0;
 			this.serverSeed = this.in.g8(603);
 			@Pc(47) int[] local47 = new int[] { (int) (Math.random() * 9.9999999E7D), (int) (Math.random() * 9.9999999E7D), (int) (this.serverSeed >> 32), (int) this.serverSeed };
@@ -7566,13 +7566,13 @@ public final class Game extends GameShell {
 				this.login.p4(this.archiveChecksum[local168]);
 			}
 			this.login.pdata(this.out.data, this.out.pos, 0, (byte) -106);
-			this.out.random = new IsaacRandom((byte) 1, local47);
+			this.out.random = new Isaac((byte) 1, local47);
 			for (@Pc(202) int local202 = 0; local202 < 4; local202++) {
 				local47[local202] += 50;
 			}
-			this.randomIn = new IsaacRandom((byte) 1, local47);
-			this.connection.writer(this.login.data, this.login.pos, true, 0);
-			@Pc(237) int local237 = this.connection.read();
+			this.randomIn = new Isaac((byte) 1, local47);
+			this.stream.writer(this.login.data, this.login.pos, true, 0);
+			@Pc(237) int local237 = this.stream.read();
 			if (local237 == 1) {
 				try {
 					Thread.sleep(2000L);
@@ -7640,7 +7640,7 @@ public final class Game extends GameShell {
 						}
 					}
 				}
-				this.spawnedLocations = new DoublyLinkedList(0);
+				this.spawnedLocations = new LinkList(0);
 				this.friendCount = 0;
 				this.stickyChatInterfaceId = -1;
 				this.chatInterfaceId = -1;
@@ -7828,7 +7828,7 @@ public final class Game extends GameShell {
 					if (arg7 < 3 && (this.levelTileFlags[1][arg1][arg2] & 0x2) == 2) {
 						local81 = arg7 + 1;
 					}
-					SceneBuilder.addLoc(arg1, this.locList, this.levelCollisionMap[arg7], arg2, arg0, this.levelHeightmap, 0, arg7, arg4, arg5, this.scene, local81);
+					World.addLoc(arg1, this.locList, this.levelCollisionMap[arg7], arg2, arg0, this.levelHeightmap, 0, arg7, arg4, arg5, this.scene, local81);
 					return;
 				}
 			}
@@ -7845,7 +7845,7 @@ public final class Game extends GameShell {
 				if (this.friendCount >= 100) {
 					this.addMessage(0, "Your friends list is full. Max of 100 hit", (byte) 4, "");
 				} else {
-					@Pc(23) String local23 = StringUtils.formatName(0, StringUtils.fromBase37(arg0, false));
+					@Pc(23) String local23 = JString.formatName(0, JString.fromBase37(arg0, false));
 					for (@Pc(25) int local25 = 0; local25 < this.friendCount; local25++) {
 						if (this.friendName37[local25] == arg0) {
 							this.addMessage(0, local23 + " is already on your friend list", (byte) 4, "");
@@ -7884,12 +7884,12 @@ public final class Game extends GameShell {
 		try {
 			signlink.reporterror = false;
 			try {
-				if (this.connection != null) {
-					this.connection.close();
+				if (this.stream != null) {
+					this.stream.close();
 				}
 			} catch (@Pc(11) Exception local11) {
 			}
-			this.connection = null;
+			this.stream = null;
 			this.stopMidi(0);
 			this.midiThreadActive = false;
 			this.out = null;
@@ -8005,7 +8005,7 @@ public final class Game extends GameShell {
 			super.drawArea = null;
 			PlayerEntity.modelCache = null;
 			Draw3D.unload(true);
-			Scene.unload(true);
+			World3D.unload(true);
 			Model.unload(true);
 			SeqBase.instances = null;
 			SeqFrame.instances = null;
@@ -8122,7 +8122,7 @@ public final class Game extends GameShell {
 						@Pc(55) boolean local55 = false;
 						try {
 							if (this.waveIds[local46] != this.lastWaveId || this.waveLoops[local46] != this.lastWaveLoops) {
-								@Pc(89) Buffer local89 = SoundTrack.generate((byte) -16, this.waveLoops[local46], this.waveIds[local46]);
+								@Pc(89) Packet local89 = Wave.generate((byte) -16, this.waveLoops[local46], this.waveIds[local46]);
 								if (System.currentTimeMillis() + (long) (local89.pos / 22) > this.lastWaveStartTime + (long) (this.lastWaveLength / 22)) {
 									this.lastWaveLength = local89.pos;
 									this.lastWaveStartTime = System.currentTimeMillis();
@@ -8162,7 +8162,7 @@ public final class Game extends GameShell {
 						this.setMidi(false, this.midiCrc, this.currentMidi, this.midiSize);
 					}
 				}
-				@Pc(250) Buffer local250 = InputTracking.flush(-809);
+				@Pc(250) Packet local250 = InputTracking.flush(-809);
 				if (local250 != null) {
 					this.out.p1isaac((byte) -34, 81);
 					this.out.p2(local250.pos);
@@ -8249,11 +8249,11 @@ public final class Game extends GameShell {
 					this.out.p1isaac((byte) -34, 215);
 					this.out.p3(4991788);
 				}
-				if (Scene.clickTileX != -1) {
-					local155 = Scene.clickTileX;
-					local508 = Scene.clickTileZ;
+				if (World3D.clickTileX != -1) {
+					local155 = World3D.clickTileX;
+					local508 = World3D.clickTileZ;
 					@Pc(653) boolean local653 = this.tryMove(this.localPlayer.pathTileX[0], 0, true, local155, this.localPlayer.pathTileZ[0], 0, 0, 0, local508, 0, 0, 0);
-					Scene.clickTileX = -1;
+					World3D.clickTileX = -1;
 					if (local653) {
 						this.crossX = super.mouseClickX;
 						this.crossY = super.mouseClickY;
@@ -8355,8 +8355,8 @@ public final class Game extends GameShell {
 					this.out.p1isaac((byte) -34, 108);
 				}
 				try {
-					if (this.connection != null && this.out.pos > 0) {
-						this.connection.writer(this.out.data, this.out.pos, true, 0);
+					if (this.stream != null && this.out.pos > 0) {
+						this.stream.writer(this.out.data, this.out.pos, true, 0);
 						this.out.pos = 0;
 						this.heartbeatTimer = 0;
 					}
@@ -8643,7 +8643,7 @@ public final class Game extends GameShell {
 	}
 
 	@OriginalMember(owner = "client!client", name = "b", descriptor = "(Lclient!kb;II)V")
-	private void readPlayerInfo(@OriginalArg(0) Buffer arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2) {
+	private void readPlayerInfo(@OriginalArg(0) Packet arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2) {
 		try {
 			this.entityRemovalCount = 0;
 			this.entityUpdateCount = 0;
@@ -9227,7 +9227,7 @@ public final class Game extends GameShell {
 	}
 
 	@OriginalMember(owner = "client!client", name = "b", descriptor = "(ILclient!kb;I)V")
-	private void readNpcs(@OriginalArg(0) int arg0, @OriginalArg(1) Buffer arg1, @OriginalArg(2) int arg2) {
+	private void readNpcs(@OriginalArg(0) int arg0, @OriginalArg(1) Packet arg1, @OriginalArg(2) int arg2) {
 		try {
 			if (arg0 < 0) {
 				arg1.accessBits(223);
@@ -9314,7 +9314,7 @@ public final class Game extends GameShell {
 				this.fontPlain12.drawStringCenter(158, (byte) 6, 16777215, "Please wait - attempting to reestablish", 256);
 				this.areaViewport.draw(11, super.graphics, 8, 5193);
 				this.flagSceneTileX = 0;
-				@Pc(60) Connection local60 = this.connection;
+				@Pc(60) ClientStream local60 = this.stream;
 				this.ingame = false;
 				this.login(this.username, this.password, true);
 				if (!this.ingame) {
@@ -9332,7 +9332,7 @@ public final class Game extends GameShell {
 	}
 
 	@OriginalMember(owner = "client!client", name = "a", descriptor = "(ILclient!ib;)V")
-	private void updateFlameBuffer(@OriginalArg(0) int arg0, @OriginalArg(1) Image8 arg1) {
+	private void updateFlameBuffer(@OriginalArg(0) int arg0, @OriginalArg(1) Pix8 arg1) {
 		try {
 			@Pc(3) short local3 = 256;
 			for (@Pc(5) int local5 = 0; local5 < this.flameBuffer0.length; local5++) {
@@ -9381,7 +9381,7 @@ public final class Game extends GameShell {
 
 	@OriginalMember(owner = "client!client", name = "j", descriptor = "(II)V")
 	private void sortObjStacks(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1) {
-		@Pc(9) DoublyLinkedList local9 = this.levelObjStacks[this.currentLevel][arg0][arg1];
+		@Pc(9) LinkList local9 = this.levelObjStacks[this.currentLevel][arg0][arg1];
 		if (local9 == null) {
 			this.scene.removeObjStack(this.currentLevel, arg0, arg1);
 			return;
@@ -9445,20 +9445,20 @@ public final class Game extends GameShell {
 					this.levelCollisionMap[local28].reset((byte) 74);
 				}
 				System.gc();
-				@Pc(53) SceneBuilder local53 = new SceneBuilder(104, this.levelTileFlags, 104, this.levelHeightmap, this.flowObfuscator35);
+				@Pc(53) World local53 = new World(104, this.levelTileFlags, 104, this.levelHeightmap, this.flowObfuscator35);
 				@Pc(56) byte[] local56 = new byte[100000];
 				@Pc(60) int local60 = this.sceneMapLandData.length;
-				SceneBuilder.lowMemory = Scene.lowMemory;
+				World.lowMemory = World3D.lowMemory;
 				@Pc(73) int local73;
 				@Pc(80) int local80;
 				for (@Pc(64) int local64 = 0; local64 < local60; local64++) {
 					local73 = this.sceneMapIndex[local64] >> 8;
 					local80 = this.sceneMapIndex[local64] & 0xFF;
 					if (local73 == 33 && local80 >= 71 && local80 <= 73) {
-						SceneBuilder.lowMemory = false;
+						World.lowMemory = false;
 					}
 				}
-				if (SceneBuilder.lowMemory) {
+				if (World.lowMemory) {
 					this.scene.setMinLevel(0, this.currentLevel);
 				} else {
 					this.scene.setMinLevel(0, 0);
@@ -9470,8 +9470,8 @@ public final class Game extends GameShell {
 					@Pc(143) int local143 = (this.sceneMapIndex[local73] & 0xFF) * 64 - this.sceneBaseTileZ;
 					@Pc(148) byte[] local148 = this.sceneMapLandData[local73];
 					if (local148 != null) {
-						local157 = (new Buffer(363, local148)).g4();
-						BZip2InputStream.read(local56, local157, local148, local148.length - 4, 4);
+						local157 = (new Packet(363, local148)).g4();
+						BZip2.read(local56, local157, local148, local148.length - 4, 4);
 						local53.readLandscape(local56, (this.sceneCenterZoneX - 6) * 8, 1, local143, local80, (this.sceneCenterZoneZ - 6) * 8);
 					} else if (this.sceneCenterZoneZ < 800) {
 						local53.clearLandscape(local80, local143, 3, 64, 64);
@@ -9482,8 +9482,8 @@ public final class Game extends GameShell {
 				for (local80 = 0; local80 < local60; local80++) {
 					@Pc(216) byte[] local216 = this.sceneMapLocData[local80];
 					if (local216 != null) {
-						local225 = (new Buffer(363, local216)).g4();
-						BZip2InputStream.read(local56, local225, local216, local216.length - 4, 4);
+						local225 = (new Packet(363, local216)).g4();
+						BZip2.read(local56, local225, local216, local216.length - 4, 4);
 						local157 = (this.sceneMapIndex[local80] >> 8) * 64 - this.sceneBaseTileX;
 						@Pc(259) int local259 = (this.sceneMapIndex[local80] & 0xFF) * 64 - this.sceneBaseTileZ;
 						local53.readLocs(local56, this.scene, this.levelCollisionMap, this.locList, true, local259, local157);
@@ -9739,7 +9739,7 @@ public final class Game extends GameShell {
 	private void loadTitleBackground(@OriginalArg(0) byte arg0) {
 		try {
 			@Pc(8) byte[] local8 = this.archiveTitle.read("title.dat", null, (byte) 2);
-			@Pc(14) Image24 local14 = new Image24(local8, this);
+			@Pc(14) Pix24 local14 = new Pix24(local8, this);
 			this.imageTitle0.bind((byte) 62);
 			local14.blitOpaque(34676, 0, 0);
 			this.imageTitle1.bind((byte) 62);
@@ -9788,7 +9788,7 @@ public final class Game extends GameShell {
 			local14.blitOpaque(34676, 212, -186);
 			this.imageTitle8.bind((byte) 62);
 			local14.blitOpaque(34676, -180, -186);
-			local14 = new Image24(this.archiveTitle, "logo", 0);
+			local14 = new Pix24(this.archiveTitle, "logo", 0);
 			this.imageTitle2.bind((byte) 62);
 			local14.draw(18, super.screenWidth / 2 - local14.width / 2 - 128, false);
 			local14 = null;
@@ -10032,7 +10032,7 @@ public final class Game extends GameShell {
 						this.addPlayerOptions(false, local68, local80, local446, local62);
 					}
 					if (local74 == 3) {
-						@Pc(565) DoublyLinkedList local565 = this.levelObjStacks[this.currentLevel][local62][local68];
+						@Pc(565) LinkList local565 = this.levelObjStacks[this.currentLevel][local62][local68];
 						if (local565 != null) {
 							for (@Pc(572) ObjEntity local572 = (ObjEntity) local565.peekBack((byte) 2); local572 != null; local572 = (ObjEntity) local565.next(false)) {
 								@Pc(578) ObjType local578 = ObjType.get(local572.index);
@@ -10165,7 +10165,7 @@ public final class Game extends GameShell {
 	}
 
 	@OriginalMember(owner = "client!client", name = "b", descriptor = "(IILclient!kb;)V")
-	private void readLocalPlayer(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(2) Buffer arg2) {
+	private void readLocalPlayer(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(2) Packet arg2) {
 		try {
 			arg2.accessBits(223);
 			@Pc(7) int local7 = arg2.gBit(9, 1);
@@ -10238,7 +10238,7 @@ public final class Game extends GameShell {
 			} else if (this.chatInterfaceId != -1) {
 				this.drawParentInterface(0, 0, 38682, IfType.instances[this.chatInterfaceId], 0);
 			} else if (this.stickyChatInterfaceId == -1) {
-				@Pc(135) BitmapFont local135 = this.fontPlain12;
+				@Pc(135) PixFont local135 = this.fontPlain12;
 				@Pc(137) int local137 = 0;
 				Draw2D.setBounds(77, 0, 463, 789, 0);
 				for (@Pc(145) int local145 = 0; local145 < 100; local145++) {
@@ -10305,7 +10305,7 @@ public final class Game extends GameShell {
 					this.chatScrollHeight = 78;
 				}
 				this.drawScrollbar(this.flowObfuscator10, 463, 0, this.chatScrollHeight - this.chatScrollOffset - 77, this.chatScrollHeight, 77);
-				local135.drawString(4, 90, false, 0, StringUtils.formatName(0, this.username) + ":");
+				local135.drawString(4, 90, false, 0, JString.formatName(0, this.username) + ":");
 				local135.drawString(local135.stringWidth(false, this.username + ": ") + 6, 90, false, 255, this.chatTyped + "*");
 				Draw2D.drawHorizontalLine(0, 0, 77, 479, 0);
 			} else {
@@ -10329,18 +10329,18 @@ public final class Game extends GameShell {
 			if (arg0) {
 				this.levelObjStacks = null;
 			}
-			if (this.connection == null) {
+			if (this.stream == null) {
 				return false;
 			}
 			@Pc(1264) String local1264;
 			@Pc(462) int local462;
 			try {
-				@Pc(15) int local15 = this.connection.available();
+				@Pc(15) int local15 = this.stream.available();
 				if (local15 == 0) {
 					return false;
 				}
 				if (this.packetType == -1) {
-					this.connection.read(this.in.data, 0, 1);
+					this.stream.read(this.in.data, 0, 1);
 					this.packetType = this.in.data[0] & 0xFF;
 					if (this.randomIn != null) {
 						this.packetType = this.packetType - this.randomIn.nextInt() & 0xFF;
@@ -10352,7 +10352,7 @@ public final class Game extends GameShell {
 					if (local15 <= 0) {
 						return false;
 					}
-					this.connection.read(this.in.data, 0, 1);
+					this.stream.read(this.in.data, 0, 1);
 					this.packetSize = this.in.data[0] & 0xFF;
 					local15--;
 				}
@@ -10360,7 +10360,7 @@ public final class Game extends GameShell {
 					if (local15 <= 1) {
 						return false;
 					}
-					this.connection.read(this.in.data, 0, 2);
+					this.stream.read(this.in.data, 0, 2);
 					this.in.pos = 0;
 					this.packetSize = this.in.g2();
 					local15 -= 2;
@@ -10369,7 +10369,7 @@ public final class Game extends GameShell {
 					return false;
 				}
 				this.in.pos = 0;
-				this.connection.read(this.in.data, 0, this.packetSize);
+				this.stream.read(this.in.data, 0, this.packetSize);
 				this.idleNetCycles = 0;
 				this.lastPacketType2 = this.lastPacketType1;
 				this.lastPacketType1 = this.lastPacketType0;
@@ -10398,7 +10398,7 @@ public final class Game extends GameShell {
 				if (this.packetType == 152) {
 					local207 = this.in.g8(603);
 					local211 = this.in.g1();
-					@Pc(217) String local217 = StringUtils.formatName(0, StringUtils.fromBase37(local207, false));
+					@Pc(217) String local217 = JString.formatName(0, JString.fromBase37(local207, false));
 					for (local219 = 0; local219 < this.friendCount; local219++) {
 						if (local207 == this.friendName37[local219]) {
 							if (this.friendWorld[local219] != local211) {
@@ -10788,7 +10788,7 @@ public final class Game extends GameShell {
 					return true;
 				}
 				if (this.packetType == 133) {
-					@Pc(1701) Buffer local1701 = InputTracking.stop(854);
+					@Pc(1701) Packet local1701 = InputTracking.stop(854);
 					if (local1701 != null) {
 						this.out.p1isaac((byte) -34, 81);
 						this.out.p2(local1701.pos);
@@ -10848,7 +10848,7 @@ public final class Game extends GameShell {
 					this.daysSinceRecoveriesChanged = this.in.g1();
 					this.unreadMessages = this.in.g2();
 					if (this.lastAddress != 0 && this.viewportInterfaceID == -1) {
-						signlink.dnslookup(StringUtils.formatIPv4(-946, this.lastAddress));
+						signlink.dnslookup(JString.formatIPv4(-946, this.lastAddress));
 						this.closeInterfaces((byte) -60);
 						@Pc(1915) short local1915 = 650;
 						if (this.daysSinceRecoveriesChanged != 201) {
@@ -10885,7 +10885,7 @@ public final class Game extends GameShell {
 						local462 = this.in.g4();
 						local211 = this.packetSize - 6;
 						@Pc(2018) byte[] local2018 = new byte[local462];
-						BZip2InputStream.read(local2018, local462, this.in.data, local211, this.in.pos);
+						BZip2.read(local2018, local462, this.in.data, local211, this.in.pos);
 						this.saveMidi(local2018, 625, local462, false);
 						this.nextMusicDelay = local159;
 					}
@@ -10904,7 +10904,7 @@ public final class Game extends GameShell {
 					if (this.waveEnabled && !lowMemory && this.waveCount < 50) {
 						this.waveIds[this.waveCount] = local159;
 						this.waveLoops[this.waveCount] = local462;
-						this.waveDelay[this.waveCount] = local211 + SoundTrack.delays[local159];
+						this.waveDelay[this.waveCount] = local211 + Wave.delays[local159];
 						this.waveCount++;
 					}
 					this.packetType = -1;
@@ -11069,12 +11069,12 @@ public final class Game extends GameShell {
 						try {
 							this.messageIds[this.privateMessageCount] = local211;
 							this.privateMessageCount = (this.privateMessageCount + 1) % 100;
-							@Pc(2721) String local2721 = ChatCompression.unpack(this.in, 118, this.packetSize - 13);
-							@Pc(2725) String local2725 = Censor.filter(local2721, 0);
+							@Pc(2721) String local2721 = WordPack.unpack(this.in, 118, this.packetSize - 13);
+							@Pc(2725) String local2725 = WordFilter.filter(local2721, 0);
 							if (local466 > 1) {
-								this.addMessage(7, local2725, (byte) 4, StringUtils.formatName(0, StringUtils.fromBase37(local207, false)));
+								this.addMessage(7, local2725, (byte) 4, JString.formatName(0, JString.fromBase37(local207, false)));
 							} else {
-								this.addMessage(3, local2725, (byte) 4, StringUtils.formatName(0, StringUtils.fromBase37(local207, false)));
+								this.addMessage(3, local2725, (byte) 4, JString.formatName(0, JString.fromBase37(local207, false)));
 							}
 						} catch (@Pc(2752) Exception local2752) {
 							signlink.reporterror("cde1");
@@ -11156,7 +11156,7 @@ public final class Game extends GameShell {
 					@Pc(3043) long local3043;
 					if (local1264.endsWith(":tradereq:")) {
 						local3040 = local1264.substring(0, local1264.indexOf(":"));
-						local3043 = StringUtils.toBase37(local3040);
+						local3043 = JString.toBase37(local3040);
 						local2652 = false;
 						for (local650 = 0; local650 < this.ignoreCount; local650++) {
 							if (this.ignoreName37[local650] == local3043) {
@@ -11169,7 +11169,7 @@ public final class Game extends GameShell {
 						}
 					} else if (local1264.endsWith(":duelreq:")) {
 						local3040 = local1264.substring(0, local1264.indexOf(":"));
-						local3043 = StringUtils.toBase37(local3040);
+						local3043 = JString.toBase37(local3040);
 						local2652 = false;
 						for (local650 = 0; local650 < this.ignoreCount; local650++) {
 							if (this.ignoreName37[local650] == local3043) {
@@ -11365,15 +11365,15 @@ public final class Game extends GameShell {
 					this.readPlayerInfo(this.in, this.packetSize, 822);
 					if (this.sceneState == 1) {
 						this.sceneState = 2;
-						SceneBuilder.levelBuilt = this.currentLevel;
+						World.levelBuilt = this.currentLevel;
 						this.buildScene(869);
 					}
-					if (lowMemory && this.sceneState == 2 && SceneBuilder.levelBuilt != this.currentLevel) {
+					if (lowMemory && this.sceneState == 2 && World.levelBuilt != this.currentLevel) {
 						this.areaViewport.bind((byte) 62);
 						this.fontPlain12.drawStringCenter(151, (byte) 6, 0, "Loading - please wait.", 257);
 						this.fontPlain12.drawStringCenter(150, (byte) 6, 16777215, "Loading - please wait.", 256);
 						this.areaViewport.draw(11, super.graphics, 8, 5193);
-						SceneBuilder.levelBuilt = this.currentLevel;
+						World.levelBuilt = this.currentLevel;
 						this.buildScene(869);
 					}
 					if (this.currentLevel != this.minimapLevel && this.sceneState == 2) {
@@ -11474,7 +11474,7 @@ public final class Game extends GameShell {
 	}
 
 	@OriginalMember(owner = "client!client", name = "a", descriptor = "(ZIILclient!kb;Lclient!z;)V")
-	private void readPlayerUpdates(@OriginalArg(0) boolean arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2, @OriginalArg(3) Buffer arg3, @OriginalArg(4) PlayerEntity arg4) {
+	private void readPlayerUpdates(@OriginalArg(0) boolean arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2, @OriginalArg(3) Packet arg3, @OriginalArg(4) PlayerEntity arg4) {
 		try {
 			if (!arg0) {
 				this.flowObfuscator14 = !this.flowObfuscator14;
@@ -11483,7 +11483,7 @@ public final class Game extends GameShell {
 			if ((arg2 & 0x1) == 1) {
 				local19 = arg3.g1();
 				@Pc(22) byte[] local22 = new byte[local19];
-				@Pc(28) Buffer local28 = new Buffer(363, local22);
+				@Pc(28) Packet local28 = new Packet(363, local22);
 				arg3.gdata(local19, -110, 0, local22);
 				this.playerAppearanceBuffer[arg1] = local28;
 				arg4.read(false, local28);
@@ -11536,7 +11536,7 @@ public final class Game extends GameShell {
 				@Pc(199) int local199 = arg3.g1();
 				@Pc(202) int local202 = arg3.pos;
 				if (arg4.name != null) {
-					@Pc(209) long local209 = StringUtils.toBase37(arg4.name);
+					@Pc(209) long local209 = JString.toBase37(arg4.name);
 					@Pc(211) boolean local211 = false;
 					if (local66 <= 1) {
 						for (@Pc(216) int local216 = 0; local216 < this.ignoreCount; local216++) {
@@ -11548,8 +11548,8 @@ public final class Game extends GameShell {
 					}
 					if (!local211 && this.overrideChat == 0) {
 						try {
-							@Pc(244) String local244 = ChatCompression.unpack(arg3, 118, local199);
-							@Pc(248) String local248 = Censor.filter(local244, 0);
+							@Pc(244) String local244 = WordPack.unpack(arg3, 118, local199);
+							@Pc(248) String local248 = WordFilter.filter(local244, 0);
 							arg4.chat = local248;
 							arg4.chatColor = local19 >> 8;
 							arg4.chatStyle = local19 & 0xFF;

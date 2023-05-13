@@ -53,13 +53,13 @@ public final class SpotAnimType {
 	public int contrast;
 
 	@OriginalMember(owner = "client!kc", name = "p", descriptor = "Lclient!s;")
-	public static Cache modelCache = new Cache((byte) 0, 30);
+	public static LruCache modelCache = new LruCache((byte) 0, 30);
 
 	@OriginalMember(owner = "client!kc", name = "a", descriptor = "(Lclient!ub;I)V")
-	public static void unpack(@OriginalArg(0) FileArchive arg0, @OriginalArg(1) int arg1) {
+	public static void unpack(@OriginalArg(0) Jagfile arg0, @OriginalArg(1) int arg1) {
 		try {
 			@Pc(3) int local3 = 91 / arg1;
-			@Pc(13) Buffer local13 = new Buffer(363, arg0.read("spotanim.dat", null, (byte) 2));
+			@Pc(13) Packet local13 = new Packet(363, arg0.read("spotanim.dat", null, (byte) 2));
 			count = local13.g2();
 			if (instances == null) {
 				instances = new SpotAnimType[count];
@@ -78,7 +78,7 @@ public final class SpotAnimType {
 	}
 
 	@OriginalMember(owner = "client!kc", name = "a", descriptor = "(ZLclient!kb;)V")
-	public void decode(@OriginalArg(0) boolean arg0, @OriginalArg(1) Buffer buf) {
+	public void decode(@OriginalArg(0) boolean arg0, @OriginalArg(1) Packet buf) {
 		try {
 			@Pc(5) int opcode;
 			if (arg0) {

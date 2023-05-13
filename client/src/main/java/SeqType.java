@@ -53,9 +53,9 @@ public final class SeqType {
 	public int replaycount = 99;
 
 	@OriginalMember(owner = "client!jc", name = "a", descriptor = "(Lclient!ub;I)V")
-	public static void unpack(@OriginalArg(0) FileArchive arg0, @OriginalArg(1) int arg1) {
+	public static void unpack(@OriginalArg(0) Jagfile arg0, @OriginalArg(1) int arg1) {
 		try {
-			@Pc(9) Buffer local9 = new Buffer(363, arg0.read("seq.dat", null, (byte) 2));
+			@Pc(9) Packet local9 = new Packet(363, arg0.read("seq.dat", null, (byte) 2));
 			if (arg1 <= 0) {
 				flowObfuscator1 = !flowObfuscator1;
 			}
@@ -76,7 +76,7 @@ public final class SeqType {
 	}
 
 	@OriginalMember(owner = "client!jc", name = "a", descriptor = "(ZLclient!kb;)V")
-	public void decode(@OriginalArg(0) boolean arg0, @OriginalArg(1) Buffer arg1) {
+	public void decode(@OriginalArg(0) boolean arg0, @OriginalArg(1) Packet arg1) {
 		try {
 			@Pc(5) int local5;
 			if (arg0) {

@@ -2,13 +2,13 @@ import org.openrs2.deob.annotation.OriginalClass;
 import org.openrs2.deob.annotation.OriginalMember;
 
 @OriginalClass("client!db")
-public class CacheableNode extends Node {
+public class Hashable extends Linkable {
 
 	@OriginalMember(owner = "client!db", name = "e", descriptor = "Lclient!db;")
-	public CacheableNode nextCacheable;
+	public Hashable nextCacheable;
 
 	@OriginalMember(owner = "client!db", name = "f", descriptor = "Lclient!db;")
-	public CacheableNode prevCacheable;
+	public Hashable prevCacheable;
 
 	@OriginalMember(owner = "client!db", name = "b", descriptor = "()V")
 	public final void uncache() {

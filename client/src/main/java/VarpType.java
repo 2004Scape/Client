@@ -53,9 +53,9 @@ public final class VarpType {
 	private boolean opcode8 = false;
 
 	@OriginalMember(owner = "client!lc", name = "a", descriptor = "(Lclient!ub;I)V")
-	public static void unpack(@OriginalArg(0) FileArchive arg0, @OriginalArg(1) int arg1) {
+	public static void unpack(@OriginalArg(0) Jagfile arg0, @OriginalArg(1) int arg1) {
 		try {
-			@Pc(9) Buffer local9 = new Buffer(363, arg0.read("varp.dat", null, (byte) 2));
+			@Pc(9) Packet local9 = new Packet(363, arg0.read("varp.dat", null, (byte) 2));
 			opcode3Count = 0;
 			@Pc(15) int local15 = 28 / arg1;
 			count = local9.g2();
@@ -78,7 +78,7 @@ public final class VarpType {
 	}
 
 	@OriginalMember(owner = "client!lc", name = "a", descriptor = "(IILclient!kb;)V")
-	public void decode(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(2) Buffer buf) {
+	public void decode(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(2) Packet buf) {
 		try {
 			if (arg0 == 13703) {
 				while (true) {

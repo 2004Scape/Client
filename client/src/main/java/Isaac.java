@@ -5,7 +5,7 @@ import org.openrs2.deob.annotation.Pc;
 import sign.signlink;
 
 @OriginalClass("client!tb")
-public final class IsaacRandom {
+public final class Isaac {
 
 	@OriginalMember(owner = "client!tb", name = "a", descriptor = "I")
 	private int count;
@@ -26,7 +26,7 @@ public final class IsaacRandom {
 	private int c;
 
 	@OriginalMember(owner = "client!tb", name = "<init>", descriptor = "(B[I)V")
-	public IsaacRandom(@OriginalArg(0) byte arg0, @OriginalArg(1) int[] arg1) {
+	public Isaac(@OriginalArg(0) byte arg0, @OriginalArg(1) int[] arg1) {
 		try {
 			this.mem = new int[256];
 			this.rsl = new int[256];

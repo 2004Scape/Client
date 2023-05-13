@@ -14,7 +14,7 @@ import org.openrs2.deob.annotation.Pc;
 import sign.signlink;
 
 @OriginalClass("client!qb")
-public final class DrawArea implements ImageProducer, ImageObserver {
+public final class PixMap implements ImageProducer, ImageObserver {
 
 	@OriginalMember(owner = "client!qb", name = "a", descriptor = "I")
 	private int flowObfuscator1 = 299;
@@ -38,7 +38,7 @@ public final class DrawArea implements ImageProducer, ImageObserver {
 	private final Image image;
 
 	@OriginalMember(owner = "client!qb", name = "<init>", descriptor = "(Ljava/awt/Component;III)V")
-	public DrawArea(@OriginalArg(0) Component arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2, @OriginalArg(3) int arg3) {
+	public PixMap(@OriginalArg(0) Component arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2, @OriginalArg(3) int arg3) {
 		try {
 			this.width = arg1;
 			this.height = arg3;

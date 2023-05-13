@@ -53,9 +53,9 @@ public final class FloType {
 	public int hsl;
 
 	@OriginalMember(owner = "client!fc", name = "a", descriptor = "(Lclient!ub;I)V")
-	public static void unpack(@OriginalArg(0) FileArchive arg0, @OriginalArg(1) int arg1) {
+	public static void unpack(@OriginalArg(0) Jagfile arg0, @OriginalArg(1) int arg1) {
 		try {
-			@Pc(9) Buffer local9 = new Buffer(363, arg0.read("flo.dat", null, (byte) 2));
+			@Pc(9) Packet local9 = new Packet(363, arg0.read("flo.dat", null, (byte) 2));
 			count = local9.g2();
 			@Pc(16) int local16 = 35 / arg1;
 			if (instances == null) {
@@ -74,7 +74,7 @@ public final class FloType {
 	}
 
 	@OriginalMember(owner = "client!fc", name = "a", descriptor = "(ZLclient!kb;)V")
-	public void decode(@OriginalArg(0) boolean arg0, @OriginalArg(1) Buffer buf) {
+	public void decode(@OriginalArg(0) boolean arg0, @OriginalArg(1) Packet buf) {
 		try {
 			if (arg0) {
 				throw new NullPointerException();

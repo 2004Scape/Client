@@ -5,7 +5,7 @@ import org.openrs2.deob.annotation.Pc;
 import sign.signlink;
 
 @OriginalClass("client!w")
-public class Entity extends Node {
+public class Entity extends Linkable {
 
 	@OriginalMember(owner = "client!w", name = "a", descriptor = "(Z)Lclient!eb;")
 	public Model draw(@OriginalArg(0) boolean arg0) {

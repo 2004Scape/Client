@@ -5,7 +5,7 @@ import org.openrs2.deob.annotation.Pc;
 import sign.signlink;
 
 @OriginalClass("client!ob")
-public final class DoublyLinkedList {
+public final class LinkList {
 
 	@OriginalMember(owner = "client!ob", name = "a", descriptor = "Z")
 	private boolean flowObfuscator1 = true;
@@ -20,13 +20,13 @@ public final class DoublyLinkedList {
 	private int flowObfuscator4 = -676;
 
 	@OriginalMember(owner = "client!ob", name = "e", descriptor = "Lclient!u;")
-	private final Node head = new Node();
+	private final Linkable head = new Linkable();
 
 	@OriginalMember(owner = "client!ob", name = "f", descriptor = "Lclient!u;")
-	private Node peeked;
+	private Linkable peeked;
 
 	@OriginalMember(owner = "client!ob", name = "<init>", descriptor = "(I)V")
-	public DoublyLinkedList(@OriginalArg(0) int arg0) {
+	public LinkList(@OriginalArg(0) int arg0) {
 		try {
 			if (arg0 != 0) {
 				this.flowObfuscator1 = !this.flowObfuscator1;
@@ -40,7 +40,7 @@ public final class DoublyLinkedList {
 	}
 
 	@OriginalMember(owner = "client!ob", name = "a", descriptor = "(Lclient!u;)V")
-	public void pushBack(@OriginalArg(0) Node arg0) {
+	public void pushBack(@OriginalArg(0) Linkable arg0) {
 		if (arg0.next != null) {
 			arg0.unlink();
 		}
@@ -51,7 +51,7 @@ public final class DoublyLinkedList {
 	}
 
 	@OriginalMember(owner = "client!ob", name = "a", descriptor = "(Lclient!u;I)V")
-	public void pushFront(@OriginalArg(0) Node arg0, @OriginalArg(1) int arg1) {
+	public void pushFront(@OriginalArg(0) Linkable arg0, @OriginalArg(1) int arg1) {
 		try {
 			if (arg0.next != null) {
 				arg0.unlink();
@@ -69,8 +69,8 @@ public final class DoublyLinkedList {
 	}
 
 	@OriginalMember(owner = "client!ob", name = "a", descriptor = "()Lclient!u;")
-	public Node pollFront() {
-		@Pc(3) Node local3 = this.head.prev;
+	public Linkable pollFront() {
+		@Pc(3) Linkable local3 = this.head.prev;
 		if (local3 == this.head) {
 			return null;
 		} else {
@@ -80,8 +80,8 @@ public final class DoublyLinkedList {
 	}
 
 	@OriginalMember(owner = "client!ob", name = "b", descriptor = "()Lclient!u;")
-	public Node peekFront() {
-		@Pc(3) Node local3 = this.head.prev;
+	public Linkable peekFront() {
+		@Pc(3) Linkable local3 = this.head.prev;
 		if (local3 == this.head) {
 			this.peeked = null;
 			return null;
@@ -92,9 +92,9 @@ public final class DoublyLinkedList {
 	}
 
 	@OriginalMember(owner = "client!ob", name = "a", descriptor = "(B)Lclient!u;")
-	public Node peekBack(@OriginalArg(0) byte arg0) {
+	public Linkable peekBack(@OriginalArg(0) byte arg0) {
 		try {
-			@Pc(3) Node local3 = this.head.next;
+			@Pc(3) Linkable local3 = this.head.next;
 			if (local3 == this.head) {
 				this.peeked = null;
 				return null;
@@ -111,12 +111,12 @@ public final class DoublyLinkedList {
 	}
 
 	@OriginalMember(owner = "client!ob", name = "a", descriptor = "(I)Lclient!u;")
-	public Node prev(@OriginalArg(0) int arg0) {
+	public Linkable prev(@OriginalArg(0) int arg0) {
 		try {
 			if (arg0 <= 0) {
 				throw new NullPointerException();
 			}
-			@Pc(8) Node local8 = this.peeked;
+			@Pc(8) Linkable local8 = this.peeked;
 			if (local8 == this.head) {
 				this.peeked = null;
 				return null;
@@ -131,9 +131,9 @@ public final class DoublyLinkedList {
 	}
 
 	@OriginalMember(owner = "client!ob", name = "a", descriptor = "(Z)Lclient!u;")
-	public Node next(@OriginalArg(0) boolean arg0) {
+	public Linkable next(@OriginalArg(0) boolean arg0) {
 		try {
-			@Pc(2) Node local2 = this.peeked;
+			@Pc(2) Linkable local2 = this.peeked;
 			if (arg0) {
 				for (@Pc(6) int local6 = 1; local6 > 0; local6++) {
 				}
@@ -154,7 +154,7 @@ public final class DoublyLinkedList {
 	@OriginalMember(owner = "client!ob", name = "c", descriptor = "()V")
 	public void clear() {
 		while (true) {
-			@Pc(3) Node local3 = this.head.prev;
+			@Pc(3) Linkable local3 = this.head.prev;
 			if (local3 == this.head) {
 				return;
 			}

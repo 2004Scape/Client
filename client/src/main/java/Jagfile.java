@@ -5,7 +5,7 @@ import org.openrs2.deob.annotation.Pc;
 import sign.signlink;
 
 @OriginalClass("client!ub")
-public final class FileArchive {
+public final class Jagfile {
 
 	@OriginalMember(owner = "client!ub", name = "a", descriptor = "Z")
 	private final boolean flowObfuscator1 = false;
@@ -41,7 +41,7 @@ public final class FileArchive {
 	private boolean unpacked;
 
 	@OriginalMember(owner = "client!ub", name = "<init>", descriptor = "([BZ)V")
-	public FileArchive(@OriginalArg(0) byte[] arg0, @OriginalArg(1) boolean arg1) {
+	public Jagfile(@OriginalArg(0) byte[] arg0, @OriginalArg(1) boolean arg1) {
 		try {
 			if (arg1) {
 				for (@Pc(17) int local17 = 1; local17 > 0; local17++) {
@@ -57,7 +57,7 @@ public final class FileArchive {
 	@OriginalMember(owner = "client!ub", name = "a", descriptor = "(Z[B)V")
 	private void load(@OriginalArg(0) boolean arg0, @OriginalArg(1) byte[] arg1) {
 		try {
-			@Pc(7) Buffer local7 = new Buffer(363, arg1);
+			@Pc(7) Packet local7 = new Packet(363, arg1);
 			@Pc(10) int local10 = local7.g3();
 			@Pc(13) int local13 = local7.g3();
 			if (local13 == local10) {
@@ -65,9 +65,9 @@ public final class FileArchive {
 				this.unpacked = false;
 			} else {
 				@Pc(19) byte[] local19 = new byte[local10];
-				BZip2InputStream.read(local19, local10, arg1, local13, 6);
+				BZip2.read(local19, local10, arg1, local13, 6);
 				this.buffer = local19;
-				local7 = new Buffer(363, this.buffer);
+				local7 = new Packet(363, this.buffer);
 				this.unpacked = true;
 			}
 			this.fileCount = local7.g2();
@@ -109,7 +109,7 @@ public final class FileArchive {
 							arg1[local67] = this.buffer[this.fileOffset[local27] + local67];
 						}
 					} else {
-						BZip2InputStream.read(arg1, this.fileSizeInflated[local27], this.buffer, this.fileSizeDeflated[local27], this.fileOffset[local27]);
+						BZip2.read(arg1, this.fileSizeInflated[local27], this.buffer, this.fileSizeDeflated[local27], this.fileOffset[local27]);
 					}
 					return arg1;
 				}

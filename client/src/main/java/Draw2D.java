@@ -5,7 +5,7 @@ import org.openrs2.deob.annotation.Pc;
 import sign.signlink;
 
 @OriginalClass("client!fb")
-public class Draw2D extends CacheableNode {
+public class Draw2D extends Hashable {
 
 	@OriginalMember(owner = "client!fb", name = "h", descriptor = "I")
 	private static int flowObfuscator1;

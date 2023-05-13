@@ -9,7 +9,7 @@ import org.openrs2.deob.annotation.Pc;
 import sign.signlink;
 
 @OriginalClass("client!d")
-public final class Connection implements Runnable {
+public final class ClientStream implements Runnable {
 
 	@OriginalMember(owner = "client!d", name = "a", descriptor = "Z")
 	private boolean flowObfuscator1 = false;
@@ -45,7 +45,7 @@ public final class Connection implements Runnable {
 	private boolean ioerror = false;
 
 	@OriginalMember(owner = "client!d", name = "<init>", descriptor = "(Lclient!a;BLjava/net/Socket;)V")
-	public Connection(@OriginalArg(0) GameShell arg0, @OriginalArg(1) byte arg1, @OriginalArg(2) Socket arg2) throws IOException {
+	public ClientStream(@OriginalArg(0) GameShell arg0, @OriginalArg(1) byte arg1, @OriginalArg(2) Socket arg2) throws IOException {
 		try {
 			if (arg1 == 2) {
 				@Pc(18) boolean local18 = false;

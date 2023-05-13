@@ -5,7 +5,7 @@ import org.openrs2.deob.annotation.Pc;
 import sign.signlink;
 
 @OriginalClass("client!nb")
-public final class LocEntity extends Node {
+public final class LocEntity extends Linkable {
 
 	@OriginalMember(owner = "client!nb", name = "e", descriptor = "I")
 	public int heightmapSW;

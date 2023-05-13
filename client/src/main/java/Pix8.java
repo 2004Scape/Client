@@ -5,7 +5,7 @@ import org.openrs2.deob.annotation.Pc;
 import sign.signlink;
 
 @OriginalClass("client!ib")
-public final class Image8 extends Draw2D {
+public final class Pix8 extends Draw2D {
 
 	@OriginalMember(owner = "client!ib", name = "v", descriptor = "Z")
 	private boolean flowObfuscator1 = false;
@@ -44,9 +44,9 @@ public final class Image8 extends Draw2D {
 	private int cropH;
 
 	@OriginalMember(owner = "client!ib", name = "<init>", descriptor = "(Lclient!ub;Ljava/lang/String;I)V")
-	public Image8(@OriginalArg(0) FileArchive arg0, @OriginalArg(1) String arg1, @OriginalArg(2) int arg2) {
-		@Pc(32) Buffer local32 = new Buffer(363, arg0.read(arg1 + ".dat", null, (byte) 2));
-		@Pc(42) Buffer local42 = new Buffer(363, arg0.read("index.dat", null, (byte) 2));
+	public Pix8(@OriginalArg(0) Jagfile arg0, @OriginalArg(1) String arg1, @OriginalArg(2) int arg2) {
+		@Pc(32) Packet local32 = new Packet(363, arg0.read(arg1 + ".dat", null, (byte) 2));
+		@Pc(42) Packet local42 = new Packet(363, arg0.read("index.dat", null, (byte) 2));
 		local42.pos = local32.g2();
 		this.cropW = local42.g2();
 		this.cropH = local42.g2();

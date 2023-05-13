@@ -6,7 +6,7 @@ import org.openrs2.deob.annotation.Pc;
 import sign.signlink;
 
 @OriginalClass("client!kb")
-public final class Buffer extends CacheableNode {
+public final class Packet extends Hashable {
 
 	@OriginalMember(owner = "client!kb", name = "h", descriptor = "I")
 	public static int flowObfuscator1 = 40946;
@@ -51,7 +51,7 @@ public final class Buffer extends CacheableNode {
 	public static final int[] BITMASK = new int[] { 0, 1, 3, 7, 15, 31, 63, 127, 255, 511, 1023, 2047, 4095, 8191, 16383, 32767, 65535, 131071, 262143, 524287, 1048575, 2097151, 4194303, 8388607, 16777215, 33554431, 67108863, 134217727, 268435455, 536870911, 1073741823, Integer.MAX_VALUE, -1 };
 
 	@OriginalMember(owner = "client!kb", name = "v", descriptor = "Lclient!tb;")
-	public IsaacRandom random;
+	public Isaac random;
 
 	@OriginalMember(owner = "client!kb", name = "w", descriptor = "I")
 	public static int cacheMinCount;
@@ -63,13 +63,13 @@ public final class Buffer extends CacheableNode {
 	public static int cacheMaxCount;
 
 	@OriginalMember(owner = "client!kb", name = "z", descriptor = "Lclient!ob;")
-	public static final DoublyLinkedList cacheMin = new DoublyLinkedList(0);
+	public static final LinkList cacheMin = new LinkList(0);
 
 	@OriginalMember(owner = "client!kb", name = "A", descriptor = "Lclient!ob;")
-	public static final DoublyLinkedList cacheMid = new DoublyLinkedList(0);
+	public static final LinkList cacheMid = new LinkList(0);
 
 	@OriginalMember(owner = "client!kb", name = "B", descriptor = "Lclient!ob;")
-	public static final DoublyLinkedList cacheMax = new DoublyLinkedList(0);
+	public static final LinkList cacheMax = new LinkList(0);
 
 	static {
 		for (@Pc(8) int local8 = 0; local8 < 256; local8++) {
@@ -86,7 +86,7 @@ public final class Buffer extends CacheableNode {
 	}
 
 	@OriginalMember(owner = "client!kb", name = "<init>", descriptor = "(I)V")
-	public Buffer(@OriginalArg(0) int arg0) {
+	public Packet(@OriginalArg(0) int arg0) {
 		try {
 			if (arg0 != 40946) {
 				flowObfuscator8 = !flowObfuscator8;
@@ -98,7 +98,7 @@ public final class Buffer extends CacheableNode {
 	}
 
 	@OriginalMember(owner = "client!kb", name = "<init>", descriptor = "(I[B)V")
-	public Buffer(@OriginalArg(0) int arg0, @OriginalArg(1) byte[] arg1) {
+	public Packet(@OriginalArg(0) int arg0, @OriginalArg(1) byte[] arg1) {
 		try {
 			this.data = arg1;
 			this.pos = 0;
@@ -110,20 +110,20 @@ public final class Buffer extends CacheableNode {
 	}
 
 	@OriginalMember(owner = "client!kb", name = "a", descriptor = "(II)Lclient!kb;")
-	public static Buffer alloc(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1) {
+	public static Packet alloc(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1) {
 		try {
-			@Pc(3) DoublyLinkedList local3 = cacheMid;
+			@Pc(3) LinkList local3 = cacheMid;
 			synchronized (cacheMid) {
-				@Pc(7) Buffer local7 = null;
+				@Pc(7) Packet local7 = null;
 				if (arg0 == 0 && cacheMinCount > 0) {
 					cacheMinCount--;
-					local7 = (Buffer) cacheMin.pollFront();
+					local7 = (Packet) cacheMin.pollFront();
 				} else if (arg0 == 1 && cacheMidCount > 0) {
 					cacheMidCount--;
-					local7 = (Buffer) cacheMid.pollFront();
+					local7 = (Packet) cacheMid.pollFront();
 				} else if (arg0 == 2 && cacheMaxCount > 0) {
 					cacheMaxCount--;
-					local7 = (Buffer) cacheMax.pollFront();
+					local7 = (Packet) cacheMax.pollFront();
 				}
 				if (local7 != null) {
 					local7.pos = 0;
@@ -133,7 +133,7 @@ public final class Buffer extends CacheableNode {
 			if (arg1 >= 0) {
 				flowObfuscator8 = !flowObfuscator8;
 			}
-			@Pc(77) Buffer local77 = new Buffer(flowObfuscator1);
+			@Pc(77) Packet local77 = new Packet(flowObfuscator1);
 			local77.pos = 0;
 			if (arg0 == 0) {
 				local77.data = new byte[100];
@@ -152,7 +152,7 @@ public final class Buffer extends CacheableNode {
 	@OriginalMember(owner = "client!kb", name = "a", descriptor = "(B)V")
 	public void release(@OriginalArg(0) byte arg0) {
 		try {
-			@Pc(1) DoublyLinkedList local1 = cacheMid;
+			@Pc(1) LinkList local1 = cacheMid;
 			synchronized (cacheMid) {
 				this.pos = 0;
 				if (this.data.length == 100 && cacheMinCount < 1000) {

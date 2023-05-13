@@ -26,7 +26,7 @@ public final class ObjType {
 	private static int[] offsets;
 
 	@OriginalMember(owner = "client!cc", name = "g", descriptor = "Lclient!kb;")
-	private static Buffer dat;
+	private static Packet dat;
 
 	@OriginalMember(owner = "client!cc", name = "h", descriptor = "[Lclient!cc;")
 	private static ObjType[] cache;
@@ -143,15 +143,15 @@ public final class ObjType {
 	public int certtemplate;
 
 	@OriginalMember(owner = "client!cc", name = "T", descriptor = "Lclient!s;")
-	public static Cache modelCache = new Cache((byte) 0, 50);
+	public static LruCache modelCache = new LruCache((byte) 0, 50);
 
 	@OriginalMember(owner = "client!cc", name = "U", descriptor = "Lclient!s;")
-	public static Cache iconCache = new Cache((byte) 0, 200);
+	public static LruCache iconCache = new LruCache((byte) 0, 200);
 
 	@OriginalMember(owner = "client!cc", name = "a", descriptor = "(Lclient!ub;)V")
-	public static void unpack(@OriginalArg(0) FileArchive arg0) {
-		dat = new Buffer(363, arg0.read("obj.dat", null, (byte) 2));
-		@Pc(21) Buffer local21 = new Buffer(363, arg0.read("obj.idx", null, (byte) 2));
+	public static void unpack(@OriginalArg(0) Jagfile arg0) {
+		dat = new Packet(363, arg0.read("obj.dat", null, (byte) 2));
+		@Pc(21) Packet local21 = new Packet(363, arg0.read("obj.idx", null, (byte) 2));
 		count = local21.g2();
 		offsets = new int[count];
 		@Pc(29) int local29 = 2;
@@ -208,9 +208,9 @@ public final class ObjType {
 	}
 
 	@OriginalMember(owner = "client!cc", name = "a", descriptor = "(III)Lclient!hb;")
-	public static Image24 getIcon(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2) {
+	public static Pix24 getIcon(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2) {
 		try {
-			@Pc(7) Image24 local7 = (Image24) iconCache.get((long) arg0);
+			@Pc(7) Pix24 local7 = (Pix24) iconCache.get((long) arg0);
 			if (local7 != null && local7.cropH != arg2 && local7.cropH != -1) {
 				local7.unlink();
 				local7 = null;
@@ -235,7 +235,7 @@ public final class ObjType {
 					local28 = get(local38);
 				}
 			}
-			local7 = new Image24(32, 32);
+			local7 = new Pix24(32, 32);
 			local38 = Draw3D.centerX;
 			local40 = Draw3D.centerY;
 			@Pc(80) int[] local80 = Draw3D.lineOffset;
@@ -280,7 +280,7 @@ public final class ObjType {
 				}
 			}
 			if (local28.certtemplate != -1) {
-				@Pc(348) Image24 local348 = getIcon(local28.certlink, 24638, 10);
+				@Pc(348) Pix24 local348 = getIcon(local28.certlink, 24638, 10);
 				@Pc(351) int local351 = local348.cropW;
 				@Pc(354) int local354 = local348.cropH;
 				local348.cropW = 32;
@@ -348,7 +348,7 @@ public final class ObjType {
 	}
 
 	@OriginalMember(owner = "client!cc", name = "a", descriptor = "(ZLclient!kb;)V")
-	public void decode(@OriginalArg(0) boolean arg0, @OriginalArg(1) Buffer buf) {
+	public void decode(@OriginalArg(0) boolean arg0, @OriginalArg(1) Packet buf) {
 		try {
 			if (arg0) {
 				throw new NullPointerException();

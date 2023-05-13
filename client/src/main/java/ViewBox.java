@@ -7,7 +7,7 @@ import org.openrs2.deob.annotation.Pc;
 import sign.signlink;
 
 @OriginalClass("client!b")
-public final class GameFrame extends Frame {
+public final class ViewBox extends Frame {
 
 	@OriginalMember(owner = "client!b", name = "a", descriptor = "I")
 	private int flowObfuscator1 = 8;
@@ -16,7 +16,7 @@ public final class GameFrame extends Frame {
 	private final GameShell shell;
 
 	@OriginalMember(owner = "client!b", name = "<init>", descriptor = "(IILclient!a;I)V")
-	public GameFrame(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(2) GameShell arg2, @OriginalArg(3) int arg3) {
+	public ViewBox(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(2) GameShell arg2, @OriginalArg(3) int arg3) {
 		try {
 			if (arg1 != 35731) {
 				this.flowObfuscator1 = -475;

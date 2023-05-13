@@ -17,7 +17,7 @@ public final class NpcType {
 	private static int[] offsets;
 
 	@OriginalMember(owner = "client!bc", name = "d", descriptor = "Lclient!kb;")
-	private static Buffer dat;
+	private static Packet dat;
 
 	@OriginalMember(owner = "client!bc", name = "e", descriptor = "[Lclient!bc;")
 	private static NpcType[] cache;
@@ -92,12 +92,12 @@ public final class NpcType {
 	private int resizez = 128;
 
 	@OriginalMember(owner = "client!bc", name = "C", descriptor = "Lclient!s;")
-	public static Cache modelCache = new Cache((byte) 0, 30);
+	public static LruCache modelCache = new LruCache((byte) 0, 30);
 
 	@OriginalMember(owner = "client!bc", name = "a", descriptor = "(Lclient!ub;)V")
-	public static void unpack(@OriginalArg(0) FileArchive arg0) {
-		dat = new Buffer(363, arg0.read("npc.dat", null, (byte) 2));
-		@Pc(21) Buffer local21 = new Buffer(363, arg0.read("npc.idx", null, (byte) 2));
+	public static void unpack(@OriginalArg(0) Jagfile arg0) {
+		dat = new Packet(363, arg0.read("npc.dat", null, (byte) 2));
+		@Pc(21) Packet local21 = new Packet(363, arg0.read("npc.idx", null, (byte) 2));
 		count = local21.g2();
 		offsets = new int[count];
 		@Pc(29) int local29 = 2;
@@ -144,7 +144,7 @@ public final class NpcType {
 	}
 
 	@OriginalMember(owner = "client!bc", name = "a", descriptor = "(ZLclient!kb;)V")
-	public void decode(@OriginalArg(0) boolean arg0, @OriginalArg(1) Buffer buf) {
+	public void decode(@OriginalArg(0) boolean arg0, @OriginalArg(1) Packet buf) {
 		try {
 			if (arg0) {
 				throw new NullPointerException();

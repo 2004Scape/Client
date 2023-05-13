@@ -5,7 +5,7 @@ import org.openrs2.deob.annotation.Pc;
 import sign.signlink;
 
 @OriginalClass("client!r")
-public final class Scene {
+public final class World3D {
 
 	@OriginalMember(owner = "client!r", name = "a", descriptor = "Z")
 	private boolean flowObfuscator1 = false;
@@ -152,7 +152,7 @@ public final class Scene {
 	public static final SceneOccluder[] activeOccluders = new SceneOccluder[500];
 
 	@OriginalMember(owner = "client!r", name = "W", descriptor = "Lclient!ob;")
-	public static DoublyLinkedList drawTileQueue = new DoublyLinkedList(0);
+	public static LinkList drawTileQueue = new LinkList(0);
 
 	@OriginalMember(owner = "client!r", name = "X", descriptor = "[I")
 	public static final int[] FRONT_WALL_TYPES = new int[] { 19, 55, 38, 155, 255, 110, 137, 205, 76 };
@@ -217,7 +217,7 @@ public final class Scene {
 	private static int viewportBottom;
 
 	@OriginalMember(owner = "client!r", name = "<init>", descriptor = "(I[[[IIII)V")
-	public Scene(@OriginalArg(0) int arg0, @OriginalArg(1) int[][][] arg1, @OriginalArg(2) int arg2, @OriginalArg(3) int arg3, @OriginalArg(4) int arg4) {
+	public World3D(@OriginalArg(0) int arg0, @OriginalArg(1) int[][][] arg1, @OriginalArg(2) int arg2, @OriginalArg(3) int arg3, @OriginalArg(4) int arg4) {
 		try {
 			this.maxLevel = arg3;
 			this.maxTileX = arg4;

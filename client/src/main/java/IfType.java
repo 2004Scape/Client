@@ -107,7 +107,7 @@ public final class IfType {
 	public int inventoryMarginY;
 
 	@OriginalMember(owner = "client!hc", name = "H", descriptor = "[Lclient!hb;")
-	public Image24[] inventorySlotImage;
+	public Pix24[] inventorySlotImage;
 
 	@OriginalMember(owner = "client!hc", name = "I", descriptor = "[I")
 	public int[] inventorySlotOffsetX;
@@ -128,7 +128,7 @@ public final class IfType {
 	public boolean shadow;
 
 	@OriginalMember(owner = "client!hc", name = "O", descriptor = "Lclient!jb;")
-	public BitmapFont font;
+	public PixFont font;
 
 	@OriginalMember(owner = "client!hc", name = "P", descriptor = "Ljava/lang/String;")
 	public String text;
@@ -146,10 +146,10 @@ public final class IfType {
 	public int hoverColor;
 
 	@OriginalMember(owner = "client!hc", name = "U", descriptor = "Lclient!hb;")
-	public Image24 image;
+	public Pix24 image;
 
 	@OriginalMember(owner = "client!hc", name = "V", descriptor = "Lclient!hb;")
-	public Image24 activeImage;
+	public Pix24 activeImage;
 
 	@OriginalMember(owner = "client!hc", name = "W", descriptor = "Lclient!eb;")
 	public Model model;
@@ -185,18 +185,18 @@ public final class IfType {
 	public String option;
 
 	@OriginalMember(owner = "client!hc", name = "hb", descriptor = "Lclient!s;")
-	private static Cache imageCache;
+	private static LruCache imageCache;
 
 	@OriginalMember(owner = "client!hc", name = "ib", descriptor = "Lclient!s;")
-	private static Cache modelCache;
+	private static LruCache modelCache;
 
 	@OriginalMember(owner = "client!hc", name = "a", descriptor = "(Lclient!ub;[Lclient!jb;ILclient!ub;)V")
-	public static void unpack(@OriginalArg(0) FileArchive arg0, @OriginalArg(1) BitmapFont[] arg1, @OriginalArg(2) int arg2, @OriginalArg(3) FileArchive arg3) {
+	public static void unpack(@OriginalArg(0) Jagfile arg0, @OriginalArg(1) PixFont[] arg1, @OriginalArg(2) int arg2, @OriginalArg(3) Jagfile arg3) {
 		try {
 			@Pc(5) int local5 = 17 / arg2;
-			imageCache = new Cache((byte) 0, 50000);
-			modelCache = new Cache((byte) 0, 50000);
-			@Pc(27) Buffer local27 = new Buffer(363, arg3.read("data", null, (byte) 2));
+			imageCache = new LruCache((byte) 0, 50000);
+			modelCache = new LruCache((byte) 0, 50000);
+			@Pc(27) Packet local27 = new Packet(363, arg3.read("data", null, (byte) 2));
 			@Pc(29) int local29 = -1;
 			@Pc(32) int local32 = local27.g2();
 			instances = new IfType[local32];
@@ -277,7 +277,7 @@ public final class IfType {
 						local62.inventoryMarginY = local27.g1();
 						local62.inventorySlotOffsetX = new int[20];
 						local62.inventorySlotOffsetY = new int[20];
-						local62.inventorySlotImage = new Image24[20];
+						local62.inventorySlotImage = new Pix24[20];
 						for (local155 = 0; local155 < 20; local155++) {
 							local160 = local27.g1();
 							if (local160 == 1) {
@@ -407,15 +407,15 @@ public final class IfType {
 	}
 
 	@OriginalMember(owner = "client!hc", name = "a", descriptor = "(Lclient!ub;ILjava/lang/String;I)Lclient!hb;")
-	private static Image24 getImage(@OriginalArg(0) FileArchive arg0, @OriginalArg(1) int arg1, @OriginalArg(2) String arg2, @OriginalArg(3) int arg3) {
+	private static Pix24 getImage(@OriginalArg(0) Jagfile arg0, @OriginalArg(1) int arg1, @OriginalArg(2) String arg2, @OriginalArg(3) int arg3) {
 		try {
-			@Pc(8) long local8 = (StringUtils.hashCode(0, arg2) << 8) + (long) arg1;
-			@Pc(13) Image24 local13 = (Image24) imageCache.get(local8);
+			@Pc(8) long local8 = (JString.hashCode(0, arg2) << 8) + (long) arg1;
+			@Pc(13) Pix24 local13 = (Pix24) imageCache.get(local8);
 			if (arg3 != -36068) {
 				throw new NullPointerException();
 			} else if (local13 == null) {
 				try {
-					local13 = new Image24(arg0, arg2, arg1);
+					local13 = new Pix24(arg0, arg2, arg1);
 					imageCache.put(6, local8, local13);
 					return local13;
 				} catch (@Pc(38) Exception local38) {

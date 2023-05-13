@@ -21,10 +21,10 @@ public final class InputTracking {
 	public static boolean enabled;
 
 	@OriginalMember(owner = "client!e", name = "f", descriptor = "Lclient!kb;")
-	private static Buffer outBuffer = null;
+	private static Packet outBuffer = null;
 
 	@OriginalMember(owner = "client!e", name = "g", descriptor = "Lclient!kb;")
-	private static Buffer oldBuffer = null;
+	private static Packet oldBuffer = null;
 
 	@OriginalMember(owner = "client!e", name = "h", descriptor = "J")
 	private static long lastTime;
@@ -44,7 +44,7 @@ public final class InputTracking {
 	@OriginalMember(owner = "client!e", name = "a", descriptor = "(I)V")
 	public static synchronized void setEnabled(@OriginalArg(0) int arg0) {
 		try {
-			outBuffer = Buffer.alloc(1, -737);
+			outBuffer = Packet.alloc(1, -737);
 			oldBuffer = null;
 			lastTime = System.currentTimeMillis();
 			if (arg0 != -31717) {
@@ -72,9 +72,9 @@ public final class InputTracking {
 	}
 
 	@OriginalMember(owner = "client!e", name = "b", descriptor = "(I)Lclient!kb;")
-	public static synchronized Buffer flush(@OriginalArg(0) int arg0) {
+	public static synchronized Packet flush(@OriginalArg(0) int arg0) {
 		try {
-			@Pc(1) Buffer local1 = null;
+			@Pc(1) Packet local1 = null;
 			if (oldBuffer != null && enabled) {
 				local1 = oldBuffer;
 			}
@@ -90,12 +90,12 @@ public final class InputTracking {
 	}
 
 	@OriginalMember(owner = "client!e", name = "c", descriptor = "(I)Lclient!kb;")
-	public static synchronized Buffer stop(@OriginalArg(0) int arg0) {
+	public static synchronized Packet stop(@OriginalArg(0) int arg0) {
 		try {
 			if (arg0 <= 0) {
 				flowObfuscator4 = !flowObfuscator4;
 			}
-			@Pc(9) Buffer local9 = null;
+			@Pc(9) Packet local9 = null;
 			if (outBuffer != null && outBuffer.pos > 0 && enabled) {
 				local9 = outBuffer;
 			}
@@ -114,8 +114,8 @@ public final class InputTracking {
 				flowObfuscator3 = !flowObfuscator3;
 			}
 			if (outBuffer.pos + arg1 >= 500) {
-				@Pc(15) Buffer local15 = outBuffer;
-				outBuffer = Buffer.alloc(1, -737);
+				@Pc(15) Packet local15 = outBuffer;
+				outBuffer = Packet.alloc(1, -737);
 				oldBuffer = local15;
 			}
 		} catch (@Pc(23) RuntimeException local23) {

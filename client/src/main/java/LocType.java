@@ -23,7 +23,7 @@ public final class LocType {
 	private static int[] offsets;
 
 	@OriginalMember(owner = "client!ac", name = "f", descriptor = "Lclient!kb;")
-	private static Buffer dat;
+	private static Packet dat;
 
 	@OriginalMember(owner = "client!ac", name = "g", descriptor = "[Lclient!ac;")
 	private static LocType[] cache;
@@ -131,15 +131,15 @@ public final class LocType {
 	public boolean forcedecor;
 
 	@OriginalMember(owner = "client!ac", name = "P", descriptor = "Lclient!s;")
-	public static Cache modelCacheStatic = new Cache((byte) 0, 500);
+	public static LruCache modelCacheStatic = new LruCache((byte) 0, 500);
 
 	@OriginalMember(owner = "client!ac", name = "Q", descriptor = "Lclient!s;")
-	public static Cache modelCacheDynamic = new Cache((byte) 0, 30);
+	public static LruCache modelCacheDynamic = new LruCache((byte) 0, 30);
 
 	@OriginalMember(owner = "client!ac", name = "a", descriptor = "(Lclient!ub;)V")
-	public static void unpack(@OriginalArg(0) FileArchive arg0) {
-		dat = new Buffer(363, arg0.read("loc.dat", null, (byte) 2));
-		@Pc(21) Buffer local21 = new Buffer(363, arg0.read("loc.idx", null, (byte) 2));
+	public static void unpack(@OriginalArg(0) Jagfile arg0) {
+		dat = new Packet(363, arg0.read("loc.dat", null, (byte) 2));
+		@Pc(21) Packet local21 = new Packet(363, arg0.read("loc.idx", null, (byte) 2));
 		count = local21.g2();
 		offsets = new int[count];
 		@Pc(29) int local29 = 2;
@@ -222,7 +222,7 @@ public final class LocType {
 	}
 
 	@OriginalMember(owner = "client!ac", name = "a", descriptor = "(ZLclient!kb;)V")
-	public void decode(@OriginalArg(0) boolean arg0, @OriginalArg(1) Buffer buf) {
+	public void decode(@OriginalArg(0) boolean arg0, @OriginalArg(1) Packet buf) {
 		try {
 			@Pc(5) int local5;
 			if (arg0) {

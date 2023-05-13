@@ -3,7 +3,7 @@ import org.openrs2.deob.annotation.OriginalClass;
 import org.openrs2.deob.annotation.OriginalMember;
 
 @OriginalClass("client!cb")
-public final class SceneTile extends Node {
+public final class SceneTile extends Linkable {
 
 	@OriginalMember(owner = "client!cb", name = "e", descriptor = "I")
 	public int level;

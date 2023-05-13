@@ -32,15 +32,15 @@ public final class SeqFrame {
 	public int[] z;
 
 	@OriginalMember(owner = "client!g", name = "a", descriptor = "(ZLclient!ub;)V")
-	public static void unpack(@OriginalArg(0) boolean arg0, @OriginalArg(1) FileArchive arg1) {
+	public static void unpack(@OriginalArg(0) boolean arg0, @OriginalArg(1) Jagfile arg1) {
 		try {
 			if (arg0) {
 				throw new NullPointerException();
 			}
-			@Pc(17) Buffer local17 = new Buffer(363, arg1.read("frame_head.dat", null, (byte) 2));
-			@Pc(27) Buffer local27 = new Buffer(363, arg1.read("frame_tran1.dat", null, (byte) 2));
-			@Pc(37) Buffer local37 = new Buffer(363, arg1.read("frame_tran2.dat", null, (byte) 2));
-			@Pc(47) Buffer local47 = new Buffer(363, arg1.read("frame_del.dat", null, (byte) 2));
+			@Pc(17) Packet local17 = new Packet(363, arg1.read("frame_head.dat", null, (byte) 2));
+			@Pc(27) Packet local27 = new Packet(363, arg1.read("frame_tran1.dat", null, (byte) 2));
+			@Pc(37) Packet local37 = new Packet(363, arg1.read("frame_tran2.dat", null, (byte) 2));
+			@Pc(47) Packet local47 = new Packet(363, arg1.read("frame_del.dat", null, (byte) 2));
 			@Pc(50) int local50 = local17.g2();
 			@Pc(53) int local53 = local17.g2();
 			instances = new SeqFrame[local53 + 1];

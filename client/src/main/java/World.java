@@ -5,7 +5,7 @@ import org.openrs2.deob.annotation.Pc;
 import sign.signlink;
 
 @OriginalClass("client!c")
-public final class SceneBuilder {
+public final class World {
 
 	@OriginalMember(owner = "client!c", name = "a", descriptor = "Z")
 	private static boolean flowObfuscator1 = true;
@@ -92,7 +92,7 @@ public final class SceneBuilder {
 	public static int randomLightnessOffset = (int) (Math.random() * 33.0D) - 16;
 
 	@OriginalMember(owner = "client!c", name = "<init>", descriptor = "(I[[[BI[[[II)V")
-	public SceneBuilder(@OriginalArg(0) int arg0, @OriginalArg(1) byte[][][] arg1, @OriginalArg(2) int arg2, @OriginalArg(3) int[][][] arg3, @OriginalArg(4) int arg4) {
+	public World(@OriginalArg(0) int arg0, @OriginalArg(1) byte[][][] arg1, @OriginalArg(2) int arg2, @OriginalArg(3) int[][][] arg3, @OriginalArg(4) int arg4) {
 		try {
 			this.maxTileX = arg2;
 			this.maxTileZ = arg0;
@@ -183,7 +183,7 @@ public final class SceneBuilder {
 	}
 
 	@OriginalMember(owner = "client!c", name = "a", descriptor = "(ILclient!ob;Lclient!ec;II[[[IIIIILclient!r;I)V")
-	public static void addLoc(@OriginalArg(0) int arg0, @OriginalArg(1) DoublyLinkedList arg1, @OriginalArg(2) CollisionMap arg2, @OriginalArg(3) int arg3, @OriginalArg(4) int arg4, @OriginalArg(5) int[][][] arg5, @OriginalArg(6) int arg6, @OriginalArg(7) int arg7, @OriginalArg(8) int arg8, @OriginalArg(9) int arg9, @OriginalArg(10) Scene arg10, @OriginalArg(11) int arg11) {
+	public static void addLoc(@OriginalArg(0) int arg0, @OriginalArg(1) LinkList arg1, @OriginalArg(2) CollisionMap arg2, @OriginalArg(3) int arg3, @OriginalArg(4) int arg4, @OriginalArg(5) int[][][] arg5, @OriginalArg(6) int arg6, @OriginalArg(7) int arg7, @OriginalArg(8) int arg8, @OriginalArg(9) int arg9, @OriginalArg(10) World3D arg10, @OriginalArg(11) int arg11) {
 		try {
 			if (arg6 != 0) {
 				flowObfuscator1 = !flowObfuscator1;
@@ -370,7 +370,7 @@ public final class SceneBuilder {
 	@OriginalMember(owner = "client!c", name = "a", descriptor = "([BIIIII)V")
 	public void readLandscape(@OriginalArg(0) byte[] arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2, @OriginalArg(3) int arg3, @OriginalArg(4) int arg4, @OriginalArg(5) int arg5) {
 		try {
-			@Pc(7) Buffer local7 = new Buffer(363, arg0);
+			@Pc(7) Packet local7 = new Packet(363, arg0);
 			if (arg2 != 1) {
 				this.flowObfuscator2 = !this.flowObfuscator2;
 			}
@@ -439,9 +439,9 @@ public final class SceneBuilder {
 	}
 
 	@OriginalMember(owner = "client!c", name = "a", descriptor = "([BLclient!r;[Lclient!ec;Lclient!ob;ZII)V")
-	public void readLocs(@OriginalArg(0) byte[] arg0, @OriginalArg(1) Scene arg1, @OriginalArg(2) CollisionMap[] arg2, @OriginalArg(3) DoublyLinkedList arg3, @OriginalArg(4) boolean arg4, @OriginalArg(5) int arg5, @OriginalArg(6) int arg6) {
+	public void readLocs(@OriginalArg(0) byte[] arg0, @OriginalArg(1) World3D arg1, @OriginalArg(2) CollisionMap[] arg2, @OriginalArg(3) LinkList arg3, @OriginalArg(4) boolean arg4, @OriginalArg(5) int arg5, @OriginalArg(6) int arg6) {
 		try {
-			@Pc(7) Buffer local7 = new Buffer(363, arg0);
+			@Pc(7) Packet local7 = new Packet(363, arg0);
 			if (!arg4) {
 				this.flowObfuscator2 = !this.flowObfuscator2;
 			}
@@ -487,7 +487,7 @@ public final class SceneBuilder {
 	}
 
 	@OriginalMember(owner = "client!c", name = "a", descriptor = "(Lclient!ec;ZIIIILclient!r;Lclient!ob;II)V")
-	private void addLoc(@OriginalArg(0) CollisionMap arg0, @OriginalArg(1) boolean arg1, @OriginalArg(2) int arg2, @OriginalArg(3) int arg3, @OriginalArg(4) int arg4, @OriginalArg(5) int arg5, @OriginalArg(6) Scene arg6, @OriginalArg(7) DoublyLinkedList arg7, @OriginalArg(8) int arg8, @OriginalArg(9) int arg9) {
+	private void addLoc(@OriginalArg(0) CollisionMap arg0, @OriginalArg(1) boolean arg1, @OriginalArg(2) int arg2, @OriginalArg(3) int arg3, @OriginalArg(4) int arg4, @OriginalArg(5) int arg5, @OriginalArg(6) World3D arg6, @OriginalArg(7) LinkList arg7, @OriginalArg(8) int arg8, @OriginalArg(9) int arg9) {
 		try {
 			if (arg1) {
 				if (lowMemory) {
@@ -740,7 +740,7 @@ public final class SceneBuilder {
 	}
 
 	@OriginalMember(owner = "client!c", name = "a", descriptor = "(Lclient!r;I[Lclient!ec;)V")
-	public void build(@OriginalArg(0) Scene arg0, @OriginalArg(1) int arg1, @OriginalArg(2) CollisionMap[] arg2) {
+	public void build(@OriginalArg(0) World3D arg0, @OriginalArg(1) int arg1, @OriginalArg(2) CollisionMap[] arg2) {
 		try {
 			@Pc(7) int local7;
 			@Pc(11) int local11;
@@ -1005,7 +1005,7 @@ public final class SceneBuilder {
 										local1284 = 240;
 										local214 = this.levelHeightmap[local191][local139][local141] - local1284;
 										local220 = this.levelHeightmap[local169][local139][local141];
-										Scene.addOccluder(local145 * 128 + 128, local139 * 128, -802, local220, 1, local139 * 128, local1127, local214, local141 * 128);
+										World3D.addOccluder(local145 * 128 + 128, local139 * 128, -802, local220, 1, local139 * 128, local1127, local214, local141 * 128);
 										for (local236 = local169; local236 <= local191; local236++) {
 											for (local284 = local141; local284 <= local145; local284++) {
 												this.levelOccludemap[local236][local139][local284] &= ~local27;
@@ -1045,7 +1045,7 @@ public final class SceneBuilder {
 										local1284 = 240;
 										local214 = this.levelHeightmap[local191][local141][local133] - local1284;
 										local220 = this.levelHeightmap[local169][local141][local133];
-										Scene.addOccluder(local133 * 128, local141 * 128, -802, local220, 2, local145 * 128 + 128, local1127, local214, local133 * 128);
+										World3D.addOccluder(local133 * 128, local141 * 128, -802, local220, 2, local145 * 128 + 128, local1127, local214, local133 * 128);
 										for (local236 = local169; local236 <= local191; local236++) {
 											for (local284 = local141; local284 <= local145; local284++) {
 												this.levelOccludemap[local236][local284][local133] &= ~local1123;
@@ -1082,7 +1082,7 @@ public final class SceneBuilder {
 									}
 									if ((local145 + 1 - local141) * (local191 + 1 - local169) >= 4) {
 										local204 = this.levelHeightmap[local1145][local141][local169];
-										Scene.addOccluder(local191 * 128 + 128, local141 * 128, -802, local204, 4, local145 * 128 + 128, local1127, local204, local169 * 128);
+										World3D.addOccluder(local191 * 128 + 128, local141 * 128, -802, local204, 4, local145 * 128 + 128, local1127, local204, local169 * 128);
 										for (local210 = local141; local210 <= local145; local210++) {
 											for (local214 = local169; local214 <= local191; local214++) {
 												this.levelOccludemap[local1145][local210][local214] &= ~local1125;

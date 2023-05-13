@@ -65,13 +65,13 @@ public class GameShell extends Applet implements Runnable, MouseListener, MouseM
 	protected Graphics graphics;
 
 	@OriginalMember(owner = "client!a", name = "o", descriptor = "Lclient!qb;")
-	protected DrawArea drawArea;
+	protected PixMap drawArea;
 
 	@OriginalMember(owner = "client!a", name = "p", descriptor = "[Lclient!hb;")
-	private final Image24[] aClass1_Sub3_Sub2_Sub2Array2 = new Image24[6];
+	private final Pix24[] aClass1_Sub3_Sub2_Sub2Array2 = new Pix24[6];
 
 	@OriginalMember(owner = "client!a", name = "q", descriptor = "Lclient!b;")
-	protected GameFrame frame;
+	protected ViewBox frame;
 
 	@OriginalMember(owner = "client!a", name = "r", descriptor = "Z")
 	private boolean refresh = true;
@@ -117,9 +117,9 @@ public class GameShell extends Applet implements Runnable, MouseListener, MouseM
 			}
 			this.screenWidth = arg1;
 			this.screenHeight = arg0;
-			this.frame = new GameFrame(this.screenHeight, 35731, this, this.screenWidth);
+			this.frame = new ViewBox(this.screenHeight, 35731, this, this.screenWidth);
 			this.graphics = this.getBaseComponent(this.flowObfuscator5).getGraphics();
-			this.drawArea = new DrawArea(this.getBaseComponent(this.flowObfuscator5), this.screenWidth, 299, this.screenHeight);
+			this.drawArea = new PixMap(this.getBaseComponent(this.flowObfuscator5), this.screenWidth, 299, this.screenHeight);
 			this.startThread(this, 1);
 		} catch (@Pc(48) RuntimeException local48) {
 			signlink.reporterror("32828, " + arg0 + ", " + arg1 + ", " + arg2 + ", " + local48.toString());
@@ -133,7 +133,7 @@ public class GameShell extends Applet implements Runnable, MouseListener, MouseM
 			this.screenWidth = arg2;
 			this.screenHeight = arg0;
 			this.graphics = this.getBaseComponent(this.flowObfuscator5).getGraphics();
-			this.drawArea = new DrawArea(this.getBaseComponent(this.flowObfuscator5), this.screenWidth, 299, this.screenHeight);
+			this.drawArea = new PixMap(this.getBaseComponent(this.flowObfuscator5), this.screenWidth, 299, this.screenHeight);
 			if (arg1) {
 				this.flowObfuscator3 = -370;
 			}

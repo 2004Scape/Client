@@ -3,7 +3,7 @@ import org.openrs2.deob.annotation.OriginalMember;
 import org.openrs2.deob.annotation.Pc;
 import sign.signlink;
 
-public final class ChatCompression {
+public final class WordPack {
 
 	@OriginalMember(owner = "client!wb", name = "a", descriptor = "[C")
 	private static final char[] charBuffer = new char[100];
@@ -12,7 +12,7 @@ public final class ChatCompression {
 	private static final char[] TABLE = new char[] { ' ', 'e', 't', 'a', 'o', 'i', 'h', 'n', 's', 'r', 'd', 'l', 'u', 'm', 'w', 'c', 'y', 'f', 'g', 'p', 'b', 'v', 'k', 'x', 'j', 'q', 'z', '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', ' ', '!', '?', '.', ',', ':', ';', '(', ')', '-', '&', '*', '\\', '\'', '@', '#', '+', '=', '£', '$', '%', '"', '[', ']' };
 
 	@OriginalMember(owner = "client!wb", name = "a", descriptor = "(Lclient!kb;II)Ljava/lang/String;")
-	public static String unpack(@OriginalArg(0) Buffer arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2) {
+	public static String unpack(@OriginalArg(0) Packet arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2) {
 		try {
 			@Pc(3) int local3 = 0;
 			@Pc(5) int local5 = -1;
@@ -58,7 +58,7 @@ public final class ChatCompression {
 	}
 
 	@OriginalMember(owner = "client!wb", name = "a", descriptor = "(Lclient!kb;ZLjava/lang/String;)V")
-	public static void pack(@OriginalArg(0) Buffer arg0, @OriginalArg(1) boolean arg1, @OriginalArg(2) String arg2) {
+	public static void pack(@OriginalArg(0) Packet arg0, @OriginalArg(1) boolean arg1, @OriginalArg(2) String arg2) {
 		try {
 			if (arg2.length() > 80) {
 				arg2 = arg2.substring(0, 80);

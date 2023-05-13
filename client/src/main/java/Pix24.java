@@ -10,7 +10,7 @@ import org.openrs2.deob.annotation.Pc;
 import sign.signlink;
 
 @OriginalClass("client!hb")
-public final class Image24 extends Draw2D {
+public final class Pix24 extends Draw2D {
 
 	@OriginalMember(owner = "client!hb", name = "v", descriptor = "Z")
 	private boolean flowObfuscator1 = false;
@@ -49,7 +49,7 @@ public final class Image24 extends Draw2D {
 	public int cropH;
 
 	@OriginalMember(owner = "client!hb", name = "<init>", descriptor = "(II)V")
-	public Image24(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1) {
+	public Pix24(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1) {
 		this.pixels = new int[arg0 * arg1];
 		this.width = this.cropW = arg0;
 		this.height = this.cropH = arg1;
@@ -57,7 +57,7 @@ public final class Image24 extends Draw2D {
 	}
 
 	@OriginalMember(owner = "client!hb", name = "<init>", descriptor = "([BLjava/awt/Component;)V")
-	public Image24(@OriginalArg(0) byte[] arg0, @OriginalArg(1) Component arg1) {
+	public Pix24(@OriginalArg(0) byte[] arg0, @OriginalArg(1) Component arg1) {
 		try {
 			@Pc(17) Image local17 = Toolkit.getDefaultToolkit().createImage(arg0);
 			@Pc(22) MediaTracker local22 = new MediaTracker(arg1);
@@ -78,9 +78,9 @@ public final class Image24 extends Draw2D {
 	}
 
 	@OriginalMember(owner = "client!hb", name = "<init>", descriptor = "(Lclient!ub;Ljava/lang/String;I)V")
-	public Image24(@OriginalArg(0) FileArchive arg0, @OriginalArg(1) String arg1, @OriginalArg(2) int arg2) {
-		@Pc(32) Buffer local32 = new Buffer(363, arg0.read(arg1 + ".dat", null, (byte) 2));
-		@Pc(42) Buffer local42 = new Buffer(363, arg0.read("index.dat", null, (byte) 2));
+	public Pix24(@OriginalArg(0) Jagfile arg0, @OriginalArg(1) String arg1, @OriginalArg(2) int arg2) {
+		@Pc(32) Packet local32 = new Packet(363, arg0.read(arg1 + ".dat", null, (byte) 2));
+		@Pc(42) Packet local42 = new Packet(363, arg0.read("index.dat", null, (byte) 2));
 		local42.pos = local32.g2();
 		this.cropW = local42.g2();
 		this.cropH = local42.g2();
@@ -555,7 +555,7 @@ public final class Image24 extends Draw2D {
 	}
 
 	@OriginalMember(owner = "client!hb", name = "a", descriptor = "(Lclient!ib;IIB)V")
-	public void drawMasked(@OriginalArg(0) Image8 arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2, @OriginalArg(3) byte arg3) {
+	public void drawMasked(@OriginalArg(0) Pix8 arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2, @OriginalArg(3) byte arg3) {
 		try {
 			arg2 += this.cropX;
 			arg1 += this.cropY;

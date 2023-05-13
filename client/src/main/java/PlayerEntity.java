@@ -80,10 +80,10 @@ public final class PlayerEntity extends PathingEntity {
 	public boolean lowMemory = false;
 
 	@OriginalMember(owner = "client!z", name = "Cb", descriptor = "Lclient!s;")
-	public static Cache modelCache = new Cache((byte) 0, 200);
+	public static LruCache modelCache = new LruCache((byte) 0, 200);
 
 	@OriginalMember(owner = "client!z", name = "a", descriptor = "(ZLclient!kb;)V")
-	public void read(@OriginalArg(0) boolean arg0, @OriginalArg(1) Buffer buf) {
+	public void read(@OriginalArg(0) boolean arg0, @OriginalArg(1) Packet buf) {
 		try {
 			buf.pos = 0;
 			this.gender = buf.g1();
@@ -135,7 +135,7 @@ public final class PlayerEntity extends PathingEntity {
 				if (super.seqRunId == 65535) {
 					super.seqRunId = -1;
 				}
-				this.name = StringUtils.formatName(0, StringUtils.fromBase37(buf.g8(603), false));
+				this.name = JString.formatName(0, JString.fromBase37(buf.g8(603), false));
 				this.combatLevel = buf.g1();
 				this.visible = true;
 				this.appearanceHashcode = 0L;
@@ -193,10 +193,10 @@ public final class PlayerEntity extends PathingEntity {
 				local10 = new Model(local119, (byte) -31, 2, true);
 			}
 			if (this.locModel != null) {
-				if (Game.loopCycle >= this.locStopCycle) {
+				if (client.loopCycle >= this.locStopCycle) {
 					this.locModel = null;
 				}
-				if (Game.loopCycle >= this.locStartCycle && Game.loopCycle < this.locStopCycle) {
+				if (client.loopCycle >= this.locStartCycle && client.loopCycle < this.locStopCycle) {
 					@Pc(148) Model local148 = this.locModel;
 					local148.translate(this.locOffsetY - this.y, this.locOffsetX - super.x, -122, this.locOffsetZ - super.z);
 					if (super.dstYaw == 512) {

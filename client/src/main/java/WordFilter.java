@@ -3,7 +3,7 @@ import org.openrs2.deob.annotation.OriginalMember;
 import org.openrs2.deob.annotation.Pc;
 import sign.signlink;
 
-public final class Censor {
+public final class WordFilter {
 
 	@OriginalMember(owner = "client!mc", name = "a", descriptor = "Z")
 	private static boolean flowObfuscator1;
@@ -54,16 +54,16 @@ public final class Censor {
 	private static final String[] ALLOWLIST = new String[] { "cook", "cook's", "cooks", "seeks", "sheet" };
 
 	@OriginalMember(owner = "client!mc", name = "a", descriptor = "(Lclient!ub;)V")
-	public static void unpack(@OriginalArg(0) FileArchive arg0) {
-		@Pc(11) Buffer local11 = new Buffer(363, arg0.read("fragmentsenc.txt", null, (byte) 2));
-		@Pc(21) Buffer local21 = new Buffer(363, arg0.read("badenc.txt", null, (byte) 2));
-		@Pc(31) Buffer local31 = new Buffer(363, arg0.read("domainenc.txt", null, (byte) 2));
-		@Pc(41) Buffer local41 = new Buffer(363, arg0.read("tldlist.txt", null, (byte) 2));
+	public static void unpack(@OriginalArg(0) Jagfile arg0) {
+		@Pc(11) Packet local11 = new Packet(363, arg0.read("fragmentsenc.txt", null, (byte) 2));
+		@Pc(21) Packet local21 = new Packet(363, arg0.read("badenc.txt", null, (byte) 2));
+		@Pc(31) Packet local31 = new Packet(363, arg0.read("domainenc.txt", null, (byte) 2));
+		@Pc(41) Packet local41 = new Packet(363, arg0.read("tldlist.txt", null, (byte) 2));
 		read(local11, local21, local31, local41);
 	}
 
 	@OriginalMember(owner = "client!mc", name = "a", descriptor = "(Lclient!kb;Lclient!kb;Lclient!kb;Lclient!kb;)V")
-	private static void read(@OriginalArg(0) Buffer arg0, @OriginalArg(1) Buffer arg1, @OriginalArg(2) Buffer arg2, @OriginalArg(3) Buffer arg3) {
+	private static void read(@OriginalArg(0) Packet arg0, @OriginalArg(1) Packet arg1, @OriginalArg(2) Packet arg2, @OriginalArg(3) Packet arg3) {
 		readBadWords(-33152, arg1);
 		readDomains(arg2, -717);
 		readFragments(24882, arg0);
@@ -71,7 +71,7 @@ public final class Censor {
 	}
 
 	@OriginalMember(owner = "client!mc", name = "a", descriptor = "(ZLclient!kb;)V")
-	private static void readTld(@OriginalArg(0) boolean arg0, @OriginalArg(1) Buffer arg1) {
+	private static void readTld(@OriginalArg(0) boolean arg0, @OriginalArg(1) Packet arg1) {
 		try {
 			@Pc(4) int local4 = arg1.g4();
 			tlds = new char[local4][];
@@ -93,7 +93,7 @@ public final class Censor {
 	}
 
 	@OriginalMember(owner = "client!mc", name = "a", descriptor = "(ILclient!kb;)V")
-	private static void readBadWords(@OriginalArg(0) int arg0, @OriginalArg(1) Buffer arg1) {
+	private static void readBadWords(@OriginalArg(0) int arg0, @OriginalArg(1) Packet arg1) {
 		try {
 			@Pc(2) int local2 = arg1.g4();
 			if (arg0 != -33152) {
@@ -110,7 +110,7 @@ public final class Censor {
 	}
 
 	@OriginalMember(owner = "client!mc", name = "a", descriptor = "(Lclient!kb;I)V")
-	private static void readDomains(@OriginalArg(0) Buffer arg0, @OriginalArg(1) int arg1) {
+	private static void readDomains(@OriginalArg(0) Packet arg0, @OriginalArg(1) int arg1) {
 		try {
 			@Pc(2) int local2 = arg0.g4();
 			if (arg1 < 0) {
@@ -124,7 +124,7 @@ public final class Censor {
 	}
 
 	@OriginalMember(owner = "client!mc", name = "b", descriptor = "(ILclient!kb;)V")
-	private static void readFragments(@OriginalArg(0) int arg0, @OriginalArg(1) Buffer arg1) {
+	private static void readFragments(@OriginalArg(0) int arg0, @OriginalArg(1) Packet arg1) {
 		try {
 			fragments = new int[arg1.g4()];
 			for (@Pc(5) int local5 = 0; local5 < fragments.length; local5++) {
@@ -140,7 +140,7 @@ public final class Censor {
 	}
 
 	@OriginalMember(owner = "client!mc", name = "a", descriptor = "([[[B[[CLclient!kb;B)V")
-	private static void readBadCombinations(@OriginalArg(0) byte[][][] arg0, @OriginalArg(1) char[][] arg1, @OriginalArg(2) Buffer arg2, @OriginalArg(3) byte arg3) {
+	private static void readBadCombinations(@OriginalArg(0) byte[][][] arg0, @OriginalArg(1) char[][] arg1, @OriginalArg(2) Packet arg2, @OriginalArg(3) byte arg3) {
 		try {
 			if (arg3 == 1) {
 				@Pc(6) boolean local6 = false;
@@ -167,7 +167,7 @@ public final class Censor {
 	}
 
 	@OriginalMember(owner = "client!mc", name = "a", descriptor = "(ILclient!kb;[[C)V")
-	private static void readDomain(@OriginalArg(0) int arg0, @OriginalArg(1) Buffer arg1, @OriginalArg(2) char[][] arg2) {
+	private static void readDomain(@OriginalArg(0) int arg0, @OriginalArg(1) Packet arg1, @OriginalArg(2) char[][] arg2) {
 		try {
 			label35: while (true) {
 				@Pc(5) int local5;

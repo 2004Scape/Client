@@ -2,7 +2,7 @@ import org.openrs2.deob.annotation.OriginalClass;
 import org.openrs2.deob.annotation.OriginalMember;
 
 @OriginalClass("client!lb")
-public final class SceneLocTemporary extends Node {
+public final class SceneLocTemporary extends Linkable {
 
 	@OriginalMember(owner = "client!lb", name = "e", descriptor = "I")
 	public int plane;

@@ -3,7 +3,7 @@ import org.openrs2.deob.annotation.OriginalMember;
 import org.openrs2.deob.annotation.Pc;
 import sign.signlink;
 
-public final class StringUtils {
+public final class JString {
 
 	@OriginalMember(owner = "client!vb", name = "a", descriptor = "Z")
 	private static boolean flowObfuscator1;
