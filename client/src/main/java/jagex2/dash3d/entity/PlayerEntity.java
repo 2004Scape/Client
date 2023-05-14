@@ -87,10 +87,12 @@ public final class PlayerEntity extends PathingEntity {
 	public static LruCache modelCache = new LruCache(200);
 
 	@OriginalMember(owner = "client!z", name = "a", descriptor = "(ZLclient!kb;)V")
-	public void read(@OriginalArg(0) boolean arg0, @OriginalArg(1) Packet buf) {
+	public void read(@OriginalArg(1) Packet buf) {
 		buf.pos = 0;
+
 		this.gender = buf.g1();
 		this.headicons = buf.g1();
+
 		@Pc(19) int local19;
 		@Pc(31) int local31;
 		for (@Pc(14) int local14 = 0; local14 < 12; local14++) {
@@ -102,6 +104,7 @@ public final class PlayerEntity extends PathingEntity {
 				this.appearances[local14] = (local19 << 8) + local31;
 			}
 		}
+
 		for (local19 = 0; local19 < 5; local19++) {
 			local31 = buf.g1();
 			if (local31 < 0 || local31 >= designPartColor[local19].length) {
@@ -109,58 +112,69 @@ public final class PlayerEntity extends PathingEntity {
 			}
 			this.colors[local19] = local31;
 		}
-		if (!arg0) {
-			super.seqStandId = buf.g2();
-			if (super.seqStandId == 65535) {
-				super.seqStandId = -1;
-			}
-			super.seqTurnId = buf.g2();
-			if (super.seqTurnId == 65535) {
-				super.seqTurnId = -1;
-			}
-			super.seqWalkId = buf.g2();
-			if (super.seqWalkId == 65535) {
-				super.seqWalkId = -1;
-			}
-			super.seqTurnAroundId = buf.g2();
-			if (super.seqTurnAroundId == 65535) {
-				super.seqTurnAroundId = -1;
-			}
-			super.seqTurnLeftId = buf.g2();
-			if (super.seqTurnLeftId == 65535) {
-				super.seqTurnLeftId = -1;
-			}
-			super.seqTurnRightId = buf.g2();
-			if (super.seqTurnRightId == 65535) {
-				super.seqTurnRightId = -1;
-			}
-			super.seqRunId = buf.g2();
-			if (super.seqRunId == 65535) {
-				super.seqRunId = -1;
-			}
-			this.name = JString.formatName(JString.fromBase37(buf.g8()));
-			this.combatLevel = buf.g1();
-			this.visible = true;
-			this.appearanceHashcode = 0L;
-			for (local31 = 0; local31 < 12; local31++) {
-				this.appearanceHashcode <<= 0x4;
-				if (this.appearances[local31] >= 256) {
-					this.appearanceHashcode += this.appearances[local31] - 256;
-				}
-			}
-			if (this.appearances[0] >= 256) {
-				this.appearanceHashcode += this.appearances[0] - 256 >> 4;
-			}
-			if (this.appearances[1] >= 256) {
-				this.appearanceHashcode += this.appearances[1] - 256 >> 8;
-			}
-			for (@Pc(243) int local243 = 0; local243 < 5; local243++) {
-				this.appearanceHashcode <<= 0x3;
-				this.appearanceHashcode += this.colors[local243];
-			}
-			this.appearanceHashcode <<= 0x1;
-			this.appearanceHashcode += this.gender;
+
+		super.seqStandId = buf.g2();
+		if (super.seqStandId == 65535) {
+			super.seqStandId = -1;
 		}
+
+		super.seqTurnId = buf.g2();
+		if (super.seqTurnId == 65535) {
+			super.seqTurnId = -1;
+		}
+
+		super.seqWalkId = buf.g2();
+		if (super.seqWalkId == 65535) {
+			super.seqWalkId = -1;
+		}
+
+		super.seqTurnAroundId = buf.g2();
+		if (super.seqTurnAroundId == 65535) {
+			super.seqTurnAroundId = -1;
+		}
+
+		super.seqTurnLeftId = buf.g2();
+		if (super.seqTurnLeftId == 65535) {
+			super.seqTurnLeftId = -1;
+		}
+
+		super.seqTurnRightId = buf.g2();
+		if (super.seqTurnRightId == 65535) {
+			super.seqTurnRightId = -1;
+		}
+
+		super.seqRunId = buf.g2();
+		if (super.seqRunId == 65535) {
+			super.seqRunId = -1;
+		}
+
+		this.name = JString.formatName(JString.fromBase37(buf.g8()));
+		this.combatLevel = buf.g1();
+
+		this.visible = true;
+		this.appearanceHashcode = 0L;
+		for (local31 = 0; local31 < 12; local31++) {
+			this.appearanceHashcode <<= 0x4;
+			if (this.appearances[local31] >= 256) {
+				this.appearanceHashcode += this.appearances[local31] - 256;
+			}
+		}
+
+		if (this.appearances[0] >= 256) {
+			this.appearanceHashcode += this.appearances[0] - 256 >> 4;
+		}
+
+		if (this.appearances[1] >= 256) {
+			this.appearanceHashcode += this.appearances[1] - 256 >> 8;
+		}
+
+		for (@Pc(243) int local243 = 0; local243 < 5; local243++) {
+			this.appearanceHashcode <<= 0x3;
+			this.appearanceHashcode += this.colors[local243];
+		}
+
+		this.appearanceHashcode <<= 0x1;
+		this.appearanceHashcode += this.gender;
 	}
 
 	@OriginalMember(owner = "client!z", name = "a", descriptor = "(Z)Lclient!eb;")
@@ -180,7 +194,7 @@ public final class PlayerEntity extends PathingEntity {
 			@Pc(51) Model local51 = new Model(local35.getModel(), true, !local35.disposeAlpha, false);
 			local51.translate(-super.spotanimOffset, 0, 0);
 			local51.createLabelReferences();
-			local51.applyTransform(local35.seq.primaryFrames[super.spotanimFrame]);
+			local51.applyTransform(local35.seq.frames[super.spotanimFrame]);
 			local51.labelFaces = null;
 			local51.labelVertices = null;
 			if (local35.resizeh != 128 || local35.resizev != 128) {
@@ -235,9 +249,9 @@ public final class PlayerEntity extends PathingEntity {
 		@Pc(12) int local12 = -1;
 		if (super.primarySeqId >= 0 && super.primarySeqDelay == 0) {
 			@Pc(23) SeqType local23 = SeqType.instances[super.primarySeqId];
-			local6 = local23.primaryFrames[super.primarySeqFrame];
+			local6 = local23.frames[super.primarySeqFrame];
 			if (super.secondarySeqId >= 0 && super.secondarySeqId != super.seqStandId) {
-				local8 = SeqType.instances[super.secondarySeqId].primaryFrames[super.secondarySeqFrame];
+				local8 = SeqType.instances[super.secondarySeqId].frames[super.secondarySeqFrame];
 			}
 			if (local23.mainhand >= 0) {
 				local10 = local23.mainhand;
@@ -248,7 +262,7 @@ public final class PlayerEntity extends PathingEntity {
 				local4 += (long) local12 - this.appearances[3] << 16;
 			}
 		} else if (super.secondarySeqId >= 0) {
-			local6 = SeqType.instances[super.secondarySeqId].primaryFrames[super.secondarySeqFrame];
+			local6 = SeqType.instances[super.secondarySeqId].frames[super.secondarySeqFrame];
 		}
 		@Pc(101) Model local101 = (Model) modelCache.get(local4);
 		if (local101 == null) {
@@ -292,7 +306,7 @@ public final class PlayerEntity extends PathingEntity {
 		}
 		@Pc(249) Model local249 = new Model(local101, true);
 		if (local6 != -1 && local8 != -1) {
-			local249.applyTransforms(local8, local6, SeqType.instances[super.primarySeqId].mask);
+			local249.applyTransforms(local8, local6, SeqType.instances[super.primarySeqId].labelGroups);
 		} else if (local6 != -1) {
 			local249.applyTransform(local6);
 		}

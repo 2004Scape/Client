@@ -170,6 +170,7 @@ public class PathingEntity extends Entity {
 		if (this.primarySeqId != -1 && SeqType.instances[this.primarySeqId].priority <= 1) {
 			this.primarySeqId = -1;
 		}
+
 		if (!arg1) {
 			@Pc(22) int local22 = arg2 - this.pathTileX[0];
 			@Pc(29) int local29 = arg3 - this.pathTileZ[0];
@@ -177,17 +178,20 @@ public class PathingEntity extends Entity {
 				if (this.pathLength < 9) {
 					this.pathLength++;
 				}
+
 				for (@Pc(54) int local54 = this.pathLength; local54 > 0; local54--) {
 					this.pathTileX[local54] = this.pathTileX[local54 - 1];
 					this.pathTileZ[local54] = this.pathTileZ[local54 - 1];
 					this.pathRunning[local54] = this.pathRunning[local54 - 1];
 				}
+
 				this.pathTileX[0] = arg2;
 				this.pathTileZ[0] = arg3;
 				this.pathRunning[0] = false;
 				return;
 			}
 		}
+
 		this.pathLength = 0;
 		this.seqPathLength = 0;
 		this.pathTileX[0] = arg2;
@@ -200,45 +204,43 @@ public class PathingEntity extends Entity {
 	public final void step(@OriginalArg(0) boolean arg0, @OriginalArg(1) int arg1) {
 		@Pc(6) int local6 = this.pathTileX[0];
 		@Pc(11) int local11 = this.pathTileZ[0];
+
 		if (arg1 == 0) {
 			local6--;
 			local11++;
-		}
-		if (arg1 == 1) {
+		} else if (arg1 == 1) {
 			local11++;
-		}
-		if (arg1 == 2) {
+		} else if (arg1 == 2) {
 			local6++;
 			local11++;
-		}
-		if (arg1 == 3) {
+		} else if (arg1 == 3) {
 			local6--;
-		}
-		if (arg1 == 4) {
+		} else if (arg1 == 4) {
 			local6++;
-		}
-		if (arg1 == 5) {
+		} else if (arg1 == 5) {
 			local6--;
 			local11--;
-		}
-		if (arg1 == 6) {
+		} else if (arg1 == 6) {
 			local11--;
-		}
-		if (arg1 == 7) {
+		} else if (arg1 == 7) {
 			local6++;
 			local11--;
 		}
+
 		if (this.primarySeqId != -1 && SeqType.instances[this.primarySeqId].priority <= 1) {
 			this.primarySeqId = -1;
 		}
+
 		if (this.pathLength < 9) {
 			this.pathLength++;
 		}
+
 		for (@Pc(83) int local83 = this.pathLength; local83 > 0; local83--) {
 			this.pathTileX[local83] = this.pathTileX[local83 - 1];
 			this.pathTileZ[local83] = this.pathTileZ[local83 - 1];
 			this.pathRunning[local83] = this.pathRunning[local83 - 1];
 		}
+
 		this.pathTileX[0] = local6;
 		this.pathTileZ[0] = local11;
 		this.pathRunning[0] = arg0;

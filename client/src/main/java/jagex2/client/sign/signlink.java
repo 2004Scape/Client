@@ -111,234 +111,258 @@ public final class signlink implements Runnable {
 	public static String errorname = "";
 
 	@OriginalMember(owner = "client!sign/signlink", name = "startpriv", descriptor = "(Ljava/net/InetAddress;)V")
-	public static void startpriv(@OriginalArg(0) InetAddress arg0) {
+	public static void startpriv(@OriginalArg(0) InetAddress address) {
 		threadliveid = (int) (Math.random() * 9.9999999E7D);
+
 		if (active) {
 			try {
 				Thread.sleep(500L);
-			} catch (@Pc(10) Exception local10) {
+			} catch (@Pc(10) Exception ignored) {
 			}
 			active = false;
 		}
+
 		socketreq = 0;
 		threadreq = null;
 		dnsreq = null;
 		loadreq = null;
 		savereq = null;
 		urlreq = null;
-		socketip = arg0;
-		@Pc(33) Thread local33 = new Thread(new signlink());
-		local33.setDaemon(true);
-		local33.start();
+		socketip = address;
+
+		@Pc(33) Thread thread = new Thread(new signlink());
+		thread.setDaemon(true);
+		thread.start();
+
 		while (!active) {
 			try {
 				Thread.sleep(50L);
-			} catch (@Pc(43) Exception local43) {
+			} catch (@Pc(43) Exception ignored) {
 			}
 		}
 	}
 
 	@OriginalMember(owner = "client!sign/signlink", name = "findcachedir", descriptor = "()Ljava/lang/String;")
 	public static String findcachedir() {
-		@Pc(50) String[] local50 = new String[] { "c:/windows/", "c:/winnt/", "d:/windows/", "d:/winnt/", "e:/windows/", "e:/winnt/", "f:/windows/", "f:/winnt/", "c:/", "~/", "/tmp/", "" };
-		@Pc(52) String local52 = ".file_store_32";
-		for (@Pc(54) int local54 = 0; local54 < local50.length; local54++) {
+		@Pc(50) String[] paths = new String[] { "c:/windows/", "c:/winnt/", "d:/windows/", "d:/winnt/", "e:/windows/", "e:/winnt/", "f:/windows/", "f:/winnt/", "c:/", "~/", "/tmp/", "" };
+		@Pc(52) String dir = ".file_store_32";
+
+		for (@Pc(54) int i = 0; i < paths.length; i++) {
 			try {
-				@Pc(59) String local59 = local50[local54];
-				@Pc(67) File local67;
-				if (local59.length() > 0) {
-					local67 = new File(local59);
-					if (!local67.exists()) {
+				@Pc(59) String path = paths[i];
+				@Pc(67) File file;
+
+				if (path.length() > 0) {
+					file = new File(path);
+					if (!file.exists()) {
 						continue;
 					}
 				}
-				local67 = new File(local59 + local52);
-				if (local67.exists() || local67.mkdir()) {
-					return local59 + local52 + "/";
+
+				file = new File(path + dir);
+				if (file.exists() || file.mkdir()) {
+					return path + dir + "/";
 				}
-			} catch (@Pc(102) Exception local102) {
+			} catch (@Pc(102) Exception ignored) {
 			}
 		}
+
 		return null;
 	}
 
 	@OriginalMember(owner = "client!sign/signlink", name = "getuid", descriptor = "(Ljava/lang/String;)I")
-	public static int getuid(@OriginalArg(0) String arg0) {
+	public static int getuid(@OriginalArg(0) String cacheDir) {
 		try {
-			@Pc(11) File local11 = new File(arg0 + "uid.dat");
-			if (!local11.exists() || local11.length() < 4L) {
-				@Pc(34) DataOutputStream local34 = new DataOutputStream(new FileOutputStream(arg0 + "uid.dat"));
-				local34.writeInt((int) (Math.random() * 9.9999999E7D));
-				local34.close();
+			@Pc(11) File uid = new File(cacheDir + "uid.dat");
+			if (!uid.exists() || uid.length() < 4L) {
+				@Pc(34) DataOutputStream stream = new DataOutputStream(new FileOutputStream(cacheDir + "uid.dat"));
+				stream.writeInt((int) (Math.random() * 9.9999999E7D));
+				stream.close();
 			}
-		} catch (@Pc(44) Exception local44) {
+		} catch (@Pc(44) Exception ignored) {
 		}
+
 		try {
-			@Pc(59) DataInputStream local59 = new DataInputStream(new FileInputStream(arg0 + "uid.dat"));
-			@Pc(62) int local62 = local59.readInt();
-			local59.close();
-			return local62 + 1;
-		} catch (@Pc(69) Exception local69) {
+			@Pc(59) DataInputStream stream = new DataInputStream(new FileInputStream(cacheDir + "uid.dat"));
+			@Pc(62) int uid = stream.readInt();
+			stream.close();
+			return uid + 1;
+		} catch (@Pc(69) Exception ignored) {
 			return 0;
 		}
 	}
 
 	@OriginalMember(owner = "client!sign/signlink", name = "gethash", descriptor = "(Ljava/lang/String;)J")
-	public static long gethash(@OriginalArg(0) String arg0) {
-		@Pc(2) String local2 = arg0.trim();
-		@Pc(4) long local4 = 0L;
-		for (@Pc(6) int local6 = 0; local6 < local2.length() && local6 < 12; local6++) {
-			@Pc(11) char local11 = local2.charAt(local6);
-			local4 *= 37L;
-			if (local11 >= 'A' && local11 <= 'Z') {
-				local4 += local11 + 1 - 65;
-			} else if (local11 >= 'a' && local11 <= 'z') {
-				local4 += local11 + 1 - 97;
-			} else if (local11 >= '0' && local11 <= '9') {
-				local4 += local11 + 27 - 48;
+	public static long gethash(@OriginalArg(0) String str) {
+		@Pc(2) String trimmed = str.trim();
+		@Pc(4) long hash = 0L;
+
+		for (@Pc(6) int i = 0; i < trimmed.length() && i < 12; i++) {
+			@Pc(11) char c = trimmed.charAt(i);
+			hash *= 37L;
+
+			if (c >= 'A' && c <= 'Z') {
+				hash += c + 1 - 65;
+			} else if (c >= 'a' && c <= 'z') {
+				hash += c + 1 - 97;
+			} else if (c >= '0' && c <= '9') {
+				hash += c + 27 - 48;
 			}
 		}
-		return local4;
+
+		return hash;
 	}
 
 	@OriginalMember(owner = "client!sign/signlink", name = "looprate", descriptor = "(I)V")
-	public static void looprate(@OriginalArg(0) int arg0) {
-		looprate = arg0;
+	public static void looprate(@OriginalArg(0) int rate) {
+		looprate = rate;
 	}
 
 	@OriginalMember(owner = "client!sign/signlink", name = "cacheload", descriptor = "(Ljava/lang/String;)[B")
-	public static synchronized byte[] cacheload(@OriginalArg(0) String arg0) {
+	public static synchronized byte[] cacheload(@OriginalArg(0) String name) {
 		if (!active) {
 			return null;
 		}
-		loadreq = String.valueOf(gethash(arg0));
+
+		loadreq = String.valueOf(gethash(name));
 		while (loadreq != null) {
 			try {
 				Thread.sleep(1L);
-			} catch (@Pc(12) Exception local12) {
+			} catch (@Pc(12) Exception ignored) {
 			}
 		}
+
 		return loadbuf;
 	}
 
 	@OriginalMember(owner = "client!sign/signlink", name = "cachesave", descriptor = "(Ljava/lang/String;[B)V")
-	public static synchronized void cachesave(@OriginalArg(0) String arg0, @OriginalArg(1) byte[] arg1) {
-		if (!active || arg1.length > 2000000) {
+	public static synchronized void cachesave(@OriginalArg(0) String name, @OriginalArg(1) byte[] src) {
+		if (!active || src.length > 2000000) {
 			return;
 		}
+
 		while (savereq != null) {
 			try {
 				Thread.sleep(1L);
-			} catch (@Pc(11) Exception local11) {
+			} catch (@Pc(11) Exception ignored) {
 			}
 		}
-		savelen = arg1.length;
-		savebuf = arg1;
-		savereq = String.valueOf(gethash(arg0));
+
+		savelen = src.length;
+		savebuf = src;
+		savereq = String.valueOf(gethash(name));
+
 		while (savereq != null) {
 			try {
 				Thread.sleep(1L);
-			} catch (@Pc(28) Exception local28) {
+			} catch (@Pc(28) Exception ignored) {
 			}
 		}
 	}
 
 	@OriginalMember(owner = "client!sign/signlink", name = "opensocket", descriptor = "(I)Ljava/net/Socket;")
-	public static synchronized Socket opensocket(@OriginalArg(0) int arg0) throws IOException {
-		socketreq = arg0;
+	public static synchronized Socket opensocket(@OriginalArg(0) int port) throws IOException {
+		socketreq = port;
+
 		while (socketreq != 0) {
 			try {
 				Thread.sleep(50L);
-			} catch (@Pc(6) Exception local6) {
+			} catch (@Pc(6) Exception ignored) {
 			}
 		}
+
 		if (socket == null) {
 			throw new IOException("could not open socket");
 		}
+
 		return socket;
 	}
 
 	@OriginalMember(owner = "client!sign/signlink", name = "openurl", descriptor = "(Ljava/lang/String;)Ljava/io/DataInputStream;")
-	public static synchronized DataInputStream openurl(@OriginalArg(0) String arg0) throws IOException {
-		urlreq = arg0;
+	public static synchronized DataInputStream openurl(@OriginalArg(0) String url) throws IOException {
+		urlreq = url;
+
 		while (urlreq != null) {
 			try {
 				Thread.sleep(50L);
-			} catch (@Pc(6) Exception local6) {
+			} catch (@Pc(6) Exception ignored) {
 			}
 		}
+
 		if (urlstream == null) {
-			throw new IOException("could not open: " + arg0);
+			throw new IOException("could not open: " + url);
 		}
+
 		return urlstream;
 	}
 
 	@OriginalMember(owner = "client!sign/signlink", name = "dnslookup", descriptor = "(Ljava/lang/String;)V")
-	public static synchronized void dnslookup(@OriginalArg(0) String arg0) {
-		dns = arg0;
-		dnsreq = arg0;
+	public static synchronized void dnslookup(@OriginalArg(0) String hostname) {
+		dns = hostname;
+		dnsreq = hostname;
 	}
 
 	@OriginalMember(owner = "client!sign/signlink", name = "startthread", descriptor = "(Ljava/lang/Runnable;I)V")
-	public static synchronized void startthread(@OriginalArg(0) Runnable arg0, @OriginalArg(1) int arg1) {
-		threadreqpri = arg1;
-		threadreq = arg0;
+	public static synchronized void startthread(@OriginalArg(0) Runnable runnable, @OriginalArg(1) int priority) {
+		threadreqpri = priority;
+		threadreq = runnable;
 	}
 
 	@OriginalMember(owner = "client!sign/signlink", name = "wavesave", descriptor = "([BI)Z")
-	public static synchronized boolean wavesave(@OriginalArg(0) byte[] arg0, @OriginalArg(1) int arg1) {
-		if (arg1 > 2000000) {
-			return false;
-		} else if (savereq == null) {
-			wavepos = (wavepos + 1) % 5;
-			savelen = arg1;
-			savebuf = arg0;
-			waveplay = true;
-			savereq = "sound" + wavepos + ".wav";
-			return true;
-		} else {
+	public static synchronized boolean wavesave(@OriginalArg(0) byte[] src, @OriginalArg(1) int length) {
+		if (length > 2000000 || savereq != null) {
 			return false;
 		}
+
+		wavepos = (wavepos + 1) % 5;
+		savelen = length;
+		savebuf = src;
+		waveplay = true;
+		savereq = "sound" + wavepos + ".wav";
+		return true;
 	}
 
 	@OriginalMember(owner = "client!sign/signlink", name = "wavereplay", descriptor = "()Z")
 	public static synchronized boolean wavereplay() {
-		if (savereq == null) {
-			savebuf = null;
-			waveplay = true;
-			savereq = "sound" + wavepos + ".wav";
-			return true;
-		} else {
+		if (savereq != null) {
 			return false;
 		}
+
+		savebuf = null;
+		waveplay = true;
+		savereq = "sound" + wavepos + ".wav";
+		return true;
 	}
 
 	@OriginalMember(owner = "client!sign/signlink", name = "midisave", descriptor = "([BI)V")
-	public static synchronized void midisave(@OriginalArg(0) byte[] arg0, @OriginalArg(1) int arg1) {
-		if (arg1 > 2000000 || savereq != null) {
+	public static synchronized void midisave(@OriginalArg(0) byte[] src, @OriginalArg(1) int length) {
+		if (length > 2000000 || savereq != null) {
 			return;
 		}
+
 		midipos = (midipos + 1) % 5;
-		savelen = arg1;
-		savebuf = arg0;
+		savelen = length;
+		savebuf = src;
 		midiplay = true;
 		savereq = "jingle" + midipos + ".mid";
 	}
 
 	@OriginalMember(owner = "client!sign/signlink", name = "reporterror", descriptor = "(Ljava/lang/String;)V")
-	public static void reporterror(@OriginalArg(0) String arg0) {
+	public static void reporterror(@OriginalArg(0) String err) {
 		if (!reporterror || !active) {
 			return;
 		}
-		System.out.println("Error: " + arg0);
+
+		System.out.println("Error: " + err);
+
 		try {
-			@Pc(19) String local19 = arg0.replace('@', '_');
-			@Pc(24) String local24 = local19.replace('&', '_');
-			@Pc(29) String local29 = local24.replace('#', '_');
-			@Pc(46) DataInputStream local46 = openurl("reporterror" + 225 + ".cgi?error=" + errorname + " " + local29);
-			local46.readLine();
-			local46.close();
-		} catch (@Pc(53) IOException local53) {
+			@Pc(19) String clean1 = err.replace('@', '_');
+			@Pc(24) String clean2 = clean1.replace('&', '_');
+			@Pc(29) String clean3 = clean2.replace('#', '_');
+			@Pc(46) DataInputStream stream = openurl("reporterror" + signlink.clientversion + ".cgi?error=" + errorname + " " + clean3);
+			stream.readLine();
+			stream.close();
+		} catch (@Pc(53) IOException ignored) {
 		}
 	}
 
@@ -346,73 +370,81 @@ public final class signlink implements Runnable {
 	@Override
 	public void run() {
 		active = true;
-		@Pc(3) String local3 = findcachedir();
-		uid = getuid(local3);
-		@Pc(8) int local8 = threadliveid;
-		while (threadliveid == local8) {
+
+		@Pc(3) String cacheDir = findcachedir();
+		uid = getuid(cacheDir);
+
+		@Pc(8) int threadId = threadliveid;
+		while (threadliveid == threadId) {
 			if (socketreq != 0) {
 				try {
 					socket = new Socket(socketip, socketreq);
-				} catch (@Pc(19) Exception local19) {
+				} catch (@Pc(19) Exception ignored) {
 					socket = null;
 				}
+
 				socketreq = 0;
 			} else if (threadreq != null) {
-				@Pc(31) Thread local31 = new Thread(threadreq);
-				local31.setDaemon(true);
-				local31.start();
-				local31.setPriority(threadreqpri);
+				@Pc(31) Thread thread = new Thread(threadreq);
+				thread.setDaemon(true);
+				thread.start();
+				thread.setPriority(threadreqpri);
 				threadreq = null;
 			} else if (dnsreq != null) {
 				try {
 					dns = InetAddress.getByName(dnsreq).getHostName();
-				} catch (@Pc(50) Exception local50) {
+				} catch (@Pc(50) Exception ignored) {
 					dns = "unknown";
 				}
 				dnsreq = null;
 			} else if (loadreq != null) {
 				loadbuf = null;
 				try {
-					@Pc(71) File local71 = new File(local3 + loadreq);
-					if (local71.exists()) {
-						@Pc(78) int local78 = (int) local71.length();
-						loadbuf = new byte[local78];
-						@Pc(96) DataInputStream local96 = new DataInputStream(new FileInputStream(local3 + loadreq));
-						local96.readFully(loadbuf, 0, local78);
-						local96.close();
+					@Pc(71) File file = new File(cacheDir + loadreq);
+					if (file.exists()) {
+						@Pc(78) int length = (int) file.length();
+						loadbuf = new byte[length];
+
+						@Pc(96) DataInputStream stream = new DataInputStream(new FileInputStream(cacheDir + loadreq));
+						stream.readFully(loadbuf, 0, length);
+						stream.close();
 					}
-				} catch (@Pc(105) Exception local105) {
+				} catch (@Pc(105) Exception ignored) {
 				}
 				loadreq = null;
 			} else if (savereq != null) {
 				if (savebuf != null) {
 					try {
-						@Pc(124) FileOutputStream local124 = new FileOutputStream(local3 + savereq);
-						local124.write(savebuf, 0, savelen);
-						local124.close();
-					} catch (@Pc(133) Exception local133) {
+						@Pc(124) FileOutputStream stream = new FileOutputStream(cacheDir + savereq);
+						stream.write(savebuf, 0, savelen);
+						stream.close();
+					} catch (@Pc(133) Exception ignored) {
 					}
 				}
+
 				if (waveplay) {
-					wave = local3 + savereq;
+					wave = cacheDir + savereq;
 					waveplay = false;
 				}
+
 				if (midiplay) {
-					midi = local3 + savereq;
+					midi = cacheDir + savereq;
 					midiplay = false;
 				}
+
 				savereq = null;
 			} else if (urlreq != null) {
 				try {
 					urlstream = new DataInputStream((new URL(mainapp.getCodeBase(), urlreq)).openStream());
-				} catch (@Pc(178) Exception local178) {
+				} catch (@Pc(178) Exception ignored) {
 					urlstream = null;
 				}
 				urlreq = null;
 			}
+
 			try {
 				Thread.sleep(looprate);
-			} catch (@Pc(187) Exception local187) {
+			} catch (@Pc(187) Exception ignored) {
 			}
 		}
 	}

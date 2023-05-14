@@ -154,9 +154,7 @@ public final class WordFilter {
 			local45 = -1;
 			while ((local45 = local22.indexOf(ALLOWLIST[local36], local45 + 1)) != -1) {
 				@Pc(52) char[] local52 = ALLOWLIST[local36].toCharArray();
-				for (@Pc(54) int local54 = 0; local54 < local52.length; local54++) {
-					local19[local54 + local45] = local52[local54];
-				}
+				System.arraycopy(local52, 0, local19, 0 + local45, local52.length);
 			}
 		}
 		replaceUpperCases(local19, local15.toCharArray());
@@ -202,10 +200,10 @@ public final class WordFilter {
 
 	@OriginalMember(owner = "client!mc", name = "b", descriptor = "(B[C)V")
 	private static void filterDomains(@OriginalArg(1) char[] arg1) {
-		@Pc(3) char[] local3 = (char[]) arg1.clone();
+		@Pc(3) char[] local3 = arg1.clone();
 		@Pc(18) char[] local18 = new char[] { '(', 'a', ')' };
 		filter(null, local3, local18);
-		@Pc(27) char[] local27 = (char[]) arg1.clone();
+		@Pc(27) char[] local27 = arg1.clone();
 		@Pc(42) char[] local42 = new char[] { 'd', 'o', 't' };
 		filter(null, local27, local42);
 		for (@Pc(56) int local56 = domains.length - 1; local56 >= 0; local56--) {
@@ -222,7 +220,8 @@ public final class WordFilter {
 				@Pc(21) int local21 = 0;
 				local23 = 1;
 				@Pc(27) boolean var9;
-				label62: while (true) {
+				label62:
+				while (true) {
 					while (true) {
 						if (local19 >= arg4.length) {
 							break label62;
@@ -331,10 +330,10 @@ public final class WordFilter {
 
 	@OriginalMember(owner = "client!mc", name = "b", descriptor = "([CI)V")
 	private static void filterTld(@OriginalArg(0) char[] arg0) {
-		@Pc(3) char[] local3 = (char[]) arg0.clone();
+		@Pc(3) char[] local3 = arg0.clone();
 		@Pc(18) char[] local18 = new char[] { 'd', 'o', 't' };
 		filter(null, local3, local18);
-		@Pc(27) char[] local27 = (char[]) arg0.clone();
+		@Pc(27) char[] local27 = arg0.clone();
 		@Pc(50) char[] local50 = new char[] { 's', 'l', 'a', 's', 'h' };
 		filter(null, local27, local50);
 		for (@Pc(65) int local65 = 0; local65 < tlds.length; local65++) {
@@ -352,7 +351,8 @@ public final class WordFilter {
 				@Pc(26) int local26 = 0;
 				local5 = 1;
 				@Pc(32) boolean var10;
-				label124: while (true) {
+				label124:
+				while (true) {
 					while (true) {
 						if (local24 >= arg3.length) {
 							break label124;
@@ -400,11 +400,7 @@ public final class WordFilter {
 						var10 = true;
 					}
 					@Pc(172) boolean local172;
-					if (arg1 == 3 && local121 > 2 && local129 > 0) {
-						local172 = true;
-					} else {
-						local172 = false;
-					}
+					local172 = arg1 == 3 && local121 > 2 && local129 > 0;
 					if (var10) {
 						@Pc(179) int local179 = local20;
 						@Pc(183) int local183 = local24 - 1;
@@ -552,7 +548,8 @@ public final class WordFilter {
 				@Pc(36) boolean var12;
 				@Pc(40) char var13;
 				@Pc(42) char var14;
-				label163: while (true) {
+				label163:
+				while (true) {
 					while (true) {
 						if (local20 >= arg2.length || local30 && local32) {
 							break label163;
@@ -627,10 +624,7 @@ public final class WordFilter {
 									for (local295 = 0; local295 < 3 && local271 + local295 < arg2.length && (!isSymbol(arg2[local271 + local295]) || arg2[local271 + local295] == '\''); local295++) {
 										local293[local295] = arg2[local271 + local295];
 									}
-									@Pc(333) boolean local333 = true;
-									if (local295 == 0) {
-										local333 = false;
-									}
+									@Pc(333) boolean local333 = local295 != 0;
 									if (local295 < 3 && local271 - 1 >= 0 && (!isSymbol(arg2[local271 - 1]) || arg2[local271 - 1] == '\'')) {
 										local333 = false;
 									}

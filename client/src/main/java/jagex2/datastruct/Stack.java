@@ -22,6 +22,7 @@ public final class Stack {
 		if (arg0.prevCacheable != null) {
 			arg0.uncache();
 		}
+
 		arg0.prevCacheable = this.head.prevCacheable;
 		arg0.nextCacheable = this.head;
 		arg0.prevCacheable.nextCacheable = arg0;

@@ -61,15 +61,18 @@ public final class ClientStream implements Runnable {
 			if (this.in != null) {
 				this.in.close();
 			}
+
 			if (this.out != null) {
 				this.out.close();
 			}
+
 			if (this.socket != null) {
 				this.socket.close();
 			}
 		} catch (@Pc(22) IOException local22) {
 			System.out.println("Error closing stream");
 		}
+
 		this.writer = false;
 		synchronized (this) {
 			this.notify();
@@ -92,11 +95,13 @@ public final class ClientStream implements Runnable {
 		if (this.closed) {
 			return;
 		}
+
 		while (arg2 > 0) {
 			@Pc(11) int local11 = this.in.read(arg0, arg1, arg2);
 			if (local11 <= 0) {
 				throw new IOException("EOF");
 			}
+
 			arg1 += local11;
 			arg2 -= local11;
 		}
@@ -109,9 +114,11 @@ public final class ClientStream implements Runnable {
 				this.ioerror = false;
 				throw new IOException("Error in writer thread");
 			}
+
 			if (this.buf == null) {
 				this.buf = new byte[5000];
 			}
+
 			synchronized (this) {
 				for (@Pc(31) int local31 = 0; local31 < arg1; local31++) {
 					this.buf[this.tnum] = arg0[local31 + arg3];
@@ -120,10 +127,12 @@ public final class ClientStream implements Runnable {
 						throw new IOException("buffer overflow");
 					}
 				}
+
 				if (!this.writer) {
 					this.writer = true;
 					this.shell.startThread(this, 2);
 				}
+
 				this.notify();
 			}
 		}
@@ -142,9 +151,11 @@ public final class ClientStream implements Runnable {
 					} catch (@Pc(16) InterruptedException local16) {
 					}
 				}
+
 				if (!this.writer) {
 					return;
 				}
+
 				local27 = this.tcyl;
 				if (this.tnum >= this.tcyl) {
 					local38 = this.tnum - this.tcyl;
@@ -152,12 +163,14 @@ public final class ClientStream implements Runnable {
 					local38 = 5000 - this.tcyl;
 				}
 			}
+
 			if (local38 > 0) {
 				try {
 					this.out.write(this.buf, local27, local38);
 				} catch (@Pc(62) IOException local62) {
 					this.ioerror = true;
 				}
+
 				this.tcyl = (this.tcyl + local38) % 5000;
 				try {
 					if (this.tnum == this.tcyl) {

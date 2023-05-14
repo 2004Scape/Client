@@ -18,6 +18,7 @@ public final class HashTable {
 	public HashTable(@OriginalArg(1) int arg1) {
 		this.size = arg1;
 		this.nodes = new Linkable[arg1];
+
 		for (@Pc(30) int local30 = 0; local30 < arg1; local30++) {
 			@Pc(40) Linkable local40 = this.nodes[local30] = new Linkable();
 			local40.prev = local40;
@@ -33,6 +34,7 @@ public final class HashTable {
 				return local14;
 			}
 		}
+
 		return null;
 	}
 
@@ -41,6 +43,7 @@ public final class HashTable {
 		if (arg2.next != null) {
 			arg2.unlink();
 		}
+
 		@Pc(18) Linkable local18 = this.nodes[(int) (arg0 & (long) (this.size - 1))];
 		arg2.next = local18.next;
 		arg2.prev = local18;

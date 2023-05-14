@@ -109,13 +109,16 @@ public final class ProjectileEntity extends Entity {
 			this.z = (double) this.srcZ + local14 * (double) this.arc / local23;
 			this.y = this.srcY;
 		}
+
 		local8 = this.lastCycle + 1 - arg4;
 		this.velocityX = ((double) arg2 - this.x) / local8;
 		this.velocityZ = ((double) arg1 - this.z) / local8;
 		this.velocity = Math.sqrt(this.velocityX * this.velocityX + this.velocityZ * this.velocityZ);
+
 		if (!this.mobile) {
 			this.velocityY = -this.velocity * Math.tan((double) this.peakPitch * 0.02454369D);
 		}
+
 		this.accelerationY = ((double) arg0 - this.y - this.velocityY * local8) * 2.0D / (local8 * local8);
 	}
 
@@ -128,12 +131,14 @@ public final class ProjectileEntity extends Entity {
 		this.velocityY += this.accelerationY * (double) arg1;
 		this.yaw = (int) (Math.atan2(this.velocityX, this.velocityZ) * 325.949D) + 1024 & 0x7FF;
 		this.pitch = (int) (Math.atan2(this.velocityY, this.velocity) * 325.949D) & 0x7FF;
+
 		if (this.spotanim.seq != null) {
 			this.seqCycle += arg1;
-			while (this.seqCycle > this.spotanim.seq.frameDelay[this.seqFrame]) {
-				this.seqCycle -= this.spotanim.seq.frameDelay[this.seqFrame] + 1;
+
+			while (this.seqCycle > this.spotanim.seq.delay[this.seqFrame]) {
+				this.seqCycle -= this.spotanim.seq.delay[this.seqFrame] + 1;
 				this.seqFrame++;
-				if (this.seqFrame >= this.spotanim.seq.framecount) {
+				if (this.seqFrame >= this.spotanim.seq.frameCount) {
 					this.seqFrame = 0;
 				}
 			}
@@ -145,15 +150,18 @@ public final class ProjectileEntity extends Entity {
 	public Model draw() {
 		@Pc(3) Model local3 = this.spotanim.getModel();
 		@Pc(19) Model local19 = new Model(local3, true, !this.spotanim.disposeAlpha, false);
+
 		if (this.spotanim.seq != null) {
 			local19.createLabelReferences();
-			local19.applyTransform(this.spotanim.seq.primaryFrames[this.seqFrame]);
+			local19.applyTransform(this.spotanim.seq.frames[this.seqFrame]);
 			local19.labelFaces = null;
 			local19.labelVertices = null;
 		}
+
 		if (this.spotanim.resizeh != 128 || this.spotanim.resizev != 128) {
 			local19.scale(this.spotanim.resizeh, this.spotanim.resizev, this.spotanim.resizeh);
 		}
+
 		local19.rotateX(this.pitch);
 		local19.calculateNormals(this.spotanim.ambient + 64, this.spotanim.contrast + 850, -30, -50, -30, true);
 		return local19;

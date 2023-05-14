@@ -84,25 +84,29 @@ public final class TileOverlay {
 	public static final int[][] SHAPE_PATHS = new int[][] { { 0, 1, 2, 3, 0, 0, 1, 3 }, { 1, 1, 2, 3, 1, 0, 1, 3 }, { 0, 1, 2, 3, 1, 0, 1, 3 }, { 0, 0, 1, 2, 0, 0, 2, 4, 1, 0, 4, 3 }, { 0, 0, 1, 4, 0, 0, 4, 3, 1, 1, 2, 4 }, { 0, 0, 4, 3, 1, 0, 1, 2, 1, 0, 2, 4 }, { 0, 1, 2, 4, 1, 0, 1, 4, 1, 0, 4, 3 }, { 0, 4, 1, 2, 0, 4, 2, 5, 1, 0, 4, 5, 1, 0, 5, 3 }, { 0, 4, 1, 2, 0, 4, 2, 3, 0, 4, 3, 5, 1, 0, 4, 5 }, { 0, 0, 4, 5, 1, 4, 1, 2, 1, 4, 2, 3, 1, 4, 3, 5 }, { 0, 0, 1, 5, 0, 1, 4, 5, 0, 1, 2, 4, 1, 0, 5, 3, 1, 5, 4, 3, 1, 4, 2, 3 }, { 1, 0, 1, 5, 1, 1, 4, 5, 1, 1, 2, 4, 0, 0, 5, 3, 0, 5, 4, 3, 0, 4, 2, 3 }, { 1, 0, 5, 4, 1, 0, 1, 5, 0, 0, 4, 3, 0, 4, 5, 3, 0, 5, 2, 3, 0, 1, 2, 5 } };
 
 	@OriginalMember(owner = "client!i", name = "<init>", descriptor = "(IIIIIIIIIIIIIIIIIIII)V")
-	public TileOverlay(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2, @OriginalArg(3) int arg3, @OriginalArg(4) int arg4, @OriginalArg(5) int arg5, @OriginalArg(6) int arg6, @OriginalArg(7) int arg7, @OriginalArg(8) int arg8, @OriginalArg(9) int arg9, @OriginalArg(10) int arg10, @OriginalArg(11) int arg11, @OriginalArg(12) int arg12, @OriginalArg(13) int arg13, @OriginalArg(14) int arg14, @OriginalArg(15) int arg15, @OriginalArg(16) int arg16, @OriginalArg(17) int arg17, @OriginalArg(18) int arg18, @OriginalArg(19) int arg19) {
+	public TileOverlay(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2, @OriginalArg(3) int arg3, @OriginalArg(4) int arg4, @OriginalArg(5) int arg5, @OriginalArg(6) int arg6, @OriginalArg(7) int arg7, @OriginalArg(8) int arg8, @OriginalArg(9) int arg9, @OriginalArg(10) int arg10, @OriginalArg(11) int arg11, @OriginalArg(12) int arg12, @OriginalArg(13) int arg13, @OriginalArg(14) int arg14, @OriginalArg(15) int arg15, @OriginalArg(17) int arg17, @OriginalArg(18) int arg18, @OriginalArg(19) int arg19) {
 		if (arg17 != arg3 || arg17 != arg13 || arg17 != arg7) {
 			this.flat = false;
 		}
+
 		this.shape = arg1;
 		this.rotation = arg5;
 		this.backgroundRgb = arg12;
 		this.foregroundRgb = arg8;
+
 		@Pc(32) short local32 = 128;
 		@Pc(36) int local36 = local32 / 2;
 		@Pc(40) int local40 = local32 / 4;
 		@Pc(46) int local46 = local32 * 3 / 4;
 		@Pc(50) int[] local50 = SHAPE_POINTS[arg1];
+
 		@Pc(53) int local53 = local50.length;
 		this.vertexX = new int[local53];
 		this.vertexY = new int[local53];
 		this.vertexZ = new int[local53];
 		@Pc(68) int[] local68 = new int[local53];
 		@Pc(71) int[] local71 = new int[local53];
+
 		@Pc(75) int local75 = arg0 * local32;
 		@Pc(79) int local79 = arg18 * local32;
 		@Pc(143) int local143;
@@ -110,17 +114,21 @@ public final class TileOverlay {
 		@Pc(147) int local147;
 		@Pc(149) int local149;
 		@Pc(151) int local151;
+
 		for (@Pc(81) int local81 = 0; local81 < local53; local81++) {
 			@Pc(87) int local87 = local50[local81];
 			if ((local87 & 0x1) == 0 && local87 <= 8) {
 				local87 = (local87 - arg5 - arg5 - 1 & 0x7) + 1;
 			}
+
 			if (local87 > 8 && local87 <= 12) {
 				local87 = (local87 - arg5 - 9 & 0x3) + 9;
 			}
+
 			if (local87 > 12 && local87 <= 16) {
 				local87 = (local87 - arg5 - 13 & 0x3) + 13;
 			}
+
 			if (local87 == 1) {
 				local143 = local75;
 				local145 = local79;
@@ -218,12 +226,14 @@ public final class TileOverlay {
 				local149 = arg15;
 				local151 = arg11;
 			}
+
 			this.vertexX[local81] = local143;
 			this.vertexY[local81] = local147;
 			this.vertexZ[local81] = local145;
 			local68[local81] = local149;
 			local71[local81] = local151;
 		}
+
 		@Pc(552) int[] local552 = SHAPE_PATHS[arg1];
 		local143 = local552.length / 4;
 		this.triangleVertexA = new int[local143];
@@ -231,13 +241,12 @@ public final class TileOverlay {
 		this.triangleVertexC = new int[local143];
 		this.triangleColorA = new int[local143];
 		this.triangleColorB = new int[local143];
-		if (arg16 != 10659) {
-			throw new NullPointerException();
-		}
+
 		this.triangleColorC = new int[local143];
 		if (arg10 != -1) {
 			this.triangleTextureIds = new int[local143];
 		}
+
 		local145 = 0;
 		for (local147 = 0; local147 < local143; local147++) {
 			local149 = local552[local145];
@@ -254,6 +263,7 @@ public final class TileOverlay {
 			if (local623 < 4) {
 				local623 = local623 - arg5 & 0x3;
 			}
+
 			this.triangleVertexA[local147] = local151;
 			this.triangleVertexB[local147] = local617;
 			this.triangleVertexC[local147] = local623;
@@ -261,6 +271,7 @@ public final class TileOverlay {
 				this.triangleColorA[local147] = local68[local151];
 				this.triangleColorB[local147] = local68[local617];
 				this.triangleColorC[local147] = local68[local623];
+
 				if (this.triangleTextureIds != null) {
 					this.triangleTextureIds[local147] = -1;
 				}
@@ -268,31 +279,40 @@ public final class TileOverlay {
 				this.triangleColorA[local147] = local71[local151];
 				this.triangleColorB[local147] = local71[local617];
 				this.triangleColorC[local147] = local71[local623];
+
 				if (this.triangleTextureIds != null) {
 					this.triangleTextureIds[local147] = arg10;
 				}
 			}
 		}
+
 		local149 = arg17;
 		local151 = arg3;
+
 		if (arg3 < arg17) {
 			local149 = arg3;
 		}
+
 		if (arg3 > arg3) {
 			local151 = arg3;
 		}
+
 		if (arg13 < local149) {
 			local149 = arg13;
 		}
+
 		if (arg13 > arg3) {
 			local151 = arg13;
 		}
+
 		if (arg7 < local149) {
 			local149 = arg7;
 		}
+
 		if (arg7 > local151) {
 			local151 = arg7;
 		}
+
 		local149 /= 14;
 		local151 /= 14;
 	}

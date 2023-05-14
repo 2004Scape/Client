@@ -284,7 +284,8 @@ public final class World3D {
 				for (local62 = -25; local62 < 25; local62++) {
 					for (local64 = -25; local64 < 25; local64++) {
 						@Pc(155) boolean local155 = false;
-						label83: for (local74 = -1; local74 <= 1; local74++) {
+						label83:
+						for (local74 = -1; local74 <= 1; local74++) {
 							for (local78 = -1; local78 <= 1; local78++) {
 								if (local28[local34][local58][local62 + local74 + 25 + 1][local64 + local78 + 25 + 1]) {
 									local155 = true;
@@ -323,11 +324,7 @@ public final class World3D {
 		}
 		local45 = viewportCenterX + (local11 << 9) / local31;
 		@Pc(76) int local76 = viewportCenterY + (local41 << 9) / local31;
-		if (local45 >= viewportLeft && local45 <= viewportRight && local76 >= viewportTop && local76 <= viewportBottom) {
-			return true;
-		} else {
-			return false;
-		}
+		return local45 >= viewportLeft && local45 <= viewportRight && local76 >= viewportTop && local76 <= viewportBottom;
 	}
 
 	@OriginalMember(owner = "client!r", name = "a", descriptor = "(I)V")
@@ -412,7 +409,7 @@ public final class World3D {
 			}
 			this.levelTiles[arg0][arg1][arg2].underlay = local14;
 		} else {
-			@Pc(145) TileOverlay local145 = new TileOverlay(arg1, arg3, arg15, arg7, arg12, arg4, arg10, arg9, arg19, arg14, arg5, arg17, arg18, arg8, arg16, arg13, 10659, arg6, arg2, arg11);
+			@Pc(145) TileOverlay local145 = new TileOverlay(arg1, arg3, arg15, arg7, arg12, arg4, arg10, arg9, arg19, arg14, arg5, arg17, arg18, arg8, arg16, arg13, arg6, arg2, arg11);
 			for (local16 = arg0; local16 >= 0; local16--) {
 				if (this.levelTiles[local16][arg1][arg2] == null) {
 					this.levelTiles[local16][arg1][arg2] = new Tile(local16, arg1, arg2);
@@ -550,7 +547,7 @@ public final class World3D {
 
 	@OriginalMember(owner = "client!r", name = "a", descriptor = "(IILclient!eb;IIIIIILclient!w;ZIII)Z")
 	public boolean addTemporary(@OriginalArg(0) int arg0, @OriginalArg(2) Model arg2, @OriginalArg(3) int arg3, @OriginalArg(4) int arg4, @OriginalArg(5) int arg5, @OriginalArg(6) int arg6, @OriginalArg(7) int arg7, @OriginalArg(8) int arg8, @OriginalArg(9) Entity arg9, @OriginalArg(11) int arg11, @OriginalArg(12) int arg12, @OriginalArg(13) int arg13) {
-		return arg2 == null && arg9 == null ? true : this.addLoc(arg11, arg8, arg7, arg0 + 1 - arg8, arg12 - arg7 + 1, arg13, arg3, arg4, arg2, arg9, arg6, true, arg5, (byte) 0);
+		return arg2 == null && arg9 == null || this.addLoc(arg11, arg8, arg7, arg0 + 1 - arg8, arg12 - arg7 + 1, arg13, arg3, arg4, arg2, arg9, arg6, true, arg5, (byte) 0);
 	}
 
 	@OriginalMember(owner = "client!r", name = "a", descriptor = "(IIIIIIIILclient!eb;Lclient!w;IZIB)Z")
@@ -1120,11 +1117,7 @@ public final class World3D {
 						if (local159.drawLevel <= arg2 && (visibilityMap[local147 + 25 - eyeTileX][local151 + 25 - eyeTileZ] || this.levelHeightmaps[local138][local147][local151] - arg4 >= 2000)) {
 							local159.visible = true;
 							local159.update = true;
-							if (local159.locCount > 0) {
-								local159.containsLocs = true;
-							} else {
-								local159.containsLocs = false;
-							}
+							local159.containsLocs = local159.locCount > 0;
 							tilesRemaining++;
 						} else {
 							local159.visible = false;
@@ -1496,7 +1489,8 @@ public final class World3D {
 										@Pc(1002) int local1002 = local8.locCount;
 										local8.containsLocs = false;
 										var22 = 0;
-										label559: for (local253 = 0; local253 < local1002; local253++) {
+										label559:
+										for (local253 = 0; local253 < local1002; local253++) {
 											var12 = local8.locs[local253];
 											if (var12.cycle != cycle) {
 												for (local1023 = var12.minSceneTileX; local1023 <= var12.maxSceneTileX; local1023++) {
@@ -1752,10 +1746,7 @@ public final class World3D {
 		Draw3D.alpha = 0;
 		@Pc(476) int local476;
 		if ((local313 - local329) * (local305 - local337) - (local321 - local337) * (local297 - local329) > 0) {
-			Draw3D.clipX = false;
-			if (local313 < 0 || local329 < 0 || local297 < 0 || local313 > Draw2D.boundX || local329 > Draw2D.boundX || local297 > Draw2D.boundX) {
-				Draw3D.clipX = true;
-			}
+			Draw3D.clipX = local313 < 0 || local329 < 0 || local297 < 0 || local313 > Draw2D.boundX || local329 > Draw2D.boundX || local297 > Draw2D.boundX;
 			if (takingInput && this.pointInsideTriangle(mouseX, mouseY, local321, local337, local305, local313, local329, local297)) {
 				clickTileX = arg6;
 				clickTileZ = arg7;
@@ -1776,10 +1767,7 @@ public final class World3D {
 		if ((local281 - local297) * (local337 - local305) - (local289 - local305) * (local329 - local297) <= 0) {
 			return;
 		}
-		Draw3D.clipX = false;
-		if (local281 < 0 || local297 < 0 || local329 < 0 || local281 > Draw2D.boundX || local297 > Draw2D.boundX || local329 > Draw2D.boundX) {
-			Draw3D.clipX = true;
-		}
+		Draw3D.clipX = local281 < 0 || local297 < 0 || local329 < 0 || local281 > Draw2D.boundX || local297 > Draw2D.boundX || local329 > Draw2D.boundX;
 		if (takingInput && this.pointInsideTriangle(mouseX, mouseY, local289, local305, local337, local281, local297, local329)) {
 			clickTileX = arg6;
 			clickTileZ = arg7;
@@ -1835,10 +1823,7 @@ public final class World3D {
 			@Pc(165) int local165 = TileOverlay.tmpScreenY[local30];
 			@Pc(169) int local169 = TileOverlay.tmpScreenY[local40];
 			if ((local149 - local153) * (local169 - local165) - (local161 - local165) * (local157 - local153) > 0) {
-				Draw3D.clipX = false;
-				if (local149 < 0 || local153 < 0 || local157 < 0 || local149 > Draw2D.boundX || local153 > Draw2D.boundX || local157 > Draw2D.boundX) {
-					Draw3D.clipX = true;
-				}
+				Draw3D.clipX = local149 < 0 || local153 < 0 || local157 < 0 || local149 > Draw2D.boundX || local153 > Draw2D.boundX || local157 > Draw2D.boundX;
 				if (takingInput && this.pointInsideTriangle(mouseX, mouseY, local161, local165, local169, local149, local153, local157)) {
 					clickTileX = arg3;
 					clickTileZ = arg1;
@@ -1994,7 +1979,8 @@ public final class World3D {
 							local84 = 50;
 						}
 						@Pc(348) boolean local348 = false;
-						label149: for (@Pc(350) int local350 = local330; local350 <= local84; local350++) {
+						label149:
+						for (@Pc(350) int local350 = local330; local350 <= local84; local350++) {
 							for (@Pc(354) int local354 = local43; local354 <= local54; local354++) {
 								if (visibilityMap[local350][local354]) {
 									local348 = true;
@@ -2068,10 +2054,7 @@ public final class World3D {
 				if (!this.occluded(local11, local34, local15)) {
 					return false;
 				}
-				if (!this.occluded(local11, local34, local15 + 128)) {
-					return false;
-				}
-				return true;
+				return this.occluded(local11, local34, local15 + 128);
 			}
 			if (arg3 == 2) {
 				if (local15 < eyeZ) {
@@ -2093,10 +2076,7 @@ public final class World3D {
 				if (!this.occluded(local11, local34, local15 + 128)) {
 					return false;
 				}
-				if (!this.occluded(local11 + 128, local34, local15 + 128)) {
-					return false;
-				}
-				return true;
+				return this.occluded(local11 + 128, local34, local15 + 128);
 			}
 			if (arg3 == 4) {
 				if (local11 < eyeX) {
@@ -2118,10 +2098,7 @@ public final class World3D {
 				if (!this.occluded(local11 + 128, local34, local15)) {
 					return false;
 				}
-				if (!this.occluded(local11 + 128, local34, local15 + 128)) {
-					return false;
-				}
-				return true;
+				return this.occluded(local11 + 128, local34, local15 + 128);
 			}
 			if (arg3 == 8) {
 				if (local15 > eyeZ) {
@@ -2143,10 +2120,7 @@ public final class World3D {
 				if (!this.occluded(local11, local34, local15)) {
 					return false;
 				}
-				if (!this.occluded(local11 + 128, local34, local15)) {
-					return false;
-				}
-				return true;
+				return this.occluded(local11 + 128, local34, local15);
 			}
 		}
 		if (!this.occluded(local11 + 64, local38, local15 + 64)) {
@@ -2201,11 +2175,7 @@ public final class World3D {
 			@Pc(199) int local199 = (arg4 << 7) - 1;
 			if (!this.occluded(local23, local171, local199)) {
 				return false;
-			} else if (this.occluded(local185, local171, local199)) {
-				return true;
-			} else {
-				return false;
-			}
+			} else return this.occluded(local185, local171, local199);
 		} else if (this.tileVisible(arg0, arg1, arg3)) {
 			local19 = arg1 << 7;
 			local23 = arg3 << 7;

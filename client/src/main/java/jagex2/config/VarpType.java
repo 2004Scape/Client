@@ -54,16 +54,20 @@ public final class VarpType {
 		@Pc(9) Packet dat = new Packet(config.read("varp.dat", null));
 		opcode3Count = 0;
 		count = dat.g2();
+
 		if (instances == null) {
 			instances = new VarpType[count];
 		}
+
 		if (opcode3 == null) {
 			opcode3 = new int[count];
 		}
+
 		for (@Pc(30) int id = 0; id < count; id++) {
 			if (instances[id] == null) {
 				instances[id] = new VarpType();
 			}
+
 			instances[id].decode(id, dat);
 		}
 	}

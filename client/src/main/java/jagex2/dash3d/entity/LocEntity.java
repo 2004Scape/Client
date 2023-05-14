@@ -41,9 +41,10 @@ public final class LocEntity extends Linkable {
 		this.heightmapNW = arg6;
 		this.index = arg1;
 		this.seq = arg5;
+
 		if (arg0 && arg5.replayoff != -1) {
-			this.seqFrame = (int) (Math.random() * (double) this.seq.framecount);
-			this.seqCycle = (int) (Math.random() * (double) this.seq.frameDelay[this.seqFrame]);
+			this.seqFrame = (int) (Math.random() * (double) this.seq.frameCount);
+			this.seqCycle = (int) (Math.random() * (double) this.seq.delay[this.seqFrame]);
 		} else {
 			this.seqFrame = -1;
 			this.seqCycle = 0;

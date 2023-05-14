@@ -32,6 +32,7 @@ public final class LruCache {
 		if (local5 != null) {
 			this.history.push(local5);
 		}
+
 		return local5;
 	}
 
@@ -44,6 +45,7 @@ public final class LruCache {
 		} else {
 			this.available--;
 		}
+
 		this.hashtable.put(arg1, arg2);
 		this.history.push(arg2);
 	}
@@ -56,6 +58,7 @@ public final class LruCache {
 				this.available = this.capacity;
 				return;
 			}
+
 			local3.unlink();
 			local3.uncache();
 		}

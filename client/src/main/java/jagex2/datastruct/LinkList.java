@@ -25,6 +25,7 @@ public final class LinkList {
 		if (arg0.next != null) {
 			arg0.unlink();
 		}
+
 		arg0.next = this.head.next;
 		arg0.prev = this.head;
 		arg0.next.prev = arg0;
@@ -36,6 +37,7 @@ public final class LinkList {
 		if (arg0.next != null) {
 			arg0.unlink();
 		}
+
 		arg0.next = this.head;
 		arg0.prev = this.head.prev;
 		arg0.next.prev = arg0;

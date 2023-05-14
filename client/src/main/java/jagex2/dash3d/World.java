@@ -165,12 +165,14 @@ public final class World {
 		if (arg0 == -1) {
 			return 12345678;
 		}
+
 		arg1 = arg1 * (arg0 & 0x7F) / 128;
 		if (arg1 < 2) {
 			arg1 = 2;
 		} else if (arg1 > 126) {
 			arg1 = 126;
 		}
+
 		return (arg0 & 0xFF80) + arg1;
 	}
 
@@ -183,140 +185,163 @@ public final class World {
 		@Pc(57) int local57 = local15 + local25 + local37 + local47 >> 2;
 		@Pc(60) LocType local60 = LocType.get(arg8);
 		@Pc(72) int local72 = arg0 + (arg3 << 7) + (arg8 << 14) + 1073741824;
-		if (!local60.interactable) {
+		if (!local60.active) {
 			local72 += Integer.MIN_VALUE;
 		}
+
 		@Pc(86) byte local86 = (byte) ((arg4 << 6) + arg9);
 		@Pc(99) Model local99;
+		@Pc(174) int local174;
+		@Pc(430) int local430;
+		@Pc(452) Model local452;
+
 		if (arg9 == 22) {
 			local99 = local60.getModel(22, arg4, local15, local25, local37, local47, -1);
 			arg10.addGroundDecoration(local99, arg0, local72, arg3, arg7, local86, local57);
-			if (local60.blockwalk && local60.interactable) {
+
+			if (local60.blockwalk && local60.active) {
 				arg2.setBlocked(arg3, arg0);
 			}
+
 			if (local60.anim != -1) {
 				arg1.pushBack(new LocEntity(true, arg8, arg7, 3, SeqType.instances[local60.anim], arg3, arg0));
 			}
-		} else {
-			@Pc(174) int local174;
-			if (arg9 == 10 || arg9 == 11) {
-				local99 = local60.getModel(10, arg4, local15, local25, local37, local47, -1);
-				if (local99 != null) {
-					@Pc(161) int local161 = 0;
-					if (arg9 == 11) {
-						local161 += 256;
-					}
-					@Pc(177) int local177;
-					if (arg4 == 1 || arg4 == 3) {
-						local174 = local60.sizeZ;
-						local177 = local60.sizeX;
-					} else {
-						local174 = local60.sizeX;
-						local177 = local60.sizeZ;
-					}
-					arg10.addLoc(local57, arg7, null, local72, arg3, arg0, local174, local86, local99, local161, local177);
+		} else if (arg9 == 10 || arg9 == 11) {
+			local99 = local60.getModel(10, arg4, local15, local25, local37, local47, -1);
+			if (local99 != null) {
+				@Pc(161) int local161 = 0;
+				if (arg9 == 11) {
+					local161 += 256;
 				}
-				if (local60.blockwalk) {
-					arg2.addLoc(arg4, local60.sizeZ, local60.sizeX, arg0, arg3, local60.blockrange);
+
+				@Pc(177) int local177;
+				if (arg4 == 1 || arg4 == 3) {
+					local174 = local60.length;
+					local177 = local60.width;
+				} else {
+					local174 = local60.width;
+					local177 = local60.length;
 				}
-				if (local60.anim != -1) {
-					arg1.pushBack(new LocEntity(true, arg8, arg7, 2, SeqType.instances[local60.anim], arg3, arg0));
-				}
-			} else if (arg9 >= 12) {
-				local99 = local60.getModel(arg9, arg4, local15, local25, local37, local47, -1);
-				arg10.addLoc(local57, arg7, null, local72, arg3, arg0, 1, local86, local99, 0, 1);
-				if (local60.blockwalk) {
-					arg2.addLoc(arg4, local60.sizeZ, local60.sizeX, arg0, arg3, local60.blockrange);
-				}
-				if (local60.anim != -1) {
-					arg1.pushBack(new LocEntity(true, arg8, arg7, 2, SeqType.instances[local60.anim], arg3, arg0));
-				}
-			} else if (arg9 == 0) {
-				local99 = local60.getModel(0, arg4, local15, local25, local37, local47, -1);
-				arg10.addWall(0, local57, arg7, ROTATION_WALL_TYPE[arg4], local99, null, arg0, local72, arg3, local86);
-				if (local60.blockwalk) {
-					arg2.addWall(arg4, arg3, arg0, local60.blockrange, arg9);
-				}
-				if (local60.anim != -1) {
-					arg1.pushBack(new LocEntity(true, arg8, arg7, 0, SeqType.instances[local60.anim], arg3, arg0));
-				}
-			} else if (arg9 == 1) {
-				local99 = local60.getModel(1, arg4, local15, local25, local37, local47, -1);
-				arg10.addWall(0, local57, arg7, ROTATION_WALL_CORNER_TYPE[arg4], local99, null, arg0, local72, arg3, local86);
-				if (local60.blockwalk) {
-					arg2.addWall(arg4, arg3, arg0, local60.blockrange, arg9);
-				}
-				if (local60.anim != -1) {
-					arg1.pushBack(new LocEntity(true, arg8, arg7, 0, SeqType.instances[local60.anim], arg3, arg0));
-				}
-			} else {
-				@Pc(430) int local430;
-				@Pc(452) Model local452;
-				if (arg9 == 2) {
-					local430 = arg4 + 1 & 0x3;
-					@Pc(442) Model local442 = local60.getModel(2, arg4 + 4, local15, local25, local37, local47, -1);
-					local452 = local60.getModel(2, local430, local15, local25, local37, local47, -1);
-					arg10.addWall(ROTATION_WALL_TYPE[local430], local57, arg7, ROTATION_WALL_TYPE[arg4], local442, local452, arg0, local72, arg3, local86);
-					if (local60.blockwalk) {
-						arg2.addWall(arg4, arg3, arg0, local60.blockrange, arg9);
-					}
-					if (local60.anim != -1) {
-						arg1.pushBack(new LocEntity(true, arg8, arg7, 0, SeqType.instances[local60.anim], arg3, arg0));
-					}
-				} else if (arg9 == 3) {
-					local99 = local60.getModel(3, arg4, local15, local25, local37, local47, -1);
-					arg10.addWall(0, local57, arg7, ROTATION_WALL_CORNER_TYPE[arg4], local99, null, arg0, local72, arg3, local86);
-					if (local60.blockwalk) {
-						arg2.addWall(arg4, arg3, arg0, local60.blockrange, arg9);
-					}
-					if (local60.anim != -1) {
-						arg1.pushBack(new LocEntity(true, arg8, arg7, 0, SeqType.instances[local60.anim], arg3, arg0));
-					}
-				} else if (arg9 == 9) {
-					local99 = local60.getModel(arg9, arg4, local15, local25, local37, local47, -1);
-					arg10.addLoc(local57, arg7, null, local72, arg3, arg0, 1, local86, local99, 0, 1);
-					if (local60.blockwalk) {
-						arg2.addLoc(arg4, local60.sizeZ, local60.sizeX, arg0, arg3, local60.blockrange);
-					}
-					if (local60.anim != -1) {
-						arg1.pushBack(new LocEntity(true, arg8, arg7, 2, SeqType.instances[local60.anim], arg3, arg0));
-					}
-				} else if (arg9 == 4) {
-					local99 = local60.getModel(4, 0, local15, local25, local37, local47, -1);
-					arg10.setWallDecoration(local57, arg3, 0, local72, arg4 * 512, ROTATION_WALL_TYPE[arg4], 0, arg0, local99, local86, arg7);
-					if (local60.anim != -1) {
-						arg1.pushBack(new LocEntity(true, arg8, arg7, 1, SeqType.instances[local60.anim], arg3, arg0));
-					}
-				} else if (arg9 == 5) {
-					local430 = 16;
-					local174 = arg10.getWallBitset(arg7, arg0, arg3);
-					if (local174 > 0) {
-						local430 = LocType.get(local174 >> 14 & 0x7FFF).walloff;
-					}
-					local452 = local60.getModel(4, 0, local15, local25, local37, local47, -1);
-					arg10.setWallDecoration(local57, arg3, WALL_DECORATION_ROTATION_FORWARD_Z[arg4] * local430, local72, arg4 * 512, ROTATION_WALL_TYPE[arg4], WALL_DECORATION_ROTATION_FORWARD_X[arg4] * local430, arg0, local452, local86, arg7);
-					if (local60.anim != -1) {
-						arg1.pushBack(new LocEntity(true, arg8, arg7, 1, SeqType.instances[local60.anim], arg3, arg0));
-					}
-				} else if (arg9 == 6) {
-					local99 = local60.getModel(4, 0, local15, local25, local37, local47, -1);
-					arg10.setWallDecoration(local57, arg3, 0, local72, arg4, 256, 0, arg0, local99, local86, arg7);
-					if (local60.anim != -1) {
-						arg1.pushBack(new LocEntity(true, arg8, arg7, 1, SeqType.instances[local60.anim], arg3, arg0));
-					}
-				} else if (arg9 == 7) {
-					local99 = local60.getModel(4, 0, local15, local25, local37, local47, -1);
-					arg10.setWallDecoration(local57, arg3, 0, local72, arg4, 512, 0, arg0, local99, local86, arg7);
-					if (local60.anim != -1) {
-						arg1.pushBack(new LocEntity(true, arg8, arg7, 1, SeqType.instances[local60.anim], arg3, arg0));
-					}
-				} else if (arg9 == 8) {
-					local99 = local60.getModel(4, 0, local15, local25, local37, local47, -1);
-					arg10.setWallDecoration(local57, arg3, 0, local72, arg4, 768, 0, arg0, local99, local86, arg7);
-					if (local60.anim != -1) {
-						arg1.pushBack(new LocEntity(true, arg8, arg7, 1, SeqType.instances[local60.anim], arg3, arg0));
-					}
-				}
+
+				arg10.addLoc(local57, arg7, null, local72, arg3, arg0, local174, local86, local99, local161, local177);
+			}
+
+			if (local60.blockwalk) {
+				arg2.addLoc(arg4, local60.length, local60.width, arg0, arg3, local60.blockrange);
+			}
+
+			if (local60.anim != -1) {
+				arg1.pushBack(new LocEntity(true, arg8, arg7, 2, SeqType.instances[local60.anim], arg3, arg0));
+			}
+		} else if (arg9 >= 12) {
+			local99 = local60.getModel(arg9, arg4, local15, local25, local37, local47, -1);
+			arg10.addLoc(local57, arg7, null, local72, arg3, arg0, 1, local86, local99, 0, 1);
+
+			if (local60.blockwalk) {
+				arg2.addLoc(arg4, local60.length, local60.width, arg0, arg3, local60.blockrange);
+			}
+
+			if (local60.anim != -1) {
+				arg1.pushBack(new LocEntity(true, arg8, arg7, 2, SeqType.instances[local60.anim], arg3, arg0));
+			}
+		} else if (arg9 == 0) {
+			local99 = local60.getModel(0, arg4, local15, local25, local37, local47, -1);
+			arg10.addWall(0, local57, arg7, ROTATION_WALL_TYPE[arg4], local99, null, arg0, local72, arg3, local86);
+
+			if (local60.blockwalk) {
+				arg2.addWall(arg4, arg3, arg0, local60.blockrange, arg9);
+			}
+
+			if (local60.anim != -1) {
+				arg1.pushBack(new LocEntity(true, arg8, arg7, 0, SeqType.instances[local60.anim], arg3, arg0));
+			}
+		} else if (arg9 == 1) {
+			local99 = local60.getModel(1, arg4, local15, local25, local37, local47, -1);
+			arg10.addWall(0, local57, arg7, ROTATION_WALL_CORNER_TYPE[arg4], local99, null, arg0, local72, arg3, local86);
+
+			if (local60.blockwalk) {
+				arg2.addWall(arg4, arg3, arg0, local60.blockrange, arg9);
+			}
+
+			if (local60.anim != -1) {
+				arg1.pushBack(new LocEntity(true, arg8, arg7, 0, SeqType.instances[local60.anim], arg3, arg0));
+			}
+		} else if (arg9 == 2) {
+			local430 = arg4 + 1 & 0x3;
+			@Pc(442) Model local442 = local60.getModel(2, arg4 + 4, local15, local25, local37, local47, -1);
+			local452 = local60.getModel(2, local430, local15, local25, local37, local47, -1);
+			arg10.addWall(ROTATION_WALL_TYPE[local430], local57, arg7, ROTATION_WALL_TYPE[arg4], local442, local452, arg0, local72, arg3, local86);
+
+			if (local60.blockwalk) {
+				arg2.addWall(arg4, arg3, arg0, local60.blockrange, arg9);
+			}
+
+			if (local60.anim != -1) {
+				arg1.pushBack(new LocEntity(true, arg8, arg7, 0, SeqType.instances[local60.anim], arg3, arg0));
+			}
+		} else if (arg9 == 3) {
+			local99 = local60.getModel(3, arg4, local15, local25, local37, local47, -1);
+			arg10.addWall(0, local57, arg7, ROTATION_WALL_CORNER_TYPE[arg4], local99, null, arg0, local72, arg3, local86);
+
+			if (local60.blockwalk) {
+				arg2.addWall(arg4, arg3, arg0, local60.blockrange, arg9);
+			}
+
+			if (local60.anim != -1) {
+				arg1.pushBack(new LocEntity(true, arg8, arg7, 0, SeqType.instances[local60.anim], arg3, arg0));
+			}
+		} else if (arg9 == 9) {
+			local99 = local60.getModel(arg9, arg4, local15, local25, local37, local47, -1);
+			arg10.addLoc(local57, arg7, null, local72, arg3, arg0, 1, local86, local99, 0, 1);
+
+			if (local60.blockwalk) {
+				arg2.addLoc(arg4, local60.length, local60.width, arg0, arg3, local60.blockrange);
+			}
+
+			if (local60.anim != -1) {
+				arg1.pushBack(new LocEntity(true, arg8, arg7, 2, SeqType.instances[local60.anim], arg3, arg0));
+			}
+		} else if (arg9 == 4) {
+			local99 = local60.getModel(4, 0, local15, local25, local37, local47, -1);
+			arg10.setWallDecoration(local57, arg3, 0, local72, arg4 * 512, ROTATION_WALL_TYPE[arg4], 0, arg0, local99, local86, arg7);
+
+			if (local60.anim != -1) {
+				arg1.pushBack(new LocEntity(true, arg8, arg7, 1, SeqType.instances[local60.anim], arg3, arg0));
+			}
+		} else if (arg9 == 5) {
+			local430 = 16;
+			local174 = arg10.getWallBitset(arg7, arg0, arg3);
+
+			if (local174 > 0) {
+				local430 = LocType.get(local174 >> 14 & 0x7FFF).walloff;
+			}
+
+			local452 = local60.getModel(4, 0, local15, local25, local37, local47, -1);
+			arg10.setWallDecoration(local57, arg3, WALL_DECORATION_ROTATION_FORWARD_Z[arg4] * local430, local72, arg4 * 512, ROTATION_WALL_TYPE[arg4], WALL_DECORATION_ROTATION_FORWARD_X[arg4] * local430, arg0, local452, local86, arg7);
+
+			if (local60.anim != -1) {
+				arg1.pushBack(new LocEntity(true, arg8, arg7, 1, SeqType.instances[local60.anim], arg3, arg0));
+			}
+		} else if (arg9 == 6) {
+			local99 = local60.getModel(4, 0, local15, local25, local37, local47, -1);
+			arg10.setWallDecoration(local57, arg3, 0, local72, arg4, 256, 0, arg0, local99, local86, arg7);
+
+			if (local60.anim != -1) {
+				arg1.pushBack(new LocEntity(true, arg8, arg7, 1, SeqType.instances[local60.anim], arg3, arg0));
+			}
+		} else if (arg9 == 7) {
+			local99 = local60.getModel(4, 0, local15, local25, local37, local47, -1);
+			arg10.setWallDecoration(local57, arg3, 0, local72, arg4, 512, 0, arg0, local99, local86, arg7);
+
+			if (local60.anim != -1) {
+				arg1.pushBack(new LocEntity(true, arg8, arg7, 1, SeqType.instances[local60.anim], arg3, arg0));
+			}
+		} else if (arg9 == 8) {
+			local99 = local60.getModel(4, 0, local15, local25, local37, local47, -1);
+			arg10.setWallDecoration(local57, arg3, 0, local72, arg4, 768, 0, arg0, local99, local86, arg7);
+
+			if (local60.anim != -1) {
+				arg1.pushBack(new LocEntity(true, arg8, arg7, 1, SeqType.instances[local60.anim], arg3, arg0));
 			}
 		}
 	}
@@ -330,10 +355,12 @@ public final class World {
 				break;
 			}
 		}
+
 		for (@Pc(33) int local33 = arg1; local33 < arg1 + arg4; local33++) {
 			for (@Pc(37) int local37 = arg0; local37 < arg0 + arg3; local37++) {
 				if (local37 >= 0 && local37 < this.maxTileX && local33 >= 0 && local33 < this.maxTileZ) {
 					this.levelTileOverlayIds[0][local37][local33] = local3;
+
 					for (@Pc(62) int local62 = 0; local62 < 4; local62++) {
 						this.levelHeightmap[local62][local37][local33] = 0;
 						this.levelTileFlags[local62][local37][local33] = 0;
@@ -346,12 +373,14 @@ public final class World {
 	@OriginalMember(owner = "client!c", name = "a", descriptor = "([BIIIII)V")
 	public void readLandscape(@OriginalArg(0) byte[] arg0, @OriginalArg(1) int arg1, @OriginalArg(3) int arg3, @OriginalArg(4) int arg4, @OriginalArg(5) int arg5) {
 		@Pc(7) Packet local7 = new Packet(arg0);
+
 		for (@Pc(20) int local20 = 0; local20 < 4; local20++) {
 			for (@Pc(24) int local24 = 0; local24 < 64; local24++) {
 				for (@Pc(28) int local28 = 0; local28 < 64; local28++) {
 					@Pc(34) int local34 = local24 + arg4;
 					@Pc(38) int local38 = local28 + arg3;
 					@Pc(60) int local60;
+
 					if (local34 >= 0 && local34 < 104 && local38 >= 0 && local38 < 104) {
 						this.levelTileFlags[local20][local34][local38] = 0;
 						while (true) {
@@ -364,6 +393,7 @@ public final class World {
 								}
 								break;
 							}
+
 							if (local60 == 1) {
 								@Pc(116) int local116 = local7.g1();
 								if (local116 == 1) {
@@ -376,6 +406,7 @@ public final class World {
 								}
 								break;
 							}
+
 							if (local60 <= 49) {
 								this.levelTileOverlayIds[local20][local34][local38] = local7.g1b();
 								this.levelTileOverlayShape[local20][local34][local38] = (byte) ((local60 - 2) / 4);
@@ -392,10 +423,12 @@ public final class World {
 							if (local60 == 0) {
 								break;
 							}
+
 							if (local60 == 1) {
 								local7.g1();
 								break;
 							}
+
 							if (local60 <= 49) {
 								local7.g1();
 							}
@@ -410,11 +443,13 @@ public final class World {
 	public void readLocs(@OriginalArg(0) byte[] arg0, @OriginalArg(1) World3D arg1, @OriginalArg(2) CollisionMap[] arg2, @OriginalArg(3) LinkList arg3, @OriginalArg(5) int arg5, @OriginalArg(6) int arg6) {
 		@Pc(7) Packet local7 = new Packet(arg0);
 		@Pc(19) int local19 = -1;
+
 		while (true) {
 			@Pc(22) int local22 = local7.gsmarts();
 			if (local22 == 0) {
 				return;
 			}
+
 			local19 += local22;
 			@Pc(30) int local30 = 0;
 			while (true) {
@@ -422,6 +457,7 @@ public final class World {
 				if (local33 == 0) {
 					break;
 				}
+
 				local30 += local33 - 1;
 				@Pc(45) int local45 = local30 & 0x3F;
 				@Pc(51) int local51 = local30 >> 6 & 0x3F;
@@ -431,15 +467,18 @@ public final class World {
 				@Pc(66) int local66 = local58 & 0x3;
 				@Pc(70) int local70 = local51 + arg6;
 				@Pc(74) int local74 = local45 + arg5;
+
 				if (local70 > 0 && local74 > 0 && local70 < 103 && local74 < 103) {
 					@Pc(86) int local86 = local55;
 					if ((this.levelTileFlags[1][local70][local74] & 0x2) == 2) {
 						local86 = local55 - 1;
 					}
+
 					@Pc(101) CollisionMap local101 = null;
 					if (local86 >= 0) {
 						local101 = arg2[local86];
 					}
+
 					this.addLoc(local101, local55, local74, local66, local62, arg1, arg3, local19, local70);
 				}
 			}
@@ -452,242 +491,281 @@ public final class World {
 			if ((this.levelTileFlags[arg2][arg9][arg3] & 0x10) != 0) {
 				return;
 			}
+
 			if (this.getDrawLevel(arg2, arg9, arg3) != levelBuilt) {
 				return;
 			}
 		}
+
 		@Pc(36) int local36 = this.levelHeightmap[arg2][arg9][arg3];
 		@Pc(47) int local47 = this.levelHeightmap[arg2][arg9 + 1][arg3];
 		@Pc(60) int local60 = this.levelHeightmap[arg2][arg9 + 1][arg3 + 1];
 		@Pc(71) int local71 = this.levelHeightmap[arg2][arg9][arg3 + 1];
 		@Pc(81) int local81 = local36 + local47 + local60 + local71 >> 2;
 		@Pc(84) LocType local84 = LocType.get(arg8);
+
 		@Pc(96) int local96 = arg9 + (arg3 << 7) + (arg8 << 14) + 1073741824;
-		if (!local84.interactable) {
+		if (!local84.active) {
 			local96 += Integer.MIN_VALUE;
 		}
+
 		@Pc(110) byte local110 = (byte) ((arg4 << 6) + arg5);
 		@Pc(132) Model local132;
-		if (arg5 != 22) {
-			@Pc(209) int local209;
-			if (arg5 == 10 || arg5 == 11) {
-				local132 = local84.getModel(10, arg4, local36, local47, local60, local71, -1);
-				if (local132 != null) {
-					@Pc(196) int local196 = 0;
-					if (arg5 == 11) {
-						local196 += 256;
-					}
-					@Pc(212) int local212;
-					if (arg4 == 1 || arg4 == 3) {
-						local209 = local84.sizeZ;
-						local212 = local84.sizeX;
-					} else {
-						local209 = local84.sizeX;
-						local212 = local84.sizeZ;
-					}
-					if (arg6.addLoc(local81, arg2, null, local96, arg3, arg9, local209, local110, local132, local196, local212) && local84.active) {
-						for (@Pc(240) int local240 = 0; local240 <= local209; local240++) {
-							for (@Pc(244) int local244 = 0; local244 <= local212; local244++) {
-								@Pc(251) int local251 = local132.radius / 4;
-								if (local251 > 30) {
-									local251 = 30;
-								}
-								if (local251 > this.levelShademap[arg2][arg9 + local240][arg3 + local244]) {
-									this.levelShademap[arg2][arg9 + local240][arg3 + local244] = (byte) local251;
-								}
+		@Pc(209) int local209;
+		@Pc(810) int local810;
+		@Pc(832) Model local832;
+
+		if (arg5 == 22) {
+			if (!lowMemory || local84.active || local84.forcedecor) {
+				local132 = local84.getModel(22, arg4, local36, local47, local60, local71, -1);
+				arg6.addGroundDecoration(local132, arg9, local96, arg3, arg2, local110, local81);
+
+				if (local84.blockwalk && local84.active && arg0 != null) {
+					arg0.setBlocked(arg3, arg9);
+				}
+
+				if (local84.anim != -1) {
+					arg7.pushBack(new LocEntity(true, arg8, arg2, 3, SeqType.instances[local84.anim], arg3, arg9));
+				}
+			}
+		} else if (arg5 == 10 || arg5 == 11) {
+			local132 = local84.getModel(10, arg4, local36, local47, local60, local71, -1);
+			if (local132 != null) {
+				@Pc(196) int local196 = 0;
+				if (arg5 == 11) {
+					local196 += 256;
+				}
+
+				@Pc(212) int local212;
+				if (arg4 == 1 || arg4 == 3) {
+					local209 = local84.length;
+					local212 = local84.width;
+				} else {
+					local209 = local84.width;
+					local212 = local84.length;
+				}
+
+				if (arg6.addLoc(local81, arg2, null, local96, arg3, arg9, local209, local110, local132, local196, local212) && local84.shadow) {
+					for (@Pc(240) int local240 = 0; local240 <= local209; local240++) {
+						for (@Pc(244) int local244 = 0; local244 <= local212; local244++) {
+							@Pc(251) int local251 = local132.radius / 4;
+							if (local251 > 30) {
+								local251 = 30;
+							}
+
+							if (local251 > this.levelShademap[arg2][arg9 + local240][arg3 + local244]) {
+								this.levelShademap[arg2][arg9 + local240][arg3 + local244] = (byte) local251;
 							}
 						}
 					}
 				}
-				if (local84.blockwalk && arg0 != null) {
-					arg0.addLoc(arg4, local84.sizeZ, local84.sizeX, arg9, arg3, local84.blockrange);
-				}
-				if (local84.anim != -1) {
-					arg7.pushBack(new LocEntity(true, arg8, arg2, 2, SeqType.instances[local84.anim], arg3, arg9));
-				}
-			} else if (arg5 >= 12) {
-				local132 = local84.getModel(arg5, arg4, local36, local47, local60, local71, -1);
-				arg6.addLoc(local81, arg2, null, local96, arg3, arg9, 1, local110, local132, 0, 1);
-				if (arg5 >= 12 && arg5 <= 17 && arg5 != 13 && arg2 > 0) {
-					this.levelOccludemap[arg2][arg9][arg3] |= 0x924;
-				}
-				if (local84.blockwalk && arg0 != null) {
-					arg0.addLoc(arg4, local84.sizeZ, local84.sizeX, arg9, arg3, local84.blockrange);
-				}
-				if (local84.anim != -1) {
-					arg7.pushBack(new LocEntity(true, arg8, arg2, 2, SeqType.instances[local84.anim], arg3, arg9));
-				}
-			} else if (arg5 == 0) {
-				local132 = local84.getModel(0, arg4, local36, local47, local60, local71, -1);
-				arg6.addWall(0, local81, arg2, ROTATION_WALL_TYPE[arg4], local132, null, arg9, local96, arg3, local110);
-				if (arg4 == 0) {
-					if (local84.active) {
-						this.levelShademap[arg2][arg9][arg3] = 50;
-						this.levelShademap[arg2][arg9][arg3 + 1] = 50;
-					}
-					if (local84.occlude) {
-						this.levelOccludemap[arg2][arg9][arg3] |= 0x249;
-					}
-				} else if (arg4 == 1) {
-					if (local84.active) {
-						this.levelShademap[arg2][arg9][arg3 + 1] = 50;
-						this.levelShademap[arg2][arg9 + 1][arg3 + 1] = 50;
-					}
-					if (local84.occlude) {
-						this.levelOccludemap[arg2][arg9][arg3 + 1] |= 0x492;
-					}
-				} else if (arg4 == 2) {
-					if (local84.active) {
-						this.levelShademap[arg2][arg9 + 1][arg3] = 50;
-						this.levelShademap[arg2][arg9 + 1][arg3 + 1] = 50;
-					}
-					if (local84.occlude) {
-						this.levelOccludemap[arg2][arg9 + 1][arg3] |= 0x249;
-					}
-				} else if (arg4 == 3) {
-					if (local84.active) {
-						this.levelShademap[arg2][arg9][arg3] = 50;
-						this.levelShademap[arg2][arg9 + 1][arg3] = 50;
-					}
-					if (local84.occlude) {
-						this.levelOccludemap[arg2][arg9][arg3] |= 0x492;
-					}
-				}
-				if (local84.blockwalk && arg0 != null) {
-					arg0.addWall(arg4, arg3, arg9, local84.blockrange, arg5);
-				}
-				if (local84.anim != -1) {
-					arg7.pushBack(new LocEntity(true, arg8, arg2, 0, SeqType.instances[local84.anim], arg3, arg9));
-				}
-				if (local84.walloff != 16) {
-					arg6.setWallDecorationOffset(arg2, arg3, arg9, local84.walloff);
-				}
-			} else if (arg5 == 1) {
-				local132 = local84.getModel(1, arg4, local36, local47, local60, local71, -1);
-				arg6.addWall(0, local81, arg2, ROTATION_WALL_CORNER_TYPE[arg4], local132, null, arg9, local96, arg3, local110);
-				if (local84.active) {
-					if (arg4 == 0) {
-						this.levelShademap[arg2][arg9][arg3 + 1] = 50;
-					} else if (arg4 == 1) {
-						this.levelShademap[arg2][arg9 + 1][arg3 + 1] = 50;
-					} else if (arg4 == 2) {
-						this.levelShademap[arg2][arg9 + 1][arg3] = 50;
-					} else if (arg4 == 3) {
-						this.levelShademap[arg2][arg9][arg3] = 50;
-					}
-				}
-				if (local84.blockwalk && arg0 != null) {
-					arg0.addWall(arg4, arg3, arg9, local84.blockrange, arg5);
-				}
-				if (local84.anim != -1) {
-					arg7.pushBack(new LocEntity(true, arg8, arg2, 0, SeqType.instances[local84.anim], arg3, arg9));
-				}
-			} else {
-				@Pc(810) int local810;
-				@Pc(832) Model local832;
-				if (arg5 == 2) {
-					local810 = arg4 + 1 & 0x3;
-					@Pc(822) Model local822 = local84.getModel(2, arg4 + 4, local36, local47, local60, local71, -1);
-					local832 = local84.getModel(2, local810, local36, local47, local60, local71, -1);
-					arg6.addWall(ROTATION_WALL_TYPE[local810], local81, arg2, ROTATION_WALL_TYPE[arg4], local822, local832, arg9, local96, arg3, local110);
-					if (local84.occlude) {
-						if (arg4 == 0) {
-							this.levelOccludemap[arg2][arg9][arg3] |= 0x249;
-							this.levelOccludemap[arg2][arg9][arg3 + 1] |= 0x492;
-						} else if (arg4 == 1) {
-							this.levelOccludemap[arg2][arg9][arg3 + 1] |= 0x492;
-							this.levelOccludemap[arg2][arg9 + 1][arg3] |= 0x249;
-						} else if (arg4 == 2) {
-							this.levelOccludemap[arg2][arg9 + 1][arg3] |= 0x249;
-							this.levelOccludemap[arg2][arg9][arg3] |= 0x492;
-						} else if (arg4 == 3) {
-							this.levelOccludemap[arg2][arg9][arg3] |= 0x492;
-							this.levelOccludemap[arg2][arg9][arg3] |= 0x249;
-						}
-					}
-					if (local84.blockwalk && arg0 != null) {
-						arg0.addWall(arg4, arg3, arg9, local84.blockrange, arg5);
-					}
-					if (local84.anim != -1) {
-						arg7.pushBack(new LocEntity(true, arg8, arg2, 0, SeqType.instances[local84.anim], arg3, arg9));
-					}
-					if (local84.walloff != 16) {
-						arg6.setWallDecorationOffset(arg2, arg3, arg9, local84.walloff);
-					}
-				} else if (arg5 == 3) {
-					local132 = local84.getModel(3, arg4, local36, local47, local60, local71, -1);
-					arg6.addWall(0, local81, arg2, ROTATION_WALL_CORNER_TYPE[arg4], local132, null, arg9, local96, arg3, local110);
-					if (local84.active) {
-						if (arg4 == 0) {
-							this.levelShademap[arg2][arg9][arg3 + 1] = 50;
-						} else if (arg4 == 1) {
-							this.levelShademap[arg2][arg9 + 1][arg3 + 1] = 50;
-						} else if (arg4 == 2) {
-							this.levelShademap[arg2][arg9 + 1][arg3] = 50;
-						} else if (arg4 == 3) {
-							this.levelShademap[arg2][arg9][arg3] = 50;
-						}
-					}
-					if (local84.blockwalk && arg0 != null) {
-						arg0.addWall(arg4, arg3, arg9, local84.blockrange, arg5);
-					}
-					if (local84.anim != -1) {
-						arg7.pushBack(new LocEntity(true, arg8, arg2, 0, SeqType.instances[local84.anim], arg3, arg9));
-					}
-				} else if (arg5 == 9) {
-					local132 = local84.getModel(arg5, arg4, local36, local47, local60, local71, -1);
-					arg6.addLoc(local81, arg2, null, local96, arg3, arg9, 1, local110, local132, 0, 1);
-					if (local84.blockwalk && arg0 != null) {
-						arg0.addLoc(arg4, local84.sizeZ, local84.sizeX, arg9, arg3, local84.blockrange);
-					}
-					if (local84.anim != -1) {
-						arg7.pushBack(new LocEntity(true, arg8, arg2, 2, SeqType.instances[local84.anim], arg3, arg9));
-					}
-				} else if (arg5 == 4) {
-					local132 = local84.getModel(4, 0, local36, local47, local60, local71, -1);
-					arg6.setWallDecoration(local81, arg3, 0, local96, arg4 * 512, ROTATION_WALL_TYPE[arg4], 0, arg9, local132, local110, arg2);
-					if (local84.anim != -1) {
-						arg7.pushBack(new LocEntity(true, arg8, arg2, 1, SeqType.instances[local84.anim], arg3, arg9));
-					}
-				} else if (arg5 == 5) {
-					local810 = 16;
-					local209 = arg6.getWallBitset(arg2, arg9, arg3);
-					if (local209 > 0) {
-						local810 = LocType.get(local209 >> 14 & 0x7FFF).walloff;
-					}
-					local832 = local84.getModel(4, 0, local36, local47, local60, local71, -1);
-					arg6.setWallDecoration(local81, arg3, WALL_DECORATION_ROTATION_FORWARD_Z[arg4] * local810, local96, arg4 * 512, ROTATION_WALL_TYPE[arg4], WALL_DECORATION_ROTATION_FORWARD_X[arg4] * local810, arg9, local832, local110, arg2);
-					if (local84.anim != -1) {
-						arg7.pushBack(new LocEntity(true, arg8, arg2, 1, SeqType.instances[local84.anim], arg3, arg9));
-					}
-				} else if (arg5 == 6) {
-					local132 = local84.getModel(4, 0, local36, local47, local60, local71, -1);
-					arg6.setWallDecoration(local81, arg3, 0, local96, arg4, 256, 0, arg9, local132, local110, arg2);
-					if (local84.anim != -1) {
-						arg7.pushBack(new LocEntity(true, arg8, arg2, 1, SeqType.instances[local84.anim], arg3, arg9));
-					}
-				} else if (arg5 == 7) {
-					local132 = local84.getModel(4, 0, local36, local47, local60, local71, -1);
-					arg6.setWallDecoration(local81, arg3, 0, local96, arg4, 512, 0, arg9, local132, local110, arg2);
-					if (local84.anim != -1) {
-						arg7.pushBack(new LocEntity(true, arg8, arg2, 1, SeqType.instances[local84.anim], arg3, arg9));
-					}
-				} else if (arg5 == 8) {
-					local132 = local84.getModel(4, 0, local36, local47, local60, local71, -1);
-					arg6.setWallDecoration(local81, arg3, 0, local96, arg4, 768, 0, arg9, local132, local110, arg2);
-					if (local84.anim != -1) {
-						arg7.pushBack(new LocEntity(true, arg8, arg2, 1, SeqType.instances[local84.anim], arg3, arg9));
-					}
-				}
 			}
-		} else if (!lowMemory || local84.interactable || local84.forcedecor) {
-			local132 = local84.getModel(22, arg4, local36, local47, local60, local71, -1);
-			arg6.addGroundDecoration(local132, arg9, local96, arg3, arg2, local110, local81);
-			if (local84.blockwalk && local84.interactable && arg0 != null) {
-				arg0.setBlocked(arg3, arg9);
+
+			if (local84.blockwalk && arg0 != null) {
+				arg0.addLoc(arg4, local84.length, local84.width, arg9, arg3, local84.blockrange);
 			}
+
 			if (local84.anim != -1) {
-				arg7.pushBack(new LocEntity(true, arg8, arg2, 3, SeqType.instances[local84.anim], arg3, arg9));
+				arg7.pushBack(new LocEntity(true, arg8, arg2, 2, SeqType.instances[local84.anim], arg3, arg9));
+			}
+		} else if (arg5 >= 12) {
+			local132 = local84.getModel(arg5, arg4, local36, local47, local60, local71, -1);
+			arg6.addLoc(local81, arg2, null, local96, arg3, arg9, 1, local110, local132, 0, 1);
+
+			if (arg5 >= 12 && arg5 <= 17 && arg5 != 13 && arg2 > 0) {
+				this.levelOccludemap[arg2][arg9][arg3] |= 0x924;
+			}
+
+			if (local84.blockwalk && arg0 != null) {
+				arg0.addLoc(arg4, local84.length, local84.width, arg9, arg3, local84.blockrange);
+			}
+
+			if (local84.anim != -1) {
+				arg7.pushBack(new LocEntity(true, arg8, arg2, 2, SeqType.instances[local84.anim], arg3, arg9));
+			}
+		} else if (arg5 == 0) {
+			local132 = local84.getModel(0, arg4, local36, local47, local60, local71, -1);
+			arg6.addWall(0, local81, arg2, ROTATION_WALL_TYPE[arg4], local132, null, arg9, local96, arg3, local110);
+
+			if (arg4 == 0) {
+				if (local84.shadow) {
+					this.levelShademap[arg2][arg9][arg3] = 50;
+					this.levelShademap[arg2][arg9][arg3 + 1] = 50;
+				}
+
+				if (local84.occlude) {
+					this.levelOccludemap[arg2][arg9][arg3] |= 0x249;
+				}
+			} else if (arg4 == 1) {
+				if (local84.shadow) {
+					this.levelShademap[arg2][arg9][arg3 + 1] = 50;
+					this.levelShademap[arg2][arg9 + 1][arg3 + 1] = 50;
+				}
+
+				if (local84.occlude) {
+					this.levelOccludemap[arg2][arg9][arg3 + 1] |= 0x492;
+				}
+			} else if (arg4 == 2) {
+				if (local84.shadow) {
+					this.levelShademap[arg2][arg9 + 1][arg3] = 50;
+					this.levelShademap[arg2][arg9 + 1][arg3 + 1] = 50;
+				}
+
+				if (local84.occlude) {
+					this.levelOccludemap[arg2][arg9 + 1][arg3] |= 0x249;
+				}
+			} else if (arg4 == 3) {
+				if (local84.shadow) {
+					this.levelShademap[arg2][arg9][arg3] = 50;
+					this.levelShademap[arg2][arg9 + 1][arg3] = 50;
+				}
+
+				if (local84.occlude) {
+					this.levelOccludemap[arg2][arg9][arg3] |= 0x492;
+				}
+			}
+
+			if (local84.blockwalk && arg0 != null) {
+				arg0.addWall(arg4, arg3, arg9, local84.blockrange, arg5);
+			}
+
+			if (local84.anim != -1) {
+				arg7.pushBack(new LocEntity(true, arg8, arg2, 0, SeqType.instances[local84.anim], arg3, arg9));
+			}
+
+			if (local84.walloff != 16) {
+				arg6.setWallDecorationOffset(arg2, arg3, arg9, local84.walloff);
+			}
+		} else if (arg5 == 1) {
+			local132 = local84.getModel(1, arg4, local36, local47, local60, local71, -1);
+			arg6.addWall(0, local81, arg2, ROTATION_WALL_CORNER_TYPE[arg4], local132, null, arg9, local96, arg3, local110);
+
+			if (local84.shadow) {
+				if (arg4 == 0) {
+					this.levelShademap[arg2][arg9][arg3 + 1] = 50;
+				} else if (arg4 == 1) {
+					this.levelShademap[arg2][arg9 + 1][arg3 + 1] = 50;
+				} else if (arg4 == 2) {
+					this.levelShademap[arg2][arg9 + 1][arg3] = 50;
+				} else if (arg4 == 3) {
+					this.levelShademap[arg2][arg9][arg3] = 50;
+				}
+			}
+
+			if (local84.blockwalk && arg0 != null) {
+				arg0.addWall(arg4, arg3, arg9, local84.blockrange, arg5);
+			}
+
+			if (local84.anim != -1) {
+				arg7.pushBack(new LocEntity(true, arg8, arg2, 0, SeqType.instances[local84.anim], arg3, arg9));
+			}
+		} else if (arg5 == 2) {
+			local810 = arg4 + 1 & 0x3;
+			@Pc(822) Model local822 = local84.getModel(2, arg4 + 4, local36, local47, local60, local71, -1);
+			local832 = local84.getModel(2, local810, local36, local47, local60, local71, -1);
+			arg6.addWall(ROTATION_WALL_TYPE[local810], local81, arg2, ROTATION_WALL_TYPE[arg4], local822, local832, arg9, local96, arg3, local110);
+
+			if (local84.occlude) {
+				if (arg4 == 0) {
+					this.levelOccludemap[arg2][arg9][arg3] |= 0x249;
+					this.levelOccludemap[arg2][arg9][arg3 + 1] |= 0x492;
+				} else if (arg4 == 1) {
+					this.levelOccludemap[arg2][arg9][arg3 + 1] |= 0x492;
+					this.levelOccludemap[arg2][arg9 + 1][arg3] |= 0x249;
+				} else if (arg4 == 2) {
+					this.levelOccludemap[arg2][arg9 + 1][arg3] |= 0x249;
+					this.levelOccludemap[arg2][arg9][arg3] |= 0x492;
+				} else if (arg4 == 3) {
+					this.levelOccludemap[arg2][arg9][arg3] |= 0x492;
+					this.levelOccludemap[arg2][arg9][arg3] |= 0x249;
+				}
+			}
+
+			if (local84.blockwalk && arg0 != null) {
+				arg0.addWall(arg4, arg3, arg9, local84.blockrange, arg5);
+			}
+
+			if (local84.anim != -1) {
+				arg7.pushBack(new LocEntity(true, arg8, arg2, 0, SeqType.instances[local84.anim], arg3, arg9));
+			}
+
+			if (local84.walloff != 16) {
+				arg6.setWallDecorationOffset(arg2, arg3, arg9, local84.walloff);
+			}
+		} else if (arg5 == 3) {
+			local132 = local84.getModel(3, arg4, local36, local47, local60, local71, -1);
+			arg6.addWall(0, local81, arg2, ROTATION_WALL_CORNER_TYPE[arg4], local132, null, arg9, local96, arg3, local110);
+
+			if (local84.shadow) {
+				if (arg4 == 0) {
+					this.levelShademap[arg2][arg9][arg3 + 1] = 50;
+				} else if (arg4 == 1) {
+					this.levelShademap[arg2][arg9 + 1][arg3 + 1] = 50;
+				} else if (arg4 == 2) {
+					this.levelShademap[arg2][arg9 + 1][arg3] = 50;
+				} else if (arg4 == 3) {
+					this.levelShademap[arg2][arg9][arg3] = 50;
+				}
+			}
+
+			if (local84.blockwalk && arg0 != null) {
+				arg0.addWall(arg4, arg3, arg9, local84.blockrange, arg5);
+			}
+
+			if (local84.anim != -1) {
+				arg7.pushBack(new LocEntity(true, arg8, arg2, 0, SeqType.instances[local84.anim], arg3, arg9));
+			}
+		} else if (arg5 == 9) {
+			local132 = local84.getModel(arg5, arg4, local36, local47, local60, local71, -1);
+			arg6.addLoc(local81, arg2, null, local96, arg3, arg9, 1, local110, local132, 0, 1);
+
+			if (local84.blockwalk && arg0 != null) {
+				arg0.addLoc(arg4, local84.length, local84.width, arg9, arg3, local84.blockrange);
+			}
+
+			if (local84.anim != -1) {
+				arg7.pushBack(new LocEntity(true, arg8, arg2, 2, SeqType.instances[local84.anim], arg3, arg9));
+			}
+		} else if (arg5 == 4) {
+			local132 = local84.getModel(4, 0, local36, local47, local60, local71, -1);
+			arg6.setWallDecoration(local81, arg3, 0, local96, arg4 * 512, ROTATION_WALL_TYPE[arg4], 0, arg9, local132, local110, arg2);
+
+			if (local84.anim != -1) {
+				arg7.pushBack(new LocEntity(true, arg8, arg2, 1, SeqType.instances[local84.anim], arg3, arg9));
+			}
+		} else if (arg5 == 5) {
+			local810 = 16;
+			local209 = arg6.getWallBitset(arg2, arg9, arg3);
+			if (local209 > 0) {
+				local810 = LocType.get(local209 >> 14 & 0x7FFF).walloff;
+			}
+
+			local832 = local84.getModel(4, 0, local36, local47, local60, local71, -1);
+			arg6.setWallDecoration(local81, arg3, WALL_DECORATION_ROTATION_FORWARD_Z[arg4] * local810, local96, arg4 * 512, ROTATION_WALL_TYPE[arg4], WALL_DECORATION_ROTATION_FORWARD_X[arg4] * local810, arg9, local832, local110, arg2);
+
+			if (local84.anim != -1) {
+				arg7.pushBack(new LocEntity(true, arg8, arg2, 1, SeqType.instances[local84.anim], arg3, arg9));
+			}
+		} else if (arg5 == 6) {
+			local132 = local84.getModel(4, 0, local36, local47, local60, local71, -1);
+			arg6.setWallDecoration(local81, arg3, 0, local96, arg4, 256, 0, arg9, local132, local110, arg2);
+
+			if (local84.anim != -1) {
+				arg7.pushBack(new LocEntity(true, arg8, arg2, 1, SeqType.instances[local84.anim], arg3, arg9));
+			}
+		} else if (arg5 == 7) {
+			local132 = local84.getModel(4, 0, local36, local47, local60, local71, -1);
+			arg6.setWallDecoration(local81, arg3, 0, local96, arg4, 512, 0, arg9, local132, local110, arg2);
+
+			if (local84.anim != -1) {
+				arg7.pushBack(new LocEntity(true, arg8, arg2, 1, SeqType.instances[local84.anim], arg3, arg9));
+			}
+		} else if (arg5 == 8) {
+			local132 = local84.getModel(4, 0, local36, local47, local60, local71, -1);
+			arg6.setWallDecoration(local81, arg3, 0, local96, arg4, 768, 0, arg9, local132, local110, arg2);
+
+			if (local84.anim != -1) {
+				arg7.pushBack(new LocEntity(true, arg8, arg2, 1, SeqType.instances[local84.anim], arg3, arg9));
 			}
 		}
 	}
@@ -697,6 +775,7 @@ public final class World {
 		@Pc(7) int local7;
 		@Pc(11) int local11;
 		@Pc(27) int local27;
+
 		for (@Pc(3) int local3 = 0; local3 < 4; local3++) {
 			for (local7 = 0; local7 < 104; local7++) {
 				for (local11 = 0; local11 < 104; local11++) {
@@ -712,20 +791,21 @@ public final class World {
 				}
 			}
 		}
+
 		randomHueOffset += (int) (Math.random() * 5.0D) - 2;
 		if (randomHueOffset < -8) {
 			randomHueOffset = -8;
-		}
-		if (randomHueOffset > 8) {
+		} else if (randomHueOffset > 8) {
 			randomHueOffset = 8;
 		}
+
 		randomLightnessOffset += (int) (Math.random() * 5.0D) - 2;
 		if (randomLightnessOffset < -16) {
 			randomLightnessOffset = -16;
-		}
-		if (randomLightnessOffset > 16) {
+		} else if (randomLightnessOffset > 16) {
 			randomLightnessOffset = 16;
 		}
+
 		@Pc(133) int local133;
 		@Pc(139) int local139;
 		@Pc(141) int local141;
@@ -738,6 +818,7 @@ public final class World {
 		@Pc(220) int local220;
 		@Pc(236) int local236;
 		@Pc(284) int local284;
+
 		for (local7 = 0; local7 < 4; local7++) {
 			@Pc(108) byte[][] local108 = this.levelShademap[local7];
 			@Pc(110) byte local110 = 96;
@@ -747,6 +828,7 @@ public final class World {
 			@Pc(118) byte local118 = -50;
 			local133 = (int) Math.sqrt(local114 * local114 + local116 * local116 + local118 * local118);
 			local139 = local112 * local133 >> 8;
+
 			for (local141 = 1; local141 < this.maxTileZ - 1; local141++) {
 				for (local145 = 1; local145 < this.maxTileX - 1; local145++) {
 					local169 = this.levelHeightmap[local7][local145 + 1][local141] - this.levelHeightmap[local7][local145 - 1][local141];
@@ -760,6 +842,7 @@ public final class World {
 					this.levelLightmap[local145][local141] = local236 - local284;
 				}
 			}
+
 			for (local145 = 0; local145 < this.maxTileZ; local145++) {
 				this.blendChroma[local145] = 0;
 				this.blendSaturation[local145] = 0;
@@ -767,12 +850,15 @@ public final class World {
 				this.blendLuminance[local145] = 0;
 				this.blendMagnitude[local145] = 0;
 			}
+
 			for (local169 = -5; local169 < this.maxTileX + 5; local169++) {
 				for (local191 = 0; local191 < this.maxTileZ; local191++) {
 					local204 = local169 + 5;
 					@Pc(419) int local419;
+
 					if (local204 >= 0 && local204 < this.maxTileX) {
 						local210 = this.levelTileUnderlayIds[local7][local204][local191] & 0xFF;
+
 						if (local210 > 0) {
 							@Pc(378) FloType local378 = FloType.instances[local210 - 1];
 							this.blendChroma[local191] += local378.chroma;
@@ -782,9 +868,11 @@ public final class World {
 							local419 = this.blendMagnitude[local191]++;
 						}
 					}
+
 					local210 = local169 - 5;
 					if (local210 >= 0 && local210 < this.maxTileX) {
 						local214 = this.levelTileUnderlayIds[local7][local210][local191] & 0xFF;
+
 						if (local214 > 0) {
 							@Pc(451) FloType local451 = FloType.instances[local214 - 1];
 							this.blendChroma[local191] -= local451.chroma;
@@ -795,12 +883,14 @@ public final class World {
 						}
 					}
 				}
+
 				if (local169 >= 1 && local169 < this.maxTileX - 1) {
 					local204 = 0;
 					local210 = 0;
 					local214 = 0;
 					local220 = 0;
 					local236 = 0;
+
 					for (local284 = -5; local284 < this.maxTileZ + 5; local284++) {
 						@Pc(527) int local527 = local284 + 5;
 						if (local527 >= 0 && local527 < this.maxTileZ) {
@@ -810,6 +900,7 @@ public final class World {
 							local220 += this.blendLuminance[local527];
 							local236 += this.blendMagnitude[local527];
 						}
+
 						@Pc(572) int local572 = local284 - 5;
 						if (local572 >= 0 && local572 < this.maxTileZ) {
 							local204 -= this.blendChroma[local572];
@@ -818,9 +909,11 @@ public final class World {
 							local220 -= this.blendLuminance[local572];
 							local236 -= this.blendMagnitude[local572];
 						}
+
 						if (local284 >= 1 && local284 < this.maxTileZ - 1 && (!lowMemory || (this.levelTileFlags[local7][local169][local284] & 0x10) == 0 && this.getDrawLevel(local7, local169, local284) == levelBuilt)) {
 							@Pc(655) int local655 = this.levelTileUnderlayIds[local7][local169][local284] & 0xFF;
 							@Pc(666) int local666 = this.levelTileOverlayIds[local7][local169][local284] & 0xFF;
+
 							if (local655 > 0 || local666 > 0) {
 								@Pc(679) int local679 = this.levelHeightmap[local7][local169][local284];
 								@Pc(690) int local690 = this.levelHeightmap[local7][local169 + 1][local284];
@@ -834,6 +927,7 @@ public final class World {
 								@Pc(754) int local754 = -1;
 								@Pc(762) int local762;
 								@Pc(766) int local766;
+
 								if (local655 > 0) {
 									local762 = local204 * 256 / local220;
 									local766 = local210 / local236;
@@ -848,22 +942,24 @@ public final class World {
 									}
 									local754 = this.hsl24to16(local782, local766, local770);
 								}
+
 								if (local7 > 0) {
-									@Pc(807) boolean local807 = true;
-									if (local655 == 0 && this.levelTileOverlayShape[local7][local169][local284] != 0) {
-										local807 = false;
-									}
+									@Pc(807) boolean local807 = local655 != 0 || this.levelTileOverlayShape[local7][local169][local284] == 0;
+
 									if (local666 > 0 && !FloType.instances[local666 - 1].occludes) {
 										local807 = false;
 									}
+
 									if (local807 && local679 == local690 && local679 == local703 && local679 == local714) {
 										this.levelOccludemap[local7][local169][local284] |= 0x924;
 									}
 								}
+
 								local762 = 0;
 								if (local752 != -1) {
 									local762 = Draw3D.palette[mulHSL(local754, 96)];
 								}
+
 								if (local666 == 0) {
 									arg0.setTile(local7, local169, local284, 0, 0, -1, local679, local690, local703, local714, mulHSL(local752, local721), mulHSL(local752, local730), mulHSL(local752, local741), mulHSL(local752, local750), 0, 0, 0, 0, local762, 0);
 								} else {
@@ -873,6 +969,7 @@ public final class World {
 									@Pc(928) int local928 = local925.texture;
 									@Pc(936) int local936;
 									@Pc(934) int local934;
+
 									if (local928 >= 0) {
 										local934 = Draw3D.getAverageTextureRGB(local928);
 										local936 = -1;
@@ -884,6 +981,7 @@ public final class World {
 										local936 = this.hsl24to16(local925.hue, local925.saturation, local925.lightness);
 										local934 = Draw3D.palette[this.adjustLightness(local925.hsl, 96)];
 									}
+
 									arg0.setTile(local7, local169, local284, local766, local919, local928, local679, local690, local703, local714, mulHSL(local752, local721), mulHSL(local752, local730), mulHSL(local752, local741), mulHSL(local752, local750), this.adjustLightness(local936, local721), this.adjustLightness(local936, local730), this.adjustLightness(local936, local741), this.adjustLightness(local936, local750), local762, local934);
 								}
 							}
@@ -891,15 +989,18 @@ public final class World {
 					}
 				}
 			}
+
 			for (local191 = 1; local191 < this.maxTileZ - 1; local191++) {
 				for (local204 = 1; local204 < this.maxTileX - 1; local204++) {
 					arg0.setDrawLevel(local7, local204, local191, this.getDrawLevel(local7, local204, local191));
 				}
 			}
 		}
+
 		if (!fullbright) {
 			arg0.buildModels(-10, 64, -50, 768, -50);
 		}
+
 		for (local11 = 0; local11 < this.maxTileX; local11++) {
 			for (local27 = 0; local27 < this.maxTileZ; local27++) {
 				if ((this.levelTileFlags[1][local11][local27] & 0x2) == 2) {
@@ -907,16 +1008,19 @@ public final class World {
 				}
 			}
 		}
+
 		if (!fullbright) {
 			local27 = 1;
 			@Pc(1123) int local1123 = 2;
 			@Pc(1125) int local1125 = 4;
+
 			for (@Pc(1127) int local1127 = 0; local1127 < 4; local1127++) {
 				if (local1127 > 0) {
 					local27 <<= 0x3;
 					local1123 <<= 0x3;
 					local1125 <<= 0x3;
 				}
+
 				for (@Pc(1145) int local1145 = 0; local1145 <= local1127; local1145++) {
 					for (local133 = 0; local133 <= this.maxTileZ; local133++) {
 						for (local139 = 0; local139 <= this.maxTileX; local139++) {
@@ -926,13 +1030,17 @@ public final class World {
 								local145 = local133;
 								local169 = local1145;
 								local191 = local1145;
+
 								while (local141 > 0 && (this.levelOccludemap[local1145][local139][local141 - 1] & local27) != 0) {
 									local141--;
 								}
+
 								while (local145 < this.maxTileZ && (this.levelOccludemap[local1145][local139][local145 + 1] & local27) != 0) {
 									local145++;
 								}
-								label337: while (local169 > 0) {
+
+								label337:
+								while (local169 > 0) {
 									for (local204 = local141; local204 <= local145; local204++) {
 										if ((this.levelOccludemap[local169 - 1][local139][local204] & local27) == 0) {
 											break label337;
@@ -940,7 +1048,9 @@ public final class World {
 									}
 									local169--;
 								}
-								label326: while (local191 < local1127) {
+
+								label326:
+								while (local191 < local1127) {
 									for (local204 = local141; local204 <= local145; local204++) {
 										if ((this.levelOccludemap[local191 + 1][local139][local204] & local27) == 0) {
 											break label326;
@@ -948,6 +1058,7 @@ public final class World {
 									}
 									local191++;
 								}
+
 								local204 = (local191 + 1 - local169) * (local145 + 1 - local141);
 								if (local204 >= 8) {
 									local1284 = 240;
@@ -961,18 +1072,23 @@ public final class World {
 									}
 								}
 							}
+
 							if ((this.levelOccludemap[local1145][local139][local133] & local1123) != 0) {
 								local141 = local139;
 								local145 = local139;
 								local169 = local1145;
 								local191 = local1145;
+
 								while (local141 > 0 && (this.levelOccludemap[local1145][local141 - 1][local133] & local1123) != 0) {
 									local141--;
 								}
+
 								while (local145 < this.maxTileX && (this.levelOccludemap[local1145][local145 + 1][local133] & local1123) != 0) {
 									local145++;
 								}
-								label390: while (local169 > 0) {
+
+								label390:
+								while (local169 > 0) {
 									for (local204 = local141; local204 <= local145; local204++) {
 										if ((this.levelOccludemap[local169 - 1][local204][local133] & local1123) == 0) {
 											break label390;
@@ -980,7 +1096,9 @@ public final class World {
 									}
 									local169--;
 								}
-								label379: while (local191 < local1127) {
+
+								label379:
+								while (local191 < local1127) {
 									for (local204 = local141; local204 <= local145; local204++) {
 										if ((this.levelOccludemap[local191 + 1][local204][local133] & local1123) == 0) {
 											break label379;
@@ -988,12 +1106,16 @@ public final class World {
 									}
 									local191++;
 								}
+
 								local204 = (local191 + 1 - local169) * (local145 + 1 - local141);
+
 								if (local204 >= 8) {
 									local1284 = 240;
 									local214 = this.levelHeightmap[local191][local141][local133] - local1284;
 									local220 = this.levelHeightmap[local169][local141][local133];
+
 									World3D.addOccluder(local133 * 128, local141 * 128, local220, 2, local145 * 128 + 128, local1127, local214, local133 * 128);
+
 									for (local236 = local169; local236 <= local191; local236++) {
 										for (local284 = local141; local284 <= local145; local284++) {
 											this.levelOccludemap[local236][local284][local133] &= ~local1123;
@@ -1006,13 +1128,17 @@ public final class World {
 								local145 = local139;
 								local169 = local133;
 								local191 = local133;
+
 								while (local169 > 0 && (this.levelOccludemap[local1145][local139][local169 - 1] & local1125) != 0) {
 									local169--;
 								}
+
 								while (local191 < this.maxTileZ && (this.levelOccludemap[local1145][local139][local191 + 1] & local1125) != 0) {
 									local191++;
 								}
-								label443: while (local141 > 0) {
+
+								label443:
+								while (local141 > 0) {
 									for (local204 = local169; local204 <= local191; local204++) {
 										if ((this.levelOccludemap[local1145][local141 - 1][local204] & local1125) == 0) {
 											break label443;
@@ -1020,7 +1146,9 @@ public final class World {
 									}
 									local141--;
 								}
-								label432: while (local145 < this.maxTileX) {
+
+								label432:
+								while (local145 < this.maxTileX) {
 									for (local204 = local169; local204 <= local191; local204++) {
 										if ((this.levelOccludemap[local1145][local145 + 1][local204] & local1125) == 0) {
 											break label432;
@@ -1028,9 +1156,11 @@ public final class World {
 									}
 									local145++;
 								}
+
 								if ((local145 + 1 - local141) * (local191 + 1 - local169) >= 4) {
 									local204 = this.levelHeightmap[local1145][local141][local169];
 									World3D.addOccluder(local191 * 128 + 128, local141 * 128, local204, 4, local145 * 128 + 128, local1127, local204, local169 * 128);
+
 									for (local210 = local141; local210 <= local145; local210++) {
 										for (local214 = local169; local214 <= local191; local214++) {
 											this.levelOccludemap[local1145][local210][local214] &= ~local1125;
@@ -1058,7 +1188,9 @@ public final class World {
 	private int adjustLightness(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1) {
 		if (arg0 == -2) {
 			return 12345678;
-		} else if (arg0 == -1) {
+		}
+
+		if (arg0 == -1) {
 			if (arg1 < 0) {
 				arg1 = 0;
 			} else if (arg1 > 127) {
@@ -1081,15 +1213,19 @@ public final class World {
 		if (arg2 > 179) {
 			arg1 /= 2;
 		}
+
 		if (arg2 > 192) {
 			arg1 /= 2;
 		}
+
 		if (arg2 > 217) {
 			arg1 /= 2;
 		}
+
 		if (arg2 > 243) {
 			arg1 /= 2;
 		}
+
 		return (arg0 / 4 << 10) + (arg1 / 32 << 7) + arg2 / 2;
 	}
 }

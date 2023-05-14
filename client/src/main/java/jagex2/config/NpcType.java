@@ -34,7 +34,7 @@ public final class NpcType {
 	public String name;
 
 	@OriginalMember(owner = "client!bc", name = "i", descriptor = "[B")
-	public byte[] desc;
+	public String desc;
 
 	@OriginalMember(owner = "client!bc", name = "j", descriptor = "B")
 	public byte size = 1;
@@ -73,13 +73,13 @@ public final class NpcType {
 	public String[] ops;
 
 	@OriginalMember(owner = "client!bc", name = "v", descriptor = "I")
-	private int opcode90 = -1;
+	private int code90 = -1;
 
 	@OriginalMember(owner = "client!bc", name = "w", descriptor = "I")
-	private int opcode91 = -1;
+	private int code91 = -1;
 
 	@OriginalMember(owner = "client!bc", name = "x", descriptor = "I")
-	private int opcode92 = -1;
+	private int code92 = -1;
 
 	@OriginalMember(owner = "client!bc", name = "y", descriptor = "Z")
 	public boolean visonmap = true;
@@ -88,10 +88,10 @@ public final class NpcType {
 	public int vislevel = -1;
 
 	@OriginalMember(owner = "client!bc", name = "A", descriptor = "I")
-	private int resizex = 128;
+	private int resizeh = 128;
 
 	@OriginalMember(owner = "client!bc", name = "B", descriptor = "I")
-	private int resizez = 128;
+	private int resizev = 128;
 
 	@OriginalMember(owner = "client!bc", name = "C", descriptor = "Lclient!s;")
 	public static LruCache modelCache = new LruCache(30);
@@ -100,13 +100,16 @@ public final class NpcType {
 	public static void unpack(@OriginalArg(0) Jagfile config) {
 		dat = new Packet(config.read("npc.dat", null));
 		@Pc(21) Packet idx = new Packet(config.read("npc.idx", null));
+
 		count = idx.g2();
 		offsets = new int[count];
+
 		@Pc(29) int offset = 2;
 		for (@Pc(31) int id = 0; id < count; id++) {
 			offsets[id] = offset;
 			offset += idx.g2();
 		}
+
 		cache = new NpcType[20];
 		for (@Pc(51) int id = 0; id < 20; id++) {
 			cache[id] = new NpcType();
@@ -128,6 +131,7 @@ public final class NpcType {
 				return cache[local1];
 			}
 		}
+
 		cachePos = (cachePos + 1) % 20;
 		@Pc(33) NpcType local33 = cache[cachePos] = new NpcType();
 		dat.pos = offsets[arg0];
@@ -149,13 +153,14 @@ public final class NpcType {
 			if (code == 1) {
 				local19 = dat.g1();
 				this.models = new int[local19];
+
 				for (local25 = 0; local25 < local19; local25++) {
 					this.models[local25] = dat.g2();
 				}
 			} else if (code == 2) {
 				this.name = dat.gstr();
 			} else if (code == 3) {
-				this.desc = dat.gstrbyte();
+				this.desc = dat.gstr();
 			} else if (code == 12) {
 				this.size = dat.g1b();
 			} else if (code == 13) {
@@ -173,6 +178,7 @@ public final class NpcType {
 				if (this.ops == null) {
 					this.ops = new String[5];
 				}
+
 				this.ops[code - 30] = dat.gstr();
 				if (this.ops[code - 30].equalsIgnoreCase("hidden")) {
 					this.ops[code - 30] = null;
@@ -181,6 +187,7 @@ public final class NpcType {
 				local19 = dat.g1();
 				this.recol_s = new int[local19];
 				this.recol_d = new int[local19];
+
 				for (local25 = 0; local25 < local19; local25++) {
 					this.recol_s[local25] = dat.g2();
 					this.recol_d[local25] = dat.g2();
@@ -188,23 +195,24 @@ public final class NpcType {
 			} else if (code == 60) {
 				local19 = dat.g1();
 				this.heads = new int[local19];
+
 				for (local25 = 0; local25 < local19; local25++) {
 					this.heads[local25] = dat.g2();
 				}
 			} else if (code == 90) {
-				this.opcode90 = dat.g2();
+				this.code90 = dat.g2();
 			} else if (code == 91) {
-				this.opcode91 = dat.g2();
+				this.code91 = dat.g2();
 			} else if (code == 92) {
-				this.opcode92 = dat.g2();
+				this.code92 = dat.g2();
 			} else if (code == 93) {
 				this.visonmap = false;
 			} else if (code == 95) {
 				this.vislevel = dat.g2();
 			} else if (code == 97) {
-				this.resizex = dat.g2();
+				this.resizeh = dat.g2();
 			} else if (code == 98) {
-				this.resizez = dat.g2();
+				this.resizev = dat.g2();
 			}
 		}
 	}
@@ -213,40 +221,50 @@ public final class NpcType {
 	public Model getSequencedModel(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int[] arg2) {
 		@Pc(3) Model local3 = null;
 		@Pc(9) Model local9 = (Model) modelCache.get(this.index);
+
 		if (local9 == null) {
 			@Pc(16) Model[] local16 = new Model[this.models.length];
 			for (@Pc(18) int local18 = 0; local18 < this.models.length; local18++) {
 				local16[local18] = new Model(this.models[local18]);
 			}
+
 			if (local16.length == 1) {
 				local9 = local16[0];
 			} else {
 				local9 = new Model(local16, local16.length);
 			}
+
 			if (this.recol_s != null) {
 				for (@Pc(60) int local60 = 0; local60 < this.recol_s.length; local60++) {
 					local9.recolor(this.recol_s[local60], this.recol_d[local60]);
 				}
 			}
+
 			local9.createLabelReferences();
 			local9.calculateNormals(64, 850, -30, -50, -30, true);
 			modelCache.put(this.index, local9);
 		}
+
 		local3 = new Model(local9, !this.disposeAlpha);
+
 		if (arg0 != -1 && arg1 != -1) {
 			local3.applyTransforms(arg1, arg0, arg2);
 		} else if (arg0 != -1) {
 			local3.applyTransform(arg0);
 		}
-		if (this.resizex != 128 || this.resizez != 128) {
-			local3.scale(this.resizex, this.resizez, this.resizex);
+
+		if (this.resizeh != 128 || this.resizev != 128) {
+			local3.scale(this.resizeh, this.resizev, this.resizeh);
 		}
+
 		local3.calculateBoundsCylinder();
 		local3.labelFaces = null;
 		local3.labelVertices = null;
+
 		if (this.size == 1) {
 			local3.pickable = true;
 		}
+
 		return local3;
 	}
 
@@ -254,23 +272,26 @@ public final class NpcType {
 	public Model getHeadModel() {
 		if (this.heads == null) {
 			return null;
-		} else {
-			@Pc(17) Model[] local17 = new Model[this.heads.length];
-			for (@Pc(19) int local19 = 0; local19 < this.heads.length; local19++) {
-				local17[local19] = new Model(this.heads[local19]);
-			}
-			@Pc(46) Model local46;
-			if (local17.length == 1) {
-				local46 = local17[0];
-			} else {
-				local46 = new Model(local17, local17.length);
-			}
-			if (this.recol_s != null) {
-				for (@Pc(61) int local61 = 0; local61 < this.recol_s.length; local61++) {
-					local46.recolor(this.recol_s[local61], this.recol_d[local61]);
-				}
-			}
-			return local46;
 		}
+
+		@Pc(17) Model[] local17 = new Model[this.heads.length];
+		for (@Pc(19) int local19 = 0; local19 < this.heads.length; local19++) {
+			local17[local19] = new Model(this.heads[local19]);
+		}
+
+		@Pc(46) Model local46;
+		if (local17.length == 1) {
+			local46 = local17[0];
+		} else {
+			local46 = new Model(local17, local17.length);
+		}
+
+		if (this.recol_s != null) {
+			for (@Pc(61) int local61 = 0; local61 < this.recol_s.length; local61++) {
+				local46.recolor(this.recol_s[local61], this.recol_d[local61]);
+			}
+		}
+
+		return local46;
 	}
 }

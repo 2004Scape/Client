@@ -61,13 +61,16 @@ public final class SpotAnimType {
 	public static void unpack(@OriginalArg(0) Jagfile config) {
 		@Pc(13) Packet dat = new Packet(config.read("spotanim.dat", null));
 		count = dat.g2();
+
 		if (instances == null) {
 			instances = new SpotAnimType[count];
 		}
+
 		for (@Pc(23) int id = 0; id < count; id++) {
 			if (instances[id] == null) {
 				instances[id] = new SpotAnimType();
 			}
+
 			instances[id].index = id;
 			instances[id].decode(dat);
 		}
@@ -116,12 +119,14 @@ public final class SpotAnimType {
 		if (local6 != null) {
 			return local6;
 		}
+
 		local6 = new Model(this.model);
 		for (@Pc(19) int local19 = 0; local19 < 6; local19++) {
 			if (this.recol_s[0] != 0) {
 				local6.recolor(this.recol_s[local19], this.recol_d[local19]);
 			}
 		}
+
 		modelCache.put(this.index, local6);
 		return local6;
 	}

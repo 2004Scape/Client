@@ -49,18 +49,19 @@ public final class SpotAnimEntity extends Entity {
 	}
 
 	@OriginalMember(owner = "client!bb", name = "a", descriptor = "(II)V")
-	public void update(@OriginalArg(0) int arg0) {
-		this.seqCycle += arg0;
+	public void update(@OriginalArg(0) int delta) {
+		this.seqCycle += delta;
+
 		while (true) {
 			do {
 				do {
-					if (this.seqCycle <= this.type.seq.frameDelay[this.seqFrame]) {
+					if (this.seqCycle <= this.type.seq.delay[this.seqFrame]) {
 						return;
 					}
-					this.seqCycle -= this.type.seq.frameDelay[this.seqFrame] + 1;
+					this.seqCycle -= this.type.seq.delay[this.seqFrame] + 1;
 					this.seqFrame++;
-				} while (this.seqFrame < this.type.seq.framecount);
-			} while (this.seqFrame >= 0 && this.seqFrame < this.type.seq.framecount);
+				} while (this.seqFrame < this.type.seq.frameCount);
+			} while (this.seqFrame >= 0 && this.seqFrame < this.type.seq.frameCount);
 			this.seqFrame = 0;
 			this.seqComplete = true;
 		}
@@ -71,29 +72,31 @@ public final class SpotAnimEntity extends Entity {
 	public Model draw() {
 		@Pc(3) Model local3 = this.type.getModel();
 		@Pc(19) Model local19 = new Model(local3, true, !this.type.disposeAlpha, false);
+
 		if (!this.seqComplete) {
 			local19.createLabelReferences();
-			local19.applyTransform(this.type.seq.primaryFrames[this.seqFrame]);
+			local19.applyTransform(this.type.seq.frames[this.seqFrame]);
 			local19.labelFaces = null;
 			local19.labelVertices = null;
 		}
+
 		if (this.type.resizeh != 128 || this.type.resizev != 128) {
 			local19.scale(this.type.resizeh, this.type.resizev, this.type.resizeh);
 		}
+
 		if (this.type.orientation != 0) {
 			if (this.type.orientation == 90) {
 				local19.rotateY90();
-			}
-			if (this.type.orientation == 180) {
+			} else if (this.type.orientation == 180) {
 				local19.rotateY90();
 				local19.rotateY90();
-			}
-			if (this.type.orientation == 270) {
+			} else if (this.type.orientation == 270) {
 				local19.rotateY90();
 				local19.rotateY90();
 				local19.rotateY90();
 			}
 		}
+
 		local19.calculateNormals(this.type.ambient + 64, this.type.contrast + 850, -30, -50, -30, true);
 		return local19;
 	}

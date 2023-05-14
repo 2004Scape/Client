@@ -53,13 +53,16 @@ public final class FloType {
 	public static void unpack(@OriginalArg(0) Jagfile config) {
 		@Pc(9) Packet dat = new Packet(config.read("flo.dat", null));
 		count = dat.g2();
+
 		if (instances == null) {
 			instances = new FloType[count];
 		}
+
 		for (@Pc(23) int id = 0; id < count; id++) {
 			if (instances[id] == null) {
 				instances[id] = new FloType();
 			}
+
 			instances[id].decode(dat);
 		}
 	}
@@ -94,6 +97,7 @@ public final class FloType {
 		@Pc(10) double local10 = (double) (arg1 >> 16 & 0xFF) / 256.0D;
 		@Pc(28) double local28 = (double) (arg1 >> 8 & 0xFF) / 256.0D;
 		@Pc(35) double local35 = (double) (arg1 & 0xFF) / 256.0D;
+
 		@Pc(37) double local37 = local10;
 		if (local28 < local10) {
 			local37 = local28;
@@ -101,6 +105,7 @@ public final class FloType {
 		if (local35 < local37) {
 			local37 = local35;
 		}
+
 		@Pc(51) double local51 = local10;
 		if (local28 > local10) {
 			local51 = local28;
@@ -108,9 +113,11 @@ public final class FloType {
 		if (local35 > local51) {
 			local51 = local35;
 		}
+
 		@Pc(65) double local65 = 0.0D;
 		@Pc(67) double local67 = 0.0D;
 		@Pc(73) double local73 = (local37 + local51) / 2.0D;
+
 		if (local37 != local51) {
 			if (local73 < 0.5D) {
 				local67 = (local51 - local37) / (local51 + local37);
@@ -126,47 +133,58 @@ public final class FloType {
 				local65 = (local10 - local28) / (local51 - local37) + 4.0D;
 			}
 		}
+
 		local65 /= 6.0D;
+
 		this.hue = (int) (local65 * 256.0D);
 		this.saturation = (int) (local67 * 256.0D);
 		this.lightness = (int) (local73 * 256.0D);
+
 		if (this.saturation < 0) {
 			this.saturation = 0;
 		} else if (this.saturation > 255) {
 			this.saturation = 255;
 		}
+
 		if (this.lightness < 0) {
 			this.lightness = 0;
 		} else if (this.lightness > 255) {
 			this.lightness = 255;
 		}
+
 		if (local73 > 0.5D) {
 			this.luminance = (int) ((1.0D - local73) * local67 * 512.0D);
 		} else {
 			this.luminance = (int) (local73 * local67 * 512.0D);
 		}
+
 		if (this.luminance < 1) {
 			this.luminance = 1;
 		}
+
 		this.chroma = (int) (local65 * (double) this.luminance);
+
 		@Pc(248) int local248 = this.hue + (int) (Math.random() * 16.0D) - 8;
 		if (local248 < 0) {
 			local248 = 0;
 		} else if (local248 > 255) {
 			local248 = 255;
 		}
+
 		@Pc(269) int local269 = this.saturation + (int) (Math.random() * 48.0D) - 24;
 		if (local269 < 0) {
 			local269 = 0;
 		} else if (local269 > 255) {
 			local269 = 255;
 		}
+
 		@Pc(290) int local290 = this.lightness + (int) (Math.random() * 48.0D) - 24;
 		if (local290 < 0) {
 			local290 = 0;
 		} else if (local290 > 255) {
 			local290 = 255;
 		}
+
 		this.hsl = this.hsl24to16(local248, local269, local290);
 	}
 
@@ -175,15 +193,19 @@ public final class FloType {
 		if (arg2 > 179) {
 			arg1 /= 2;
 		}
+
 		if (arg2 > 192) {
 			arg1 /= 2;
 		}
+
 		if (arg2 > 217) {
 			arg1 /= 2;
 		}
+
 		if (arg2 > 243) {
 			arg1 /= 2;
 		}
+
 		return (arg0 / 4 << 10) + (arg1 / 32 << 7) + arg2 / 2;
 	}
 }

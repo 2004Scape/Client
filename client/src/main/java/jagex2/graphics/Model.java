@@ -1592,10 +1592,7 @@ public final class Model extends Hashable {
 			return;
 		}
 		@Pc(136) int local136 = local28 + (this.maxY * arg1 >> 16);
-		@Pc(138) boolean local138 = false;
-		if (local21 - local136 <= 50) {
-			local138 = true;
-		}
+		@Pc(138) boolean local138 = local21 - local136 <= 50;
 		@Pc(147) boolean local147 = false;
 		@Pc(155) int local155;
 		@Pc(204) int local204;
@@ -1706,11 +1703,7 @@ public final class Model extends Hashable {
 					}
 					if ((local46 - local50) * (vertexScreenY[local42] - vertexScreenY[local37]) - (vertexScreenY[local32] - vertexScreenY[local37]) * (local54 - local50) > 0) {
 						faceNearClipped[local16] = false;
-						if (local46 >= 0 && local50 >= 0 && local54 >= 0 && local46 <= Draw2D.boundX && local50 <= Draw2D.boundX && local54 <= Draw2D.boundX) {
-							faceClippedX[local16] = false;
-						} else {
-							faceClippedX[local16] = true;
-						}
+						faceClippedX[local16] = local46 < 0 || local50 < 0 || local54 < 0 || local46 > Draw2D.boundX || local50 > Draw2D.boundX || local54 > Draw2D.boundX;
 						local86 = (vertexScreenZ[local32] + vertexScreenZ[local37] + vertexScreenZ[local42]) / 3 + this.minDepth;
 						tmpDepthFaces[local86][tmpDepthFaceCount[local86]++] = local16;
 					}

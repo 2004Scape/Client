@@ -30,9 +30,7 @@ public final class Isaac {
 	public Isaac(@OriginalArg(1) int[] arg1) {
 		this.mem = new int[256];
 		this.rsl = new int[256];
-		for (@Pc(13) int local13 = 0; local13 < arg1.length; local13++) {
-			this.rsl[local13] = arg1[local13];
-		}
+		System.arraycopy(arg1, 0, this.rsl, 0, arg1.length);
 		this.init();
 	}
 
@@ -50,7 +48,7 @@ public final class Isaac {
 		this.b += ++this.c;
 		for (@Pc(15) int local15 = 0; local15 < 256; local15++) {
 			@Pc(22) int local22 = this.mem[local15];
-			switch(local15 & 0x3) {
+			switch (local15 & 0x3) {
 				case 0:
 					this.a ^= this.a << 13;
 					break;

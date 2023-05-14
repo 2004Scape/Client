@@ -84,9 +84,9 @@ public class GameShell extends Applet implements Runnable, MouseListener, MouseM
 	private int keyQueueWritePos;
 
 	@OriginalMember(owner = "client!a", name = "a", descriptor = "(III)V")
-	protected final void initApplication(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1) {
-		this.screenWidth = arg1;
-		this.screenHeight = arg0;
+	protected final void initApplication(@OriginalArg(0) int height, @OriginalArg(1) int width) {
+		this.screenWidth = width;
+		this.screenHeight = height;
 		this.frame = new ViewBox(this.screenHeight, this, this.screenWidth);
 		this.graphics = this.getBaseComponent().getGraphics();
 		this.drawArea = new PixMap(this.getBaseComponent(), this.screenWidth, this.screenHeight);
@@ -94,9 +94,9 @@ public class GameShell extends Applet implements Runnable, MouseListener, MouseM
 	}
 
 	@OriginalMember(owner = "client!a", name = "a", descriptor = "(IZI)V")
-	protected final void initApplet(@OriginalArg(0) int arg0, @OriginalArg(2) int arg2) {
-		this.screenWidth = arg2;
-		this.screenHeight = arg0;
+	protected final void initApplet(@OriginalArg(0) int height, @OriginalArg(2) int width) {
+		this.screenWidth = width;
+		this.screenHeight = height;
 		this.graphics = this.getBaseComponent().getGraphics();
 		this.drawArea = new PixMap(this.getBaseComponent(), this.screenWidth, this.screenHeight);
 		this.startThread(this, 1);
@@ -109,11 +109,14 @@ public class GameShell extends Applet implements Runnable, MouseListener, MouseM
 		this.getBaseComponent().addMouseMotionListener(this);
 		this.getBaseComponent().addKeyListener(this);
 		this.getBaseComponent().addFocusListener(this);
+
 		if (this.frame != null) {
 			this.frame.addWindowListener(this);
 		}
+
 		this.drawProgress("Loading...", 0);
 		this.load();
+
 		@Pc(41) int local41 = 0;
 		@Pc(43) int local43 = 256;
 		@Pc(45) int local45 = 1;
@@ -121,6 +124,7 @@ public class GameShell extends Applet implements Runnable, MouseListener, MouseM
 		for (@Pc(49) int local49 = 0; local49 < 10; local49++) {
 			this.otim[local49] = System.currentTimeMillis();
 		}
+
 		@Pc(62) long local62 = System.currentTimeMillis();
 		while (this.state >= 0) {
 			if (this.state > 0) {
@@ -176,6 +180,7 @@ public class GameShell extends Applet implements Runnable, MouseListener, MouseM
 			}
 			this.draw();
 		}
+
 		if (this.state == -1) {
 			this.shutdown();
 		}
@@ -185,10 +190,12 @@ public class GameShell extends Applet implements Runnable, MouseListener, MouseM
 	private void shutdown() {
 		this.state = -2;
 		this.unload();
+
 		try {
 			Thread.sleep(1000L);
 		} catch (@Pc(21) Exception local21) {
 		}
+
 		try {
 			System.exit(0);
 		} catch (@Pc(25) Throwable local25) {
@@ -196,8 +203,8 @@ public class GameShell extends Applet implements Runnable, MouseListener, MouseM
 	}
 
 	@OriginalMember(owner = "client!a", name = "a", descriptor = "(II)V")
-	protected final void setFramerate(@OriginalArg(1) int arg1) {
-		this.deltime = 1000 / arg1;
+	protected final void setFramerate(@OriginalArg(1) int fps) {
+		this.deltime = 1000 / fps;
 	}
 
 	@OriginalMember(owner = "client!a", name = "start", descriptor = "()V")
@@ -220,10 +227,12 @@ public class GameShell extends Applet implements Runnable, MouseListener, MouseM
 	@Override
 	public final void destroy() {
 		this.state = -1;
+
 		try {
-			Thread.sleep(5000L);
+			Thread.sleep(1000L);
 		} catch (@Pc(6) Exception local6) {
 		}
+
 		if (this.state == -1) {
 			this.shutdown();
 		}
@@ -231,66 +240,72 @@ public class GameShell extends Applet implements Runnable, MouseListener, MouseM
 
 	@OriginalMember(owner = "client!a", name = "update", descriptor = "(Ljava/awt/Graphics;)V")
 	@Override
-	public final void update(@OriginalArg(0) Graphics arg0) {
+	public final void update(@OriginalArg(0) Graphics g) {
 		if (this.graphics == null) {
-			this.graphics = arg0;
+			this.graphics = g;
 		}
+
 		this.refresh = true;
 		this.refresh();
 	}
 
 	@OriginalMember(owner = "client!a", name = "paint", descriptor = "(Ljava/awt/Graphics;)V")
 	@Override
-	public final void paint(@OriginalArg(0) Graphics arg0) {
+	public final void paint(@OriginalArg(0) Graphics g) {
 		if (this.graphics == null) {
-			this.graphics = arg0;
+			this.graphics = g;
 		}
+
 		this.refresh = true;
 		this.refresh();
 	}
 
 	@OriginalMember(owner = "client!a", name = "mousePressed", descriptor = "(Ljava/awt/event/MouseEvent;)V")
 	@Override
-	public final void mousePressed(@OriginalArg(0) MouseEvent arg0) {
-		@Pc(2) int local2 = arg0.getX();
-		@Pc(5) int local5 = arg0.getY();
+	public final void mousePressed(@OriginalArg(0) MouseEvent e) {
+		@Pc(2) int x = e.getX();
+		@Pc(5) int y = e.getY();
 		if (this.frame != null) {
-			local2 -= 4;
-			local5 -= 22;
+			x -= 4;
+			y -= 22;
 		}
+
 		this.idleCycles = 0;
-		this.mouseClickX = local2;
-		this.mouseClickY = local5;
-		if (arg0.isMetaDown()) {
+		this.mouseClickX = x;
+		this.mouseClickY = y;
+
+		if (e.isMetaDown()) {
 			this.mouseClickButton = 2;
 			this.mouseButton = 2;
 		} else {
 			this.mouseClickButton = 1;
 			this.mouseButton = 1;
 		}
+
 		if (InputTracking.enabled) {
-			InputTracking.mousePressed(local2, arg0.isMetaDown() ? 1 : 0, local5);
+			InputTracking.mousePressed(x, e.isMetaDown() ? 1 : 0, y);
 		}
 	}
 
 	@OriginalMember(owner = "client!a", name = "mouseReleased", descriptor = "(Ljava/awt/event/MouseEvent;)V")
 	@Override
-	public final void mouseReleased(@OriginalArg(0) MouseEvent arg0) {
+	public final void mouseReleased(@OriginalArg(0) MouseEvent e) {
 		this.idleCycles = 0;
 		this.mouseButton = 0;
+
 		if (InputTracking.enabled) {
-			InputTracking.mouseReleased(arg0.isMetaDown() ? 1 : 0);
+			InputTracking.mouseReleased(e.isMetaDown() ? 1 : 0);
 		}
 	}
 
 	@OriginalMember(owner = "client!a", name = "mouseClicked", descriptor = "(Ljava/awt/event/MouseEvent;)V")
 	@Override
-	public final void mouseClicked(@OriginalArg(0) MouseEvent arg0) {
+	public final void mouseClicked(@OriginalArg(0) MouseEvent e) {
 	}
 
 	@OriginalMember(owner = "client!a", name = "mouseEntered", descriptor = "(Ljava/awt/event/MouseEvent;)V")
 	@Override
-	public final void mouseEntered(@OriginalArg(0) MouseEvent arg0) {
+	public final void mouseEntered(@OriginalArg(0) MouseEvent e) {
 		if (InputTracking.enabled) {
 			InputTracking.mouseEntered();
 		}
@@ -298,7 +313,7 @@ public class GameShell extends Applet implements Runnable, MouseListener, MouseM
 
 	@OriginalMember(owner = "client!a", name = "mouseExited", descriptor = "(Ljava/awt/event/MouseEvent;)V")
 	@Override
-	public final void mouseExited(@OriginalArg(0) MouseEvent arg0) {
+	public final void mouseExited(@OriginalArg(0) MouseEvent e) {
 		if (InputTracking.enabled) {
 			InputTracking.mouseExited();
 		}
@@ -306,155 +321,160 @@ public class GameShell extends Applet implements Runnable, MouseListener, MouseM
 
 	@OriginalMember(owner = "client!a", name = "mouseDragged", descriptor = "(Ljava/awt/event/MouseEvent;)V")
 	@Override
-	public final void mouseDragged(@OriginalArg(0) MouseEvent arg0) {
-		@Pc(2) int local2 = arg0.getX();
-		@Pc(5) int local5 = arg0.getY();
+	public final void mouseDragged(@OriginalArg(0) MouseEvent e) {
+		@Pc(2) int x = e.getX();
+		@Pc(5) int y = e.getY();
 		if (this.frame != null) {
-			local2 -= 4;
-			local5 -= 22;
+			x -= 4;
+			y -= 22;
 		}
+
 		this.idleCycles = 0;
-		this.mouseX = local2;
-		this.mouseY = local5;
+		this.mouseX = x;
+		this.mouseY = y;
+
 		if (InputTracking.enabled) {
-			InputTracking.mouseMoved(local5, local2);
+			InputTracking.mouseMoved(y, x);
 		}
 	}
 
 	@OriginalMember(owner = "client!a", name = "mouseMoved", descriptor = "(Ljava/awt/event/MouseEvent;)V")
 	@Override
-	public final void mouseMoved(@OriginalArg(0) MouseEvent arg0) {
-		@Pc(2) int local2 = arg0.getX();
-		@Pc(5) int local5 = arg0.getY();
+	public final void mouseMoved(@OriginalArg(0) MouseEvent e) {
+		@Pc(2) int x = e.getX();
+		@Pc(5) int y = e.getY();
 		if (this.frame != null) {
-			local2 -= 4;
-			local5 -= 22;
+			x -= 4;
+			y -= 22;
 		}
+
 		this.idleCycles = 0;
-		this.mouseX = local2;
-		this.mouseY = local5;
+		this.mouseX = x;
+		this.mouseY = y;
+
 		if (InputTracking.enabled) {
-			InputTracking.mouseMoved(local5, local2);
+			InputTracking.mouseMoved(y, x);
 		}
 	}
 
 	@OriginalMember(owner = "client!a", name = "keyPressed", descriptor = "(Ljava/awt/event/KeyEvent;)V")
 	@Override
-	public final void keyPressed(@OriginalArg(0) KeyEvent arg0) {
+	public final void keyPressed(@OriginalArg(0) KeyEvent e) {
 		this.idleCycles = 0;
-		@Pc(7) int local7 = arg0.getKeyCode();
-		@Pc(10) int local10 = arg0.getKeyChar();
-		if (local10 < 30) {
-			local10 = 0;
+
+		@Pc(7) int code = e.getKeyCode();
+		@Pc(10) int ch = e.getKeyChar();
+
+		if (ch < 30) {
+			ch = 0;
 		}
-		if (local7 == 37) {
-			local10 = 1;
+
+		if (code == 37) {
+			ch = 1;
+		} else if (code == 39) {
+			ch = 2;
+		} else if (code == 38) {
+			ch = 3;
+		} else if (code == 40) {
+			ch = 4;
+		} else if (code == 17) {
+			ch = 5;
+		} else if (code == 8) {
+			ch = 8;
+		} else if (code == 127) {
+			ch = 8;
+		} else if (code == 9) {
+			ch = 9;
+		} else if (code == 10) {
+			ch = 10;
+		} else if (code >= 112 && code <= 123) {
+			ch = code + 1008 - 112;
+		} else if (code == 36) {
+			ch = 1000;
+		} else if (code == 35) {
+			ch = 1001;
+		} else if (code == 33) {
+			ch = 1002;
+		} else if (code == 34) {
+			ch = 1003;
 		}
-		if (local7 == 39) {
-			local10 = 2;
+
+		if (ch > 0 && ch < 128) {
+			this.actionKey[ch] = 1;
 		}
-		if (local7 == 38) {
-			local10 = 3;
-		}
-		if (local7 == 40) {
-			local10 = 4;
-		}
-		if (local7 == 17) {
-			local10 = 5;
-		}
-		if (local7 == 8) {
-			local10 = 8;
-		}
-		if (local7 == 127) {
-			local10 = 8;
-		}
-		if (local7 == 9) {
-			local10 = 9;
-		}
-		if (local7 == 10) {
-			local10 = 10;
-		}
-		if (local7 >= 112 && local7 <= 123) {
-			local10 = local7 + 1008 - 112;
-		}
-		if (local7 == 36) {
-			local10 = 1000;
-		}
-		if (local7 == 35) {
-			local10 = 1001;
-		}
-		if (local7 == 33) {
-			local10 = 1002;
-		}
-		if (local7 == 34) {
-			local10 = 1003;
-		}
-		if (local10 > 0 && local10 < 128) {
-			this.actionKey[local10] = 1;
-		}
-		if (local10 > 4) {
-			this.keyQueue[this.keyQueueWritePos] = local10;
+
+		if (ch > 4) {
+			this.keyQueue[this.keyQueueWritePos] = ch;
 			this.keyQueueWritePos = this.keyQueueWritePos + 1 & 0x7F;
 		}
+
 		if (InputTracking.enabled) {
-			InputTracking.keyPressed(local10);
+			InputTracking.keyPressed(ch);
 		}
 	}
 
 	@OriginalMember(owner = "client!a", name = "keyReleased", descriptor = "(Ljava/awt/event/KeyEvent;)V")
 	@Override
-	public final void keyReleased(@OriginalArg(0) KeyEvent arg0) {
+	public final void keyReleased(@OriginalArg(0) KeyEvent e) {
 		this.idleCycles = 0;
-		@Pc(5) int local5 = arg0.getKeyCode();
-		@Pc(8) char local8 = arg0.getKeyChar();
-		if (local8 < '\u001e') {
-			local8 = '\u0000';
+
+		@Pc(5) int code = e.getKeyCode();
+		@Pc(8) int ch = e.getKeyChar();
+
+		if (ch < 30) {
+			ch = 0;
 		}
-		if (local5 == 37) {
-			local8 = '\u0001';
+
+		if (code == 37) {
+			ch = 1;
+		} else if (code == 39) {
+			ch = 2;
+		} else if (code == 38) {
+			ch = 3;
+		} else if (code == 40) {
+			ch = 4;
+		} else if (code == 17) {
+			ch = 5;
+		} else if (code == 8) {
+			ch = 8;
+		} else if (code == 127) {
+			ch = 8;
+		} else if (code == 9) {
+			ch = 9;
+		} else if (code == 10) {
+			ch = 10;
+		} else if (code >= 112 && code <= 123) {
+			ch = code + 1008 - 112;
+		} else if (code == 36) {
+			ch = 1000;
+		} else if (code == 35) {
+			ch = 1001;
+		} else if (code == 33) {
+			ch = 1002;
+		} else if (code == 34) {
+			ch = 1003;
 		}
-		if (local5 == 39) {
-			local8 = '\u0002';
+
+		if (ch > 0 && ch < 128) {
+			this.actionKey[ch] = 0;
 		}
-		if (local5 == 38) {
-			local8 = '\u0003';
-		}
-		if (local5 == 40) {
-			local8 = '\u0004';
-		}
-		if (local5 == 17) {
-			local8 = '\u0005';
-		}
-		if (local5 == 8) {
-			local8 = '\b';
-		}
-		if (local5 == 127) {
-			local8 = '\b';
-		}
-		if (local5 == 9) {
-			local8 = '\t';
-		}
-		if (local5 == 10) {
-			local8 = '\n';
-		}
-		if (local8 > '\u0000' && local8 < '\u0080') {
-			this.actionKey[local8] = 0;
-		}
+
 		if (InputTracking.enabled) {
-			InputTracking.keyReleased(local8);
+			InputTracking.keyReleased(ch);
 		}
 	}
 
 	@OriginalMember(owner = "client!a", name = "keyTyped", descriptor = "(Ljava/awt/event/KeyEvent;)V")
 	@Override
-	public final void keyTyped(@OriginalArg(0) KeyEvent arg0) {
+	public final void keyTyped(@OriginalArg(0) KeyEvent e) {
 	}
 
 	@OriginalMember(owner = "client!a", name = "focusGained", descriptor = "(Ljava/awt/event/FocusEvent;)V")
 	@Override
-	public final void focusGained(@OriginalArg(0) FocusEvent arg0) {
+	public final void focusGained(@OriginalArg(0) FocusEvent e) {
 		this.refresh = true;
 		this.refresh();
+
 		if (InputTracking.enabled) {
 			InputTracking.focusGained();
 		}
@@ -462,7 +482,7 @@ public class GameShell extends Applet implements Runnable, MouseListener, MouseM
 
 	@OriginalMember(owner = "client!a", name = "focusLost", descriptor = "(Ljava/awt/event/FocusEvent;)V")
 	@Override
-	public final void focusLost(@OriginalArg(0) FocusEvent arg0) {
+	public final void focusLost(@OriginalArg(0) FocusEvent e) {
 		if (InputTracking.enabled) {
 			InputTracking.focusLost();
 		}
@@ -470,48 +490,48 @@ public class GameShell extends Applet implements Runnable, MouseListener, MouseM
 
 	@OriginalMember(owner = "client!a", name = "a", descriptor = "(Z)I")
 	protected final int pollKey() {
-		@Pc(1) int local1 = -1;
+		@Pc(1) int key = -1;
 		if (this.keyQueueWritePos != this.keyQueueReadPos) {
-			local1 = this.keyQueue[this.keyQueueReadPos];
+			key = this.keyQueue[this.keyQueueReadPos];
 			this.keyQueueReadPos = this.keyQueueReadPos + 1 & 0x7F;
 		}
-		return local1;
+		return key;
 	}
 
 	@OriginalMember(owner = "client!a", name = "windowActivated", descriptor = "(Ljava/awt/event/WindowEvent;)V")
 	@Override
-	public final void windowActivated(@OriginalArg(0) WindowEvent arg0) {
+	public final void windowActivated(@OriginalArg(0) WindowEvent e) {
 	}
 
 	@OriginalMember(owner = "client!a", name = "windowClosed", descriptor = "(Ljava/awt/event/WindowEvent;)V")
 	@Override
-	public final void windowClosed(@OriginalArg(0) WindowEvent arg0) {
+	public final void windowClosed(@OriginalArg(0) WindowEvent e) {
 	}
 
 	@OriginalMember(owner = "client!a", name = "windowClosing", descriptor = "(Ljava/awt/event/WindowEvent;)V")
 	@Override
-	public final void windowClosing(@OriginalArg(0) WindowEvent arg0) {
+	public final void windowClosing(@OriginalArg(0) WindowEvent e) {
 		this.destroy();
 	}
 
 	@OriginalMember(owner = "client!a", name = "windowDeactivated", descriptor = "(Ljava/awt/event/WindowEvent;)V")
 	@Override
-	public final void windowDeactivated(@OriginalArg(0) WindowEvent arg0) {
+	public final void windowDeactivated(@OriginalArg(0) WindowEvent e) {
 	}
 
 	@OriginalMember(owner = "client!a", name = "windowDeiconified", descriptor = "(Ljava/awt/event/WindowEvent;)V")
 	@Override
-	public final void windowDeiconified(@OriginalArg(0) WindowEvent arg0) {
+	public final void windowDeiconified(@OriginalArg(0) WindowEvent e) {
 	}
 
 	@OriginalMember(owner = "client!a", name = "windowIconified", descriptor = "(Ljava/awt/event/WindowEvent;)V")
 	@Override
-	public final void windowIconified(@OriginalArg(0) WindowEvent arg0) {
+	public final void windowIconified(@OriginalArg(0) WindowEvent e) {
 	}
 
 	@OriginalMember(owner = "client!a", name = "windowOpened", descriptor = "(Ljava/awt/event/WindowEvent;)V")
 	@Override
-	public final void windowOpened(@OriginalArg(0) WindowEvent arg0) {
+	public final void windowOpened(@OriginalArg(0) WindowEvent e) {
 	}
 
 	@OriginalMember(owner = "client!a", name = "a", descriptor = "()V")
@@ -540,43 +560,51 @@ public class GameShell extends Applet implements Runnable, MouseListener, MouseM
 	}
 
 	@OriginalMember(owner = "client!a", name = "a", descriptor = "(Ljava/lang/Runnable;I)V")
-	public void startThread(@OriginalArg(0) Runnable arg0, @OriginalArg(1) int arg1) {
-		@Pc(4) Thread local4 = new Thread(arg0);
-		local4.start();
-		local4.setPriority(arg1);
+	public void startThread(@OriginalArg(0) Runnable runnable, @OriginalArg(1) int priority) {
+		@Pc(4) Thread thread = new Thread(runnable);
+		thread.start();
+		thread.setPriority(priority);
 	}
 
 	@OriginalMember(owner = "client!a", name = "a", descriptor = "(ZLjava/lang/String;I)V")
-	protected void drawProgress(@OriginalArg(1) String arg1, @OriginalArg(2) int arg2) {
+	protected void drawProgress(@OriginalArg(1) String message, @OriginalArg(2) int progress) {
 		while (this.graphics == null) {
 			this.graphics = this.getBaseComponent().getGraphics();
+
 			try {
 				this.getBaseComponent().repaint();
-			} catch (@Pc(22) Exception local22) {
+			} catch (@Pc(22) Exception ignored) {
 			}
+
 			try {
 				Thread.sleep(1000L);
-			} catch (@Pc(26) Exception local26) {
+			} catch (@Pc(26) Exception ignored) {
 			}
 		}
-		@Pc(37) Font local37 = new Font("Helvetica", Font.BOLD, 13);
-		@Pc(44) FontMetrics local44 = this.getBaseComponent().getFontMetrics(local37);
-		@Pc(51) Font local51 = new Font("Helvetica", Font.PLAIN, 13);
-		this.getBaseComponent().getFontMetrics(local51);
+
+		@Pc(37) Font bold = new Font("Helvetica", Font.BOLD, 13);
+		@Pc(44) FontMetrics boldMetrics = this.getBaseComponent().getFontMetrics(bold);
+		@Pc(51) Font plain = new Font("Helvetica", Font.PLAIN, 13);
+		FontMetrics plainMetrics = this.getBaseComponent().getFontMetrics(plain);
+
 		if (this.refresh) {
 			this.graphics.setColor(Color.black);
 			this.graphics.fillRect(0, 0, this.screenWidth, this.screenHeight);
 			this.refresh = false;
 		}
-		@Pc(84) Color local84 = new Color(140, 17, 17);
-		@Pc(91) int local91 = this.screenHeight / 2 - 18;
-		this.graphics.setColor(local84);
-		this.graphics.drawRect(this.screenWidth / 2 - 152, local91, 304, 34);
-		this.graphics.fillRect(this.screenWidth / 2 - 150, local91 + 2, arg2 * 3, 30);
+
+		@Pc(84) Color barColor = new Color(140, 17, 17);
+		@Pc(91) int y = this.screenHeight / 2 - 18;
+
+		this.graphics.setColor(barColor);
+		this.graphics.drawRect(this.screenWidth / 2 - 152, y, 304, 34);
+		this.graphics.fillRect(this.screenWidth / 2 - 150, y + 2, progress * 3, 30);
+
 		this.graphics.setColor(Color.black);
-		this.graphics.fillRect(this.screenWidth / 2 + arg2 * 3 - 150, local91 + 2, 300 - arg2 * 3, 30);
-		this.graphics.setFont(local37);
+		this.graphics.fillRect(this.screenWidth / 2 + progress * 3 - 150, y + 2, 300 - progress * 3, 30);
+
+		this.graphics.setFont(bold);
 		this.graphics.setColor(Color.white);
-		this.graphics.drawString(arg1, (this.screenWidth - local44.stringWidth(arg1)) / 2, local91 + 22);
+		this.graphics.drawString(message, (this.screenWidth - boldMetrics.stringWidth(message)) / 2, y + 22);
 	}
 }

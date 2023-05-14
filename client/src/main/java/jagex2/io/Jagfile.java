@@ -77,9 +77,8 @@ public final class Jagfile {
 					arg1 = new byte[this.fileSizeInflated[local27]];
 				}
 				if (this.unpacked) {
-					for (@Pc(67) int local67 = 0; local67 < this.fileSizeInflated[local27]; local67++) {
-						arg1[local67] = this.buffer[this.fileOffset[local27] + local67];
-					}
+					if (this.fileSizeInflated[local27] >= 0)
+						System.arraycopy(this.buffer, this.fileOffset[local27] + 0, arg1, 0, this.fileSizeInflated[local27]);
 				} else {
 					BZip2.read(arg1, this.fileSizeInflated[local27], this.buffer, this.fileSizeDeflated[local27], this.fileOffset[local27]);
 				}
