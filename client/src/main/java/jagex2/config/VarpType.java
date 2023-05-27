@@ -17,50 +17,50 @@ public final class VarpType {
 	public static VarpType[] instances;
 
 	@OriginalMember(owner = "client!lc", name = "e", descriptor = "I")
-	public static int opcode3Count;
+	public static int code3Count;
 
 	@OriginalMember(owner = "client!lc", name = "f", descriptor = "[I")
-	public static int[] opcode3;
+	public static int[] code3;
 
 	@OriginalMember(owner = "client!lc", name = "g", descriptor = "Ljava/lang/String;")
-	private String opcode10;
+	private String code10;
 
 	@OriginalMember(owner = "client!lc", name = "h", descriptor = "I")
-	private int opcode1;
+	private int code1;
 
 	@OriginalMember(owner = "client!lc", name = "i", descriptor = "I")
-	private int opcode2;
+	private int code2;
 
 	@OriginalMember(owner = "client!lc", name = "j", descriptor = "Z")
-	private boolean hasOpcode3 = false;
+	private boolean hasCode3 = false;
 
 	@OriginalMember(owner = "client!lc", name = "k", descriptor = "Z")
-	private boolean opcode4 = true;
+	private boolean code4 = true;
 
 	@OriginalMember(owner = "client!lc", name = "l", descriptor = "I")
 	public int clientcode;
 
 	@OriginalMember(owner = "client!lc", name = "n", descriptor = "I")
-	private int opcode7;
+	private int code7;
 
 	@OriginalMember(owner = "client!lc", name = "m", descriptor = "Z")
-	private boolean opcode6 = false;
+	private boolean code6 = false;
 
 	@OriginalMember(owner = "client!lc", name = "o", descriptor = "Z")
-	private boolean opcode8 = false;
+	private boolean code8 = false;
 
 	@OriginalMember(owner = "client!lc", name = "a", descriptor = "(Lclient!ub;I)V")
 	public static void unpack(@OriginalArg(0) Jagfile config) {
 		@Pc(9) Packet dat = new Packet(config.read("varp.dat", null));
-		opcode3Count = 0;
+		code3Count = 0;
 		count = dat.g2();
 
 		if (instances == null) {
 			instances = new VarpType[count];
 		}
 
-		if (opcode3 == null) {
-			opcode3 = new int[count];
+		if (code3 == null) {
+			code3 = new int[count];
 		}
 
 		for (@Pc(30) int id = 0; id < count; id++) {
@@ -81,24 +81,24 @@ public final class VarpType {
 			}
 
 			if (code == 1) {
-				this.opcode1 = dat.g1();
+				this.code1 = dat.g1();
 			} else if (code == 2) {
-				this.opcode2 = dat.g1();
+				this.code2 = dat.g1();
 			} else if (code == 3) {
-				this.hasOpcode3 = true;
-				opcode3[opcode3Count++] = id;
+				this.hasCode3 = true;
+				VarpType.code3[VarpType.code3Count++] = id;
 			} else if (code == 4) {
-				this.opcode4 = false;
+				this.code4 = false;
 			} else if (code == 5) {
 				this.clientcode = dat.g2();
 			} else if (code == 6) {
-				this.opcode6 = true;
+				this.code6 = true;
 			} else if (code == 7) {
-				this.opcode7 = dat.g4();
+				this.code7 = dat.g4();
 			} else if (code == 8) {
-				this.opcode8 = true;
+				this.code8 = true;
 			} else if (code == 10) {
-				this.opcode10 = dat.gstr();
+				this.code10 = dat.gstr();
 			} else {
 				System.out.println("Error unrecognised config code: " + code);
 			}

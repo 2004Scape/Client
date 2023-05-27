@@ -946,7 +946,7 @@ public final class World {
 								if (local7 > 0) {
 									@Pc(807) boolean local807 = local655 != 0 || this.levelTileOverlayShape[local7][local169][local284] == 0;
 
-									if (local666 > 0 && !FloType.instances[local666 - 1].occludes) {
+									if (local666 > 0 && !FloType.instances[local666 - 1].occlude) {
 										local807 = false;
 									}
 

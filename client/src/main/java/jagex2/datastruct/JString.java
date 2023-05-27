@@ -10,119 +10,129 @@ public final class JString {
 	private static final char[] builder = new char[12];
 
 	@OriginalMember(owner = "client!vb", name = "g", descriptor = "[C")
-	private static final char[] BASE37_TABLE = new char[] { '_', 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z', '0', '1', '2', '3', '4', '5', '6', '7', '8', '9' };
+	private static final char[] BASE37_LOOKUP = new char[] {
+		'_', 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i',
+		'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's',
+		't', 'u', 'v', 'w', 'x', 'y', 'z',
+		'0', '1', '2', '3', '4', '5', '6', '7', '8', '9'
+	};
 
 	@OriginalMember(owner = "client!vb", name = "a", descriptor = "(Ljava/lang/String;)J")
-	public static long toBase37(@OriginalArg(0) String arg0) {
-		@Pc(3) long local3 = 0L;
+	public static long toBase37(@OriginalArg(0) String str) {
+		@Pc(3) long hash = 0L;
 
-		for (@Pc(5) int local5 = 0; local5 < arg0.length() && local5 < 12; local5++) {
-			@Pc(11) char local11 = arg0.charAt(local5);
-			local3 *= 37L;
-			if (local11 >= 'A' && local11 <= 'Z') {
-				local3 += local11 + 1 - 65;
-			} else if (local11 >= 'a' && local11 <= 'z') {
-				local3 += local11 + 1 - 97;
-			} else if (local11 >= '0' && local11 <= '9') {
-				local3 += local11 + 27 - 48;
+		for (@Pc(5) int i = 0; i < str.length() && i < 12; i++) {
+			@Pc(11) char c = str.charAt(i);
+			hash *= 37L;
+
+			if (c >= 'A' && c <= 'Z') {
+				hash += c + 1 - 65;
+			} else if (c >= 'a' && c <= 'z') {
+				hash += c + 1 - 97;
+			} else if (c >= '0' && c <= '9') {
+				hash += c + 27 - 48;
 			}
 		}
 
-		while (local3 % 37L == 0L && local3 != 0L) {
-			local3 /= 37L;
+		while (hash % 37L == 0L && hash != 0L) {
+			hash /= 37L;
 		}
 
-		return local3;
+		return hash;
 	}
 
 	@OriginalMember(owner = "client!vb", name = "a", descriptor = "(JZ)Ljava/lang/String;")
-	public static String fromBase37(@OriginalArg(0) long arg0) {
-		if (arg0 <= 0L || arg0 >= 6582952005840035281L) {
+	public static String fromBase37(@OriginalArg(0) long username) {
+		// >= 37 to the 12th power
+		if (username <= 0L || username >= 6582952005840035281L) {
 			return "invalid_name";
 		}
 
-		if (arg0 % 37L == 0L) {
+		if (username % 37L == 0L) {
 			return "invalid_name";
 		}
 
-		@Pc(19) int local19 = 0;
-		while (arg0 != 0L) {
-			@Pc(27) long local27 = arg0;
-			arg0 /= 37L;
-			builder[11 - local19++] = BASE37_TABLE[(int) (local27 - arg0 * 37L)];
+		@Pc(19) int len = 0;
+		while (username != 0L) {
+			@Pc(27) long last = username;
+			username /= 37L;
+			builder[11 - len++] = BASE37_LOOKUP[(int) (last - username * 37L)];
 		}
 
-		return new String(builder, 12 - local19, local19);
+		return new String(builder, 12 - len, len);
 	}
 
 	@OriginalMember(owner = "client!vb", name = "a", descriptor = "(ILjava/lang/String;)J")
-	public static long hashCode(@OriginalArg(1) String arg1) {
-		@Pc(8) String local8 = arg1.toUpperCase();
-		@Pc(10) long local10 = 0L;
+	public static long hashCode(@OriginalArg(1) String str) {
+		@Pc(8) String upper = str.toUpperCase();
+		@Pc(10) long hash = 0L;
 
-		for (@Pc(12) int local12 = 0; local12 < local8.length(); local12++) {
-			local10 = local10 * 61L + (long) local8.charAt(local12) - 32L;
-			local10 = local10 + (local10 >> 56) & 0xFFFFFFFFFFFFFFL;
+		for (@Pc(12) int i = 0; i < upper.length(); i++) {
+			hash = hash * 61L + (long) upper.charAt(i) - 32L;
+			hash = hash + (hash >> 56) & 0xFFFFFFFFFFFFFFL;
 		}
 
-		return local10;
+		return hash;
 	}
 
 	@OriginalMember(owner = "client!vb", name = "a", descriptor = "(II)Ljava/lang/String;")
-	public static String formatIPv4(@OriginalArg(1) int arg1) {
-		return (arg1 >> 24 & 0xFF) + "." + (arg1 >> 16 & 0xFF) + "." + (arg1 >> 8 & 0xFF) + "." + (arg1 & 0xFF);
+	public static String formatIPv4(@OriginalArg(1) int ip) {
+		return (ip >> 24 & 0xFF) + "." + (ip >> 16 & 0xFF) + "." + (ip >> 8 & 0xFF) + "." + (ip & 0xFF);
 	}
 
 	@OriginalMember(owner = "client!vb", name = "b", descriptor = "(ILjava/lang/String;)Ljava/lang/String;")
-	public static String formatName(@OriginalArg(1) String arg1) {
-		if (arg1.length() == 0) {
-			return arg1;
+	public static String formatName(@OriginalArg(1) String str) {
+		if (str.length() == 0) {
+			return str;
 		}
 
-		@Pc(11) char[] local11 = arg1.toCharArray();
-		for (@Pc(13) int local13 = 0; local13 < local11.length; local13++) {
-			if (local11[local13] == '_') {
-				local11[local13] = ' ';
-				if (local13 + 1 < local11.length && local11[local13 + 1] >= 'a' && local11[local13 + 1] <= 'z') {
-					local11[local13 + 1] = (char) (local11[local13 + 1] + 'A' - 97);
+		@Pc(11) char[] chars = str.toCharArray();
+		for (@Pc(13) int i = 0; i < chars.length; i++) {
+			if (chars[i] == '_') {
+				chars[i] = ' ';
+
+				if (i + 1 < chars.length && chars[i + 1] >= 'a' && chars[i + 1] <= 'z') {
+					chars[i + 1] = (char) (chars[i + 1] + 'A' - 97);
 				}
 			}
 		}
 
-		if (local11[0] >= 'a' && local11[0] <= 'z') {
-			local11[0] = (char) (local11[0] + 'A' - 97);
+		if (chars[0] >= 'a' && chars[0] <= 'z') {
+			chars[0] = (char) (chars[0] + 'A' - 97);
 		}
 
-		return new String(local11);
+		return new String(chars);
 	}
 
 	@OriginalMember(owner = "client!vb", name = "a", descriptor = "(Ljava/lang/String;I)Ljava/lang/String;")
-	public static String toSentenceCase(@OriginalArg(0) String arg0) {
-		@Pc(2) String local2 = arg0.toLowerCase();
-		@Pc(9) char[] local9 = local2.toCharArray();
-		@Pc(12) int local12 = local9.length;
-		@Pc(14) boolean local14 = true;
+	public static String toSentenceCase(@OriginalArg(0) String str) {
+		@Pc(2) String lower = str.toLowerCase();
+		@Pc(9) char[] chars = lower.toCharArray();
+		@Pc(12) int length = chars.length;
+		@Pc(14) boolean capitalize = true;
 
-		for (@Pc(16) int local16 = 0; local16 < local12; local16++) {
-			@Pc(22) char local22 = local9[local16];
-			if (local14 && local22 >= 'a' && local22 <= 'z') {
-				local9[local16] = (char) (local9[local16] - 32);
-				local14 = false;
+		for (@Pc(16) int i = 0; i < length; i++) {
+			@Pc(22) char c = chars[i];
+
+			if (capitalize && c >= 'a' && c <= 'z') {
+				chars[i] = (char) (chars[i] - 32);
+				capitalize = false;
 			}
-			if (local22 == '.' || local22 == '!') {
-				local14 = true;
+
+			if (c == '.' || c == '!') {
+				capitalize = true;
 			}
 		}
 
-		return new String(local9);
+		return new String(chars);
 	}
 
 	@OriginalMember(owner = "client!vb", name = "c", descriptor = "(ILjava/lang/String;)Ljava/lang/String;")
-	public static String toAsterisks(@OriginalArg(1) String arg1) {
-		@Pc(1) String local1 = "";
-		for (@Pc(10) int local10 = 0; local10 < arg1.length(); local10++) {
-			local1 = local1 + "*";
+	public static String toAsterisks(@OriginalArg(1) String str) {
+		@Pc(1) String temp = "";
+		for (@Pc(10) int i = 0; i < str.length(); i++) {
+			temp = temp + "*";
 		}
-		return local1;
+		return temp;
 	}
 }

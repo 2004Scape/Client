@@ -124,7 +124,7 @@ public final class LocType {
 	private int zoff;
 
 	@OriginalMember(owner = "client!ac", name = "N", descriptor = "I")
-	public int blocksides;
+	public int forceapproach;
 
 	@OriginalMember(owner = "client!ac", name = "O", descriptor = "Z")
 	public boolean forcedecor;
@@ -210,7 +210,7 @@ public final class LocType {
 		this.resizex = 128;
 		this.resizey = 128;
 		this.resizez = 128;
-		this.blocksides = 0;
+		this.forceapproach = 0;
 		this.xoff = 0;
 		this.yoff = 0;
 		this.zoff = 0;
@@ -308,7 +308,7 @@ public final class LocType {
 			} else if (code == 68) {
 				this.mapscene = dat.g2();
 			} else if (code == 69) {
-				this.blocksides = dat.g1();
+				this.forceapproach = dat.g1();
 			} else if (code == 70) {
 				this.xoff = dat.g2b();
 			} else if (code == 71) {

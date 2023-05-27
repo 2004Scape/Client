@@ -6508,7 +6508,7 @@ public final class client extends GameShell {
 				local51 = local43.length;
 				local54 = local43.width;
 			}
-			@Pc(65) int local65 = local43.blocksides;
+			@Pc(65) int local65 = local43.forceapproach;
 			if (local31 != 0) {
 				local65 = (local65 << local31 & 0xF) + (local65 >> 4 - local31);
 			}
@@ -6766,7 +6766,7 @@ public final class client extends GameShell {
 				local47[local202] += 50;
 			}
 			this.randomIn = new Isaac(local47);
-			this.stream.writer(this.login.data, this.login.pos, 0);
+			this.stream.write(this.login.data, this.login.pos, 0);
 			@Pc(237) int local237 = this.stream.read();
 			if (local237 == 1) {
 				try {
@@ -7508,7 +7508,7 @@ public final class client extends GameShell {
 			}
 			try {
 				if (this.stream != null && this.out.pos > 0) {
-					this.stream.writer(this.out.data, this.out.pos, 0);
+					this.stream.write(this.out.data, this.out.pos, 0);
 					this.out.pos = 0;
 					this.heartbeatTimer = 0;
 				}

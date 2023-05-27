@@ -13,25 +13,25 @@ public final class Stack {
 
 	@OriginalMember(owner = "client!pb", name = "<init>", descriptor = "(I)V")
 	public Stack() {
-		this.head.nextCacheable = this.head;
-		this.head.prevCacheable = this.head;
+		this.head.nextHashable = this.head;
+		this.head.prevHashable = this.head;
 	}
 
 	@OriginalMember(owner = "client!pb", name = "a", descriptor = "(Lclient!db;)V")
 	public void push(@OriginalArg(0) Hashable arg0) {
-		if (arg0.prevCacheable != null) {
+		if (arg0.prevHashable != null) {
 			arg0.uncache();
 		}
 
-		arg0.prevCacheable = this.head.prevCacheable;
-		arg0.nextCacheable = this.head;
-		arg0.prevCacheable.nextCacheable = arg0;
-		arg0.nextCacheable.prevCacheable = arg0;
+		arg0.prevHashable = this.head.prevHashable;
+		arg0.nextHashable = this.head;
+		arg0.prevHashable.nextHashable = arg0;
+		arg0.nextHashable.prevHashable = arg0;
 	}
 
 	@OriginalMember(owner = "client!pb", name = "a", descriptor = "()Lclient!db;")
 	public Hashable pop() {
-		@Pc(3) Hashable local3 = this.head.nextCacheable;
+		@Pc(3) Hashable local3 = this.head.nextHashable;
 		if (local3 == this.head) {
 			return null;
 		} else {

@@ -21,95 +21,91 @@ public final class LinkList {
 	}
 
 	@OriginalMember(owner = "client!ob", name = "a", descriptor = "(Lclient!u;)V")
-	public void pushBack(@OriginalArg(0) Linkable arg0) {
-		if (arg0.next != null) {
-			arg0.unlink();
+	public void pushBack(@OriginalArg(0) Linkable node) {
+		if (node.next != null) {
+			node.unlink();
 		}
 
-		arg0.next = this.head.next;
-		arg0.prev = this.head;
-		arg0.next.prev = arg0;
-		arg0.prev.next = arg0;
+		node.next = this.head.next;
+		node.prev = this.head;
+		node.next.prev = node;
+		node.prev.next = node;
 	}
 
 	@OriginalMember(owner = "client!ob", name = "a", descriptor = "(Lclient!u;I)V")
-	public void pushFront(@OriginalArg(0) Linkable arg0) {
-		if (arg0.next != null) {
-			arg0.unlink();
+	public void pushFront(@OriginalArg(0) Linkable node) {
+		if (node.next != null) {
+			node.unlink();
 		}
 
-		arg0.next = this.head;
-		arg0.prev = this.head.prev;
-		arg0.next.prev = arg0;
-		arg0.prev.next = arg0;
+		node.next = this.head;
+		node.prev = this.head.prev;
+		node.next.prev = node;
+		node.prev.next = node;
 	}
 
 	@OriginalMember(owner = "client!ob", name = "a", descriptor = "()Lclient!u;")
 	public Linkable pollFront() {
-		@Pc(3) Linkable local3 = this.head.prev;
-		if (local3 == this.head) {
+		@Pc(3) Linkable node = this.head.prev;
+		if (node == this.head) {
 			return null;
-		} else {
-			local3.unlink();
-			return local3;
 		}
+		node.unlink();
+		return node;
 	}
 
 	@OriginalMember(owner = "client!ob", name = "b", descriptor = "()Lclient!u;")
 	public Linkable peekFront() {
-		@Pc(3) Linkable local3 = this.head.prev;
-		if (local3 == this.head) {
+		@Pc(3) Linkable node = this.head.prev;
+		if (node == this.head) {
 			this.peeked = null;
 			return null;
-		} else {
-			this.peeked = local3.prev;
-			return local3;
 		}
+		this.peeked = node.prev;
+		return node;
 	}
 
 	@OriginalMember(owner = "client!ob", name = "a", descriptor = "(B)Lclient!u;")
 	public Linkable peekBack() {
-		@Pc(3) Linkable local3 = this.head.next;
-		if (local3 == this.head) {
+		@Pc(3) Linkable node = this.head.next;
+		if (node == this.head) {
 			this.peeked = null;
 			return null;
 		}
-		this.peeked = local3.next;
-		return local3;
+		this.peeked = node.next;
+		return node;
 	}
 
 	@OriginalMember(owner = "client!ob", name = "a", descriptor = "(I)Lclient!u;")
 	public Linkable prev() {
-		@Pc(8) Linkable local8 = this.peeked;
-		if (local8 == this.head) {
+		@Pc(8) Linkable node = this.peeked;
+		if (node == this.head) {
 			this.peeked = null;
 			return null;
-		} else {
-			this.peeked = local8.prev;
-			return local8;
 		}
+		this.peeked = node.prev;
+		return node;
 	}
 
 	@OriginalMember(owner = "client!ob", name = "a", descriptor = "(Z)Lclient!u;")
 	public Linkable next() {
-		@Pc(2) Linkable local2 = this.peeked;
-		if (local2 == this.head) {
+		@Pc(2) Linkable node = this.peeked;
+		if (node == this.head) {
 			this.peeked = null;
 			return null;
-		} else {
-			this.peeked = local2.next;
-			return local2;
 		}
+		this.peeked = node.next;
+		return node;
 	}
 
 	@OriginalMember(owner = "client!ob", name = "c", descriptor = "()V")
 	public void clear() {
 		while (true) {
-			@Pc(3) Linkable local3 = this.head.prev;
-			if (local3 == this.head) {
+			@Pc(3) Linkable node = this.head.prev;
+			if (node == this.head) {
 				return;
 			}
-			local3.unlink();
+			node.unlink();
 		}
 	}
 }

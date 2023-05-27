@@ -273,8 +273,8 @@ public final class Packet extends Hashable {
 
 	@OriginalMember(owner = "client!kb", name = "a", descriptor = "(III[B)V")
 	public void gdata(@OriginalArg(0) int length, @OriginalArg(2) int offset, @OriginalArg(3) byte[] dest) {
-		for (@Pc(6) int local6 = offset; local6 < offset + length; local6++) {
-			dest[local6] = this.data[this.pos++];
+		for (@Pc(6) int i = offset; i < offset + length; i++) {
+			dest[i] = this.data[this.pos++];
 		}
 	}
 

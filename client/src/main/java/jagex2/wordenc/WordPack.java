@@ -11,83 +11,100 @@ public final class WordPack {
 	private static final char[] charBuffer = new char[100];
 
 	@OriginalMember(owner = "client!wb", name = "b", descriptor = "[C")
-	private static final char[] TABLE = new char[] { ' ', 'e', 't', 'a', 'o', 'i', 'h', 'n', 's', 'r', 'd', 'l', 'u', 'm', 'w', 'c', 'y', 'f', 'g', 'p', 'b', 'v', 'k', 'x', 'j', 'q', 'z', '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', ' ', '!', '?', '.', ',', ':', ';', '(', ')', '-', '&', '*', '\\', '\'', '@', '#', '+', '=', '£', '$', '%', '"', '[', ']' };
+	private static final char[] TABLE = new char[] {
+		// combined to save space:
+		' ', 'e', 't', 'a', 'o', 'i', 'h', 'n', 's', 'r', 'd', 'l', 'u',
+		// allowed:
+		'm', 'w', 'c', 'y', 'f', 'g', 'p', 'b', 'v', 'k', 'x', 'j', 'q', 'z',
+		'0', '1', '2', '3', '4', '5', '6', '7', '8', '9',
+		' ', '!', '?', '.', ',', ':', ';', '(', ')', '-', '&', '*', '\\', '\'', '@', '#', '+', '=', '£', '$', '%', '"', '[', ']'
+	};
 
 	@OriginalMember(owner = "client!wb", name = "a", descriptor = "(Lclient!kb;II)Ljava/lang/String;")
-	public static String unpack(@OriginalArg(0) Packet arg0, @OriginalArg(2) int arg2) {
-		@Pc(3) int local3 = 0;
-		@Pc(5) int local5 = -1;
-		@Pc(22) int local22;
-		for (@Pc(11) int local11 = 0; local11 < arg2; local11++) {
-			@Pc(16) int local16 = arg0.g1();
-			local22 = local16 >> 4 & 0xF;
-			if (local5 != -1) {
-				charBuffer[local3++] = TABLE[(local5 << 4) + local22 - 195];
-				local5 = -1;
-			} else if (local22 < 13) {
-				charBuffer[local3++] = TABLE[local22];
+	public static String unpack(@OriginalArg(0) Packet word, @OriginalArg(2) int length) {
+		@Pc(3) int pos = 0;
+		@Pc(5) int carry = -1;
+
+		@Pc(22) int nibble;
+		for (@Pc(11) int i = 0; i < length; i++) {
+			@Pc(16) int value = word.g1();
+			nibble = value >> 4 & 0xF;
+
+			if (carry != -1) {
+				charBuffer[pos++] = TABLE[(carry << 4) + nibble - 195];
+				carry = -1;
+			} else if (nibble < 13) {
+				charBuffer[pos++] = TABLE[nibble];
 			} else {
-				local5 = local22;
+				carry = nibble;
 			}
-			local22 = local16 & 0xF;
-			if (local5 != -1) {
-				charBuffer[local3++] = TABLE[(local5 << 4) + local22 - 195];
-				local5 = -1;
-			} else if (local22 < 13) {
-				charBuffer[local3++] = TABLE[local22];
+
+			nibble = value & 0xF;
+			if (carry != -1) {
+				charBuffer[pos++] = TABLE[(carry << 4) + nibble - 195];
+				carry = -1;
+			} else if (nibble < 13) {
+				charBuffer[pos++] = TABLE[nibble];
 			} else {
-				local5 = local22;
+				carry = nibble;
 			}
 		}
-		@Pc(100) boolean local100 = true;
-		for (local22 = 0; local22 < local3; local22++) {
-			@Pc(108) char local108 = charBuffer[local22];
-			if (local100 && local108 >= 'a' && local108 <= 'z') {
-				charBuffer[local22] = (char) (charBuffer[local22] - 32);
-				local100 = false;
+
+		@Pc(100) boolean uppercase = true;
+		for (int i = 0; i < pos; i++) {
+			@Pc(108) char c = charBuffer[i];
+			if (uppercase && c >= 'a' && c <= 'z') {
+				charBuffer[i] = (char) (charBuffer[i] - 32);
+				uppercase = false;
 			}
-			if (local108 == '.' || local108 == '!') {
-				local100 = true;
+
+			if (c == '.' || c == '!') {
+				uppercase = true;
 			}
 		}
-		return new String(charBuffer, 0, local3);
+		return new String(charBuffer, 0, pos);
 	}
 
 	@OriginalMember(owner = "client!wb", name = "a", descriptor = "(Lclient!kb;ZLjava/lang/String;)V")
-	public static void pack(@OriginalArg(0) Packet arg0, @OriginalArg(2) String arg2) {
-		if (arg2.length() > 80) {
-			arg2 = arg2.substring(0, 80);
+	public static void pack(@OriginalArg(0) Packet word, @OriginalArg(2) String str) {
+		if (str.length() > 80) {
+			str = str.substring(0, 80);
 		}
-		arg2 = arg2.toLowerCase();
-		@Pc(15) int local15 = -1;
-		for (@Pc(17) int local17 = 0; local17 < arg2.length(); local17++) {
-			@Pc(23) char local23 = arg2.charAt(local17);
-			@Pc(25) int local25 = 0;
-			for (@Pc(27) int local27 = 0; local27 < TABLE.length; local27++) {
-				if (local23 == TABLE[local27]) {
-					local25 = local27;
+		str = str.toLowerCase();
+
+		@Pc(15) int carry = -1;
+		for (@Pc(17) int i = 0; i < str.length(); i++) {
+			@Pc(23) char c = str.charAt(i);
+
+			@Pc(25) int index = 0;
+			for (@Pc(27) int j = 0; j < TABLE.length; j++) {
+				if (c == TABLE[j]) {
+					index = j;
 					break;
 				}
 			}
-			if (local25 > 12) {
-				local25 += 195;
+
+			if (index > 12) {
+				index += 195;
 			}
-			if (local15 == -1) {
-				if (local25 < 13) {
-					local15 = local25;
+
+			if (carry == -1) {
+				if (index < 13) {
+					carry = index;
 				} else {
-					arg0.p1(local25);
+					word.p1(index);
 				}
-			} else if (local25 < 13) {
-				arg0.p1((local15 << 4) + local25);
-				local15 = -1;
+			} else if (index < 13) {
+				word.p1((carry << 4) + index);
+				carry = -1;
 			} else {
-				arg0.p1((local15 << 4) + (local25 >> 4));
-				local15 = local25 & 0xF;
+				word.p1((carry << 4) + (index >> 4));
+				carry = index & 0xF;
 			}
 		}
-		if (local15 != -1) {
-			arg0.p1(local15 << 4);
+
+		if (carry != -1) {
+			word.p1(carry << 4);
 		}
 	}
 }

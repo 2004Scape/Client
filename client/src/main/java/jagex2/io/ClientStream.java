@@ -33,10 +33,10 @@ public final class ClientStream implements Runnable {
 	private byte[] buf;
 
 	@OriginalMember(owner = "client!d", name = "h", descriptor = "I")
-	private int tcyl;
+	private int bufLen;
 
 	@OriginalMember(owner = "client!d", name = "i", descriptor = "I")
-	private int tnum;
+	private int bufPos;
 
 	@OriginalMember(owner = "client!d", name = "j", descriptor = "Z")
 	private boolean writer = false;
@@ -45,9 +45,9 @@ public final class ClientStream implements Runnable {
 	private boolean ioerror = false;
 
 	@OriginalMember(owner = "client!d", name = "<init>", descriptor = "(Lclient!a;BLjava/net/Socket;)V")
-	public ClientStream(@OriginalArg(0) GameShell arg0, @OriginalArg(2) Socket arg2) throws IOException {
-		this.shell = arg0;
-		this.socket = arg2;
+	public ClientStream(@OriginalArg(0) GameShell shell, @OriginalArg(2) Socket socket) throws IOException {
+		this.shell = shell;
+		this.socket = socket;
 		this.socket.setSoTimeout(30000);
 		this.socket.setTcpNoDelay(true);
 		this.in = this.socket.getInputStream();
@@ -57,6 +57,7 @@ public final class ClientStream implements Runnable {
 	@OriginalMember(owner = "client!d", name = "a", descriptor = "()V")
 	public void close() {
 		this.closed = true;
+
 		try {
 			if (this.in != null) {
 				this.in.close();
@@ -69,7 +70,7 @@ public final class ClientStream implements Runnable {
 			if (this.socket != null) {
 				this.socket.close();
 			}
-		} catch (@Pc(22) IOException local22) {
+		} catch (@Pc(22) IOException ignored) {
 			System.out.println("Error closing stream");
 		}
 
@@ -91,24 +92,24 @@ public final class ClientStream implements Runnable {
 	}
 
 	@OriginalMember(owner = "client!d", name = "a", descriptor = "([BII)V")
-	public void read(@OriginalArg(0) byte[] arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2) throws IOException {
+	public void read(@OriginalArg(0) byte[] dst, @OriginalArg(1) int off, @OriginalArg(2) int len) throws IOException {
 		if (this.closed) {
 			return;
 		}
 
-		while (arg2 > 0) {
-			@Pc(11) int local11 = this.in.read(arg0, arg1, arg2);
-			if (local11 <= 0) {
+		while (len > 0) {
+			@Pc(11) int read = this.in.read(dst, off, len);
+			if (read <= 0) {
 				throw new IOException("EOF");
 			}
 
-			arg1 += local11;
-			arg2 -= local11;
+			off += read;
+			len -= read;
 		}
 	}
 
 	@OriginalMember(owner = "client!d", name = "a", descriptor = "([BIZI)V")
-	public void writer(@OriginalArg(0) byte[] arg0, @OriginalArg(1) int arg1, @OriginalArg(3) int arg3) throws IOException {
+	public void write(@OriginalArg(0) byte[] src, @OriginalArg(1) int len, @OriginalArg(3) int off) throws IOException {
 		if (!this.closed) {
 			if (this.ioerror) {
 				this.ioerror = false;
@@ -120,10 +121,11 @@ public final class ClientStream implements Runnable {
 			}
 
 			synchronized (this) {
-				for (@Pc(31) int local31 = 0; local31 < arg1; local31++) {
-					this.buf[this.tnum] = arg0[local31 + arg3];
-					this.tnum = (this.tnum + 1) % 5000;
-					if (this.tnum == (this.tcyl + 4900) % 5000) {
+				for (@Pc(31) int i = 0; i < len; i++) {
+					this.buf[this.bufPos] = src[i + off];
+					this.bufPos = (this.bufPos + 1) % 5000;
+
+					if (this.bufPos == (this.bufLen + 4900) % 5000) {
 						throw new IOException("buffer overflow");
 					}
 				}
@@ -142,13 +144,14 @@ public final class ClientStream implements Runnable {
 	@Override
 	public void run() {
 		while (this.writer) {
-			@Pc(38) int local38;
-			@Pc(27) int local27;
+			@Pc(38) int len;
+			@Pc(27) int off;
+
 			synchronized (this) {
-				if (this.tnum == this.tcyl) {
+				if (this.bufPos == this.bufLen) {
 					try {
 						this.wait();
-					} catch (@Pc(16) InterruptedException local16) {
+					} catch (@Pc(16) InterruptedException ignored) {
 					}
 				}
 
@@ -156,27 +159,27 @@ public final class ClientStream implements Runnable {
 					return;
 				}
 
-				local27 = this.tcyl;
-				if (this.tnum >= this.tcyl) {
-					local38 = this.tnum - this.tcyl;
+				off = this.bufLen;
+				if (this.bufPos >= this.bufLen) {
+					len = this.bufPos - this.bufLen;
 				} else {
-					local38 = 5000 - this.tcyl;
+					len = 5000 - this.bufLen;
 				}
 			}
 
-			if (local38 > 0) {
+			if (len > 0) {
 				try {
-					this.out.write(this.buf, local27, local38);
-				} catch (@Pc(62) IOException local62) {
+					this.out.write(this.buf, off, len);
+				} catch (@Pc(62) IOException ignored) {
 					this.ioerror = true;
 				}
 
-				this.tcyl = (this.tcyl + local38) % 5000;
+				this.bufLen = (this.bufLen + len) % 5000;
 				try {
-					if (this.tnum == this.tcyl) {
+					if (this.bufPos == this.bufLen) {
 						this.out.flush();
 					}
-				} catch (@Pc(83) IOException local83) {
+				} catch (@Pc(83) IOException ignored) {
 					this.ioerror = true;
 				}
 			}

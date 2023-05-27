@@ -15,23 +15,24 @@ public final class HashTable {
 	private final Linkable[] nodes;
 
 	@OriginalMember(owner = "client!t", name = "<init>", descriptor = "(II)V")
-	public HashTable(@OriginalArg(1) int arg1) {
-		this.size = arg1;
-		this.nodes = new Linkable[arg1];
+	public HashTable(@OriginalArg(1) int size) {
+		this.size = size;
+		this.nodes = new Linkable[size];
 
-		for (@Pc(30) int local30 = 0; local30 < arg1; local30++) {
-			@Pc(40) Linkable local40 = this.nodes[local30] = new Linkable();
-			local40.prev = local40;
-			local40.next = local40;
+		for (@Pc(30) int i = 0; i < size; i++) {
+			@Pc(40) Linkable node = this.nodes[i] = new Linkable();
+			node.prev = node;
+			node.next = node;
 		}
 	}
 
 	@OriginalMember(owner = "client!t", name = "a", descriptor = "(J)Lclient!u;")
-	public Linkable get(@OriginalArg(0) long arg0) {
-		@Pc(11) Linkable local11 = this.nodes[(int) (arg0 & (long) (this.size - 1))];
-		for (@Pc(14) Linkable local14 = local11.prev; local14 != local11; local14 = local14.prev) {
-			if (local14.id == arg0) {
-				return local14;
+	public Linkable get(@OriginalArg(0) long key) {
+		@Pc(11) Linkable start = this.nodes[(int) (key & (long) (this.size - 1))];
+
+		for (@Pc(14) Linkable node = start.prev; node != start; node = node.prev) {
+			if (node.id == key) {
+				return node;
 			}
 		}
 
@@ -39,16 +40,16 @@ public final class HashTable {
 	}
 
 	@OriginalMember(owner = "client!t", name = "a", descriptor = "(JILclient!u;)V")
-	public void put(@OriginalArg(0) long arg0, @OriginalArg(2) Linkable arg2) {
-		if (arg2.next != null) {
-			arg2.unlink();
+	public void put(@OriginalArg(0) long key, @OriginalArg(2) Linkable value) {
+		if (value.next != null) {
+			value.unlink();
 		}
 
-		@Pc(18) Linkable local18 = this.nodes[(int) (arg0 & (long) (this.size - 1))];
-		arg2.next = local18.next;
-		arg2.prev = local18;
-		arg2.next.prev = arg2;
-		arg2.prev.next = arg2;
-		arg2.id = arg0;
+		@Pc(18) Linkable node = this.nodes[(int) (key & (long) (this.size - 1))];
+		value.next = node.next;
+		value.prev = node;
+		value.next.prev = value;
+		value.prev.next = value;
+		value.id = key;
 	}
 }

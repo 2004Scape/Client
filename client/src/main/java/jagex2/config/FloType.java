@@ -26,7 +26,7 @@ public final class FloType {
 	private boolean opcode3 = false;
 
 	@OriginalMember(owner = "client!fc", name = "h", descriptor = "Z")
-	public boolean occludes = true;
+	public boolean occlude = true;
 
 	@OriginalMember(owner = "client!fc", name = "i", descriptor = "Ljava/lang/String;")
 	public String name;
@@ -83,7 +83,7 @@ public final class FloType {
 			} else if (code == 3) {
 				this.opcode3 = true;
 			} else if (code == 5) {
-				this.occludes = false;
+				this.occlude = false;
 			} else if (code == 6) {
 				this.name = dat.gstr();
 			} else {

@@ -21,46 +21,46 @@ public final class LruCache {
 	private final Stack history = new Stack();
 
 	@OriginalMember(owner = "client!s", name = "<init>", descriptor = "(BI)V")
-	public LruCache(@OriginalArg(1) int arg1) {
-		this.capacity = arg1;
-		this.available = arg1;
+	public LruCache(@OriginalArg(1) int size) {
+		this.capacity = size;
+		this.available = size;
 	}
 
 	@OriginalMember(owner = "client!s", name = "a", descriptor = "(J)Lclient!db;")
-	public Hashable get(@OriginalArg(0) long arg0) {
-		@Pc(5) Hashable local5 = (Hashable) this.hashtable.get(arg0);
-		if (local5 != null) {
-			this.history.push(local5);
+	public Hashable get(@OriginalArg(0) long key) {
+		@Pc(5) Hashable node = (Hashable) this.hashtable.get(key);
+		if (node != null) {
+			this.history.push(node);
 		}
 
-		return local5;
+		return node;
 	}
 
 	@OriginalMember(owner = "client!s", name = "a", descriptor = "(IJLclient!db;)V")
-	public void put(@OriginalArg(1) long arg1, @OriginalArg(2) Hashable arg2) {
+	public void put(@OriginalArg(1) long key, @OriginalArg(2) Hashable value) {
 		if (this.available == 0) {
-			@Pc(8) Hashable local8 = this.history.pop();
-			local8.unlink();
-			local8.uncache();
+			@Pc(8) Hashable node = this.history.pop();
+			node.unlink();
+			node.uncache();
 		} else {
 			this.available--;
 		}
 
-		this.hashtable.put(arg1, arg2);
-		this.history.push(arg2);
+		this.hashtable.put(key, value);
+		this.history.push(value);
 	}
 
 	@OriginalMember(owner = "client!s", name = "a", descriptor = "()V")
 	public void clear() {
 		while (true) {
-			@Pc(3) Hashable local3 = this.history.pop();
-			if (local3 == null) {
+			@Pc(3) Hashable node = this.history.pop();
+			if (node == null) {
 				this.available = this.capacity;
 				return;
 			}
 
-			local3.unlink();
-			local3.uncache();
+			node.unlink();
+			node.uncache();
 		}
 	}
 }

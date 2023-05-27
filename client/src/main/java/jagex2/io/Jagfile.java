@@ -18,10 +18,10 @@ public final class Jagfile {
 	private int[] fileHash;
 
 	@OriginalMember(owner = "client!ub", name = "h", descriptor = "[I")
-	private int[] fileSizeInflated;
+	private int[] fileUnpackedSize;
 
 	@OriginalMember(owner = "client!ub", name = "i", descriptor = "[I")
-	private int[] fileSizeDeflated;
+	private int[] filePackedSize;
 
 	@OriginalMember(owner = "client!ub", name = "j", descriptor = "[I")
 	private int[] fileOffset;
@@ -30,61 +30,69 @@ public final class Jagfile {
 	private boolean unpacked;
 
 	@OriginalMember(owner = "client!ub", name = "<init>", descriptor = "([BZ)V")
-	public Jagfile(@OriginalArg(0) byte[] arg0) {
-		this.load(arg0);
+	public Jagfile(@OriginalArg(0) byte[] src) {
+		this.load(src);
 	}
 
 	@OriginalMember(owner = "client!ub", name = "a", descriptor = "(Z[B)V")
-	private void load(@OriginalArg(1) byte[] arg1) {
-		@Pc(7) Packet local7 = new Packet(arg1);
-		@Pc(10) int local10 = local7.g3();
-		@Pc(13) int local13 = local7.g3();
-		if (local13 == local10) {
-			this.buffer = arg1;
+	private void load(@OriginalArg(1) byte[] src) {
+		@Pc(7) Packet data = new Packet(src);
+		@Pc(10) int unpackedSize = data.g3();
+		@Pc(13) int packedSize = data.g3();
+
+		if (packedSize == unpackedSize) {
+			this.buffer = src;
 			this.unpacked = false;
 		} else {
-			@Pc(19) byte[] local19 = new byte[local10];
-			BZip2.read(local19, local10, arg1, local13, 6);
-			this.buffer = local19;
-			local7 = new Packet(this.buffer);
+			@Pc(19) byte[] temp = new byte[unpackedSize];
+			BZip2.read(temp, unpackedSize, src, packedSize, 6);
+			this.buffer = temp;
+
+			data = new Packet(this.buffer);
 			this.unpacked = true;
 		}
-		this.fileCount = local7.g2();
+
+		this.fileCount = data.g2();
 		this.fileHash = new int[this.fileCount];
-		this.fileSizeInflated = new int[this.fileCount];
-		this.fileSizeDeflated = new int[this.fileCount];
+		this.fileUnpackedSize = new int[this.fileCount];
+		this.filePackedSize = new int[this.fileCount];
 		this.fileOffset = new int[this.fileCount];
-		@Pc(82) int local82 = local7.pos + this.fileCount * 10;
-		for (@Pc(84) int local84 = 0; local84 < this.fileCount; local84++) {
-			this.fileHash[local84] = local7.g4();
-			this.fileSizeInflated[local84] = local7.g3();
-			this.fileSizeDeflated[local84] = local7.g3();
-			this.fileOffset[local84] = local82;
-			local82 += this.fileSizeDeflated[local84];
+
+		@Pc(82) int pos = data.pos + this.fileCount * 10;
+		for (@Pc(84) int i = 0; i < this.fileCount; i++) {
+			this.fileHash[i] = data.g4();
+			this.fileUnpackedSize[i] = data.g3();
+			this.filePackedSize[i] = data.g3();
+			this.fileOffset[i] = pos;
+			pos += this.filePackedSize[i];
 		}
 	}
 
 	@OriginalMember(owner = "client!ub", name = "a", descriptor = "(Ljava/lang/String;[BB)[B")
-	public byte[] read(@OriginalArg(0) String arg0, @OriginalArg(1) byte[] arg1) {
-		@Pc(3) int local3 = 0;
-		@Pc(6) String local6 = arg0.toUpperCase();
-		for (@Pc(8) int local8 = 0; local8 < local6.length(); local8++) {
-			local3 = local3 * 61 + local6.charAt(local8) - 32;
+	public byte[] read(@OriginalArg(0) String name, @OriginalArg(1) byte[] dst) {
+		@Pc(3) int hash = 0;
+		@Pc(6) String upper = name.toUpperCase();
+		for (@Pc(8) int i = 0; i < upper.length(); i++) {
+			hash = hash * 61 + upper.charAt(i) - 32;
 		}
-		for (@Pc(27) int local27 = 0; local27 < this.fileCount; local27++) {
-			if (this.fileHash[local27] == local3) {
-				if (arg1 == null) {
-					arg1 = new byte[this.fileSizeInflated[local27]];
+
+		for (@Pc(27) int i = 0; i < this.fileCount; i++) {
+			if (this.fileHash[i] == hash) {
+				if (dst == null) {
+					dst = new byte[this.fileUnpackedSize[i]];
 				}
+
 				if (this.unpacked) {
-					if (this.fileSizeInflated[local27] >= 0)
-						System.arraycopy(this.buffer, this.fileOffset[local27] + 0, arg1, 0, this.fileSizeInflated[local27]);
+					if (this.fileUnpackedSize[i] >= 0) {
+						System.arraycopy(this.buffer, this.fileOffset[i], dst, 0, this.fileUnpackedSize[i]);
+					}
 				} else {
-					BZip2.read(arg1, this.fileSizeInflated[local27], this.buffer, this.fileSizeDeflated[local27], this.fileOffset[local27]);
+					BZip2.read(dst, this.fileUnpackedSize[i], this.buffer, this.filePackedSize[i], this.fileOffset[i]);
 				}
-				return arg1;
+				return dst;
 			}
 		}
+
 		return null;
 	}
 }
