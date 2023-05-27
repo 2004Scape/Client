@@ -74,8 +74,8 @@ public final class Packet extends Hashable {
 	}
 
 	@OriginalMember(owner = "client!kb", name = "<init>", descriptor = "(I[B)V")
-	public Packet(@OriginalArg(1) byte[] arg1) {
-		this.data = arg1;
+	public Packet(@OriginalArg(1) byte[] src) {
+		this.data = src;
 		this.pos = 0;
 	}
 
@@ -254,8 +254,7 @@ public final class Packet extends Hashable {
 	@OriginalMember(owner = "client!kb", name = "i", descriptor = "()Ljava/lang/String;")
 	public String gstr() {
 		@Pc(2) int start = this.pos;
-		while (this.data[this.pos++] != 10) {
-		}
+		while (this.data[this.pos++] != 10) {}
 
 		return new String(this.data, start, this.pos - start - 1);
 	}
@@ -263,11 +262,10 @@ public final class Packet extends Hashable {
 	@OriginalMember(owner = "client!kb", name = "b", descriptor = "(B)[B")
 	public byte[] gstrbyte() {
 		@Pc(2) int start = this.pos;
-		while (this.data[this.pos++] != 10) {
-		}
+		while (this.data[this.pos++] != 10) {}
 
 		@Pc(29) byte[] temp = new byte[this.pos - start - 1];
-		if (this.pos - 1 - start >= 0) System.arraycopy(this.data, start, temp, start - start, this.pos - 1 - start);
+		if (this.pos - 1 - start >= 0) System.arraycopy(this.data, start, temp, 0, this.pos - 1 - start);
 		return temp;
 	}
 
