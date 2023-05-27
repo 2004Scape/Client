@@ -83,57 +83,57 @@ public final class ProjectileEntity extends Entity {
 	private int seqCycle;
 
 	@OriginalMember(owner = "client!ab", name = "<init>", descriptor = "(IIIIIIIIIIII)V")
-	public ProjectileEntity(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2, @OriginalArg(3) int arg3, @OriginalArg(4) int arg4, @OriginalArg(5) int arg5, @OriginalArg(6) int arg6, @OriginalArg(7) int arg7, @OriginalArg(9) int arg9, @OriginalArg(10) int arg10, @OriginalArg(11) int arg11) {
-		this.spotanim = SpotAnimType.instances[arg10];
-		this.level = arg4;
-		this.srcX = arg11;
-		this.srcZ = arg2;
-		this.srcY = arg9;
-		this.startCycle = arg6;
-		this.lastCycle = arg3;
-		this.peakPitch = arg1;
-		this.arc = arg7;
-		this.target = arg5;
-		this.offsetY = arg0;
+	public ProjectileEntity(@OriginalArg(0) int offsetY, @OriginalArg(1) int peakPitch, @OriginalArg(2) int srcZ, @OriginalArg(3) int lastCycle, @OriginalArg(4) int level, @OriginalArg(5) int target, @OriginalArg(6) int startCycle, @OriginalArg(7) int arc, @OriginalArg(9) int srcY, @OriginalArg(10) int spotanim, @OriginalArg(11) int srcX) {
+		this.spotanim = SpotAnimType.instances[spotanim];
+		this.level = level;
+		this.srcX = srcX;
+		this.srcZ = srcZ;
+		this.srcY = srcY;
+		this.startCycle = startCycle;
+		this.lastCycle = lastCycle;
+		this.peakPitch = peakPitch;
+		this.arc = arc;
+		this.target = target;
+		this.offsetY = offsetY;
 		this.mobile = false;
 	}
 
 	@OriginalMember(owner = "client!ab", name = "a", descriptor = "(IIIII)V")
-	public void updateVelocity(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2, @OriginalArg(4) int arg4) {
-		@Pc(8) double local8;
+	public void updateVelocity(@OriginalArg(0) int arg0, @OriginalArg(1) int dstZ, @OriginalArg(2) int dstX, @OriginalArg(4) int cycle) {
 		if (!this.mobile) {
-			local8 = arg2 - this.srcX;
-			@Pc(14) double local14 = arg1 - this.srcZ;
-			@Pc(23) double local23 = Math.sqrt(local8 * local8 + local14 * local14);
-			this.x = (double) this.srcX + local8 * (double) this.arc / local23;
-			this.z = (double) this.srcZ + local14 * (double) this.arc / local23;
+			@Pc(8) double dx = dstX - this.srcX;
+			@Pc(14) double dz = dstZ - this.srcZ;
+			@Pc(23) double d = Math.sqrt(dx * dx + dz * dz);
+
+			this.x = (double) this.srcX + dx * (double) this.arc / d;
+			this.z = (double) this.srcZ + dz * (double) this.arc / d;
 			this.y = this.srcY;
 		}
 
-		local8 = this.lastCycle + 1 - arg4;
-		this.velocityX = ((double) arg2 - this.x) / local8;
-		this.velocityZ = ((double) arg1 - this.z) / local8;
+		double dt = this.lastCycle + 1 - cycle;
+		this.velocityX = ((double) dstX - this.x) / dt;
+		this.velocityZ = ((double) dstZ - this.z) / dt;
 		this.velocity = Math.sqrt(this.velocityX * this.velocityX + this.velocityZ * this.velocityZ);
 
 		if (!this.mobile) {
 			this.velocityY = -this.velocity * Math.tan((double) this.peakPitch * 0.02454369D);
 		}
 
-		this.accelerationY = ((double) arg0 - this.y - this.velocityY * local8) * 2.0D / (local8 * local8);
+		this.accelerationY = ((double) arg0 - this.y - this.velocityY * dt) * 2.0D / (dt * dt);
 	}
 
 	@OriginalMember(owner = "client!ab", name = "a", descriptor = "(BI)V")
-	public void update(@OriginalArg(1) int arg1) {
+	public void update(@OriginalArg(1) int delta) {
 		this.mobile = true;
-		this.x += this.velocityX * (double) arg1;
-		this.z += this.velocityZ * (double) arg1;
-		this.y += this.velocityY * (double) arg1 + this.accelerationY * 0.5D * (double) arg1 * (double) arg1;
-		this.velocityY += this.accelerationY * (double) arg1;
+		this.x += this.velocityX * (double) delta;
+		this.z += this.velocityZ * (double) delta;
+		this.y += this.velocityY * (double) delta + this.accelerationY * 0.5D * (double) delta * (double) delta;
+		this.velocityY += this.accelerationY * (double) delta;
 		this.yaw = (int) (Math.atan2(this.velocityX, this.velocityZ) * 325.949D) + 1024 & 0x7FF;
 		this.pitch = (int) (Math.atan2(this.velocityY, this.velocity) * 325.949D) & 0x7FF;
 
 		if (this.spotanim.seq != null) {
-			this.seqCycle += arg1;
+			this.seqCycle += delta;
 
 			while (this.seqCycle > this.spotanim.seq.delay[this.seqFrame]) {
 				this.seqCycle -= this.spotanim.seq.delay[this.seqFrame] + 1;
@@ -148,22 +148,22 @@ public final class ProjectileEntity extends Entity {
 	@OriginalMember(owner = "client!ab", name = "a", descriptor = "(Z)Lclient!eb;")
 	@Override
 	public Model draw() {
-		@Pc(3) Model local3 = this.spotanim.getModel();
-		@Pc(19) Model local19 = new Model(local3, true, !this.spotanim.disposeAlpha, false);
+		@Pc(3) Model tmp = this.spotanim.getModel();
+		@Pc(19) Model model = new Model(tmp, true, !this.spotanim.disposeAlpha, false);
 
 		if (this.spotanim.seq != null) {
-			local19.createLabelReferences();
-			local19.applyTransform(this.spotanim.seq.frames[this.seqFrame]);
-			local19.labelFaces = null;
-			local19.labelVertices = null;
+			model.createLabelReferences();
+			model.applyTransform(this.spotanim.seq.frames[this.seqFrame]);
+			model.labelFaces = null;
+			model.labelVertices = null;
 		}
 
 		if (this.spotanim.resizeh != 128 || this.spotanim.resizev != 128) {
-			local19.scale(this.spotanim.resizeh, this.spotanim.resizev, this.spotanim.resizeh);
+			model.scale(this.spotanim.resizeh, this.spotanim.resizev, this.spotanim.resizeh);
 		}
 
-		local19.rotateX(this.pitch);
-		local19.calculateNormals(this.spotanim.ambient + 64, this.spotanim.contrast + 850, -30, -50, -30, true);
-		return local19;
+		model.rotateX(this.pitch);
+		model.calculateNormals(64 + this.spotanim.ambient, 850 + this.spotanim.contrast, -30, -50, -30, true);
+		return model;
 	}
 }

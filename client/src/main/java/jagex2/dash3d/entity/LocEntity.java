@@ -34,15 +34,15 @@ public final class LocEntity extends Linkable {
 	public int seqCycle;
 
 	@OriginalMember(owner = "client!nb", name = "<init>", descriptor = "(ZIIIILclient!jc;II)V")
-	public LocEntity(@OriginalArg(0) boolean arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2, @OriginalArg(4) int arg4, @OriginalArg(5) SeqType arg5, @OriginalArg(6) int arg6, @OriginalArg(7) int arg7) {
-		this.heightmapSW = arg2;
-		this.heightmapSE = arg4;
-		this.heightmapNE = arg7;
-		this.heightmapNW = arg6;
-		this.index = arg1;
-		this.seq = arg5;
+	public LocEntity(@OriginalArg(0) boolean randomFrame, @OriginalArg(1) int index, @OriginalArg(2) int heightmapSW, @OriginalArg(4) int heightmapSE, @OriginalArg(5) SeqType seq, @OriginalArg(6) int heightmapNW, @OriginalArg(7) int heightmapNE) {
+		this.heightmapSW = heightmapSW;
+		this.heightmapSE = heightmapSE;
+		this.heightmapNE = heightmapNE;
+		this.heightmapNW = heightmapNW;
+		this.index = index;
+		this.seq = seq;
 
-		if (arg0 && arg5.replayoff != -1) {
+		if (randomFrame && seq.replayoff != -1) {
 			this.seqFrame = (int) (Math.random() * (double) this.seq.frameCount);
 			this.seqCycle = (int) (Math.random() * (double) this.seq.delay[this.seqFrame]);
 		} else {

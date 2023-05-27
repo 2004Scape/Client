@@ -38,19 +38,29 @@ public final class SpotAnimEntity extends Entity {
 	public boolean seqComplete = false;
 
 	@OriginalMember(owner = "client!bb", name = "<init>", descriptor = "(IIZIIIII)V")
-	public SpotAnimEntity(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(3) int arg3, @OriginalArg(4) int arg4, @OriginalArg(5) int arg5, @OriginalArg(6) int arg6, @OriginalArg(7) int arg7) {
-		this.type = SpotAnimType.instances[arg1];
-		this.level = arg6;
-		this.x = arg0;
-		this.z = arg3;
-		this.y = arg5;
-		this.startCycle = arg7 + arg4;
+	public SpotAnimEntity(@OriginalArg(0) int x, @OriginalArg(1) int id, @OriginalArg(3) int z, @OriginalArg(4) int delay, @OriginalArg(5) int y, @OriginalArg(6) int level, @OriginalArg(7) int cycle) {
+		this.type = SpotAnimType.instances[id];
+		this.level = level;
+		this.x = x;
+		this.z = z;
+		this.y = y;
+		this.startCycle = cycle + delay;
 		this.seqComplete = false;
 	}
 
 	@OriginalMember(owner = "client!bb", name = "a", descriptor = "(II)V")
 	public void update(@OriginalArg(0) int delta) {
-		this.seqCycle += delta;
+		for (this.seqCycle += delta; this.seqCycle > this.type.seq.delay[this.seqFrame]; ) {
+			this.seqCycle -= this.type.seq.delay[this.seqFrame] + 1;
+			this.seqFrame++;
+
+			if (this.seqFrame >= this.type.seq.frameCount) {
+				this.seqFrame = 0;
+				this.seqComplete = true;
+			}
+		}
+
+		/*this.seqCycle += delta;
 
 		while (true) {
 			do {
@@ -58,46 +68,48 @@ public final class SpotAnimEntity extends Entity {
 					if (this.seqCycle <= this.type.seq.delay[this.seqFrame]) {
 						return;
 					}
+
 					this.seqCycle -= this.type.seq.delay[this.seqFrame] + 1;
 					this.seqFrame++;
 				} while (this.seqFrame < this.type.seq.frameCount);
 			} while (this.seqFrame >= 0 && this.seqFrame < this.type.seq.frameCount);
+
 			this.seqFrame = 0;
 			this.seqComplete = true;
-		}
+		}*/
 	}
 
 	@OriginalMember(owner = "client!bb", name = "a", descriptor = "(Z)Lclient!eb;")
 	@Override
 	public Model draw() {
-		@Pc(3) Model local3 = this.type.getModel();
-		@Pc(19) Model local19 = new Model(local3, true, !this.type.disposeAlpha, false);
+		@Pc(3) Model tmp = this.type.getModel();
+		@Pc(19) Model model = new Model(tmp, true, !this.type.disposeAlpha, false);
 
 		if (!this.seqComplete) {
-			local19.createLabelReferences();
-			local19.applyTransform(this.type.seq.frames[this.seqFrame]);
-			local19.labelFaces = null;
-			local19.labelVertices = null;
+			model.createLabelReferences();
+			model.applyTransform(this.type.seq.frames[this.seqFrame]);
+			model.labelFaces = null;
+			model.labelVertices = null;
 		}
 
 		if (this.type.resizeh != 128 || this.type.resizev != 128) {
-			local19.scale(this.type.resizeh, this.type.resizev, this.type.resizeh);
+			model.scale(this.type.resizeh, this.type.resizev, this.type.resizeh);
 		}
 
 		if (this.type.orientation != 0) {
 			if (this.type.orientation == 90) {
-				local19.rotateY90();
+				model.rotateY90();
 			} else if (this.type.orientation == 180) {
-				local19.rotateY90();
-				local19.rotateY90();
+				model.rotateY90();
+				model.rotateY90();
 			} else if (this.type.orientation == 270) {
-				local19.rotateY90();
-				local19.rotateY90();
-				local19.rotateY90();
+				model.rotateY90();
+				model.rotateY90();
+				model.rotateY90();
 			}
 		}
 
-		local19.calculateNormals(this.type.ambient + 64, this.type.contrast + 850, -30, -50, -30, true);
-		return local19;
+		model.calculateNormals(64 + this.type.ambient, 850 + this.type.contrast, -30, -50, -30, true);
+		return model;
 	}
 }

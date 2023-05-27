@@ -25,50 +25,50 @@ public final class NpcEntity extends PathingEntity {
 			return this.getSequencedModel();
 		}
 
-		@Pc(20) Model local20 = this.getSequencedModel();
-		@Pc(25) SpotAnimType local25 = SpotAnimType.instances[super.spotanimId];
-		@Pc(41) Model local41 = new Model(local25.getModel(), true, !local25.disposeAlpha, false);
-		local41.translate(-super.spotanimOffset, 0, 0);
-		local41.createLabelReferences();
-		local41.applyTransform(local25.seq.frames[super.spotanimFrame]);
-		local41.labelFaces = null;
-		local41.labelVertices = null;
+		@Pc(20) Model model = this.getSequencedModel();
+		@Pc(25) SpotAnimType spotanim = SpotAnimType.instances[super.spotanimId];
 
-		if (local25.resizeh != 128 || local25.resizev != 128) {
-			local41.scale(local25.resizeh, local25.resizev, local25.resizeh);
+		@Pc(41) Model model1 = new Model(spotanim.getModel(), true, !spotanim.disposeAlpha, false);
+		model1.translate(-super.spotanimOffset, 0, 0);
+		model1.createLabelReferences();
+		model1.applyTransform(spotanim.seq.frames[super.spotanimFrame]);
+		model1.labelFaces = null;
+		model1.labelVertices = null;
+
+		if (spotanim.resizeh != 128 || spotanim.resizev != 128) {
+			model1.scale(spotanim.resizeh, spotanim.resizev, spotanim.resizeh);
 		}
 
-		local41.calculateNormals(local25.ambient + 64, local25.contrast + 850, -30, -50, -30, true);
-		@Pc(115) Model[] local115 = new Model[] { local20, local41 };
-		@Pc(123) Model local123 = new Model(local115, 2, true);
+		model1.calculateNormals(64 + spotanim.ambient, 850 + spotanim.contrast, -30, -50, -30, true);
+		@Pc(115) Model[] models = new Model[] { model, model1 };
+
+		@Pc(123) Model tmp = new Model(models, 2, true);
 		if (this.type.size == 1) {
-			local123.pickable = true;
+			tmp.pickable = true;
 		}
 
-		return local123;
+		return tmp;
 	}
 
 	@OriginalMember(owner = "client!y", name = "c", descriptor = "(Z)Lclient!eb;")
 	private Model getSequencedModel() {
-		@Pc(14) int local14;
-
 		if (super.primarySeqId >= 0 && super.primarySeqDelay == 0) {
-			local14 = SeqType.instances[super.primarySeqId].frames[super.primarySeqFrame];
-			@Pc(16) int local16 = -1;
+			@Pc(14) int primaryTransformId = SeqType.instances[super.primarySeqId].frames[super.primarySeqFrame];
+			@Pc(16) int secondaryTransformId = -1;
 			if (super.secondarySeqId >= 0 && super.secondarySeqId != super.seqStandId) {
-				local16 = SeqType.instances[super.secondarySeqId].frames[super.secondarySeqFrame];
+				secondaryTransformId = SeqType.instances[super.secondarySeqId].frames[super.secondarySeqFrame];
 			}
-			return this.type.getSequencedModel(local14, local16, SeqType.instances[super.primarySeqId].labelGroups);
+			return this.type.getSequencedModel(primaryTransformId, secondaryTransformId, SeqType.instances[super.primarySeqId].labelGroups);
 		}
 
-		local14 = -1;
+		int transformId = -1;
 		if (super.secondarySeqId >= 0) {
-			local14 = SeqType.instances[super.secondarySeqId].frames[super.secondarySeqFrame];
+			transformId = SeqType.instances[super.secondarySeqId].frames[super.secondarySeqFrame];
 		}
 
-		@Pc(71) Model local71 = this.type.getSequencedModel(local14, -1, null);
-		super.height = local71.maxY;
-		return local71;
+		@Pc(71) Model model = this.type.getSequencedModel(transformId, -1, null);
+		super.height = model.maxY;
+		return model;
 	}
 
 	@OriginalMember(owner = "client!y", name = "b", descriptor = "(Z)Z")

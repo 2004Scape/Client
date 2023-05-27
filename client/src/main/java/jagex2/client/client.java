@@ -1812,7 +1812,7 @@ public final class client extends GameShell {
 				}
 			}
 		} else {
-			@Pc(395) ObjEntity local395;
+			@Pc(395) ObjStackEntity local395;
 			if (arg2 == 223) {
 				local15 = arg1.g1();
 				local24 = this.baseX + (local15 >> 4 & 0x7);
@@ -1820,7 +1820,7 @@ public final class client extends GameShell {
 				local34 = arg1.g2();
 				local38 = arg1.g2();
 				if (local24 >= 0 && local31 >= 0 && local24 < 104 && local31 < 104) {
-					local395 = new ObjEntity();
+					local395 = new ObjStackEntity();
 					local395.index = local34;
 					local395.count = local38;
 					if (this.levelObjStacks[this.currentLevel][local24][local31] == null) {
@@ -1837,7 +1837,7 @@ public final class client extends GameShell {
 				if (local24 >= 0 && local31 >= 0 && local24 < 104 && local31 < 104) {
 					@Pc(485) LinkList local485 = this.levelObjStacks[this.currentLevel][local24][local31];
 					if (local485 != null) {
-						for (local395 = (ObjEntity) local485.peekFront(); local395 != null; local395 = (ObjEntity) local485.prev()) {
+						for (local395 = (ObjStackEntity) local485.peekFront(); local395 != null; local395 = (ObjStackEntity) local485.prev()) {
 							if (local395.index == (local34 & 0x7FFF)) {
 								local395.unlink();
 								break;
@@ -1896,7 +1896,7 @@ public final class client extends GameShell {
 					local38 = arg1.g2();
 					local42 = arg1.g2();
 					if (local24 >= 0 && local31 >= 0 && local24 < 104 && local31 < 104 && local42 != this.localPid) {
-						@Pc(807) ObjEntity local807 = new ObjEntity();
+						@Pc(807) ObjStackEntity local807 = new ObjStackEntity();
 						local807.index = local34;
 						local807.count = local38;
 						if (this.levelObjStacks[this.currentLevel][local24][local31] == null) {
@@ -1977,7 +1977,7 @@ public final class client extends GameShell {
 						if (local24 >= 0 && local31 >= 0 && local24 < 104 && local31 < 104) {
 							@Pc(1178) LinkList local1178 = this.levelObjStacks[this.currentLevel][local24][local31];
 							if (local1178 != null) {
-								for (@Pc(1184) ObjEntity local1184 = (ObjEntity) local1178.peekFront(); local1184 != null; local1184 = (ObjEntity) local1178.prev()) {
+								for (@Pc(1184) ObjStackEntity local1184 = (ObjStackEntity) local1178.peekFront(); local1184 != null; local1184 = (ObjStackEntity) local1178.prev()) {
 									if (local1184.index == (local34 & 0x7FFF) && local1184.count == local38) {
 										local1184.count = local42;
 										break;
@@ -5616,9 +5616,9 @@ public final class client extends GameShell {
 				@Pc(241) Model local241 = new Model(local209, local211);
 				for (@Pc(243) int local243 = 0; local243 < 5; local243++) {
 					if (this.designColors[local243] != 0) {
-						local241.recolor(PlayerEntity.designPartColor[local243][0], PlayerEntity.designPartColor[local243][this.designColors[local243]]);
+						local241.recolor(PlayerEntity.DESIGN_BODY_COLOR[local243][0], PlayerEntity.DESIGN_BODY_COLOR[local243][this.designColors[local243]]);
 						if (local243 == 1) {
-							local241.recolor(PlayerEntity.designHairColor[0], PlayerEntity.designHairColor[this.designColors[local243]]);
+							local241.recolor(PlayerEntity.DESIGN_HAIR_COLOR[0], PlayerEntity.DESIGN_HAIR_COLOR[this.designColors[local243]]);
 						}
 					}
 				}
@@ -5859,12 +5859,12 @@ public final class client extends GameShell {
 			if (local116 == 0) {
 				local121--;
 				if (local121 < 0) {
-					local121 = PlayerEntity.designPartColor[local112].length - 1;
+					local121 = PlayerEntity.DESIGN_BODY_COLOR[local112].length - 1;
 				}
 			}
 			if (local116 == 1) {
 				local121++;
-				if (local121 >= PlayerEntity.designPartColor[local112].length) {
+				if (local121 >= PlayerEntity.DESIGN_BODY_COLOR[local112].length) {
 					local121 = 0;
 				}
 			}
@@ -8394,10 +8394,10 @@ public final class client extends GameShell {
 			return;
 		}
 		@Pc(21) int local21 = -99999999;
-		@Pc(23) ObjEntity local23 = null;
-		@Pc(27) ObjEntity local27;
+		@Pc(23) ObjStackEntity local23 = null;
+		@Pc(27) ObjStackEntity local27;
 		@Pc(35) int local35;
-		for (local27 = (ObjEntity) local9.peekFront(); local27 != null; local27 = (ObjEntity) local9.prev()) {
+		for (local27 = (ObjStackEntity) local9.peekFront(); local27 != null; local27 = (ObjStackEntity) local9.prev()) {
 			@Pc(32) ObjType local32 = ObjType.get(local27.index);
 			local35 = local32.cost;
 			if (local32.stackable) {
@@ -8413,7 +8413,7 @@ public final class client extends GameShell {
 		local35 = -1;
 		@Pc(69) int local69 = 0;
 		@Pc(71) int local71 = 0;
-		for (local27 = (ObjEntity) local9.peekFront(); local27 != null; local27 = (ObjEntity) local9.prev()) {
+		for (local27 = (ObjStackEntity) local9.peekFront(); local27 != null; local27 = (ObjStackEntity) local9.prev()) {
 			if (local27.index != local23.index && local65 == -1) {
 				local65 = local27.index;
 				local69 = local27.count;
@@ -8976,7 +8976,7 @@ public final class client extends GameShell {
 				if (local74 == 3) {
 					@Pc(565) LinkList local565 = this.levelObjStacks[this.currentLevel][local62][local68];
 					if (local565 != null) {
-						for (@Pc(572) ObjEntity local572 = (ObjEntity) local565.peekBack(); local572 != null; local572 = (ObjEntity) local565.next()) {
+						for (@Pc(572) ObjStackEntity local572 = (ObjStackEntity) local565.peekBack(); local572 != null; local572 = (ObjStackEntity) local565.next()) {
 							@Pc(578) ObjType local578 = ObjType.get(local572.index);
 							if (this.objSelected == 1) {
 								this.menuOption[this.menuSize] = "Use " + this.objSelectedName + " with @lre@" + local578.name;

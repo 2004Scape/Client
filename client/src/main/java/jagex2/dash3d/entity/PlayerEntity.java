@@ -18,10 +18,18 @@ import org.openrs2.deob.annotation.Pc;
 public final class PlayerEntity extends PathingEntity {
 
 	@OriginalMember(owner = "client!client", name = "qh", descriptor = "[I")
-	public static final int[] designHairColor = new int[] { 9104, 10275, 7595, 3610, 7975, 8526, 918, 38802, 24466, 10145, 58654, 5027, 1457, 16565, 34991, 25486 };
+	public static final int[] DESIGN_HAIR_COLOR = new int[] {
+		9104, 10275, 7595, 3610, 7975, 8526, 918, 38802, 24466, 10145, 58654, 5027, 1457, 16565, 34991, 25486
+	};
 
 	@OriginalMember(owner = "client!client", name = "Oe", descriptor = "[[I")
-	public static final int[][] designPartColor = new int[][] { { 6798, 107, 10283, 16, 4797, 7744, 5799, 4634, 33697, 22433, 2983, 54193 }, { 8741, 12, 64030, 43162, 7735, 8404, 1701, 38430, 24094, 10153, 56621, 4783, 1341, 16578, 35003, 25239 }, { 25238, 8742, 12, 64030, 43162, 7735, 8404, 1701, 38430, 24094, 10153, 56621, 4783, 1341, 16578, 35003 }, { 4626, 11146, 6439, 12, 4758, 10270 }, { 4550, 4537, 5681, 5673, 5790, 6806, 8076, 4574 } };
+	public static final int[][] DESIGN_BODY_COLOR = new int[][] {
+		{ 6798, 107, 10283, 16, 4797, 7744, 5799, 4634, 33697, 22433, 2983, 54193 },
+		{ 8741, 12, 64030, 43162, 7735, 8404, 1701, 38430, 24094, 10153, 56621, 4783, 1341, 16578, 35003, 25239 },
+		{ 25238, 8742, 12, 64030, 43162, 7735, 8404, 1701, 38430, 24094, 10153, 56621, 4783, 1341, 16578, 35003 },
+		{ 4626, 11146, 6439, 12, 4758, 10270 },
+		{ 4550, 4537, 5681, 5673, 5790, 6806, 8076, 4574 }
+	};
 
 	@OriginalMember(owner = "client!z", name = "ib", descriptor = "Ljava/lang/String;")
 	public String name;
@@ -93,24 +101,23 @@ public final class PlayerEntity extends PathingEntity {
 		this.gender = buf.g1();
 		this.headicons = buf.g1();
 
-		@Pc(19) int local19;
-		@Pc(31) int local31;
-		for (@Pc(14) int local14 = 0; local14 < 12; local14++) {
-			local19 = buf.g1();
-			if (local19 == 0) {
-				this.appearances[local14] = 0;
+		for (@Pc(14) int part = 0; part < 12; part++) {
+			int msb = buf.g1();
+			if (msb == 0) {
+				this.appearances[part] = 0;
 			} else {
-				local31 = buf.g1();
-				this.appearances[local14] = (local19 << 8) + local31;
+				int lsb = buf.g1();
+				this.appearances[part] = (msb << 8) + lsb;
 			}
 		}
 
-		for (local19 = 0; local19 < 5; local19++) {
-			local31 = buf.g1();
-			if (local31 < 0 || local31 >= designPartColor[local19].length) {
-				local31 = 0;
+		for (int part = 0; part < 5; part++) {
+			int color = buf.g1();
+			if (color < 0 || color >= DESIGN_BODY_COLOR[part].length) {
+				color = 0;
 			}
-			this.colors[local19] = local31;
+
+			this.colors[part] = color;
 		}
 
 		super.seqStandId = buf.g2();
@@ -153,10 +160,11 @@ public final class PlayerEntity extends PathingEntity {
 
 		this.visible = true;
 		this.appearanceHashcode = 0L;
-		for (local31 = 0; local31 < 12; local31++) {
+		for (int part = 0; part < 12; part++) {
 			this.appearanceHashcode <<= 0x4;
-			if (this.appearances[local31] >= 256) {
-				this.appearanceHashcode += this.appearances[local31] - 256;
+
+			if (this.appearances[part] >= 256) {
+				this.appearanceHashcode += this.appearances[part] - 256;
 			}
 		}
 
@@ -168,9 +176,9 @@ public final class PlayerEntity extends PathingEntity {
 			this.appearanceHashcode += this.appearances[1] - 256 >> 8;
 		}
 
-		for (@Pc(243) int local243 = 0; local243 < 5; local243++) {
+		for (@Pc(243) int part = 0; part < 5; part++) {
 			this.appearanceHashcode <<= 0x3;
-			this.appearanceHashcode += this.colors[local243];
+			this.appearanceHashcode += this.colors[part];
 		}
 
 		this.appearanceHashcode <<= 0x1;
@@ -183,137 +191,163 @@ public final class PlayerEntity extends PathingEntity {
 		if (!this.visible) {
 			return null;
 		}
-		@Pc(10) Model local10 = this.getSequencedModel();
-		super.height = local10.maxY;
-		local10.pickable = true;
+
+		@Pc(10) Model model = this.getSequencedModel();
+		super.height = model.maxY;
+		model.pickable = true;
+
 		if (this.lowMemory) {
-			return local10;
+			return model;
 		}
+
 		if (super.spotanimId != -1 && super.spotanimFrame != -1) {
-			@Pc(35) SpotAnimType local35 = SpotAnimType.instances[super.spotanimId];
-			@Pc(51) Model local51 = new Model(local35.getModel(), true, !local35.disposeAlpha, false);
-			local51.translate(-super.spotanimOffset, 0, 0);
-			local51.createLabelReferences();
-			local51.applyTransform(local35.seq.frames[super.spotanimFrame]);
-			local51.labelFaces = null;
-			local51.labelVertices = null;
-			if (local35.resizeh != 128 || local35.resizev != 128) {
-				local51.scale(local35.resizeh, local35.resizev, local35.resizeh);
+			@Pc(35) SpotAnimType spotanim = SpotAnimType.instances[super.spotanimId];
+			@Pc(51) Model model2 = new Model(spotanim.getModel(), true, !spotanim.disposeAlpha, false);
+
+			model2.translate(-super.spotanimOffset, 0, 0);
+			model2.createLabelReferences();
+			model2.applyTransform(spotanim.seq.frames[super.spotanimFrame]);
+			model2.labelFaces = null;
+			model2.labelVertices = null;
+			if (spotanim.resizeh != 128 || spotanim.resizev != 128) {
+				model2.scale(spotanim.resizeh, spotanim.resizev, spotanim.resizeh);
 			}
-			local51.calculateNormals(local35.ambient + 64, local35.contrast + 850, -30, -50, -30, true);
-			@Pc(119) Model[] local119 = new Model[] { local10, local51 };
-			local10 = new Model(local119, 2, true);
+			model2.calculateNormals(spotanim.ambient + 64, spotanim.contrast + 850, -30, -50, -30, true);
+
+			@Pc(119) Model[] models = new Model[] { model, model2 };
+			model = new Model(models, 2, true);
 		}
+
 		if (this.locModel != null) {
 			if (client.loopCycle >= this.locStopCycle) {
 				this.locModel = null;
 			}
+
 			if (client.loopCycle >= this.locStartCycle && client.loopCycle < this.locStopCycle) {
-				@Pc(148) Model local148 = this.locModel;
-				local148.translate(this.locOffsetY - this.y, this.locOffsetX - super.x, this.locOffsetZ - super.z);
+				@Pc(148) Model loc = this.locModel;
+				loc.translate(this.locOffsetY - this.y, this.locOffsetX - super.x, this.locOffsetZ - super.z);
 				if (super.dstYaw == 512) {
-					local148.rotateY90();
-					local148.rotateY90();
-					local148.rotateY90();
+					loc.rotateY90();
+					loc.rotateY90();
+					loc.rotateY90();
 				} else if (super.dstYaw == 1024) {
-					local148.rotateY90();
-					local148.rotateY90();
+					loc.rotateY90();
+					loc.rotateY90();
 				} else if (super.dstYaw == 1536) {
-					local148.rotateY90();
+					loc.rotateY90();
 				}
-				@Pc(211) Model[] local211 = new Model[] { local10, local148 };
-				local10 = new Model(local211, 2, true);
+
+				@Pc(211) Model[] models = new Model[] { model, loc };
+				model = new Model(models, 2, true);
 				if (super.dstYaw == 512) {
-					local148.rotateY90();
+					loc.rotateY90();
 				} else if (super.dstYaw == 1024) {
-					local148.rotateY90();
-					local148.rotateY90();
+					loc.rotateY90();
+					loc.rotateY90();
 				} else if (super.dstYaw == 1536) {
-					local148.rotateY90();
-					local148.rotateY90();
-					local148.rotateY90();
+					loc.rotateY90();
+					loc.rotateY90();
+					loc.rotateY90();
 				}
-				local148.translate(this.y - this.locOffsetY, super.x - this.locOffsetX, super.z - this.locOffsetZ);
+
+				loc.translate(this.y - this.locOffsetY, super.x - this.locOffsetX, super.z - this.locOffsetZ);
 			}
 		}
-		local10.pickable = true;
-		return local10;
+
+		model.pickable = true;
+		return model;
 	}
 
 	@OriginalMember(owner = "client!z", name = "c", descriptor = "(Z)Lclient!eb;")
 	private Model getSequencedModel() {
-		@Pc(4) long local4 = this.appearanceHashcode;
-		@Pc(6) int local6 = -1;
-		@Pc(8) int local8 = -1;
-		@Pc(10) int local10 = -1;
-		@Pc(12) int local12 = -1;
+		@Pc(4) long hashCode = this.appearanceHashcode;
+		@Pc(6) int primaryTransformId = -1;
+		@Pc(8) int secondaryTransformId = -1;
+		@Pc(10) int rightHandValue = -1;
+		@Pc(12) int leftHandValue = -1;
+
 		if (super.primarySeqId >= 0 && super.primarySeqDelay == 0) {
-			@Pc(23) SeqType local23 = SeqType.instances[super.primarySeqId];
-			local6 = local23.frames[super.primarySeqFrame];
+			@Pc(23) SeqType seq = SeqType.instances[super.primarySeqId];
+
+			primaryTransformId = seq.frames[super.primarySeqFrame];
 			if (super.secondarySeqId >= 0 && super.secondarySeqId != super.seqStandId) {
-				local8 = SeqType.instances[super.secondarySeqId].frames[super.secondarySeqFrame];
+				secondaryTransformId = SeqType.instances[super.secondarySeqId].frames[super.secondarySeqFrame];
 			}
-			if (local23.mainhand >= 0) {
-				local10 = local23.mainhand;
-				local4 += (long) local10 - this.appearances[5] << 8;
+
+			if (seq.mainhand >= 0) {
+				rightHandValue = seq.mainhand;
+				hashCode += (long) rightHandValue - this.appearances[5] << 8;
 			}
-			if (local23.offhand >= 0) {
-				local12 = local23.offhand;
-				local4 += (long) local12 - this.appearances[3] << 16;
+
+			if (seq.offhand >= 0) {
+				leftHandValue = seq.offhand;
+				hashCode += (long) leftHandValue - this.appearances[3] << 16;
 			}
 		} else if (super.secondarySeqId >= 0) {
-			local6 = SeqType.instances[super.secondarySeqId].frames[super.secondarySeqFrame];
+			primaryTransformId = SeqType.instances[super.secondarySeqId].frames[super.secondarySeqFrame];
 		}
-		@Pc(101) Model local101 = (Model) modelCache.get(local4);
-		if (local101 == null) {
-			@Pc(106) Model[] local106 = new Model[12];
-			@Pc(108) int local108 = 0;
-			@Pc(117) int local117;
-			for (@Pc(110) int local110 = 0; local110 < 12; local110++) {
-				local117 = this.appearances[local110];
-				if (local12 >= 0 && local110 == 3) {
-					local117 = local12;
+
+		@Pc(101) Model model = (Model) modelCache.get(hashCode);
+		if (model == null) {
+			@Pc(106) Model[] models = new Model[12];
+			@Pc(108) int modelCount = 0;
+
+			for (@Pc(110) int part = 0; part < 12; part++) {
+				int value = this.appearances[part];
+
+				if (leftHandValue >= 0 && part == 3) {
+					value = leftHandValue;
 				}
-				if (local10 >= 0 && local110 == 5) {
-					local117 = local10;
+
+				if (rightHandValue >= 0 && part == 5) {
+					value = rightHandValue;
 				}
-				if (local117 >= 256 && local117 < 512) {
-					local106[local108++] = IdkType.instances[local117 - 256].getModel();
+
+				if (value >= 256 && value < 512) {
+					models[modelCount++] = IdkType.instances[value - 256].getModel();
 				}
-				if (local117 >= 512) {
-					@Pc(155) ObjType local155 = ObjType.get(local117 - 512);
-					@Pc(161) Model local161 = local155.getWornModel(this.gender);
-					if (local161 != null) {
-						local106[local108++] = local161;
+
+				if (value >= 512) {
+					@Pc(155) ObjType obj = ObjType.get(value - 512);
+					@Pc(161) Model wornModel = obj.getWornModel(this.gender);
+
+					if (wornModel != null) {
+						models[modelCount++] = wornModel;
 					}
 				}
 			}
-			local101 = new Model(local106, local108);
-			for (local117 = 0; local117 < 5; local117++) {
-				if (this.colors[local117] != 0) {
-					local101.recolor(designPartColor[local117][0], designPartColor[local117][this.colors[local117]]);
-					if (local117 == 1) {
-						local101.recolor(designHairColor[0], designHairColor[this.colors[local117]]);
+
+			model = new Model(models, modelCount);
+			for (int part = 0; part < 5; part++) {
+				if (this.colors[part] != 0) {
+					model.recolor(DESIGN_BODY_COLOR[part][0], DESIGN_BODY_COLOR[part][this.colors[part]]);
+
+					if (part == 1) {
+						model.recolor(DESIGN_HAIR_COLOR[0], DESIGN_HAIR_COLOR[this.colors[part]]);
 					}
 				}
 			}
-			local101.createLabelReferences();
-			local101.calculateNormals(64, 850, -30, -50, -30, true);
-			modelCache.put(local4, local101);
+
+			model.createLabelReferences();
+			model.calculateNormals(64, 850, -30, -50, -30, true);
+			modelCache.put(hashCode, model);
 		}
+
 		if (this.lowMemory) {
-			return local101;
+			return model;
 		}
-		@Pc(249) Model local249 = new Model(local101, true);
-		if (local6 != -1 && local8 != -1) {
-			local249.applyTransforms(local8, local6, SeqType.instances[super.primarySeqId].labelGroups);
-		} else if (local6 != -1) {
-			local249.applyTransform(local6);
+
+		@Pc(249) Model tmp = new Model(model, true);
+		if (primaryTransformId != -1 && secondaryTransformId != -1) {
+			tmp.applyTransforms(secondaryTransformId, primaryTransformId, SeqType.instances[super.primarySeqId].labelGroups);
+		} else if (primaryTransformId != -1) {
+			tmp.applyTransform(primaryTransformId);
 		}
-		local249.calculateBoundsCylinder();
-		local249.labelFaces = null;
-		local249.labelVertices = null;
-		return local249;
+
+		tmp.calculateBoundsCylinder();
+		tmp.labelFaces = null;
+		tmp.labelVertices = null;
+		return tmp;
 	}
 
 	@OriginalMember(owner = "client!z", name = "a", descriptor = "(I)Lclient!eb;")
@@ -321,30 +355,37 @@ public final class PlayerEntity extends PathingEntity {
 		if (!this.visible) {
 			return null;
 		}
-		@Pc(9) Model[] local9 = new Model[12];
-		@Pc(11) int local11 = 0;
-		for (@Pc(13) int local13 = 0; local13 < 12; local13++) {
-			@Pc(20) int local20 = this.appearances[local13];
-			if (local20 >= 256 && local20 < 512) {
-				local9[local11++] = IdkType.instances[local20 - 256].getHeadModel();
+
+		@Pc(9) Model[] models = new Model[12];
+		@Pc(11) int modelCount = 0;
+		for (@Pc(13) int part = 0; part < 12; part++) {
+			@Pc(20) int value = this.appearances[part];
+
+			if (value >= 256 && value < 512) {
+				models[modelCount++] = IdkType.instances[value - 256].getHeadModel();
 			}
-			if (local20 >= 512) {
-				@Pc(49) Model local49 = ObjType.get(local20 - 512).getHeadModel(this.gender);
-				if (local49 != null) {
-					local9[local11++] = local49;
+
+			if (value >= 512) {
+				@Pc(49) Model headModel = ObjType.get(value - 512).getHeadModel(this.gender);
+
+				if (headModel != null) {
+					models[modelCount++] = headModel;
 				}
 			}
 		}
-		@Pc(67) Model local67 = new Model(local9, local11);
-		for (@Pc(69) int local69 = 0; local69 < 5; local69++) {
-			if (this.colors[local69] != 0) {
-				local67.recolor(designPartColor[local69][0], designPartColor[local69][this.colors[local69]]);
-				if (local69 == 1) {
-					local67.recolor(designHairColor[0], designHairColor[this.colors[local69]]);
+
+		@Pc(67) Model tmp = new Model(models, modelCount);
+		for (@Pc(69) int part = 0; part < 5; part++) {
+			if (this.colors[part] != 0) {
+				tmp.recolor(DESIGN_BODY_COLOR[part][0], DESIGN_BODY_COLOR[part][this.colors[part]]);
+
+				if (part == 1) {
+					tmp.recolor(DESIGN_HAIR_COLOR[0], DESIGN_HAIR_COLOR[this.colors[part]]);
 				}
 			}
 		}
-		return local67;
+
+		return tmp;
 	}
 
 	@OriginalMember(owner = "client!z", name = "b", descriptor = "(Z)Z")
