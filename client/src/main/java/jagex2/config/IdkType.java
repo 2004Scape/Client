@@ -90,41 +90,41 @@ public final class IdkType {
 			return null;
 		}
 
-		@Pc(11) Model[] local11 = new Model[this.models.length];
-		for (@Pc(13) int local13 = 0; local13 < this.models.length; local13++) {
-			local11[local13] = new Model(this.models[local13]);
+		@Pc(11) Model[] models = new Model[this.models.length];
+		for (@Pc(13) int i = 0; i < this.models.length; i++) {
+			models[i] = new Model(this.models[i]);
 		}
 
-		@Pc(40) Model local40;
-		if (local11.length == 1) {
-			local40 = local11[0];
+		@Pc(40) Model model;
+		if (models.length == 1) {
+			model = models[0];
 		} else {
-			local40 = new Model(local11, local11.length);
+			model = new Model(models, models.length);
 		}
 
-		for (@Pc(52) int local52 = 0; local52 < 6 && this.recol_s[local52] != 0; local52++) {
-			local40.recolor(this.recol_s[local52], this.recol_d[local52]);
+		for (@Pc(52) int i = 0; i < 6 && this.recol_s[i] != 0; i++) {
+			model.recolor(this.recol_s[i], this.recol_d[i]);
 		}
 
-		return local40;
+		return model;
 	}
 
 	@OriginalMember(owner = "client!gc", name = "a", descriptor = "(Z)Lclient!eb;")
 	public Model getHeadModel() {
-		@Pc(4) Model[] local4 = new Model[5];
-		@Pc(6) int local6 = 0;
+		@Pc(4) Model[] models = new Model[5];
 
-		for (@Pc(8) int local8 = 0; local8 < 5; local8++) {
-			if (this.heads[local8] != -1) {
-				local4[local6++] = new Model(this.heads[local8]);
+		@Pc(6) int count = 0;
+		for (@Pc(8) int i = 0; i < 5; i++) {
+			if (this.heads[i] != -1) {
+				models[count++] = new Model(this.heads[i]);
 			}
 		}
 
-		@Pc(39) Model local39 = new Model(local4, local6);
-		for (@Pc(41) int local41 = 0; local41 < 6 && this.recol_s[local41] != 0; local41++) {
-			local39.recolor(this.recol_s[local41], this.recol_d[local41]);
+		@Pc(39) Model model = new Model(models, count);
+		for (@Pc(41) int i = 0; i < 6 && this.recol_s[i] != 0; i++) {
+			model.recolor(this.recol_s[i], this.recol_d[i]);
 		}
 
-		return local39;
+		return model;
 	}
 }

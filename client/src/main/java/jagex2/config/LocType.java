@@ -165,20 +165,20 @@ public final class LocType {
 	}
 
 	@OriginalMember(owner = "client!ac", name = "a", descriptor = "(I)Lclient!ac;")
-	public static LocType get(@OriginalArg(0) int arg0) {
-		for (@Pc(1) int local1 = 0; local1 < 10; local1++) {
-			if (cache[local1].index == arg0) {
-				return cache[local1];
+	public static LocType get(@OriginalArg(0) int id) {
+		for (@Pc(1) int i = 0; i < 10; i++) {
+			if (cache[i].index == id) {
+				return cache[i];
 			}
 		}
 
 		cachePos = (cachePos + 1) % 10;
-		@Pc(27) LocType local27 = cache[cachePos];
-		dat.pos = offsets[arg0];
-		local27.index = arg0;
-		local27.reset();
-		local27.decode(dat);
-		return local27;
+		@Pc(27) LocType loc = cache[cachePos];
+		dat.pos = offsets[id];
+		loc.index = id;
+		loc.reset();
+		loc.decode(dat);
+		return loc;
 	}
 
 	@OriginalMember(owner = "client!ac", name = "a", descriptor = "()V")
@@ -219,7 +219,7 @@ public final class LocType {
 
 	@OriginalMember(owner = "client!ac", name = "a", descriptor = "(ZLclient!kb;)V")
 	public void decode(@OriginalArg(1) Packet dat) {
-		@Pc(5) int local5 = -1;
+		@Pc(5) int active = -1;
 
 		while (true) {
 			@Pc(15) int code = dat.g1();
@@ -227,16 +227,14 @@ public final class LocType {
 				break;
 			}
 
-			@Pc(23) int local23;
-			@Pc(33) int local33;
 			if (code == 1) {
-				local23 = dat.g1();
-				this.shapes = new int[local23];
-				this.models = new int[local23];
+				int count = dat.g1();
+				this.shapes = new int[count];
+				this.models = new int[count];
 
-				for (local33 = 0; local33 < local23; local33++) {
-					this.models[local33] = dat.g2();
-					this.shapes[local33] = dat.g1();
+				for (int i = 0; i < count; i++) {
+					this.models[i] = dat.g2();
+					this.shapes[i] = dat.g1();
 				}
 			} else if (code == 2) {
 				this.name = dat.gstr();
@@ -251,9 +249,9 @@ public final class LocType {
 			} else if (code == 18) {
 				this.blockrange = false;
 			} else if (code == 19) {
-				local5 = dat.g1();
+				active = dat.g1();
 
-				if (local5 == 1) {
+				if (active == 1) {
 					this.active = true;
 				}
 			} else if (code == 21) {
@@ -285,13 +283,13 @@ public final class LocType {
 					this.ops[code - 30] = null;
 				}
 			} else if (code == 40) {
-				local23 = dat.g1();
-				this.recol_s = new int[local23];
-				this.recol_d = new int[local23];
+				int count = dat.g1();
+				this.recol_s = new int[count];
+				this.recol_d = new int[count];
 
-				for (local33 = 0; local33 < local23; local33++) {
-					this.recol_s[local33] = dat.g2();
-					this.recol_d[local33] = dat.g2();
+				for (int i = 0; i < count; i++) {
+					this.recol_s[i] = dat.g2();
+					this.recol_d[i] = dat.g2();
 				}
 			} else if (code == 60) {
 				this.mapfunction = dat.g2();
@@ -324,8 +322,7 @@ public final class LocType {
 			this.shapes = new int[0];
 		}
 
-		if (local5 == -1) {
-
+		if (active == -1) {
 			this.active = this.shapes.length > 0 && this.shapes[0] == 10;
 
 			if (this.ops != null) {
@@ -335,137 +332,135 @@ public final class LocType {
 	}
 
 	@OriginalMember(owner = "client!ac", name = "a", descriptor = "(IIIIIII)Lclient!eb;")
-	public Model getModel(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2, @OriginalArg(3) int arg3, @OriginalArg(4) int arg4, @OriginalArg(5) int arg5, @OriginalArg(6) int arg6) {
-		@Pc(3) int local3 = -1;
-		for (@Pc(5) int local5 = 0; local5 < this.shapes.length; local5++) {
-			if (this.shapes[local5] == arg0) {
-				local3 = local5;
+	public Model getModel(@OriginalArg(0) int shape, @OriginalArg(1) int rotation, @OriginalArg(2) int heightmapSW, @OriginalArg(3) int heightmapSE, @OriginalArg(4) int heightmapNE, @OriginalArg(5) int heightmapNW, @OriginalArg(6) int transformId) {
+		@Pc(3) int shapeIndex = -1;
+		for (@Pc(5) int i = 0; i < this.shapes.length; i++) {
+			if (this.shapes[i] == shape) {
+				shapeIndex = i;
 				break;
 			}
 		}
 
-		if (local3 == -1) {
+		if (shapeIndex == -1) {
 			return null;
 		}
 
-		@Pc(47) long local47 = ((long) this.index << 6) + ((long) local3 << 3) + arg1 + ((long) (arg6 + 1) << 32);
+		@Pc(47) long bitset = ((long) this.index << 6) + ((long) shapeIndex << 3) + rotation + ((long) (transformId + 1) << 32);
 		if (reset) {
-			local47 = 0L;
+			bitset = 0L;
 		}
 
-		@Pc(56) Model local56 = (Model) modelCacheDynamic.get(local47);
-		@Pc(91) int local91;
-		@Pc(141) int local141;
-
-		if (local56 != null) {
+		@Pc(56) Model cached = (Model) modelCacheDynamic.get(bitset);
+		if (cached != null) {
 			if (reset) {
-				return local56;
+				return cached;
 			}
 
 			if (this.hillskew || this.sharelight) {
-				local56 = new Model(local56, this.hillskew, this.sharelight);
+				cached = new Model(cached, this.hillskew, this.sharelight);
 			}
 
 			if (this.hillskew) {
-				local91 = (arg2 + arg3 + arg4 + arg5) / 4;
+				int groundY = (heightmapSW + heightmapSE + heightmapNE + heightmapNW) / 4;
 
-				for (@Pc(93) int local93 = 0; local93 < local56.vertexCount; local93++) {
-					@Pc(100) int local100 = local56.vertexX[local93];
-					@Pc(105) int local105 = local56.vertexZ[local93];
+				for (@Pc(93) int i = 0; i < cached.vertexCount; i++) {
+					@Pc(100) int x = cached.vertexX[i];
+					@Pc(105) int z = cached.vertexZ[i];
 
-					@Pc(117) int local117 = arg2 + (arg3 - arg2) * (local100 + 64) / 128;
-					@Pc(129) int local129 = arg5 + (arg4 - arg5) * (local100 + 64) / 128;
-					local141 = local117 + (local129 - local117) * (local105 + 64) / 128;
+					@Pc(117) int heightS = heightmapSW + (heightmapSE - heightmapSW) * (x + 64) / 128;
+					@Pc(129) int heightN = heightmapNW + (heightmapNE - heightmapNW) * (x + 64) / 128;
+					int y = heightS + (heightN - heightS) * (z + 64) / 128;
 
-					local56.vertexY[local93] += local141 - local91;
+					cached.vertexY[i] += y - groundY;
 				}
 
-				local56.calculateBoundsY();
+				cached.calculateBoundsY();
 			}
 
-			return local56;
+			return cached;
 		}
 
-		if (local3 >= this.models.length) {
+		if (shapeIndex >= this.models.length) {
 			return null;
 		}
 
-		local91 = this.models[local3];
-		if (local91 == -1) {
+		int modelId = this.models[shapeIndex];
+		if (modelId == -1) {
 			return null;
 		}
 
-		@Pc(188) boolean local188 = this.mirror ^ arg1 > 3;
-		if (local188) {
-			local91 += 65536;
+		@Pc(188) boolean flipped = this.mirror ^ rotation > 3;
+		if (flipped) {
+			modelId += 65536;
 		}
 
-		@Pc(200) Model local200 = (Model) modelCacheStatic.get(local91);
-		if (local200 == null) {
-			local200 = new Model(local91 & 0xFFFF);
-			if (local188) {
-				local200.rotateY180();
+		@Pc(200) Model model = (Model) modelCacheStatic.get(modelId);
+		if (model == null) {
+			model = new Model(modelId & 0xFFFF);
+			if (flipped) {
+				model.rotateY180();
 			}
-			modelCacheStatic.put(local91, local200);
+			modelCacheStatic.put(modelId, model);
 		}
 
-		@Pc(235) boolean local235;
-		local235 = this.resizex != 128 || this.resizey != 128 || this.resizez != 128;
+		@Pc(235) boolean scaled = this.resizex != 128 || this.resizey != 128 || this.resizez != 128;
+		@Pc(250) boolean translated = this.xoff != 0 || this.yoff != 0 || this.zoff != 0;
 
-		@Pc(250) boolean local250;
-		local250 = this.xoff != 0 || this.yoff != 0 || this.zoff != 0;
-
-		@Pc(284) Model local284 = new Model(local200, this.recol_s == null, !this.disposeAlpha, arg1 == 0 && arg6 == -1 && !local235 && !local250);
-		if (arg6 != -1) {
-			local284.createLabelReferences();
-			local284.applyTransform(arg6);
-			local284.labelFaces = null;
-			local284.labelVertices = null;
+		@Pc(284) Model modified = new Model(model, this.recol_s == null, !this.disposeAlpha, rotation == 0 && transformId == -1 && !scaled && !translated);
+		if (transformId != -1) {
+			modified.createLabelReferences();
+			modified.applyTransform(transformId);
+			modified.labelFaces = null;
+			modified.labelVertices = null;
 		}
 
-		while (arg1-- > 0) {
-			local284.rotateY90();
+		while (rotation-- > 0) {
+			modified.rotateY90();
 		}
 
 		if (this.recol_s != null) {
-			for (local141 = 0; local141 < this.recol_s.length; local141++) {
-				local284.recolor(this.recol_s[local141], this.recol_d[local141]);
+			for (int i = 0; i < this.recol_s.length; i++) {
+				modified.recolor(this.recol_s[i], this.recol_d[i]);
 			}
 		}
 
-		if (local235) {
-			local284.scale(this.resizez, this.resizey, this.resizex);
+		if (scaled) {
+			modified.scale(this.resizez, this.resizey, this.resizex);
 		}
 
-		if (local250) {
-			local284.translate(this.yoff, this.xoff, this.zoff);
+		if (translated) {
+			modified.translate(this.yoff, this.xoff, this.zoff);
 		}
 
-		local284.calculateNormals(this.ambient + 64, this.contrast * 5 + 768, -50, -10, -50, !this.sharelight);
+		modified.calculateNormals(this.ambient + 64, this.contrast * 5 + 768, -50, -10, -50, !this.sharelight);
 
 		if (this.blockwalk) {
-			local284.objRaise = local284.maxY;
+			modified.objRaise = modified.maxY;
 		}
 
-		modelCacheDynamic.put(local47, local284);
+		modelCacheDynamic.put(bitset, modified);
 
 		if (this.hillskew || this.sharelight) {
-			local284 = new Model(local284, this.hillskew, this.sharelight);
+			modified = new Model(modified, this.hillskew, this.sharelight);
 		}
 
 		if (this.hillskew) {
-			local141 = (arg2 + arg3 + arg4 + arg5) / 4;
-			for (@Pc(417) int local417 = 0; local417 < local284.vertexCount; local417++) {
-				@Pc(424) int local424 = local284.vertexX[local417];
-				@Pc(429) int local429 = local284.vertexZ[local417];
-				@Pc(441) int local441 = arg2 + (arg3 - arg2) * (local424 + 64) / 128;
-				@Pc(453) int local453 = arg5 + (arg4 - arg5) * (local424 + 64) / 128;
-				@Pc(465) int local465 = local441 + (local453 - local441) * (local429 + 64) / 128;
-				local284.vertexY[local417] += local465 - local141;
+			int groundY = (heightmapSW + heightmapSE + heightmapNE + heightmapNW) / 4;
+
+			for (@Pc(417) int i = 0; i < modified.vertexCount; i++) {
+				@Pc(424) int x = modified.vertexX[i];
+				@Pc(429) int z = modified.vertexZ[i];
+
+				@Pc(441) int heightS = heightmapSW + (heightmapSE - heightmapSW) * (x + 64) / 128;
+				@Pc(453) int heightN = heightmapNW + (heightmapNE - heightmapNW) * (x + 64) / 128;
+				@Pc(465) int y = heightS + (heightN - heightS) * (z + 64) / 128;
+
+				modified.vertexY[i] += y - groundY;
 			}
-			local284.calculateBoundsY();
+
+			modified.calculateBoundsY();
 		}
 
-		return local284;
+		return modified;
 	}
 }

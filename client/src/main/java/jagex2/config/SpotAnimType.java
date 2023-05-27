@@ -88,6 +88,7 @@ public final class SpotAnimType {
 				this.model = dat.g2();
 			} else if (code == 2) {
 				this.anim = dat.g2();
+
 				if (SeqType.instances != null) {
 					this.seq = SeqType.instances[this.anim];
 				}
@@ -115,19 +116,19 @@ public final class SpotAnimType {
 
 	@OriginalMember(owner = "client!kc", name = "a", descriptor = "()Lclient!eb;")
 	public Model getModel() {
-		@Pc(6) Model local6 = (Model) modelCache.get(this.index);
-		if (local6 != null) {
-			return local6;
+		@Pc(6) Model model = (Model) modelCache.get(this.index);
+		if (model != null) {
+			return model;
 		}
 
-		local6 = new Model(this.model);
-		for (@Pc(19) int local19 = 0; local19 < 6; local19++) {
+		model = new Model(this.model);
+		for (@Pc(19) int i = 0; i < 6; i++) {
 			if (this.recol_s[0] != 0) {
-				local6.recolor(this.recol_s[local19], this.recol_d[local19]);
+				model.recolor(this.recol_s[i], this.recol_d[i]);
 			}
 		}
 
-		modelCache.put(this.index, local6);
-		return local6;
+		modelCache.put(this.index, model);
+		return model;
 	}
 }

@@ -174,136 +174,138 @@ public final class ObjType {
 	}
 
 	@OriginalMember(owner = "client!cc", name = "a", descriptor = "(I)Lclient!cc;")
-	public static ObjType get(@OriginalArg(0) int arg0) {
-		for (@Pc(1) int local1 = 0; local1 < 10; local1++) {
-			if (cache[local1].index == arg0) {
-				return cache[local1];
+	public static ObjType get(@OriginalArg(0) int id) {
+		for (@Pc(1) int i = 0; i < 10; i++) {
+			if (cache[i].index == id) {
+				return cache[i];
 			}
 		}
 
 		cachePos = (cachePos + 1) % 10;
-		@Pc(27) ObjType local27 = cache[cachePos];
-		dat.pos = offsets[arg0];
-		local27.index = arg0;
-		local27.reset();
-		local27.decode(dat);
+		@Pc(27) ObjType obj = cache[cachePos];
+		dat.pos = offsets[id];
+		obj.index = id;
+		obj.reset();
+		obj.decode(dat);
 
-		if (local27.certtemplate != -1) {
-			local27.toCertificate();
+		if (obj.certtemplate != -1) {
+			obj.toCertificate();
 		}
 
-		if (!membersWorld && local27.members) {
-			local27.name = "Members Object";
-			local27.desc = "Login to a members' server to use this object.";
-			local27.ops = null;
-			local27.iops = null;
+		if (!membersWorld && obj.members) {
+			obj.name = "Members Object";
+			obj.desc = "Login to a members' server to use this object.";
+			obj.ops = null;
+			obj.iops = null;
 		}
 
-		return local27;
+		return obj;
 	}
 
 	@OriginalMember(owner = "client!cc", name = "a", descriptor = "(III)Lclient!hb;")
-	public static Pix24 getIcon(@OriginalArg(0) int arg0, @OriginalArg(2) int arg2) {
-		@Pc(7) Pix24 local7 = (Pix24) iconCache.get(arg0);
-		if (local7 != null && local7.cropH != arg2 && local7.cropH != -1) {
-			local7.unlink();
-			local7 = null;
+	public static Pix24 getIcon(@OriginalArg(0) int id, @OriginalArg(2) int count) {
+		@Pc(7) Pix24 icon = (Pix24) iconCache.get(id);
+		if (icon != null && icon.cropH != count && icon.cropH != -1) {
+			icon.unlink();
+			icon = null;
 		}
 
-		if (local7 != null) {
-			return local7;
+		if (icon != null) {
+			return icon;
 		}
 
-		@Pc(28) ObjType local28 = get(arg0);
-		if (local28.countobj == null) {
-			arg2 = -1;
+		@Pc(28) ObjType obj = get(id);
+		if (obj.countobj == null) {
+			count = -1;
 		}
 
-		@Pc(38) int local38;
-		@Pc(40) int local40;
-		if (arg2 > 1) {
-			local38 = -1;
-			for (local40 = 0; local40 < 10; local40++) {
-				if (arg2 >= local28.countco[local40] && local28.countco[local40] != 0) {
-					local38 = local28.countobj[local40];
+		if (count > 1) {
+			int countobj = -1;
+			for (int i = 0; i < 10; i++) {
+				if (count >= obj.countco[i] && obj.countco[i] != 0) {
+					countobj = obj.countobj[i];
 				}
 			}
-			if (local38 != -1) {
-				local28 = get(local38);
+
+			if (countobj != -1) {
+				obj = get(countobj);
 			}
 		}
 
-		local7 = new Pix24(32, 32);
-		local38 = Draw3D.centerX;
-		local40 = Draw3D.centerY;
-		@Pc(80) int[] local80 = Draw3D.lineOffset;
-		@Pc(82) int[] local82 = Draw2D.data;
-		@Pc(84) int local84 = Draw2D.width2d;
-		@Pc(86) int local86 = Draw2D.height2d;
-		@Pc(88) int local88 = Draw2D.left;
-		@Pc(90) int local90 = Draw2D.right;
-		@Pc(92) int local92 = Draw2D.top;
-		@Pc(94) int local94 = Draw2D.bottom;
+		icon = new Pix24(32, 32);
+
+		int _cx = Draw3D.centerX;
+		int _cy = Draw3D.centerY;
+		@Pc(80) int[] _loff = Draw3D.lineOffset;
+		@Pc(82) int[] _data = Draw2D.data;
+		@Pc(84) int _w = Draw2D.width2d;
+		@Pc(86) int _h = Draw2D.height2d;
+		@Pc(88) int _l = Draw2D.left;
+		@Pc(90) int _r = Draw2D.right;
+		@Pc(92) int _t = Draw2D.top;
+		@Pc(94) int _b = Draw2D.bottom;
 
 		Draw3D.jagged = false;
-		Draw2D.bind(32, local7.pixels, 32);
+		Draw2D.bind(32, icon.pixels, 32);
 		Draw2D.fillRect(0, 0, 0, 32, 32);
 		Draw3D.init2D();
 
-		@Pc(115) Model local115 = local28.getInterfaceModel(1);
-		@Pc(125) int local125 = Draw3D.sin[local28.xan2d] * local28.zoom2d >> 16;
-		@Pc(135) int local135 = Draw3D.cos[local28.xan2d] * local28.zoom2d >> 16;
-		local115.drawSimple(0, local28.yan2d, local28.zan2d, local28.xan2d, local28.xof2d, local125 + local115.maxY / 2 + local28.yof2d, local135 + local28.yof2d);
+		@Pc(115) Model iModel = obj.getInterfaceModel(1);
+		@Pc(125) int sinPitch = Draw3D.sin[obj.xan2d] * obj.zoom2d >> 16;
+		@Pc(135) int cosPitch = Draw3D.cos[obj.xan2d] * obj.zoom2d >> 16;
+		iModel.drawSimple(0, obj.yan2d, obj.zan2d, obj.xan2d, obj.xof2d, sinPitch + iModel.maxY / 2 + obj.yof2d, cosPitch + obj.yof2d);
 
-		for (@Pc(168) int local168 = 31; local168 >= 0; local168--) {
-			for (local135 = 31; local135 >= 0; local135--) {
-				if (local7.pixels[local168 + local135 * 32] == 0) {
-					if (local168 > 0 && local7.pixels[local168 + local135 * 32 - 1] > 1) {
-						local7.pixels[local168 + local135 * 32] = 1;
-					} else if (local135 > 0 && local7.pixels[local168 + (local135 - 1) * 32] > 1) {
-						local7.pixels[local168 + local135 * 32] = 1;
-					} else if (local168 < 31 && local7.pixels[local168 + local135 * 32 + 1] > 1) {
-						local7.pixels[local168 + local135 * 32] = 1;
-					} else if (local135 < 31 && local7.pixels[local168 + (local135 + 1) * 32] > 1) {
-						local7.pixels[local168 + local135 * 32] = 1;
-					}
+		for (@Pc(168) int x = 31; x >= 0; x--) {
+			for (int y = 31; y >= 0; y--) {
+				if (icon.pixels[x + y * 32] != 0) {
+					continue;
+				}
+
+				if (x > 0 && icon.pixels[x + y * 32 - 1] > 1) {
+					icon.pixels[x + y * 32] = 1;
+				} else if (y > 0 && icon.pixels[x + (y - 1) * 32] > 1) {
+					icon.pixels[x + y * 32] = 1;
+				} else if (x < 31 && icon.pixels[x + y * 32 + 1] > 1) {
+					icon.pixels[x + y * 32] = 1;
+				} else if (y < 31 && icon.pixels[x + (y + 1) * 32] > 1) {
+					icon.pixels[x + y * 32] = 1;
 				}
 			}
 		}
 
-		for (@Pc(291) int local291 = 31; local291 >= 0; local291--) {
-			for (local135 = 31; local135 >= 0; local135--) {
-				if (local7.pixels[local291 + local135 * 32] == 0 && local291 > 0 && local135 > 0 && local7.pixels[local291 + (local135 - 1) * 32 - 1] > 0) {
-					local7.pixels[local291 + local135 * 32] = 3153952;
+		for (@Pc(291) int x = 31; x >= 0; x--) {
+			for (int y = 31; y >= 0; y--) {
+				if (icon.pixels[x + y * 32] == 0 && x > 0 && y > 0 && icon.pixels[x + (y - 1) * 32 - 1] > 0) {
+					icon.pixels[x + y * 32] = 3153952;
 				}
 			}
 		}
 
-		if (local28.certtemplate != -1) {
-			@Pc(348) Pix24 local348 = getIcon(local28.certlink, 10);
-			@Pc(351) int local351 = local348.cropW;
-			@Pc(354) int local354 = local348.cropH;
-			local348.cropW = 32;
-			local348.cropH = 32;
-			local348.crop(22, 5, 22, 5);
-			local348.cropW = local351;
-			local348.cropH = local354;
+		if (obj.certtemplate != -1) {
+			@Pc(348) Pix24 linkedIcon = getIcon(obj.certlink, 10);
+			@Pc(351) int w = linkedIcon.cropW;
+			@Pc(354) int h = linkedIcon.cropH;
+			linkedIcon.cropW = 32;
+			linkedIcon.cropH = 32;
+			linkedIcon.crop(22, 5, 22, 5);
+			linkedIcon.cropW = w;
+			linkedIcon.cropH = h;
 		}
 
-		iconCache.put(arg0, local7);
-		Draw2D.bind(local84, local82, local86);
-		Draw2D.setBounds(local94, local92, local90, local88);
-		Draw3D.centerX = local38;
-		Draw3D.centerY = local40;
-		Draw3D.lineOffset = local80;
+		iconCache.put(id, icon);
+		Draw2D.bind(_w, _data, _h);
+		Draw2D.setBounds(_b, _t, _r, _l);
+		Draw3D.centerX = _cx;
+		Draw3D.centerY = _cy;
+		Draw3D.lineOffset = _loff;
 		Draw3D.jagged = true;
-		if (local28.stackable) {
-			local7.cropW = 33;
+		if (obj.stackable) {
+			icon.cropW = 33;
 		} else {
-			local7.cropW = 32;
+			icon.cropW = 32;
 		}
-		local7.cropH = arg2;
-		return local7;
+		icon.cropH = count;
+		return icon;
 	}
 
 	@OriginalMember(owner = "client!cc", name = "a", descriptor = "()V")
@@ -410,13 +412,13 @@ public final class ObjType {
 
 				this.iops[code - 35] = dat.gstr();
 			} else if (code == 40) {
-				@Pc(260) int local260 = dat.g1();
-				this.recol_s = new int[local260];
-				this.recol_d = new int[local260];
+				@Pc(260) int count = dat.g1();
+				this.recol_s = new int[count];
+				this.recol_d = new int[count];
 
-				for (@Pc(270) int local270 = 0; local270 < local260; local270++) {
-					this.recol_s[local270] = dat.g2();
-					this.recol_d[local270] = dat.g2();
+				for (@Pc(270) int i = 0; i < count; i++) {
+					this.recol_s[i] = dat.g2();
+					this.recol_d[i] = dat.g2();
 				}
 			} else if (code == 78) {
 				this.manwear3 = dat.g2();
@@ -450,145 +452,144 @@ public final class ObjType {
 
 	@OriginalMember(owner = "client!cc", name = "b", descriptor = "(I)V")
 	public void toCertificate() {
-		@Pc(3) ObjType local3 = get(this.certtemplate);
-		this.model = local3.model;
-		this.zoom2d = local3.zoom2d;
-		this.xan2d = local3.xan2d;
-		this.yan2d = local3.yan2d;
-		this.zan2d = local3.zan2d;
-		this.xof2d = local3.xof2d;
-		this.yof2d = local3.yof2d;
-		this.recol_s = local3.recol_s;
-		this.recol_d = local3.recol_d;
+		@Pc(3) ObjType template = get(this.certtemplate);
+		this.model = template.model;
+		this.zoom2d = template.zoom2d;
+		this.xan2d = template.xan2d;
+		this.yan2d = template.yan2d;
+		this.zan2d = template.zan2d;
+		this.xof2d = template.xof2d;
+		this.yof2d = template.yof2d;
+		this.recol_s = template.recol_s;
+		this.recol_d = template.recol_d;
 
-		@Pc(55) ObjType local55 = get(this.certlink);
-		this.name = local55.name;
-		this.members = local55.members;
-		this.cost = local55.cost;
+		@Pc(55) ObjType link = get(this.certlink);
+		this.name = link.name;
+		this.members = link.members;
+		this.cost = link.cost;
 
-		@Pc(69) String local69 = "a";
-		@Pc(74) char local74 = local55.name.charAt(0);
-		if (local74 == 'A' || local74 == 'E' || local74 == 'I' || local74 == 'O' || local74 == 'U') {
-			local69 = "an";
+		@Pc(69) String article = "a";
+		@Pc(74) char c = link.name.charAt(0);
+		if (c == 'A' || c == 'E' || c == 'I' || c == 'O' || c == 'U') {
+			article = "an";
 		}
-		this.desc = "Swap this note at any bank for " + local69 + " " + local55.name + ".";
+		this.desc = "Swap this note at any bank for " + article + " " + link.name + ".";
 
 		this.stackable = true;
 	}
 
 	@OriginalMember(owner = "client!cc", name = "c", descriptor = "(I)Lclient!eb;")
-	public Model getInterfaceModel(@OriginalArg(0) int arg0) {
-		@Pc(11) int local11;
-
-		if (this.countobj != null && arg0 > 1) {
-			@Pc(9) int local9 = -1;
-			for (local11 = 0; local11 < 10; local11++) {
-				if (arg0 >= this.countco[local11] && this.countco[local11] != 0) {
-					local9 = this.countobj[local11];
+	public Model getInterfaceModel(@OriginalArg(0) int count) {
+		if (this.countobj != null && count > 1) {
+			@Pc(9) int id = -1;
+			for (int i = 0; i < 10; i++) {
+				if (count >= this.countco[i] && this.countco[i] != 0) {
+					id = this.countobj[i];
 				}
 			}
 
-			if (local9 != -1) {
-				return get(local9).getInterfaceModel(1);
+			if (id != -1) {
+				return get(id).getInterfaceModel(1);
 			}
 		}
 
-		@Pc(48) Model local48 = (Model) modelCache.get(this.index);
-		if (local48 != null) {
-			return local48;
+		@Pc(48) Model model = (Model) modelCache.get(this.index);
+		if (model != null) {
+			return model;
 		}
 
-		local48 = new Model(this.model);
+		model = new Model(this.model);
 		if (this.recol_s != null) {
-			for (local11 = 0; local11 < this.recol_s.length; local11++) {
-				local48.recolor(this.recol_s[local11], this.recol_d[local11]);
+			for (int i = 0; i < this.recol_s.length; i++) {
+				model.recolor(this.recol_s[i], this.recol_d[i]);
 			}
 		}
 
-		local48.calculateNormals(64, 768, -50, -10, -50, true);
-		local48.pickable = true;
-		modelCache.put(this.index, local48);
-		return local48;
+		model.calculateNormals(64, 768, -50, -10, -50, true);
+		model.pickable = true;
+		modelCache.put(this.index, model);
+		return model;
 	}
 
 	@OriginalMember(owner = "client!cc", name = "a", descriptor = "(BI)Lclient!eb;")
-	public Model getWornModel(@OriginalArg(1) int arg1) {
-		@Pc(4) int local4 = this.manwear;
-		if (arg1 == 1) {
-			local4 = this.womanwear;
+	public Model getWornModel(@OriginalArg(1) int gender) {
+		@Pc(4) int id1 = this.manwear;
+		if (gender == 1) {
+			id1 = this.womanwear;
 		}
 
-		if (local4 == -1) {
+		if (id1 == -1) {
 			return null;
 		}
 
-		@Pc(25) int local25 = this.manwear2;
-		@Pc(28) int local28 = this.manwear3;
-		if (arg1 == 1) {
-			local25 = this.womanwear2;
-			local28 = this.womanwear3;
+		@Pc(25) int id2 = this.manwear2;
+		@Pc(28) int id3 = this.manwear3;
+		if (gender == 1) {
+			id2 = this.womanwear2;
+			id3 = this.womanwear3;
 		}
 
-		@Pc(43) Model local43 = new Model(local4);
-		if (local25 != -1) {
-			@Pc(55) Model local55;
-			local55 = new Model(local25);
-			if (local28 == -1) {
-				@Pc(102) Model[] local102 = new Model[] { local43, local55 };
-				local43 = new Model(local102, 2);
+		@Pc(43) Model model = new Model(id1);
+		if (id2 != -1) {
+			@Pc(55) Model model2;
+			model2 = new Model(id2);
+
+			if (id3 == -1) {
+				@Pc(102) Model[] models = new Model[] { model, model2 };
+				model = new Model(models, 2);
 			} else {
-				@Pc(61) Model local61 = new Model(local28);
-				@Pc(76) Model[] local76 = new Model[] { local43, local55, local61 };
-				local43 = new Model(local76, 3);
+				@Pc(61) Model model3 = new Model(id3);
+				@Pc(76) Model[] models = new Model[] { model, model2, model3 };
+				model = new Model(models, 3);
 			}
 		}
 
-		if (arg1 == 0 && this.manwearOffsetY != 0) {
-			local43.translate(this.manwearOffsetY, 0, 0);
+		if (gender == 0 && this.manwearOffsetY != 0) {
+			model.translate(this.manwearOffsetY, 0, 0);
 		}
 
-		if (arg1 == 1 && this.womanwearOffsetY != 0) {
-			local43.translate(this.womanwearOffsetY, 0, 0);
+		if (gender == 1 && this.womanwearOffsetY != 0) {
+			model.translate(this.womanwearOffsetY, 0, 0);
 		}
 
 		if (this.recol_s != null) {
-			for (@Pc(139) int local139 = 0; local139 < this.recol_s.length; local139++) {
-				local43.recolor(this.recol_s[local139], this.recol_d[local139]);
+			for (@Pc(139) int i = 0; i < this.recol_s.length; i++) {
+				model.recolor(this.recol_s[i], this.recol_d[i]);
 			}
 		}
 
-		return local43;
+		return model;
 	}
 
 	@OriginalMember(owner = "client!cc", name = "a", descriptor = "(II)Lclient!eb;")
-	public Model getModel(@OriginalArg(1) int arg1) {
-		@Pc(2) int local2 = this.manhead;
-		if (arg1 == 1) {
-			local2 = this.womanhead;
+	public Model getHeadModel(@OriginalArg(1) int gender) {
+		@Pc(2) int head1 = this.manhead;
+		if (gender == 1) {
+			head1 = this.womanhead;
 		}
 
-		if (local2 == -1) {
+		if (head1 == -1) {
 			return null;
 		}
 
-		@Pc(22) int local22 = this.manhead2;
-		if (arg1 == 1) {
-			local22 = this.womanhead2;
+		@Pc(22) int head2 = this.manhead2;
+		if (gender == 1) {
+			head2 = this.womanhead2;
 		}
 
-		@Pc(34) Model local34 = new Model(local2);
-		if (local22 != -1) {
-			@Pc(43) Model local43 = new Model(local22);
-			@Pc(54) Model[] local54 = new Model[] { local34, local43 };
-			local34 = new Model(local54, 2);
+		@Pc(34) Model model = new Model(head1);
+		if (head2 != -1) {
+			@Pc(43) Model model2 = new Model(head2);
+			@Pc(54) Model[] models = new Model[] { model, model2 };
+			model = new Model(models, 2);
 		}
 
 		if (this.recol_s != null) {
-			for (@Pc(66) int local66 = 0; local66 < this.recol_s.length; local66++) {
-				local34.recolor(this.recol_s[local66], this.recol_d[local66]);
+			for (@Pc(66) int i = 0; i < this.recol_s.length; i++) {
+				model.recolor(this.recol_s[i], this.recol_d[i]);
 			}
 		}
 
-		return local34;
+		return model;
 	}
 }

@@ -329,7 +329,7 @@ public final class PlayerEntity extends PathingEntity {
 				local9[local11++] = IdkType.instances[local20 - 256].getHeadModel();
 			}
 			if (local20 >= 512) {
-				@Pc(49) Model local49 = ObjType.get(local20 - 512).getModel(this.gender);
+				@Pc(49) Model local49 = ObjType.get(local20 - 512).getHeadModel(this.gender);
 				if (local49 != null) {
 					local9[local11++] = local49;
 				}

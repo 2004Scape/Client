@@ -93,52 +93,53 @@ public final class FloType {
 	}
 
 	@OriginalMember(owner = "client!fc", name = "a", descriptor = "(II)V")
-	private void setColor(@OriginalArg(1) int arg1) {
-		@Pc(10) double local10 = (double) (arg1 >> 16 & 0xFF) / 256.0D;
-		@Pc(28) double local28 = (double) (arg1 >> 8 & 0xFF) / 256.0D;
-		@Pc(35) double local35 = (double) (arg1 & 0xFF) / 256.0D;
+	private void setColor(@OriginalArg(1) int rgb) {
+		@Pc(10) double red = (double) (rgb >> 16 & 0xFF) / 256.0D;
+		@Pc(28) double green = (double) (rgb >> 8 & 0xFF) / 256.0D;
+		@Pc(35) double blue = (double) (rgb & 0xFF) / 256.0D;
 
-		@Pc(37) double local37 = local10;
-		if (local28 < local10) {
-			local37 = local28;
+		@Pc(37) double min = red;
+		if (green < red) {
+			min = green;
 		}
-		if (local35 < local37) {
-			local37 = local35;
-		}
-
-		@Pc(51) double local51 = local10;
-		if (local28 > local10) {
-			local51 = local28;
-		}
-		if (local35 > local51) {
-			local51 = local35;
+		if (blue < min) {
+			min = blue;
 		}
 
-		@Pc(65) double local65 = 0.0D;
-		@Pc(67) double local67 = 0.0D;
-		@Pc(73) double local73 = (local37 + local51) / 2.0D;
+		@Pc(51) double max = red;
+		if (green > red) {
+			max = green;
+		}
+		if (blue > max) {
+			max = blue;
+		}
 
-		if (local37 != local51) {
-			if (local73 < 0.5D) {
-				local67 = (local51 - local37) / (local51 + local37);
+		@Pc(65) double h = 0.0D;
+		@Pc(67) double s = 0.0D;
+		@Pc(73) double l = (min + max) / 2.0D;
+
+		if (min != max) {
+			if (l < 0.5D) {
+				s = (max - min) / (max + min);
 			}
-			if (local73 >= 0.5D) {
-				local67 = (local51 - local37) / (2.0D - local51 - local37);
+			if (l >= 0.5D) {
+				s = (max - min) / (2.0D - max - min);
 			}
-			if (local10 == local51) {
-				local65 = (local28 - local35) / (local51 - local37);
-			} else if (local28 == local51) {
-				local65 = (local35 - local10) / (local51 - local37) + 2.0D;
-			} else if (local35 == local51) {
-				local65 = (local10 - local28) / (local51 - local37) + 4.0D;
+
+			if (red == max) {
+				h = (green - blue) / (max - min);
+			} else if (green == max) {
+				h = (blue - red) / (max - min) + 2.0D;
+			} else if (blue == max) {
+				h = (red - green) / (max - min) + 4.0D;
 			}
 		}
 
-		local65 /= 6.0D;
+		h /= 6.0D;
 
-		this.hue = (int) (local65 * 256.0D);
-		this.saturation = (int) (local67 * 256.0D);
-		this.lightness = (int) (local73 * 256.0D);
+		this.hue = (int) (h * 256.0D);
+		this.saturation = (int) (s * 256.0D);
+		this.lightness = (int) (l * 256.0D);
 
 		if (this.saturation < 0) {
 			this.saturation = 0;
@@ -152,60 +153,60 @@ public final class FloType {
 			this.lightness = 255;
 		}
 
-		if (local73 > 0.5D) {
-			this.luminance = (int) ((1.0D - local73) * local67 * 512.0D);
+		if (l > 0.5D) {
+			this.luminance = (int) ((1.0D - l) * s * 512.0D);
 		} else {
-			this.luminance = (int) (local73 * local67 * 512.0D);
+			this.luminance = (int) (l * s * 512.0D);
 		}
 
 		if (this.luminance < 1) {
 			this.luminance = 1;
 		}
 
-		this.chroma = (int) (local65 * (double) this.luminance);
+		this.chroma = (int) (h * (double) this.luminance);
 
-		@Pc(248) int local248 = this.hue + (int) (Math.random() * 16.0D) - 8;
-		if (local248 < 0) {
-			local248 = 0;
-		} else if (local248 > 255) {
-			local248 = 255;
+		@Pc(248) int hue = this.hue + (int) (Math.random() * 16.0D) - 8;
+		if (hue < 0) {
+			hue = 0;
+		} else if (hue > 255) {
+			hue = 255;
 		}
 
-		@Pc(269) int local269 = this.saturation + (int) (Math.random() * 48.0D) - 24;
-		if (local269 < 0) {
-			local269 = 0;
-		} else if (local269 > 255) {
-			local269 = 255;
+		@Pc(269) int saturation = this.saturation + (int) (Math.random() * 48.0D) - 24;
+		if (saturation < 0) {
+			saturation = 0;
+		} else if (saturation > 255) {
+			saturation = 255;
 		}
 
-		@Pc(290) int local290 = this.lightness + (int) (Math.random() * 48.0D) - 24;
-		if (local290 < 0) {
-			local290 = 0;
-		} else if (local290 > 255) {
-			local290 = 255;
+		@Pc(290) int lightness = this.lightness + (int) (Math.random() * 48.0D) - 24;
+		if (lightness < 0) {
+			lightness = 0;
+		} else if (lightness > 255) {
+			lightness = 255;
 		}
 
-		this.hsl = this.hsl24to16(local248, local269, local290);
+		this.hsl = this.hsl24to16(hue, saturation, lightness);
 	}
 
 	@OriginalMember(owner = "client!fc", name = "a", descriptor = "(III)I")
-	private int hsl24to16(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2) {
-		if (arg2 > 179) {
-			arg1 /= 2;
+	private int hsl24to16(@OriginalArg(0) int hue, @OriginalArg(1) int saturation, @OriginalArg(2) int lightness) {
+		if (lightness > 179) {
+			saturation /= 2;
 		}
 
-		if (arg2 > 192) {
-			arg1 /= 2;
+		if (lightness > 192) {
+			saturation /= 2;
 		}
 
-		if (arg2 > 217) {
-			arg1 /= 2;
+		if (lightness > 217) {
+			saturation /= 2;
 		}
 
-		if (arg2 > 243) {
-			arg1 /= 2;
+		if (lightness > 243) {
+			saturation /= 2;
 		}
 
-		return (arg0 / 4 << 10) + (arg1 / 32 << 7) + arg2 / 2;
+		return (hue / 4 << 10) + (saturation / 32 << 7) + lightness / 2;
 	}
 }

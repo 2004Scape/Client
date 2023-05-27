@@ -76,41 +76,40 @@ public final class SeqType {
 				break;
 			}
 
-			@Pc(40) int local40;
 			if (code == 1) {
 				this.frameCount = dat.g1();
 				this.frames = new int[this.frameCount];
 				this.iframes = new int[this.frameCount];
 				this.delay = new int[this.frameCount];
 
-				for (local40 = 0; local40 < this.frameCount; local40++) {
-					this.frames[local40] = dat.g2();
+				for (int i = 0; i < this.frameCount; i++) {
+					this.frames[i] = dat.g2();
 
-					this.iframes[local40] = dat.g2();
-					if (this.iframes[local40] == 65535) {
-						this.iframes[local40] = -1;
+					this.iframes[i] = dat.g2();
+					if (this.iframes[i] == 65535) {
+						this.iframes[i] = -1;
 					}
 
-					this.delay[local40] = dat.g2();
-					if (this.delay[local40] == 0) {
-						this.delay[local40] = SeqFrame.instances[this.frames[local40]].delay;
+					this.delay[i] = dat.g2();
+					if (this.delay[i] == 0) {
+						this.delay[i] = SeqFrame.instances[this.frames[i]].delay;
 					}
 
-					if (this.delay[local40] == 0) {
-						this.delay[local40] = 1;
+					if (this.delay[i] == 0) {
+						this.delay[i] = 1;
 					}
 				}
 			} else if (code == 2) {
 				this.replayoff = dat.g2();
 			} else if (code == 3) {
-				local40 = dat.g1();
-				this.labelGroups = new int[local40 + 1];
+				int count = dat.g1();
+				this.labelGroups = new int[count + 1];
 
-				for (@Pc(127) int local127 = 0; local127 < local40; local127++) {
-					this.labelGroups[local127] = dat.g1();
+				for (@Pc(127) int i = 0; i < count; i++) {
+					this.labelGroups[i] = dat.g1();
 				}
 
-				this.labelGroups[local40] = 9999999;
+				this.labelGroups[count] = 9999999;
 			} else if (code == 4) {
 				this.stretches = true;
 			} else if (code == 5) {

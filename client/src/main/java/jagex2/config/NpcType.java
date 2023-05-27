@@ -125,19 +125,19 @@ public final class NpcType {
 	}
 
 	@OriginalMember(owner = "client!bc", name = "a", descriptor = "(I)Lclient!bc;")
-	public static NpcType get(@OriginalArg(0) int arg0) {
-		for (@Pc(1) int local1 = 0; local1 < 20; local1++) {
-			if (cache[local1].index == (long) arg0) {
-				return cache[local1];
+	public static NpcType get(@OriginalArg(0) int id) {
+		for (@Pc(1) int i = 0; i < 20; i++) {
+			if (cache[i].index == (long) id) {
+				return cache[i];
 			}
 		}
 
 		cachePos = (cachePos + 1) % 20;
-		@Pc(33) NpcType local33 = cache[cachePos] = new NpcType();
-		dat.pos = offsets[arg0];
-		local33.index = arg0;
-		local33.decode(dat);
-		return local33;
+		@Pc(33) NpcType npc = cache[cachePos] = new NpcType();
+		dat.pos = offsets[id];
+		npc.index = id;
+		npc.decode(dat);
+		return npc;
 	}
 
 	@OriginalMember(owner = "client!bc", name = "a", descriptor = "(ZLclient!kb;)V")
@@ -148,14 +148,12 @@ public final class NpcType {
 				return;
 			}
 
-			@Pc(19) int local19;
-			@Pc(25) int local25;
 			if (code == 1) {
-				local19 = dat.g1();
-				this.models = new int[local19];
+				int count = dat.g1();
+				this.models = new int[count];
 
-				for (local25 = 0; local25 < local19; local25++) {
-					this.models[local25] = dat.g2();
+				for (int i = 0; i < count; i++) {
+					this.models[i] = dat.g2();
 				}
 			} else if (code == 2) {
 				this.name = dat.gstr();
@@ -184,20 +182,20 @@ public final class NpcType {
 					this.ops[code - 30] = null;
 				}
 			} else if (code == 40) {
-				local19 = dat.g1();
-				this.recol_s = new int[local19];
-				this.recol_d = new int[local19];
+				int count = dat.g1();
+				this.recol_s = new int[count];
+				this.recol_d = new int[count];
 
-				for (local25 = 0; local25 < local19; local25++) {
-					this.recol_s[local25] = dat.g2();
-					this.recol_d[local25] = dat.g2();
+				for (int i = 0; i < count; i++) {
+					this.recol_s[i] = dat.g2();
+					this.recol_d[i] = dat.g2();
 				}
 			} else if (code == 60) {
-				local19 = dat.g1();
-				this.heads = new int[local19];
+				int count = dat.g1();
+				this.heads = new int[count];
 
-				for (local25 = 0; local25 < local19; local25++) {
-					this.heads[local25] = dat.g2();
+				for (int i = 0; i < count; i++) {
+					this.heads[i] = dat.g2();
 				}
 			} else if (code == 90) {
 				this.code90 = dat.g2();
@@ -218,54 +216,54 @@ public final class NpcType {
 	}
 
 	@OriginalMember(owner = "client!bc", name = "a", descriptor = "(II[I)Lclient!eb;")
-	public Model getSequencedModel(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int[] arg2) {
-		@Pc(3) Model local3 = null;
-		@Pc(9) Model local9 = (Model) modelCache.get(this.index);
+	public Model getSequencedModel(@OriginalArg(0) int primaryTransformId, @OriginalArg(1) int secondaryTransformId, @OriginalArg(2) int[] seqMask) {
+		@Pc(3) Model tmp = null;
+		@Pc(9) Model model = (Model) modelCache.get(this.index);
 
-		if (local9 == null) {
-			@Pc(16) Model[] local16 = new Model[this.models.length];
-			for (@Pc(18) int local18 = 0; local18 < this.models.length; local18++) {
-				local16[local18] = new Model(this.models[local18]);
+		if (model == null) {
+			@Pc(16) Model[] models = new Model[this.models.length];
+			for (@Pc(18) int i = 0; i < this.models.length; i++) {
+				models[i] = new Model(this.models[i]);
 			}
 
-			if (local16.length == 1) {
-				local9 = local16[0];
+			if (models.length == 1) {
+				model = models[0];
 			} else {
-				local9 = new Model(local16, local16.length);
+				model = new Model(models, models.length);
 			}
 
 			if (this.recol_s != null) {
-				for (@Pc(60) int local60 = 0; local60 < this.recol_s.length; local60++) {
-					local9.recolor(this.recol_s[local60], this.recol_d[local60]);
+				for (@Pc(60) int i = 0; i < this.recol_s.length; i++) {
+					model.recolor(this.recol_s[i], this.recol_d[i]);
 				}
 			}
 
-			local9.createLabelReferences();
-			local9.calculateNormals(64, 850, -30, -50, -30, true);
-			modelCache.put(this.index, local9);
+			model.createLabelReferences();
+			model.calculateNormals(64, 850, -30, -50, -30, true);
+			modelCache.put(this.index, model);
 		}
 
-		local3 = new Model(local9, !this.disposeAlpha);
+		tmp = new Model(model, !this.disposeAlpha);
 
-		if (arg0 != -1 && arg1 != -1) {
-			local3.applyTransforms(arg1, arg0, arg2);
-		} else if (arg0 != -1) {
-			local3.applyTransform(arg0);
+		if (primaryTransformId != -1 && secondaryTransformId != -1) {
+			tmp.applyTransforms(secondaryTransformId, primaryTransformId, seqMask);
+		} else if (primaryTransformId != -1) {
+			tmp.applyTransform(primaryTransformId);
 		}
 
 		if (this.resizeh != 128 || this.resizev != 128) {
-			local3.scale(this.resizeh, this.resizev, this.resizeh);
+			tmp.scale(this.resizeh, this.resizev, this.resizeh);
 		}
 
-		local3.calculateBoundsCylinder();
-		local3.labelFaces = null;
-		local3.labelVertices = null;
+		tmp.calculateBoundsCylinder();
+		tmp.labelFaces = null;
+		tmp.labelVertices = null;
 
 		if (this.size == 1) {
-			local3.pickable = true;
+			tmp.pickable = true;
 		}
 
-		return local3;
+		return tmp;
 	}
 
 	@OriginalMember(owner = "client!bc", name = "b", descriptor = "(Z)Lclient!eb;")
@@ -274,24 +272,24 @@ public final class NpcType {
 			return null;
 		}
 
-		@Pc(17) Model[] local17 = new Model[this.heads.length];
-		for (@Pc(19) int local19 = 0; local19 < this.heads.length; local19++) {
-			local17[local19] = new Model(this.heads[local19]);
+		@Pc(17) Model[] models = new Model[this.heads.length];
+		for (@Pc(19) int i = 0; i < this.heads.length; i++) {
+			models[i] = new Model(this.heads[i]);
 		}
 
-		@Pc(46) Model local46;
-		if (local17.length == 1) {
-			local46 = local17[0];
+		@Pc(46) Model model;
+		if (models.length == 1) {
+			model = models[0];
 		} else {
-			local46 = new Model(local17, local17.length);
+			model = new Model(models, models.length);
 		}
 
 		if (this.recol_s != null) {
-			for (@Pc(61) int local61 = 0; local61 < this.recol_s.length; local61++) {
-				local46.recolor(this.recol_s[local61], this.recol_d[local61]);
+			for (@Pc(61) int i = 0; i < this.recol_s.length; i++) {
+				model.recolor(this.recol_s[i], this.recol_d[i]);
 			}
 		}
 
-		return local46;
+		return model;
 	}
 }
