@@ -29,13 +29,13 @@ public final class TileUnderlay {
 	public final int rgb;
 
 	@OriginalMember(owner = "client!o", name = "<init>", descriptor = "(IIIIIIZ)V")
-	public TileUnderlay(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2, @OriginalArg(3) int arg3, @OriginalArg(4) int arg4, @OriginalArg(5) int arg5, @OriginalArg(6) boolean arg6) {
-		this.southwestColor = arg0;
-		this.southeastColor = arg1;
-		this.northeastColor = arg2;
-		this.northwestColor = arg3;
-		this.textureId = arg4;
-		this.rgb = arg5;
-		this.flat = arg6;
+	public TileUnderlay(@OriginalArg(0) int southwestColor, @OriginalArg(1) int southeastColor, @OriginalArg(2) int northeastColor, @OriginalArg(3) int northwestColor, @OriginalArg(4) int textureId, @OriginalArg(5) int rgb, @OriginalArg(6) boolean flat) {
+		this.southwestColor = southwestColor;
+		this.southeastColor = southeastColor;
+		this.northeastColor = northeastColor;
+		this.northwestColor = northwestColor;
+		this.textureId = textureId;
+		this.rgb = rgb;
+		this.flat = flat;
 	}
 }

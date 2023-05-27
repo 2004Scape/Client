@@ -33,14 +33,14 @@ public final class LocSpawned extends Linkable {
 	public final int lastCycle;
 
 	@OriginalMember(owner = "client!mb", name = "<init>", descriptor = "(IIIIIIIII)V")
-	public LocSpawned(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2, @OriginalArg(3) int arg3, @OriginalArg(5) int arg5, @OriginalArg(6) int arg6, @OriginalArg(7) int arg7, @OriginalArg(8) int arg8) {
-		this.plane = arg0;
-		this.classType = arg8;
-		this.x = arg7;
-		this.z = arg2;
-		this.locIndex = arg6;
-		this.orientation = arg1;
-		this.type = arg5;
-		this.lastCycle = arg3;
+	public LocSpawned(@OriginalArg(0) int plane, @OriginalArg(1) int orientation, @OriginalArg(2) int z, @OriginalArg(3) int lastCycle, @OriginalArg(5) int type, @OriginalArg(6) int locIndex, @OriginalArg(7) int x, @OriginalArg(8) int classType) {
+		this.plane = plane;
+		this.classType = classType;
+		this.x = x;
+		this.z = z;
+		this.locIndex = locIndex;
+		this.orientation = orientation;
+		this.type = type;
+		this.lastCycle = lastCycle;
 	}
 }
