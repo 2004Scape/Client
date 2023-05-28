@@ -36,77 +36,91 @@ public final class SeqFrame {
 
 	@OriginalMember(owner = "client!g", name = "a", descriptor = "(ZLclient!ub;)V")
 	public static void unpack(@OriginalArg(1) Jagfile arg1) {
-		@Pc(17) Packet local17 = new Packet(arg1.read("frame_head.dat", null));
-		@Pc(27) Packet local27 = new Packet(arg1.read("frame_tran1.dat", null));
-		@Pc(37) Packet local37 = new Packet(arg1.read("frame_tran2.dat", null));
-		@Pc(47) Packet local47 = new Packet(arg1.read("frame_del.dat", null));
-		@Pc(50) int local50 = local17.g2();
-		@Pc(53) int local53 = local17.g2();
-		instances = new SeqFrame[local53 + 1];
-		@Pc(61) int[] local61 = new int[500];
-		@Pc(64) int[] local64 = new int[500];
-		@Pc(67) int[] local67 = new int[500];
-		@Pc(70) int[] local70 = new int[500];
-		for (@Pc(72) int local72 = 0; local72 < local50; local72++) {
-			@Pc(77) int local77 = local17.g2();
-			@Pc(85) SeqFrame local85 = instances[local77] = new SeqFrame();
-			local85.delay = local47.g1();
-			@Pc(92) int local92 = local17.g2();
-			@Pc(96) SeqBase local96 = SeqBase.instances[local92];
-			local85.base = local96;
-			@Pc(102) int local102 = local17.g1();
-			@Pc(104) int local104 = -1;
-			@Pc(106) int local106 = 0;
-			@Pc(113) int local113;
-			for (@Pc(108) int local108 = 0; local108 < local102; local108++) {
-				local113 = local27.g1();
-				if (local113 > 0) {
-					if (local96.types[local108] != 0) {
-						for (@Pc(124) int local124 = local108 - 1; local124 > local104; local124--) {
-							if (local96.types[local124] == 0) {
-								local61[local106] = local124;
-								local64[local106] = 0;
-								local67[local106] = 0;
-								local70[local106] = 0;
-								local106++;
+		@Pc(17) Packet head = new Packet(arg1.read("frame_head.dat", null));
+		@Pc(27) Packet tran1 = new Packet(arg1.read("frame_tran1.dat", null));
+		@Pc(37) Packet tran2 = new Packet(arg1.read("frame_tran2.dat", null));
+		@Pc(47) Packet del = new Packet(arg1.read("frame_del.dat", null));
+
+		@Pc(50) int total = head.g2();
+		@Pc(53) int count = head.g2();
+		instances = new SeqFrame[count + 1];
+
+		@Pc(61) int[] labels = new int[500];
+		@Pc(64) int[] x = new int[500];
+		@Pc(67) int[] y = new int[500];
+		@Pc(70) int[] z = new int[500];
+
+		for (@Pc(72) int i = 0; i < total; i++) {
+			@Pc(77) int id = head.g2();
+			@Pc(85) SeqFrame frame = instances[id] = new SeqFrame();
+			frame.delay = del.g1();
+
+			@Pc(92) int baseId = head.g2();
+			@Pc(96) SeqBase base = SeqBase.instances[baseId];
+			frame.base = base;
+
+			@Pc(102) int groupCount = head.g1();
+			@Pc(104) int lastGroup = -1;
+			@Pc(106) int current = 0;
+
+			for (@Pc(108) int j = 0; j < groupCount; j++) {
+				int flags = tran1.g1();
+
+				if (flags > 0) {
+					if (base.types[j] != 0) {
+						for (@Pc(124) int group = j - 1; group > lastGroup; group--) {
+							if (base.types[group] == 0) {
+								labels[current] = group;
+								x[current] = 0;
+								y[current] = 0;
+								z[current] = 0;
+								current++;
 								break;
 							}
 						}
 					}
-					local61[local106] = local108;
-					@Pc(160) short local160 = 0;
-					if (local96.types[local61[local106]] == 3) {
-						local160 = 128;
+
+					labels[current] = j;
+
+					@Pc(160) short defaultValue = 0;
+					if (base.types[labels[current]] == 3) {
+						defaultValue = 128;
 					}
-					if ((local113 & 0x1) == 0) {
-						local64[local106] = local160;
+
+					if ((flags & 0x1) == 0) {
+						x[current] = defaultValue;
 					} else {
-						local64[local106] = local37.gsmart();
+						x[current] = tran2.gsmart();
 					}
-					if ((local113 & 0x2) == 0) {
-						local67[local106] = local160;
+
+					if ((flags & 0x2) == 0) {
+						y[current] = defaultValue;
 					} else {
-						local67[local106] = local37.gsmart();
+						y[current] = tran2.gsmart();
 					}
-					if ((local113 & 0x4) == 0) {
-						local70[local106] = local160;
+
+					if ((flags & 0x4) == 0) {
+						z[current] = defaultValue;
 					} else {
-						local70[local106] = local37.gsmart();
+						z[current] = tran2.gsmart();
 					}
-					local104 = local108;
-					local106++;
+
+					lastGroup = j;
+					current++;
 				}
 			}
-			local85.length = local106;
-			local85.bases = new int[local106];
-			local85.x = new int[local106];
-			local85.y = new int[local106];
-			local85.z = new int[local106];
-			for (local113 = 0; local113 < local106; local113++) {
-				local85.bases[local113] = local61[local113];
-				local85.x[local113] = local64[local113];
-				local85.y[local113] = local67[local113];
-				local85.z[local113] = local70[local113];
+
+			frame.length = current;
+			frame.bases = new int[current];
+			frame.x = new int[current];
+			frame.y = new int[current];
+			frame.z = new int[current];
+
+			for (int j = 0; j < current; j++) {
+				frame.bases[j] = labels[j];
+				frame.x[j] = x[j];
+				frame.y[j] = y[j];
+				frame.z[j] = z[j];
 			}
 		}
 	}
