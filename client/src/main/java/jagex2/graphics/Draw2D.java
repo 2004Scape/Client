@@ -44,11 +44,11 @@ public class Draw2D extends Hashable {
 	}
 
 	@OriginalMember(owner = "client!fb", name = "a", descriptor = "(I[III)V")
-	public static void bind(@OriginalArg(0) int arg0, @OriginalArg(1) int[] arg1, @OriginalArg(3) int arg3) {
-		data = arg1;
-		width2d = arg0;
-		height2d = arg3;
-		setBounds(arg3, 0, arg0, 0);
+	public static void bind(@OriginalArg(0) int width, @OriginalArg(1) int[] src, @OriginalArg(3) int height) {
+		data = src;
+		width2d = width;
+		height2d = height;
+		setBounds(height, 0, width, 0);
 	}
 
 	@OriginalMember(owner = "client!fb", name = "a", descriptor = "(I)V")
@@ -62,101 +62,118 @@ public class Draw2D extends Hashable {
 	}
 
 	@OriginalMember(owner = "client!fb", name = "a", descriptor = "(IIIII)V")
-	public static void setBounds(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2, @OriginalArg(4) int arg4) {
-		if (arg4 < 0) {
-			arg4 = 0;
+	public static void setBounds(@OriginalArg(0) int bottom, @OriginalArg(1) int top, @OriginalArg(2) int right, @OriginalArg(4) int left) {
+		if (left < 0) {
+			left = 0;
 		}
-		if (arg1 < 0) {
-			arg1 = 0;
+
+		if (top < 0) {
+			top = 0;
 		}
-		if (arg2 > width2d) {
-			arg2 = width2d;
+
+		if (right > width2d) {
+			right = width2d;
 		}
-		if (arg0 > height2d) {
-			arg0 = height2d;
+
+		if (bottom > height2d) {
+			bottom = height2d;
 		}
-		left = arg4;
-		top = arg1;
-		right = arg2;
-		bottom = arg0;
-		boundX = right - 1;
-		centerX2d = right / 2;
-		centerY2d = bottom / 2;
+
+		Draw2D.left = left;
+		Draw2D.top = top;
+		Draw2D.right = right;
+		Draw2D.bottom = bottom;
+		boundX = Draw2D.right - 1;
+		centerX2d = Draw2D.right / 2;
+		centerY2d = Draw2D.bottom / 2;
 	}
 
 	@OriginalMember(owner = "client!fb", name = "b", descriptor = "(I)V")
 	public static void clear() {
-		@Pc(7) int local7 = width2d * height2d;
-		for (@Pc(9) int local9 = 0; local9 < local7; local9++) {
-			data[local9] = 0;
+		@Pc(7) int len = width2d * height2d;
+		for (@Pc(9) int i = 0; i < len; i++) {
+			data[i] = 0;
 		}
 	}
 
 	@OriginalMember(owner = "client!fb", name = "a", descriptor = "(IIIBII)V")
-	public static void fillRect(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2, @OriginalArg(4) int arg4, @OriginalArg(5) int arg5) {
-		if (arg1 < left) {
-			arg4 -= left - arg1;
-			arg1 = left;
+	public static void fillRect(@OriginalArg(0) int y, @OriginalArg(1) int x, @OriginalArg(2) int rgb, @OriginalArg(4) int width, @OriginalArg(5) int height) {
+		if (x < left) {
+			width -= left - x;
+			x = left;
 		}
-		if (arg0 < top) {
-			arg5 -= top - arg0;
-			arg0 = top;
+
+		if (y < top) {
+			height -= top - y;
+			y = top;
 		}
-		if (arg1 + arg4 > right) {
-			arg4 = right - arg1;
+
+		if (x + width > right) {
+			width = right - x;
 		}
-		if (arg0 + arg5 > bottom) {
-			arg5 = bottom - arg0;
+
+		if (y + height > bottom) {
+			height = bottom - y;
 		}
-		@Pc(50) int local50 = width2d - arg4;
-		@Pc(56) int local56 = arg1 + arg0 * width2d;
-		for (@Pc(59) int local59 = -arg5; local59 < 0; local59++) {
-			for (@Pc(64) int local64 = -arg4; local64 < 0; local64++) {
-				data[local56++] = arg2;
+
+		@Pc(50) int step = width2d - width;
+		@Pc(56) int offset = x + y * width2d;
+		for (@Pc(59) int i = -height; i < 0; i++) {
+			for (@Pc(64) int j = -width; j < 0; j++) {
+				data[offset++] = rgb;
 			}
-			local56 += local50;
+
+			offset += step;
 		}
 	}
 
 	@OriginalMember(owner = "client!fb", name = "a", descriptor = "(IIIIII)V")
-	public static void drawRect(@OriginalArg(1) int arg1, @OriginalArg(2) int arg2, @OriginalArg(3) int arg3, @OriginalArg(4) int arg4, @OriginalArg(5) int arg5) {
-		drawHorizontalLine(arg2, arg4, arg5, arg1);
-		drawHorizontalLine(arg2, arg4 + arg3 - 1, arg5, arg1);
-		drawVerticalLine(arg2, arg4, arg3, arg1);
-		drawVerticalLine(arg2, arg4, arg3, arg1 + arg5 - 1);
+	public static void drawRect(@OriginalArg(1) int x, @OriginalArg(2) int rgb, @OriginalArg(3) int height, @OriginalArg(4) int y, @OriginalArg(5) int len) {
+		drawHorizontalLine(rgb, y, len, x);
+		drawHorizontalLine(rgb, y + height - 1, len, x);
+		drawVerticalLine(rgb, y, height, x);
+		drawVerticalLine(rgb, y, height, x + len - 1);
 	}
 
 	@OriginalMember(owner = "client!fb", name = "b", descriptor = "(IIIII)V")
-	public static void drawHorizontalLine(@OriginalArg(0) int arg0, @OriginalArg(2) int arg2, @OriginalArg(3) int arg3, @OriginalArg(4) int arg4) {
-		if (arg2 >= top && arg2 < bottom) {
-			if (arg4 < left) {
-				arg3 -= left - arg4;
-				arg4 = left;
-			}
-			if (arg4 + arg3 > right) {
-				arg3 = right - arg4;
-			}
-			@Pc(32) int local32 = arg4 + arg2 * width2d;
-			for (@Pc(37) int local37 = 0; local37 < arg3; local37++) {
-				data[local32 + local37] = arg0;
-			}
+	public static void drawHorizontalLine(@OriginalArg(0) int rgb, @OriginalArg(2) int y, @OriginalArg(3) int len, @OriginalArg(4) int x) {
+		if (y < top || y >= bottom) {
+			return;
+		}
+
+		if (x < left) {
+			len -= left - x;
+			x = left;
+		}
+
+		if (x + len > right) {
+			len = right - x;
+		}
+
+		@Pc(32) int off = x + y * width2d;
+		for (@Pc(37) int i = 0; i < len; i++) {
+			data[off + i] = rgb;
 		}
 	}
 
 	@OriginalMember(owner = "client!fb", name = "c", descriptor = "(IIIII)V")
-	public static void drawVerticalLine(@OriginalArg(0) int arg0, @OriginalArg(2) int arg2, @OriginalArg(3) int arg3, @OriginalArg(4) int arg4) {
-		if (arg4 >= left && arg4 < right) {
-			if (arg2 < top) {
-				arg3 -= top - arg2;
-				arg2 = top;
-			}
-			if (arg2 + arg3 > bottom) {
-				arg3 = bottom - arg2;
-			}
-			@Pc(32) int local32 = arg4 + arg2 * width2d;
-			for (@Pc(38) int local38 = 0; local38 < arg3; local38++) {
-				data[local32 + local38 * width2d] = arg0;
-			}
+	public static void drawVerticalLine(@OriginalArg(0) int rgb, @OriginalArg(2) int y, @OriginalArg(3) int len, @OriginalArg(4) int x) {
+		if (x < left || x >= right) {
+			return;
+		}
+
+		if (y < top) {
+			len -= top - y;
+			y = top;
+		}
+
+		if (y + len > bottom) {
+			len = bottom - y;
+		}
+
+		@Pc(32) int off = x + y * width2d;
+		for (@Pc(38) int i = 0; i < len; i++) {
+			data[off + i * width2d] = rgb;
 		}
 	}
 

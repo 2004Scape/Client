@@ -4069,9 +4069,9 @@ public final class client extends GameShell {
 												local215 = 0;
 												local217 = 0;
 											}
-											local251.draw(128, local182 + local215, local191 + local217);
+											local251.drawAlpha(128, local182 + local215, local191 + local217);
 										} else if (this.selectedArea != 0 && this.selectedItem == local165 && this.selectedInterface == local84.id) {
-											local251.draw(128, local182, local191);
+											local251.drawAlpha(128, local182, local191);
 										} else {
 											local251.draw(local191, local182);
 										}
@@ -6436,7 +6436,7 @@ public final class client extends GameShell {
 			@Pc(66) int local66 = arg0 * local47 + arg3 * local56 >> 16;
 			@Pc(76) int local76 = arg0 * local56 - arg3 * local47 >> 16;
 			if (local15 > 2500) {
-				arg2.drawMasked(this.imageMapback, 83 - local76 - arg2.cropH / 2, local66 + 94 - arg2.cropW / 2, (byte) -15);
+				arg2.drawMasked(this.imageMapback, 83 - local76 - arg2.cropH / 2, local66 + 94 - arg2.cropW / 2);
 			} else {
 				arg2.draw(83 - local76 - arg2.cropH / 2, local66 + 94 - arg2.cropW / 2);
 			}

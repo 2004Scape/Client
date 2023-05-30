@@ -24,155 +24,153 @@ public final class CollisionMap {
 	public final int[][] flags;
 
 	@OriginalMember(owner = "client!ec", name = "<init>", descriptor = "(III)V")
-	public CollisionMap(@OriginalArg(0) int arg0, @OriginalArg(2) int arg2) {
+	public CollisionMap(@OriginalArg(0) int sizeX, @OriginalArg(2) int sizeZ) {
 		this.offsetX = 0;
 		this.offsetZ = 0;
-		this.sizeX = arg0;
-		this.sizeZ = arg2;
+		this.sizeX = sizeX;
+		this.sizeZ = sizeZ;
 		this.flags = new int[this.sizeX][this.sizeZ];
 		this.reset();
 	}
 
 	@OriginalMember(owner = "client!ec", name = "a", descriptor = "(B)V")
 	public void reset() {
-		@Pc(7) int local7;
-		for (@Pc(3) int local3 = 0; local3 < this.sizeX; local3++) {
-			for (local7 = 0; local7 < this.sizeZ; local7++) {
-				if (local3 == 0 || local7 == 0 || local3 == this.sizeX - 1 || local7 == this.sizeZ - 1) {
-					this.flags[local3][local7] = 16777215;
+		for (@Pc(3) int x = 0; x < this.sizeX; x++) {
+			for (@Pc(7) int z = 0; z < this.sizeZ; z++) {
+				if (x == 0 || z == 0 || x == this.sizeX - 1 || z == this.sizeZ - 1) {
+					this.flags[x][z] = 0xffffff;
 				} else {
-					this.flags[local3][local7] = 0;
+					this.flags[x][z] = 0;
 				}
 			}
 		}
 	}
 
 	@OriginalMember(owner = "client!ec", name = "a", descriptor = "(ZIIIZI)V")
-	public void addWall(@OriginalArg(1) int arg1, @OriginalArg(2) int arg2, @OriginalArg(3) int arg3, @OriginalArg(4) boolean arg4, @OriginalArg(5) int arg5) {
-		@Pc(4) int local4 = arg3 - this.offsetX;
-		@Pc(19) int local19 = arg2 - this.offsetZ;
+	public void addWall(@OriginalArg(1) int rotation, @OriginalArg(2) int tileZ, @OriginalArg(3) int tileX, @OriginalArg(4) boolean blockrange, @OriginalArg(5) int type) {
+		@Pc(4) int x = tileX - this.offsetX;
+		@Pc(19) int z = tileZ - this.offsetZ;
 
-		if (arg5 == 0) {
-			if (arg1 == 0) {
-				this.add(local4, local19, 128);
-				this.add(local4 - 1, local19, 8);
-			} else if (arg1 == 1) {
-				this.add(local4, local19, 2);
-				this.add(local4, local19 + 1, 32);
-			} else if (arg1 == 2) {
-				this.add(local4, local19, 8);
-				this.add(local4 + 1, local19, 128);
-			} else if (arg1 == 3) {
-				this.add(local4, local19, 32);
-				this.add(local4, local19 - 1, 2);
+		if (type == 0) {
+			if (rotation == 0) {
+				this.add(x, z, 128);
+				this.add(x - 1, z, 8);
+			} else if (rotation == 1) {
+				this.add(x, z, 2);
+				this.add(x, z + 1, 32);
+			} else if (rotation == 2) {
+				this.add(x, z, 8);
+				this.add(x + 1, z, 128);
+			} else if (rotation == 3) {
+				this.add(x, z, 32);
+				this.add(x, z - 1, 2);
 			}
-		} else if (arg5 == 1 || arg5 == 3) {
-			if (arg1 == 0) {
-				this.add(local4, local19, 1);
-				this.add(local4 - 1, local19 + 1, 16);
-			} else if (arg1 == 1) {
-				this.add(local4, local19, 4);
-				this.add(local4 + 1, local19 + 1, 64);
-			} else if (arg1 == 2) {
-				this.add(local4, local19, 16);
-				this.add(local4 + 1, local19 - 1, 1);
-			} else if (arg1 == 3) {
-				this.add(local4, local19, 64);
-				this.add(local4 - 1, local19 - 1, 4);
+		} else if (type == 1 || type == 3) {
+			if (rotation == 0) {
+				this.add(x, z, 1);
+				this.add(x - 1, z + 1, 16);
+			} else if (rotation == 1) {
+				this.add(x, z, 4);
+				this.add(x + 1, z + 1, 64);
+			} else if (rotation == 2) {
+				this.add(x, z, 16);
+				this.add(x + 1, z - 1, 1);
+			} else if (rotation == 3) {
+				this.add(x, z, 64);
+				this.add(x - 1, z - 1, 4);
 			}
-		} else if (arg5 == 2) {
-			if (arg1 == 0) {
-				this.add(local4, local19, 130);
-				this.add(local4 - 1, local19, 8);
-				this.add(local4, local19 + 1, 32);
-			} else if (arg1 == 1) {
-				this.add(local4, local19, 10);
-				this.add(local4, local19 + 1, 32);
-				this.add(local4 + 1, local19, 128);
-			} else if (arg1 == 2) {
-				this.add(local4, local19, 40);
-				this.add(local4 + 1, local19, 128);
-				this.add(local4, local19 - 1, 2);
-			} else if (arg1 == 3) {
-				this.add(local4, local19, 160);
-				this.add(local4, local19 - 1, 2);
-				this.add(local4 - 1, local19, 8);
+		} else if (type == 2) {
+			if (rotation == 0) {
+				this.add(x, z, 130);
+				this.add(x - 1, z, 8);
+				this.add(x, z + 1, 32);
+			} else if (rotation == 1) {
+				this.add(x, z, 10);
+				this.add(x, z + 1, 32);
+				this.add(x + 1, z, 128);
+			} else if (rotation == 2) {
+				this.add(x, z, 40);
+				this.add(x + 1, z, 128);
+				this.add(x, z - 1, 2);
+			} else if (rotation == 3) {
+				this.add(x, z, 160);
+				this.add(x, z - 1, 2);
+				this.add(x - 1, z, 8);
 			}
 		}
 
-		if (arg4) {
-			if (arg5 == 0) {
-				if (arg1 == 0) {
-					this.add(local4, local19, 65536);
-					this.add(local4 - 1, local19, 4096);
-				} else if (arg1 == 1) {
-					this.add(local4, local19, 1024);
-					this.add(local4, local19 + 1, 16384);
-				} else if (arg1 == 2) {
-					this.add(local4, local19, 4096);
-					this.add(local4 + 1, local19, 65536);
-				} else if (arg1 == 3) {
-					this.add(local4, local19, 16384);
-					this.add(local4, local19 - 1, 1024);
+		if (blockrange) {
+			if (type == 0) {
+				if (rotation == 0) {
+					this.add(x, z, 65536);
+					this.add(x - 1, z, 4096);
+				} else if (rotation == 1) {
+					this.add(x, z, 1024);
+					this.add(x, z + 1, 16384);
+				} else if (rotation == 2) {
+					this.add(x, z, 4096);
+					this.add(x + 1, z, 65536);
+				} else if (rotation == 3) {
+					this.add(x, z, 16384);
+					this.add(x, z - 1, 1024);
 				}
-			} else if (arg5 == 1 || arg5 == 3) {
-				if (arg1 == 0) {
-					this.add(local4, local19, 512);
-					this.add(local4 - 1, local19 + 1, 8192);
-				} else if (arg1 == 1) {
-					this.add(local4, local19, 2048);
-					this.add(local4 + 1, local19 + 1, 32768);
-				} else if (arg1 == 2) {
-					this.add(local4, local19, 8192);
-					this.add(local4 + 1, local19 - 1, 512);
-				} else if (arg1 == 3) {
-					this.add(local4, local19, 32768);
-					this.add(local4 - 1, local19 - 1, 2048);
+			} else if (type == 1 || type == 3) {
+				if (rotation == 0) {
+					this.add(x, z, 512);
+					this.add(x - 1, z + 1, 8192);
+				} else if (rotation == 1) {
+					this.add(x, z, 2048);
+					this.add(x + 1, z + 1, 32768);
+				} else if (rotation == 2) {
+					this.add(x, z, 8192);
+					this.add(x + 1, z - 1, 512);
+				} else if (rotation == 3) {
+					this.add(x, z, 32768);
+					this.add(x - 1, z - 1, 2048);
 				}
-			} else if (arg5 == 2) {
-				if (arg1 == 0) {
-					this.add(local4, local19, 66560);
-					this.add(local4 - 1, local19, 4096);
-					this.add(local4, local19 + 1, 16384);
-				} else if (arg1 == 1) {
-					this.add(local4, local19, 5120);
-					this.add(local4, local19 + 1, 16384);
-					this.add(local4 + 1, local19, 65536);
-				} else if (arg1 == 2) {
-					this.add(local4, local19, 20480);
-					this.add(local4 + 1, local19, 65536);
-					this.add(local4, local19 - 1, 1024);
-				} else if (arg1 == 3) {
-					this.add(local4, local19, 81920);
-					this.add(local4, local19 - 1, 1024);
-					this.add(local4 - 1, local19, 4096);
+			} else if (type == 2) {
+				if (rotation == 0) {
+					this.add(x, z, 66560);
+					this.add(x - 1, z, 4096);
+					this.add(x, z + 1, 16384);
+				} else if (rotation == 1) {
+					this.add(x, z, 5120);
+					this.add(x, z + 1, 16384);
+					this.add(x + 1, z, 65536);
+				} else if (rotation == 2) {
+					this.add(x, z, 20480);
+					this.add(x + 1, z, 65536);
+					this.add(x, z - 1, 1024);
+				} else if (rotation == 3) {
+					this.add(x, z, 81920);
+					this.add(x, z - 1, 1024);
+					this.add(x - 1, z, 4096);
 				}
 			}
 		}
 	}
 
 	@OriginalMember(owner = "client!ec", name = "a", descriptor = "(IIIIIIZ)V")
-	public void addLoc(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2, @OriginalArg(3) int arg3, @OriginalArg(5) int arg5, @OriginalArg(6) boolean arg6) {
-		@Pc(3) int local3 = 256;
-		if (arg6) {
-			local3 += 131072;
+	public void addLoc(@OriginalArg(0) int rotation, @OriginalArg(1) int sizeZ, @OriginalArg(2) int sizeX, @OriginalArg(3) int tileX, @OriginalArg(5) int tileZ, @OriginalArg(6) boolean blockrange) {
+		@Pc(3) int flags = 256;
+		if (blockrange) {
+			flags += 131072;
 		}
 
-		@Pc(14) int local14 = arg3 - this.offsetX;
-		@Pc(19) int local19 = arg5 - this.offsetZ;
-		@Pc(27) int local27;
-		if (arg0 == 1 || arg0 == 3) {
-			local27 = arg2;
-			arg2 = arg1;
-			arg1 = local27;
+		@Pc(14) int x = tileX - this.offsetX;
+		@Pc(19) int z = tileZ - this.offsetZ;
+
+		if (rotation == 1 || rotation == 3) {
+			int tmp = sizeX;
+			sizeX = sizeZ;
+			sizeZ = tmp;
 		}
 
-		@Pc(43) int local43;
-		for (local27 = local14; local27 < local14 + arg2; local27++) {
-			if (local27 >= 0 && local27 < this.sizeX) {
-				for (local43 = local19; local43 < local19 + arg1; local43++) {
-					if (local43 >= 0 && local43 < this.sizeZ) {
-						this.add(local27, local43, local3);
+		for (int tx = x; tx < x + sizeX; tx++) {
+			if (tx >= 0 && tx < this.sizeX) {
+				for (int tz = z; tz < z + sizeZ; tz++) {
+					if (tz >= 0 && tz < this.sizeZ) {
+						this.add(tx, tz, flags);
 					}
 				}
 			}
@@ -180,142 +178,142 @@ public final class CollisionMap {
 	}
 
 	@OriginalMember(owner = "client!ec", name = "a", descriptor = "(BII)V")
-	public void setBlocked(@OriginalArg(1) int arg1, @OriginalArg(2) int arg2) {
-		@Pc(9) int local9 = arg2 - this.offsetX;
-		@Pc(14) int local14 = arg1 - this.offsetZ;
-		this.flags[local9][local14] |= 0x200000;
+	public void setBlocked(@OriginalArg(1) int tileZ, @OriginalArg(2) int tileX) {
+		@Pc(9) int x = tileX - this.offsetX;
+		@Pc(14) int z = tileZ - this.offsetZ;
+		this.flags[x][z] |= 0x200000;
 	}
 
 	@OriginalMember(owner = "client!ec", name = "a", descriptor = "(III)V")
-	private void add(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2) {
-		this.flags[arg0][arg1] |= arg2;
+	private void add(@OriginalArg(0) int x, @OriginalArg(1) int z, @OriginalArg(2) int flags) {
+		this.flags[x][z] |= flags;
 	}
 
 	@OriginalMember(owner = "client!ec", name = "a", descriptor = "(ZIIIII)V")
-	public void removeWall(@OriginalArg(0) boolean arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2, @OriginalArg(3) int arg3, @OriginalArg(5) int arg5) {
-		@Pc(8) int local8 = arg2 - this.offsetX;
-		@Pc(13) int local13 = arg3 - this.offsetZ;
+	public void removeWall(@OriginalArg(0) boolean blockrange, @OriginalArg(1) int rotation, @OriginalArg(2) int tileX, @OriginalArg(3) int tileZ, @OriginalArg(5) int type) {
+		@Pc(8) int x = tileX - this.offsetX;
+		@Pc(13) int z = tileZ - this.offsetZ;
 
-		if (arg5 == 0) {
-			if (arg1 == 0) {
-				this.remove(local13, local8, 128);
-				this.remove(local13, local8 - 1, 8);
-			} else if (arg1 == 1) {
-				this.remove(local13, local8, 2);
-				this.remove(local13 + 1, local8, 32);
-			} else if (arg1 == 2) {
-				this.remove(local13, local8, 8);
-				this.remove(local13, local8 + 1, 128);
-			} else if (arg1 == 3) {
-				this.remove(local13, local8, 32);
-				this.remove(local13 - 1, local8, 2);
+		if (type == 0) {
+			if (rotation == 0) {
+				this.remove(z, x, 128);
+				this.remove(z, x - 1, 8);
+			} else if (rotation == 1) {
+				this.remove(z, x, 2);
+				this.remove(z + 1, x, 32);
+			} else if (rotation == 2) {
+				this.remove(z, x, 8);
+				this.remove(z, x + 1, 128);
+			} else if (rotation == 3) {
+				this.remove(z, x, 32);
+				this.remove(z - 1, x, 2);
 			}
-		} else if (arg5 == 1 || arg5 == 3) {
-			if (arg1 == 0) {
-				this.remove(local13, local8, 1);
-				this.remove(local13 + 1, local8 - 1, 16);
-			} else if (arg1 == 1) {
-				this.remove(local13, local8, 4);
-				this.remove(local13 + 1, local8 + 1, 64);
-			} else if (arg1 == 2) {
-				this.remove(local13, local8, 16);
-				this.remove(local13 - 1, local8 + 1, 1);
-			} else if (arg1 == 3) {
-				this.remove(local13, local8, 64);
-				this.remove(local13 - 1, local8 - 1, 4);
+		} else if (type == 1 || type == 3) {
+			if (rotation == 0) {
+				this.remove(z, x, 1);
+				this.remove(z + 1, x - 1, 16);
+			} else if (rotation == 1) {
+				this.remove(z, x, 4);
+				this.remove(z + 1, x + 1, 64);
+			} else if (rotation == 2) {
+				this.remove(z, x, 16);
+				this.remove(z - 1, x + 1, 1);
+			} else if (rotation == 3) {
+				this.remove(z, x, 64);
+				this.remove(z - 1, x - 1, 4);
 			}
-		} else if (arg5 == 2) {
-			if (arg1 == 0) {
-				this.remove(local13, local8, 130);
-				this.remove(local13, local8 - 1, 8);
-				this.remove(local13 + 1, local8, 32);
-			} else if (arg1 == 1) {
-				this.remove(local13, local8, 10);
-				this.remove(local13 + 1, local8, 32);
-				this.remove(local13, local8 + 1, 128);
-			} else if (arg1 == 2) {
-				this.remove(local13, local8, 40);
-				this.remove(local13, local8 + 1, 128);
-				this.remove(local13 - 1, local8, 2);
-			} else if (arg1 == 3) {
-				this.remove(local13, local8, 160);
-				this.remove(local13 - 1, local8, 2);
-				this.remove(local13, local8 - 1, 8);
+		} else if (type == 2) {
+			if (rotation == 0) {
+				this.remove(z, x, 130);
+				this.remove(z, x - 1, 8);
+				this.remove(z + 1, x, 32);
+			} else if (rotation == 1) {
+				this.remove(z, x, 10);
+				this.remove(z + 1, x, 32);
+				this.remove(z, x + 1, 128);
+			} else if (rotation == 2) {
+				this.remove(z, x, 40);
+				this.remove(z, x + 1, 128);
+				this.remove(z - 1, x, 2);
+			} else if (rotation == 3) {
+				this.remove(z, x, 160);
+				this.remove(z - 1, x, 2);
+				this.remove(z, x - 1, 8);
 			}
 		}
 
-		if (arg0) {
-			if (arg5 == 0) {
-				if (arg1 == 0) {
-					this.remove(local13, local8, 65536);
-					this.remove(local13, local8 - 1, 4096);
-				} else if (arg1 == 1) {
-					this.remove(local13, local8, 1024);
-					this.remove(local13 + 1, local8, 16384);
-				} else if (arg1 == 2) {
-					this.remove(local13, local8, 4096);
-					this.remove(local13, local8 + 1, 65536);
-				} else if (arg1 == 3) {
-					this.remove(local13, local8, 16384);
-					this.remove(local13 - 1, local8, 1024);
+		if (blockrange) {
+			if (type == 0) {
+				if (rotation == 0) {
+					this.remove(z, x, 65536);
+					this.remove(z, x - 1, 4096);
+				} else if (rotation == 1) {
+					this.remove(z, x, 1024);
+					this.remove(z + 1, x, 16384);
+				} else if (rotation == 2) {
+					this.remove(z, x, 4096);
+					this.remove(z, x + 1, 65536);
+				} else if (rotation == 3) {
+					this.remove(z, x, 16384);
+					this.remove(z - 1, x, 1024);
 				}
-			} else if (arg5 == 1 || arg5 == 3) {
-				if (arg1 == 0) {
-					this.remove(local13, local8, 512);
-					this.remove(local13 + 1, local8 - 1, 8192);
-				} else if (arg1 == 1) {
-					this.remove(local13, local8, 2048);
-					this.remove(local13 + 1, local8 + 1, 32768);
-				} else if (arg1 == 2) {
-					this.remove(local13, local8, 8192);
-					this.remove(local13 - 1, local8 + 1, 512);
-				} else if (arg1 == 3) {
-					this.remove(local13, local8, 32768);
-					this.remove(local13 - 1, local8 - 1, 2048);
+			} else if (type == 1 || type == 3) {
+				if (rotation == 0) {
+					this.remove(z, x, 512);
+					this.remove(z + 1, x - 1, 8192);
+				} else if (rotation == 1) {
+					this.remove(z, x, 2048);
+					this.remove(z + 1, x + 1, 32768);
+				} else if (rotation == 2) {
+					this.remove(z, x, 8192);
+					this.remove(z - 1, x + 1, 512);
+				} else if (rotation == 3) {
+					this.remove(z, x, 32768);
+					this.remove(z - 1, x - 1, 2048);
 				}
-			} else if (arg5 == 2) {
-				if (arg1 == 0) {
-					this.remove(local13, local8, 66560);
-					this.remove(local13, local8 - 1, 4096);
-					this.remove(local13 + 1, local8, 16384);
-				} else if (arg1 == 1) {
-					this.remove(local13, local8, 5120);
-					this.remove(local13 + 1, local8, 16384);
-					this.remove(local13, local8 + 1, 65536);
-				} else if (arg1 == 2) {
-					this.remove(local13, local8, 20480);
-					this.remove(local13, local8 + 1, 65536);
-					this.remove(local13 - 1, local8, 1024);
-				} else if (arg1 == 3) {
-					this.remove(local13, local8, 81920);
-					this.remove(local13 - 1, local8, 1024);
-					this.remove(local13, local8 - 1, 4096);
+			} else if (type == 2) {
+				if (rotation == 0) {
+					this.remove(z, x, 66560);
+					this.remove(z, x - 1, 4096);
+					this.remove(z + 1, x, 16384);
+				} else if (rotation == 1) {
+					this.remove(z, x, 5120);
+					this.remove(z + 1, x, 16384);
+					this.remove(z, x + 1, 65536);
+				} else if (rotation == 2) {
+					this.remove(z, x, 20480);
+					this.remove(z, x + 1, 65536);
+					this.remove(z - 1, x, 1024);
+				} else if (rotation == 3) {
+					this.remove(z, x, 81920);
+					this.remove(z - 1, x, 1024);
+					this.remove(z, x - 1, 4096);
 				}
 			}
 		}
 	}
 
 	@OriginalMember(owner = "client!ec", name = "a", descriptor = "(IIIIZZI)V")
-	public void removeLoc(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2, @OriginalArg(3) int arg3, @OriginalArg(5) boolean arg5, @OriginalArg(6) int arg6) {
-		@Pc(3) int local3 = 256;
-		if (arg5) {
-			local3 += 131072;
+	public void removeLoc(@OriginalArg(0) int tileZ, @OriginalArg(1) int tileX, @OriginalArg(2) int rotation, @OriginalArg(3) int sizeX, @OriginalArg(5) boolean blockrange, @OriginalArg(6) int sizeZ) {
+		@Pc(3) int flags = 256;
+		if (blockrange) {
+			flags += 131072;
 		}
 
-		@Pc(14) int local14 = arg1 - this.offsetX;
-		@Pc(19) int local19 = arg0 - this.offsetZ;
-		@Pc(32) int local32;
-		if (arg2 == 1 || arg2 == 3) {
-			local32 = arg3;
-			arg3 = arg6;
-			arg6 = local32;
+		@Pc(14) int x = tileX - this.offsetX;
+		@Pc(19) int z = tileZ - this.offsetZ;
+
+		if (rotation == 1 || rotation == 3) {
+			int tmp = sizeX;
+			sizeX = sizeZ;
+			sizeZ = tmp;
 		}
 
-		for (local32 = local14; local32 < local14 + arg3; local32++) {
-			if (local32 >= 0 && local32 < this.sizeX) {
-				for (@Pc(48) int local48 = local19; local48 < local19 + arg6; local48++) {
-					if (local48 >= 0 && local48 < this.sizeZ) {
-						this.remove(local48, local32, local3);
+		for (int tx = x; tx < x + sizeX; tx++) {
+			if (tx >= 0 && tx < this.sizeX) {
+				for (@Pc(48) int tz = z; tz < z + sizeZ; tz++) {
+					if (tz >= 0 && tz < this.sizeZ) {
+						this.remove(tz, tx, flags);
 					}
 				}
 			}
@@ -323,170 +321,192 @@ public final class CollisionMap {
 	}
 
 	@OriginalMember(owner = "client!ec", name = "a", descriptor = "(IBII)V")
-	private void remove(@OriginalArg(0) int arg0, @OriginalArg(2) int arg2, @OriginalArg(3) int arg3) {
-		this.flags[arg2][arg0] &= 16777215 - arg3;
+	private void remove(@OriginalArg(0) int z, @OriginalArg(2) int x, @OriginalArg(3) int flags) {
+		this.flags[x][z] &= 16777215 - flags;
 	}
 
 	@OriginalMember(owner = "client!ec", name = "b", descriptor = "(III)V")
-	public void removeBlocked(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1) {
-		@Pc(7) int local7 = arg1 - this.offsetX;
-		@Pc(12) int local12 = arg0 - this.offsetZ;
-		this.flags[local7][local12] &= 0xDFFFFF;
+	public void removeBlocked(@OriginalArg(0) int tileZ, @OriginalArg(1) int tileX) {
+		@Pc(7) int x = tileX - this.offsetX;
+		@Pc(12) int z = tileZ - this.offsetZ;
+		this.flags[x][z] &= 0xDFFFFF;
 	}
 
 	@OriginalMember(owner = "client!ec", name = "a", descriptor = "(IIIIIII)Z")
-	public boolean reachedWall(@OriginalArg(1) int arg1, @OriginalArg(2) int arg2, @OriginalArg(3) int arg3, @OriginalArg(4) int arg4, @OriginalArg(5) int arg5, @OriginalArg(6) int arg6) {
-		if (arg6 == arg5 && arg4 == arg2) {
+	public boolean reachedWall(@OriginalArg(1) int rotation, @OriginalArg(2) int destZ, @OriginalArg(3) int type, @OriginalArg(4) int sourceZ, @OriginalArg(5) int destX, @OriginalArg(6) int sourceX) {
+		if (sourceX == destX && sourceZ == destZ) {
 			return true;
 		}
 
-		@Pc(12) int local12 = arg6 - this.offsetX;
-		@Pc(17) int local17 = arg4 - this.offsetZ;
-		@Pc(29) int local29 = arg5 - this.offsetX;
-		@Pc(34) int local34 = arg2 - this.offsetZ;
+		@Pc(12) int sx = sourceX - this.offsetX;
+		@Pc(17) int sz = sourceZ - this.offsetZ;
+		@Pc(29) int dx = destX - this.offsetX;
+		@Pc(34) int dz = destZ - this.offsetZ;
 
-		if (arg3 == 0) {
-			if (arg1 == 0) {
-				if (local12 == local29 - 1 && local17 == local34) {
+		if (type == 0) {
+			if (rotation == 0) {
+				if (sx == dx - 1 && sz == dz) {
 					return true;
-				} else if (local12 == local29 && local17 == local34 + 1 && (this.flags[local12][local17] & 0x280120) == 0) {
+				} else if (sx == dx && sz == dz + 1 && (this.flags[sx][sz] & 0x280120) == 0) {
 					return true;
-				} else return local12 == local29 && local17 == local34 - 1 && (this.flags[local12][local17] & 0x280102) == 0;
-			} else if (arg1 == 1) {
-				if (local12 == local29 && local17 == local34 + 1) {
+				} else if (sx == dx && sz == dz - 1 && (this.flags[sx][sz] & 0x280102) == 0) {
 					return true;
-				} else if (local12 == local29 - 1 && local17 == local34 && (this.flags[local12][local17] & 0x280108) == 0) {
+				}
+			} else if (rotation == 1) {
+				if (sx == dx && sz == dz + 1) {
 					return true;
-				} else return local12 == local29 + 1 && local17 == local34 && (this.flags[local12][local17] & 0x280180) == 0;
-			} else if (arg1 == 2) {
-				if (local12 == local29 + 1 && local17 == local34) {
+				} else if (sx == dx - 1 && sz == dz && (this.flags[sx][sz] & 0x280108) == 0) {
 					return true;
-				} else if (local12 == local29 && local17 == local34 + 1 && (this.flags[local12][local17] & 0x280120) == 0) {
+				} else if (sx == dx + 1 && sz == dz && (this.flags[sx][sz] & 0x280180) == 0) {
 					return true;
-				} else return local12 == local29 && local17 == local34 - 1 && (this.flags[local12][local17] & 0x280102) == 0;
-			} else if (arg1 == 3) {
-				if (local12 == local29 && local17 == local34 - 1) {
+				}
+			} else if (rotation == 2) {
+				if (sx == dx + 1 && sz == dz) {
 					return true;
-				} else if (local12 == local29 - 1 && local17 == local34 && (this.flags[local12][local17] & 0x280108) == 0) {
+				} else if (sx == dx && sz == dz + 1 && (this.flags[sx][sz] & 0x280120) == 0) {
 					return true;
-				} else return local12 == local29 + 1 && local17 == local34 && (this.flags[local12][local17] & 0x280180) == 0;
+				} else if (sx == dx && sz == dz - 1 && (this.flags[sx][sz] & 0x280102) == 0) {
+					return true;
+				}
+			} else if (rotation == 3) {
+				if (sx == dx && sz == dz - 1) {
+					return true;
+				} else if (sx == dx - 1 && sz == dz && (this.flags[sx][sz] & 0x280108) == 0) {
+					return true;
+				} else if (sx == dx + 1 && sz == dz && (this.flags[sx][sz] & 0x280180) == 0) {
+					return true;
+				}
 			}
-		} else if (arg3 == 2) {
-			if (arg1 == 0) {
-				if (local12 == local29 - 1 && local17 == local34) {
+		} else if (type == 2) {
+			if (rotation == 0) {
+				if (sx == dx - 1 && sz == dz) {
 					return true;
-				} else if (local12 == local29 && local17 == local34 + 1) {
+				} else if (sx == dx && sz == dz + 1) {
 					return true;
-				} else if (local12 == local29 + 1 && local17 == local34 && (this.flags[local12][local17] & 0x280180) == 0) {
+				} else if (sx == dx + 1 && sz == dz && (this.flags[sx][sz] & 0x280180) == 0) {
 					return true;
-				} else return local12 == local29 && local17 == local34 - 1 && (this.flags[local12][local17] & 0x280102) == 0;
-			} else if (arg1 == 1) {
-				if (local12 == local29 - 1 && local17 == local34 && (this.flags[local12][local17] & 0x280108) == 0) {
+				} else if (sx == dx && sz == dz - 1 && (this.flags[sx][sz] & 0x280102) == 0) {
 					return true;
 				}
-				if (local12 == local29 && local17 == local34 + 1) {
+			} else if (rotation == 1) {
+				if (sx == dx - 1 && sz == dz && (this.flags[sx][sz] & 0x280108) == 0) {
+					return true;
+				} else if (sx == dx && sz == dz + 1) {
+					return true;
+				} else if (sx == dx + 1 && sz == dz) {
+					return true;
+				} else if (sx == dx && sz == dz - 1 && (this.flags[sx][sz] & 0x280102) == 0) {
 					return true;
 				}
-				if (local12 == local29 + 1 && local17 == local34) {
+			} else if (rotation == 2) {
+				if (sx == dx - 1 && sz == dz && (this.flags[sx][sz] & 0x280108) == 0) {
+					return true;
+				} else if (sx == dx && sz == dz + 1 && (this.flags[sx][sz] & 0x280120) == 0) {
+					return true;
+				} else if (sx == dx + 1 && sz == dz) {
+					return true;
+				} else if (sx == dx && sz == dz - 1) {
 					return true;
 				}
-				return local12 == local29 && local17 == local34 - 1 && (this.flags[local12][local17] & 0x280102) == 0;
-			} else if (arg1 == 2) {
-				if (local12 == local29 - 1 && local17 == local34 && (this.flags[local12][local17] & 0x280108) == 0) {
+			} else if (rotation == 3) {
+				if (sx == dx - 1 && sz == dz) {
+					return true;
+				} else if (sx == dx && sz == dz + 1 && (this.flags[sx][sz] & 0x280120) == 0) {
+					return true;
+				} else if (sx == dx + 1 && sz == dz && (this.flags[sx][sz] & 0x280180) == 0) {
+					return true;
+				} else if (sx == dx && sz == dz - 1) {
 					return true;
 				}
-				if (local12 == local29 && local17 == local34 + 1 && (this.flags[local12][local17] & 0x280120) == 0) {
-					return true;
-				}
-				if (local12 == local29 + 1 && local17 == local34) {
-					return true;
-				}
-				return local12 == local29 && local17 == local34 - 1;
-			} else if (arg1 == 3) {
-				if (local12 == local29 - 1 && local17 == local34) {
-					return true;
-				}
-				if (local12 == local29 && local17 == local34 + 1 && (this.flags[local12][local17] & 0x280120) == 0) {
-					return true;
-				}
-				if (local12 == local29 + 1 && local17 == local34 && (this.flags[local12][local17] & 0x280180) == 0) {
-					return true;
-				}
-				return local12 == local29 && local17 == local34 - 1;
 			}
-		} else if (arg3 == 9) {
-			if (local12 == local29 && local17 == local34 + 1 && (this.flags[local12][local17] & 0x20) == 0) {
+		} else if (type == 9) {
+			if (sx == dx && sz == dz + 1 && (this.flags[sx][sz] & 0x20) == 0) {
 				return true;
-			} else if (local12 == local29 && local17 == local34 - 1 && (this.flags[local12][local17] & 0x2) == 0) {
+			} else if (sx == dx && sz == dz - 1 && (this.flags[sx][sz] & 0x2) == 0) {
 				return true;
-			} else if (local12 == local29 - 1 && local17 == local34 && (this.flags[local12][local17] & 0x8) == 0) {
+			} else if (sx == dx - 1 && sz == dz && (this.flags[sx][sz] & 0x8) == 0) {
 				return true;
-			} else return local12 == local29 + 1 && local17 == local34 && (this.flags[local12][local17] & 0x80) == 0;
+			} else if (sx == dx + 1 && sz == dz && (this.flags[sx][sz] & 0x80) == 0) {
+				return true;
+			}
 		}
 
 		return false;
 	}
 
 	@OriginalMember(owner = "client!ec", name = "b", descriptor = "(IIIIIII)Z")
-	public boolean reachedWallDecoration(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(3) int arg3, @OriginalArg(4) int arg4, @OriginalArg(5) int arg5, @OriginalArg(6) int arg6) {
-		if (arg3 == arg4 && arg5 == arg6) {
+	public boolean reachedWallDecoration(@OriginalArg(0) int rotation, @OriginalArg(1) int type, @OriginalArg(3) int sourceX, @OriginalArg(4) int destX, @OriginalArg(5) int sourceZ, @OriginalArg(6) int destZ) {
+		if (sourceX == destX && sourceZ == destZ) {
 			return true;
 		}
 
-		@Pc(19) int local19 = arg3 - this.offsetX;
-		@Pc(24) int local24 = arg5 - this.offsetZ;
-		@Pc(29) int local29 = arg4 - this.offsetX;
-		@Pc(34) int local34 = arg6 - this.offsetZ;
+		@Pc(19) int sx = sourceX - this.offsetX;
+		@Pc(24) int sz = sourceZ - this.offsetZ;
+		@Pc(29) int dx = destX - this.offsetX;
+		@Pc(34) int dz = destZ - this.offsetZ;
 
-		if (arg1 == 6 || arg1 == 7) {
-			if (arg1 == 7) {
-				arg0 = arg0 + 2 & 0x3;
+		if (type == 6 || type == 7) {
+			if (type == 7) {
+				rotation = rotation + 2 & 0x3;
 			}
 
-			if (arg0 == 0) {
-				if (local19 == local29 + 1 && local24 == local34 && (this.flags[local19][local24] & 0x80) == 0) {
+			if (rotation == 0) {
+				if (sx == dx + 1 && sz == dz && (this.flags[sx][sz] & 0x80) == 0) {
 					return true;
-				} else return local19 == local29 && local24 == local34 - 1 && (this.flags[local19][local24] & 0x2) == 0;
-			} else if (arg0 == 1) {
-				if (local19 == local29 - 1 && local24 == local34 && (this.flags[local19][local24] & 0x8) == 0) {
+				} else if (sx == dx && sz == dz - 1 && (this.flags[sx][sz] & 0x2) == 0) {
 					return true;
-				} else return local19 == local29 && local24 == local34 - 1 && (this.flags[local19][local24] & 0x2) == 0;
-			} else if (arg0 == 2) {
-				if (local19 == local29 - 1 && local24 == local34 && (this.flags[local19][local24] & 0x8) == 0) {
+				}
+			} else if (rotation == 1) {
+				if (sx == dx - 1 && sz == dz && (this.flags[sx][sz] & 0x8) == 0) {
 					return true;
-				} else return local19 == local29 && local24 == local34 + 1 && (this.flags[local19][local24] & 0x20) == 0;
-			} else if (arg0 == 3) {
-				if (local19 == local29 + 1 && local24 == local34 && (this.flags[local19][local24] & 0x80) == 0) {
+				} else if (sx == dx && sz == dz - 1 && (this.flags[sx][sz] & 0x2) == 0) {
 					return true;
-				} else return local19 == local29 && local24 == local34 + 1 && (this.flags[local19][local24] & 0x20) == 0;
+				}
+			} else if (rotation == 2) {
+				if (sx == dx - 1 && sz == dz && (this.flags[sx][sz] & 0x8) == 0) {
+					return true;
+				} else if (sx == dx && sz == dz + 1 && (this.flags[sx][sz] & 0x20) == 0) {
+					return true;
+				}
+			} else if (rotation == 3) {
+				if (sx == dx + 1 && sz == dz && (this.flags[sx][sz] & 0x80) == 0) {
+					return true;
+				} else if (sx == dx && sz == dz + 1 && (this.flags[sx][sz] & 0x20) == 0) {
+					return true;
+				}
 			}
-		} else if (arg1 == 8) {
-			if (local19 == local29 && local24 == local34 + 1 && (this.flags[local19][local24] & 0x20) == 0) {
+		} else if (type == 8) {
+			if (sx == dx && sz == dz + 1 && (this.flags[sx][sz] & 0x20) == 0) {
 				return true;
-			} else if (local19 == local29 && local24 == local34 - 1 && (this.flags[local19][local24] & 0x2) == 0) {
+			} else if (sx == dx && sz == dz - 1 && (this.flags[sx][sz] & 0x2) == 0) {
 				return true;
-			} else if (local19 == local29 - 1 && local24 == local34 && (this.flags[local19][local24] & 0x8) == 0) {
+			} else if (sx == dx - 1 && sz == dz && (this.flags[sx][sz] & 0x8) == 0) {
 				return true;
-			} else return local19 == local29 + 1 && local24 == local34 && (this.flags[local19][local24] & 0x80) == 0;
+			} else if (sx == dx + 1 && sz == dz && (this.flags[sx][sz] & 0x80) == 0) {
+				return true;
+			}
 		}
+
 		return false;
 	}
 
 	@OriginalMember(owner = "client!ec", name = "a", descriptor = "(IIIIIIII)Z")
-	public boolean reachedLoc(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2, @OriginalArg(3) int arg3, @OriginalArg(4) int arg4, @OriginalArg(5) int arg5, @OriginalArg(6) int arg6) {
-		@Pc(5) int local5 = arg3 + arg6 - 1;
-		@Pc(11) int local11 = arg5 + arg1 - 1;
+	public boolean reachedLoc(@OriginalArg(0) int srcZ, @OriginalArg(1) int dstSizeZ, @OriginalArg(2) int srcX, @OriginalArg(3) int dstX, @OriginalArg(4) int forceapproach, @OriginalArg(5) int dstZ, @OriginalArg(6) int dstSizeX) {
+		@Pc(5) int maxX = dstX + dstSizeX - 1;
+		@Pc(11) int maxZ = dstZ + dstSizeZ - 1;
 
-		if (arg2 >= arg3 && arg2 <= local5 && arg0 >= arg5 && arg0 <= local11) {
+		if (srcX >= dstX && srcX <= maxX && srcZ >= dstZ && srcZ <= maxZ) {
 			return true;
-		} else if (arg2 == arg3 - 1 && arg0 >= arg5 && arg0 <= local11 && (this.flags[arg2 - this.offsetX][arg0 - this.offsetZ] & 0x8) == 0 && (arg4 & 0x8) == 0) {
+		} else if (srcX == dstX - 1 && srcZ >= dstZ && srcZ <= maxZ && (this.flags[srcX - this.offsetX][srcZ - this.offsetZ] & 0x8) == 0 && (forceapproach & 0x8) == 0) {
 			return true;
-		} else if (arg2 == local5 + 1 && arg0 >= arg5 && arg0 <= local11 && (this.flags[arg2 - this.offsetX][arg0 - this.offsetZ] & 0x80) == 0 && (arg4 & 0x2) == 0) {
+		} else if (srcX == maxX + 1 && srcZ >= dstZ && srcZ <= maxZ && (this.flags[srcX - this.offsetX][srcZ - this.offsetZ] & 0x80) == 0 && (forceapproach & 0x2) == 0) {
 			return true;
-		} else if (arg0 == arg5 - 1 && arg2 >= arg3 && arg2 <= local5 && (this.flags[arg2 - this.offsetX][arg0 - this.offsetZ] & 0x2) == 0 && (arg4 & 0x4) == 0) {
+		} else if (srcZ == dstZ - 1 && srcX >= dstX && srcX <= maxX && (this.flags[srcX - this.offsetX][srcZ - this.offsetZ] & 0x2) == 0 && (forceapproach & 0x4) == 0) {
 			return true;
-		} else {
-			return arg0 == local11 + 1 && arg2 >= arg3 && arg2 <= local5 && (this.flags[arg2 - this.offsetX][arg0 - this.offsetZ] & 0x20) == 0 && (arg4 & 0x1) == 0;
+		} else if (srcZ == maxZ + 1 && srcX >= dstX && srcX <= maxX && (this.flags[srcX - this.offsetX][srcZ - this.offsetZ] & 0x20) == 0 && (forceapproach & 0x1) == 0) {
+			return true;
 		}
+
+		return false;
 	}
 }
