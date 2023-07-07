@@ -286,16 +286,16 @@ public class GameShell extends Applet implements Runnable, MouseListener, MouseM
 		this.mouseClickX = x;
 		this.mouseClickY = y;
 
-		if (e.isMetaDown()) {
+		if ((e.getModifiersEx() & MouseEvent.BUTTON3_DOWN_MASK) != 0) {
 			this.mouseClickButton = 2;
 			this.mouseButton = 2;
-		} else {
+		} else if ((e.getModifiersEx() & MouseEvent.BUTTON1_DOWN_MASK) != 0) {
 			this.mouseClickButton = 1;
 			this.mouseButton = 1;
 		}
 
 		if (InputTracking.enabled) {
-			InputTracking.mousePressed(x, e.isMetaDown() ? 1 : 0, y);
+			InputTracking.mousePressed(x, (e.getModifiersEx() & MouseEvent.BUTTON3_DOWN_MASK) != 0 ? 1 : 0, y);
 		}
 	}
 
@@ -306,7 +306,7 @@ public class GameShell extends Applet implements Runnable, MouseListener, MouseM
 		this.mouseButton = 0;
 
 		if (InputTracking.enabled) {
-			InputTracking.mouseReleased(e.isMetaDown() ? 1 : 0);
+			InputTracking.mouseReleased((e.getModifiersEx() & MouseEvent.BUTTON3_DOWN_MASK) != 0 ? 1 : 0);
 		}
 	}
 
