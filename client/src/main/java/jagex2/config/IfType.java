@@ -290,7 +290,7 @@ public final class IfType {
 						com.inventorySlotOffsetX[i] = dat.g2b();
 						com.inventorySlotOffsetY[i] = dat.g2b();
 
-						@Pc(352) String sprite = dat.gstr();
+						@Pc(352) String sprite = dat.gjstr();
 						if (media != null && sprite.length() > 0) {
 							@Pc(361) int spriteIndex = sprite.lastIndexOf(",");
 							com.inventorySlotImage[i] = getImage(media, Integer.parseInt(sprite.substring(spriteIndex + 1)), sprite.substring(0, spriteIndex));
@@ -300,7 +300,7 @@ public final class IfType {
 
 				com.inventoryOptions = new String[5];
 				for (int i = 0; i < 5; i++) {
-					com.inventoryOptions[i] = dat.gstr();
+					com.inventoryOptions[i] = dat.gjstr();
 
 					if (com.inventoryOptions[i].length() == 0) {
 						com.inventoryOptions[i] = null;
@@ -322,8 +322,8 @@ public final class IfType {
 			}
 
 			if (com.type == 4) {
-				com.text = dat.gstr();
-				com.activeText = dat.gstr();
+				com.text = dat.gjstr();
+				com.activeText = dat.gjstr();
 			}
 
 			if (com.type == 1 || com.type == 3 || com.type == 4) {
@@ -336,13 +336,13 @@ public final class IfType {
 			}
 
 			if (com.type == 5) {
-				@Pc(511) String sprite = dat.gstr();
+				@Pc(511) String sprite = dat.gjstr();
 				if (media != null && sprite.length() > 0) {
 					int spriteIndex = sprite.lastIndexOf(",");
 					com.image = getImage(media, Integer.parseInt(sprite.substring(spriteIndex + 1)), sprite.substring(0, spriteIndex));
 				}
 
-				sprite = dat.gstr();
+				sprite = dat.gjstr();
 				if (media != null && sprite.length() > 0) {
 					int spriteIndex = sprite.lastIndexOf(",");
 					com.activeImage = getImage(media, Integer.parseInt(sprite.substring(spriteIndex + 1)), sprite.substring(0, spriteIndex));
@@ -395,7 +395,7 @@ public final class IfType {
 
 				com.inventoryOptions = new String[5];
 				for (int i = 0; i < 5; i++) {
-					com.inventoryOptions[i] = dat.gstr();
+					com.inventoryOptions[i] = dat.gjstr();
 					if (com.inventoryOptions[i].length() == 0) {
 						com.inventoryOptions[i] = null;
 					}
@@ -403,13 +403,13 @@ public final class IfType {
 			}
 
 			if (com.optionType == 2 || com.type == 2) {
-				com.spellAction = dat.gstr();
-				com.spellName = dat.gstr();
+				com.spellAction = dat.gjstr();
+				com.spellName = dat.gjstr();
 				com.spellFlags = dat.g2();
 			}
 
 			if (com.optionType == 1 || com.optionType == 4 || com.optionType == 5 || com.optionType == 6) {
-				com.option = dat.gstr();
+				com.option = dat.gjstr();
 
 				if (com.option.length() == 0) {
 					if (com.optionType == 1) {

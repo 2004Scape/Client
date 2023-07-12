@@ -85,7 +85,7 @@ public final class FloType {
 			} else if (code == 5) {
 				this.occlude = false;
 			} else if (code == 6) {
-				this.name = dat.gstr();
+				this.name = dat.gjstr();
 			} else {
 				System.out.println("Error unrecognised config code: " + code);
 			}

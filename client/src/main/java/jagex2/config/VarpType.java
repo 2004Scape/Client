@@ -98,7 +98,7 @@ public final class VarpType {
 			} else if (code == 8) {
 				this.code8 = true;
 			} else if (code == 10) {
-				this.code10 = dat.gstr();
+				this.code10 = dat.gjstr();
 			} else {
 				System.out.println("Error unrecognised config code: " + code);
 			}

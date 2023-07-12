@@ -1,6 +1,5 @@
 package jagex2.client;
 
-import jagex2.client.sign.signlink;
 import jagex2.config.*;
 import jagex2.dash3d.CollisionMap;
 import jagex2.dash3d.World;
@@ -1227,7 +1226,7 @@ public final class client extends GameShell {
 	@OriginalMember(owner = "client!client", name = "main", descriptor = "([Ljava/lang/String;)V")
 	public static void main(@OriginalArg(0) String[] arg0) {
 		try {
-			System.out.println("RS2 user client - release #" + signlink.clientversion);
+			System.out.println("RS2 user client - release #" + Signlink.clientversion);
 			if (arg0.length == 4) {
 				nodeId = Integer.parseInt(arg0[0]);
 				portOffset = Integer.parseInt(arg0[1]);
@@ -1247,7 +1246,7 @@ public final class client extends GameShell {
 					System.out.println("Usage: node-id, port-offset, [lowmem/highmem], [free/members]");
 					return;
 				}
-				signlink.startpriv(InetAddress.getByName("world2.runewiki.org"));
+				Signlink.startpriv(InetAddress.getByName("localhost"));
 				@Pc(82) client local82 = new client();
 				local82.initApplication(532, 789);
 			} else {
@@ -1518,8 +1517,8 @@ public final class client extends GameShell {
 
 	@OriginalMember(owner = "client!client", name = "e", descriptor = "(I)V")
 	private void stopMidi() {
-		signlink.midifade = 0;
-		signlink.midi = "stop";
+		Signlink.midifade = false;
+		Signlink.midi = "stop";
 	}
 
 	@OriginalMember(owner = "client!client", name = "f", descriptor = "(I)V")
@@ -1646,7 +1645,7 @@ public final class client extends GameShell {
 				}
 			}
 			if ((local16 & 0x8) == 8) {
-				local13.chat = arg0.gstr();
+				local13.chat = arg0.gjstr();
 				local13.chatTimer = 100;
 			}
 			if ((local16 & 0x10) == 16) {
@@ -2203,7 +2202,7 @@ public final class client extends GameShell {
 				this.midiSyncLen = 0;
 			}
 			if (local19 != null) {
-				@Pc(52) byte[] local52 = signlink.cacheload(local19 + ".mid");
+				@Pc(52) byte[] local52 = Signlink.cacheload(local19 + ".mid");
 				@Pc(69) int local69;
 				if (local52 != null && local22 != 12345678) {
 					this.crc32.reset();
@@ -2229,7 +2228,7 @@ public final class client extends GameShell {
 							}
 						}
 						local91.close();
-						signlink.cachesave(local19 + ".mid", local52);
+						Signlink.cachesave(local19 + ".mid", local52);
 					} catch (@Pc(153) Exception local153) {
 					}
 				}
@@ -3097,7 +3096,7 @@ public final class client extends GameShell {
 	@OriginalMember(owner = "client!client", name = "a", descriptor = "(Ljava/lang/String;ILjava/lang/String;II)Lclient!ub;")
 	private Jagfile loadArchive(@OriginalArg(0) String arg0, @OriginalArg(1) int arg1, @OriginalArg(2) String arg2, @OriginalArg(3) int arg3) {
 		@Pc(3) int local3 = 5;
-		@Pc(6) byte[] local6 = signlink.cacheload(arg2);
+		@Pc(6) byte[] local6 = Signlink.cacheload(arg2);
 		@Pc(20) int local20;
 		if (local6 != null) {
 			this.crc32.reset();
@@ -3151,7 +3150,7 @@ public final class client extends GameShell {
 				}
 			}
 		}
-		signlink.cachesave(arg2, local6);
+		Signlink.cachesave(arg2, local6);
 		return new Jagfile(local6);
 	}
 
@@ -3376,10 +3375,10 @@ public final class client extends GameShell {
 	@OriginalMember(owner = "client!client", name = "b", descriptor = "(B)Ljava/awt/Component;")
 	@Override
 	protected Component getBaseComponent() {
-		if (signlink.mainapp == null) {
+		if (Signlink.mainapp == null) {
 			return super.frame == null ? this : super.frame;
 		} else {
-			return signlink.mainapp;
+			return Signlink.mainapp;
 		}
 	}
 
@@ -3630,12 +3629,12 @@ public final class client extends GameShell {
 			}
 		}
 		if (arg0.pos != arg1) {
-			signlink.reporterror(this.username + " size mismatch in getnpcpos - pos:" + arg0.pos + " psize:" + arg1);
+			Signlink.reporterror(this.username + " size mismatch in getnpcpos - pos:" + arg0.pos + " psize:" + arg1);
 			throw new RuntimeException("eek");
 		}
 		for (local36 = 0; local36 < this.npcCount; local36++) {
 			if (this.npcs[this.npcIds[local36]] == null) {
-				signlink.reporterror(this.username + " null entry in npc list - pos:" + local36 + " size:" + this.npcCount);
+				Signlink.reporterror(this.username + " null entry in npc list - pos:" + local36 + " size:" + this.npcCount);
 				throw new RuntimeException("eek");
 			}
 		}
@@ -3644,10 +3643,10 @@ public final class client extends GameShell {
 	@OriginalMember(owner = "client!client", name = "a", descriptor = "(Ljava/lang/Runnable;I)V")
 	@Override
 	public void startThread(@OriginalArg(0) Runnable runnable, @OriginalArg(1) int priority) {
-		if (signlink.mainapp == null) {
+		if (Signlink.mainapp == null) {
 			super.startThread(runnable, priority);
 		} else {
-			signlink.startthread(runnable, priority);
+			Signlink.startthread(runnable, priority);
 		}
 	}
 
@@ -3726,7 +3725,7 @@ public final class client extends GameShell {
 			}
 		}
 		if (local6 > this.playerCount) {
-			signlink.reporterror(this.username + " Too many players");
+			Signlink.reporterror(this.username + " Too many players");
 			throw new RuntimeException("eek");
 		}
 		this.playerCount = 0;
@@ -3811,8 +3810,8 @@ public final class client extends GameShell {
 
 	@OriginalMember(owner = "client!client", name = "a", descriptor = "([BIIZ)V")
 	private void saveMidi(@OriginalArg(0) byte[] arg0, @OriginalArg(2) int arg2, @OriginalArg(3) boolean arg3) {
-		signlink.midifade = arg3 ? 1 : 0;
-		signlink.midisave(arg0, arg2);
+		Signlink.midifade = arg3;
+		Signlink.midisave(arg0, arg2);
 	}
 
 	@OriginalMember(owner = "client!client", name = "h", descriptor = "(Z)V")
@@ -3838,8 +3837,8 @@ public final class client extends GameShell {
 
 	@OriginalMember(owner = "client!client", name = "a", descriptor = "(IIZ)V")
 	private void setMidiVolume(@OriginalArg(1) int arg1) {
-		signlink.midivol = arg1;
-		signlink.midi = "voladjust";
+		Signlink.midivol = arg1;
+		Signlink.midi = "voladjust";
 	}
 
 	@OriginalMember(owner = "client!client", name = "o", descriptor = "(I)V")
@@ -4267,19 +4266,19 @@ public final class client extends GameShell {
 			if (local8 == 3) {
 				@Pc(54) boolean local54 = this.midiActive;
 				if (local16 == 0) {
-					this.setMidiVolume(0);
+					this.setMidiVolume(192);
 					this.midiActive = true;
 				}
 				if (local16 == 1) {
-					this.setMidiVolume(-400);
+					this.setMidiVolume(128);
 					this.midiActive = true;
 				}
 				if (local16 == 2) {
-					this.setMidiVolume(-800);
+					this.setMidiVolume(64);
 					this.midiActive = true;
 				}
 				if (local16 == 3) {
-					this.setMidiVolume(-1200);
+					this.setMidiVolume(32);
 					this.midiActive = true;
 				}
 				if (local16 == 4) {
@@ -4297,19 +4296,19 @@ public final class client extends GameShell {
 			if (local8 == 4) {
 				if (local16 == 0) {
 					this.waveEnabled = true;
-					this.setWaveVolume(0);
+					this.setWaveVolume(100);
 				}
 				if (local16 == 1) {
 					this.waveEnabled = true;
-					this.setWaveVolume(-400);
+					this.setWaveVolume(75);
 				}
 				if (local16 == 2) {
 					this.waveEnabled = true;
-					this.setWaveVolume(-800);
+					this.setWaveVolume(50);
 				}
 				if (local16 == 3) {
 					this.waveEnabled = true;
-					this.setWaveVolume(-1200);
+					this.setWaveVolume(25);
 				}
 				if (local16 == 4) {
 					this.waveEnabled = false;
@@ -5471,10 +5470,10 @@ public final class client extends GameShell {
 
 	@OriginalMember(owner = "client!client", name = "s", descriptor = "(I)Ljava/lang/String;")
 	private String getHost() {
-		if (signlink.mainapp == null) {
+		if (Signlink.mainapp == null) {
 			return super.frame == null ? super.getDocumentBase().getHost().toLowerCase() : "runescape.com";
 		} else {
-			return signlink.mainapp.getDocumentBase().getHost().toLowerCase();
+			return Signlink.mainapp.getDocumentBase().getHost().toLowerCase();
 		}
 	}
 
@@ -5678,7 +5677,7 @@ public final class client extends GameShell {
 					} else {
 						local441 = this.daysSinceLastLogin + " days ago";
 					}
-					arg1.text = "You last logged in " + local441 + " from: " + signlink.dns;
+					arg1.text = "You last logged in " + local441 + " from: " + Signlink.dns;
 				}
 			}
 			if (local4 == 651) {
@@ -5734,17 +5733,17 @@ public final class client extends GameShell {
 
 	@OriginalMember(owner = "client!client", name = "a", descriptor = "([BII)Z")
 	private boolean saveWave(@OriginalArg(0) byte[] arg0, @OriginalArg(1) int arg1) {
-		return arg0 == null || signlink.wavesave(arg0, arg1);
+		return arg0 == null || Signlink.wavesave(arg0, arg1);
 	}
 
 	@OriginalMember(owner = "client!client", name = "u", descriptor = "(I)Z")
 	private boolean replayWave() {
-		return signlink.wavereplay();
+		return Signlink.wavereplay();
 	}
 
 	@OriginalMember(owner = "client!client", name = "g", descriptor = "(II)V")
 	private void setWaveVolume(@OriginalArg(0) int arg0) {
-		signlink.wavevol = arg0;
+		Signlink.wavevol = arg0;
 	}
 
 	@OriginalMember(owner = "client!client", name = "a", descriptor = "(ZLclient!kb;I)V")
@@ -5908,7 +5907,7 @@ public final class client extends GameShell {
 	@OriginalMember(owner = "client!client", name = "a", descriptor = "()V")
 	@Override
 	protected void load() {
-		if (signlink.sunjava) {
+		if (Signlink.sunjava) {
 			super.mindel = 5;
 		}
 		if (!lowMemory) {
@@ -6607,7 +6606,7 @@ public final class client extends GameShell {
 
 	@OriginalMember(owner = "client!client", name = "a", descriptor = "(Ljava/lang/String;)Ljava/io/DataInputStream;")
 	private DataInputStream openUrl(@OriginalArg(0) String arg0) throws IOException {
-		return signlink.mainapp == null ? new DataInputStream((new URL(this.getCodeBase(), arg0)).openStream()) : signlink.openurl(arg0);
+		return Signlink.mainapp == null ? new DataInputStream((new URL(this.getCodeBase(), arg0)).openStream()) : Signlink.openurl(arg0);
 	}
 
 	@OriginalMember(owner = "client!client", name = "j", descriptor = "(B)V")
@@ -6726,7 +6725,7 @@ public final class client extends GameShell {
 
 	@OriginalMember(owner = "client!client", name = "a", descriptor = "(Ljava/lang/String;Ljava/lang/String;Z)V")
 	private void login(@OriginalArg(0) String arg0, @OriginalArg(1) String arg1, @OriginalArg(2) boolean arg2) {
-		signlink.errorname = arg0;
+		Signlink.errorname = arg0;
 		try {
 			if (!arg2) {
 				this.loginMessage0 = "";
@@ -6744,7 +6743,7 @@ public final class client extends GameShell {
 			this.out.p4(local47[1]);
 			this.out.p4(local47[2]);
 			this.out.p4(local47[3]);
-			this.out.p4(signlink.uid);
+			this.out.p4(Signlink.uid);
 			this.out.pjstr(arg0);
 			this.out.pjstr(arg1);
 			this.out.rsaenc(RSA_MODULUS, RSA_EXPONENT);
@@ -7054,7 +7053,7 @@ public final class client extends GameShell {
 	@OriginalMember(owner = "client!client", name = "a", descriptor = "(B)V")
 	@Override
 	protected void unload() {
-		signlink.reporterror = false;
+		Signlink.reporterror = false;
 		try {
 			if (this.stream != null) {
 				this.stream.close();
@@ -7182,7 +7181,7 @@ public final class client extends GameShell {
 
 	@OriginalMember(owner = "client!client", name = "A", descriptor = "(I)Ljava/net/Socket;")
 	private Socket openSocket(@OriginalArg(0) int arg0) throws IOException {
-		return signlink.mainapp == null ? new Socket(InetAddress.getByName(this.getCodeBase().getHost()), arg0) : signlink.opensocket(arg0);
+		return Signlink.mainapp == null ? new Socket(InetAddress.getByName(this.getCodeBase().getHost()), arg0) : Signlink.opensocket(arg0);
 	}
 
 	@OriginalMember(owner = "client!client", name = "a", descriptor = "(ZIILclient!z;I)V")
@@ -7557,12 +7556,12 @@ public final class client extends GameShell {
 	@OriginalMember(owner = "client!client", name = "getCodeBase", descriptor = "()Ljava/net/URL;")
 	@Override
 	public URL getCodeBase() {
-		if (signlink.mainapp != null) {
-			return signlink.mainapp.getCodeBase();
+		if (Signlink.mainapp != null) {
+			return Signlink.mainapp.getCodeBase();
 		}
 		try {
 			if (super.frame != null) {
-				return new URL("http://world2.runewiki.org:" + (portOffset + 80));
+				return new URL("http://localhost:" + (portOffset + 80));
 			}
 		} catch (@Pc(21) Exception local21) {
 		}
@@ -7778,12 +7777,12 @@ public final class client extends GameShell {
 			}
 		}
 		if (arg0.pos != arg1) {
-			signlink.reporterror("Error packet size mismatch in getplayer pos:" + arg0.pos + " psize:" + arg1);
+			Signlink.reporterror("Error packet size mismatch in getplayer pos:" + arg0.pos + " psize:" + arg1);
 			throw new RuntimeException("eek");
 		}
 		for (local36 = 0; local36 < this.playerCount; local36++) {
 			if (this.players[this.playerIds[local36]] == null) {
-				signlink.reporterror(this.username + " null entry in pl list - pos:" + local36 + " size:" + this.playerCount);
+				Signlink.reporterror(this.username + " null entry in pl list - pos:" + local36 + " size:" + this.playerCount);
 				throw new RuntimeException("eek");
 			}
 		}
@@ -8267,7 +8266,7 @@ public final class client extends GameShell {
 			}
 		}
 		if (local14 > this.npcCount) {
-			signlink.reporterror(this.username + " Too many npcs");
+			Signlink.reporterror(this.username + " Too many npcs");
 			throw new RuntimeException("eek");
 		}
 		this.npcCount = 0;
@@ -8318,7 +8317,7 @@ public final class client extends GameShell {
 	@OriginalMember(owner = "client!client", name = "getParameter", descriptor = "(Ljava/lang/String;)Ljava/lang/String;")
 	@Override
 	public String getParameter(@OriginalArg(0) String arg0) {
-		return signlink.mainapp == null ? super.getParameter(arg0) : signlink.mainapp.getParameter(arg0);
+		return Signlink.mainapp == null ? super.getParameter(arg0) : Signlink.mainapp.getParameter(arg0);
 	}
 
 	@OriginalMember(owner = "client!client", name = "l", descriptor = "(Z)V")
@@ -9364,7 +9363,7 @@ public final class client extends GameShell {
 					}
 				}
 				if (local211 != -1) {
-					signlink.cachesave("m" + local159 + "_" + local462, this.sceneMapLandData[local211]);
+					Signlink.cachesave("m" + local159 + "_" + local462, this.sceneMapLandData[local211]);
 					this.sceneState = 1;
 				}
 				this.packetType = -1;
@@ -9392,7 +9391,7 @@ public final class client extends GameShell {
 				this.fontPlain12.drawStringCenter(151, 0, "Loading - please wait.", 257);
 				this.fontPlain12.drawStringCenter(150, 16777215, "Loading - please wait.", 256);
 				this.areaViewport.draw(11, super.graphics, 8);
-				signlink.looprate(5);
+				Signlink.looprate(5);
 				local211 = (this.packetSize - 2) / 10;
 				this.sceneMapLandData = new byte[local211][];
 				this.sceneMapLocData = new byte[local211][];
@@ -9409,7 +9408,7 @@ public final class client extends GameShell {
 					this.sceneMapIndex[local219] = (local650 << 8) + local321;
 					@Pc(686) byte[] local686;
 					if (local354 != 0) {
-						local686 = signlink.cacheload("m" + local650 + "_" + local321);
+						local686 = Signlink.cacheload("m" + local650 + "_" + local321);
 						if (local686 != null) {
 							this.crc32.reset();
 							this.crc32.update(local686);
@@ -9428,7 +9427,7 @@ public final class client extends GameShell {
 						}
 					}
 					if (local662 != 0) {
-						local686 = signlink.cacheload("l" + local650 + "_" + local321);
+						local686 = Signlink.cacheload("l" + local650 + "_" + local321);
 						if (local686 != null) {
 							this.crc32.reset();
 							this.crc32.update(local686);
@@ -9448,7 +9447,7 @@ public final class client extends GameShell {
 					}
 				}
 				this.out.psize1(local466);
-				signlink.looprate(50);
+				Signlink.looprate(50);
 				this.areaViewport.bind();
 				if (this.sceneState == 0) {
 					this.fontPlain12.drawStringCenter(166, 0, "Map area updated since last visit, so load will take longer this time only", 257);
@@ -9569,7 +9568,7 @@ public final class client extends GameShell {
 				return true;
 			}
 			if (this.packetType == 54) {
-				local1264 = this.in.gstr();
+				local1264 = this.in.gjstr();
 				local462 = this.in.g4();
 				local211 = this.in.g4();
 				if (!local1264.equals(this.currentMidi) && this.midiActive && !lowMemory) {
@@ -9597,7 +9596,7 @@ public final class client extends GameShell {
 					}
 				}
 				if (local211 != -1) {
-					signlink.cachesave("l" + local159 + "_" + local462, this.sceneMapLocData[local211]);
+					Signlink.cachesave("l" + local159 + "_" + local462, this.sceneMapLocData[local211]);
 					this.sceneState = 1;
 				}
 				this.packetType = -1;
@@ -9752,7 +9751,7 @@ public final class client extends GameShell {
 				this.daysSinceRecoveriesChanged = this.in.g1();
 				this.unreadMessages = this.in.g2();
 				if (this.lastAddress != 0 && this.viewportInterfaceID == -1) {
-					signlink.dnslookup(JString.formatIPv4(this.lastAddress));
+					Signlink.dnslookup(JString.formatIPv4(this.lastAddress));
 					this.closeInterfaces();
 					@Pc(1915) short local1915 = 650;
 					if (this.daysSinceRecoveriesChanged != 201) {
@@ -9981,7 +9980,7 @@ public final class client extends GameShell {
 							this.addMessage(3, local2725, JString.formatName(JString.fromBase37(local207)));
 						}
 					} catch (@Pc(2752) Exception local2752) {
-						signlink.reporterror("cde1");
+						Signlink.reporterror("cde1");
 					}
 				}
 				this.packetType = -1;
@@ -10056,7 +10055,7 @@ public final class client extends GameShell {
 			}
 			@Pc(3040) String local3040;
 			if (this.packetType == 4) {
-				local1264 = this.in.gstr();
+				local1264 = this.in.gjstr();
 				@Pc(3043) long local3043;
 				if (local1264.endsWith(":tradereq:")) {
 					local3040 = local1264.substring(0, local1264.indexOf(":"));
@@ -10191,7 +10190,7 @@ public final class client extends GameShell {
 			}
 			if (this.packetType == 201) {
 				local159 = this.in.g2();
-				local3040 = this.in.gstr();
+				local3040 = this.in.gjstr();
 				IfType.instances[local159].text = local3040;
 				if (IfType.instances[local159].parentId == this.tabInterfaceId[this.selectedTab]) {
 					this.redrawSidebar = true;
@@ -10287,7 +10286,7 @@ public final class client extends GameShell {
 				this.packetType = -1;
 				return true;
 			}
-			signlink.reporterror("T1 - " + this.packetType + "," + this.packetSize + " - " + this.lastPacketType1 + "," + this.lastPacketType2);
+			Signlink.reporterror("T1 - " + this.packetType + "," + this.packetSize + " - " + this.lastPacketType1 + "," + this.lastPacketType2);
 			this.logout();
 		} catch (@Pc(3862) IOException local3862) {
 			this.tryReconnect();
@@ -10296,7 +10295,7 @@ public final class client extends GameShell {
 			for (local462 = 0; local462 < this.packetSize && local462 < 50; local462++) {
 				local1264 = local1264 + this.in.data[local462] + ",";
 			}
-			signlink.reporterror(local1264);
+			Signlink.reporterror(local1264);
 			this.logout();
 		}
 		return true;
@@ -10385,7 +10384,7 @@ public final class client extends GameShell {
 			}
 		}
 		if ((arg2 & 0x8) == 8) {
-			arg4.chat = arg3.gstr();
+			arg4.chat = arg3.gjstr();
 			arg4.chatColor = 0;
 			arg4.chatStyle = 0;
 			arg4.chatTimer = 150;
@@ -10432,7 +10431,7 @@ public final class client extends GameShell {
 							this.addMessage(2, local248, arg4.name);
 						}
 					} catch (@Pc(285) Exception local285) {
-						signlink.reporterror("cde2");
+						Signlink.reporterror("cde2");
 					}
 				}
 			}

@@ -252,7 +252,7 @@ public final class Packet extends Hashable {
 	}
 
 	@OriginalMember(owner = "client!kb", name = "i", descriptor = "()Ljava/lang/String;")
-	public String gstr() {
+	public String gjstr() {
 		@Pc(2) int start = this.pos;
 		while (this.data[this.pos++] != 10) {}
 

@@ -357,9 +357,9 @@ public final class ObjType {
 			if (code == 1) {
 				this.model = dat.g2();
 			} else if (code == 2) {
-				this.name = dat.gstr();
+				this.name = dat.gjstr();
 			} else if (code == 3) {
-				this.desc = dat.gstr();
+				this.desc = dat.gjstr();
 			} else if (code == 4) {
 				this.zoom2d = dat.g2();
 			} else if (code == 5) {
@@ -401,7 +401,7 @@ public final class ObjType {
 					this.ops = new String[5];
 				}
 
-				this.ops[code - 30] = dat.gstr();
+				this.ops[code - 30] = dat.gjstr();
 				if (this.ops[code - 30].equalsIgnoreCase("hidden")) {
 					this.ops[code - 30] = null;
 				}
@@ -410,7 +410,7 @@ public final class ObjType {
 					this.iops = new String[5];
 				}
 
-				this.iops[code - 35] = dat.gstr();
+				this.iops[code - 35] = dat.gjstr();
 			} else if (code == 40) {
 				@Pc(260) int count = dat.g1();
 				this.recol_s = new int[count];

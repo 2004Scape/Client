@@ -156,9 +156,9 @@ public final class NpcType {
 					this.models[i] = dat.g2();
 				}
 			} else if (code == 2) {
-				this.name = dat.gstr();
+				this.name = dat.gjstr();
 			} else if (code == 3) {
-				this.desc = dat.gstr();
+				this.desc = dat.gjstr();
 			} else if (code == 12) {
 				this.size = dat.g1b();
 			} else if (code == 13) {
@@ -177,7 +177,7 @@ public final class NpcType {
 					this.ops = new String[5];
 				}
 
-				this.ops[code - 30] = dat.gstr();
+				this.ops[code - 30] = dat.gjstr();
 				if (this.ops[code - 30].equalsIgnoreCase("hidden")) {
 					this.ops[code - 30] = null;
 				}
