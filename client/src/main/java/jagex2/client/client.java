@@ -3376,7 +3376,7 @@ public final class client extends GameShell {
 	@Override
 	protected Component getBaseComponent() {
 		if (Signlink.mainapp == null) {
-			return super.frame == null ? this : super.frame;
+			return this;
 		} else {
 			return Signlink.mainapp;
 		}

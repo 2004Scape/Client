@@ -18,9 +18,14 @@ public final class ViewBox extends Frame {
 		this.shell = shell;
 		this.setTitle("Jagex");
 		this.setResizable(false);
-		this.show();
+
+        this.setLayout(new BorderLayout());
+        this.add(shell);
+        this.pack();
+
+        this.setVisible(true);
+
 		this.toFront();
-		this.resize(width + 8, height + 28);
 	}
 
 	@OriginalMember(owner = "client!b", name = "getGraphics", descriptor = "()Ljava/awt/Graphics;")

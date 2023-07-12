@@ -87,6 +87,7 @@ public class GameShell extends Applet implements Runnable, MouseListener, MouseM
 	protected final void initApplication(@OriginalArg(0) int height, @OriginalArg(1) int width) {
 		this.screenWidth = width;
 		this.screenHeight = height;
+        this.setPreferredSize(new Dimension(this.screenWidth, this.screenHeight));
 		this.frame = new ViewBox(this.screenHeight, this, this.screenWidth);
 		this.graphics = this.getBaseComponent().getGraphics();
 		this.drawArea = new PixMap(this.getBaseComponent(), this.screenWidth, this.screenHeight);
@@ -277,10 +278,6 @@ public class GameShell extends Applet implements Runnable, MouseListener, MouseM
 	public final void mousePressed(@OriginalArg(0) MouseEvent e) {
 		@Pc(2) int x = e.getX();
 		@Pc(5) int y = e.getY();
-		if (this.frame != null) {
-			x -= 4;
-			y -= 22;
-		}
 
 		this.idleCycles = 0;
 		this.mouseClickX = x;
@@ -336,10 +333,6 @@ public class GameShell extends Applet implements Runnable, MouseListener, MouseM
 	public final void mouseDragged(@OriginalArg(0) MouseEvent e) {
 		@Pc(2) int x = e.getX();
 		@Pc(5) int y = e.getY();
-		if (this.frame != null) {
-			x -= 4;
-			y -= 22;
-		}
 
 		this.idleCycles = 0;
 		this.mouseX = x;
@@ -355,10 +348,6 @@ public class GameShell extends Applet implements Runnable, MouseListener, MouseM
 	public final void mouseMoved(@OriginalArg(0) MouseEvent e) {
 		@Pc(2) int x = e.getX();
 		@Pc(5) int y = e.getY();
-		if (this.frame != null) {
-			x -= 4;
-			y -= 22;
-		}
 
 		this.idleCycles = 0;
 		this.mouseX = x;
@@ -568,7 +557,7 @@ public class GameShell extends Applet implements Runnable, MouseListener, MouseM
 
 	@OriginalMember(owner = "client!a", name = "b", descriptor = "(B)Ljava/awt/Component;")
 	protected Component getBaseComponent() {
-		return this.frame == null ? this : this.frame;
+		return this;
 	}
 
 	@OriginalMember(owner = "client!a", name = "a", descriptor = "(Ljava/lang/Runnable;I)V")
