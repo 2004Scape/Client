@@ -2325,8 +2325,12 @@ public final class Client extends GameShell {
 			this.fontPlain11.drawStringRight(String.format("FPS: %d", super.fps), x, y, 0xFFFF00, true);
 			y += 13;
 
-			String tickMessage = lastTickFlag ? "tock" : "tick"; 
-			this.fontPlain11.drawStringRight(tickMessage, x, y, 0xFFFF00, true);
+			if (lastTickFlag) {
+				this.fontPlain11.drawStringRight("tock", x, y, 0xFFFF00, true);
+			} else {
+				this.fontBold12.drawStringRight("tick", x, y, 0xFFFF00, true);
+			}
+
 			y += 13;
 		}
 
