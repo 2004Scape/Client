@@ -37,6 +37,11 @@ public final class Client extends GameShell {
 	private boolean showOccluders = false;
 	private boolean showDebug = false;
 
+	/**
+	 * Are we ticking or are we tocking?
+	 */
+	private boolean lastTickFlag = false;
+
 	@OriginalMember(owner = "client!client", name = "E", descriptor = "I")
 	public static int opHeld1Counter;
 
@@ -2318,6 +2323,10 @@ public final class Client extends GameShell {
 
 		if (showPerformance) {
 			this.fontPlain11.drawStringRight(String.format("FPS: %d", super.fps), x, y, 0xFFFF00, true);
+			y += 13;
+
+			String tickMessage = lastTickFlag ? "tock" : "tick"; 
+			this.fontPlain11.drawStringRight(tickMessage, x, y, 0xFFFF00, true);
 			y += 13;
 		}
 
@@ -10430,6 +10439,7 @@ public final class Client extends GameShell {
 				return true;
 			}
 			if (this.packetType == ServerProt.PLAYER_INFO) {
+				this.lastTickFlag = !this.lastTickFlag;
 				this.readPlayerInfo(this.in, this.packetSize);
 				if (this.sceneState == 1) {
 					this.sceneState = 2;
