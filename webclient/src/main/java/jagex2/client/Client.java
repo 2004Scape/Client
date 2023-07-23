@@ -9257,7 +9257,7 @@ public final class Client extends GameShell {
 			return;
 		}
 
-		this.project((this.hintTileX - this.sceneBaseTileX << 7) + this.hintOffsetX, this.hintHeight * 2, (this.hintTileZ - this.sceneBaseTileZ << 7) + this.hintOffsetZ);
+		this.projectFromGround((this.hintTileX - this.sceneBaseTileX << 7) + this.hintOffsetX, this.hintHeight * 2, (this.hintTileZ - this.sceneBaseTileZ << 7) + this.hintOffsetZ);
 		if (this.projectX > -1 && loopCycle % 20 < 10) {
 			this.imageHeadicons[2].draw(this.projectY - 28, this.projectX - 12);
 		}
