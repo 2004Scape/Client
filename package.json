@@ -1,0 +1,8 @@
+{
+  "name": "client",
+  "version": "1.0.0",
+  "scripts": {
+    "build": "./mvnw package",
+    "dev": "java -jar client/target/client-1.0.jar 10 0 highmem members"
+  }
+}

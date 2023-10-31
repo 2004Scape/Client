@@ -31,9 +31,9 @@ import java.util.zip.CRC32;
 @OriginalClass("client!client")
 public final class Client extends GameShell {
 
-	private static String SERVER_ADDRESS = "world2.runewiki.org";
+	private static String SERVER_ADDRESS = "localhost";
 	private static String SERVER_WEB_SCHEMA = "http:";
-	private static int SERVER_WEB_PORT = 80;
+	private static int SERVER_WEB_PORT = 8080;
 
 	private boolean showPerformance = false;
 	private boolean showOccluders = false;
@@ -6931,7 +6931,7 @@ public final class Client extends GameShell {
 				this.loginMessage1 = "Connecting to server...";
 				this.drawTitleScreen();
 			}
-			this.connection = new ClientStream(this, this.openSocket(portOffset + 43594));
+			this.connection = new ClientStream(this, this.openSocket(portOffset + 44594));
 			this.connection.read(this.in.data, 0, 8);
 			this.in.pos = 0;
 			this.serverSeed = this.in.g8();
