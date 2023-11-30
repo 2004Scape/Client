@@ -9,7 +9,7 @@ import org.openrs2.deob.annotation.Pc;
 @OriginalClass("client!fb")
 public class Draw2D extends Hashable {
 
-	public static boolean fullViewport = true;
+	public static boolean fullViewport = false;
 
 	@OriginalMember(owner = "client!fb", name = "k", descriptor = "[I")
 	public static int[] data;

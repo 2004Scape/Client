@@ -14,7 +14,7 @@ import java.awt.image.PixelGrabber;
 @OriginalClass("client!hb")
 public final class Pix24 extends Draw2D {
 
-	public static boolean bilinearFiltering = true;
+	public static boolean bilinearFiltering = false;
 
 	@OriginalMember(owner = "client!hb", name = "A", descriptor = "[I")
 	public int[] pixels;

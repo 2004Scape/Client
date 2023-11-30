@@ -36,6 +36,7 @@ public final class Client extends GameShell {
 	private boolean showPerformance = false;
 	private boolean showOccluders = false;
 	private boolean showDebug = false;
+	private int chatEra = 2; // 0 - early beta, 1 - late beta, 2 - launch
 
 	/**
 	 * Are we ticking or are we tocking?
@@ -3078,6 +3079,8 @@ public final class Client extends GameShell {
 								Draw3D.fixTransparency = true;
 								Pix24.bilinearFiltering = true;
 								Draw2D.fullViewport = true;
+							} else if (this.chatTyped.equals("::chat")) {
+								this.chatEra = (this.chatEra + 1) % 3;
 							} else if (this.chatTyped.startsWith("::")) {
 								this.out.p1isaac(ClientProt.CLIENT_CHEAT);
 								this.out.p1(this.chatTyped.length() - 1);
@@ -9328,6 +9331,9 @@ public final class Client extends GameShell {
 			this.drawParentInterface(0, 0, IfType.instances[this.chatInterfaceId], 0);
 		} else if (this.stickyChatInterfaceId == -1) {
 			@Pc(135) BitmapFont local135 = this.fontPlain12;
+			if (this.chatEra == 0) {
+				local135 = this.fontQuill8;
+			}
 			@Pc(137) int local137 = 0;
 			Draw2D.setBounds(77, 0, 463, 0);
 			for (@Pc(145) int local145 = 0; local145 < 100; local145++) {
@@ -9394,8 +9400,17 @@ public final class Client extends GameShell {
 				this.chatScrollHeight = 78;
 			}
 			this.drawScrollbar(463, 0, this.chatScrollHeight - this.chatScrollOffset - 77, this.chatScrollHeight, 77);
-			local135.drawString(4, 90, 0, JString.formatName(this.username) + ":");
-			local135.drawString(local135.stringWidth(this.username + ": ") + 6, 90, 255, this.chatTyped + "*");
+			if (this.chatEra == 0) {
+				// 186-194?
+				local135.drawString(3, 90, 0x000000, this.chatTyped + "*");
+			} else if (this.chatEra == 1) {
+				// <204
+				local135.drawString(3, 90, 0x0000FF, this.chatTyped + "*");
+			} else if (this.chatEra == 2) {
+				// 204+
+				local135.drawString(4, 90, 0, JString.formatName(this.username) + ":");
+				local135.drawString(local135.stringWidth(this.username + ": ") + 6, 90, 0x0000FF, this.chatTyped + "*");
+			}
 			Draw2D.drawHorizontalLine(0, 77, 479, 0);
 		} else {
 			this.drawParentInterface(0, 0, IfType.instances[this.stickyChatInterfaceId], 0);

@@ -20,7 +20,7 @@ import org.teavm.jso.typedarrays.Uint8ClampedArray;
 @OriginalClass("client!hb")
 public final class Pix24 extends Draw2D {
 
-	public static boolean bilinearFiltering = true;
+	public static boolean bilinearFiltering = false;
 
 	@OriginalMember(owner = "client!hb", name = "A", descriptor = "[I")
 	public int[] pixels;

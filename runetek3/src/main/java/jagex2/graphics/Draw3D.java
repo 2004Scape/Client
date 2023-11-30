@@ -9,7 +9,7 @@ import org.openrs2.deob.annotation.Pc;
 @OriginalClass("client!gb")
 public final class Draw3D extends Draw2D {
 
-	public static boolean fixTransparency = true;
+	public static boolean fixTransparency = false;
 
 	@OriginalMember(owner = "client!gb", name = "A", descriptor = "Z")
 	public static boolean lowMemory = true;
