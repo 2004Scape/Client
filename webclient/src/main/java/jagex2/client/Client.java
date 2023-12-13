@@ -785,7 +785,7 @@ public final class Client extends GameShell {
 	public static int updateGame;
 
 	@OriginalMember(owner = "client!client", name = "Uf", descriptor = "Lclient!d;")
-	private WebSocket connection;
+	private WebClientStream connection;
 
 	@OriginalMember(owner = "client!client", name = "Vf", descriptor = "[[B")
 	private byte[][] sceneMapLocData;
@@ -7402,7 +7402,7 @@ public final class Client extends GameShell {
 	}
 
 	@OriginalMember(owner = "client!client", name = "A", descriptor = "(I)Ljava/net/Socket;")
-	private WebSocket openSocket(@OriginalArg(0) int arg0) throws IOException {
+	private WebClientStream openSocket(@OriginalArg(0) int arg0) throws IOException {
 		return Signlink.opensocket(arg0);
 	}
 
@@ -7735,9 +7735,11 @@ public final class Client extends GameShell {
 					this.out.pos = 0;
 					this.heartbeatTimer = 0;
 				}
-			} catch (@Pc(1001) IOException local1001) {
+			} catch (@Pc(1001) IOException ex) {
+				ex.printStackTrace();
 				this.tryReconnect();
-			} catch (@Pc(1006) Exception local1006) {
+			} catch (@Pc(1006) Exception ex) {
+				ex.printStackTrace();
 				this.logout();
 			}
 		}
@@ -7913,9 +7915,6 @@ public final class Client extends GameShell {
 		}
 		@Pc(882) byte local882 = 0;
 		this.bfsStepX[local882] = local11;
-		if (arg5 != 0) {
-			this.packetType = this.in.g1();
-		}
 		local57 = local882 + 1;
 		this.bfsStepZ[local882] = local39;
 		local193 = local809 = this.bfsDirection[local11][local39];
@@ -8553,7 +8552,7 @@ public final class Client extends GameShell {
 			this.fontPlain12.drawStringCenter(158, 16777215, "Please wait - attempting to reestablish", 256);
 			this.areaViewport.draw(11, this.context, 8);
 			this.flagSceneTileX = 0;
-			@Pc(60) WebSocket local60 = this.connection;
+			@Pc(60) WebClientStream local60 = this.connection;
 			this.ingame = false;
 			this.login(this.username, this.password, true);
 			if (!this.ingame) {
@@ -9439,7 +9438,7 @@ public final class Client extends GameShell {
 				this.connection.read(this.in.data, 0, 1);
 				this.packetType = this.in.data[0] & 0xFF;
 				if (this.randomIn != null) {
-					this.packetType = this.packetType - this.randomIn.nextInt() & 0xFF;
+					this.packetType = (this.packetType - this.randomIn.nextInt()) & 0xFF;
 				}
 				this.packetSize = ServerProt.PACKET_LENGTHS[this.packetType];
 				local15--;
@@ -10482,9 +10481,11 @@ public final class Client extends GameShell {
 			}
 			Signlink.reporterror("T1 - " + this.packetType + "," + this.packetSize + " - " + this.lastPacketType1 + "," + this.lastPacketType2);
 			this.logout();
-		} catch (@Pc(3862) IOException local3862) {
+		} catch (@Pc(3862) IOException ex) {
+			ex.printStackTrace();
 			this.tryReconnect();
-		} catch (@Pc(3867) Exception local3867) {
+		} catch (@Pc(3867) Exception ex) {
+			ex.printStackTrace();
 			local1264 = "T2 - " + this.packetType + "," + this.lastPacketType1 + "," + this.lastPacketType2 + " - " + this.packetSize + "," + (this.sceneBaseTileX + this.localPlayer.pathTileX[0]) + "," + (this.sceneBaseTileZ + this.localPlayer.pathTileZ[0]) + " - ";
 			for (local462 = 0; local462 < this.packetSize && local462 < 50; local462++) {
 				local1264 = local1264 + this.in.data[local462] + ",";

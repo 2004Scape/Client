@@ -2,7 +2,7 @@ package jagex2.client;
 
 import jagex2.io.DatabaseStore;
 import jagex2.io.FileDownloadStream;
-import jagex2.io.WebSocket;
+import jagex2.io.WebClientStream;
 import org.openrs2.deob.annotation.OriginalArg;
 import org.openrs2.deob.annotation.OriginalClass;
 import org.openrs2.deob.annotation.OriginalMember;
@@ -58,7 +58,7 @@ public final class Signlink implements Runnable {
 	public static int wavevol = 192;
 
 	@OriginalMember(owner = "client!sign/signlink", name = "socket", descriptor = "Ljava/net/Socket;")
-	private static WebSocket socket = null;
+	private static WebClientStream socket = null;
 
 	@OriginalMember(owner = "client!sign/signlink", name = "threadreqpri", descriptor = "I")
 	private static int threadreqpri = 1;
@@ -181,7 +181,7 @@ public final class Signlink implements Runnable {
 	}
 
 	@OriginalMember(owner = "client!sign/signlink", name = "opensocket", descriptor = "(I)Ljava/net/Socket;")
-	public static synchronized WebSocket opensocket(@OriginalArg(0) int arg0) throws IOException {
+	public static synchronized WebClientStream opensocket(@OriginalArg(0) int arg0) throws IOException {
 		socketreq = arg0;
 		while (socketreq != 0) {
 			try {
@@ -342,7 +342,7 @@ public final class Signlink implements Runnable {
 
 			if (socketreq != 0) {
 				try {
-					socket = new WebSocket(socketip, socketreq);
+					socket = new WebClientStream(socketip, socketreq);
 					socket.connect();
 				} catch (@Pc(19) Exception local19) {
 					socket = null;
