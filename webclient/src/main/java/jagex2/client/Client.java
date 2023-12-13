@@ -29,7 +29,7 @@ import java.util.zip.CRC32;
 @OriginalClass("client!client")
 public final class Client extends GameShell {
 
-	private static String SERVER_ADDRESS = "world2.runewiki.org";
+	private static String SERVER_ADDRESS = "w1.225.2004scape.org";
 	private static String SERVER_WEB_SCHEMA = "http:";
 	private static int SERVER_WEB_PORT = 80;
 

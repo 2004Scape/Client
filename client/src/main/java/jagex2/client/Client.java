@@ -31,7 +31,7 @@ import java.util.zip.CRC32;
 @OriginalClass("client!client")
 public final class Client extends GameShell {
 
-	private static String SERVER_ADDRESS = "world2.runewiki.org";
+	private static String SERVER_ADDRESS = "w1.225.2004scape.org";
 	private static String SERVER_WEB_SCHEMA = "http:";
 	private static int SERVER_WEB_PORT = 80;
 
@@ -1238,10 +1238,10 @@ public final class Client extends GameShell {
 			System.out.println("RS2 user client - release #" + Signlink.clientversion);
 
 			// sane defaults
-			nodeId = 10;
+			nodeId = 10; // world 1
 			portOffset = 0;
 			setHighMemory();
-			members = true;
+			members = false;
 
 			if (args.length > 0) {
 				nodeId = Integer.parseInt(args[0]);
