@@ -1224,35 +1224,38 @@ public final class client extends GameShell {
 	}
 
 	@OriginalMember(owner = "client!client", name = "main", descriptor = "([Ljava/lang/String;)V")
-	public static void main(@OriginalArg(0) String[] arg0) {
+	public static void main(@OriginalArg(0) String[] args) {
 		try {
 			System.out.println("RS2 user client - release #" + Signlink.clientversion);
-			if (arg0.length == 4) {
-				nodeId = Integer.parseInt(arg0[0]);
-				portOffset = Integer.parseInt(arg0[1]);
-				if (arg0[2].equals("lowmem")) {
-					setLowMemory();
-				} else if (arg0[2].equals("highmem")) {
-					setHighMemory();
-				} else {
-					System.out.println("Usage: node-id, port-offset, [lowmem/highmem], [free/members]");
-					return;
-				}
-				if (arg0[3].equals("free")) {
-					members = false;
-				} else if (arg0[3].equals("members")) {
-					members = true;
-				} else {
-					System.out.println("Usage: node-id, port-offset, [lowmem/highmem], [free/members]");
-					return;
-				}
-				Signlink.startpriv(InetAddress.getByName("localhost"));
-				@Pc(82) client local82 = new client();
-				local82.initApplication(532, 789);
-			} else {
-				System.out.println("Usage: node-id, port-offset, [lowmem/highmem], [free/members]");
-			}
-		} catch (@Pc(89) Exception local89) {
+
+            if (args.length > 0) {
+                nodeId = Integer.parseInt(args[0]);
+            } else {
+                nodeId = 10;
+            }
+
+            if (args.length > 1) {
+                portOffset = Integer.parseInt(args[1]);
+            } else {
+                portOffset = 0;
+            }
+
+            if (args.length > 2 && args[2].equals("lowmem")) {
+                setLowMemory();
+            } else {
+                setHighMemory();
+            }
+
+            if (args.length > 3 && args[3].equals("free")) {
+                members = false;
+            } else {
+                members = true;
+            }
+
+            Signlink.startpriv(InetAddress.getByName("localhost"));
+            @Pc(82) client c = new client();
+            c.initApplication(532, 789);
+		} catch (@Pc(89) Exception _ex) {
 		}
 	}
 
