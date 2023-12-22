@@ -2310,10 +2310,10 @@ public final class Client extends GameShell {
 					continue;
 				}
 
-				Draw2D.drawLine(x0, y0, x1, y1, color);
-				Draw2D.drawLine(x0, y0, x2, y2, color);
 				Draw2D.drawLine(x0, y0, x3, y3, (color & 0xFEFEFE) >> 1);
 				Draw2D.drawLine(x1, y1, x2, y2, (color & 0xFEFEFE) >> 1);
+				Draw2D.drawLine(x0, y0, x1, y1, color);
+				Draw2D.drawLine(x0, y0, x2, y2, color);
 				Draw2D.drawLine(x1, y1, x3, y3, color);
 				Draw2D.drawLine(x2, y2, x3, y3, color);
 			}
@@ -2325,7 +2325,14 @@ public final class Client extends GameShell {
 		if (showPerformance) {
 			this.fontPlain11.drawStringRight(String.format("FPS: %d", super.fps), x, y, 0xFFFF00, true);
 			y += 13;
+		}
 
+		if (showOccluders) {
+			this.fontPlain11.drawStringRight(String.format("Occluders: %d Active: %d", World3D.levelOccluderCount[World3D.topLevel], World3D.activeOccluderCount), x, y, 0xFFFF00, true);
+			y += 13;
+		}
+
+        if (showDebug) {
 			if (lastTickFlag) {
 				this.fontPlain11.drawStringRight("tock", x, y, 0xFFFF00, true);
 			} else {
@@ -2333,12 +2340,54 @@ public final class Client extends GameShell {
 			}
 
 			y += 13;
-		}
+        }
 
-		if (showOccluders) {
-			this.fontPlain11.drawStringRight(String.format("Occluders: %d Active: %d", World3D.levelOccluderCount[World3D.topLevel], World3D.activeOccluderCount), x, y, 0xFFFF00, true);
-		}
+        if (showDebug) {
+            // display true tile
+            if (this.localPlayer.pathLength > 0 || this.localPlayer.forceMoveEndCycle >= loopCycle || this.localPlayer.forceMoveStartCycle > loopCycle) {
+                this.drawTileOverlay(this.localPlayer.pathTileX[0] * 128 + 64, this.localPlayer.pathTileZ[0] * 128 + 64, this.currentLevel, 0x666666, true);
+            }
+
+            // display local client tile
+            this.drawTileOverlay(this.localPlayer.x, this.localPlayer.z, this.currentLevel, 0x444444, false);
+        }
 	}
+
+    private void drawTileOverlay(int x, int z, int level, int color, boolean crossed) {
+            int height = this.getHeightmapY(level, x, z);
+            int x0 = -1, y0 = -1;
+            int x1 = -1, y1 = -1;
+            int x2 = -1, y2 = -1;
+            int x3 = -1, y3 = -1;
+
+            // x/z should be the center of a tile which is 128 client-units large, so +/- 64 puts us at the edges
+            this.project(x - 64, height, z - 64);
+            x0 = this.projectX;
+            y0 = this.projectY;
+            this.project(x + 64, height, z - 64);
+            x1 = this.projectX;
+            y1 = this.projectY;
+            this.project(x - 64, height, z + 64);
+            x2 = this.projectX;
+            y2 = this.projectY;
+            this.project(x + 64, height, z + 64);
+            x3 = this.projectX;
+            y3 = this.projectY;
+
+            // one of our points failed to project
+            if ((x0 == -1) || (x1 == -1) || (x2 == -1) || (x3 == -1)) {
+                return;
+            }
+
+            if (crossed) {
+                Draw2D.drawLine(x0, y0, x3, y3, (color & 0xFEFEFE) >> 1);
+                Draw2D.drawLine(x1, y1, x2, y2, (color & 0xFEFEFE) >> 1);
+            }
+            Draw2D.drawLine(x0, y0, x1, y1, color);
+            Draw2D.drawLine(x0, y0, x2, y2, color);
+            Draw2D.drawLine(x1, y1, x3, y3, color);
+            Draw2D.drawLine(x2, y2, x3, y3, color);
+    }
 
 	@OriginalMember(owner = "client!client", name = "c", descriptor = "(Z)V")
 	private void runMidi() {
@@ -8056,6 +8105,9 @@ public final class Client extends GameShell {
 			this.messageSender[local20] = this.messageSender[local20 - 1];
 			this.messageText[local20] = this.messageText[local20 - 1];
 		}
+        if (showDebug && arg0 == 0) {
+            arg1 = "[" + (this.loopCycle / 30) + "]: " + arg1;
+        }
 		this.messageType[0] = arg0;
 		this.messageSender[0] = arg3;
 		this.messageText[0] = arg1;
