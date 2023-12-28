@@ -158,6 +158,12 @@ public class GameShell implements Runnable {
 	@OriginalMember(owner = "client!client", name = "Wf", descriptor = "I")
 	public int chatInterfaceId = -1;
 
+	@OriginalMember(owner = "client!client", name = "Yg", descriptor = "Z")
+	public boolean chatbackInputOpen = false;
+
+	@OriginalMember(owner = "client!client", name = "td", descriptor = "Z")
+	public boolean showSocialInput = false;
+
 	@JSBody(params = { "event", "clientX", "clientY" }, script = "return new MouseEvent('mousedown', { 'clientX': clientX, 'clientY': clientY });")
 	public static native MouseEvent mouseEvent(Event event, int clientX, int clientY);
 	
@@ -241,7 +247,16 @@ public class GameShell implements Runnable {
 		int chatInputAreaY1 = 449;
 		int chatInputAreaX2 = chatInputAreaX1 + 495;
 		int chatInputAreaY2 = chatInputAreaY1 + 33;
-		return this.ingame && this.chatInterfaceId != -1 && mouseX >= chatInputAreaX1 && mouseX <= chatInputAreaX2 && mouseY >= chatInputAreaY1 && mouseY <= chatInputAreaY2;
+		return this.ingame && this.chatInterfaceId == -1 && !this.chatbackInputOpen && !this.showSocialInput && mouseX >= chatInputAreaX1 && mouseX <= chatInputAreaX2 && mouseY >= chatInputAreaY1 && mouseY <= chatInputAreaY2;
+	}
+
+	public boolean insideChatPopupArea() {
+		// 495 x 99
+		int chatInputAreaX1 = 11;
+		int chatInputAreaY1 = 383;
+		int chatInputAreaX2 = chatInputAreaX1 + 495;
+		int chatInputAreaY2 = chatInputAreaY1 + 99;
+		return this.ingame && (this.chatbackInputOpen || this.showSocialInput) && mouseX >= chatInputAreaX1 && mouseX <= chatInputAreaX2 && mouseY >= chatInputAreaY1 && mouseY <= chatInputAreaY2;
 	}
 
 	public boolean insideTabArea() {
@@ -423,7 +438,7 @@ public class GameShell implements Runnable {
 				} else if (startedInTabArea && !insideTabArea()) {
 					touching = false;
 					return;
-				} else if (insideChatInputArea() || insideUsernameArea() || inPasswordArea()) {
+				} else if (insideChatInputArea() || insideChatPopupArea() || insideUsernameArea() || inPasswordArea()) {
 					if (input != null) {
 						input.getParentNode().removeChild(input);
 						input = null;

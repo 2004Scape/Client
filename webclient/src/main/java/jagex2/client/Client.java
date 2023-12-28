@@ -424,9 +424,6 @@ public final class Client extends GameShell {
 	@OriginalMember(owner = "client!client", name = "sd", descriptor = "I")
 	private int lastHoveredInterfaceId;
 
-	@OriginalMember(owner = "client!client", name = "td", descriptor = "Z")
-	private boolean showSocialInput = false;
-
 	@OriginalMember(owner = "client!client", name = "wd", descriptor = "Z")
 	private boolean pressedContinueOption = false;
 
@@ -933,9 +930,6 @@ public final class Client extends GameShell {
 
 	@OriginalMember(owner = "client!client", name = "Xg", descriptor = "I")
 	private int unreadMessages;
-
-	@OriginalMember(owner = "client!client", name = "Yg", descriptor = "Z")
-	private boolean chatbackInputOpen = false;
 
 	@OriginalMember(owner = "client!client", name = "Zg", descriptor = "Lclient!ob;")
 	private LinkList spotanims = new LinkList();
