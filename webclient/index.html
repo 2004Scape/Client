@@ -2,6 +2,7 @@
 <html>
     <head>
         <title>RuneScape 2</title>
+        <meta name="viewport" content="width=device-width, initial-scale = 0.86, maximum-scale=3.0, minimum-scale=0.86">
 
         <style>
             body, td, p {
@@ -15,8 +16,16 @@
             }
 
             canvas {
+                touch-action: none;
+                -webkit-touch-callout: none;
+                -webkit-user-select: none;
+                -khtml-user-select: none;
+                -moz-user-select: none;
+                -ms-user-select: none;
+                user-select: none;
                 outline: none;
-                -webkit-tap-highlight-color: rgba(255, 255, 255, 0); /* mobile webkit */
+                -webkit-tap-highlight-color: rgba(255, 255, 255, 0);
+                z-index: -1;
             }
 
             a, a.visited {

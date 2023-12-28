@@ -1,14 +1,21 @@
 package jagex2.client;
 
 import jagex2.graphics.PixMap;
+import java.util.Date;
 import org.openrs2.deob.annotation.OriginalArg;
 import org.openrs2.deob.annotation.OriginalClass;
 import org.openrs2.deob.annotation.OriginalMember;
 import org.openrs2.deob.annotation.Pc;
 import org.teavm.jso.JSBody;
+import org.teavm.jso.JSObject;
+import org.teavm.jso.browser.TimerHandler;
 import org.teavm.jso.browser.Window;
 import org.teavm.jso.canvas.CanvasRenderingContext2D;
 import org.teavm.jso.canvas.ImageData;
+import org.teavm.jso.core.JSArray;
+import org.teavm.jso.core.JSNumber;
+import org.teavm.jso.core.JSString;
+import org.teavm.jso.dom.events.Event;
 import org.teavm.jso.dom.events.EventListener;
 import org.teavm.jso.dom.events.KeyboardEvent;
 import org.teavm.jso.dom.events.MouseEvent;
@@ -136,6 +143,125 @@ public class GameShell implements Runnable {
 	@OriginalMember(owner = "client!a", name = "C", descriptor = "I")
 	private int keyQueueWritePos;
 
+	@OriginalMember(owner = "client!client", name = "ai", descriptor = "I")
+	public int titleScreenState;
+
+	@OriginalMember(owner = "client!client", name = "vh", descriptor = "I")
+	public int sceneState;
+
+	@JSBody(params = { "event", "clientX", "clientY" }, script = "return new MouseEvent('mousedown', { 'clientX': clientX, 'clientY': clientY });")
+	public static native MouseEvent mouseEvent(Event event, int clientX, int clientY);
+	
+	@JSBody(params = { "event", "keyChar" }, script = "return new KeyboardEvent('keydown', { 'key': keyChar ? keyChar : event.data });")
+	public static native KeyboardEvent keyEvent(Event event, String keyChar);
+	
+	public static KeyboardEvent keyEvent(Event event) {
+		return keyEvent(event, "");
+	}
+	
+	@JSBody(params = { "event", "type" }, script = "return new event.constructor(type ? type : event.type, event);")
+	public static native Event clone(Event event, String type);
+	
+	@JSBody(params = { "message" }, script = "console.log(message)")
+	public static native void log(JSObject message);
+	
+	@JSBody(params = { "object", "property", "value" }, script = "object[property] = value")
+	public static native void setProperty(JSObject object, String property, JSObject value);
+	
+	@JSBody(params = { "object", "property", "elem" }, script = "return object[property]")
+	public static native <S extends JSObject> S getProperty(JSObject object, String property, S elem);
+	
+	@JSBody(params = { "handler", "delay" }, script = "return setTimeout(handler, delay);")
+	static native JSNumber setTimeout(TimerHandler handler, int delay);
+
+	@JSBody(params = { "handler", "delay" }, script = "return setInterval(handler, delay);")
+	static native JSNumber setInterval(TimerHandler handler, int delay);
+
+	@JSBody(params = { "timeoutID" }, script = "clearTimeout(timeoutID);")
+	static native void clearTimeout(int timeoutID);
+
+	@JSBody(params = { "message" }, script = "alert(message);")
+	static native void alert(String message);
+	
+	@JSBody(params = { }, script = "return navigator.maxTouchPoints > 0 || navigator.msMaxTouchPoints > 0;")
+	public static native boolean isMobile();
+
+	public int mx, my, nx, ny;
+	public int mousePress;
+	public double time = -1;
+
+	public boolean touching = false;
+	public boolean startedInViewport = false;
+	public boolean startedInTabArea = false;
+	public HTMLElement input = null;
+
+	public void rotate(int direction) {
+		if (direction == 0) {
+			keyReleased(KEY_RIGHT, 39);
+			keyPressed(KEY_LEFT, 37);
+		} else if (direction == 1) {
+			keyReleased(KEY_DOWN, 40);
+			keyPressed(KEY_UP, 38);
+		} else if (direction == 2) {
+			keyReleased(KEY_LEFT, 37);
+			keyPressed(KEY_RIGHT, 39);
+		} else if (direction == 3) {
+			keyReleased(KEY_UP, 38);
+			keyPressed(KEY_DOWN, 40);
+		}
+	}
+
+	public boolean isOutsideCanvas(JSObject obj) {
+		int clientX = getProperty(obj, "clientX", JSNumber.valueOf(0)).intValue();
+		int clientY = getProperty(obj, "clientY", JSNumber.valueOf(0)).intValue();
+		return clientX < 0 || clientX > this.screenWidth || clientY < 0 || clientY > this.screenHeight;
+	}
+
+	public boolean insideViewportArea() {
+		// 512 x 334
+		int viewportAreaX1 = 8;
+		int viewportAreaY1 = 11;
+		int viewportAreaX2 = viewportAreaX1 + 512;
+		int viewportAreaY2 = viewportAreaY1 + 334;
+		return this.sceneState == 2 && mouseX >= viewportAreaX1 && mouseX <= viewportAreaX2 && mouseY >= viewportAreaY1 && mouseY <= viewportAreaY2;
+	}
+
+	public boolean insideChatInputArea() {
+		// 495 x 33
+		int chatInputAreaX1 = 11;
+		int chatInputAreaY1 = 449;
+		int chatInputAreaX2 = chatInputAreaX1 + 495;
+		int chatInputAreaY2 = chatInputAreaY1 + 33;
+		return this.sceneState == 2 && mouseX >= chatInputAreaX1 && mouseX <= chatInputAreaX2 && mouseY >= chatInputAreaY1 && mouseY <= chatInputAreaY2;
+	}
+
+	public boolean insideTabArea() {
+		// 190 x 261
+		int tabAreaX1 = 562;
+		int tabAreaY1 = 231;
+		int tabAreaX2 = tabAreaX1 + 190;
+		int tabAreaY2 = tabAreaY1 + 261;
+		return this.sceneState == 2 && mouseX >= tabAreaX1 && mouseX <= tabAreaX2 && mouseY >= tabAreaY1 && mouseY <= tabAreaY2;
+	}
+
+	public boolean insideUsernameArea() {
+		// 261 x 17
+		int usernameAreaX1 = 301;
+		int usernameAreaY1 = 262;
+		int usernameAreaX2 = usernameAreaX1 + 261;
+		int usernameAreaY2 = usernameAreaY1 + 17;
+		return this.titleScreenState == 2 && mouseX >= usernameAreaX1 && mouseX <= usernameAreaX2 && mouseY >= usernameAreaY1 && mouseY <= usernameAreaY2;
+	}
+
+	public boolean inPasswordArea() {
+		// 261 x 17
+		int passwordAreaX1 = 301;
+		int passwordAreaY1 = 279;
+		int passwordAreaX2 = passwordAreaX1 + 261;
+		int passwordAreaY2 = passwordAreaY1 + 17;
+		return this.titleScreenState == 2 && mouseX >= passwordAreaX1 && mouseX <= passwordAreaX2 && mouseY >= passwordAreaY1 && mouseY <= passwordAreaY2;
+	}
+
 	@OriginalMember(owner = "client!a", name = "a", descriptor = "(IZI)V")
 	protected final void initApplet(@OriginalArg(0) int arg0, @OriginalArg(2) int arg2) {
 		this.screenWidth = arg2;
@@ -149,10 +275,32 @@ public class GameShell implements Runnable {
 		this.context = (CanvasRenderingContext2D) this.canvas.getContext("2d");
 		imageData = context.createImageData(this.screenWidth, this.screenHeight);
 
+		/*
+		 * OSRS mobile controls:
+		 * - swipe viewport = move camera (done)
+		 * - swipe interface = scroll (todo)
+		 * - long press and move = drag item (todo)
+		 * - press < .5s = left click (done)
+		 * - press > .5s = right click (partially done)
+		 */
+
 		this.canvas.addEventListener("mousedown", new EventListener<MouseEvent>() {
 			public void handleEvent(MouseEvent event) {
+				// on mobile this event comes after touchstart/touchend, if you tap in one spot without moving
+				touching = false;
 				setMousePosition(event);
-				mousePressed(event.getButton() == 2 ? 2 : 1);
+
+				if (isMobile()) {
+					if (insideChatInputArea() || insideUsernameArea() || inPasswordArea()) {
+						mousePressed(1);
+						return;
+					}
+
+					double eventTime = ((JSNumber) event.getTimeStamp()).doubleValue();
+					mousePressed(eventTime >= time + 500 ? 2 : 1);
+				} else {
+					mousePressed(event.getButton() == 2 ? 2 : 1);
+				}
 			}
 		});
 
@@ -163,10 +311,202 @@ public class GameShell implements Runnable {
 			}
 		});
 
+		this.canvas.addEventListener("mouseleave", new EventListener<MouseEvent>() {
+			public void handleEvent(MouseEvent event) {
+				setMousePosition(event);
+				mouseReleased(event.getButton() == 2 ? 2 : 1);
+			}
+		});
+
 		this.canvas.addEventListener("mousemove", new EventListener<MouseEvent>() {
 			public void handleEvent(MouseEvent event) {
 				setMousePosition(event);
 				mouseMoved();
+			}
+		});
+
+		// we don't want hover tooltips on mobile so constantly move the mouse off the canvas...
+		setInterval(() -> {
+			if (!isMobile() || !touching) {
+				return;
+			}
+
+			this.mouseX = 0;
+			this.mouseY = 0;
+			this.mouseButton = 0;
+			this.idleCycles = 0;
+		}, 100);
+
+		this.canvas.addEventListener("touchstart", new EventListener<Event>() {
+			public void handleEvent(Event event) {
+				if (!isMobile()) {
+					return;
+				}
+
+				if (input != null) {
+					input.getParentNode().removeChild(input);
+					input = null;
+				}
+
+				touching = true;
+				int clientX = getProperty(getProperty(event, "changedTouches", JSArray.create(1)).get(0), "clientX", JSNumber.valueOf(0)).intValue();
+				int clientY = getProperty(getProperty(event, "changedTouches", JSArray.create(1)).get(0), "clientY", JSNumber.valueOf(0)).intValue();
+				setMousePosition(mouseEvent(event, clientX, clientY));
+				mouseMoved();
+
+				nx = mx = getProperty(getProperty(event, "changedTouches", JSArray.create(1)).get(0), "screenX", JSNumber.valueOf(0)).intValue();
+				ny = my = getProperty(getProperty(event, "changedTouches", JSArray.create(1)).get(0), "screenY", JSNumber.valueOf(0)).intValue();
+				time = ((JSNumber) event.getTimeStamp()).doubleValue();
+
+				startedInViewport = insideViewportArea();
+				startedInTabArea = insideTabArea();
+			}
+		});
+
+		// todo: open up right-click menu automatically after .5s, if user has not moved or released
+		this.canvas.addEventListener("touchmove", new EventListener<Event>() {
+			public void handleEvent(Event event) {
+				if (!isMobile() || !touching) {
+					return;
+				}
+
+				int clientX = getProperty(getProperty(event, "changedTouches", JSArray.create(1)).get(0), "clientX", JSNumber.valueOf(0)).intValue();
+				int clientY = getProperty(getProperty(event, "changedTouches", JSArray.create(1)).get(0), "clientY", JSNumber.valueOf(0)).intValue();
+				setMousePosition(mouseEvent(event, clientX, clientY));
+				mouseMoved();
+
+				nx = getProperty(getProperty(event, "changedTouches", JSArray.create(1)).get(0), "screenX", JSNumber.valueOf(0)).intValue();
+				ny = getProperty(getProperty(event, "changedTouches", JSArray.create(1)).get(0), "screenY", JSNumber.valueOf(0)).intValue();
+
+				if (startedInViewport) {
+					if (mx - nx > 0) {
+						rotate(2);
+					} else if (mx - nx < 0) {
+						rotate(0);
+					}
+
+					if (my - ny > 0) {
+						rotate(1);
+					} else if (my - ny < 0) {
+						rotate(3);
+					}
+				}
+
+				mx = nx;
+				my = ny;
+			}
+		});
+
+		this.canvas.addEventListener("touchend", new EventListener<Event>() {
+			public void handleEvent(Event event) {
+				if (!isMobile() || !touching) {
+					return;
+				}
+
+				int clientX = getProperty(getProperty(event, "changedTouches", JSArray.create(1)).get(0), "clientX", JSNumber.valueOf(0)).intValue();
+				int clientY = getProperty(getProperty(event, "changedTouches", JSArray.create(1)).get(0), "clientY", JSNumber.valueOf(0)).intValue();
+				setMousePosition(mouseEvent(event, clientX, clientY));
+				mouseMoved();
+
+				nx = getProperty(getProperty(event, "changedTouches", JSArray.create(1)).get(0), "screenX", JSNumber.valueOf(0)).intValue();
+				ny = getProperty(getProperty(event, "changedTouches", JSArray.create(1)).get(0), "screenY", JSNumber.valueOf(0)).intValue();
+
+				keyReleased(KEY_LEFT, 37);
+				keyReleased(KEY_UP, 38);
+				keyReleased(KEY_RIGHT, 39);
+				keyReleased(KEY_DOWN, 40);
+
+				if (startedInViewport && !insideViewportArea()) {
+					touching = false;
+					return;
+				} else if (startedInTabArea && !insideTabArea()) {
+					touching = false;
+					return;
+				} else if (insideChatInputArea() || insideUsernameArea() || inPasswordArea()) {
+					if (input != null) {
+						input.getParentNode().removeChild(input);
+						input = null;
+					}
+
+					HTMLDocument document = HTMLDocument.current();
+					input = document.createElement("input");
+					if (insideUsernameArea()) {
+						input.setAttribute("id", "username");
+						input.setAttribute("placeholder", "Username");
+					} else if (inPasswordArea()) {
+						input.setAttribute("id", "password");
+						input.setAttribute("placeholder", "Password");
+					}
+					input.setAttribute("type", inPasswordArea() ? "password" : "text");
+					input.setAttribute("autofocus", "autofocus");
+					input.setAttribute("style", "position: absolute; left: " + clientX + "px; top: " + clientY + "px; width: 1px; height: 1px; opacity: 0;");
+					document.getBody().appendChild(input);
+					input.focus();
+					input.click();
+
+					input.addEventListener("keydown", new EventListener<KeyboardEvent>() {
+						public void handleEvent(KeyboardEvent event) {
+							int code = event.getKeyCode();
+							int charCode = event.getKey().length() == 1 ? event.getKey().charAt(0) : 65535;
+
+							if (code == 13) {
+								code = 10; // convert \r to \n (enter key)
+							}
+
+							if (code == 8 || code == 10 || code == 9) {
+								charCode = code;
+							}
+
+							if (event.getModifierState("Alt")) {
+								return;
+							}
+
+							keyPressed(charCode, code);
+						}
+					});
+
+					input.addEventListener("keyup", new EventListener<KeyboardEvent>() {
+						public void handleEvent(KeyboardEvent event) {
+							int code = event.getKeyCode();
+							int charCode = event.getKey().length() == 1 ? event.getKey().charAt(0) : 65535;
+
+							if (code == 13) {
+								code = 10; // convert \r to \n (enter key)
+							}
+
+							if (code == 8 || code == 10 || code == 9) {
+								charCode = code;
+							}
+
+							if (event.getModifierState("Alt")) {
+								return;
+							}
+
+							keyReleased(charCode, code);
+						}
+					});
+
+					input.addEventListener("focusout", new EventListener<Event>() {
+						public void handleEvent(Event event) {
+							input.getParentNode().removeChild(input);
+							input = null;
+						}
+					});
+
+					touching = false;
+					return;
+				}
+
+				double eventTime = ((JSNumber) event.getTimeStamp()).doubleValue();
+				boolean longPress = eventTime >= time + 500;
+				boolean moved = Math.abs(nx - mx) > 16 || Math.abs(ny - my) > 16;
+
+				if (longPress && !moved) {
+					touching = true;
+					mousePressed(2);
+				} else {
+					touching = false;
+				}
 			}
 		});
 
@@ -189,6 +529,10 @@ public class GameShell implements Runnable {
 					charCode = code;
 				}
 
+				if (event.getModifierState("Alt")) {
+					return;
+				}
+
 				keyPressed(charCode, code);
 			}
 		});
@@ -206,13 +550,17 @@ public class GameShell implements Runnable {
 					charCode = code;
 				}
 
+				if (event.getModifierState("Alt")) {
+					return;
+				}
+
 				keyReleased(charCode, code);
 			}
 		});
+
 		this.pixMap = new PixMap(this.context, this.screenWidth, this.screenHeight);
 
 		this.run();
-		// this.startThread(this, 1);
 	}
 
 	@OriginalMember(owner = "client!a", name = "run", descriptor = "()V")

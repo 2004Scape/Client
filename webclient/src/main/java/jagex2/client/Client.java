@@ -1000,9 +1000,6 @@ public final class Client extends GameShell {
 	@OriginalMember(owner = "client!client", name = "th", descriptor = "I")
 	private int hintPlayer;
 
-	@OriginalMember(owner = "client!client", name = "vh", descriptor = "I")
-	private int sceneState;
-
 	@OriginalMember(owner = "client!client", name = "wh", descriptor = "[I")
 	private final int[] skillExperience = new int[50];
 
@@ -1086,9 +1083,6 @@ public final class Client extends GameShell {
 
 	@OriginalMember(owner = "client!client", name = "Zh", descriptor = "I")
 	public static int updateTemporaryLocsCounter;
-
-	@OriginalMember(owner = "client!client", name = "ai", descriptor = "I")
-	private int titleScreenState;
 
 	@OriginalMember(owner = "client!client", name = "bi", descriptor = "I")
 	private int midiCrc;

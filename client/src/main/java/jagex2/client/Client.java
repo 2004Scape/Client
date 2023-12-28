@@ -7973,9 +7973,6 @@ public final class Client extends GameShell {
 		}
 		@Pc(882) byte local882 = 0;
 		this.bfsStepX[local882] = local11;
-		if (arg5 != 0) {
-			this.packetType = this.in.g1();
-		}
 		local57 = local882 + 1;
 		this.bfsStepZ[local882] = local39;
 		local193 = local809 = this.bfsDirection[local11][local39];
@@ -9554,7 +9551,7 @@ public final class Client extends GameShell {
 				this.connection.read(this.in.data, 0, 1);
 				this.packetType = this.in.data[0] & 0xFF;
 				if (this.randomIn != null) {
-					this.packetType = this.packetType - this.randomIn.nextInt() & 0xFF;
+					this.packetType = (this.packetType - this.randomIn.nextInt()) & 0xFF;
 				}
 				this.packetSize = ServerProt.PACKET_LENGTHS[this.packetType];
 				local15--;
