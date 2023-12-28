@@ -149,6 +149,15 @@ public class GameShell implements Runnable {
 	@OriginalMember(owner = "client!client", name = "vh", descriptor = "I")
 	public int sceneState;
 
+	@OriginalMember(owner = "client!client", name = "vf", descriptor = "Z")
+	public boolean ingame = false;
+
+	@OriginalMember(owner = "client!client", name = "sf", descriptor = "I")
+	public int viewportInterfaceId = -1;
+
+	@OriginalMember(owner = "client!client", name = "Wf", descriptor = "I")
+	public int chatInterfaceId = -1;
+
 	@JSBody(params = { "event", "clientX", "clientY" }, script = "return new MouseEvent('mousedown', { 'clientX': clientX, 'clientY': clientY });")
 	public static native MouseEvent mouseEvent(Event event, int clientX, int clientY);
 	
@@ -186,7 +195,7 @@ public class GameShell implements Runnable {
 	@JSBody(params = { }, script = "return navigator.maxTouchPoints > 0 || navigator.msMaxTouchPoints > 0;")
 	public static native boolean isMobile();
 
-	public int mx, my, nx, ny;
+	public int sx, sy, mx, my, nx, ny;
 	public int mousePress;
 	public double time = -1;
 
@@ -223,7 +232,7 @@ public class GameShell implements Runnable {
 		int viewportAreaY1 = 11;
 		int viewportAreaX2 = viewportAreaX1 + 512;
 		int viewportAreaY2 = viewportAreaY1 + 334;
-		return this.sceneState == 2 && mouseX >= viewportAreaX1 && mouseX <= viewportAreaX2 && mouseY >= viewportAreaY1 && mouseY <= viewportAreaY2;
+		return this.ingame && mouseX >= viewportAreaX1 && mouseX <= viewportAreaX2 && mouseY >= viewportAreaY1 && mouseY <= viewportAreaY2;
 	}
 
 	public boolean insideChatInputArea() {
@@ -232,7 +241,7 @@ public class GameShell implements Runnable {
 		int chatInputAreaY1 = 449;
 		int chatInputAreaX2 = chatInputAreaX1 + 495;
 		int chatInputAreaY2 = chatInputAreaY1 + 33;
-		return this.sceneState == 2 && mouseX >= chatInputAreaX1 && mouseX <= chatInputAreaX2 && mouseY >= chatInputAreaY1 && mouseY <= chatInputAreaY2;
+		return this.ingame && this.chatInterfaceId != -1 && mouseX >= chatInputAreaX1 && mouseX <= chatInputAreaX2 && mouseY >= chatInputAreaY1 && mouseY <= chatInputAreaY2;
 	}
 
 	public boolean insideTabArea() {
@@ -241,7 +250,7 @@ public class GameShell implements Runnable {
 		int tabAreaY1 = 231;
 		int tabAreaX2 = tabAreaX1 + 190;
 		int tabAreaY2 = tabAreaY1 + 261;
-		return this.sceneState == 2 && mouseX >= tabAreaX1 && mouseX <= tabAreaX2 && mouseY >= tabAreaY1 && mouseY <= tabAreaY2;
+		return this.ingame && mouseX >= tabAreaX1 && mouseX <= tabAreaX2 && mouseY >= tabAreaY1 && mouseY <= tabAreaY2;
 	}
 
 	public boolean insideUsernameArea() {
@@ -250,7 +259,7 @@ public class GameShell implements Runnable {
 		int usernameAreaY1 = 262;
 		int usernameAreaX2 = usernameAreaX1 + 261;
 		int usernameAreaY2 = usernameAreaY1 + 17;
-		return this.titleScreenState == 2 && mouseX >= usernameAreaX1 && mouseX <= usernameAreaX2 && mouseY >= usernameAreaY1 && mouseY <= usernameAreaY2;
+		return !this.ingame && this.titleScreenState == 2 && mouseX >= usernameAreaX1 && mouseX <= usernameAreaX2 && mouseY >= usernameAreaY1 && mouseY <= usernameAreaY2;
 	}
 
 	public boolean inPasswordArea() {
@@ -259,7 +268,7 @@ public class GameShell implements Runnable {
 		int passwordAreaY1 = 279;
 		int passwordAreaX2 = passwordAreaX1 + 261;
 		int passwordAreaY2 = passwordAreaY1 + 17;
-		return this.titleScreenState == 2 && mouseX >= passwordAreaX1 && mouseX <= passwordAreaX2 && mouseY >= passwordAreaY1 && mouseY <= passwordAreaY2;
+		return !this.ingame && this.titleScreenState == 2 && mouseX >= passwordAreaX1 && mouseX <= passwordAreaX2 && mouseY >= passwordAreaY1 && mouseY <= passwordAreaY2;
 	}
 
 	@OriginalMember(owner = "client!a", name = "a", descriptor = "(IZI)V")
@@ -279,7 +288,7 @@ public class GameShell implements Runnable {
 		 * OSRS mobile controls:
 		 * - swipe viewport = move camera (done)
 		 * - swipe interface = scroll (todo)
-		 * - long press and move = drag item (todo)
+		 * - long press and move = drag item (done)
 		 * - press < .5s = left click (done)
 		 * - press > .5s = right click (partially done)
 		 */
@@ -325,18 +334,6 @@ public class GameShell implements Runnable {
 			}
 		});
 
-		// we don't want hover tooltips on mobile so constantly move the mouse off the canvas...
-		setInterval(() -> {
-			if (!isMobile() || !touching) {
-				return;
-			}
-
-			this.mouseX = 0;
-			this.mouseY = 0;
-			this.mouseButton = 0;
-			this.idleCycles = 0;
-		}, 100);
-
 		this.canvas.addEventListener("touchstart", new EventListener<Event>() {
 			public void handleEvent(Event event) {
 				if (!isMobile()) {
@@ -354,8 +351,8 @@ public class GameShell implements Runnable {
 				setMousePosition(mouseEvent(event, clientX, clientY));
 				mouseMoved();
 
-				nx = mx = getProperty(getProperty(event, "changedTouches", JSArray.create(1)).get(0), "screenX", JSNumber.valueOf(0)).intValue();
-				ny = my = getProperty(getProperty(event, "changedTouches", JSArray.create(1)).get(0), "screenY", JSNumber.valueOf(0)).intValue();
+				sx = nx = mx = getProperty(getProperty(event, "changedTouches", JSArray.create(1)).get(0), "screenX", JSNumber.valueOf(0)).intValue();
+				sy = ny = my = getProperty(getProperty(event, "changedTouches", JSArray.create(1)).get(0), "screenY", JSNumber.valueOf(0)).intValue();
 				time = ((JSNumber) event.getTimeStamp()).doubleValue();
 
 				startedInViewport = insideViewportArea();
@@ -378,7 +375,8 @@ public class GameShell implements Runnable {
 				nx = getProperty(getProperty(event, "changedTouches", JSArray.create(1)).get(0), "screenX", JSNumber.valueOf(0)).intValue();
 				ny = getProperty(getProperty(event, "changedTouches", JSArray.create(1)).get(0), "screenY", JSNumber.valueOf(0)).intValue();
 
-				if (startedInViewport) {
+				if (startedInViewport && viewportInterfaceId == -1) {
+					// camera panning
 					if (mx - nx > 0) {
 						rotate(2);
 					} else if (mx - nx < 0) {
@@ -386,10 +384,13 @@ public class GameShell implements Runnable {
 					}
 
 					if (my - ny > 0) {
-						rotate(1);
-					} else if (my - ny < 0) {
 						rotate(3);
+					} else if (my - ny < 0) {
+						rotate(1);
 					}
+				} else if (startedInTabArea || viewportInterfaceId != -1) {
+					// drag and drop
+					mousePressed(1);
 				}
 
 				mx = nx;
@@ -499,12 +500,13 @@ public class GameShell implements Runnable {
 
 				double eventTime = ((JSNumber) event.getTimeStamp()).doubleValue();
 				boolean longPress = eventTime >= time + 500;
-				boolean moved = Math.abs(nx - mx) > 16 || Math.abs(ny - my) > 16;
+				boolean moved = Math.abs(sx - nx) > 16 || Math.abs(sy - ny) > 16;
 
 				if (longPress && !moved) {
 					touching = true;
 					mousePressed(2);
 				} else {
+					mouseButton = 0;
 					touching = false;
 				}
 			}

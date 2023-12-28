@@ -1,121 +1,135 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <title>RuneScape 2</title>
-        <meta name="viewport" content="width=device-width, initial-scale = 0.86, maximum-scale=3.0, minimum-scale=0.86">
 
-        <style>
-            body, td, p {
-                font-family: Arial, Helvetica, sans-serif;
-                font-size: 11px;
+<head>
+    <title>RuneScape 2</title>
+    <meta name="viewport" content="width=device-width, initial-scale = 0.86, maximum-scale=3.0, minimum-scale=0.86">
+
+    <style>
+        body, td, p {
+            font-family: Arial, Helvetica, sans-serif;
+            font-size: 11px;
+        }
+
+        body {
+            margin: 0px;
+            overflow: auto;
+        }
+
+        canvas {
+            touch-action: none;
+            -webkit-touch-callout: none;
+            -webkit-user-select: none;
+            -khtml-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+            outline: none;
+            -webkit-tap-highlight-color: rgba(255, 255, 255, 0);
+            z-index: -1;
+        }
+
+        a, a.visited {
+            color: white;
+            text-decoration: none;
+        }
+    </style>
+
+    <script type="module" src="/midi.js"></script>
+
+    <script>
+        let waveGain;
+
+        async function playWave(data, vol) {
+            this.setWaveVolume(vol);
+
+            try {
+                const audioBuffer = await window.audioContext.decodeAudioData(Uint8Array.from(data).buffer);
+                let bufferSource = window.audioContext.createBufferSource();
+                bufferSource.buffer = audioBuffer;
+                bufferSource.connect(waveGain);
+                bufferSource.start();
+            } catch (err) {
+                console.log(err);
+            }
+        }
+
+        function setWaveVolume(vol) {
+            if (!waveGain) {
+                waveGain = window.audioContext.createGain();
+                waveGain.connect(window.audioContext.destination);
             }
 
-            body {
-                margin: 0px;
-                overflow: auto;
+            waveGain.gain.value = vol / 256;
+        }
+
+        function playMidi(data, vol, fade) {
+            if (window._tinyMidiPlay) {
+                window._tinyMidiPlay(data, vol / 256);
             }
+        }
 
-            canvas {
-                touch-action: none;
-                -webkit-touch-callout: none;
-                -webkit-user-select: none;
-                -khtml-user-select: none;
-                -moz-user-select: none;
-                -ms-user-select: none;
-                user-select: none;
-                outline: none;
-                -webkit-tap-highlight-color: rgba(255, 255, 255, 0);
-                z-index: -1;
+        function setMidiVolume(vol) {
+            if (window._tinyMidiVolume) {
+                window._tinyMidiVolume(vol / 256);
             }
+        }
 
-            a, a.visited {
-                color: white;
-                text-decoration: none;
+        function stopMidi() {
+            if (window._tinyMidiStop) {
+                window._tinyMidiStop();
             }
-        </style>
+        }
 
-        <script type="module" src="/midi.js"></script>
+        function toggleFullscreen() {
+            if (document.fullscreenElement || document.webkitFullscreenElement || document.mozFullScreenElement || document.msFullscreenElement) {
+                if (document.exitFullscreen) {
+                    document.exitFullscreen();
+                } else if (document.webkitExitFullscreen) {
+                    document.webkitExitFullscreen();
+                } else if (document.mozCancelFullScreen) {
+                    document.mozCancelFullScreen();
+                } else if (document.msExitFullscreen) {
+                    document.msExitFullscreen();
+                }
+            } else {
+                let element = document.getElementById('game');
 
-        <script>
-            window.onload = function() {
-                main(['10', '0', 'highmem', 'members', 'true']);
-            };
-            
-            let waveGain;
-
-            async function playWave(data, vol) {
-                this.setWaveVolume(vol);
-
-                try {
-                    const audioBuffer = await window.audioContext.decodeAudioData(Uint8Array.from(data).buffer);
-                    let bufferSource = window.audioContext.createBufferSource();
-                    bufferSource.buffer = audioBuffer;
-                    bufferSource.connect(waveGain);
-                    bufferSource.start();
-                } catch (err) {
-                    console.log(err);
+                if (element.requestFullscreen) {
+                    element.requestFullscreen();
+                } else if (element.webkitRequestFullscreen) {
+                    element.webkitRequestFullscreen();
+                } else if (element.mozRequestFullScreen) {
+                    element.mozRequestFullScreen();
+                } else if (element.msRequestFullscreen) {
+                    element.msRequestFullscreen();
                 }
             }
+        }
 
-            function setWaveVolume(vol) {
-                if (!waveGain) {
-                    waveGain = window.audioContext.createGain();
-                    waveGain.connect(window.audioContext.destination);
-                }
+        function toggleFiltering() {
+            let canvas = document.getElementById('game');
+            let filtering = canvas.style.imageRendering == 'pixelated';
+            canvas.style.imageRendering = filtering ? 'auto' : 'pixelated';
 
-                waveGain.gain.value = vol / 256;
-            }
+            let element = document.getElementById('filtering');
+            element.textContent = filtering ? "Auto scaling" : "Pixel scaling";
+        }
 
-            function playMidi(data, vol, fade) {
-                if (window._tinyMidiPlay) {
-                    window._tinyMidiPlay(data, vol / 256);
-                }
-            }
+        window.onload = () => {
+            let canvas = document.getElementById('game');
+            canvas.style.imageRendering = 'auto';
 
-            function setMidiVolume(vol) {
-                if (window._tinyMidiVolume) {
-                    window._tinyMidiVolume(vol / 256);
-                }
-            }
+            main(['10', '0', 'highmem', 'free', 'true']);
+        }
+    </script>
 
-            function stopMidi() {
-                if (window._tinyMidiStop) {
-                    window._tinyMidiStop();
-                }
-            }
+    <script src="target/js/classes.js"></script>
+</head>
 
-            function toggleFullscreen() {
-                if (document.fullscreenElement || document.webkitFullscreenElement || document.mozFullScreenElement || document.msFullscreenElement) {
-                    if (document.exitFullscreen) {
-                        document.exitFullscreen();
-                    } else if (document.webkitExitFullscreen) {
-                        document.webkitExitFullscreen();
-                    } else if (document.mozCancelFullScreen) {
-                        document.mozCancelFullScreen();
-                    } else if (document.msExitFullscreen) {
-                        document.msExitFullscreen();
-                    }
-                } else {
-                    let element = document.getElementById('game');
+<body style="background-color: black">
+    <canvas id="game" width="789" height="532"></canvas><br />
+    <a href="#" id="fullscreen" onclick="toggleFullscreen();">Go fullscreen</a>
+</body>
 
-                    if (element.requestFullscreen) {
-                        element.requestFullscreen();
-                    } else if (element.webkitRequestFullscreen) {
-                        element.webkitRequestFullscreen();
-                    } else if (element.mozRequestFullScreen) {
-                        element.mozRequestFullScreen();
-                    } else if (element.msRequestFullscreen) {
-                        element.msRequestFullscreen();
-                    }
-                }
-            }
-        </script>
-
-        <script src="target/js/classes.js"></script>
-    </head>
-
-    <body style="background-color: black">
-        <canvas id="game" width="789" height="532"></canvas><br />
-        <a href="#" id="fullscreen" onclick="toggleFullscreen();">Go fullscreen</a>
-    </body>
 </html>

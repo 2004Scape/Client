@@ -703,17 +703,11 @@ public final class Client extends GameShell {
 	@OriginalMember(owner = "client!client", name = "rf", descriptor = "Ljava/lang/String;")
 	private String reportAbuseInput = "";
 
-	@OriginalMember(owner = "client!client", name = "sf", descriptor = "I")
-	private int viewportInterfaceId = -1;
-
 	@OriginalMember(owner = "client!client", name = "tf", descriptor = "I")
 	private int titleLoginField;
 
 	@OriginalMember(owner = "client!client", name = "uf", descriptor = "[Lclient!ib;")
 	private Pix8[] imageRunes;
-
-	@OriginalMember(owner = "client!client", name = "vf", descriptor = "Z")
-	private boolean ingame = false;
 
 	@OriginalMember(owner = "client!client", name = "wf", descriptor = "Z")
 	private boolean flamesThread = false;
@@ -789,9 +783,6 @@ public final class Client extends GameShell {
 
 	@OriginalMember(owner = "client!client", name = "Vf", descriptor = "[[B")
 	private byte[][] sceneMapLocData;
-
-	@OriginalMember(owner = "client!client", name = "Wf", descriptor = "I")
-	private int chatInterfaceId = -1;
 
 	@OriginalMember(owner = "client!client", name = "Xf", descriptor = "I")
 	private int objSelected;
