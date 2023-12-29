@@ -30,241 +30,241 @@ public final class WordFilter {
 	private static final String[] ALLOWLIST = new String[] { "cook", "cook's", "cooks", "seeks", "sheet" };
 
 	@OriginalMember(owner = "client!mc", name = "a", descriptor = "(Lclient!ub;)V")
-	public static void unpack(@OriginalArg(0) Jagfile arg0) {
-		@Pc(11) Packet local11 = new Packet(arg0.read("fragmentsenc.txt", null));
-		@Pc(21) Packet local21 = new Packet(arg0.read("badenc.txt", null));
-		@Pc(31) Packet local31 = new Packet(arg0.read("domainenc.txt", null));
-		@Pc(41) Packet local41 = new Packet(arg0.read("tldlist.txt", null));
-		read(local11, local21, local31, local41);
+	public static void unpack(@OriginalArg(0) Jagfile jag) {
+		@Pc(11) Packet fragments = new Packet(jag.read("fragmentsenc.txt", null));
+		@Pc(21) Packet bad = new Packet(jag.read("badenc.txt", null));
+		@Pc(31) Packet domain = new Packet(jag.read("domainenc.txt", null));
+		@Pc(41) Packet tld = new Packet(jag.read("tldlist.txt", null));
+		read(fragments, bad, domain, tld);
 	}
 
 	@OriginalMember(owner = "client!mc", name = "a", descriptor = "(Lclient!kb;Lclient!kb;Lclient!kb;Lclient!kb;)V")
-	private static void read(@OriginalArg(0) Packet arg0, @OriginalArg(1) Packet arg1, @OriginalArg(2) Packet arg2, @OriginalArg(3) Packet arg3) {
-		readBadWords(arg1);
-		readDomains(arg2);
-		readFragments(arg0);
-		readTld(arg3);
+	private static void read(@OriginalArg(0) Packet fragments, @OriginalArg(1) Packet bad, @OriginalArg(2) Packet domain, @OriginalArg(3) Packet tld) {
+		readBadWords(bad);
+		readDomains(domain);
+		readFragments(fragments);
+		readTld(tld);
 	}
 
 	@OriginalMember(owner = "client!mc", name = "a", descriptor = "(ZLclient!kb;)V")
-	private static void readTld(@OriginalArg(1) Packet arg1) {
-		@Pc(4) int local4 = arg1.g4();
-		tlds = new char[local4][];
-		tldType = new int[local4];
-		for (@Pc(15) int local15 = 0; local15 < local4; local15++) {
-			tldType[local15] = arg1.g1();
-			@Pc(26) char[] local26 = new char[arg1.g1()];
-			for (@Pc(28) int local28 = 0; local28 < local26.length; local28++) {
-				local26[local28] = (char) arg1.g1();
+	private static void readTld(@OriginalArg(1) Packet buf) {
+		@Pc(4) int count = buf.g4();
+		tlds = new char[count][];
+		tldType = new int[count];
+		for (@Pc(15) int i = 0; i < count; i++) {
+			tldType[i] = buf.g1();
+			@Pc(26) char[] tld = new char[buf.g1()];
+			for (@Pc(28) int j = 0; j < tld.length; j++) {
+				tld[j] = (char) buf.g1();
 			}
-			tlds[local15] = local26;
+			tlds[i] = tld;
 		}
 	}
 
 	@OriginalMember(owner = "client!mc", name = "a", descriptor = "(ILclient!kb;)V")
-	private static void readBadWords(@OriginalArg(1) Packet arg1) {
-		@Pc(2) int local2 = arg1.g4();
-		badWords = new char[local2][];
-		badCombinations = new byte[local2][][];
-		readBadCombinations(badCombinations, badWords, arg1);
+	private static void readBadWords(@OriginalArg(1) Packet buf) {
+		@Pc(2) int count = buf.g4();
+		badWords = new char[count][];
+		badCombinations = new byte[count][][];
+		readBadCombinations(badCombinations, badWords, buf);
 	}
 
 	@OriginalMember(owner = "client!mc", name = "a", descriptor = "(Lclient!kb;I)V")
-	private static void readDomains(@OriginalArg(0) Packet arg0) {
-		@Pc(2) int local2 = arg0.g4();
-		domains = new char[local2][];
-		readDomain(arg0, domains);
+	private static void readDomains(@OriginalArg(0) Packet buf) {
+		@Pc(2) int count = buf.g4();
+		domains = new char[count][];
+		readDomain(buf, domains);
 	}
 
 	@OriginalMember(owner = "client!mc", name = "b", descriptor = "(ILclient!kb;)V")
-	private static void readFragments(@OriginalArg(1) Packet arg1) {
-		fragments = new int[arg1.g4()];
-		for (@Pc(5) int local5 = 0; local5 < fragments.length; local5++) {
-			fragments[local5] = arg1.g2();
+	private static void readFragments(@OriginalArg(1) Packet buf) {
+		fragments = new int[buf.g4()];
+		for (@Pc(5) int i = 0; i < fragments.length; i++) {
+			fragments[i] = buf.g2();
 		}
 	}
 
 	@OriginalMember(owner = "client!mc", name = "a", descriptor = "([[[B[[CLclient!kb;B)V")
-	private static void readBadCombinations(@OriginalArg(0) byte[][][] arg0, @OriginalArg(1) char[][] arg1, @OriginalArg(2) Packet arg2) {
-		for (@Pc(10) int local10 = 0; local10 < arg1.length; local10++) {
-			@Pc(17) char[] local17 = new char[arg2.g1()];
-			for (@Pc(19) int local19 = 0; local19 < local17.length; local19++) {
-				local17[local19] = (char) arg2.g1();
+	private static void readBadCombinations(@OriginalArg(0) byte[][][] badCombinations, @OriginalArg(1) char[][] badwords, @OriginalArg(2) Packet buf) {
+		for (@Pc(10) int i = 0; i < badwords.length; i++) {
+			@Pc(17) char[] badword = new char[buf.g1()];
+			for (@Pc(19) int j = 0; j < badword.length; j++) {
+				badword[j] = (char) buf.g1();
 			}
-			arg1[local10] = local17;
-			@Pc(41) byte[][] local41 = new byte[arg2.g1()][2];
-			for (@Pc(43) int local43 = 0; local43 < local41.length; local43++) {
-				local41[local43][0] = (byte) arg2.g1();
-				local41[local43][1] = (byte) arg2.g1();
+			badwords[i] = badword;
+			@Pc(41) byte[][] combination = new byte[buf.g1()][2];
+			for (@Pc(43) int j = 0; j < combination.length; j++) {
+				combination[j][0] = (byte) buf.g1();
+				combination[j][1] = (byte) buf.g1();
 			}
-			if (local41.length > 0) {
-				arg0[local10] = local41;
+			if (combination.length > 0) {
+				badCombinations[i] = combination;
 			}
 		}
 	}
 
 	@OriginalMember(owner = "client!mc", name = "a", descriptor = "(ILclient!kb;[[C)V")
-	private static void readDomain(@OriginalArg(1) Packet arg1, @OriginalArg(2) char[][] arg2) {
-		for (@Pc(5) int local5 = 0; local5 < arg2.length; local5++) {
-			@Pc(20) char[] local20 = new char[arg1.g1()];
-			for (@Pc(22) int local22 = 0; local22 < local20.length; local22++) {
-				local20[local22] = (char) arg1.g1();
+	private static void readDomain(@OriginalArg(1) Packet buf, @OriginalArg(2) char[][] domains) {
+		for (@Pc(5) int i = 0; i < domains.length; i++) {
+			@Pc(20) char[] domain = new char[buf.g1()];
+			for (@Pc(22) int j = 0; j < domain.length; j++) {
+				domain[j] = (char) buf.g1();
 			}
-			arg2[local5] = local20;
+			domains[i] = domain;
 		}
 	}
 
 	@OriginalMember(owner = "client!mc", name = "a", descriptor = "([CI)V")
-	private static void filterCharacters(@OriginalArg(0) char[] arg0) {
-		@Pc(3) int local3 = 0;
-		for (@Pc(5) int local5 = 0; local5 < arg0.length; local5++) {
-			if (allowCharacter(arg0[local5])) {
-				arg0[local3] = arg0[local5];
+	private static void filterCharacters(@OriginalArg(0) char[] in) {
+		@Pc(3) int pos = 0;
+		for (@Pc(5) int i = 0; i < in.length; i++) {
+			if (allowCharacter(in[i])) {
+				in[pos] = in[i];
 			} else {
-				arg0[local3] = ' ';
+				in[pos] = ' ';
 			}
-			if (local3 == 0 || arg0[local3] != ' ' || arg0[local3 - 1] != ' ') {
-				local3++;
+			if (pos == 0 || in[pos] != ' ' || in[pos - 1] != ' ') {
+				pos++;
 			}
 		}
-		for (@Pc(55) int local55 = local3; local55 < arg0.length; local55++) {
-			arg0[local55] = ' ';
+		for (@Pc(55) int i = pos; i < in.length; i++) {
+			in[i] = ' ';
 		}
 	}
 
 	@OriginalMember(owner = "client!mc", name = "a", descriptor = "(IC)Z")
-	private static boolean allowCharacter(@OriginalArg(1) char arg1) {
-		return arg1 >= ' ' && arg1 <= '\u007f' || arg1 == ' ' || arg1 == '\n' || arg1 == '\t' || arg1 == '£' || arg1 == '€';
+	private static boolean allowCharacter(@OriginalArg(1) char c) {
+		return c >= ' ' && c <= '\u007f' || c == ' ' || c == '\n' || c == '\t' || c == '£' || c == '€';
 	}
 
 	@OriginalMember(owner = "client!mc", name = "a", descriptor = "(Ljava/lang/String;I)Ljava/lang/String;")
-	public static String filter(@OriginalArg(0) String arg0) {
-		@Pc(3) long local3 = System.currentTimeMillis();
-		@Pc(6) char[] local6 = arg0.toCharArray();
-		filterCharacters(local6);
-		@Pc(15) String local15 = (new String(local6)).trim();
-		@Pc(19) char[] local19 = local15.toLowerCase().toCharArray();
-		@Pc(22) String local22 = local15.toLowerCase();
-		filterTld(local19);
-		filterBad(local19);
-		filterDomains(local19);
-		filterFragments(local19);
-		@Pc(45) int local45;
-		for (@Pc(36) int local36 = 0; local36 < ALLOWLIST.length; local36++) {
-			local45 = -1;
-			while ((local45 = local22.indexOf(ALLOWLIST[local36], local45 + 1)) != -1) {
-				@Pc(52) char[] local52 = ALLOWLIST[local36].toCharArray();
-				System.arraycopy(local52, 0, local19, 0 + local45, local52.length);
+	public static String filter(@OriginalArg(0) String input) {
+		@Pc(3) long start = System.currentTimeMillis();
+		@Pc(6) char[] outputPre = input.toCharArray();
+		filterCharacters(outputPre);
+		@Pc(15) String trimmed = (new String(outputPre)).trim();
+		@Pc(19) char[] output = trimmed.toLowerCase().toCharArray();
+		@Pc(22) String lowercase = trimmed.toLowerCase();
+		filterTld(output);
+		filterBad(output);
+		filterDomains(output);
+		filterFragments(output);
+		@Pc(45) int j;
+		for (@Pc(36) int i = 0; i < ALLOWLIST.length; i++) {
+			j = -1;
+			while ((j = lowercase.indexOf(ALLOWLIST[i], j + 1)) != -1) {
+				@Pc(52) char[] allowed = ALLOWLIST[i].toCharArray();
+				System.arraycopy(allowed, 0, output, 0 + j, allowed.length);
 			}
 		}
-		replaceUpperCases(local19, local15.toCharArray());
-		formatUpperCases(local19);
-		@Pc(105) long local105 = System.currentTimeMillis();
-		return (new String(local19)).trim();
+		replaceUpperCases(output, trimmed.toCharArray());
+		formatUpperCases(output);
+		@Pc(105) long end = System.currentTimeMillis();
+		return (new String(output)).trim();
 	}
 
 	@OriginalMember(owner = "client!mc", name = "a", descriptor = "([CI[C)V")
-	private static void replaceUpperCases(@OriginalArg(0) char[] arg0, @OriginalArg(2) char[] arg2) {
-		for (@Pc(1) int local1 = 0; local1 < arg2.length; local1++) {
-			if (arg0[local1] != '*' && isUpperCase(arg2[local1])) {
-				arg0[local1] = arg2[local1];
+	private static void replaceUpperCases(@OriginalArg(0) char[] in, @OriginalArg(2) char[] unfiltered) {
+		for (@Pc(1) int i = 0; i < unfiltered.length; i++) {
+			if (in[i] != '*' && isUpperCase(unfiltered[i])) {
+				in[i] = unfiltered[i];
 			}
 		}
 	}
 
 	@OriginalMember(owner = "client!mc", name = "a", descriptor = "(B[C)V")
-	private static void formatUpperCases(@OriginalArg(1) char[] arg1) {
-		@Pc(3) boolean local3 = true;
-		for (@Pc(12) int local12 = 0; local12 < arg1.length; local12++) {
-			@Pc(19) char local19 = arg1[local12];
-			if (!isAlpha(local19)) {
-				local3 = true;
-			} else if (local3) {
-				if (isLowerCase(local19)) {
-					local3 = false;
+	private static void formatUpperCases(@OriginalArg(1) char[] in) {
+		@Pc(3) boolean upper = true;
+		for (@Pc(12) int i = 0; i < in.length; i++) {
+			@Pc(19) char c = in[i];
+			if (!isAlpha(c)) {
+				upper = true;
+			} else if (upper) {
+				if (isLowerCase(c)) {
+					upper = false;
 				}
-			} else if (isUpperCase(local19)) {
-				arg1[local12] = (char) (local19 + 'a' - 65);
+			} else if (isUpperCase(c)) {
+				in[i] = (char) (c + 'a' - 65);
 			}
 		}
 	}
 
 	@OriginalMember(owner = "client!mc", name = "a", descriptor = "(Z[C)V")
-	private static void filterBad(@OriginalArg(1) char[] arg1) {
-		for (@Pc(3) int local3 = 0; local3 < 2; local3++) {
-			for (@Pc(10) int local10 = badWords.length - 1; local10 >= 0; local10--) {
-				filter(badCombinations[local10], arg1, badWords[local10]);
+	private static void filterBad(@OriginalArg(1) char[] in) {
+		for (@Pc(3) int passes = 0; passes < 2; passes++) {
+			for (@Pc(10) int i = badWords.length - 1; i >= 0; i--) {
+				filter(badCombinations[i], in, badWords[i]);
 			}
 		}
 	}
 
 	@OriginalMember(owner = "client!mc", name = "b", descriptor = "(B[C)V")
-	private static void filterDomains(@OriginalArg(1) char[] arg1) {
-		@Pc(3) char[] local3 = arg1.clone();
-		@Pc(18) char[] local18 = new char[] { '(', 'a', ')' };
-		filter(null, local3, local18);
-		@Pc(27) char[] local27 = arg1.clone();
-		@Pc(42) char[] local42 = new char[] { 'd', 'o', 't' };
-		filter(null, local27, local42);
-		for (@Pc(56) int local56 = domains.length - 1; local56 >= 0; local56--) {
-			filterDomain(local27, local3, domains[local56], arg1);
+	private static void filterDomains(@OriginalArg(1) char[] in) {
+		@Pc(3) char[] filteredAt = in.clone();
+		@Pc(18) char[] at = new char[] { '(', 'a', ')' };
+		filter(null, filteredAt, at);
+		@Pc(27) char[] filteredDot = in.clone();
+		@Pc(42) char[] dot = new char[] { 'd', 'o', 't' };
+		filter(null, filteredDot, dot);
+		for (@Pc(56) int i = domains.length - 1; i >= 0; i--) {
+			filterDomain(filteredDot, filteredAt, domains[i], in);
 		}
 	}
 
 	@OriginalMember(owner = "client!mc", name = "a", descriptor = "([CI[C[C[C)V")
-	private static void filterDomain(@OriginalArg(0) char[] arg0, @OriginalArg(2) char[] arg2, @OriginalArg(3) char[] arg3, @OriginalArg(4) char[] arg4) {
-		if (arg3.length <= arg4.length) {
-			@Pc(23) int local23;
-			for (@Pc(15) int local15 = 0; local15 <= arg4.length - arg3.length; local15 += local23) {
-				@Pc(19) int local19 = local15;
-				@Pc(21) int local21 = 0;
-				local23 = 1;
-				@Pc(27) boolean var9;
-				label62:
+	private static void filterDomain(@OriginalArg(0) char[] filteredDot, @OriginalArg(2) char[] filteredAt, @OriginalArg(3) char[] domain, @OriginalArg(4) char[] in) {
+		if (domain.length <= in.length) {
+			@Pc(23) int stride;
+			for (@Pc(15) int start = 0; start <= in.length - domain.length; start += stride) {
+				@Pc(19) int end = start;
+				@Pc(21) int offset = 0;
+				stride = 1;
+				@Pc(27) boolean match;
+				filter_pass:
 				while (true) {
 					while (true) {
-						if (local19 >= arg4.length) {
-							break label62;
+						if (end >= in.length) {
+							break filter_pass;
 						}
-						var9 = false;
-						@Pc(31) char local31 = arg4[local19];
-						@Pc(33) char local33 = 0;
-						if (local19 + 1 < arg4.length) {
-							local33 = arg4[local19 + 1];
+						match = false;
+						@Pc(31) char b = in[end];
+						@Pc(33) char c = 0;
+						if (end + 1 < in.length) {
+							c = in[end + 1];
 						}
-						@Pc(58) int local58;
-						if (local21 < arg3.length && (local58 = getEmulatedDomainCharSize(local33, arg3[local21], local31)) > 0) {
-							local19 += local58;
-							local21++;
+						@Pc(58) int charSize;
+						if (offset < domain.length && (charSize = getEmulatedDomainCharSize(c, domain[offset], b)) > 0) {
+							end += charSize;
+							offset++;
 						} else {
-							if (local21 == 0) {
-								break label62;
+							if (offset == 0) {
+								break filter_pass;
 							}
-							@Pc(79) int local79;
-							if ((local79 = getEmulatedDomainCharSize(local33, arg3[local21 - 1], local31)) > 0) {
-								local19 += local79;
-								if (local21 == 1) {
-									local23++;
+							@Pc(79) int charSize2;
+							if ((charSize2 = getEmulatedDomainCharSize(c, domain[offset - 1], b)) > 0) {
+								end += charSize2;
+								if (offset == 1) {
+									stride++;
 								}
 							} else {
-								if (local21 >= arg3.length || !isSymbol(local31)) {
-									break label62;
+								if (offset >= domain.length || !isSymbol(b)) {
+									break filter_pass;
 								}
-								local19++;
+								end++;
 							}
 						}
 					}
 				}
-				if (local21 >= arg3.length) {
-					var9 = false;
-					@Pc(116) int local116 = getDomainAtFilterStatus(local15, arg4, arg2);
-					@Pc(124) int local124 = getDomainDotFilterStatus(arg0, arg4, local19 - 1);
-					if (local116 > 2 || local124 > 2) {
-						var9 = true;
+				if (offset >= domain.length) {
+					match = false;
+					@Pc(116) int atFilter = getDomainAtFilterStatus(start, in, filteredAt);
+					@Pc(124) int dotFilter = getDomainDotFilterStatus(filteredDot, in, end - 1);
+					if (atFilter > 2 || dotFilter > 2) {
+						match = true;
 					}
-					if (var9) {
-						for (@Pc(136) int local136 = local15; local136 < local19; local136++) {
-							arg4[local136] = '*';
+					if (match) {
+						for (@Pc(136) int i = start; i < end; i++) {
+							in[i] = '*';
 						}
 					}
 				}
@@ -273,24 +273,24 @@ public final class WordFilter {
 	}
 
 	@OriginalMember(owner = "client!mc", name = "a", descriptor = "(I[CB[C)I")
-	private static int getDomainAtFilterStatus(@OriginalArg(0) int arg0, @OriginalArg(1) char[] arg1, @OriginalArg(3) char[] arg3) {
-		if (arg0 == 0) {
+	private static int getDomainAtFilterStatus(@OriginalArg(0) int end, @OriginalArg(1) char[] a, @OriginalArg(3) char[] b) {
+		if (end == 0) {
 			return 2;
 		}
-		for (@Pc(9) int local9 = arg0 - 1; local9 >= 0 && isSymbol(arg1[local9]); local9--) {
-			if (arg1[local9] == '@') {
+		for (@Pc(9) int i = end - 1; i >= 0 && isSymbol(a[i]); i--) {
+			if (a[i] == '@') {
 				return 3;
 			}
 		}
-		@Pc(37) int local37 = 0;
-		for (@Pc(41) int local41 = arg0 - 1; local41 >= 0 && isSymbol(arg3[local41]); local41--) {
-			if (arg3[local41] == '*') {
-				local37++;
+		@Pc(37) int asteriskCount = 0;
+		for (@Pc(41) int i = end - 1; i >= 0 && isSymbol(b[i]); i--) {
+			if (b[i] == '*') {
+				asteriskCount++;
 			}
 		}
-		if (local37 >= 3) {
+		if (asteriskCount >= 3) {
 			return 4;
-		} else if (isSymbol(arg1[arg0 - 1])) {
+		} else if (isSymbol(a[end - 1])) {
 			return 1;
 		} else {
 			return 0;
@@ -298,29 +298,29 @@ public final class WordFilter {
 	}
 
 	@OriginalMember(owner = "client!mc", name = "a", descriptor = "([C[CII)I")
-	private static int getDomainDotFilterStatus(@OriginalArg(0) char[] arg0, @OriginalArg(1) char[] arg1, @OriginalArg(2) int arg2) {
-		if (arg2 + 1 == arg1.length) {
+	private static int getDomainDotFilterStatus(@OriginalArg(0) char[] b, @OriginalArg(1) char[] a, @OriginalArg(2) int start) {
+		if (start + 1 == a.length) {
 			return 2;
 		} else {
-			@Pc(17) int local17 = arg2 + 1;
+			@Pc(17) int i = start + 1;
 			while (true) {
-				if (local17 < arg1.length && isSymbol(arg1[local17])) {
-					if (arg1[local17] != '.' && arg1[local17] != ',') {
-						local17++;
+				if (i < a.length && isSymbol(a[i])) {
+					if (a[i] != '.' && a[i] != ',') {
+						i++;
 						continue;
 					}
 					return 3;
 				}
-				@Pc(44) int local44 = 0;
-				for (@Pc(48) int local48 = arg2 + 1; local48 < arg1.length && isSymbol(arg0[local48]); local48++) {
-					if (arg0[local48] == '*') {
-						local44++;
+				@Pc(44) int asteriskCount = 0;
+				for (@Pc(48) int j = start + 1; j < a.length && isSymbol(b[j]); j++) {
+					if (b[j] == '*') {
+						asteriskCount++;
 					}
 				}
-				if (local44 >= 3) {
+				if (asteriskCount >= 3) {
 					return 4;
 				}
-				if (isSymbol(arg1[arg2 + 1])) {
+				if (isSymbol(a[start + 1])) {
 					return 1;
 				}
 				return 0;
@@ -329,141 +329,140 @@ public final class WordFilter {
 	}
 
 	@OriginalMember(owner = "client!mc", name = "b", descriptor = "([CI)V")
-	private static void filterTld(@OriginalArg(0) char[] arg0) {
-		@Pc(3) char[] local3 = arg0.clone();
-		@Pc(18) char[] local18 = new char[] { 'd', 'o', 't' };
-		filter(null, local3, local18);
-		@Pc(27) char[] local27 = arg0.clone();
-		@Pc(50) char[] local50 = new char[] { 's', 'l', 'a', 's', 'h' };
-		filter(null, local27, local50);
-		for (@Pc(65) int local65 = 0; local65 < tlds.length; local65++) {
-			filterTld(local27, tldType[local65], arg0, tlds[local65], local3);
+	private static void filterTld(@OriginalArg(0) char[] in) {
+		@Pc(3) char[] filteredDot = in.clone();
+		@Pc(18) char[] dot = new char[] { 'd', 'o', 't' };
+		filter(null, filteredDot, dot);
+		@Pc(27) char[] filteredSlash = in.clone();
+		@Pc(50) char[] slash = new char[] { 's', 'l', 'a', 's', 'h' };
+		filter(null, filteredSlash, slash);
+		for (@Pc(65) int i = 0; i < tlds.length; i++) {
+			filterTld(filteredSlash, tldType[i], in, tlds[i], filteredDot);
 		}
 	}
 
 	@OriginalMember(owner = "client!mc", name = "a", descriptor = "([CIZ[C[C[C)V")
-	private static void filterTld(@OriginalArg(0) char[] arg0, @OriginalArg(1) int arg1, @OriginalArg(3) char[] arg3, @OriginalArg(4) char[] arg4, @OriginalArg(5) char[] arg5) {
-		@Pc(5) int local5;
-		if (arg4.length <= arg3.length) {
-			@Pc(18) boolean local18 = true;
-			for (@Pc(20) int local20 = 0; local20 <= arg3.length - arg4.length; local20 += local5) {
-				@Pc(24) int local24 = local20;
-				@Pc(26) int local26 = 0;
-				local5 = 1;
-				@Pc(32) boolean var10;
-				label124:
+	private static void filterTld(@OriginalArg(0) char[] filteredSlash, @OriginalArg(1) int type, @OriginalArg(3) char[] chars, @OriginalArg(4) char[] tld, @OriginalArg(5) char[] filteredDot) {
+		@Pc(5) int stride;
+		if (tld.length <= chars.length) {
+			@Pc(18) boolean compare = true;
+			for (@Pc(20) int start = 0; start <= chars.length - tld.length; start += stride) {
+				@Pc(24) int end = start;
+				@Pc(26) int offset = 0;
+				stride = 1;
+				@Pc(32) boolean match;
+				filter_pass:
 				while (true) {
 					while (true) {
-						if (local24 >= arg3.length) {
-							break label124;
+						if (end >= chars.length) {
+							break filter_pass;
 						}
-						var10 = false;
-						@Pc(36) char local36 = arg3[local24];
-						@Pc(38) char local38 = 0;
-						if (local24 + 1 < arg3.length) {
-							local38 = arg3[local24 + 1];
+						match = false;
+						@Pc(36) char b = chars[end];
+						@Pc(38) char c = 0;
+						if (end + 1 < chars.length) {
+							c = chars[end + 1];
 						}
-						@Pc(63) int local63;
-						if (local26 < arg4.length && (local63 = getEmulatedDomainCharSize(local38, arg4[local26], local36)) > 0) {
-							local24 += local63;
-							local26++;
+						@Pc(63) int charLen;
+						if (offset < tld.length && (charLen = getEmulatedDomainCharSize(c, tld[offset], b)) > 0) {
+							end += charLen;
+							offset++;
 						} else {
-							if (local26 == 0) {
-								break label124;
+							if (offset == 0) {
+								break filter_pass;
 							}
-							@Pc(84) int local84;
-							if ((local84 = getEmulatedDomainCharSize(local38, arg4[local26 - 1], local36)) > 0) {
-								local24 += local84;
-								if (local26 == 1) {
-									local5++;
+							@Pc(84) int charLen2;
+							if ((charLen2 = getEmulatedDomainCharSize(c, tld[offset - 1], b)) > 0) {
+								end += charLen2;
+								if (offset == 1) {
+									stride++;
 								}
 							} else {
-								if (local26 >= arg4.length || !isSymbol(local36)) {
-									break label124;
+								if (offset >= tld.length || !isSymbol(b)) {
+									break filter_pass;
 								}
-								local24++;
+								end++;
 							}
 						}
 					}
 				}
-				if (local26 >= arg4.length) {
-					var10 = false;
-					@Pc(121) int local121 = getTldDotFilterStatus(arg3, arg5, local20);
-					@Pc(129) int local129 = getTldSlashFilterStatus(arg0, local24 - 1, arg3);
-					if (arg1 == 1 && local121 > 0 && local129 > 0) {
-						var10 = true;
+				if (offset >= tld.length) {
+					match = false;
+					@Pc(121) int status0 = getTldDotFilterStatus(chars, filteredDot, start);
+					@Pc(129) int status1 = getTldSlashFilterStatus(filteredSlash, end - 1, chars);
+					if (type == 1 && status0 > 0 && status1 > 0) {
+						match = true;
 					}
-					if (arg1 == 2 && (local121 > 2 && local129 > 0 || local121 > 0 && local129 > 2)) {
-						var10 = true;
+					if (type == 2 && (status0 > 2 && status1 > 0 || status0 > 0 && status1 > 2)) {
+						match = true;
 					}
-					if (arg1 == 3 && local121 > 0 && local129 > 2) {
-						var10 = true;
+					if (type == 3 && status0 > 0 && status1 > 2) {
+						match = true;
 					}
-					@Pc(172) boolean local172;
-					local172 = arg1 == 3 && local121 > 2 && local129 > 0;
-					if (var10) {
-						@Pc(179) int local179 = local20;
-						@Pc(183) int local183 = local24 - 1;
-						@Pc(191) boolean local191;
-						@Pc(195) int local195;
-						if (local121 > 2) {
-							if (local121 == 4) {
-								local191 = false;
-								for (local195 = local20 - 1; local195 >= 0; local195--) {
-									if (local191) {
-										if (arg5[local195] != '*') {
+					@Pc(172) boolean lastCheck = type == 3 && status0 > 2 && status1 > 0;
+					if (match) {
+						@Pc(179) int first = start;
+						@Pc(183) int last = end - 1;
+						@Pc(191) boolean findStart;
+						@Pc(195) int i;
+						if (status0 > 2) {
+							if (status0 == 4) {
+								findStart = false;
+								for (i = start - 1; i >= 0; i--) {
+									if (findStart) {
+										if (filteredDot[i] != '*') {
 											break;
 										}
-										local179 = local195;
-									} else if (arg5[local195] == '*') {
-										local179 = local195;
-										local191 = true;
+										first = i;
+									} else if (filteredDot[i] == '*') {
+										first = i;
+										findStart = true;
 									}
 								}
 							}
-							local191 = false;
-							for (local195 = local179 - 1; local195 >= 0; local195--) {
-								if (local191) {
-									if (isSymbol(arg3[local195])) {
+							findStart = false;
+							for (i = first - 1; i >= 0; i--) {
+								if (findStart) {
+									if (isSymbol(chars[i])) {
 										break;
 									}
-									local179 = local195;
-								} else if (!isSymbol(arg3[local195])) {
-									local191 = true;
-									local179 = local195;
+									first = i;
+								} else if (!isSymbol(chars[i])) {
+									findStart = true;
+									first = i;
 								}
 							}
 						}
-						if (local129 > 2) {
-							if (local129 == 4) {
-								local191 = false;
-								for (local195 = local183 + 1; local195 < arg3.length; local195++) {
-									if (local191) {
-										if (arg0[local195] != '*') {
+						if (status1 > 2) {
+							if (status1 == 4) {
+								findStart = false;
+								for (i = last + 1; i < chars.length; i++) {
+									if (findStart) {
+										if (filteredSlash[i] != '*') {
 											break;
 										}
-										local183 = local195;
-									} else if (arg0[local195] == '*') {
-										local183 = local195;
-										local191 = true;
+										last = i;
+									} else if (filteredSlash[i] == '*') {
+										last = i;
+										findStart = true;
 									}
 								}
 							}
-							local191 = false;
-							for (local195 = local183 + 1; local195 < arg3.length; local195++) {
-								if (local191) {
-									if (isSymbol(arg3[local195])) {
+							findStart = false;
+							for (i = last + 1; i < chars.length; i++) {
+								if (findStart) {
+									if (isSymbol(chars[i])) {
 										break;
 									}
-									local183 = local195;
-								} else if (!isSymbol(arg3[local195])) {
-									local191 = true;
-									local183 = local195;
+									last = i;
+								} else if (!isSymbol(chars[i])) {
+									findStart = true;
+									last = i;
 								}
 							}
 						}
-						for (@Pc(329) int local329 = local179; local329 <= local183; local329++) {
-							arg3[local329] = '*';
+						for (@Pc(329) int j = first; j <= last; j++) {
+							chars[j] = '*';
 						}
 					}
 				}
@@ -472,30 +471,30 @@ public final class WordFilter {
 	}
 
 	@OriginalMember(owner = "client!mc", name = "a", descriptor = "([CZ[CI)I")
-	private static int getTldDotFilterStatus(@OriginalArg(0) char[] arg0, @OriginalArg(2) char[] arg2, @OriginalArg(3) int arg3) {
-		if (arg3 == 0) {
+	private static int getTldDotFilterStatus(@OriginalArg(0) char[] a, @OriginalArg(2) char[] b, @OriginalArg(3) int start) {
+		if (start == 0) {
 			return 2;
 		}
-		@Pc(9) int local9 = arg3 - 1;
+		@Pc(9) int i = start - 1;
 		while (true) {
-			if (local9 >= 0 && isSymbol(arg0[local9])) {
-				if (arg0[local9] != ',' && arg0[local9] != '.') {
-					local9--;
+			if (i >= 0 && isSymbol(a[i])) {
+				if (a[i] != ',' && a[i] != '.') {
+					i--;
 					continue;
 				}
 				return 3;
 			}
-			@Pc(34) int local34 = 0;
-			@Pc(38) int local38;
-			for (local38 = arg3 - 1; local38 >= 0 && isSymbol(arg2[local38]); local38--) {
-				if (arg2[local38] == '*') {
-					local34++;
+			@Pc(34) int asteriskCount = 0;
+			@Pc(38) int j;
+			for (j = start - 1; j >= 0 && isSymbol(b[j]); j--) {
+				if (b[j] == '*') {
+					asteriskCount++;
 				}
 			}
-			if (local34 >= 3) {
+			if (asteriskCount >= 3) {
 				return 4;
 			}
-			if (isSymbol(arg0[arg3 - 1])) {
+			if (isSymbol(a[start - 1])) {
 				return 1;
 			}
 			return 0;
@@ -503,29 +502,29 @@ public final class WordFilter {
 	}
 
 	@OriginalMember(owner = "client!mc", name = "a", descriptor = "([CII[C)I")
-	private static int getTldSlashFilterStatus(@OriginalArg(0) char[] arg0, @OriginalArg(2) int arg2, @OriginalArg(3) char[] arg3) {
-		if (arg2 + 1 == arg3.length) {
+	private static int getTldSlashFilterStatus(@OriginalArg(0) char[] b, @OriginalArg(2) int end, @OriginalArg(3) char[] a) {
+		if (end + 1 == a.length) {
 			return 2;
 		}
-		@Pc(13) int local13 = arg2 + 1;
+		@Pc(13) int i = end + 1;
 		while (true) {
-			if (local13 < arg3.length && isSymbol(arg3[local13])) {
-				if (arg3[local13] != '\\' && arg3[local13] != '/') {
-					local13++;
+			if (i < a.length && isSymbol(a[i])) {
+				if (a[i] != '\\' && a[i] != '/') {
+					i++;
 					continue;
 				}
 				return 3;
 			}
-			@Pc(40) int local40 = 0;
-			for (@Pc(44) int local44 = arg2 + 1; local44 < arg3.length && isSymbol(arg0[local44]); local44++) {
-				if (arg0[local44] == '*') {
-					local40++;
+			@Pc(40) int asteriskCount = 0;
+			for (@Pc(44) int j = end + 1; j < a.length && isSymbol(b[j]); j++) {
+				if (b[j] == '*') {
+					asteriskCount++;
 				}
 			}
-			if (local40 >= 5) {
+			if (asteriskCount >= 5) {
 				return 4;
 			}
-			if (isSymbol(arg3[arg2 + 1])) {
+			if (isSymbol(a[end + 1])) {
 				return 1;
 			}
 			return 0;
@@ -533,139 +532,139 @@ public final class WordFilter {
 	}
 
 	@OriginalMember(owner = "client!mc", name = "a", descriptor = "(B[[B[C[C)V")
-	private static void filter(@OriginalArg(1) byte[][] arg1, @OriginalArg(2) char[] arg2, @OriginalArg(3) char[] arg3) {
-		if (arg3.length <= arg2.length) {
-			@Pc(9) boolean local9 = true;
-			@Pc(26) int local26;
-			for (@Pc(16) int local16 = 0; local16 <= arg2.length - arg3.length; local16 += local26) {
-				@Pc(20) int local20 = local16;
-				@Pc(22) int local22 = 0;
-				@Pc(24) int local24 = 0;
-				local26 = 1;
-				@Pc(28) boolean local28 = false;
-				@Pc(30) boolean local30 = false;
-				@Pc(32) boolean local32 = false;
-				@Pc(36) boolean var12;
-				@Pc(40) char var13;
-				@Pc(42) char var14;
+	private static void filter(@OriginalArg(1) byte[][] badCombinations, @OriginalArg(2) char[] chars, @OriginalArg(3) char[] fragment) {
+		if (fragment.length <= chars.length) {
+			@Pc(9) boolean compare = true;
+			@Pc(26) int stride;
+			for (@Pc(16) int start = 0; start <= chars.length - fragment.length; start += stride) {
+				@Pc(20) int end = start;
+				@Pc(22) int fragOff = 0;
+				@Pc(24) int iterations = 0;
+				stride = 1;
+				@Pc(28) boolean isSymbol = false;
+				@Pc(30) boolean isEmulated = false;
+				@Pc(32) boolean isNumeral = false;
+				@Pc(36) boolean bad;
+				@Pc(40) char b;
+				@Pc(42) char c;
 				label163:
 				while (true) {
 					while (true) {
-						if (local20 >= arg2.length || local30 && local32) {
+						if (end >= chars.length || isEmulated && isNumeral) {
 							break label163;
 						}
-						var12 = false;
-						var13 = arg2[local20];
-						var14 = '\u0000';
-						if (local20 + 1 < arg2.length) {
-							var14 = arg2[local20 + 1];
+						bad = false;
+						b = chars[end];
+						c = '\0';
+						if (end + 1 < chars.length) {
+							c = chars[end + 1];
 						}
-						@Pc(67) int local67;
-						if (local22 < arg3.length && (local67 = getEmulatedSize(var14, arg3[local22], var13)) > 0) {
-							if (local67 == 1 && isNumber(var13)) {
-								local30 = true;
+						@Pc(67) int charLen;
+						if (fragOff < fragment.length && (charLen = getEmulatedSize(c, fragment[fragOff], b)) > 0) {
+							if (charLen == 1 && isNumber(b)) {
+								isEmulated = true;
 							}
-							if (local67 == 2 && (isNumber(var13) || isNumber(var14))) {
-								local30 = true;
+							if (charLen == 2 && (isNumber(b) || isNumber(c))) {
+								isEmulated = true;
 							}
-							local20 += local67;
-							local22++;
+							end += charLen;
+							fragOff++;
 						} else {
-							if (local22 == 0) {
+							if (fragOff == 0) {
 								break label163;
 							}
-							@Pc(110) int local110;
-							if ((local110 = getEmulatedSize(var14, arg3[local22 - 1], var13)) > 0) {
-								local20 += local110;
-								if (local22 == 1) {
-									local26++;
+							@Pc(110) int charLen2;
+							if ((charLen2 = getEmulatedSize(c, fragment[fragOff - 1], b)) > 0) {
+								end += charLen2;
+								if (fragOff == 1) {
+									stride++;
 								}
 							} else {
-								if (local22 >= arg3.length || !isLowerCaseAlpha(var13)) {
+								if (fragOff >= fragment.length || !isLowerCaseAlpha(b)) {
 									break label163;
 								}
-								if (isSymbol(var13) && var13 != '\'') {
-									local28 = true;
+								if (isSymbol(b) && b != '\'') {
+									isSymbol = true;
 								}
-								if (isNumber(var13)) {
-									local32 = true;
+								if (isNumber(b)) {
+									isNumeral = true;
 								}
-								local20++;
-								local24++;
-								if (local24 * 100 / (local20 - local16) > 90) {
+								end++;
+								iterations++;
+								if (iterations * 100 / (end - start) > 90) {
 									break label163;
 								}
 							}
 						}
 					}
 				}
-				if (local22 >= arg3.length && (!local30 || !local32)) {
-					var12 = true;
-					@Pc(271) int local271;
-					if (local28) {
-						@Pc(221) boolean local221 = false;
-						@Pc(223) boolean local223 = false;
-						if (local16 - 1 < 0 || isSymbol(arg2[local16 - 1]) && arg2[local16 - 1] != '\'') {
-							local221 = true;
+				if (fragOff >= fragment.length && (!isEmulated || !isNumeral)) {
+					bad = true;
+					@Pc(271) int cur;
+					if (isSymbol) {
+						@Pc(221) boolean badCurrent = false;
+						@Pc(223) boolean badNext = false;
+						if (start - 1 < 0 || isSymbol(chars[start - 1]) && chars[start - 1] != '\'') {
+							badCurrent = true;
 						}
-						if (local20 >= arg2.length || isSymbol(arg2[local20]) && arg2[local20] != '\'') {
-							local223 = true;
+						if (end >= chars.length || isSymbol(chars[end]) && chars[end] != '\'') {
+							badNext = true;
 						}
-						if (!local221 || !local223) {
-							@Pc(267) boolean local267 = false;
-							local271 = local16 - 2;
-							if (local221) {
-								local271 = local16;
+						if (!badCurrent || !badNext) {
+							@Pc(267) boolean good = false;
+							cur = start - 2;
+							if (badCurrent) {
+								cur = start;
 							}
-							while (!local267 && local271 < local20) {
-								if (local271 >= 0 && (!isSymbol(arg2[local271]) || arg2[local271] == '\'')) {
-									@Pc(293) char[] local293 = new char[3];
-									@Pc(295) int local295;
-									for (local295 = 0; local295 < 3 && local271 + local295 < arg2.length && (!isSymbol(arg2[local271 + local295]) || arg2[local271 + local295] == '\''); local295++) {
-										local293[local295] = arg2[local271 + local295];
+							while (!good && cur < end) {
+								if (cur >= 0 && (!isSymbol(chars[cur]) || chars[cur] == '\'')) {
+									@Pc(293) char[] frag = new char[3];
+									@Pc(295) int off;
+									for (off = 0; off < 3 && cur + off < chars.length && (!isSymbol(chars[cur + off]) || chars[cur + off] == '\''); off++) {
+										frag[off] = chars[cur + off];
 									}
-									@Pc(333) boolean local333 = local295 != 0;
-									if (local295 < 3 && local271 - 1 >= 0 && (!isSymbol(arg2[local271 - 1]) || arg2[local271 - 1] == '\'')) {
-										local333 = false;
+									@Pc(333) boolean valid = off != 0;
+									if (off < 3 && cur - 1 >= 0 && (!isSymbol(chars[cur - 1]) || chars[cur - 1] == '\'')) {
+										valid = false;
 									}
-									if (local333 && !isBadFragment(local293)) {
-										local267 = true;
+									if (valid && !isBadFragment(frag)) {
+										good = true;
 									}
 								}
-								local271++;
+								cur++;
 							}
-							if (!local267) {
-								var12 = false;
+							if (!good) {
+								bad = false;
 							}
 						}
 					} else {
-						var13 = ' ';
-						if (local16 - 1 >= 0) {
-							var13 = arg2[local16 - 1];
+						b = ' ';
+						if (start - 1 >= 0) {
+							b = chars[start - 1];
 						}
-						var14 = ' ';
-						if (local20 < arg2.length) {
-							var14 = arg2[local20];
+						c = ' ';
+						if (end < chars.length) {
+							c = chars[end];
 						}
-						@Pc(203) byte local203 = getIndex(var13);
-						@Pc(207) byte local207 = getIndex(var14);
-						if (arg1 != null && comboMatches(local203, arg1, local207)) {
-							var12 = false;
+						@Pc(203) byte bIndex = getIndex(b);
+						@Pc(207) byte cIndex = getIndex(c);
+						if (badCombinations != null && comboMatches(bIndex, badCombinations, cIndex)) {
+							bad = false;
 						}
 					}
-					if (var12) {
-						@Pc(383) int local383 = 0;
-						@Pc(385) int local385 = 0;
-						for (@Pc(387) int local387 = local16; local387 < local20; local387++) {
-							if (isNumber(arg2[local387])) {
-								local383++;
-							} else if (isAlpha(arg2[local387])) {
-								local385++;
+					if (bad) {
+						@Pc(383) int numeralCount = 0;
+						@Pc(385) int alphaCount = 0;
+						for (@Pc(387) int n = start; n < end; n++) {
+							if (isNumber(chars[n])) {
+								numeralCount++;
+							} else if (isAlpha(chars[n])) {
+								alphaCount++;
 							}
 						}
-						if (local383 <= local385) {
-							for (local271 = local16; local271 < local20; local271++) {
-								arg2[local271] = '*';
+						if (numeralCount <= alphaCount) {
+							for (cur = start; cur < end; cur++) {
+								chars[cur] = '*';
 							}
 						}
 					}
@@ -675,44 +674,44 @@ public final class WordFilter {
 	}
 
 	@OriginalMember(owner = "client!mc", name = "a", descriptor = "(IB[[BB)Z")
-	private static boolean comboMatches(@OriginalArg(1) byte arg1, @OriginalArg(2) byte[][] arg2, @OriginalArg(3) byte arg3) {
-		@Pc(9) int local9 = 0;
-		if (arg2[local9][0] == arg1 && arg2[local9][1] == arg3) {
+	private static boolean comboMatches(@OriginalArg(1) byte a, @OriginalArg(2) byte[][] combos, @OriginalArg(3) byte b) {
+		@Pc(9) int first = 0;
+		if (combos[first][0] == a && combos[first][1] == b) {
 			return true;
 		}
-		@Pc(30) int local30 = arg2.length - 1;
-		if (arg2[local30][0] == arg1 && arg2[local30][1] == arg3) {
+		@Pc(30) int last = combos.length - 1;
+		if (combos[last][0] == a && combos[last][1] == b) {
 			return true;
 		}
 		do {
-			@Pc(52) int local52 = (local9 + local30) / 2;
-			if (arg2[local52][0] == arg1 && arg2[local52][1] == arg3) {
+			@Pc(52) int middle = (first + last) / 2;
+			if (combos[middle][0] == a && combos[middle][1] == b) {
 				return true;
 			}
-			if (arg1 < arg2[local52][0] || arg1 == arg2[local52][0] && arg3 < arg2[local52][1]) {
-				local30 = local52;
+			if (a < combos[middle][0] || a == combos[middle][0] && b < combos[middle][1]) {
+				last = middle;
 			} else {
-				local9 = local52;
+				first = middle;
 			}
-		} while (local9 != local30 && local9 + 1 != local30);
+		} while (first != last && first + 1 != last);
 		return false;
 	}
 
 	@OriginalMember(owner = "client!mc", name = "a", descriptor = "(ICCC)I")
-	private static int getEmulatedDomainCharSize(@OriginalArg(1) char arg1, @OriginalArg(2) char arg2, @OriginalArg(3) char arg3) {
-		if (arg2 == arg3) {
+	private static int getEmulatedDomainCharSize(@OriginalArg(1) char c, @OriginalArg(2) char a, @OriginalArg(3) char b) {
+		if (a == b) {
 			return 1;
-		} else if (arg2 == 'o' && arg3 == '0') {
+		} else if (a == 'o' && b == '0') {
 			return 1;
-		} else if (arg2 == 'o' && arg3 == '(' && arg1 == ')') {
+		} else if (a == 'o' && b == '(' && c == ')') {
 			return 2;
-		} else if (arg2 == 'c' && (arg3 == '(' || arg3 == '<' || arg3 == '[')) {
+		} else if (a == 'c' && (b == '(' || b == '<' || b == '[')) {
 			return 1;
-		} else if (arg2 == 'e' && arg3 == '€') {
+		} else if (a == 'e' && b == '€') {
 			return 1;
-		} else if (arg2 == 's' && arg3 == '$') {
+		} else if (a == 's' && b == '$') {
 			return 1;
-		} else if (arg2 == 'l' && arg3 == 'i') {
+		} else if (a == 'l' && b == 'i') {
 			return 1;
 		} else {
 			return 0;
@@ -720,348 +719,348 @@ public final class WordFilter {
 	}
 
 	@OriginalMember(owner = "client!mc", name = "a", descriptor = "(CCCI)I")
-	private static int getEmulatedSize(@OriginalArg(0) char arg0, @OriginalArg(1) char arg1, @OriginalArg(2) char arg2) {
-		if (arg1 == arg2) {
+	private static int getEmulatedSize(@OriginalArg(0) char c, @OriginalArg(1) char a, @OriginalArg(2) char b) {
+		if (a == b) {
 			return 1;
 		}
-		if (arg1 >= 'a' && arg1 <= 'm') {
-			if (arg1 == 'a') {
-				if (arg2 != '4' && arg2 != '@' && arg2 != '^') {
-					if (arg2 == '/' && arg0 == '\\') {
+		if (a >= 'a' && a <= 'm') {
+			if (a == 'a') {
+				if (b != '4' && b != '@' && b != '^') {
+					if (b == '/' && c == '\\') {
 						return 2;
 					}
 					return 0;
 				}
 				return 1;
 			}
-			if (arg1 == 'b') {
-				if (arg2 != '6' && arg2 != '8') {
-					if (arg2 == '1' && arg0 == '3') {
+			if (a == 'b') {
+				if (b != '6' && b != '8') {
+					if (b == '1' && c == '3') {
 						return 2;
 					}
 					return 0;
 				}
 				return 1;
 			}
-			if (arg1 == 'c') {
-				if (arg2 != '(' && arg2 != '<' && arg2 != '{' && arg2 != '[') {
+			if (a == 'c') {
+				if (b != '(' && b != '<' && b != '{' && b != '[') {
 					return 0;
 				}
 				return 1;
 			}
-			if (arg1 == 'd') {
-				if (arg2 == '[' && arg0 == ')') {
+			if (a == 'd') {
+				if (b == '[' && c == ')') {
 					return 2;
 				}
 				return 0;
 			}
-			if (arg1 == 'e') {
-				if (arg2 != '3' && arg2 != '€') {
+			if (a == 'e') {
+				if (b != '3' && b != '€') {
 					return 0;
 				}
 				return 1;
 			}
-			if (arg1 == 'f') {
-				if (arg2 == 'p' && arg0 == 'h') {
+			if (a == 'f') {
+				if (b == 'p' && c == 'h') {
 					return 2;
 				}
-				if (arg2 == '£') {
+				if (b == '£') {
 					return 1;
 				}
 				return 0;
 			}
-			if (arg1 == 'g') {
-				if (arg2 != '9' && arg2 != '6') {
+			if (a == 'g') {
+				if (b != '9' && b != '6') {
 					return 0;
 				}
 				return 1;
 			}
-			if (arg1 == 'h') {
-				if (arg2 == '#') {
+			if (a == 'h') {
+				if (b == '#') {
 					return 1;
 				}
 				return 0;
 			}
-			if (arg1 == 'i') {
-				if (arg2 != 'y' && arg2 != 'l' && arg2 != 'j' && arg2 != '1' && arg2 != '!' && arg2 != ':' && arg2 != ';' && arg2 != '|') {
+			if (a == 'i') {
+				if (b != 'y' && b != 'l' && b != 'j' && b != '1' && b != '!' && b != ':' && b != ';' && b != '|') {
 					return 0;
 				}
 				return 1;
 			}
-			if (arg1 == 'j') {
+			if (a == 'j') {
 				return 0;
 			}
-			if (arg1 == 'k') {
+			if (a == 'k') {
 				return 0;
 			}
-			if (arg1 == 'l') {
-				if (arg2 != '1' && arg2 != '|' && arg2 != 'i') {
+			if (a == 'l') {
+				if (b != '1' && b != '|' && b != 'i') {
 					return 0;
 				}
 				return 1;
 			}
-			if (arg1 == 'm') {
+			if (a == 'm') {
 				return 0;
 			}
 		}
-		if (arg1 >= 'n' && arg1 <= 'z') {
-			if (arg1 == 'n') {
+		if (a >= 'n' && a <= 'z') {
+			if (a == 'n') {
 				return 0;
 			}
-			if (arg1 == 'o') {
-				if (arg2 != '0' && arg2 != '*') {
-					if ((arg2 != '(' || arg0 != ')') && (arg2 != '[' || arg0 != ']') && (arg2 != '{' || arg0 != '}') && (arg2 != '<' || arg0 != '>')) {
+			if (a == 'o') {
+				if (b != '0' && b != '*') {
+					if ((b != '(' || c != ')') && (b != '[' || c != ']') && (b != '{' || c != '}') && (b != '<' || c != '>')) {
 						return 0;
 					}
 					return 2;
 				}
 				return 1;
 			}
-			if (arg1 == 'p') {
+			if (a == 'p') {
 				return 0;
 			}
-			if (arg1 == 'q') {
+			if (a == 'q') {
 				return 0;
 			}
-			if (arg1 == 'r') {
+			if (a == 'r') {
 				return 0;
 			}
-			if (arg1 == 's') {
-				if (arg2 != '5' && arg2 != 'z' && arg2 != '$' && arg2 != '2') {
+			if (a == 's') {
+				if (b != '5' && b != 'z' && b != '$' && b != '2') {
 					return 0;
 				}
 				return 1;
 			}
-			if (arg1 == 't') {
-				if (arg2 != '7' && arg2 != '+') {
+			if (a == 't') {
+				if (b != '7' && b != '+') {
 					return 0;
 				}
 				return 1;
 			}
-			if (arg1 == 'u') {
-				if (arg2 == 'v') {
+			if (a == 'u') {
+				if (b == 'v') {
 					return 1;
 				}
-				if (arg2 == '\\' && arg0 == '/' || arg2 == '\\' && arg0 == '|' || arg2 == '|' && arg0 == '/') {
+				if (b == '\\' && c == '/' || b == '\\' && c == '|' || b == '|' && c == '/') {
 					return 2;
 				}
 				return 0;
 			}
-			if (arg1 == 'v') {
-				if ((arg2 != '\\' || arg0 != '/') && (arg2 != '\\' || arg0 != '|') && (arg2 != '|' || arg0 != '/')) {
+			if (a == 'v') {
+				if ((b != '\\' || c != '/') && (b != '\\' || c != '|') && (b != '|' || c != '/')) {
 					return 0;
 				}
 				return 2;
 			}
-			if (arg1 == 'w') {
-				if (arg2 == 'v' && arg0 == 'v') {
+			if (a == 'w') {
+				if (b == 'v' && c == 'v') {
 					return 2;
 				}
 				return 0;
 			}
-			if (arg1 == 'x') {
-				if ((arg2 != ')' || arg0 != '(') && (arg2 != '}' || arg0 != '{') && (arg2 != ']' || arg0 != '[') && (arg2 != '>' || arg0 != '<')) {
+			if (a == 'x') {
+				if ((b != ')' || c != '(') && (b != '}' || c != '{') && (b != ']' || c != '[') && (b != '>' || c != '<')) {
 					return 0;
 				}
 				return 2;
 			}
-			if (arg1 == 'y') {
+			if (a == 'y') {
 				return 0;
 			}
-			if (arg1 == 'z') {
+			if (a == 'z') {
 				return 0;
 			}
 		}
-		if (arg1 >= '0' && arg1 <= '9') {
-			if (arg1 == '0') {
-				if (arg2 == 'o' || arg2 == 'O') {
+		if (a >= '0' && a <= '9') {
+			if (a == '0') {
+				if (b == 'o' || b == 'O') {
 					return 1;
-				} else if ((arg2 != '(' || arg0 != ')') && (arg2 != '{' || arg0 != '}') && (arg2 != '[' || arg0 != ']')) {
+				} else if ((b != '(' || c != ')') && (b != '{' || c != '}') && (b != '[' || c != ']')) {
 					return 0;
 				} else {
 					return 2;
 				}
-			} else if (arg1 == '1') {
-				return arg2 == 'l' ? 1 : 0;
+			} else if (a == '1') {
+				return b == 'l' ? 1 : 0;
 			} else {
 				return 0;
 			}
-		} else if (arg1 == ',') {
-			return arg2 == '.' ? 1 : 0;
-		} else if (arg1 == '.') {
-			return arg2 == ',' ? 1 : 0;
-		} else if (arg1 == '!') {
-			return arg2 == 'i' ? 1 : 0;
+		} else if (a == ',') {
+			return b == '.' ? 1 : 0;
+		} else if (a == '.') {
+			return b == ',' ? 1 : 0;
+		} else if (a == '!') {
+			return b == 'i' ? 1 : 0;
 		} else {
 			return 0;
 		}
 	}
 
 	@OriginalMember(owner = "client!mc", name = "b", descriptor = "(IC)B")
-	private static byte getIndex(@OriginalArg(1) char arg1) {
-		if (arg1 >= 'a' && arg1 <= 'z') {
-			return (byte) (arg1 + 1 - 'a');
-		} else if (arg1 == '\'') {
+	private static byte getIndex(@OriginalArg(1) char c) {
+		if (c >= 'a' && c <= 'z') {
+			return (byte) (c + 1 - 'a');
+		} else if (c == '\'') {
 			return 28;
-		} else if (arg1 >= '0' && arg1 <= '9') {
-			return (byte) (arg1 + 29 - '0');
+		} else if (c >= '0' && c <= '9') {
+			return (byte) (c + 29 - '0');
 		} else {
 			return 27;
 		}
 	}
 
 	@OriginalMember(owner = "client!mc", name = "a", descriptor = "(I[C)V")
-	private static void filterFragments(@OriginalArg(1) char[] arg1) {
-		@Pc(3) boolean local3 = false;
-		@Pc(5) int local5 = 0;
-		@Pc(11) int local11 = 0;
-		@Pc(13) int local13 = 0;
+	private static void filterFragments(@OriginalArg(1) char[] chars) {
+		@Pc(3) boolean compare = false;
+		@Pc(5) int end = 0;
+		@Pc(11) int count = 0;
+		@Pc(13) int start = 0;
 		while (true) {
 			do {
-				@Pc(112) int local112;
-				if ((local112 = indexOfNumber(arg1, local5)) == -1) {
+				@Pc(112) int index;
+				if ((index = indexOfNumber(chars, end)) == -1) {
 					return;
 				}
-				@Pc(17) boolean local17 = false;
-				for (@Pc(19) int local19 = local5; local19 >= 0 && local19 < local112 && !local17; local19++) {
-					if (!isSymbol(arg1[local19]) && !isLowerCaseAlpha(arg1[local19])) {
-						local17 = true;
+				@Pc(17) boolean foundLowercase = false;
+				for (@Pc(19) int i = end; i >= 0 && i < index && !foundLowercase; i++) {
+					if (!isSymbol(chars[i]) && !isLowerCaseAlpha(chars[i])) {
+						foundLowercase = true;
 					}
 				}
-				if (local17) {
-					local11 = 0;
+				if (foundLowercase) {
+					count = 0;
 				}
-				if (local11 == 0) {
-					local13 = local112;
+				if (count == 0) {
+					start = index;
 				}
-				local5 = indexOfNonNumber(local112, arg1);
-				@Pc(58) int local58 = 0;
-				for (@Pc(60) int local60 = local112; local60 < local5; local60++) {
-					local58 = local58 * 10 + arg1[local60] - 48;
+				end = indexOfNonNumber(index, chars);
+				@Pc(58) int value = 0;
+				for (@Pc(60) int i = index; i < end; i++) {
+					value = value * 10 + chars[i] - 48;
 				}
-				if (local58 <= 255 && local5 - local112 <= 8) {
-					local11++;
+				if (value <= 255 && end - index <= 8) {
+					count++;
 				} else {
-					local11 = 0;
+					count = 0;
 				}
-			} while (local11 != 4);
-			for (@Pc(94) int local94 = local13; local94 < local5; local94++) {
-				arg1[local94] = '*';
+			} while (count != 4);
+			for (@Pc(94) int i = start; i < end; i++) {
+				chars[i] = '*';
 			}
-			local11 = 0;
+			count = 0;
 		}
 	}
 
 	@OriginalMember(owner = "client!mc", name = "a", descriptor = "(I[CI)I")
-	private static int indexOfNumber(@OriginalArg(1) char[] arg1, @OriginalArg(2) int arg2) {
-		for (@Pc(5) int local5 = arg2; local5 < arg1.length && local5 >= 0; local5++) {
-			if (arg1[local5] >= '0' && arg1[local5] <= '9') {
-				return local5;
+	private static int indexOfNumber(@OriginalArg(1) char[] input, @OriginalArg(2) int off) {
+		for (@Pc(5) int i = off; i < input.length && i >= 0; i++) {
+			if (input[i] >= '0' && input[i] <= '9') {
+				return i;
 			}
 		}
 		return -1;
 	}
 
 	@OriginalMember(owner = "client!mc", name = "a", descriptor = "(II[C)I")
-	private static int indexOfNonNumber(@OriginalArg(1) int arg1, @OriginalArg(2) char[] arg2) {
-		@Pc(6) int local6 = arg1;
+	private static int indexOfNonNumber(@OriginalArg(1) int off, @OriginalArg(2) char[] input) {
+		@Pc(6) int i = off;
 		while (true) {
-			if (local6 < arg2.length && local6 >= 0) {
-				if (arg2[local6] >= '0' && arg2[local6] <= '9') {
-					local6++;
+			if (i < input.length && i >= 0) {
+				if (input[i] >= '0' && input[i] <= '9') {
+					i++;
 					continue;
 				}
-				return local6;
+				return i;
 			}
-			return arg2.length;
+			return input.length;
 		}
 	}
 
 	@OriginalMember(owner = "client!mc", name = "a", descriptor = "(CI)Z")
-	private static boolean isSymbol(@OriginalArg(0) char arg0) {
-		return !isAlpha(arg0) && !isNumber(arg0);
+	private static boolean isSymbol(@OriginalArg(0) char c) {
+		return !isAlpha(c) && !isNumber(c);
 	}
 
 	@OriginalMember(owner = "client!mc", name = "a", descriptor = "(CB)Z")
-	private static boolean isLowerCaseAlpha(@OriginalArg(0) char arg0) {
-		if (arg0 >= 'a' && arg0 <= 'z') {
-			return arg0 == 'v' || arg0 == 'x' || arg0 == 'j' || arg0 == 'q' || arg0 == 'z';
+	private static boolean isLowerCaseAlpha(@OriginalArg(0) char c) {
+		if (c >= 'a' && c <= 'z') {
+			return c == 'v' || c == 'x' || c == 'j' || c == 'q' || c == 'z';
 		} else {
 			return true;
 		}
 	}
 
 	@OriginalMember(owner = "client!mc", name = "c", descriptor = "(IC)Z")
-	private static boolean isAlpha(@OriginalArg(1) char arg1) {
-		return arg1 >= 'a' && arg1 <= 'z' || arg1 >= 'A' && arg1 <= 'Z';
+	private static boolean isAlpha(@OriginalArg(1) char c) {
+		return c >= 'a' && c <= 'z' || c >= 'A' && c <= 'Z';
 	}
 
 	@OriginalMember(owner = "client!mc", name = "b", descriptor = "(CI)Z")
-	private static boolean isNumber(@OriginalArg(0) char arg0) {
-		return arg0 >= '0' && arg0 <= '9';
+	private static boolean isNumber(@OriginalArg(0) char c) {
+		return c >= '0' && c <= '9';
 	}
 
 	@OriginalMember(owner = "client!mc", name = "a", descriptor = "(BC)Z")
-	private static boolean isLowerCase(@OriginalArg(1) char arg1) {
-		return arg1 >= 'a' && arg1 <= 'z';
+	private static boolean isLowerCase(@OriginalArg(1) char c) {
+		return c >= 'a' && c <= 'z';
 	}
 
 	@OriginalMember(owner = "client!mc", name = "d", descriptor = "(IC)Z")
-	private static boolean isUpperCase(@OriginalArg(1) char arg1) {
-		return arg1 >= 'A' && arg1 <= 'Z';
+	private static boolean isUpperCase(@OriginalArg(1) char c) {
+		return c >= 'A' && c <= 'Z';
 	}
 
 	@OriginalMember(owner = "client!mc", name = "c", descriptor = "([CI)Z")
-	private static boolean isBadFragment(@OriginalArg(0) char[] arg0) {
-		@Pc(3) boolean local3 = true;
-		for (@Pc(5) int local5 = 0; local5 < arg0.length; local5++) {
-			if (!isNumber(arg0[local5]) && arg0[local5] != '\u0000') {
-				local3 = false;
+	private static boolean isBadFragment(@OriginalArg(0) char[] input) {
+		@Pc(3) boolean skip = true;
+		for (@Pc(5) int i = 0; i < input.length; i++) {
+			if (!isNumber(input[i]) && input[i] != '\0') {
+				skip = false;
 				break;
 			}
 		}
-		if (local3) {
+		if (skip) {
 			return true;
 		}
-		@Pc(32) int local32 = firstFragmentId(arg0);
-		@Pc(34) int local34 = 0;
-		@Pc(39) int local39;
-		local39 = fragments.length - 1;
-		if (local32 == fragments[local34] || local32 == fragments[local39]) {
+		@Pc(32) int i = firstFragmentId(input);
+		@Pc(34) int start = 0;
+		@Pc(39) int end;
+		end = fragments.length - 1;
+		if (i == fragments[start] || i == fragments[end]) {
 			return true;
 		}
 		do {
-			@Pc(67) int local67 = (local34 + local39) / 2;
-			if (local32 == fragments[local67]) {
+			@Pc(67) int middle = (start + end) / 2;
+			if (i == fragments[middle]) {
 				return true;
 			}
-			if (local32 < fragments[local67]) {
-				local39 = local67;
+			if (i < fragments[middle]) {
+				end = middle;
 			} else {
-				local34 = local67;
+				start = middle;
 			}
-		} while (local34 != local39 && local34 + 1 != local39);
+		} while (start != end && start + 1 != end);
 		return false;
 	}
 
 	@OriginalMember(owner = "client!mc", name = "b", descriptor = "(I[C)I")
-	private static int firstFragmentId(@OriginalArg(1) char[] arg1) {
-		if (arg1.length > 6) {
+	private static int firstFragmentId(@OriginalArg(1) char[] chars) {
+		if (chars.length > 6) {
 			return 0;
 		}
-		@Pc(9) int local9 = 0;
-		for (@Pc(11) int local11 = 0; local11 < arg1.length; local11++) {
-			@Pc(22) char local22 = arg1[arg1.length - local11 - 1];
-			if (local22 >= 'a' && local22 <= 'z') {
-				local9 = local9 * 38 + local22 + 1 - 'a';
-			} else if (local22 == '\'') {
-				local9 = local9 * 38 + 27;
-			} else if (local22 >= '0' && local22 <= '9') {
-				local9 = local9 * 38 + local22 + 28 - '0';
-			} else if (local22 != '\u0000') {
+		@Pc(9) int value = 0;
+		for (@Pc(11) int i = 0; i < chars.length; i++) {
+			@Pc(22) char c = chars[chars.length - i - 1];
+			if (c >= 'a' && c <= 'z') {
+				value = value * 38 + c + 1 - 'a';
+			} else if (c == '\'') {
+				value = value * 38 + 27;
+			} else if (c >= '0' && c <= '9') {
+				value = value * 38 + c + 28 - '0';
+			} else if (c != '\0') {
 				return 0;
 			}
 		}
-		return local9;
+		return value;
 	}
 }
