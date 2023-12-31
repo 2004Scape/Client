@@ -104,7 +104,6 @@ public class GameShell extends Applet implements Runnable, MouseListener, MouseM
 	}
 
 	@OriginalMember(owner = "client!a", name = "run", descriptor = "()V")
-	@Override
 	public void run() {
 		this.getBaseComponent().addMouseListener(this);
 		this.getBaseComponent().addMouseMotionListener(this);
@@ -274,7 +273,6 @@ public class GameShell extends Applet implements Runnable, MouseListener, MouseM
 	}
 
 	@OriginalMember(owner = "client!a", name = "mousePressed", descriptor = "(Ljava/awt/event/MouseEvent;)V")
-	@Override
 	public final void mousePressed(@OriginalArg(0) MouseEvent e) {
 		@Pc(2) int x = e.getX();
 		@Pc(5) int y = e.getY();
@@ -297,7 +295,6 @@ public class GameShell extends Applet implements Runnable, MouseListener, MouseM
 	}
 
 	@OriginalMember(owner = "client!a", name = "mouseReleased", descriptor = "(Ljava/awt/event/MouseEvent;)V")
-	@Override
 	public final void mouseReleased(@OriginalArg(0) MouseEvent e) {
 		this.idleCycles = 0;
 		this.mouseButton = 0;
@@ -308,12 +305,10 @@ public class GameShell extends Applet implements Runnable, MouseListener, MouseM
 	}
 
 	@OriginalMember(owner = "client!a", name = "mouseClicked", descriptor = "(Ljava/awt/event/MouseEvent;)V")
-	@Override
 	public final void mouseClicked(@OriginalArg(0) MouseEvent e) {
 	}
 
 	@OriginalMember(owner = "client!a", name = "mouseEntered", descriptor = "(Ljava/awt/event/MouseEvent;)V")
-	@Override
 	public final void mouseEntered(@OriginalArg(0) MouseEvent e) {
 		if (InputTracking.enabled) {
 			InputTracking.mouseEntered();
@@ -321,7 +316,6 @@ public class GameShell extends Applet implements Runnable, MouseListener, MouseM
 	}
 
 	@OriginalMember(owner = "client!a", name = "mouseExited", descriptor = "(Ljava/awt/event/MouseEvent;)V")
-	@Override
 	public final void mouseExited(@OriginalArg(0) MouseEvent e) {
 		if (InputTracking.enabled) {
 			InputTracking.mouseExited();
@@ -329,7 +323,6 @@ public class GameShell extends Applet implements Runnable, MouseListener, MouseM
 	}
 
 	@OriginalMember(owner = "client!a", name = "mouseDragged", descriptor = "(Ljava/awt/event/MouseEvent;)V")
-	@Override
 	public final void mouseDragged(@OriginalArg(0) MouseEvent e) {
 		@Pc(2) int x = e.getX();
 		@Pc(5) int y = e.getY();
@@ -344,7 +337,6 @@ public class GameShell extends Applet implements Runnable, MouseListener, MouseM
 	}
 
 	@OriginalMember(owner = "client!a", name = "mouseMoved", descriptor = "(Ljava/awt/event/MouseEvent;)V")
-	@Override
 	public final void mouseMoved(@OriginalArg(0) MouseEvent e) {
 		@Pc(2) int x = e.getX();
 		@Pc(5) int y = e.getY();
@@ -359,7 +351,6 @@ public class GameShell extends Applet implements Runnable, MouseListener, MouseM
 	}
 
 	@OriginalMember(owner = "client!a", name = "keyPressed", descriptor = "(Ljava/awt/event/KeyEvent;)V")
-	@Override
 	public final void keyPressed(@OriginalArg(0) KeyEvent e) {
 		this.idleCycles = 0;
 
@@ -415,7 +406,6 @@ public class GameShell extends Applet implements Runnable, MouseListener, MouseM
 	}
 
 	@OriginalMember(owner = "client!a", name = "keyReleased", descriptor = "(Ljava/awt/event/KeyEvent;)V")
-	@Override
 	public final void keyReleased(@OriginalArg(0) KeyEvent e) {
 		this.idleCycles = 0;
 
@@ -466,12 +456,10 @@ public class GameShell extends Applet implements Runnable, MouseListener, MouseM
 	}
 
 	@OriginalMember(owner = "client!a", name = "keyTyped", descriptor = "(Ljava/awt/event/KeyEvent;)V")
-	@Override
 	public final void keyTyped(@OriginalArg(0) KeyEvent e) {
 	}
 
 	@OriginalMember(owner = "client!a", name = "focusGained", descriptor = "(Ljava/awt/event/FocusEvent;)V")
-	@Override
 	public final void focusGained(@OriginalArg(0) FocusEvent e) {
 		this.refresh = true;
 		this.refresh();
@@ -482,7 +470,6 @@ public class GameShell extends Applet implements Runnable, MouseListener, MouseM
 	}
 
 	@OriginalMember(owner = "client!a", name = "focusLost", descriptor = "(Ljava/awt/event/FocusEvent;)V")
-	@Override
 	public final void focusLost(@OriginalArg(0) FocusEvent e) {
 		if (InputTracking.enabled) {
 			InputTracking.focusLost();
@@ -500,38 +487,31 @@ public class GameShell extends Applet implements Runnable, MouseListener, MouseM
 	}
 
 	@OriginalMember(owner = "client!a", name = "windowActivated", descriptor = "(Ljava/awt/event/WindowEvent;)V")
-	@Override
 	public final void windowActivated(@OriginalArg(0) WindowEvent e) {
 	}
 
 	@OriginalMember(owner = "client!a", name = "windowClosed", descriptor = "(Ljava/awt/event/WindowEvent;)V")
-	@Override
 	public final void windowClosed(@OriginalArg(0) WindowEvent e) {
 	}
 
 	@OriginalMember(owner = "client!a", name = "windowClosing", descriptor = "(Ljava/awt/event/WindowEvent;)V")
-	@Override
 	public final void windowClosing(@OriginalArg(0) WindowEvent e) {
 		this.destroy();
 	}
 
 	@OriginalMember(owner = "client!a", name = "windowDeactivated", descriptor = "(Ljava/awt/event/WindowEvent;)V")
-	@Override
 	public final void windowDeactivated(@OriginalArg(0) WindowEvent e) {
 	}
 
 	@OriginalMember(owner = "client!a", name = "windowDeiconified", descriptor = "(Ljava/awt/event/WindowEvent;)V")
-	@Override
 	public final void windowDeiconified(@OriginalArg(0) WindowEvent e) {
 	}
 
 	@OriginalMember(owner = "client!a", name = "windowIconified", descriptor = "(Ljava/awt/event/WindowEvent;)V")
-	@Override
 	public final void windowIconified(@OriginalArg(0) WindowEvent e) {
 	}
 
 	@OriginalMember(owner = "client!a", name = "windowOpened", descriptor = "(Ljava/awt/event/WindowEvent;)V")
-	@Override
 	public final void windowOpened(@OriginalArg(0) WindowEvent e) {
 	}
 

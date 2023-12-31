@@ -576,16 +576,16 @@ public final class World3D {
 			for (@Pc(115) int tz = tileZ; tz < tileZ + tileSizeZ; tz++) {
 				@Pc(119) int spans = 0;
 				if (tx > tileX) {
-					spans |= 0b0001;
+					spans |= 0x1;
 				}
 				if (tx < tileX + tileSizeX - 1) {
-					spans += 0b0100;
+					spans += 0x4;
 				}
 				if (tz > tileZ) {
-					spans += 0b1000;
+					spans += 0x8;
 				}
 				if (tz < tileZ + tileSizeZ - 1) {
-					spans += 0b0010;
+					spans += 0x2;
 				}
 				for (@Pc(145) int l = level; l >= 0; l--) {
 					if (this.levelTiles[l][tx][tz] == null) {

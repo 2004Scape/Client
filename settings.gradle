@@ -11,5 +11,7 @@ dependencyResolutionManagement {
 
 include(
     "deob-annotations",
-    "client"
+    "client",
+    "loader",
+    "tools"
 )

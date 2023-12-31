@@ -1252,7 +1252,13 @@ public final class client extends GameShell {
                 members = true;
             }
 
+			String vendor = System.getProperties().getProperty("java.vendor");
+			if (vendor.toLowerCase().indexOf("sun") != -1 || vendor.toLowerCase().indexOf("apple") != -1) {
+				Signlink.sunjava = true;
+			}
+
             Signlink.startpriv(InetAddress.getByName("w1.225.2004scape.org"));
+
             @Pc(82) client c = new client();
             c.initApplication(532, 789);
 		} catch (@Pc(89) Exception _ex) {
@@ -1520,7 +1526,7 @@ public final class client extends GameShell {
 
 	@OriginalMember(owner = "client!client", name = "e", descriptor = "(I)V")
 	private void stopMidi() {
-		Signlink.midifade = false;
+		Signlink.midifade = 0;
 		Signlink.midi = "stop";
 	}
 
@@ -2208,7 +2214,7 @@ public final class client extends GameShell {
 				int uncompressedLength = (new Packet(data)).g4();
 				@Pc(167) byte[] uncompressed = new byte[uncompressedLength];
 				BZip2.read(uncompressed, uncompressedLength, data, len, 4);
-				this.saveMidi(uncompressed, uncompressedLength, true);
+				this.saveMidi(uncompressed, uncompressedLength, 1);
 			}
 		}
 	}
@@ -3773,7 +3779,7 @@ public final class client extends GameShell {
 	}
 
 	@OriginalMember(owner = "client!client", name = "a", descriptor = "([BIIZ)V")
-	private void saveMidi(@OriginalArg(0) byte[] src, @OriginalArg(2) int length, @OriginalArg(3) boolean fade) {
+	private void saveMidi(@OriginalArg(0) byte[] src, @OriginalArg(2) int length, @OriginalArg(3) int fade) {
 		Signlink.midifade = fade;
 		Signlink.midisave(src, length);
 	}
@@ -4239,19 +4245,19 @@ public final class client extends GameShell {
 			if (clientcode == 3) {
 				@Pc(54) boolean lastMidiActive = this.midiActive;
 				if (value == 0) {
-					this.setMidiVolume(192);
+					this.setMidiVolume(0);
 					this.midiActive = true;
 				}
 				if (value == 1) {
-					this.setMidiVolume(128);
+					this.setMidiVolume(-400);
 					this.midiActive = true;
 				}
 				if (value == 2) {
-					this.setMidiVolume(64);
+					this.setMidiVolume(-800);
 					this.midiActive = true;
 				}
 				if (value == 3) {
-					this.setMidiVolume(32);
+					this.setMidiVolume(-1200);
 					this.midiActive = true;
 				}
 				if (value == 4) {
@@ -4269,19 +4275,19 @@ public final class client extends GameShell {
 			if (clientcode == 4) {
 				if (value == 0) {
 					this.waveEnabled = true;
-					this.setWaveVolume(100);
+					this.setWaveVolume(0);
 				}
 				if (value == 1) {
 					this.waveEnabled = true;
-					this.setWaveVolume(75);
+					this.setWaveVolume(-400);
 				}
 				if (value == 2) {
 					this.waveEnabled = true;
-					this.setWaveVolume(50);
+					this.setWaveVolume(-800);
 				}
 				if (value == 3) {
 					this.waveEnabled = true;
-					this.setWaveVolume(25);
+					this.setWaveVolume(-1200);
 				}
 				if (value == 4) {
 					this.waveEnabled = false;
@@ -9804,7 +9810,7 @@ public final class client extends GameShell {
 					int remaining = this.packetSize - 6;
 					@Pc(2018) byte[] src = new byte[length];
 					BZip2.read(src, length, this.in.data, remaining, this.in.pos);
-					this.saveMidi(src, length, false);
+					this.saveMidi(src, length, 0);
 					this.nextMusicDelay = delay;
 				}
 				this.packetType = -1;

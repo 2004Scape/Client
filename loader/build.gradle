@@ -3,7 +3,7 @@ plugins {
     id 'application'
 }
 
-mainClassName = 'jagex2.client.client'
+mainClassName = 'jagex2.client.loader'
 
 tasks.withType(JavaCompile) {
     options.encoding = 'UTF-8'

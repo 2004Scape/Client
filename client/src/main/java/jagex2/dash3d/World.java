@@ -576,7 +576,7 @@ public final class World {
 			scene.addLoc(y, level, null, bitset, z, x, 1, info, model, 0, 1);
 
 			if (shape >= 12 && shape <= 17 && shape != 13 && level > 0) {
-				this.levelOccludemap[level][x][z] |= 0b100_100_100_100;
+				this.levelOccludemap[level][x][z] |= 0x924;
 			}
 
 			if (loc.blockwalk && collision != null) {
@@ -597,7 +597,7 @@ public final class World {
 				}
 
 				if (loc.occlude) {
-					this.levelOccludemap[level][x][z] |= 0b001_001_001_001;
+					this.levelOccludemap[level][x][z] |= 0x249;
 				}
 			} else if (rotation == 1) {
 				if (loc.shadow) {
@@ -606,7 +606,7 @@ public final class World {
 				}
 
 				if (loc.occlude) {
-					this.levelOccludemap[level][x][z + 1] |= 0b010_010_010_010;
+					this.levelOccludemap[level][x][z + 1] |= 0x492;
 				}
 			} else if (rotation == 2) {
 				if (loc.shadow) {
@@ -615,7 +615,7 @@ public final class World {
 				}
 
 				if (loc.occlude) {
-					this.levelOccludemap[level][x + 1][z] |= 0b001_001_001_001;
+					this.levelOccludemap[level][x + 1][z] |= 0x249;
 				}
 			} else if (rotation == 3) {
 				if (loc.shadow) {
@@ -624,7 +624,7 @@ public final class World {
 				}
 
 				if (loc.occlude) {
-					this.levelOccludemap[level][x][z] |= 0b010_010_010_010;
+					this.levelOccludemap[level][x][z] |= 0x492;
 				}
 			}
 
@@ -670,17 +670,17 @@ public final class World {
 
 			if (loc.occlude) {
 				if (rotation == 0) {
-					this.levelOccludemap[level][x][z] |= 0b000_100_001_001;
-					this.levelOccludemap[level][x][z + 1] |= 0b010_010_010_010;
+					this.levelOccludemap[level][x][z] |= 0x109;
+					this.levelOccludemap[level][x][z + 1] |= 0x492;
 				} else if (rotation == 1) {
-					this.levelOccludemap[level][x][z + 1] |= 0b010_010_010_010;
-					this.levelOccludemap[level][x + 1][z] |= 0b001_001_001_001;
+					this.levelOccludemap[level][x][z + 1] |= 0x492;
+					this.levelOccludemap[level][x + 1][z] |= 0x249;
 				} else if (rotation == 2) {
-					this.levelOccludemap[level][x + 1][z] |= 0b001_001_001_001;
-					this.levelOccludemap[level][x][z] |= 0b010_010_010_010;
+					this.levelOccludemap[level][x + 1][z] |= 0x249;
+					this.levelOccludemap[level][x][z] |= 0x492;
 				} else if (rotation == 3) {
-					this.levelOccludemap[level][x][z] |= 0b010_010_010_010;
-					this.levelOccludemap[level][x][z] |= 0b001_001_001_001;
+					this.levelOccludemap[level][x][z] |= 0x492;
+					this.levelOccludemap[level][x][z] |= 0x249;
 				}
 			}
 
@@ -942,7 +942,7 @@ public final class World {
 
 									// occludes && flat
 									if (occludes && heightSW == heightSE && heightSW == heightNE && heightSW == heightNW) {
-										this.levelOccludemap[level][x0][z0] |= 0b100_100_100_100;
+										this.levelOccludemap[level][x0][z0] |= 0x924;
 									}
 								}
 
@@ -1001,9 +1001,9 @@ public final class World {
 		}
 
 		if (!fullbright) {
-			int wall0 = 0b001; // this flag is set by walls with rotation 0 or 2
-			@Pc(1123) int wall1 = 0b010; // this flag is set by walls with rotation 1 or 3
-			@Pc(1125) int floor = 0b100; // this flag is set by floors which are flat
+			int wall0 = 0x1; // this flag is set by walls with rotation 0 or 2
+			@Pc(1123) int wall1 = 0x2; // this flag is set by walls with rotation 1 or 3
+			@Pc(1125) int floor = 0x4; // this flag is set by floors which are flat
 
 			for (@Pc(1127) int topLevel = 0; topLevel < 4; topLevel++) {
 				if (topLevel > 0) {
