@@ -1439,6 +1439,119 @@ public final class Client extends GameShell {
 						this.fontPlain11.drawStringCenter(this.projectY + 3, 16777215, String.valueOf(local23.damage), this.projectX - 1);
 					}
 				}
+
+				if (showDebug) {
+					if (local15 < this.playerCount) {
+						@Pc(66) PlayerEntity player = (PlayerEntity) local23;
+
+						int offsetY = 0;
+						this.projectFromGround(local23.height + 30, local23);
+
+						this.fontPlain11.drawStringCenter(this.projectY + offsetY, 0xFFFFFF, player.name, this.projectX);
+						offsetY -= 15;
+
+						if (player.lastMask != -1 && loopCycle - player.lastMaskCycle < 30) {
+							if ((player.lastMask & 0x1) == 0x1) {
+								this.fontPlain11.drawStringCenter(this.projectY + offsetY, 0xFFFFFF, "Appearance Update", this.projectX);
+								offsetY -= 15;
+							}
+
+							if ((player.lastMask & 0x2) == 0x2) {
+								this.fontPlain11.drawStringCenter(this.projectY + offsetY, 0xFFFFFF, "Play Seq: " + player.primarySeqId, this.projectX);
+								offsetY -= 15;
+							}
+
+							if ((player.lastMask & 0x4) == 0x4) {
+								int target = player.targetId;
+								if (target > 32767) {
+									target -= 32768;
+								}
+								this.fontPlain11.drawStringCenter(this.projectY + offsetY, 0xFFFFFF, "Face Entity: " + target, this.projectX);
+								offsetY -= 15;
+							}
+
+							if ((player.lastMask & 0x8) == 0x8) {
+								this.fontPlain11.drawStringCenter(this.projectY + offsetY, 0xFFFFFF, "Say", this.projectX);
+								offsetY -= 15;
+							}
+
+							if ((player.lastMask & 0x10) == 0x10) {
+								this.fontPlain11.drawStringCenter(this.projectY + offsetY, 0xFFFFFF, "Hit: Type " + player.damageType + " Amount " + player.damage + " HP " + player.health + "/" + player.totalHealth, this.projectX);
+								offsetY -= 15;
+							}
+
+							if ((player.lastMask & 0x20) == 0x20) {
+								this.fontPlain11.drawStringCenter(this.projectY + offsetY, 0xFFFFFF, "Face Coord: " + (player.lastFaceX / 2) + " " + (player.lastFaceZ / 2), this.projectX);
+								offsetY -= 15;
+							}
+
+							if ((player.lastMask & 0x40) == 0x40) {
+								this.fontPlain11.drawStringCenter(this.projectY + offsetY, 0xFFFFFF, "Chat", this.projectX);
+								offsetY -= 15;
+							}
+
+							if ((player.lastMask & 0x100) == 0x100) {
+								this.fontPlain11.drawStringCenter(this.projectY + offsetY, 0xFFFFFF, "Play Spotanim: " + player.spotanimId, this.projectX);
+								offsetY -= 15;
+							}
+
+							if ((player.lastMask & 0x200) == 0x200) {
+								this.fontPlain11.drawStringCenter(this.projectY + offsetY, 0xFFFFFF, "Exact Move", this.projectX);
+								offsetY -= 15;
+							}
+						}
+					} else {
+						// npc
+						@Pc(66) NpcEntity npc = (NpcEntity) local23;
+
+						int offsetY = 0;
+						this.projectFromGround(local23.height + 30, local23);
+
+						this.fontPlain11.drawStringCenter(this.projectY + offsetY, 0xFFFFFF, npc.type.name, this.projectX);
+						offsetY -= 15;
+
+						if (npc.lastMask != -1 && loopCycle - npc.lastMaskCycle < 30) {
+							if ((npc.lastMask & 0x2) == 0x2) {
+								this.fontPlain11.drawStringCenter(this.projectY + offsetY, 0xFFFFFF, "Play Seq: " + npc.primarySeqId, this.projectX);
+								offsetY -= 15;
+							}
+
+							if ((npc.lastMask & 0x4) == 0x4) {
+								int target = npc.targetId;
+								if (target > 32767) {
+									target -= 32768;
+								}
+								this.fontPlain11.drawStringCenter(this.projectY + offsetY, 0xFFFFFF, "Face Entity: " + target, this.projectX);
+								offsetY -= 15;
+							}
+
+							if ((npc.lastMask & 0x8) == 0x8) {
+								this.fontPlain11.drawStringCenter(this.projectY + offsetY, 0xFFFFFF, "Say", this.projectX);
+								offsetY -= 15;
+							}
+
+							if ((npc.lastMask & 0x10) == 0x10) {
+								this.fontPlain11.drawStringCenter(this.projectY + offsetY, 0xFFFFFF, "Hit: Type " + npc.damageType + " Amount " + npc.damage + " HP " + npc.health + "/" + npc.totalHealth, this.projectX);
+								offsetY -= 15;
+							}
+
+							if ((npc.lastMask & 0x20) == 0x20) {
+								this.fontPlain11.drawStringCenter(this.projectY + offsetY, 0xFFFFFF, "Change Type: " + npc.type.index, this.projectX);
+								offsetY -= 15;
+							}
+
+							if ((npc.lastMask & 0x40) == 0x40) {
+								this.fontPlain11.drawStringCenter(this.projectY + offsetY, 0xFFFFFF, "Play Spotanim: " + npc.spotanimId, this.projectX);
+								offsetY -= 15;
+							}
+
+							if ((npc.lastMask & 0x80) == 0x80) {
+								this.fontPlain11.drawStringCenter(this.projectY + offsetY, 0xFFFFFF, "Face Coord: " + (npc.lastFaceX / 2) + " " + (npc.lastFaceZ / 2), this.projectX);
+								offsetY -= 15;
+							}
+						}
+					}
+				}
 			}
 		}
 		for (@Pc(483) int local483 = 0; local483 < this.chatCount; local483++) {
@@ -1651,6 +1764,8 @@ public final class Client extends GameShell {
 			@Pc(8) int local8 = this.entityUpdateIds[local1];
 			@Pc(13) NpcEntity local13 = this.npcs[local8];
 			@Pc(16) int local16 = arg0.g1();
+			local13.lastMask = local16;
+			local13.lastMaskCycle = loopCycle;
 			@Pc(24) int local24;
 			if ((local16 & 0x2) == 2) {
 				local24 = arg0.g2();
@@ -1711,6 +1826,8 @@ public final class Client extends GameShell {
 			if ((local16 & 0x80) == 128) {
 				local13.targetTileX = arg0.g2();
 				local13.targetTileZ = arg0.g2();
+				local13.lastFaceX = local13.targetTileX;
+				local13.lastFaceZ = local13.targetTileZ;
 			}
 		}
 	}
@@ -10644,6 +10761,8 @@ public final class Client extends GameShell {
 
 	@OriginalMember(owner = "client!client", name = "a", descriptor = "(ZIILclient!kb;Lclient!z;)V")
 	private void readPlayerUpdates(@OriginalArg(1) int arg1, @OriginalArg(2) int arg2, @OriginalArg(3) Packet arg3, @OriginalArg(4) PlayerEntity arg4) {
+		arg4.lastMask = arg2;
+		arg4.lastMaskCycle = loopCycle;
 		@Pc(19) int local19;
 		if ((arg2 & 0x1) == 1) {
 			local19 = arg3.g1();
@@ -10694,6 +10813,8 @@ public final class Client extends GameShell {
 		if ((arg2 & 0x20) == 32) {
 			arg4.targetTileX = arg3.g2();
 			arg4.targetTileZ = arg3.g2();
+			arg4.lastFaceX = arg4.targetTileX;
+			arg4.lastFaceZ = arg4.targetTileZ;
 		}
 		if ((arg2 & 0x40) == 64) {
 			local19 = arg3.g2();
