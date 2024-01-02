@@ -7,7 +7,7 @@ import org.openrs2.deob.annotation.OriginalClass;
 import org.openrs2.deob.annotation.OriginalMember;
 
 @OriginalClass("client!nb")
-public final class LocEntity extends Linkable {
+public class LocEntity extends Linkable {
 
 	@OriginalMember(owner = "client!nb", name = "e", descriptor = "I")
 	public int heightmapSW;

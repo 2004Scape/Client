@@ -4,7 +4,7 @@ import org.openrs2.deob.annotation.OriginalClass;
 import org.openrs2.deob.annotation.OriginalMember;
 
 @OriginalClass("client!m")
-public final class Occluder {
+public class Occluder {
 
 	@OriginalMember(owner = "client!m", name = "a", descriptor = "I")
 	public int minTileX;

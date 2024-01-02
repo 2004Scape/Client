@@ -6,7 +6,7 @@ import org.openrs2.deob.annotation.OriginalMember;
 import org.openrs2.deob.annotation.Pc;
 
 @OriginalClass("client!ec")
-public final class CollisionMap {
+public class CollisionMap {
 
 	@OriginalMember(owner = "client!ec", name = "f", descriptor = "I")
 	private final int offsetX;

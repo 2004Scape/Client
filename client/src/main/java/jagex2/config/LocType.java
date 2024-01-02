@@ -10,7 +10,7 @@ import org.openrs2.deob.annotation.OriginalMember;
 import org.openrs2.deob.annotation.Pc;
 
 @OriginalClass("client!ac")
-public final class LocType {
+public class LocType {
 
 	@OriginalMember(owner = "client!ac", name = "c", descriptor = "Z")
 	public static boolean reset;

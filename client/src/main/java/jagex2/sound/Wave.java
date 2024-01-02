@@ -7,7 +7,7 @@ import org.openrs2.deob.annotation.OriginalMember;
 import org.openrs2.deob.annotation.Pc;
 
 @OriginalClass("client!yb")
-public final class Wave {
+public class Wave {
 
 	@OriginalMember(owner = "client!yb", name = "c", descriptor = "[Lclient!yb;")
 	private static final Wave[] tracks = new Wave[1000];

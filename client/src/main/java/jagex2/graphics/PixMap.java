@@ -8,7 +8,7 @@ import java.awt.*;
 import java.awt.image.*;
 
 @OriginalClass("client!qb")
-public final class PixMap implements ImageProducer, ImageObserver {
+public class PixMap implements ImageProducer, ImageObserver {
 
 	@OriginalMember(owner = "client!qb", name = "b", descriptor = "[I")
 	public final int[] pixels;

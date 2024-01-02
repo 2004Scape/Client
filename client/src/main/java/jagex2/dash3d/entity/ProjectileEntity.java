@@ -8,7 +8,7 @@ import org.openrs2.deob.annotation.OriginalMember;
 import org.openrs2.deob.annotation.Pc;
 
 @OriginalClass("client!ab")
-public final class ProjectileEntity extends Entity {
+public class ProjectileEntity extends Entity {
 
 	@OriginalMember(owner = "client!ab", name = "g", descriptor = "Lclient!kc;")
 	private final SpotAnimType spotanim;

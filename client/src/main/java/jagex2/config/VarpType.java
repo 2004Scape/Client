@@ -8,7 +8,7 @@ import org.openrs2.deob.annotation.OriginalMember;
 import org.openrs2.deob.annotation.Pc;
 
 @OriginalClass("client!lc")
-public final class VarpType {
+public class VarpType {
 
 	@OriginalMember(owner = "client!lc", name = "c", descriptor = "I")
 	private static int count;

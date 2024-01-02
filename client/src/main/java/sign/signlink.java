@@ -15,7 +15,7 @@ import javax.sound.midi.MidiSystem;
 import javax.sound.sampled.*;
 
 @OriginalClass("client!sign/signlink")
-public final class signlink implements Runnable {
+public class signlink implements Runnable {
 
 	@OriginalMember(owner = "client!sign/signlink", name = "clientversion", descriptor = "I")
 	public static final int clientversion = 225;

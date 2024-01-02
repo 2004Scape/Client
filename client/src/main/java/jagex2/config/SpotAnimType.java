@@ -10,7 +10,7 @@ import org.openrs2.deob.annotation.OriginalMember;
 import org.openrs2.deob.annotation.Pc;
 
 @OriginalClass("client!kc")
-public final class SpotAnimType {
+public class SpotAnimType {
 
 	@OriginalMember(owner = "client!kc", name = "b", descriptor = "I")
 	private static int count;

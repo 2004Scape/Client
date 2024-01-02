@@ -9,7 +9,7 @@ import org.openrs2.deob.annotation.OriginalMember;
 import org.openrs2.deob.annotation.Pc;
 
 @OriginalClass("client!jc")
-public final class SeqType {
+public class SeqType {
 
 	@OriginalMember(owner = "client!jc", name = "c", descriptor = "I")
 	private static int count;

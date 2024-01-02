@@ -9,7 +9,7 @@ import org.openrs2.deob.annotation.OriginalMember;
 import org.openrs2.deob.annotation.Pc;
 
 @OriginalClass("client!y")
-public final class NpcEntity extends PathingEntity {
+public class NpcEntity extends PathingEntity {
 
 	@OriginalMember(owner = "client!y", name = "ib", descriptor = "Lclient!bc;")
 	public NpcType type;

@@ -7,7 +7,7 @@ import org.openrs2.deob.annotation.OriginalMember;
 import org.openrs2.deob.annotation.Pc;
 
 @OriginalClass("client!gb")
-public final class Draw3D extends Draw2D {
+public class Draw3D extends Draw2D {
 
 	@OriginalMember(owner = "client!gb", name = "A", descriptor = "Z")
 	public static boolean lowMemory = true;

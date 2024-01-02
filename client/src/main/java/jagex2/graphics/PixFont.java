@@ -10,7 +10,7 @@ import org.openrs2.deob.annotation.Pc;
 import java.util.Random;
 
 @OriginalClass("client!jb")
-public final class PixFont extends Draw2D {
+public class PixFont extends Draw2D {
 
 	@OriginalMember(owner = "client!jb", name = "B", descriptor = "[[B")
 	private final byte[][] charMask = new byte[94][];

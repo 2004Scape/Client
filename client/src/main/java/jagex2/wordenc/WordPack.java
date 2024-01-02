@@ -5,7 +5,7 @@ import org.openrs2.deob.annotation.OriginalArg;
 import org.openrs2.deob.annotation.OriginalMember;
 import org.openrs2.deob.annotation.Pc;
 
-public final class WordPack {
+public class WordPack {
 
 	@OriginalMember(owner = "client!wb", name = "a", descriptor = "[C")
 	private static final char[] charBuffer = new char[100];

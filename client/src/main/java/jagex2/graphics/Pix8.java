@@ -8,7 +8,7 @@ import org.openrs2.deob.annotation.OriginalMember;
 import org.openrs2.deob.annotation.Pc;
 
 @OriginalClass("client!ib")
-public final class Pix8 extends Draw2D {
+public class Pix8 extends Draw2D {
 
 	@OriginalMember(owner = "client!ib", name = "z", descriptor = "[B")
 	public byte[] pixels;

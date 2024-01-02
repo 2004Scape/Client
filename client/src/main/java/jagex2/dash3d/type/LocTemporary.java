@@ -5,7 +5,7 @@ import org.openrs2.deob.annotation.OriginalClass;
 import org.openrs2.deob.annotation.OriginalMember;
 
 @OriginalClass("client!lb")
-public final class LocTemporary extends Linkable {
+public class LocTemporary extends Linkable {
 
 	@OriginalMember(owner = "client!lb", name = "e", descriptor = "I")
 	public int plane;

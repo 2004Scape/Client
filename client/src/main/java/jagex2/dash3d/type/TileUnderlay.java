@@ -5,7 +5,7 @@ import org.openrs2.deob.annotation.OriginalClass;
 import org.openrs2.deob.annotation.OriginalMember;
 
 @OriginalClass("client!o")
-public final class TileUnderlay {
+public class TileUnderlay {
 
 	@OriginalMember(owner = "client!o", name = "a", descriptor = "I")
 	public final int southwestColor;

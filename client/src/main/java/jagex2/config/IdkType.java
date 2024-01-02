@@ -9,7 +9,7 @@ import org.openrs2.deob.annotation.OriginalMember;
 import org.openrs2.deob.annotation.Pc;
 
 @OriginalClass("client!gc")
-public final class IdkType {
+public class IdkType {
 
 	@OriginalMember(owner = "client!gc", name = "d", descriptor = "I")
 	public static int count;

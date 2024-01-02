@@ -6,7 +6,7 @@ import org.openrs2.deob.annotation.OriginalMember;
 import org.openrs2.deob.annotation.Pc;
 
 @OriginalClass("client!i")
-public final class TileOverlay {
+public class TileOverlay {
 
 	@OriginalMember(owner = "client!i", name = "a", descriptor = "[I")
 	public final int[] vertexX;

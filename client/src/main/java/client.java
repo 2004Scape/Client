@@ -29,7 +29,7 @@ import java.net.URL;
 import java.util.zip.CRC32;
 
 @OriginalClass("client!client")
-public final class client extends GameShell {
+public class client extends GameShell {
 
 	@OriginalMember(owner = "client!client", name = "E", descriptor = "I")
 	public static int opHeld1Counter;

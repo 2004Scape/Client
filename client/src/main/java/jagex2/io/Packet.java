@@ -10,7 +10,7 @@ import org.openrs2.deob.annotation.Pc;
 import java.math.BigInteger;
 
 @OriginalClass("client!kb")
-public final class Packet extends Hashable {
+public class Packet extends Hashable {
 
 	@OriginalMember(owner = "client!kb", name = "t", descriptor = "[I")
 	private static final int[] crctable = new int[256];

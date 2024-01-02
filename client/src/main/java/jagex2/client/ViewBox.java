@@ -8,7 +8,7 @@ import org.openrs2.deob.annotation.Pc;
 import java.awt.*;
 
 @OriginalClass("client!b")
-public final class ViewBox extends Frame {
+public class ViewBox extends Frame {
 
 	@OriginalMember(owner = "client!b", name = "b", descriptor = "Lclient!a;")
 	private final GameShell shell;

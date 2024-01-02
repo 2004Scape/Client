@@ -4,7 +4,7 @@ import org.openrs2.deob.annotation.OriginalArg;
 import org.openrs2.deob.annotation.OriginalMember;
 import org.openrs2.deob.annotation.Pc;
 
-public final class JString {
+public class JString {
 
 	@OriginalMember(owner = "client!vb", name = "f", descriptor = "[C")
 	private static final char[] builder = new char[12];

@@ -6,7 +6,7 @@ import org.openrs2.deob.annotation.OriginalArg;
 import org.openrs2.deob.annotation.OriginalMember;
 import org.openrs2.deob.annotation.Pc;
 
-public final class WordFilter {
+public class WordFilter {
 
 	@OriginalMember(owner = "client!mc", name = "j", descriptor = "[I")
 	private static int[] fragments;

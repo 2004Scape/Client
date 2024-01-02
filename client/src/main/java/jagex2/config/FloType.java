@@ -8,7 +8,7 @@ import org.openrs2.deob.annotation.OriginalMember;
 import org.openrs2.deob.annotation.Pc;
 
 @OriginalClass("client!fc")
-public final class FloType {
+public class FloType {
 
 	@OriginalMember(owner = "client!fc", name = "c", descriptor = "I")
 	public static int count;

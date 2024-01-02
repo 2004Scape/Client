@@ -13,7 +13,7 @@ import org.openrs2.deob.annotation.OriginalMember;
 import org.openrs2.deob.annotation.Pc;
 
 @OriginalClass("client!hc")
-public final class IfType {
+public class IfType {
 
 	@OriginalMember(owner = "client!hc", name = "c", descriptor = "[Lclient!hc;")
 	public static IfType[] instances;

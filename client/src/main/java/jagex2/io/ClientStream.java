@@ -12,7 +12,7 @@ import java.io.OutputStream;
 import java.net.Socket;
 
 @OriginalClass("client!d")
-public final class ClientStream implements Runnable {
+public class ClientStream implements Runnable {
 
 	@OriginalMember(owner = "client!d", name = "b", descriptor = "Ljava/io/InputStream;")
 	private final InputStream in;

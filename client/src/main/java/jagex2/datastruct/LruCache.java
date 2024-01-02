@@ -6,7 +6,7 @@ import org.openrs2.deob.annotation.OriginalMember;
 import org.openrs2.deob.annotation.Pc;
 
 @OriginalClass("client!s")
-public final class LruCache {
+public class LruCache {
 
 	@OriginalMember(owner = "client!s", name = "c", descriptor = "I")
 	private final int capacity;

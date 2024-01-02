@@ -9,7 +9,7 @@ import org.openrs2.deob.annotation.OriginalMember;
 import org.openrs2.deob.annotation.Pc;
 
 @OriginalClass("client!eb")
-public final class Model extends Hashable {
+public class Model extends Hashable {
 
 	@OriginalMember(owner = "client!eb", name = "n", descriptor = "I")
 	public int vertexCount;

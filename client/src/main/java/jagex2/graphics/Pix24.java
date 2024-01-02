@@ -11,7 +11,7 @@ import java.awt.*;
 import java.awt.image.PixelGrabber;
 
 @OriginalClass("client!hb")
-public final class Pix24 extends Draw2D {
+public class Pix24 extends Draw2D {
 
 	@OriginalMember(owner = "client!hb", name = "A", descriptor = "[I")
 	public int[] pixels;

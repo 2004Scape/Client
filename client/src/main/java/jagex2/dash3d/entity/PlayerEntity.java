@@ -14,7 +14,7 @@ import org.openrs2.deob.annotation.OriginalMember;
 import org.openrs2.deob.annotation.Pc;
 
 @OriginalClass("client!z")
-public final class PlayerEntity extends PathingEntity {
+public class PlayerEntity extends PathingEntity {
 
 	@OriginalMember(owner = "client!client", name = "qh", descriptor = "[I")
 	public static final int[] DESIGN_HAIR_COLOR = new int[] {

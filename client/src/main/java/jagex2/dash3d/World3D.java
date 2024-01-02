@@ -12,7 +12,7 @@ import org.openrs2.deob.annotation.OriginalMember;
 import org.openrs2.deob.annotation.Pc;
 
 @OriginalClass("client!r")
-public final class World3D {
+public class World3D {
 
 	@OriginalMember(owner = "client!r", name = "h", descriptor = "Z")
 	public static boolean lowMemory = true;

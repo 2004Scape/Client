@@ -6,7 +6,7 @@ import org.openrs2.deob.annotation.OriginalMember;
 import org.openrs2.deob.annotation.Pc;
 
 @OriginalClass("client!pb")
-public final class Stack {
+public class Stack {
 
 	@OriginalMember(owner = "client!pb", name = "d", descriptor = "Lclient!db;")
 	private final Hashable head = new Hashable();

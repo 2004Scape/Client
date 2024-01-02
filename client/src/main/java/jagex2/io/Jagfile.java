@@ -6,7 +6,7 @@ import org.openrs2.deob.annotation.OriginalMember;
 import org.openrs2.deob.annotation.Pc;
 
 @OriginalClass("client!ub")
-public final class Jagfile {
+public class Jagfile {
 
 	@OriginalMember(owner = "client!ub", name = "e", descriptor = "[B")
 	private byte[] buffer;

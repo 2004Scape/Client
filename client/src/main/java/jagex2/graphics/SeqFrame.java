@@ -8,7 +8,7 @@ import org.openrs2.deob.annotation.OriginalMember;
 import org.openrs2.deob.annotation.Pc;
 
 @OriginalClass("client!g")
-public final class SeqFrame {
+public class SeqFrame {
 
 	@OriginalMember(owner = "client!g", name = "a", descriptor = "[Lclient!g;")
 	public static SeqFrame[] instances;

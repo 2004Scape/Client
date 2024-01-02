@@ -6,7 +6,7 @@ import org.openrs2.deob.annotation.OriginalMember;
 import org.openrs2.deob.annotation.Pc;
 
 @OriginalClass("client!t")
-public final class HashTable {
+public class HashTable {
 
 	@OriginalMember(owner = "client!t", name = "c", descriptor = "I")
 	private final int size;

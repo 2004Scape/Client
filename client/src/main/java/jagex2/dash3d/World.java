@@ -14,7 +14,7 @@ import org.openrs2.deob.annotation.OriginalMember;
 import org.openrs2.deob.annotation.Pc;
 
 @OriginalClass("client!c")
-public final class World {
+public class World {
 
 	@OriginalMember(owner = "client!c", name = "d", descriptor = "Z")
 	public static boolean lowMemory = true;

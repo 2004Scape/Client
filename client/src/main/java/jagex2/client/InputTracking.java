@@ -5,7 +5,7 @@ import org.openrs2.deob.annotation.OriginalArg;
 import org.openrs2.deob.annotation.OriginalMember;
 import org.openrs2.deob.annotation.Pc;
 
-public final class InputTracking {
+public class InputTracking {
 
 	@OriginalMember(owner = "client!e", name = "e", descriptor = "Z")
 	public static boolean enabled;

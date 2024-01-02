@@ -6,7 +6,7 @@ import org.openrs2.deob.annotation.OriginalMember;
 import org.openrs2.deob.annotation.Pc;
 
 @OriginalClass("client!ob")
-public final class LinkList {
+public class LinkList {
 
 	@OriginalMember(owner = "client!ob", name = "e", descriptor = "Lclient!u;")
 	private final Linkable head = new Linkable();

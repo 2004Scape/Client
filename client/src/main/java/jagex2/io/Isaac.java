@@ -6,7 +6,7 @@ import org.openrs2.deob.annotation.OriginalMember;
 import org.openrs2.deob.annotation.Pc;
 
 @OriginalClass("client!tb")
-public final class Isaac {
+public class Isaac {
 
 	@OriginalMember(owner = "client!tb", name = "a", descriptor = "I")
 	private int count;

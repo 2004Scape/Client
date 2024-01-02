@@ -13,7 +13,7 @@ import org.openrs2.deob.annotation.OriginalMember;
 import org.openrs2.deob.annotation.Pc;
 
 @OriginalClass("client!cc")
-public final class ObjType {
+public class ObjType {
 
 	@OriginalMember(owner = "client!cc", name = "e", descriptor = "I")
 	private static int count;
