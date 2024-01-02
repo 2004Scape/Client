@@ -5907,27 +5907,13 @@ public class client extends GameShell {
 		}
 
 		started = true;
-		@Pc(34) boolean good = false;
+
+		@Pc(34) boolean good = this.frame != null;
 		@Pc(38) String host = this.getHost();
-		if (host.endsWith("jagex.com")) {
+		if (host.endsWith("2004scape.org")) {
 			good = true;
 		}
-		if (host.endsWith("runescape.com")) {
-			good = true;
-		}
-		if (host.endsWith("192.168.1.2")) {
-			good = true;
-		}
-		if (host.endsWith("192.168.1.249")) {
-			good = true;
-		}
-		if (host.endsWith("192.168.1.252")) {
-			good = true;
-		}
-		if (host.endsWith("192.168.1.253")) {
-			good = true;
-		}
-		if (host.endsWith("192.168.1.254")) {
+		if (host.endsWith("localhost")) {
 			good = true;
 		}
 		if (host.endsWith("127.0.0.1")) {

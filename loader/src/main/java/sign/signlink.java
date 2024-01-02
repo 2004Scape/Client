@@ -10,9 +10,6 @@ import java.io.*;
 import java.net.InetAddress;
 import java.net.Socket;
 import java.net.URL;
-import java.util.Objects;
-import javax.sound.midi.MidiSystem;
-import javax.sound.sampled.*;
 
 @OriginalClass("client!sign/signlink")
 public class signlink implements Runnable {
@@ -147,25 +144,45 @@ public class signlink implements Runnable {
 
 	@OriginalMember(owner = "client!sign/signlink", name = "findcachedir", descriptor = "()Ljava/lang/String;")
 	public static String findcachedir() {
-		@Pc(50) String[] paths = new String[] { "c:/windows/", "c:/winnt/", "d:/windows/", "d:/winnt/", "e:/windows/", "e:/winnt/", "f:/windows/", "f:/winnt/", "c:/", "~/", "/tmp/", "" };
-		@Pc(52) String dir = ".file_store_32";
+		@Pc(50) String[] paths = new String[] {
+			// prioritize home directories
+			System.getenv("HOME"), System.getenv("HOMEDRIVE") + System.getenv("HOMEPATH"), System.getenv("USERPROFILE"),
+			System.getenv("user.home"), "~",
+			// fall back to OS-specific paths
+			"c:", "c:/windows", "c:/winnt", "d:/windows", "d:/winnt", "e:/windows", "e:/winnt", "f:/windows", "f:/winnt",
+			// fall back to temporary cache directories (RAM or browser cache)
+			"/tmp", ""
+		};
+		@Pc(52) String dir = ".lostcity";
 
 		for (@Pc(54) int i = 0; i < paths.length; i++) {
 			try {
 				@Pc(59) String path = paths[i];
 				@Pc(67) File file;
 
+				if (path == null) {
+					continue;
+				}
+
 				if (path.length() > 0) {
 					file = new File(path);
+
 					if (!file.exists()) {
 						continue;
 					}
 				}
 
-				file = new File(path + dir);
-				if (file.exists() || file.mkdir()) {
-					return path + dir + "/";
+				file = new File(path + "/" + dir);
+				if ((!file.exists() && !file.mkdir()) || !file.canWrite()) {
+					continue;
 				}
+
+				file = new File(path + "/" + dir + "/" + signlink.clientversion);
+				if ((!file.exists() && !file.mkdir()) || !file.canWrite()) {
+					continue;
+				}
+
+				return path + "/" + dir + "/" + signlink.clientversion + "/";
 			} catch (@Pc(102) Exception ignored) {
 			}
 		}
@@ -175,6 +192,10 @@ public class signlink implements Runnable {
 
 	@OriginalMember(owner = "client!sign/signlink", name = "getuid", descriptor = "(Ljava/lang/String;)I")
 	public static int getuid(@OriginalArg(0) String cacheDir) {
+		if (cacheDir == null) {
+			return 0;
+		}
+
 		try {
 			@Pc(11) File uid = new File(cacheDir + "uid.dat");
 			if (!uid.exists() || uid.length() < 4L) {

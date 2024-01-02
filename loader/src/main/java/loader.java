@@ -12,16 +12,13 @@ import java.util.zip.ZipFile;
 import sign.signlink;
 
 public class loader extends Applet implements Runnable {
-	private boolean maxpri = false;
-	private Applet inner;
 	private static final int swid = 789;
 	private static final int shei = 532;
 
-	public void init() {
-		Graphics g = getGraphics();
-		g.setColor(Color.black);
-		g.fillRect(0, 0, loader.swid, loader.shei);
+	private boolean maxpri = false;
+	private Applet inner;
 
+	public void init() {
 		try {
 			signlink.mainapp = this;
 			signlink.startpriv(InetAddress.getByName(getCodeBase().getHost()));
@@ -50,8 +47,14 @@ public class loader extends Applet implements Runnable {
 				}
 			}
 
+			String cachedir = signlink.findcachedir();
+			if (cachedir == null) {
+				showprogress("No writable cache directory", 0);
+				return;
+			}
+
 			cloader classLoader = new cloader();
-			classLoader.jar = new ZipFile(signlink.findcachedir() + "/" + signlink.gethash("runescape.jar"));
+			classLoader.jar = new ZipFile(cachedir + "/" + signlink.gethash("runescape.jar"));
 			classLoader.link = Class.forName("sign.signlink");
 
 			inner = (Applet) classLoader.loadClass("client").newInstance();
@@ -62,14 +65,29 @@ public class loader extends Applet implements Runnable {
 		}
 	}
 
-	private void updatecache() throws Exception {
+	private void showprogress(String message, int percent) {
 		Graphics g = getGraphics();
+
 		Font bold = new Font("Helvetica", Font.BOLD, 13);
 		FontMetrics boldMetrics = getFontMetrics(bold);
 		Font plain = new Font("Helvetica", Font.PLAIN, 13);
 		FontMetrics plainMetrics = getFontMetrics(plain);
+
 		Color barColor = new Color(140, 17, 17);
 
+		g.setColor(Color.black);
+		g.fillRect(0, 0, loader.swid, loader.shei);
+
+		g.setColor(barColor);
+		g.drawRect(242, 248, 304, 34);
+
+		String str = message + " - " + percent + "%";
+		g.setFont(bold);
+		g.setColor(Color.white);
+		g.drawString(str, ((loader.swid - boldMetrics.stringWidth(str)) / 2), 270);
+	}
+
+	private void updatecache() throws Exception {
 		// name + sha has a benefit of cache busting in addition to being harder to find
 		byte[] src = new byte[sig.len];
 		String uriSha = "";
@@ -90,16 +108,7 @@ public class loader extends Applet implements Runnable {
 
 			int percent = read * 100 / sig.len;
 			if (percent != lastPercent) {
-				g.setColor(Color.black);
-				g.fillRect(0, 0, loader.swid, loader.shei);
-
-				g.setColor(barColor);
-				g.drawRect(242, 248, 304, 34);
-
-				String str = "Loading game code - " + percent + "%";
-				g.setFont(bold);
-				g.setColor(Color.white);
-				g.drawString(str, ((loader.swid - boldMetrics.stringWidth(str)) / 2), 270);
+				showprogress("Loading game code", percent);
 
 				lastPercent = percent;
 			}

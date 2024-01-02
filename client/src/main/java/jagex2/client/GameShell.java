@@ -203,15 +203,12 @@ public class GameShell extends Applet implements Runnable, MouseListener, MouseM
 		this.state = -2;
 		this.unload();
 
-		try {
-			Thread.sleep(1000L);
-		} catch (@Pc(21) Exception ignored) {
-		}
-
-		try {
-			System.exit(0);
-		} catch (@Pc(25) Throwable ignored) {
-		}
+        if (this.frame != null) {
+            try {
+                System.exit(0);
+            } catch (@Pc(25) Throwable ignored) {
+            }
+        }
 	}
 
 	@OriginalMember(owner = "client!a", name = "a", descriptor = "(II)V")
