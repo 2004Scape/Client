@@ -4,9 +4,9 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.security.MessageDigest;
 
-public class ShaSum {
+public class LoaderSig {
 	public static void main(String[] args) {
-		// todo: spit out sig.java
+		String sig = "public class sig  {\n\tpublic static final int len = %d;\n\n\tpublic static final int[] sha = { %s };\n}";
 
 		try {
 			String name = args[0];
@@ -18,7 +18,7 @@ public class ShaSum {
 			shasum.reset();
 			shasum.update(src);
 
-			System.out.print("SHA: ");
+			String shaStr = "";
 			String uriSha = "";
 			byte[] sha = shasum.digest();
 			for (int i = 0; i < 20; i++) {
@@ -26,10 +26,20 @@ public class ShaSum {
 					uriSha += sha[i];
 				}
 
-				System.out.printf("%d, ", sha[i]);
+				if (i < 19) {
+					shaStr += sha[i] + ", ";
+				} else {
+					shaStr += sha[i];
+				}
 			}
-			System.out.println();
+			System.out.println("SHA: " + shaStr);
 			System.out.println("URI: " + uriSha);
+
+			sig = String.format(sig, src.length, shaStr);
+
+			Files.write(Paths.get("loader/src/main/java/sig.java"), sig.getBytes());
+			Files.createDirectories(Paths.get("loader/build/libs/"));
+			Files.write(Paths.get("loader/build/libs/runescape" + uriSha + ".jar"), src);
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		}

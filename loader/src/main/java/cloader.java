@@ -1,5 +1,3 @@
-package jagex2.client;
-
 import java.io.DataInputStream;
 import java.util.Hashtable;
 import java.util.zip.ZipEntry;

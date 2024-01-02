@@ -1,4 +1,4 @@
-package jagex2.client;
+package sign;
 
 import org.openrs2.deob.annotation.OriginalArg;
 import org.openrs2.deob.annotation.OriginalClass;
@@ -15,7 +15,7 @@ import javax.sound.midi.MidiSystem;
 import javax.sound.sampled.*;
 
 @OriginalClass("client!sign/signlink")
-public final class Signlink implements Runnable {
+public final class signlink implements Runnable {
 
 	@OriginalMember(owner = "client!sign/signlink", name = "clientversion", descriptor = "I")
 	public static final int clientversion = 225;
@@ -133,7 +133,7 @@ public final class Signlink implements Runnable {
 		urlreq = null;
 		socketip = address;
 
-		@Pc(33) Thread thread = new Thread(new Signlink());
+		@Pc(33) Thread thread = new Thread(new signlink());
 		thread.setDaemon(true);
 		thread.start();
 
@@ -363,7 +363,7 @@ public final class Signlink implements Runnable {
 			message = message.replace('&', '_');
 			message = message.replace('#', '_');
 
-			@Pc(46) DataInputStream stream = openurl("reporterror" + Signlink.clientversion + ".cgi?error=" + errorname + " " + message);
+			@Pc(46) DataInputStream stream = openurl("reporterror" + signlink.clientversion + ".cgi?error=" + errorname + " " + message);
 			stream.readLine();
 			stream.close();
 		} catch (@Pc(53) IOException ignored) {

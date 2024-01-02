@@ -3,7 +3,7 @@ plugins {
     id 'application'
 }
 
-mainClassName = 'jagex2.client.client'
+mainClassName = 'client'
 
 tasks.withType(JavaCompile) {
     options.encoding = 'UTF-8'
@@ -27,5 +27,5 @@ jar {
     manifest {
         attributes 'Main-Class': "$mainClassName"
     }
-    from { configurations.compileClasspath.collect { it.isDirectory() ? it : zipTree(it) } }
+//    from { configurations.compileClasspath.collect { it.isDirectory() ? it : zipTree(it) } }
 }

@@ -16,7 +16,7 @@ public final class NpcEntity extends PathingEntity {
 
 	@OriginalMember(owner = "client!y", name = "a", descriptor = "(Z)Lclient!eb;")
 	@Override
-	public Model draw() {
+	public Model draw(int loopCycle) {
 		if (this.type == null) {
 			return null;
 		}

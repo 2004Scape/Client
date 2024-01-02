@@ -1053,7 +1053,7 @@ public final class World3D {
 	}
 
 	@OriginalMember(owner = "client!r", name = "a", descriptor = "(IIIIIII)V")
-	public void draw(@OriginalArg(0) int eyeYaw, @OriginalArg(1) int eyeX, @OriginalArg(2) int topLevel, @OriginalArg(3) int eyePitch, @OriginalArg(4) int eyeY, @OriginalArg(5) int eyeZ) {
+	public void draw(@OriginalArg(0) int eyeYaw, @OriginalArg(1) int eyeX, @OriginalArg(2) int topLevel, @OriginalArg(3) int eyePitch, @OriginalArg(4) int eyeY, @OriginalArg(5) int eyeZ, int loopCycle) {
 		if (eyeX < 0) {
 			eyeX = 0;
 		} else if (eyeX >= this.maxTileX * 128) {
@@ -1130,13 +1130,13 @@ public final class World3D {
 							if (forwardTileZ >= minDrawTileZ) {
 								tile = tiles[rightTileX][forwardTileZ];
 								if (tile != null && tile.visible) {
-									this.drawTile(tile, true);
+									this.drawTile(tile, true, loopCycle);
 								}
 							}
 							if (backwardTileZ < maxDrawTileZ) {
 								tile = tiles[rightTileX][backwardTileZ];
 								if (tile != null && tile.visible) {
-									this.drawTile(tile, true);
+									this.drawTile(tile, true, loopCycle);
 								}
 							}
 						}
@@ -1144,13 +1144,13 @@ public final class World3D {
 							if (forwardTileZ >= minDrawTileZ) {
 								tile = tiles[leftTileX][forwardTileZ];
 								if (tile != null && tile.visible) {
-									this.drawTile(tile, true);
+									this.drawTile(tile, true, loopCycle);
 								}
 							}
 							if (backwardTileZ < maxDrawTileZ) {
 								tile = tiles[leftTileX][backwardTileZ];
 								if (tile != null && tile.visible) {
-									this.drawTile(tile, true);
+									this.drawTile(tile, true, loopCycle);
 								}
 							}
 						}
@@ -1176,13 +1176,13 @@ public final class World3D {
 							if (forwardTileZ >= minDrawTileZ) {
 								tile = tiles[rightTileX][forwardTileZ];
 								if (tile != null && tile.visible) {
-									this.drawTile(tile, false);
+									this.drawTile(tile, false, loopCycle);
 								}
 							}
 							if (backgroundTileZ < maxDrawTileZ) {
 								tile = tiles[rightTileX][backgroundTileZ];
 								if (tile != null && tile.visible) {
-									this.drawTile(tile, false);
+									this.drawTile(tile, false, loopCycle);
 								}
 							}
 						}
@@ -1190,13 +1190,13 @@ public final class World3D {
 							if (forwardTileZ >= minDrawTileZ) {
 								tile = tiles[leftTileX][forwardTileZ];
 								if (tile != null && tile.visible) {
-									this.drawTile(tile, false);
+									this.drawTile(tile, false, loopCycle);
 								}
 							}
 							if (backgroundTileZ < maxDrawTileZ) {
 								tile = tiles[leftTileX][backgroundTileZ];
 								if (tile != null && tile.visible) {
-									this.drawTile(tile, false);
+									this.drawTile(tile, false, loopCycle);
 								}
 							}
 						}
@@ -1211,7 +1211,7 @@ public final class World3D {
 	}
 
 	@OriginalMember(owner = "client!r", name = "a", descriptor = "(Lclient!cb;Z)V")
-	private void drawTile(@OriginalArg(0) Tile tile, @OriginalArg(1) boolean checkAdjacent) {
+	private void drawTile(@OriginalArg(0) Tile tile, @OriginalArg(1) boolean checkAdjacent, int loopCycle) {
 		drawTileQueue.pushBack(tile);
 		while (true) {
 			@Pc(8) Tile local8;
@@ -1309,7 +1309,7 @@ public final class World3D {
 													if (var12 != null) {
 														@Pc(265) Model local265 = var12.model;
 														if (local265 == null) {
-															local265 = var12.entity.draw();
+															local265 = var12.entity.draw(loopCycle);
 														}
 														local265.draw(var12.yaw, sinEyePitch, cosEyePitch, sinEyeYaw, cosEyeYaw, var12.x - eyeX, var12.y - eyeY, var12.z - eyeZ, var12.bitset);
 													}
@@ -1537,7 +1537,7 @@ public final class World3D {
 											local1154.cycle = cycle;
 											@Pc(1184) Model local1184 = local1154.model;
 											if (local1184 == null) {
-												local1184 = local1154.entity.draw();
+												local1184 = local1154.entity.draw(loopCycle);
 											}
 											if (!this.locVisible(local26, local1154.minSceneTileX, local1154.maxSceneTileX, local1154.minSceneTileZ, local1154.maxSceneTileZ, local1184.maxY)) {
 												local1184.draw(local1154.yaw, sinEyePitch, cosEyePitch, sinEyeYaw, cosEyeYaw, local1154.x - eyeX, local1154.y - eyeY, local1154.z - eyeZ, local1154.bitset);

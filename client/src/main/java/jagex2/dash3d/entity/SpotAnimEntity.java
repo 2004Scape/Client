@@ -81,7 +81,7 @@ public final class SpotAnimEntity extends Entity {
 
 	@OriginalMember(owner = "client!bb", name = "a", descriptor = "(Z)Lclient!eb;")
 	@Override
-	public Model draw() {
+	public Model draw(int loopCycle) {
 		@Pc(3) Model tmp = this.type.getModel();
 		@Pc(19) Model model = new Model(tmp, true, !this.type.disposeAlpha, false);
 

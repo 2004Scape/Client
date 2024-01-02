@@ -1,5 +1,3 @@
-package jagex2.client;
-
 import java.applet.Applet;
 import java.awt.Color;
 import java.awt.Font;
@@ -10,6 +8,8 @@ import java.net.InetAddress;
 import java.net.URL;
 import java.security.MessageDigest;
 import java.util.zip.ZipFile;
+
+import sign.signlink;
 
 public class loader extends Applet implements Runnable {
 	private boolean maxpri = false;
@@ -23,12 +23,12 @@ public class loader extends Applet implements Runnable {
 		g.fillRect(0, 0, loader.swid, loader.shei);
 
 		try {
-			Signlink.mainapp = this;
-			Signlink.startpriv(InetAddress.getByName(getCodeBase().getHost()));
+			signlink.mainapp = this;
+			signlink.startpriv(InetAddress.getByName(getCodeBase().getHost()));
 
 			String vendor = System.getProperties().getProperty("java.vendor");
 			if (vendor.toLowerCase().indexOf("sun") != -1 || vendor.toLowerCase().indexOf("apple") != -1) {
-				Signlink.sunjava = true;
+				signlink.sunjava = true;
 			}
 
 			new Thread(this).start();
@@ -39,22 +39,22 @@ public class loader extends Applet implements Runnable {
 
 	public void run() {
 		try {
-			byte[] jar = Signlink.cacheload("runescape.jar");
+			byte[] jar = signlink.cacheload("runescape.jar");
 
 			if (!verify(jar)) {
 				updatecache();
 
-				jar = Signlink.cacheload("runescape.jar");
+				jar = signlink.cacheload("runescape.jar");
 				if (!verify(jar)) {
 					return;
 				}
 			}
 
 			cloader classLoader = new cloader();
-			classLoader.jar = new ZipFile(Signlink.findcachedir() + "/" + Signlink.gethash("runescape.jar"));
-			classLoader.link = Class.forName("jagex2.client.Signlink");
+			classLoader.jar = new ZipFile(signlink.findcachedir() + "/" + signlink.gethash("runescape.jar"));
+			classLoader.link = Class.forName("sign.signlink");
 
-			inner = (Applet) classLoader.loadClass("jagex2.client.client").newInstance();
+			inner = (Applet) classLoader.loadClass("client").newInstance();
 			inner.init();
 			inner.start();
 		} catch (Exception ex) {
@@ -106,7 +106,7 @@ public class loader extends Applet implements Runnable {
 		}
 
 		stream.close();
-		Signlink.cachesave("runescape.jar", src);
+		signlink.cachesave("runescape.jar", src);
 	}
 
 	private boolean verify(byte[] src) throws Exception {
@@ -159,34 +159,34 @@ public class loader extends Applet implements Runnable {
 	}
 
 	public String getmidi() {
-		if (Signlink.midi == null) {
+		if (signlink.midi == null) {
 			return "none";
 		}
 
-		String str = Signlink.midi;
-		Signlink.midi = null;
+		String str = signlink.midi;
+		signlink.midi = null;
 		return str;
 	}
 
 	public int getmidivol() {
-		return Signlink.midivol;
+		return signlink.midivol;
 	}
 
 	public int getmidifade() {
-		return Signlink.midifade;
+		return signlink.midifade;
 	}
 
 	public String getwave() {
-		if (Signlink.wave == null) {
+		if (signlink.wave == null) {
 			return "none";
 		}
 
-		String str = Signlink.wave;
-		Signlink.wave = null;
+		String str = signlink.wave;
+		signlink.wave = null;
 		return str;
 	}
 
 	public int getwavevol() {
-		return Signlink.wavevol;
+		return signlink.wavevol;
 	}
 }

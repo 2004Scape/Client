@@ -147,7 +147,7 @@ public final class ProjectileEntity extends Entity {
 
 	@OriginalMember(owner = "client!ab", name = "a", descriptor = "(Z)Lclient!eb;")
 	@Override
-	public Model draw() {
+	public Model draw(int loopCycle) {
 		@Pc(3) Model tmp = this.spotanim.getModel();
 		@Pc(19) Model model = new Model(tmp, true, !this.spotanim.disposeAlpha, false);
 

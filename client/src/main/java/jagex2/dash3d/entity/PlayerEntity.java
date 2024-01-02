@@ -1,6 +1,5 @@
 package jagex2.dash3d.entity;
 
-import jagex2.client.client;
 import jagex2.config.IdkType;
 import jagex2.config.ObjType;
 import jagex2.config.SeqType;
@@ -187,7 +186,7 @@ public final class PlayerEntity extends PathingEntity {
 
 	@OriginalMember(owner = "client!z", name = "a", descriptor = "(Z)Lclient!eb;")
 	@Override
-	public Model draw() {
+	public Model draw(int loopCycle) {
 		if (!this.visible) {
 			return null;
 		}
@@ -219,11 +218,11 @@ public final class PlayerEntity extends PathingEntity {
 		}
 
 		if (this.locModel != null) {
-			if (client.loopCycle >= this.locStopCycle) {
+			if (loopCycle >= this.locStopCycle) {
 				this.locModel = null;
 			}
 
-			if (client.loopCycle >= this.locStartCycle && client.loopCycle < this.locStopCycle) {
+			if (loopCycle >= this.locStartCycle && loopCycle < this.locStopCycle) {
 				@Pc(148) Model loc = this.locModel;
 				loc.translate(this.locOffsetY - this.y, this.locOffsetX - super.x, this.locOffsetZ - super.z);
 				if (super.dstYaw == 512) {
