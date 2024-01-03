@@ -1,0 +1,18 @@
+plugins {
+    id 'java'
+}
+
+tasks.withType(JavaCompile) {
+    options.encoding = 'UTF-8'
+    options.compilerArgs << '-Xlint:unchecked' << '-Xlint:deprecation'
+}
+
+tasks.withType(JavaExec) {
+    workingDir = project.rootDir
+}
+
+tasks.register('sig', JavaExec) {
+    classpath = sourceSets.main.runtimeClasspath
+    mainClass = 'lostcity.tools.LoaderSig'
+    args = ['client/build/libs/client.jar']
+}
