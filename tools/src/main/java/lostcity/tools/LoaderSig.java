@@ -42,6 +42,7 @@ public class LoaderSig {
 			Files.write(Paths.get("loader/build/libs/runescape" + uriSha + ".jar"), src);
 		} catch (Exception ex) {
 			ex.printStackTrace();
+            System.exit(1);
 		}
 	}
 }
