@@ -10,3 +10,9 @@ tasks.withType(JavaCompile) {
 tasks.withType(JavaExec) {
     workingDir = rootProject.projectDir
 }
+
+tasks.register('sig', JavaExec) {
+    classpath = sourceSets.main.runtimeClasspath
+    main = 'lostcity.tools.LoaderSig'
+    args = ['client/build/libs/client.jar']
+}

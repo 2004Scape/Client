@@ -1,4 +1,4 @@
-package lostcity;
+package lostcity.tools;
 
 import java.nio.file.Files;
 import java.nio.file.Paths;
