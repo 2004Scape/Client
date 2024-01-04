@@ -3,7 +3,6 @@ package jagex2.client;
 import org.openrs2.deob.annotation.OriginalArg;
 import org.openrs2.deob.annotation.OriginalClass;
 import org.openrs2.deob.annotation.OriginalMember;
-import org.openrs2.deob.annotation.Pc;
 
 import java.awt.*;
 
@@ -14,7 +13,7 @@ public class ViewBox extends Frame {
 	private final GameShell shell;
 
 	@OriginalMember(owner = "client!b", name = "<init>", descriptor = "(IILclient!a;I)V")
-	public ViewBox(@OriginalArg(0) int height, @OriginalArg(2) GameShell shell, @OriginalArg(3) int width) {
+	public ViewBox(@OriginalArg(2) GameShell shell, @OriginalArg(3) int width, @OriginalArg(0) int height) {
 		this.shell = shell;
 		this.setTitle("Jagex");
 		this.setResizable(false);
@@ -25,7 +24,7 @@ public class ViewBox extends Frame {
 
         // for compatibility with Java < 1.4
         Insets insets = this.getInsets();
-        this.setSize(width + insets.left, height + insets.top);
+        this.setSize(width + insets.left + insets.bottom, height + insets.top + insets.bottom);
         this.setVisible(true);
 
 		this.toFront();

@@ -84,18 +84,18 @@ public class GameShell extends Applet implements Runnable, MouseListener, MouseM
 	private int keyQueueWritePos;
 
 	@OriginalMember(owner = "client!a", name = "a", descriptor = "(III)V")
-	protected final void initApplication(@OriginalArg(0) int height, @OriginalArg(1) int width) {
+	protected final void initApplication(@OriginalArg(1) int width, @OriginalArg(0) int height) {
 		this.screenWidth = width;
 		this.screenHeight = height;
         // this.setPreferredSize(new Dimension(this.screenWidth, this.screenHeight));
-		this.frame = new ViewBox(this.screenHeight, this, this.screenWidth);
+		this.frame = new ViewBox(this, this.screenWidth, this.screenHeight);
 		this.graphics = this.getBaseComponent().getGraphics();
 		this.drawArea = new PixMap(this.getBaseComponent(), this.screenWidth, this.screenHeight);
 		this.startThread(this, 1);
 	}
 
 	@OriginalMember(owner = "client!a", name = "a", descriptor = "(IZI)V")
-	protected final void initApplet(@OriginalArg(0) int height, @OriginalArg(2) int width) {
+	protected final void initApplet(@OriginalArg(2) int width, @OriginalArg(0) int height) {
 		this.screenWidth = width;
 		this.screenHeight = height;
 		this.graphics = this.getBaseComponent().getGraphics();
@@ -274,6 +274,10 @@ public class GameShell extends Applet implements Runnable, MouseListener, MouseM
 		@Pc(2) int x = e.getX();
 		@Pc(5) int y = e.getY();
 
+		Insets insets = this.getInsets();
+		x -= insets.left;
+		y -= insets.top;
+
 		this.idleCycles = 0;
 		this.mouseClickX = x;
 		this.mouseClickY = y;
@@ -287,7 +291,7 @@ public class GameShell extends Applet implements Runnable, MouseListener, MouseM
 		}
 
 		if (InputTracking.enabled) {
-			InputTracking.mousePressed(x, (e.getModifiersEx() & MouseEvent.BUTTON3_DOWN_MASK) != 0 ? 1 : 0, y);
+			InputTracking.mousePressed(x, y, (e.getModifiersEx() & MouseEvent.BUTTON3_DOWN_MASK) != 0 ? 1 : 0);
 		}
 	}
 
@@ -324,12 +328,16 @@ public class GameShell extends Applet implements Runnable, MouseListener, MouseM
 		@Pc(2) int x = e.getX();
 		@Pc(5) int y = e.getY();
 
+		Insets insets = this.getInsets();
+		x -= insets.left;
+		y -= insets.top;
+
 		this.idleCycles = 0;
 		this.mouseX = x;
 		this.mouseY = y;
 
 		if (InputTracking.enabled) {
-			InputTracking.mouseMoved(y, x);
+			InputTracking.mouseMoved(x, y);
 		}
 	}
 
@@ -338,12 +346,16 @@ public class GameShell extends Applet implements Runnable, MouseListener, MouseM
 		@Pc(2) int x = e.getX();
 		@Pc(5) int y = e.getY();
 
+		Insets insets = this.getInsets();
+		x -= insets.left;
+		y -= insets.top;
+
 		this.idleCycles = 0;
 		this.mouseX = x;
 		this.mouseY = y;
 
 		if (InputTracking.enabled) {
-			InputTracking.mouseMoved(y, x);
+			InputTracking.mouseMoved(x, y);
 		}
 	}
 

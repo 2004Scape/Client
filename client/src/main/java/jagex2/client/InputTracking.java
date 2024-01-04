@@ -75,7 +75,7 @@ public class InputTracking {
 	}
 
 	@OriginalMember(owner = "client!e", name = "a", descriptor = "(IIIB)V")
-	public static synchronized void mousePressed(@OriginalArg(0) int x, @OriginalArg(1) int button, @OriginalArg(2) int y) {
+	public static synchronized void mousePressed(@OriginalArg(0) int x, @OriginalArg(2) int y, @OriginalArg(1) int button) {
 		if (enabled && (x >= 0 && x < 789 && y >= 0 && y < 532)) {
 			trackedCount++;
 
@@ -124,7 +124,7 @@ public class InputTracking {
 	}
 
 	@OriginalMember(owner = "client!e", name = "a", descriptor = "(IZI)V")
-	public static synchronized void mouseMoved(@OriginalArg(0) int y, @OriginalArg(2) int x) {
+	public static synchronized void mouseMoved(@OriginalArg(2) int x, @OriginalArg(0) int y) {
 		if (enabled && (x >= 0 && x < 789 && y >= 0 && y < 532)) {
 			@Pc(17) long now = System.currentTimeMillis();
 
