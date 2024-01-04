@@ -87,7 +87,7 @@ public class GameShell extends Applet implements Runnable, MouseListener, MouseM
 	protected final void initApplication(@OriginalArg(0) int height, @OriginalArg(1) int width) {
 		this.screenWidth = width;
 		this.screenHeight = height;
-        this.setPreferredSize(new Dimension(this.screenWidth, this.screenHeight));
+        // this.setPreferredSize(new Dimension(this.screenWidth, this.screenHeight));
 		this.frame = new ViewBox(this.screenHeight, this, this.screenWidth);
 		this.graphics = this.getBaseComponent().getGraphics();
 		this.drawArea = new PixMap(this.getBaseComponent(), this.screenWidth, this.screenHeight);

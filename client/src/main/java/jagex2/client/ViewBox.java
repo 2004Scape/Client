@@ -23,17 +23,12 @@ public class ViewBox extends Frame {
         this.add(shell);
         this.pack();
 
+        // for compatibility with Java < 1.4
+        Insets insets = this.getInsets();
+        this.setSize(width + insets.left, height + insets.top);
         this.setVisible(true);
 
 		this.toFront();
-	}
-
-	@OriginalMember(owner = "client!b", name = "getGraphics", descriptor = "()Ljava/awt/Graphics;")
-	@Override
-	public Graphics getGraphics() {
-		@Pc(2) Graphics g = super.getGraphics();
-		g.translate(4, 24);
-		return g;
 	}
 
 	@OriginalMember(owner = "client!b", name = "update", descriptor = "(Ljava/awt/Graphics;)V")

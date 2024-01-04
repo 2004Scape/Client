@@ -146,8 +146,9 @@ public class signlink implements Runnable {
 	public static String findcachedir() {
 		@Pc(50) String[] paths = new String[] {
 			// prioritize home directories
-			System.getenv("HOME"), System.getenv("HOMEDRIVE") + System.getenv("HOMEPATH"), System.getenv("USERPROFILE"),
-			System.getenv("user.home"), "~",
+            System.getProperty("user.home"),
+			// System.getenv("HOME"), System.getenv("HOMEDRIVE") + System.getenv("HOMEPATH"), System.getenv("USERPROFILE"),
+			// System.getenv("user.home"), "~",
 			// fall back to OS-specific paths
 			"c:", "c:/windows", "c:/winnt", "d:/windows", "d:/winnt", "e:/windows", "e:/winnt", "f:/windows", "f:/winnt",
 			// fall back to temporary cache directories (RAM or browser cache)
