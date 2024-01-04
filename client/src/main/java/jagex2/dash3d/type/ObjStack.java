@@ -20,10 +20,10 @@ public class ObjStack {
 	public Model topObj;
 
 	@OriginalMember(owner = "client!k", name = "e", descriptor = "Lclient!eb;")
-	public Model middleObj;
+	public Model bottomObj;
 
 	@OriginalMember(owner = "client!k", name = "f", descriptor = "Lclient!eb;")
-	public Model bottomObj;
+	public Model middleObj;
 
 	@OriginalMember(owner = "client!k", name = "g", descriptor = "I")
 	public int bitset;

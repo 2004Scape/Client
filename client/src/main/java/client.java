@@ -8824,35 +8824,35 @@ public class client extends GameShell {
 
 		objStacks.pushFront(topObj);
 
-		@Pc(65) int middleObjId = -1;
-		int bottomObjId = -1;
-		@Pc(69) int middleObjCount = 0;
-		@Pc(71) int bottomObjCount = 0;
+		@Pc(65) int bottomObjId = -1;
+		int middleObjId = -1;
+		@Pc(69) int bottomObjCount = 0;
+		@Pc(71) int middleObjCount = 0;
 		for (ObjStackEntity obj = (ObjStackEntity) objStacks.peekFront(); obj != null; obj = (ObjStackEntity) objStacks.prev()) {
-			if (obj.index != topObj.index && middleObjId == -1) {
-				middleObjId = obj.index;
-				middleObjCount = obj.count;
-			}
-
-			if (obj.index != topObj.index && obj.index != middleObjId && bottomObjId == -1) {
+			if (obj.index != topObj.index && bottomObjId == -1) {
 				bottomObjId = obj.index;
 				bottomObjCount = obj.count;
 			}
+
+			if (obj.index != topObj.index && obj.index != bottomObjId && middleObjId == -1) {
+				middleObjId = obj.index;
+				middleObjCount = obj.count;
+			}
 		}
 
-		@Pc(118) Model middleObj = null;
-		if (middleObjId != -1) {
-			middleObj = ObjType.get(middleObjId).getInterfaceModel(middleObjCount);
-		}
-
-		@Pc(128) Model bottomObj = null;
+		@Pc(118) Model bottomObj = null;
 		if (bottomObjId != -1) {
 			bottomObj = ObjType.get(bottomObjId).getInterfaceModel(bottomObjCount);
 		}
 
+		@Pc(128) Model middleObj = null;
+		if (middleObjId != -1) {
+			middleObj = ObjType.get(middleObjId).getInterfaceModel(middleObjCount);
+		}
+
 		@Pc(144) int bitset = x + (z << 7) + 1610612736;
 		@Pc(148) ObjType type = ObjType.get(topObj.index);
-		this.scene.addObjStack(type.getInterfaceModel(topObj.count), middleObj, this.getHeightmapY(this.currentLevel, x * 128 + 64, z * 128 + 64), this.currentLevel, bitset, z, x, bottomObj);
+		this.scene.addObjStack(type.getInterfaceModel(topObj.count), bottomObj, this.getHeightmapY(this.currentLevel, x * 128 + 64, z * 128 + 64), this.currentLevel, bitset, z, x, middleObj);
 	}
 
 	@OriginalMember(owner = "client!client", name = "D", descriptor = "(I)V")
