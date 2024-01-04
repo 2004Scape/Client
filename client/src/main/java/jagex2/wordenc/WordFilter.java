@@ -200,10 +200,10 @@ public class WordFilter {
 
 	@OriginalMember(owner = "client!mc", name = "b", descriptor = "(B[C)V")
 	private static void filterDomains(@OriginalArg(1) char[] in) {
-		@Pc(3) char[] filteredAt = in.clone();
+		@Pc(3) char[] filteredAt = (char[]) in.clone();
 		@Pc(18) char[] at = new char[] { '(', 'a', ')' };
 		filter(null, filteredAt, at);
-		@Pc(27) char[] filteredDot = in.clone();
+		@Pc(27) char[] filteredDot = (char[]) in.clone();
 		@Pc(42) char[] dot = new char[] { 'd', 'o', 't' };
 		filter(null, filteredDot, dot);
 		for (@Pc(56) int i = domains.length - 1; i >= 0; i--) {
@@ -330,10 +330,10 @@ public class WordFilter {
 
 	@OriginalMember(owner = "client!mc", name = "b", descriptor = "([CI)V")
 	private static void filterTld(@OriginalArg(0) char[] in) {
-		@Pc(3) char[] filteredDot = in.clone();
+		@Pc(3) char[] filteredDot = (char[]) in.clone();
 		@Pc(18) char[] dot = new char[] { 'd', 'o', 't' };
 		filter(null, filteredDot, dot);
-		@Pc(27) char[] filteredSlash = in.clone();
+		@Pc(27) char[] filteredSlash = (char[]) in.clone();
 		@Pc(50) char[] slash = new char[] { 's', 'l', 'a', 's', 'h' };
 		filter(null, filteredSlash, slash);
 		for (@Pc(65) int i = 0; i < tlds.length; i++) {
