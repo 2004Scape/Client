@@ -5,3 +5,4 @@ build/
 *.class
 
 loader/src/main/java/sig.java
+loader/src/main/java/sign/signlink.java

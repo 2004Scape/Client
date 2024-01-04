@@ -7,14 +7,21 @@ dependencies {
 }
 
 java {
-    sourceCompatibility = JavaVersion.VERSION_1_5
+    sourceCompatibility = JavaVersion.VERSION_1_8
 }
 
 tasks.withType(JavaCompile) {
     options.encoding = 'UTF-8'
     options.compilerArgs << '-Xlint:unchecked' << '-Xlint:deprecation'
+
+    dependsOn("copySignlink")
 }
 
 tasks.withType(JavaExec) {
     workingDir = project.rootDir
+}
+
+tasks.register("copySignlink", Copy) {
+    from("../client/src/main/java/sign/signlink.java")
+    into("src/main/java/sign/")
 }

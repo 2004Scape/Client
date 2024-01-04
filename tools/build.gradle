@@ -16,3 +16,8 @@ tasks.register('sig', JavaExec) {
     mainClass = 'lostcity.tools.LoaderSig'
     args = ['client/build/libs/client.jar']
 }
+
+tasks.register('removeAnnotations', JavaExec) {
+    classpath = sourceSets.main.runtimeClasspath
+    mainClass = 'lostcity.tools.RemoveAnnotations'
+}
