@@ -16,7 +16,7 @@ public class PathingEntity extends Entity {
 	public int z;
 
 	@OriginalMember(owner = "client!x", name = "i", descriptor = "I")
-	public int seqDelay;
+	public int yaw;
 
 	@OriginalMember(owner = "client!x", name = "j", descriptor = "Z")
 	public boolean seqStretches = false;
@@ -163,7 +163,7 @@ public class PathingEntity extends Entity {
 	public final boolean[] pathRunning = new boolean[10];
 
 	@OriginalMember(owner = "client!x", name = "fb", descriptor = "I")
-	public int seqPathLength;
+	public int seqTrigger;
 
 	@OriginalMember(owner = "client!x", name = "a", descriptor = "(ZZII)V")
 	public final void move(@OriginalArg(1) boolean teleport, @OriginalArg(2) int x, @OriginalArg(3) int z) {
@@ -194,7 +194,7 @@ public class PathingEntity extends Entity {
 		}
 
 		this.pathLength = 0;
-		this.seqPathLength = 0;
+		this.seqTrigger = 0;
 		this.pathTileX[0] = x;
 		this.pathTileZ[0] = z;
 		this.x = this.pathTileX[0] * 128 + this.size * 64;

@@ -129,8 +129,8 @@ public class PixFont extends Draw2D {
 	}
 
 	@OriginalMember(owner = "client!jb", name = "a", descriptor = "(IIZILjava/lang/String;I)V")
-	public void drawStringTaggableCenter(@OriginalArg(0) int x, @OriginalArg(1) int arg1, @OriginalArg(2) boolean arg2, @OriginalArg(3) int arg3, @OriginalArg(4) String str) {
-		this.drawStringTaggable(x - this.stringWidth(str) / 2, arg3, str, arg2, arg1);
+	public void drawStringTaggableCenter(@OriginalArg(0) int x, @OriginalArg(1) int color, @OriginalArg(2) boolean shadowed, @OriginalArg(3) int y, @OriginalArg(4) String str) {
+		this.drawStringTaggable(x - this.stringWidth(str) / 2, y, str, shadowed, color);
 	}
 
 	@OriginalMember(owner = "client!jb", name = "a", descriptor = "(ZLjava/lang/String;)I")
@@ -210,7 +210,7 @@ public class PixFont extends Draw2D {
 	}
 
 	@OriginalMember(owner = "client!jb", name = "a", descriptor = "(IZBIILjava/lang/String;I)V")
-	public void drawStringTooltip(@OriginalArg(0) int seed, @OriginalArg(1) boolean shadowed, @OriginalArg(3) int y, @OriginalArg(4) int arg4, @OriginalArg(5) String str, @OriginalArg(6) int x) {
+	public void drawStringTooltip(@OriginalArg(0) int seed, @OriginalArg(1) boolean shadowed, @OriginalArg(3) int y, @OriginalArg(4) int color, @OriginalArg(5) String str, @OriginalArg(6) int x) {
 		if (str != null) {
 			this.random.setSeed(seed);
 
@@ -218,7 +218,7 @@ public class PixFont extends Draw2D {
 			@Pc(22) int offY = y - this.height;
 			for (@Pc(30) int i = 0; i < str.length(); i++) {
 				if (str.charAt(i) == '@' && i + 4 < str.length() && str.charAt(i + 4) == '@') {
-					arg4 = this.evaluateTag(str.substring(i + 1, i + 4));
+					color = this.evaluateTag(str.substring(i + 1, i + 4));
 					i += 4;
 				} else {
 					@Pc(71) int c = CHAR_LOOKUP[str.charAt(i)];
@@ -227,7 +227,7 @@ public class PixFont extends Draw2D {
 							this.drawCharAlpha(this.charMask[c], x + this.charOffsetX[c] + 1, this.charMaskHeight[c], 0, offY + this.charOffsetY[c] + 1, 192, this.charMaskWidth[c]);
 						}
 
-						this.drawCharAlpha(this.charMask[c], x + this.charOffsetX[c], this.charMaskHeight[c], arg4, offY + this.charOffsetY[c], rand, this.charMaskWidth[c]);
+						this.drawCharAlpha(this.charMask[c], x + this.charOffsetX[c], this.charMaskHeight[c], color, offY + this.charOffsetY[c], rand, this.charMaskWidth[c]);
 					}
 
 					x += this.charAdvance[c];

@@ -99,7 +99,7 @@ public class ProjectileEntity extends Entity {
 	}
 
 	@OriginalMember(owner = "client!ab", name = "a", descriptor = "(IIIII)V")
-	public void updateVelocity(@OriginalArg(0) int arg0, @OriginalArg(1) int dstZ, @OriginalArg(2) int dstX, @OriginalArg(4) int cycle) {
+	public void updateVelocity(@OriginalArg(0) int dstY, @OriginalArg(1) int dstZ, @OriginalArg(2) int dstX, @OriginalArg(4) int cycle) {
 		if (!this.mobile) {
 			@Pc(8) double dx = dstX - this.srcX;
 			@Pc(14) double dz = dstZ - this.srcZ;
@@ -119,7 +119,7 @@ public class ProjectileEntity extends Entity {
 			this.velocityY = -this.velocity * Math.tan((double) this.peakPitch * 0.02454369D);
 		}
 
-		this.accelerationY = ((double) arg0 - this.y - this.velocityY * dt) * 2.0D / (dt * dt);
+		this.accelerationY = ((double) dstY - this.y - this.velocityY * dt) * 2.0D / (dt * dt);
 	}
 
 	@OriginalMember(owner = "client!ab", name = "a", descriptor = "(BI)V")

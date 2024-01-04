@@ -12,11 +12,12 @@ import org.openrs2.deob.annotation.OriginalClass;
 import org.openrs2.deob.annotation.OriginalMember;
 import org.openrs2.deob.annotation.Pc;
 
+// Interface Component - doesn't quite belong under config...
 @OriginalClass("client!hc")
-public class IfType {
+public class ComType {
 
 	@OriginalMember(owner = "client!hc", name = "c", descriptor = "[Lclient!hc;")
-	public static IfType[] instances;
+	public static ComType[] instances;
 
 	@OriginalMember(owner = "client!hc", name = "d", descriptor = "[I")
 	public int[] inventorySlotObjId;
@@ -201,7 +202,7 @@ public class IfType {
 		@Pc(29) int parentId = -1;
 
 		@Pc(32) int count = dat.g2();
-		instances = new IfType[count];
+		instances = new ComType[count];
 
 		while (dat.pos < dat.data.length) {
 			@Pc(45) int id = dat.g2();
@@ -210,7 +211,7 @@ public class IfType {
 				id = dat.g2();
 			}
 
-			@Pc(62) IfType com = instances[id] = new IfType();
+			@Pc(62) ComType com = instances[id] = new ComType();
 			com.id = id;
 			com.parentId = parentId;
 			com.type = dat.g1();

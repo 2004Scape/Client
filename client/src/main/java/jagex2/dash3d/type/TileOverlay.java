@@ -319,35 +319,5 @@ public class TileOverlay {
 				}
 			}
 		}
-
-		/*int local149 = southwestY;
-		int local151 = southeastY;
-
-		if (southeastY < southwestY) {
-			local149 = southeastY;
-		}
-
-		if (southeastY > southeastY) {
-			local151 = southeastY;
-		}
-
-		if (northeastY < local149) {
-			local149 = northeastY;
-		}
-
-		if (northeastY > southeastY) {
-			local151 = northeastY;
-		}
-
-		if (northwestY < local149) {
-			local149 = northwestY;
-		}
-
-		if (northwestY > local151) {
-			local151 = northwestY;
-		}
-
-		local149 /= 14;
-		local151 /= 14;*/
 	}
 }

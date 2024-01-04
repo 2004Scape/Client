@@ -73,10 +73,10 @@ public class BZip2 {
 				}
 			}
 
-			@Pc(64) boolean local64 = true;
+			@Pc(64) boolean next = true;
 			@Pc(87) byte k1;
-			while (local64) {
-				local64 = false;
+			while (next) {
+				next = false;
 				if (c_nblock_used == s_save_nblockPP) {
 					c_state_out_len = 0;
 					break label67;
@@ -99,7 +99,7 @@ public class BZip2 {
 					cs_decompressed[cs_next_out] = c_state_out_ch;
 					cs_next_out++;
 					cs_avail_out--;
-					local64 = true;
+					next = true;
 				} else if (c_nblock_used == s_save_nblockPP) {
 					if (cs_avail_out == 0) {
 						c_state_out_len = 1;
@@ -109,7 +109,7 @@ public class BZip2 {
 					cs_decompressed[cs_next_out] = c_state_out_ch;
 					cs_next_out++;
 					cs_avail_out--;
-					local64 = true;
+					next = true;
 				}
 			}
 

@@ -241,7 +241,7 @@ public class World3D {
 	}
 
 	@OriginalMember(owner = "client!r", name = "a", descriptor = "([IIIBII)V")
-	public static void init(@OriginalArg(0) int[] pitchDistance, @OriginalArg(1) int arg1, @OriginalArg(2) int viewportWidth, @OriginalArg(4) int viewportHeight, @OriginalArg(5) int arg5) {
+	public static void init(@OriginalArg(0) int[] pitchDistance, @OriginalArg(1) int constant1, @OriginalArg(2) int viewportWidth, @OriginalArg(4) int viewportHeight, @OriginalArg(5) int constant2) {
 		viewportLeft = 0;
 		viewportTop = 0;
 		viewportRight = viewportWidth;
@@ -263,7 +263,7 @@ public class World3D {
 						int x = dx * 128;
 						int z = dz * 128;
 						@Pc(80) boolean visible = false;
-						for (@Pc(83) int y = -arg5; y <= arg1; y += 128) {
+						for (@Pc(83) int y = -constant2; y <= constant1; y += 128) {
 							if (testPoint(x, z, pitchDistance[pitchLevel] + y)) {
 								visible = true;
 								break;
@@ -1784,7 +1784,7 @@ public class World3D {
 	}
 
 	@OriginalMember(owner = "client!r", name = "a", descriptor = "(IILclient!i;IIIIZ)V")
-	private void drawTileOverlay(@OriginalArg(0) int sinEyeYaw, @OriginalArg(1) int arg1, @OriginalArg(2) TileOverlay overlay, @OriginalArg(3) int arg3, @OriginalArg(4) int cosEyePitch, @OriginalArg(5) int sinEyePitch, @OriginalArg(6) int cosEyeYaw) {
+	private void drawTileOverlay(@OriginalArg(0) int sinEyeYaw, @OriginalArg(1) int tileZ, @OriginalArg(2) TileOverlay overlay, @OriginalArg(3) int tileX, @OriginalArg(4) int cosEyePitch, @OriginalArg(5) int sinEyePitch, @OriginalArg(6) int cosEyeYaw) {
 		@Pc(5) int vertexCount = overlay.vertexX.length;
 
 		for (@Pc(7) int i = 0; i < vertexCount; i++) {
@@ -1829,8 +1829,8 @@ public class World3D {
 			if ((x0 - x1) * (y2 - y1) - (y0 - y1) * (x2 - x1) > 0) {
 				Draw3D.clipX = x0 < 0 || x1 < 0 || x2 < 0 || x0 > Draw2D.boundX || x1 > Draw2D.boundX || x2 > Draw2D.boundX;
 				if (takingInput && this.pointInsideTriangle(mouseX, mouseY, y0, y1, y2, x0, x1, x2)) {
-					clickTileX = arg3;
-					clickTileZ = arg1;
+					clickTileX = tileX;
+					clickTileZ = tileZ;
 				}
 				if (overlay.triangleTextureIds == null || overlay.triangleTextureIds[v] == -1) {
 					if (overlay.triangleColorA[v] != 12345678) {
@@ -2143,11 +2143,11 @@ public class World3D {
 	}
 
 	@OriginalMember(owner = "client!r", name = "j", descriptor = "(IIII)Z")
-	private boolean visible(@OriginalArg(0) int level, @OriginalArg(1) int tileX, @OriginalArg(2) int tileZ, @OriginalArg(3) int arg3) {
+	private boolean visible(@OriginalArg(0) int level, @OriginalArg(1) int tileX, @OriginalArg(2) int tileZ, @OriginalArg(3) int y) {
 		if (this.tileVisible(level, tileX, tileZ)) {
 			@Pc(11) int x = tileX << 7;
 			@Pc(15) int z = tileZ << 7;
-			return this.occluded(x + 1, this.levelHeightmaps[level][tileX][tileZ] - arg3, z + 1) && this.occluded(x + 128 - 1, this.levelHeightmaps[level][tileX + 1][tileZ] - arg3, z + 1) && this.occluded(x + 128 - 1, this.levelHeightmaps[level][tileX + 1][tileZ + 1] - arg3, z + 128 - 1) && this.occluded(x + 1, this.levelHeightmaps[level][tileX][tileZ + 1] - arg3, z + 128 - 1);
+			return this.occluded(x + 1, this.levelHeightmaps[level][tileX][tileZ] - y, z + 1) && this.occluded(x + 128 - 1, this.levelHeightmaps[level][tileX + 1][tileZ] - y, z + 1) && this.occluded(x + 128 - 1, this.levelHeightmaps[level][tileX + 1][tileZ + 1] - y, z + 128 - 1) && this.occluded(x + 1, this.levelHeightmaps[level][tileX][tileZ + 1] - y, z + 128 - 1);
 		} else {
 			return false;
 		}

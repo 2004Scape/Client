@@ -141,7 +141,6 @@ public class ClientStream implements Runnable {
 	}
 
 	@OriginalMember(owner = "client!d", name = "run", descriptor = "()V")
-	@Override
 	public void run() {
 		while (this.writer) {
 			@Pc(38) int len;

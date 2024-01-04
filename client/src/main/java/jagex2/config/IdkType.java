@@ -64,11 +64,11 @@ public class IdkType {
 			if (code == 1) {
 				this.type = dat.g1();
 			} else if (code == 2) {
-				@Pc(26) int local26 = dat.g1();
-				this.models = new int[local26];
+				@Pc(26) int count = dat.g1();
+				this.models = new int[count];
 
-				for (@Pc(32) int local32 = 0; local32 < local26; local32++) {
-					this.models[local32] = dat.g2();
+				for (@Pc(32) int i = 0; i < count; i++) {
+					this.models[i] = dat.g2();
 				}
 			} else if (code == 3) {
 				this.disable = true;

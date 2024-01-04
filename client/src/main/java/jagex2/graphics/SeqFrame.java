@@ -35,11 +35,11 @@ public class SeqFrame {
 	public int[] z;
 
 	@OriginalMember(owner = "client!g", name = "a", descriptor = "(ZLclient!ub;)V")
-	public static void unpack(@OriginalArg(1) Jagfile arg1) {
-		@Pc(17) Packet head = new Packet(arg1.read("frame_head.dat", null));
-		@Pc(27) Packet tran1 = new Packet(arg1.read("frame_tran1.dat", null));
-		@Pc(37) Packet tran2 = new Packet(arg1.read("frame_tran2.dat", null));
-		@Pc(47) Packet del = new Packet(arg1.read("frame_del.dat", null));
+	public static void unpack(@OriginalArg(1) Jagfile models) {
+		@Pc(17) Packet head = new Packet(models.read("frame_head.dat", null));
+		@Pc(27) Packet tran1 = new Packet(models.read("frame_tran1.dat", null));
+		@Pc(37) Packet tran2 = new Packet(models.read("frame_tran2.dat", null));
+		@Pc(47) Packet del = new Packet(models.read("frame_del.dat", null));
 
 		@Pc(50) int total = head.g2();
 		@Pc(53) int count = head.g2();
