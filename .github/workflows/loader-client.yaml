@@ -20,14 +20,8 @@ jobs:
     - name: Make code compatible with old Java
       run: gradle -p tools removeAnnotations
 
-    - name: Build Client
-      run: gradle client:build
-
-    - name: Generate Client SHA Signature
-      run: gradle -p tools sig
-
-    - name: Generate Loader
-      run: gradle loader:build
+    - name: Run Gradle build
+      run: gradle build -x :deob-annotations:build
 
     - name: Upload a Build Artifact
       uses: actions/upload-artifact@v3
