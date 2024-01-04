@@ -9,13 +9,14 @@ import java.util.Iterator;
 
 public class RemoveAnnotations {
     public static void main(String[] args) {
-        // in order to build for ancient Java versions, iterate through every single .java file and remove the deob-annotations tags
+        // in order to build for ancient Java versions, iterate through every single .java file and remove annotations (Java 5+)
         Collection<File> source = FileUtils.listFiles(new File("client/src/main/java"), new String[]{ "java" }, true);
         for (Iterator<File> iterator = source.iterator(); iterator.hasNext();) {
             File file = iterator.next();
 
             try {
                 String contents = FileUtils.readFileToString(file);
+                contents = contents.replaceAll("@Override", "");
                 contents = contents.replaceAll("@OriginalArg\\(\\d+\\) ", "");
                 contents = contents.replaceAll("@OriginalClass\\(.*\\)", "");
                 contents = contents.replaceAll("@OriginalMember\\(.*\\)", "");
