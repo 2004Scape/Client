@@ -1362,7 +1362,7 @@ public class client extends GameShell {
 						if (this.projectX > -1) {
 							for (int icon = 0; icon < 8; icon++) {
 								if ((player.headicons & 0x1 << icon) != 0) {
-									this.imageHeadicons[icon].draw(this.projectY - y, this.projectX - 12);
+									this.imageHeadicons[icon].draw(this.projectX - 12, this.projectY - y);
 									y -= 25;
 								}
 							}
@@ -1371,13 +1371,13 @@ public class client extends GameShell {
 					if (index >= 0 && this.hintType == 10 && this.hintPlayer == this.playerIds[index]) {
 						this.projectFromGround(entity.height + 15, entity);
 						if (this.projectX > -1) {
-							this.imageHeadicons[7].draw(this.projectY - y, this.projectX - 12);
+							this.imageHeadicons[7].draw(this.projectX - 12, this.projectY - y);
 						}
 					}
 				} else if (this.hintType == 1 && this.hintNpc == this.npcIds[index - this.playerCount] && loopCycle % 20 < 10) {
 					this.projectFromGround(entity.height + 15, entity);
 					if (this.projectX > -1) {
-						this.imageHeadicons[2].draw(this.projectY - 28, this.projectX - 12);
+						this.imageHeadicons[2].draw(this.projectX - 12, this.projectY - 28);
 					}
 				}
 				if (entity.chat != null && (index >= this.playerCount || this.publicChatSetting == 0 || this.publicChatSetting == 3 || this.publicChatSetting == 1 && this.isFriend(((PlayerEntity) entity).name))) {
@@ -1407,14 +1407,14 @@ public class client extends GameShell {
 						if (w > 30) {
 							w = 30;
 						}
-						Draw2D.fillRect(this.projectY - 3, this.projectX - 15, 0xff00, w, 5);
-						Draw2D.fillRect(this.projectY - 3, this.projectX - 15 + w, 0xff0000, 30 - w, 5);
+						Draw2D.fillRect(this.projectX - 15, this.projectY - 3, 0xff00, w, 5);
+						Draw2D.fillRect(this.projectX - 15 + w, this.projectY - 3, 0xff0000, 30 - w, 5);
 					}
 				}
 				if (entity.combatCycle > loopCycle + 330) {
 					this.projectFromGround(entity.height / 2, entity);
 					if (this.projectX > -1) {
-						this.imageHitmarks[entity.damageType].draw(this.projectY - 12, this.projectX - 12);
+						this.imageHitmarks[entity.damageType].draw(this.projectX - 12, this.projectY - 12);
 						this.fontPlain11.drawStringCenter(this.projectY + 4, 0, String.valueOf(entity.damage), this.projectX);
 						this.fontPlain11.drawStringCenter(this.projectY + 3, 0xffffff, String.valueOf(entity.damage), this.projectX - 1);
 					}
@@ -1489,15 +1489,15 @@ public class client extends GameShell {
 					this.fontBold12.drawStringCenter(this.projectY, color, message, this.projectX);
 				}
 				if (this.chatStyles[i] == 1) {
-					this.fontBold12.drawCenteredWave(this.sceneCycle, this.projectX, this.projectY + 1, 0, message);
-					this.fontBold12.drawCenteredWave(this.sceneCycle, this.projectX, this.projectY, color, message);
+					this.fontBold12.drawCenteredWave(this.projectX, this.projectY + 1, message, 0, this.sceneCycle);
+					this.fontBold12.drawCenteredWave(this.projectX, this.projectY, message, color, this.sceneCycle);
 				}
 				if (this.chatStyles[i] == 2) {
 					int w = this.fontBold12.stringWidth(message);
 					@Pc(913) int offsetX = (150 - this.chatTimers[i]) * (w + 100) / 150;
-					Draw2D.setBounds(334, 0, this.projectX + 50, this.projectX - 50);
-					this.fontBold12.drawString(this.projectX + 50 - offsetX, this.projectY + 1, 0, message);
-					this.fontBold12.drawString(this.projectX + 50 - offsetX, this.projectY, color, message);
+					Draw2D.setBounds(334, this.projectX + 50, 0, this.projectX - 50);
+					this.fontBold12.drawString(this.projectX + 50 - offsetX, this.projectY + 1, message, 0);
+					this.fontBold12.drawString(this.projectX + 50 - offsetX, this.projectY, message, color);
 					Draw2D.resetBounds();
 				}
 			} else {
@@ -1600,8 +1600,8 @@ public class client extends GameShell {
                 @Pc(60) int y;
                 if ((type == 3 || type == 7) && (type == 7 || this.privateChatSetting == 0 || this.privateChatSetting == 1 && this.isFriend(this.messageSender[i]))) {
                     y = 329 - lineOffset * 13;
-                    font.drawString(4, y, 0, "From " + this.messageSender[i] + ": " + this.messageText[i]);
-                    font.drawString(4, y - 1, 65535, "From " + this.messageSender[i] + ": " + this.messageText[i]);
+                    font.drawString(4, y, "From " + this.messageSender[i] + ": " + this.messageText[i], 0);
+                    font.drawString(4, y - 1, "From " + this.messageSender[i] + ": " + this.messageText[i], 65535);
 
                     lineOffset++;
                     if (lineOffset >= 5) {
@@ -1611,8 +1611,8 @@ public class client extends GameShell {
 
                 if (type == 5 && this.privateChatSetting < 2) {
                     y = 329 - lineOffset * 13;
-                    font.drawString(4, y, 0, this.messageText[i]);
-                    font.drawString(4, y - 1, 65535, this.messageText[i]);
+                    font.drawString(4, y, this.messageText[i], 0);
+                    font.drawString(4, y - 1, this.messageText[i], 65535);
 
                     lineOffset++;
                     if (lineOffset >= 5) {
@@ -1622,8 +1622,8 @@ public class client extends GameShell {
 
                 if (type == 6 && this.privateChatSetting < 2) {
                     y = 329 - lineOffset * 13;
-                    font.drawString(4, y, 0, "To " + this.messageSender[i] + ": " + this.messageText[i]);
-                    font.drawString(4, y - 1, 65535, "To " + this.messageSender[i] + ": " + this.messageText[i]);
+                    font.drawString(4, y, "To " + this.messageSender[i] + ": " + this.messageText[i], 0);
+                    font.drawString(4, y - 1, "To " + this.messageSender[i] + ": " + this.messageText[i], 65535);
 
                     lineOffset++;
                     if (lineOffset >= 5) {
@@ -1758,7 +1758,7 @@ public class client extends GameShell {
 			if (x >= 0 && z >= 0 && x < 104 && z < 104) {
 				@Pc(69) LocTemporary loc = null;
 				for (@Pc(74) LocTemporary next = (LocTemporary) this.spawnedLocations.peekFront(); next != null; next = (LocTemporary) this.spawnedLocations.prev()) {
-					if (next.plane == this.currentLevel && next.x == x && next.z == z && next.classType == layer) {
+					if (next.plane == this.currentLevel && next.x == x && next.z == z && next.layer == layer) {
 						loc = next;
 						break;
 					}
@@ -1766,8 +1766,8 @@ public class client extends GameShell {
 				if (loc == null) {
 					int bitset = 0;
 					int otherId = -1;
-					int otherKind = 0;
-					@Pc(114) int otherRotation = 0;
+					int otherShape = 0;
+					@Pc(114) int otherAngle = 0;
 					if (layer == 0) {
 						bitset = this.scene.getWallBitset(this.currentLevel, x, z);
 					}
@@ -1783,23 +1783,23 @@ public class client extends GameShell {
 					if (bitset != 0) {
 						@Pc(169) int otherInfo = this.scene.getInfo(this.currentLevel, x, z, bitset);
 						otherId = bitset >> 14 & 0x7FFF;
-						otherKind = otherInfo & 0x1F;
-						otherRotation = otherInfo >> 6;
+						otherShape = otherInfo & 0x1F;
+						otherAngle = otherInfo >> 6;
 					}
 					loc = new LocTemporary();
 					loc.plane = this.currentLevel;
-					loc.classType = layer;
+					loc.layer = layer;
 					loc.x = x;
 					loc.z = z;
 					loc.lastLocIndex = otherId;
-					loc.lastType = otherKind;
-					loc.lastOrientation = otherRotation;
+					loc.lastShape = otherShape;
+					loc.lastAngle = otherAngle;
 					this.spawnedLocations.pushBack(loc);
 				}
 				loc.locIndex = id;
-				loc.type = shape;
-				loc.orientation = angle;
-				this.addLoc(angle, x, z, layer, id, shape, this.currentLevel);
+				loc.shape = shape;
+				loc.angle = angle;
+				this.addLoc(this.currentLevel, x, z, id, angle, shape, layer);
 			}
 		} else if (opcode == 42) {
 			// LOC_ANIM
@@ -1822,7 +1822,7 @@ public class client extends GameShell {
 					bitset = this.scene.getGroundDecorationBitset(this.currentLevel, x, z);
 				}
 				if (bitset != 0) {
-					@Pc(348) LocEntity loc = new LocEntity(false, bitset >> 14 & 0x7FFF, this.currentLevel, layer, SeqType.instances[id], z, x);
+					@Pc(348) LocEntity loc = new LocEntity(bitset >> 14 & 0x7FFF, this.currentLevel, layer, x, z, SeqType.instances[id], false);
 					this.locList.pushBack(loc);
 				}
 			}
@@ -1875,8 +1875,8 @@ public class client extends GameShell {
 				z = z * 128 + 64;
 				dx = dx * 128 + 64;
 				dz = dz * 128 + 64;
-				@Pc(657) ProjectileEntity proj = new ProjectileEntity(dstHeight, peak, z, endDelay + loopCycle, this.currentLevel, target, startDelay + loopCycle, arc, this.getHeightmapY(this.currentLevel, x, z) - srcHeight, spotanim, x);
-				proj.updateVelocity(this.getHeightmapY(this.currentLevel, dx, dz) - dstHeight, dz, dx, startDelay + loopCycle);
+				@Pc(657) ProjectileEntity proj = new ProjectileEntity(spotanim, this.currentLevel, x, this.getHeightmapY(this.currentLevel, x, z) - srcHeight, z, startDelay + loopCycle, endDelay + loopCycle, peak, arc, target, dstHeight);
+				proj.updateVelocity(dx, this.getHeightmapY(this.currentLevel, dx, dz) - dstHeight, dz, startDelay + loopCycle);
 				this.projectiles.pushBack(proj);
 			}
 		} else if (opcode == 191) {
@@ -1887,7 +1887,7 @@ public class client extends GameShell {
 			if (x >= 0 && z >= 0 && x < 104 && z < 104) {
 				x = x * 128 + 64;
 				z = z * 128 + 64;
-				@Pc(753) SpotAnimEntity spotanim = new SpotAnimEntity(x, id, z, delay, this.getHeightmapY(this.currentLevel, x, z) - height, this.currentLevel, loopCycle);
+				@Pc(753) SpotAnimEntity spotanim = new SpotAnimEntity(id, this.currentLevel, x, z, this.getHeightmapY(this.currentLevel, x, z) - height, loopCycle, delay);
 				this.spotanims.pushBack(spotanim);
 			}
 		} else if (opcode == 50) {
@@ -1909,7 +1909,7 @@ public class client extends GameShell {
 			// LOC_MERGE
 			int info = buf.g1();
 			int shape = info >> 2;
-			int rotation = info & 0x3;
+			int angle = info & 0x3;
 			int layer = this.LOC_KIND_TO_CLASS_ID[shape];
 			int id = buf.g2();
 			int start = buf.g2();
@@ -1919,45 +1919,55 @@ public class client extends GameShell {
 			@Pc(908) byte south = buf.g1b();
 			@Pc(911) byte west = buf.g1b();
 			@Pc(914) byte north = buf.g1b();
+
 			@Pc(921) PlayerEntity player;
 			if (pid == this.localPid) {
 				player = this.localPlayer;
 			} else {
 				player = this.players[pid];
 			}
+
 			if (player != null) {
-				@Pc(946) LocSpawned loc1 = new LocSpawned(this.currentLevel, rotation, z, start + loopCycle, shape, -1, x, layer);
+				@Pc(946) LocSpawned loc1 = new LocSpawned(this.currentLevel, layer, x, z, -1, angle, shape, start + loopCycle);
 				this.temporaryLocs.pushBack(loc1);
-				@Pc(966) LocSpawned loc2 = new LocSpawned(this.currentLevel, rotation, z, end + loopCycle, shape, id, x, layer);
+
+				@Pc(966) LocSpawned loc2 = new LocSpawned(this.currentLevel, layer, x, z, id, angle, shape, end + loopCycle);
 				this.temporaryLocs.pushBack(loc2);
+
 				@Pc(980) int y0 = this.levelHeightmap[this.currentLevel][x][z];
 				@Pc(992) int y1 = this.levelHeightmap[this.currentLevel][x + 1][z];
 				@Pc(1006) int y2 = this.levelHeightmap[this.currentLevel][x + 1][z + 1];
 				@Pc(1018) int y3 = this.levelHeightmap[this.currentLevel][x][z + 1];
 				@Pc(1021) LocType loc = LocType.get(id);
+
 				player.locStartCycle = start + loopCycle;
 				player.locStopCycle = end + loopCycle;
-				player.locModel = loc.getModel(shape, rotation, y0, y1, y2, y3, -1);
+				player.locModel = loc.getModel(shape, angle, y0, y1, y2, y3, -1);
+
 				@Pc(1045) int width = loc.width;
 				@Pc(1048) int height = loc.length;
-				if (rotation == 1 || rotation == 3) {
+				if (angle == 1 || angle == 3) {
 					width = loc.length;
 					height = loc.width;
 				}
+
 				player.locOffsetX = x * 128 + width * 64;
 				player.locOffsetZ = z * 128 + height * 64;
 				player.locOffsetY = this.getHeightmapY(this.currentLevel, player.locOffsetX, player.locOffsetZ);
+
 				@Pc(1094) byte tmp;
 				if (east > west) {
 					tmp = east;
 					east = west;
 					west = tmp;
 				}
+
 				if (south > north) {
 					tmp = south;
 					south = north;
 					north = tmp;
 				}
+
 				player.minTileX = x + east;
 				player.maxTileX = x + west;
 				player.minTileZ = z + south;
@@ -2164,13 +2174,13 @@ public class client extends GameShell {
 		Model.mouseX = super.mouseX - 8;
 		Model.mouseZ = super.mouseY - 11;
 		Draw2D.clear();
-		this.scene.draw(this.cameraYaw, this.cameraX, level, this.cameraPitch, this.cameraY, this.cameraZ, loopCycle);
+		this.scene.draw(this.cameraX, this.cameraY, this.cameraZ, level, this.cameraYaw, this.cameraPitch, loopCycle);
 		this.scene.clearTemporaryLocs();
 		this.draw2DEntityElements();
 		this.drawTileHint();
 		this.updateTextures(jitter);
 		this.draw3DEntityElements();
-		this.areaViewport.draw(11, super.graphics, 8);
+		this.areaViewport.draw(super.graphics, 8, 11);
 		this.cameraX = cameraX;
 		this.cameraY = cameraY;
 		this.cameraZ = cameraZ;
@@ -2300,7 +2310,7 @@ public class client extends GameShell {
 			dstOffset += step;
 		}
 
-		this.imageTitle0.draw(0, super.graphics, 0);
+		this.imageTitle0.draw(super.graphics, 0, 0);
 
 		for (int i = 0; i < 33920; i++) {
 			this.imageTitle1.pixels[i] = this.imageFlamesRight.pixels[i];
@@ -2328,7 +2338,7 @@ public class client extends GameShell {
 			dstOffset += 128 - step - offset;
 		}
 
-		this.imageTitle1.draw(0, super.graphics, 661);
+		this.imageTitle1.draw(super.graphics, 661, 0);
 	}
 
 	@OriginalMember(owner = "client!client", name = "a", descriptor = "(IIILclient!hc;III)V")
@@ -2705,11 +2715,11 @@ public class client extends GameShell {
                 }
 
                 player.y = this.getHeightmapY(this.currentLevel, player.x, player.z);
-                this.scene.addTemporary(player.z, 60, player.yaw, player.x, id, player.seqStretches, null, player, player.y, this.currentLevel);
+                this.scene.addTemporary(this.currentLevel, player.x, player.y, player.z, null, player, id, player.yaw, 60, player.seqStretches);
             } else {
                 player.lowMemory = false;
                 player.y = this.getHeightmapY(this.currentLevel, player.x, player.z);
-                this.scene.addTemporary(player.maxTileX, null, player.z, player.y, id, player.yaw, player.minTileZ, player.minTileX, player, this.currentLevel, player.maxTileZ, player.x);
+                this.scene.addTemporary(this.currentLevel, player.x, player.y, player.z, player.minTileX, player.minTileZ, player.maxTileX, player.maxTileZ, null, player, id, player.yaw);
             }
         }
 	}
@@ -3389,8 +3399,8 @@ public class client extends GameShell {
 		@Pc(26) int anchorX = this.localPlayer.x / 32 + 48;
 		@Pc(34) int anchorY = 464 - this.localPlayer.z / 32;
 
-		this.imageMinimap.drawRotatedMasked(angle, 146, this.minimapMaskLineOffsets, 151, anchorY, this.minimapZoom + 256, anchorX, 21, 9, this.minimapMaskLineLengths);
-		this.imageCompass.drawRotatedMasked(this.orbitCameraYaw, 33, this.compassMaskLineOffsets, 33, 25, 256, 25, 0, 0, this.compassMaskLineLengths);
+		this.imageMinimap.drawRotatedMasked(21, 9, 146, 151, this.minimapMaskLineOffsets, this.minimapMaskLineLengths, anchorX, anchorY, angle, this.minimapZoom + 256);
+		this.imageCompass.drawRotatedMasked(0, 0, 33, 33, this.compassMaskLineOffsets, this.compassMaskLineLengths, 25, 25, this.orbitCameraYaw, 256);
 		for (@Pc(72) int i = 0; i < this.activeMapFunctionCount; i++) {
 			anchorX = this.activeMapFunctionX[i] * 4 + 2 - this.localPlayer.x / 32;
 			anchorY = this.activeMapFunctionZ[i] * 4 + 2 - this.localPlayer.z / 32;
@@ -3446,7 +3456,7 @@ public class client extends GameShell {
 			this.drawOnMinimap(anchorY, this.imageMapflag, anchorX);
 		}
 
-		Draw2D.fillRect(82, 93, 0xffffff, 3, 3);
+		Draw2D.fillRect(93, 82, 0xffffff, 3, 3);
 		this.areaViewport.bind();
 	}
 
@@ -3465,7 +3475,7 @@ public class client extends GameShell {
 		if (this.sceneState == 2) {
 			for (@Pc(12) LocSpawned loc = (LocSpawned) this.temporaryLocs.peekFront(); loc != null; loc = (LocSpawned) this.temporaryLocs.prev()) {
 				if (loopCycle >= loc.lastCycle) {
-					this.addLoc(loc.orientation, loc.x, loc.z, loc.classType, loc.locIndex, loc.type, loc.plane);
+					this.addLoc(loc.plane, loc.x, loc.z, loc.locIndex, loc.angle, loc.shape, loc.layer);
 					loc.unlink();
 				}
 			}
@@ -3491,11 +3501,11 @@ public class client extends GameShell {
 
 			for (int x = 1; x < 103; x++) {
 				if ((this.levelTileFlags[level][x][z] & 0x18) == 0) {
-					this.scene.drawMinimapTile(pixels, offset, 512, level, x, z);
+					this.scene.drawMinimapTile(level, x, z, pixels, offset, 512);
 				}
 
 				if (level < 3 && (this.levelTileFlags[level + 1][x][z] & 0x8) != 0) {
-					this.scene.drawMinimapTile(pixels, offset, 512, level + 1, x, z);
+					this.scene.drawMinimapTile(level + 1, x, z, pixels, offset, 512);
 				}
 
 				offset += 4;
@@ -3574,7 +3584,7 @@ public class client extends GameShell {
 
 		if (bitset != 0) {
 			int info = this.scene.getInfo(level, tileX, tileZ, bitset);
-			int rotation = info >> 6 & 0x3;
+			int angle = info >> 6 & 0x3;
 			int shape = info & 0x1F;
 			int rgb = wallRgb;
 			if (bitset > 0) {
@@ -3588,22 +3598,22 @@ public class client extends GameShell {
 			@Pc(61) LocType loc = LocType.get(locId);
 			if (loc.mapscene == -1) {
 				if (shape == 0 || shape == 2) {
-					if (rotation == 0) {
+					if (angle == 0) {
 						dst[offset] = rgb;
 						dst[offset + 512] = rgb;
 						dst[offset + 1024] = rgb;
 						dst[offset + 1536] = rgb;
-					} else if (rotation == 1) {
+					} else if (angle == 1) {
 						dst[offset] = rgb;
 						dst[offset + 1] = rgb;
 						dst[offset + 2] = rgb;
 						dst[offset + 3] = rgb;
-					} else if (rotation == 2) {
+					} else if (angle == 2) {
 						dst[offset + 3] = rgb;
 						dst[offset + 3 + 512] = rgb;
 						dst[offset + 3 + 1024] = rgb;
 						dst[offset + 3 + 1536] = rgb;
-					} else if (rotation == 3) {
+					} else if (angle == 3) {
 						dst[offset + 1536] = rgb;
 						dst[offset + 1536 + 1] = rgb;
 						dst[offset + 1536 + 2] = rgb;
@@ -3612,34 +3622,34 @@ public class client extends GameShell {
 				}
 
 				if (shape == 3) {
-					if (rotation == 0) {
+					if (angle == 0) {
 						dst[offset] = rgb;
-					} else if (rotation == 1) {
+					} else if (angle == 1) {
 						dst[offset + 3] = rgb;
-					} else if (rotation == 2) {
+					} else if (angle == 2) {
 						dst[offset + 3 + 1536] = rgb;
-					} else if (rotation == 3) {
+					} else if (angle == 3) {
 						dst[offset + 1536] = rgb;
 					}
 				}
 
 				if (shape == 2) {
-					if (rotation == 3) {
+					if (angle == 3) {
 						dst[offset] = rgb;
 						dst[offset + 512] = rgb;
 						dst[offset + 1024] = rgb;
 						dst[offset + 1536] = rgb;
-					} else if (rotation == 0) {
+					} else if (angle == 0) {
 						dst[offset] = rgb;
 						dst[offset + 1] = rgb;
 						dst[offset + 2] = rgb;
 						dst[offset + 3] = rgb;
-					} else if (rotation == 1) {
+					} else if (angle == 1) {
 						dst[offset + 3] = rgb;
 						dst[offset + 3 + 512] = rgb;
 						dst[offset + 3 + 1024] = rgb;
 						dst[offset + 3 + 1536] = rgb;
-					} else if (rotation == 2) {
+					} else if (angle == 2) {
 						dst[offset + 1536] = rgb;
 						dst[offset + 1536 + 1] = rgb;
 						dst[offset + 1536 + 2] = rgb;
@@ -3651,7 +3661,7 @@ public class client extends GameShell {
 				if (scene != null) {
 					@Pc(83) int offsetX = (loc.width * 4 - scene.width) / 2;
 					@Pc(93) int offsetY = (loc.length * 4 - scene.height) / 2;
-					scene.draw((104 - tileZ - loc.length) * 4 + offsetY + 48, tileX * 4 + 48 + offsetX);
+					scene.draw(tileX * 4 + 48 + offsetX, (104 - tileZ - loc.length) * 4 + offsetY + 48);
 				}
 			}
 		}
@@ -3659,7 +3669,7 @@ public class client extends GameShell {
 		bitset = this.scene.getLocBitset(level, tileX, tileZ);
 		if (bitset != 0) {
 			int info = this.scene.getInfo(level, tileX, tileZ, bitset);
-			int rotation = info >> 6 & 0x3;
+			int angle = info >> 6 & 0x3;
 			int shape = info & 0x1F;
 			int locId = bitset >> 14 & 0x7FFF;
 			@Pc(451) LocType loc = LocType.get(locId);
@@ -3669,7 +3679,7 @@ public class client extends GameShell {
 				if (scene != null) {
 					int offsetX = (loc.width * 4 - scene.width) / 2;
 					int offsetY = (loc.length * 4 - scene.height) / 2;
-					scene.draw((104 - tileZ - loc.length) * 4 + offsetY + 48, tileX * 4 + 48 + offsetX);
+					scene.draw(tileX * 4 + 48 + offsetX, (104 - tileZ - loc.length) * 4 + offsetY + 48);
 				}
 			} else if (shape == 9) {
 				int rgb = 0xeeeeee;
@@ -3680,7 +3690,7 @@ public class client extends GameShell {
 				@Pc(520) int[] dst = this.imageMinimap.pixels;
 				int offset = tileX * 4 + (103 - tileZ) * 512 * 4 + 24624;
 
-				if (rotation == 0 || rotation == 2) {
+				if (angle == 0 || angle == 2) {
 					dst[offset + 1536] = rgb;
 					dst[offset + 1024 + 1] = rgb;
 					dst[offset + 512 + 2] = rgb;
@@ -3703,7 +3713,7 @@ public class client extends GameShell {
 				if (scene != null) {
 					int offsetX = (loc.width * 4 - scene.width) / 2;
 					@Pc(647) int offsetY = (loc.length * 4 - scene.height) / 2;
-					scene.draw((104 - tileZ - loc.length) * 4 + offsetY + 48, tileX * 4 + 48 + offsetX);
+					scene.draw(tileX * 4 + 48 + offsetX, (104 - tileZ - loc.length) * 4 + offsetY + 48);
 				}
 			}
 		}
@@ -3878,9 +3888,9 @@ public class client extends GameShell {
 
 	@OriginalMember(owner = "client!client", name = "b", descriptor = "(IIIIII)V")
 	private void drawScrollbar(@OriginalArg(1) int x, @OriginalArg(2) int y, @OriginalArg(3) int scrollY, @OriginalArg(4) int scrollHeight, @OriginalArg(5) int height) {
-		this.imageScrollbar0.draw(y, x);
-		this.imageScrollbar1.draw(y + height - 16, x);
-		Draw2D.fillRect(y + 16, x, this.SCROLLBAR_TRACK, 16, height - 32);
+		this.imageScrollbar0.draw(x, y);
+		this.imageScrollbar1.draw(x, y + height - 16);
+		Draw2D.fillRect(x, y + 16, this.SCROLLBAR_TRACK, 16, height - 32);
 
 		@Pc(35) int gripSize = (height - 32) * height / scrollHeight;
 		if (gripSize < 8) {
@@ -3888,19 +3898,19 @@ public class client extends GameShell {
 		}
 
 		@Pc(52) int gripY = (height - gripSize - 32) * scrollY / (scrollHeight - height);
-		Draw2D.fillRect(y + gripY + 16, x, this.SCROLLBAR_GRIP_FOREGROUND, 16, gripSize);
+		Draw2D.fillRect(x, y + gripY + 16, this.SCROLLBAR_GRIP_FOREGROUND, 16, gripSize);
 
-		Draw2D.drawVerticalLine(this.SCROLLBAR_GRIP_HIGHLIGHT, y + gripY + 16, gripSize, x);
-		Draw2D.drawVerticalLine(this.SCROLLBAR_GRIP_HIGHLIGHT, y + gripY + 16, gripSize, x + 1);
+		Draw2D.drawVerticalLine(x, y + gripY + 16, this.SCROLLBAR_GRIP_HIGHLIGHT, gripSize);
+		Draw2D.drawVerticalLine(x + 1, y + gripY + 16, this.SCROLLBAR_GRIP_HIGHLIGHT, gripSize);
 
-		Draw2D.drawHorizontalLine(this.SCROLLBAR_GRIP_HIGHLIGHT, y + gripY + 16, 16, x);
-		Draw2D.drawHorizontalLine(this.SCROLLBAR_GRIP_HIGHLIGHT, y + gripY + 17, 16, x);
+		Draw2D.drawHorizontalLine(x, y + gripY + 16, this.SCROLLBAR_GRIP_HIGHLIGHT, 16);
+		Draw2D.drawHorizontalLine(x, y + gripY + 17, this.SCROLLBAR_GRIP_HIGHLIGHT, 16);
 
-		Draw2D.drawVerticalLine(this.SCROLLBAR_GRIP_LOWLIGHT, y + gripY + 16, gripSize, x + 15);
-		Draw2D.drawVerticalLine(this.SCROLLBAR_GRIP_LOWLIGHT, y + gripY + 17, gripSize - 1, x + 14);
+		Draw2D.drawVerticalLine(x + 15, y + gripY + 16, this.SCROLLBAR_GRIP_LOWLIGHT, gripSize);
+		Draw2D.drawVerticalLine(x + 14, y + gripY + 17, this.SCROLLBAR_GRIP_LOWLIGHT, gripSize - 1);
 
-		Draw2D.drawHorizontalLine(this.SCROLLBAR_GRIP_LOWLIGHT, y + gripY + gripSize + 15, 16, x);
-		Draw2D.drawHorizontalLine(this.SCROLLBAR_GRIP_LOWLIGHT, y + gripY + gripSize + 14, 15, x + 1);
+		Draw2D.drawHorizontalLine(x, y + gripY + gripSize + 15, this.SCROLLBAR_GRIP_LOWLIGHT, 16);
+		Draw2D.drawHorizontalLine(x + 1, y + gripY + gripSize + 14, this.SCROLLBAR_GRIP_LOWLIGHT, 15);
 	}
 
 	@OriginalMember(owner = "client!client", name = "g", descriptor = "(B)V")
@@ -3950,7 +3960,7 @@ public class client extends GameShell {
                 this.tileLastOccupiedCycle[x][z] = this.sceneCycle;
             }
 
-            this.scene.addTemporary(npc.z, (npc.size - 1) * 64 + 60, npc.yaw, npc.x, bitset, npc.seqStretches, null, npc, this.getHeightmapY(this.currentLevel, npc.x, npc.z), this.currentLevel);
+            this.scene.addTemporary(this.currentLevel, npc.x, this.getHeightmapY(this.currentLevel, npc.x, npc.z), npc.z, null, npc, bitset, npc.yaw, (npc.size - 1) * 64 + 60, npc.seqStretches);
         }
 	}
 
@@ -3971,73 +3981,73 @@ public class client extends GameShell {
 
 		if (this.titleScreenState == 0) {
 			int y = h / 2 - 20;
-			this.fontBold12.drawStringTaggableCenter(w / 2, 16776960, true, y, "Welcome to RuneScape");
+			this.fontBold12.drawStringTaggableCenter("Welcome to RuneScape", w / 2, y, 16776960, true);
 
 			int x = w / 2 - 80;
 			y = h / 2 + 20;
 
-			this.imageTitlebutton.draw(y - 20, x - 73);
-			this.fontBold12.drawStringTaggableCenter(x, 16777215, true, y + 5, "New user");
+			this.imageTitlebutton.draw(x - 73, y - 20);
+			this.fontBold12.drawStringTaggableCenter("New user", x, y + 5, 16777215, true);
 
 			x = w / 2 + 80;
-			this.imageTitlebutton.draw(y - 20, x - 73);
-			this.fontBold12.drawStringTaggableCenter(x, 16777215, true, y + 5, "Existing User");
+			this.imageTitlebutton.draw(x - 73, y - 20);
+			this.fontBold12.drawStringTaggableCenter("Existing User", x, y + 5, 16777215, true);
 		} else if (this.titleScreenState == 2) {
 			int y = h / 2 - 40;
 			if (this.loginMessage0.length() > 0) {
-				this.fontBold12.drawStringTaggableCenter(w / 2, 16776960, true, y - 15, this.loginMessage0);
-				this.fontBold12.drawStringTaggableCenter(w / 2, 16776960, true, y, this.loginMessage1);
+				this.fontBold12.drawStringTaggableCenter(this.loginMessage0, w / 2, y - 15, 16776960, true);
+				this.fontBold12.drawStringTaggableCenter(this.loginMessage1, w / 2, y, 16776960, true);
 				y += 30;
 			} else {
-				this.fontBold12.drawStringTaggableCenter(w / 2, 16776960, true, y - 7, this.loginMessage1);
+				this.fontBold12.drawStringTaggableCenter(this.loginMessage1, w / 2, y - 7, 16776960, true);
 				y += 30;
 			}
 
-			this.fontBold12.drawStringTaggable(w / 2 - 90, y, "Username: " + this.username + (this.titleLoginField == 0 & loopCycle % 40 < 20 ? "@yel@|" : ""), true, 16777215);
+			this.fontBold12.drawStringTaggable(w / 2 - 90, y, "Username: " + this.username + (this.titleLoginField == 0 & loopCycle % 40 < 20 ? "@yel@|" : ""), 16777215, true);
 			y += 15;
 
-			this.fontBold12.drawStringTaggable(w / 2 - 88, y, "Password: " + JString.toAsterisks(this.password) + (this.titleLoginField == 1 & loopCycle % 40 < 20 ? "@yel@|" : ""), true, 16777215);
+			this.fontBold12.drawStringTaggable(w / 2 - 88, y, "Password: " + JString.toAsterisks(this.password) + (this.titleLoginField == 1 & loopCycle % 40 < 20 ? "@yel@|" : ""), 16777215, true);
 			y += 15;
 
 			int x = w / 2 - 80;
 			y = h / 2 + 50;
-			this.imageTitlebutton.draw(y - 20, x - 73);
-			this.fontBold12.drawStringTaggableCenter(x, 16777215, true, y + 5, "Login");
+			this.imageTitlebutton.draw(x - 73, y - 20);
+			this.fontBold12.drawStringTaggableCenter("Login", x, y + 5, 16777215, true);
 
 			x = w / 2 + 80;
-			this.imageTitlebutton.draw(y - 20, x - 73);
-			this.fontBold12.drawStringTaggableCenter(x, 16777215, true, y + 5, "Cancel");
+			this.imageTitlebutton.draw(x - 73, y - 20);
+			this.fontBold12.drawStringTaggableCenter("Cancel", x, y + 5, 16777215, true);
 		} else if (this.titleScreenState == 3) {
-			this.fontBold12.drawStringTaggableCenter(w / 2, 16776960, true, h / 2 - 60, "Create a free account");
+			this.fontBold12.drawStringTaggableCenter("Create a free account", w / 2, h / 2 - 60, 16776960, true);
 
 			int y = h / 2 - 35;
-			this.fontBold12.drawStringTaggableCenter(w / 2, 16777215, true, y, "To create a new account you need to");
+			this.fontBold12.drawStringTaggableCenter("To create a new account you need to", w / 2, y, 16777215, true);
 			y += 15;
 
-			this.fontBold12.drawStringTaggableCenter(w / 2, 16777215, true, y, "go back to the main RuneScape webpage");
+			this.fontBold12.drawStringTaggableCenter("go back to the main RuneScape webpage", w / 2, y, 16777215, true);
 			y += 15;
 
-			this.fontBold12.drawStringTaggableCenter(w / 2, 16777215, true, y, "and choose the red 'create account'");
+			this.fontBold12.drawStringTaggableCenter("and choose the red 'create account'", w / 2, y, 16777215, true);
 			y += 15;
 
-			this.fontBold12.drawStringTaggableCenter(w / 2, 16777215, true, y, "button at the top right of that page.");
+			this.fontBold12.drawStringTaggableCenter("button at the top right of that page.", w / 2, y, 16777215, true);
 			y += 15;
 
 			int x = w / 2;
 			y = h / 2 + 50;
-			this.imageTitlebutton.draw(y - 20, x - 73);
-			this.fontBold12.drawStringTaggableCenter(x, 16777215, true, y + 5, "Cancel");
+			this.imageTitlebutton.draw(x - 73, y - 20);
+			this.fontBold12.drawStringTaggableCenter("Cancel", x, y + 5, 16777215, true);
 		}
 
-		this.imageTitle4.draw(186, super.graphics, 214);
+		this.imageTitle4.draw(super.graphics, 214, 186);
 		if (this.redrawTitleBackground) {
 			this.redrawTitleBackground = false;
-			this.imageTitle2.draw(0, super.graphics, 128);
-			this.imageTitle3.draw(386, super.graphics, 214);
-			this.imageTitle5.draw(265, super.graphics, 0);
-			this.imageTitle6.draw(265, super.graphics, 574);
-			this.imageTitle7.draw(186, super.graphics, 128);
-			this.imageTitle8.draw(186, super.graphics, 574);
+			this.imageTitle2.draw(super.graphics, 128, 0);
+			this.imageTitle3.draw(super.graphics, 214, 386);
+			this.imageTitle5.draw(super.graphics, 0, 265);
+			this.imageTitle6.draw(super.graphics, 574, 265);
+			this.imageTitle7.draw(super.graphics, 128, 186);
+			this.imageTitle8.draw(super.graphics, 574, 186);
 		}
 	}
 
@@ -4148,7 +4158,7 @@ public class client extends GameShell {
         @Pc(33) int right = Draw2D.right;
         @Pc(35) int bottom = Draw2D.bottom;
 
-        Draw2D.setBounds(y + com.height, y, x + com.width, x);
+        Draw2D.setBounds(y + com.height, x + com.width, y, x);
         @Pc(57) int children = com.childId.length;
 
         for (@Pc(59) int i = 0; i < children; i++) {
@@ -4217,20 +4227,20 @@ public class client extends GameShell {
                                 } else if (this.selectedArea != 0 && this.selectedItem == slot && this.selectedInterface == child.id) {
                                     icon.drawAlpha(128, slotX, slotY);
                                 } else {
-                                    icon.draw(slotY, slotX);
+                                    icon.draw(slotX, slotY);
                                 }
 
                                 if (icon.cropW == 33 || child.inventorySlotObjCount[slot] != 1) {
                                     @Pc(351) int count = child.inventorySlotObjCount[slot];
-                                    this.fontPlain11.drawString(slotX + dx + 1, slotY + 10 + dy, 0, formatObjCount(count));
-                                    this.fontPlain11.drawString(slotX + dx, slotY + 9 + dy, 0xffff00, formatObjCount(count));
+                                    this.fontPlain11.drawString(slotX + dx + 1, slotY + 10 + dy, formatObjCount(count), 0);
+                                    this.fontPlain11.drawString(slotX + dx, slotY + 9 + dy, formatObjCount(count), 0xffff00);
                                 }
                             }
                         } else if (child.inventorySlotImage != null && slot < 20) {
                             @Pc(398) Pix24 image = child.inventorySlotImage[slot];
 
                             if (image != null) {
-                                image.draw(slotY, slotX);
+                                image.draw(slotX, slotY);
                             }
                         }
 
@@ -4239,9 +4249,9 @@ public class client extends GameShell {
                 }
             } else if (child.type == 3) {
                 if (child.fill) {
-                    Draw2D.fillRect(childY, childX, child.color, child.width, child.height);
+                    Draw2D.fillRect(childX, childY, child.color, child.width, child.height);
                 } else {
-                    Draw2D.drawRect(childX, child.color, child.height, childY, child.width);
+                    Draw2D.drawRect(childX, childY, child.color, child.width, child.height);
                 }
             } else if (child.type == 4) {
                 PixFont font = child.font;
@@ -4324,9 +4334,9 @@ public class client extends GameShell {
 					}
 
 					if (child.center) {
-                        font.drawStringTaggableCenter(childX + child.width / 2, color, child.shadow, lineY, split);
+                        font.drawStringTaggableCenter(split, childX + child.width / 2, lineY, color, child.shadow);
                     } else {
-                        font.drawStringTaggable(childX, lineY, split, child.shadow, color);
+                        font.drawStringTaggable(childX, lineY, split, color, child.shadow);
                     }
                 }
             } else if (child.type == 5) {
@@ -4338,7 +4348,7 @@ public class client extends GameShell {
                 }
 
                 if (image != null) {
-                    image.draw(childY, childX);
+                    image.draw(childX, childY);
                 }
             } else if (child.type == 6) {
                 int tmpX = Draw3D.centerX;
@@ -4388,9 +4398,9 @@ public class client extends GameShell {
                             int textY = childY + row * (child.inventoryMarginY + 12);
 
                             if (child.center) {
-                                font.drawStringTaggableCenter(textX + child.width / 2, child.color, child.shadow, textY, text);
+                                font.drawStringTaggableCenter(text, textX + child.width / 2, textY, child.color, child.shadow);
                             } else {
-                                font.drawStringTaggable(textX, textY, text, child.shadow, child.color);
+                                font.drawStringTaggable(textX, textY, text, child.color, child.shadow);
                             }
                         }
 
@@ -4400,7 +4410,7 @@ public class client extends GameShell {
             }
         }
 
-        Draw2D.setBounds(bottom, top, right, left);
+        Draw2D.setBounds(bottom, right, top, left);
     }
 
 	@OriginalMember(owner = "client!client", name = "a", descriptor = "(ZILclient!kb;)V")
@@ -4862,23 +4872,23 @@ public class client extends GameShell {
 	private void drawGame() {
 		if (this.redrawTitleBackground) {
 			this.redrawTitleBackground = false;
-			this.areaBackleft1.draw(11, super.graphics, 0);
-			this.areaBackleft2.draw(375, super.graphics, 0);
-			this.areaBackright1.draw(5, super.graphics, 729);
-			this.areaBackright2.draw(231, super.graphics, 752);
-			this.areaBacktop1.draw(0, super.graphics, 0);
-			this.areaBacktop2.draw(0, super.graphics, 561);
-			this.areaBackvmid1.draw(11, super.graphics, 520);
-			this.areaBackvmid2.draw(231, super.graphics, 520);
-			this.areaBackvmid3.draw(375, super.graphics, 501);
-			this.areaBackhmid2.draw(345, super.graphics, 0);
+			this.areaBackleft1.draw(super.graphics, 0, 11);
+			this.areaBackleft2.draw(super.graphics, 0, 375);
+			this.areaBackright1.draw(super.graphics, 729, 5);
+			this.areaBackright2.draw(super.graphics, 752, 231);
+			this.areaBacktop1.draw(super.graphics, 0, 0);
+			this.areaBacktop2.draw(super.graphics, 561, 0);
+			this.areaBackvmid1.draw(super.graphics, 520, 11);
+			this.areaBackvmid2.draw(super.graphics, 520, 231);
+			this.areaBackvmid3.draw(super.graphics, 501, 375);
+			this.areaBackhmid2.draw(super.graphics, 0, 345);
 			this.redrawSidebar = true;
 			this.redrawChatback = true;
 			this.redrawSideicons = true;
 			this.redrawPrivacySettings = true;
 			if (this.sceneState != 2) {
-				this.areaViewport.draw(11, super.graphics, 8);
-				this.areaMapback.draw(5, super.graphics, 561);
+				this.areaViewport.draw(super.graphics, 8, 11);
+				this.areaMapback.draw(super.graphics, 561, 5);
 			}
 		}
 		if (this.sceneState == 2) {
@@ -4955,7 +4965,7 @@ public class client extends GameShell {
 
 		if (this.sceneState == 2) {
 			this.drawMinimap();
-			this.areaMapback.draw(5, super.graphics, 561);
+			this.areaMapback.draw(super.graphics, 561, 5);
 		}
 
 		if (this.flashingTab != -1) {
@@ -4976,99 +4986,99 @@ public class client extends GameShell {
 			if (this.sidebarInterfaceId == -1) {
 				if (this.tabInterfaceId[this.selectedTab] != -1) {
 					if (this.selectedTab == 0) {
-						this.imageRedstone1.draw(30, 29);
+						this.imageRedstone1.draw(29, 30);
 					} else if (this.selectedTab == 1) {
-						this.imageRedstone2.draw(29, 59);
+						this.imageRedstone2.draw(59, 29);
 					} else if (this.selectedTab == 2) {
-						this.imageRedstone2.draw(29, 87);
+						this.imageRedstone2.draw(87, 29);
 					} else if (this.selectedTab == 3) {
-						this.imageRedstone3.draw(29, 115);
+						this.imageRedstone3.draw(115, 29);
 					} else if (this.selectedTab == 4) {
-						this.imageRedstone2h.draw(29, 156);
+						this.imageRedstone2h.draw(156, 29);
 					} else if (this.selectedTab == 5) {
-						this.imageRedstone2h.draw(29, 184);
+						this.imageRedstone2h.draw(184, 29);
 					} else if (this.selectedTab == 6) {
-						this.imageRedstone1h.draw(30, 212);
+						this.imageRedstone1h.draw(212, 30);
 					}
 				}
 
 				if (this.tabInterfaceId[0] != -1 && (this.flashingTab != 0 || loopCycle % 20 < 10)) {
-					this.imageSideicons[0].draw(34, 35);
+					this.imageSideicons[0].draw(35, 34);
 				}
 
 				if (this.tabInterfaceId[1] != -1 && (this.flashingTab != 1 || loopCycle % 20 < 10)) {
-					this.imageSideicons[1].draw(32, 59);
+					this.imageSideicons[1].draw(59, 32);
 				}
 
 				if (this.tabInterfaceId[2] != -1 && (this.flashingTab != 2 || loopCycle % 20 < 10)) {
-					this.imageSideicons[2].draw(32, 86);
+					this.imageSideicons[2].draw(86, 32);
 				}
 
 				if (this.tabInterfaceId[3] != -1 && (this.flashingTab != 3 || loopCycle % 20 < 10)) {
-					this.imageSideicons[3].draw(33, 121);
+					this.imageSideicons[3].draw(121, 33);
 				}
 
 				if (this.tabInterfaceId[4] != -1 && (this.flashingTab != 4 || loopCycle % 20 < 10)) {
-					this.imageSideicons[4].draw(34, 157);
+					this.imageSideicons[4].draw(157, 34);
 				}
 
 				if (this.tabInterfaceId[5] != -1 && (this.flashingTab != 5 || loopCycle % 20 < 10)) {
-					this.imageSideicons[5].draw(32, 185);
+					this.imageSideicons[5].draw(185, 32);
 				}
 
 				if (this.tabInterfaceId[6] != -1 && (this.flashingTab != 6 || loopCycle % 20 < 10)) {
-					this.imageSideicons[6].draw(34, 212);
+					this.imageSideicons[6].draw(212, 34);
 				}
 			}
 
-			this.areaBackhmid1.draw(165, super.graphics, 520);
+			this.areaBackhmid1.draw(super.graphics, 520, 165);
 			this.areaBackbase2.bind();
 			this.imageBackbase2.draw(0, 0);
 
 			if (this.sidebarInterfaceId == -1) {
 				if (this.tabInterfaceId[this.selectedTab] != -1) {
 					if (this.selectedTab == 7) {
-						this.imageRedstone1v.draw(0, 49);
+						this.imageRedstone1v.draw(49, 0);
 					} else if (this.selectedTab == 8) {
-						this.imageRedstone2v.draw(0, 81);
+						this.imageRedstone2v.draw(81, 0);
 					} else if (this.selectedTab == 9) {
-						this.imageRedstone2v.draw(0, 108);
+						this.imageRedstone2v.draw(108, 0);
 					} else if (this.selectedTab == 10) {
-						this.imageRedstone3v.draw(1, 136);
+						this.imageRedstone3v.draw(136, 1);
 					} else if (this.selectedTab == 11) {
-						this.imageRedstone2hv.draw(0, 178);
+						this.imageRedstone2hv.draw(178, 0);
 					} else if (this.selectedTab == 12) {
-						this.imageRedstone2hv.draw(0, 205);
+						this.imageRedstone2hv.draw(205, 0);
 					} else if (this.selectedTab == 13) {
-						this.imageRedstone1hv.draw(0, 233);
+						this.imageRedstone1hv.draw(233, 0);
 					}
 				}
 
 				if (this.tabInterfaceId[8] != -1 && (this.flashingTab != 8 || loopCycle % 20 < 10)) {
-					this.imageSideicons[7].draw(2, 80);
+					this.imageSideicons[7].draw(80, 2);
 				}
 
 				if (this.tabInterfaceId[9] != -1 && (this.flashingTab != 9 || loopCycle % 20 < 10)) {
-					this.imageSideicons[8].draw(3, 107);
+					this.imageSideicons[8].draw(107, 3);
 				}
 
 				if (this.tabInterfaceId[10] != -1 && (this.flashingTab != 10 || loopCycle % 20 < 10)) {
-					this.imageSideicons[9].draw(4, 142);
+					this.imageSideicons[9].draw(142, 4);
 				}
 
 				if (this.tabInterfaceId[11] != -1 && (this.flashingTab != 11 || loopCycle % 20 < 10)) {
-					this.imageSideicons[10].draw(2, 179);
+					this.imageSideicons[10].draw(179, 2);
 				}
 
 				if (this.tabInterfaceId[12] != -1 && (this.flashingTab != 12 || loopCycle % 20 < 10)) {
-					this.imageSideicons[11].draw(2, 206);
+					this.imageSideicons[11].draw(206, 2);
 				}
 
 				if (this.tabInterfaceId[13] != -1 && (this.flashingTab != 13 || loopCycle % 20 < 10)) {
-					this.imageSideicons[12].draw(2, 230);
+					this.imageSideicons[12].draw(230, 2);
 				}
 			}
-			this.areaBackbase2.draw(492, super.graphics, 501);
+			this.areaBackbase2.draw(super.graphics, 501, 492);
 			this.areaViewport.bind();
 		}
 
@@ -5077,44 +5087,44 @@ public class client extends GameShell {
 			this.areaBackbase1.bind();
 			this.imageBackbase1.draw(0, 0);
 
-			this.fontPlain12.drawStringTaggableCenter(57, 16777215, true, 33, "Public chat");
+			this.fontPlain12.drawStringTaggableCenter("Public chat", 57, 33, 16777215, true);
 			if (this.publicChatSetting == 0) {
-				this.fontPlain12.drawStringTaggableCenter(57, 65280, true, 46, "On");
+				this.fontPlain12.drawStringTaggableCenter("On", 57, 46, 65280, true);
 			}
 			if (this.publicChatSetting == 1) {
-				this.fontPlain12.drawStringTaggableCenter(57, 16776960, true, 46, "Friends");
+				this.fontPlain12.drawStringTaggableCenter("Friends", 57, 46, 16776960, true);
 			}
 			if (this.publicChatSetting == 2) {
-				this.fontPlain12.drawStringTaggableCenter(57, 16711680, true, 46, "Off");
+				this.fontPlain12.drawStringTaggableCenter("Off", 57, 46, 16711680, true);
 			}
 			if (this.publicChatSetting == 3) {
-				this.fontPlain12.drawStringTaggableCenter(57, 65535, true, 46, "Hide");
+				this.fontPlain12.drawStringTaggableCenter("Hide", 57, 46, 65535, true);
 			}
 
-			this.fontPlain12.drawStringTaggableCenter(186, 16777215, true, 33, "Private chat");
+			this.fontPlain12.drawStringTaggableCenter("Private chat", 186, 33, 16777215, true);
 			if (this.privateChatSetting == 0) {
-				this.fontPlain12.drawStringTaggableCenter(186, 65280, true, 46, "On");
+				this.fontPlain12.drawStringTaggableCenter("On", 186, 46, 65280, true);
 			}
 			if (this.privateChatSetting == 1) {
-				this.fontPlain12.drawStringTaggableCenter(186, 16776960, true, 46, "Friends");
+				this.fontPlain12.drawStringTaggableCenter("Friends", 186, 46, 16776960, true);
 			}
 			if (this.privateChatSetting == 2) {
-				this.fontPlain12.drawStringTaggableCenter(186, 16711680, true, 46, "Off");
+				this.fontPlain12.drawStringTaggableCenter("Off", 186, 46, 16711680, true);
 			}
 
-			this.fontPlain12.drawStringTaggableCenter(326, 16777215, true, 33, "Trade/duel");
+			this.fontPlain12.drawStringTaggableCenter("Trade/duel", 326, 33, 16777215, true);
 			if (this.tradeChatSetting == 0) {
-				this.fontPlain12.drawStringTaggableCenter(326, 65280, true, 46, "On");
+				this.fontPlain12.drawStringTaggableCenter("On", 326, 46, 65280, true);
 			}
 			if (this.tradeChatSetting == 1) {
-				this.fontPlain12.drawStringTaggableCenter(326, 16776960, true, 46, "Friends");
+				this.fontPlain12.drawStringTaggableCenter("Friends", 326, 46, 16776960, true);
 			}
 			if (this.tradeChatSetting == 2) {
-				this.fontPlain12.drawStringTaggableCenter(326, 16711680, true, 46, "Off");
+				this.fontPlain12.drawStringTaggableCenter("Off", 326, 46, 16711680, true);
 			}
 
-			this.fontPlain12.drawStringTaggableCenter(462, 16777215, true, 38, "Report abuse");
-			this.areaBackbase1.draw(471, super.graphics, 0);
+			this.fontPlain12.drawStringTaggableCenter("Report abuse", 462, 38, 16777215, true);
+			this.areaBackbase1.draw(super.graphics, 0, 471);
 			this.areaViewport.bind();
 		}
 
@@ -5354,9 +5364,9 @@ public class client extends GameShell {
             }
         } else if (action == 660) {
             if (this.menuVisible) {
-                this.scene.click(c - 11, b - 8);
+                this.scene.click(b - 8, c - 11);
             } else {
-                this.scene.click(super.mouseClickY - 11, super.mouseClickX - 8);
+                this.scene.click(super.mouseClickX - 8, super.mouseClickY - 11);
             }
         } else if (action == 188) {
             this.objSelected = 1;
@@ -5759,11 +5769,11 @@ public class client extends GameShell {
 		@Pc(8) int w = this.menuWidth;
 		@Pc(11) int h = this.menuHeight;
 		@Pc(13) int background = 0x5d5447;
-		Draw2D.fillRect(y, x, background, w, h);
-		Draw2D.fillRect(y + 1, x + 1, 0, w - 2, 16);
-		Draw2D.drawRect(x + 1, 0, h - 19, y + 18, w - 2);
+		Draw2D.fillRect(x, y, background, w, h);
+		Draw2D.fillRect(x + 1, y + 1, 0, w - 2, 16);
+		Draw2D.drawRect(x + 1, y + 18, 0, w - 2, h - 19);
 
-		this.fontBold12.drawString(x + 3, y + 14, background, "Choose Option");
+		this.fontBold12.drawString(x + 3, y + 14, "Choose Option", background);
 		@Pc(63) int mouseX = super.mouseX;
 		@Pc(66) int mouseY = super.mouseY;
 		if (this.menuArea == 0) {
@@ -5785,7 +5795,7 @@ public class client extends GameShell {
 			if (mouseX > x && mouseX < x + w && mouseY > optionY - 13 && mouseY < optionY + 3) {
 				rgb = 0xffff00;
 			}
-			this.fontBold12.drawStringTaggable(x + 3, optionY, this.menuOption[i], true, rgb);
+			this.fontBold12.drawStringTaggable(x + 3, optionY, this.menuOption[i], rgb, true);
 		}
 	}
 
@@ -5908,7 +5918,7 @@ public class client extends GameShell {
 
 				model.createLabelReferences();
 				model.applyTransform(SeqType.instances[this.localPlayer.seqStandId].frames[0]);
-				model.calculateNormals(64, 850, -30, -50, -30, true);
+				model.calculateNormals(-30, -50, -30, 64, 850, true);
 				component.model = model;
 			}
 		} else if (contentType == 324) {
@@ -6426,7 +6436,7 @@ public class client extends GameShell {
 
 			this.drawProgress("Unpacking interfaces", 92);
 			@Pc(1150) PixFont[] fonts = new PixFont[] { this.fontPlain11, this.fontPlain12, this.fontBold12, this.fontQuill8 };
-			ComType.unpack(media, fonts, inter);
+			ComType.unpack(inter, media, fonts);
 
 			this.drawProgress("Preparing game engine", 97);
 			for (@Pc(1162) int y = 0; y < 33; y++) {
@@ -6463,11 +6473,11 @@ public class client extends GameShell {
 				this.minimapMaskLineLengths[y - 9] = right - left;
 			}
 
-			Draw3D.init3D(96, 479);
+			Draw3D.init3D(479, 96);
 			this.areaChatbackOffsets = Draw3D.lineOffset;
-			Draw3D.init3D(261, 190);
+			Draw3D.init3D(190, 261);
 			this.areaSidebarOffsets = Draw3D.lineOffset;
-			Draw3D.init3D(334, 512);
+			Draw3D.init3D(512, 334);
 			this.areaViewportOffsets = Draw3D.lineOffset;
 
 			@Pc(1312) int[] distance = new int[9];
@@ -6477,7 +6487,8 @@ public class client extends GameShell {
 				@Pc(1334) int sin = Draw3D.sin[angle];
 				distance[x] = offset * sin >> 16;
 			}
-			World3D.init(distance, 800, 512, 334, 500);
+
+			World3D.init(512, 334, 500, 800, distance);
 			WordFilter.unpack(wordenc);
 		} catch (@Pc(1357) Exception ex) {
 			this.errorLoading = true;
@@ -6583,10 +6594,10 @@ public class client extends GameShell {
 	private void draw3DEntityElements() {
 		this.drawPrivateMessages();
 		if (this.crossMode == 1) {
-			this.imageCrosses[this.crossCycle / 100].draw(this.crossY - 8 - 11, this.crossX - 8 - 8);
+			this.imageCrosses[this.crossCycle / 100].draw(this.crossX - 8 - 8, this.crossY - 8 - 11);
 		}
 		if (this.crossMode == 2) {
-			this.imageCrosses[this.crossCycle / 100 + 4].draw(this.crossY - 8 - 11, this.crossX - 8 - 8);
+			this.imageCrosses[this.crossCycle / 100 + 4].draw(this.crossX - 8 - 8, this.crossY - 8 - 11);
 		}
 		if (this.viewportInterfaceID != -1) {
 			this.updateInterfaceAnimation(this.viewportInterfaceID, this.sceneDelta);
@@ -6601,17 +6612,17 @@ public class client extends GameShell {
 		}
 		if (this.inMultizone == 1) {
 			if (this.wildernessLevel > 0 || this.worldLocationState == 1) {
-				this.imageHeadicons[1].draw(258, 472);
+				this.imageHeadicons[1].draw(472, 258);
 			} else {
-				this.imageHeadicons[1].draw(296, 472);
+				this.imageHeadicons[1].draw(472, 296);
 			}
 		}
 		if (this.wildernessLevel > 0) {
-			this.imageHeadicons[0].draw(296, 472);
+			this.imageHeadicons[0].draw(472, 296);
 			this.fontPlain12.drawStringCenter(329, 16776960, "Level: " + this.wildernessLevel, 484);
 		}
 		if (this.worldLocationState == 1) {
-			this.imageHeadicons[6].draw(296, 472);
+			this.imageHeadicons[6].draw(472, 296);
 			this.fontPlain12.drawStringCenter(329, 16776960, "Arena", 484);
 		}
 		if (this.systemUpdateTimer != 0) {
@@ -6620,9 +6631,9 @@ public class client extends GameShell {
 			seconds %= 60;
 
 			if (seconds < 10) {
-				this.fontPlain12.drawString(4, 329, 16776960, "System update in: " + minutes + ":0" + seconds);
+				this.fontPlain12.drawString(4, 329, "System update in: " + minutes + ":0" + seconds, 16776960);
 			} else {
-				this.fontPlain12.drawString(4, 329, 16776960, "System update in: " + minutes + ":" + seconds);
+				this.fontPlain12.drawString(4, 329, "System update in: " + minutes + ":" + seconds, 16776960);
 			}
 		}
 	}
@@ -6710,7 +6721,7 @@ public class client extends GameShell {
 				if (proj.target > 0) {
 					@Pc(42) NpcEntity npc = this.npcs[proj.target - 1];
 					if (npc != null) {
-						proj.updateVelocity(this.getHeightmapY(proj.level, npc.x, npc.z) - proj.offsetY, npc.z, npc.x, loopCycle);
+						proj.updateVelocity(npc.x, this.getHeightmapY(proj.level, npc.x, npc.z) - proj.offsetY, npc.z, loopCycle);
 					}
 				}
 
@@ -6723,12 +6734,12 @@ public class client extends GameShell {
 						player = this.players[index];
 					}
 					if (player != null) {
-						proj.updateVelocity(this.getHeightmapY(proj.level, player.x, player.z) - proj.offsetY, player.z, player.x, loopCycle);
+						proj.updateVelocity(player.x, this.getHeightmapY(proj.level, player.x, player.z) - proj.offsetY, player.z, loopCycle);
 					}
 				}
 
 				proj.update(this.sceneDelta);
-				this.scene.addTemporary((int) proj.z, 60, proj.yaw, (int) proj.x, -1, false, null, proj, (int) proj.y, this.currentLevel);
+				this.scene.addTemporary(this.currentLevel, (int) proj.x, (int) proj.y, (int) proj.z, null, proj, -1, proj.yaw, 60, false);
 			}
 		}
 	}
@@ -6754,9 +6765,9 @@ public class client extends GameShell {
 			@Pc(76) int y = dy * cosAngle - dx * sinAngle >> 16;
 
 			if (distance > 2500) {
-				image.drawMasked(this.imageMapback, 83 - y - image.cropH / 2, x + 94 - image.cropW / 2);
+				image.drawMasked(x + 94 - image.cropW / 2, 83 - y - image.cropH / 2, this.imageMapback);
 			} else {
-				image.draw(83 - y - image.cropH / 2, x + 94 - image.cropW / 2);
+				image.draw(x + 94 - image.cropW / 2, 83 - y - image.cropH / 2);
 			}
 		}
 	}
@@ -7297,7 +7308,7 @@ public class client extends GameShell {
 	}
 
 	@OriginalMember(owner = "client!client", name = "a", descriptor = "(IIIIIIII)V")
-	private void addLoc(@OriginalArg(0) int rotation, @OriginalArg(1) int x, @OriginalArg(2) int z, @OriginalArg(3) int layer, @OriginalArg(4) int id, @OriginalArg(5) int shape, @OriginalArg(7) int level) {
+	private void addLoc(@OriginalArg(7) int level, @OriginalArg(1) int x, @OriginalArg(2) int z, @OriginalArg(4) int id, @OriginalArg(0) int angle, @OriginalArg(5) int shape, @OriginalArg(3) int layer) {
         if (x < 1 || z < 1 || x > 102 || z > 102) {
             return;
         }
@@ -7331,20 +7342,20 @@ public class client extends GameShell {
             @Pc(95) int otherRotation = otherInfo >> 6;
 
             if (layer == 0) {
-                this.scene.removeWall(x, level, z, 1);
+                this.scene.removeWall(level, x, z, 1);
                 LocType type = LocType.get(otherId);
 
                 if (type.blockwalk) {
-                    this.levelCollisionMap[level].removeWall(type.blockrange, otherRotation, x, z, otherShape);
+                    this.levelCollisionMap[level].removeWall(x, z, otherShape, otherRotation, type.blockrange);
                 }
             }
 
             if (layer == 1) {
-                this.scene.removeWallDecoration(level, z, x);
+                this.scene.removeWallDecoration(level, x, z);
             }
 
             if (layer == 2) {
-                this.scene.removeLoc(x, z, level);
+                this.scene.removeLoc(level, x, z);
                 LocType type = LocType.get(otherId);
 
                 if (x + type.width > 103 || z + type.width > 103 || x + type.length > 103 || z + type.length > 103) {
@@ -7352,7 +7363,7 @@ public class client extends GameShell {
                 }
 
                 if (type.blockwalk) {
-                    this.levelCollisionMap[level].removeLoc(z, x, otherRotation, type.width, type.blockrange, type.length);
+                    this.levelCollisionMap[level].removeLoc(x, z, type.width, type.length, otherRotation, type.blockrange);
                 }
             }
 
@@ -7361,7 +7372,7 @@ public class client extends GameShell {
                 LocType type = LocType.get(otherId);
 
                 if (type.blockwalk && type.active) {
-                    this.levelCollisionMap[level].removeBlocked(z, x);
+                    this.levelCollisionMap[level].removeBlocked(x, z);
                 }
             }
         }
@@ -7373,7 +7384,7 @@ public class client extends GameShell {
                 tileLevel = level + 1;
             }
 
-            World.addLoc(x, this.locList, this.levelCollisionMap[level], z, rotation, this.levelHeightmap, level, id, shape, this.scene, tileLevel);
+            World.addLoc(level, x, z, this.scene, this.levelHeightmap, this.locList, this.levelCollisionMap[level], id, shape, angle, tileLevel);
         }
     }
 
@@ -7640,7 +7651,7 @@ public class client extends GameShell {
 					@Pc(55) boolean failed = false;
 					try {
 						if (this.waveIds[wave] != this.lastWaveId || this.waveLoops[wave] != this.lastWaveLoops) {
-							@Pc(89) Packet buf = Wave.generate(this.waveLoops[wave], this.waveIds[wave]);
+							@Pc(89) Packet buf = Wave.generate(this.waveIds[wave], this.waveLoops[wave]);
 
 							if (System.currentTimeMillis() + (long) (buf.pos / 22) > this.lastWaveStartTime + (long) (this.lastWaveLength / 22)) {
 								this.lastWaveLength = buf.pos;
@@ -7936,7 +7947,7 @@ public class client extends GameShell {
             tooltip = tooltip + "@whi@ / " + (this.menuSize - 2) + " more options";
         }
 
-        this.fontBold12.drawStringTooltip(loopCycle / 1000, true, 15, 16777215, tooltip, 4);
+        this.fontBold12.drawStringTooltip(4, 15, tooltip, 16777215, true, loopCycle / 1000);
     }
 
 	@OriginalMember(owner = "client!client", name = "k", descriptor = "(B)V")
@@ -7949,7 +7960,7 @@ public class client extends GameShell {
 				if (entity.seqComplete) {
 					entity.unlink();
 				} else {
-					this.scene.addTemporary(entity.z, 60, 0, entity.x, -1, false, null, entity, entity.y, entity.level);
+					this.scene.addTemporary(entity.level, entity.x, entity.y, entity.z, null, entity, -1, 0, 60, false);
 				}
 			}
 		}
@@ -8008,18 +8019,18 @@ public class client extends GameShell {
 			}
 
 			if (locShape != 0) {
-				if ((locShape < 5 || locShape == 10) && this.levelCollisionMap[this.currentLevel].reachedWall(locRotation, dz, locShape - 1, z, dx, x)) {
+				if ((locShape < 5 || locShape == 10) && this.levelCollisionMap[this.currentLevel].reachedWall(x, z, dx, dz, locShape - 1, locRotation)) {
 					arrived = true;
 					break;
 				}
 
-				if (locShape < 10 && this.levelCollisionMap[this.currentLevel].reachedWallDecoration(locRotation, locShape - 1, x, dx, z, dz)) {
+				if (locShape < 10 && this.levelCollisionMap[this.currentLevel].reachedWallDecoration(x, z, dx, dz, locShape - 1, locRotation)) {
 					arrived = true;
 					break;
 				}
 			}
 
-			if (locWidth != 0 && locLength != 0 && this.levelCollisionMap[this.currentLevel].reachedLoc(z, locLength, x, dx, forceapproach, dz, locWidth)) {
+			if (locWidth != 0 && locLength != 0 && this.levelCollisionMap[this.currentLevel].reachedLoc(x, z, dx, dz, locWidth, locLength, forceapproach)) {
 				arrived = true;
 				break;
 			}
@@ -8797,7 +8808,7 @@ public class client extends GameShell {
 			this.fontPlain12.drawStringCenter(143, 16777215, "Connection lost", 256);
 			this.fontPlain12.drawStringCenter(159, 0, "Please wait - attempting to reestablish", 257);
 			this.fontPlain12.drawStringCenter(158, 16777215, "Please wait - attempting to reestablish", 256);
-			this.areaViewport.draw(11, super.graphics, 8);
+			this.areaViewport.draw(super.graphics, 8, 11);
 			this.flagSceneTileX = 0;
 			@Pc(60) ClientStream stream = this.stream;
 			this.ingame = false;
@@ -8908,7 +8919,7 @@ public class client extends GameShell {
 
 		@Pc(144) int bitset = x + (z << 7) + 1610612736;
 		@Pc(148) ObjType type = ObjType.get(topObj.index);
-		this.scene.addObjStack(type.getInterfaceModel(topObj.count), bottomObj, this.getHeightmapY(this.currentLevel, x * 128 + 64, z * 128 + 64), this.currentLevel, bitset, z, x, middleObj);
+		this.scene.addObjStack(x, z, this.getHeightmapY(this.currentLevel, x * 128 + 64, z * 128 + 64), this.currentLevel, bitset, type.getInterfaceModel(topObj.count), middleObj, bottomObj);
 	}
 
 	@OriginalMember(owner = "client!client", name = "D", descriptor = "(I)V")
@@ -8927,7 +8938,7 @@ public class client extends GameShell {
 			}
 			System.gc();
 
-			@Pc(53) World world = new World(104, this.levelTileFlags, 104, this.levelHeightmap);
+			@Pc(53) World world = new World(104, 104, this.levelHeightmap, this.levelTileFlags);
 			World.lowMemory = World3D.lowMemory;
 
 			@Pc(60) int maps = this.sceneMapLandData.length;
@@ -8958,9 +8969,9 @@ public class client extends GameShell {
 				if (src != null) {
 					int length = (new Packet(src)).g4();
 					BZip2.read(data, length, src, src.length - 4, 4);
-					world.readLandscape(data, (this.sceneCenterZoneX - 6) * 8, z, x, (this.sceneCenterZoneZ - 6) * 8);
+					world.readLandscape((this.sceneCenterZoneX - 6) * 8, (this.sceneCenterZoneZ - 6) * 8, x, z, data);
 				} else if (this.sceneCenterZoneZ < 800) {
-					world.clearLandscape(x, z, 64, 64);
+					world.clearLandscape(z, x, 64, 64);
 				}
 			}
 
@@ -8972,7 +8983,7 @@ public class client extends GameShell {
 					BZip2.read(data, length, src, src.length - 4, 4);
 					int x = (this.sceneMapIndex[i] >> 8) * 64 - this.sceneBaseTileX;
 					@Pc(259) int z = (this.sceneMapIndex[i] & 0xFF) * 64 - this.sceneBaseTileZ;
-					world.readLocs(data, this.scene, this.levelCollisionMap, this.locList, z, x);
+					world.readLocs(this.scene, this.locList, this.levelCollisionMap, data, x, z);
 				}
 			}
 
@@ -8996,7 +9007,7 @@ public class client extends GameShell {
 			}
 
 			for (@Pc(361) LocTemporary loc = (LocTemporary) this.spawnedLocations.peekFront(); loc != null; loc = (LocTemporary) this.spawnedLocations.prev()) {
-				this.addLoc(loc.orientation, loc.x, loc.z, loc.classType, loc.locIndex, loc.type, loc.plane);
+				this.addLoc(loc.plane, loc.x, loc.z, loc.locIndex, loc.angle, loc.shape, loc.layer);
 			}
 		} catch (@Pc(390) Exception ignored) {
 		}
@@ -9267,7 +9278,7 @@ public class client extends GameShell {
 
 		title = new Pix24(this.archiveTitle, "logo", 0);
 		this.imageTitle2.bind();
-		title.draw(18, super.screenWidth / 2 - title.width / 2 - 128);
+		title.draw(super.screenWidth / 2 - title.width / 2 - 128, 18);
 		title = null;
 
 		// some null objects may force garbage collection threshold
@@ -9346,10 +9357,10 @@ public class client extends GameShell {
 						}
 
 						Model model = type.getModel(shape, rotation, heightmapSW, heightmapSE, heightmapNE, heightmapNW, seqId);
-						this.scene.setLocModel(x, model, level, z);
+						this.scene.setLocModel(level, x, z, model);
 					} else if (loc.heightmapSE == 1) {
 						@Pc(282) Model model = type.getModel(4, 0, heightmapSW, heightmapSE, heightmapNE, heightmapNW, seqId);
-						this.scene.setWallDecorationModel(z, x, model, level);
+						this.scene.setWallDecorationModel(level, x, z, model);
 					} else if (loc.heightmapSE == 0) {
 						int info = this.scene.getInfo(level, x, z, bitset);
 						int shape = info & 0x1F;
@@ -9359,16 +9370,16 @@ public class client extends GameShell {
 							@Pc(320) int nextRotation = rotation + 1 & 0x3;
 							@Pc(332) Model model1 = type.getModel(2, rotation + 4, heightmapSW, heightmapSE, heightmapNE, heightmapNW, seqId);
 							@Pc(342) Model mmodel2 = type.getModel(2, nextRotation, heightmapSW, heightmapSE, heightmapNE, heightmapNW, seqId);
-							this.scene.setWallModels(model1, mmodel2, z, x, level);
+							this.scene.setWallModels(x, z, level, model1, mmodel2);
 						} else {
 							Model model = type.getModel(shape, rotation, heightmapSW, heightmapSE, heightmapNE, heightmapNW, seqId);
-							this.scene.setWallModel(model, z, x, level);
+							this.scene.setWallModel(level, x, z, model);
 						}
 					} else if (loc.heightmapSE == 3) {
 						int info = this.scene.getInfo(level, x, z, bitset);
 						int rotation = info >> 6;
 						@Pc(400) Model model = type.getModel(22, rotation, heightmapSW, heightmapSE, heightmapNE, heightmapNW, seqId);
-						this.scene.setGroundDecorationModel(model, z, x, level);
+						this.scene.setGroundDecorationModel(level, x, z, model);
 					}
 				} else {
 					loc.unlink();
@@ -9634,7 +9645,7 @@ public class client extends GameShell {
 		if (this.hintType == 2) {
 			this.projectFromGround((this.hintTileZ - this.sceneBaseTileZ << 7) + this.hintOffsetZ, (this.hintTileX - this.sceneBaseTileX << 7) + this.hintOffsetX, this.hintHeight * 2);
 			if (this.projectX > -1 && loopCycle % 20 < 10) {
-				this.imageHeadicons[2].draw(this.projectY - 28, this.projectX - 12);
+				this.imageHeadicons[2].draw(this.projectX - 12, this.projectY - 28);
 			}
 		}
 	}
@@ -9701,60 +9712,60 @@ public class client extends GameShell {
 		} else if (this.stickyChatInterfaceId == -1) {
 			@Pc(135) PixFont font = this.fontPlain12;
 			@Pc(137) int line = 0;
-			Draw2D.setBounds(77, 0, 463, 0);
+			Draw2D.setBounds(77, 463, 0, 0);
 			for (@Pc(145) int i = 0; i < 100; i++) {
 				if (this.messageText[i] != null) {
 					@Pc(157) int type = this.messageType[i];
 					@Pc(166) int offset = this.chatScrollOffset + 70 - line * 14;
 					if (type == 0) {
 						if (offset > 0 && offset < 110) {
-							font.drawString(4, offset, 0, this.messageText[i]);
+							font.drawString(4, offset, this.messageText[i], 0);
 						}
 						line++;
 					}
 					if (type == 1) {
 						if (offset > 0 && offset < 110) {
-							font.drawString(4, offset, 16777215, this.messageSender[i] + ":");
-							font.drawString(font.stringWidth(this.messageSender[i]) + 12, offset, 255, this.messageText[i]);
+							font.drawString(4, offset, this.messageSender[i] + ":", 16777215);
+							font.drawString(font.stringWidth(this.messageSender[i]) + 12, offset, this.messageText[i], 255);
 						}
 						line++;
 					}
 					if (type == 2 && (this.publicChatSetting == 0 || this.publicChatSetting == 1 && this.isFriend(this.messageSender[i]))) {
 						if (offset > 0 && offset < 110) {
-							font.drawString(4, offset, 0, this.messageSender[i] + ":");
-							font.drawString(font.stringWidth(this.messageSender[i]) + 12, offset, 255, this.messageText[i]);
+							font.drawString(4, offset, this.messageSender[i] + ":", 0);
+							font.drawString(font.stringWidth(this.messageSender[i]) + 12, offset, this.messageText[i], 255);
 						}
 						line++;
 					}
 					if ((type == 3 || type == 7) && this.splitPrivateChat == 0 && (type == 7 || this.privateChatSetting == 0 || this.privateChatSetting == 1 && this.isFriend(this.messageSender[i]))) {
 						if (offset > 0 && offset < 110) {
-							font.drawString(4, offset, 0, "From " + this.messageSender[i] + ":");
-							font.drawString(font.stringWidth("From " + this.messageSender[i]) + 12, offset, 8388608, this.messageText[i]);
+							font.drawString(4, offset, "From " + this.messageSender[i] + ":", 0);
+							font.drawString(font.stringWidth("From " + this.messageSender[i]) + 12, offset, this.messageText[i], 8388608);
 						}
 						line++;
 					}
 					if (type == 4 && (this.tradeChatSetting == 0 || this.tradeChatSetting == 1 && this.isFriend(this.messageSender[i]))) {
 						if (offset > 0 && offset < 110) {
-							font.drawString(4, offset, 8388736, this.messageSender[i] + " " + this.messageText[i]);
+							font.drawString(4, offset, this.messageSender[i] + " " + this.messageText[i], 8388736);
 						}
 						line++;
 					}
 					if (type == 5 && this.splitPrivateChat == 0 && this.privateChatSetting < 2) {
 						if (offset > 0 && offset < 110) {
-							font.drawString(4, offset, 8388608, this.messageText[i]);
+							font.drawString(4, offset, this.messageText[i], 8388608);
 						}
 						line++;
 					}
 					if (type == 6 && this.splitPrivateChat == 0 && this.privateChatSetting < 2) {
 						if (offset > 0 && offset < 110) {
-							font.drawString(4, offset, 0, "To " + this.messageSender[i] + ":");
-							font.drawString(font.stringWidth("To " + this.messageSender[i]) + 12, offset, 8388608, this.messageText[i]);
+							font.drawString(4, offset, "To " + this.messageSender[i] + ":", 0);
+							font.drawString(font.stringWidth("To " + this.messageSender[i]) + 12, offset, this.messageText[i], 8388608);
 						}
 						line++;
 					}
 					if (type == 8 && (this.tradeChatSetting == 0 || this.tradeChatSetting == 1 && this.isFriend(this.messageSender[i]))) {
 						if (offset > 0 && offset < 110) {
-							font.drawString(4, offset, 13350793, this.messageSender[i] + " " + this.messageText[i]);
+							font.drawString(4, offset, this.messageSender[i] + " " + this.messageText[i], 13350793);
 						}
 						line++;
 					}
@@ -9766,16 +9777,16 @@ public class client extends GameShell {
 				this.chatScrollHeight = 78;
 			}
 			this.drawScrollbar(463, 0, this.chatScrollHeight - this.chatScrollOffset - 77, this.chatScrollHeight, 77);
-			font.drawString(4, 90, 0, JString.formatName(this.username) + ":");
-			font.drawString(font.stringWidth(this.username + ": ") + 6, 90, 255, this.chatTyped + "*");
-			Draw2D.drawHorizontalLine(0, 77, 479, 0);
+			font.drawString(4, 90, JString.formatName(this.username) + ":", 0);
+			font.drawString(font.stringWidth(this.username + ": ") + 6, 90, this.chatTyped + "*", 255);
+			Draw2D.drawHorizontalLine(0, 77, 0, 479);
 		} else {
 			this.drawInterface(ComType.instances[this.stickyChatInterfaceId], 0, 0, 0);
 		}
 		if (this.menuVisible && this.menuArea == 2) {
 			this.drawMenu();
 		}
-		this.areaChatback.draw(375, super.graphics, 22);
+		this.areaChatback.draw(super.graphics, 22, 375);
 		this.areaViewport.bind();
 		Draw3D.lineOffset = this.areaViewportOffsets;
 	}
@@ -9947,7 +9958,7 @@ public class client extends GameShell {
 				this.areaViewport.bind();
 				this.fontPlain12.drawStringCenter(151, 0, "Loading - please wait.", 257);
 				this.fontPlain12.drawStringCenter(150, 16777215, "Loading - please wait.", 256);
-				this.areaViewport.draw(11, super.graphics, 8);
+				this.areaViewport.draw(super.graphics, 8, 11);
 				signlink.looprate(5);
 				int regions = (this.packetSize - 2) / 10;
 				this.sceneMapLandData = new byte[regions][];
@@ -10009,7 +10020,7 @@ public class client extends GameShell {
 					this.fontPlain12.drawStringCenter(166, 0, "Map area updated since last visit, so load will take longer this time only", 257);
 					this.fontPlain12.drawStringCenter(165, 16777215, "Map area updated since last visit, so load will take longer this time only", 256);
 				}
-				this.areaViewport.draw(11, super.graphics, 8);
+				this.areaViewport.draw(super.graphics, 8, 11);
 				int dx = this.sceneBaseTileX - this.mapLastBaseX;
 				int dz = this.sceneBaseTileZ - this.mapLastBaseZ;
 				this.mapLastBaseX = this.sceneBaseTileX;
@@ -10506,7 +10517,7 @@ public class client extends GameShell {
 				}
 				for (@Pc(2487) LocTemporary loc = (LocTemporary) this.spawnedLocations.peekFront(); loc != null; loc = (LocTemporary) this.spawnedLocations.prev()) {
 					if (loc.x >= this.baseX && loc.x < this.baseX + 8 && loc.z >= this.baseZ && loc.z < this.baseZ + 8 && loc.plane == this.currentLevel) {
-						this.addLoc(loc.lastOrientation, loc.x, loc.z, loc.classType, loc.lastLocIndex, loc.lastType, loc.plane);
+						this.addLoc(loc.plane, loc.x, loc.z, loc.lastLocIndex, loc.lastAngle, loc.lastShape, loc.layer);
 						loc.unlink();
 					}
 				}
@@ -10882,7 +10893,7 @@ public class client extends GameShell {
 					this.areaViewport.bind();
 					this.fontPlain12.drawStringCenter(151, 0, "Loading - please wait.", 257);
 					this.fontPlain12.drawStringCenter(150, 16777215, "Loading - please wait.", 256);
-					this.areaViewport.draw(11, super.graphics, 8);
+					this.areaViewport.draw(super.graphics, 8, 11);
 					World.levelBuilt = this.currentLevel;
 					this.buildScene();
 				}
@@ -10921,7 +10932,7 @@ public class client extends GameShell {
 		if (this.menuVisible && this.menuArea == 1) {
 			this.drawMenu();
 		}
-		this.areaSidebar.draw(231, super.graphics, 562);
+		this.areaSidebar.draw(super.graphics, 562, 231);
 		this.areaViewport.bind();
 		Draw3D.lineOffset = this.areaViewportOffsets;
 	}
@@ -11083,24 +11094,24 @@ public class client extends GameShell {
 			@Pc(21) byte offsetY = 20;
 			this.fontBold12.drawStringCenter(y / 2 - offsetY - 26, 16777215, "RuneScape is loading - please wait...", x / 2);
 			@Pc(51) int midY = y / 2 - offsetY - 18;
-			Draw2D.drawRect(x / 2 - 152, 9179409, 34, midY, 304);
-			Draw2D.drawRect(x / 2 - 151, 0, 32, midY + 1, 302);
-			Draw2D.fillRect(midY + 2, x / 2 - 150, 9179409, progress * 3, 30);
-			Draw2D.fillRect(midY + 2, x / 2 - 150 + progress * 3, 0, 300 - progress * 3, 30);
+			Draw2D.drawRect(x / 2 - 152, midY, 9179409, 304, 34);
+			Draw2D.drawRect(x / 2 - 151, midY + 1, 0, 302, 32);
+			Draw2D.fillRect(x / 2 - 150, midY + 2, 9179409, progress * 3, 30);
+			Draw2D.fillRect(x / 2 - 150 + progress * 3, midY + 2, 0, 300 - progress * 3, 30);
 			this.fontBold12.drawStringCenter(y / 2 + 5 - offsetY, 16777215, message, x / 2);
-			this.imageTitle4.draw(186, super.graphics, 214);
+			this.imageTitle4.draw(super.graphics, 214, 186);
 			if (this.redrawTitleBackground) {
 				this.redrawTitleBackground = false;
 				if (!this.flameActive) {
-					this.imageTitle0.draw(0, super.graphics, 0);
-					this.imageTitle1.draw(0, super.graphics, 661);
+					this.imageTitle0.draw(super.graphics, 0, 0);
+					this.imageTitle1.draw(super.graphics, 661, 0);
 				}
-				this.imageTitle2.draw(0, super.graphics, 128);
-				this.imageTitle3.draw(386, super.graphics, 214);
-				this.imageTitle5.draw(265, super.graphics, 0);
-				this.imageTitle6.draw(265, super.graphics, 574);
-				this.imageTitle7.draw(186, super.graphics, 128);
-				this.imageTitle8.draw(186, super.graphics, 574);
+				this.imageTitle2.draw(super.graphics, 128, 0);
+				this.imageTitle3.draw(super.graphics, 214, 386);
+				this.imageTitle5.draw(super.graphics, 0, 265);
+				this.imageTitle6.draw(super.graphics, 574, 265);
+				this.imageTitle7.draw(super.graphics, 128, 186);
+				this.imageTitle8.draw(super.graphics, 574, 186);
 			}
 		}
 	}

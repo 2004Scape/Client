@@ -111,7 +111,7 @@ public class Pix24 extends Draw2D {
 
 	@OriginalMember(owner = "client!hb", name = "a", descriptor = "(B)V")
 	public void bind() {
-		Draw2D.bind(this.width, this.pixels, this.height);
+		Draw2D.bind(this.width, this.height, this.pixels);
 	}
 
 	@OriginalMember(owner = "client!hb", name = "a", descriptor = "(IIIZ)V")
@@ -191,12 +191,12 @@ public class Pix24 extends Draw2D {
 		}
 
 		if (w > 0 && h > 0) {
-			this.copyPixels(this.pixels, dstStep, h, srcOff, srcStep, dstOff, w, Draw2D.data);
+			this.copyPixels(w, h, this.pixels, srcOff, srcStep, Draw2D.data, dstOff, dstStep);
 		}
 	}
 
 	@OriginalMember(owner = "client!hb", name = "a", descriptor = "(I[IIIIIII[I)V")
-	private void copyPixels(@OriginalArg(1) int[] src, @OriginalArg(2) int dstStep, @OriginalArg(3) int h, @OriginalArg(4) int srcOff, @OriginalArg(5) int srcStep, @OriginalArg(6) int dstOff, @OriginalArg(7) int w, @OriginalArg(8) int[] dst) {
+	private void copyPixels(@OriginalArg(7) int w, @OriginalArg(3) int h, @OriginalArg(1) int[] src, @OriginalArg(4) int srcOff, @OriginalArg(5) int srcStep, @OriginalArg(8) int[] dst, @OriginalArg(6) int dstOff, @OriginalArg(2) int dstStep) {
 		@Pc(6) int qw = -(w >> 2);
 		w = -(w & 0x3);
 
@@ -218,7 +218,7 @@ public class Pix24 extends Draw2D {
 	}
 
 	@OriginalMember(owner = "client!hb", name = "a", descriptor = "(IIZ)V")
-	public void draw(@OriginalArg(0) int y, @OriginalArg(1) int x) {
+	public void draw(@OriginalArg(1) int x, @OriginalArg(0) int y) {
 		x += this.cropX;
 		y += this.cropY;
 
@@ -314,7 +314,7 @@ public class Pix24 extends Draw2D {
 	}
 
 	@OriginalMember(owner = "client!hb", name = "d", descriptor = "(IIIII)V")
-	public void crop(@OriginalArg(0) int h, @OriginalArg(1) int y, @OriginalArg(2) int w, @OriginalArg(4) int x) {
+	public void crop(@OriginalArg(4) int x, @OriginalArg(1) int y, @OriginalArg(2) int w, @OriginalArg(0) int h) {
 		try {
 			@Pc(6) int currentW = this.width;
 			@Pc(9) int currentH = this.height;
@@ -373,14 +373,14 @@ public class Pix24 extends Draw2D {
 				dstOff += cutoff;
 			}
 
-			this.scale(offW, scaleCropWidth, Draw2D.data, scaleCropHeight, offH, this.pixels, dstOff, dstStep, h, currentW, w);
+			this.scale(w, h, this.pixels, offW, offH, Draw2D.data, dstOff, dstStep, currentW, scaleCropWidth, scaleCropHeight);
 		} catch (@Pc(243) Exception ignored) {
 			System.out.println("error in sprite clipping routine");
 		}
 	}
 
 	@OriginalMember(owner = "client!hb", name = "a", descriptor = "(II[IIIII[IIIIII)V")
-	private void scale(@OriginalArg(0) int offW, @OriginalArg(1) int scaleCropWidth, @OriginalArg(2) int[] dst, @OriginalArg(4) int scaleCropHeight, @OriginalArg(5) int offH, @OriginalArg(7) int[] src, @OriginalArg(8) int dstStep, @OriginalArg(9) int dstOff, @OriginalArg(10) int h, @OriginalArg(11) int currentW, @OriginalArg(12) int w) {
+	private void scale(@OriginalArg(12) int w, @OriginalArg(10) int h, @OriginalArg(7) int[] src, @OriginalArg(0) int offW, @OriginalArg(5) int offH, @OriginalArg(2) int[] dst, @OriginalArg(8) int dstStep, @OriginalArg(9) int dstOff, @OriginalArg(11) int currentW, @OriginalArg(1) int scaleCropWidth, @OriginalArg(4) int scaleCropHeight) {
 		try {
 			@Pc(5) int lastOffW = offW;
 
@@ -449,12 +449,12 @@ public class Pix24 extends Draw2D {
 		}
 
 		if (w > 0 && h > 0) {
-			this.copyPixelsAlpha(dstStep, this.pixels, alpha, h, Draw2D.data, srcStep, w, dstOff, srcOff);
+			this.copyPixelsAlpha(w, h, this.pixels, srcStep, srcOff, Draw2D.data, dstStep, dstOff, alpha);
 		}
 	}
 
 	@OriginalMember(owner = "client!hb", name = "a", descriptor = "(II[III[IIBIII)V")
-	private void copyPixelsAlpha(@OriginalArg(0) int dstOff, @OriginalArg(2) int[] src, @OriginalArg(3) int alpha, @OriginalArg(4) int h, @OriginalArg(5) int[] dst, @OriginalArg(6) int srcOff, @OriginalArg(8) int w, @OriginalArg(9) int dstStep, @OriginalArg(10) int srcStep) {
+	private void copyPixelsAlpha(@OriginalArg(8) int w, @OriginalArg(4) int h, @OriginalArg(2) int[] src, @OriginalArg(6) int srcOff, @OriginalArg(10) int srcStep, @OriginalArg(5) int[] dst, @OriginalArg(0) int dstOff, @OriginalArg(9) int dstStep, @OriginalArg(3) int alpha) {
 		@Pc(5) int invAlpha = 256 - alpha;
 
 		for (@Pc(19) int y = -h; y < 0; y++) {
@@ -474,7 +474,7 @@ public class Pix24 extends Draw2D {
 	}
 
 	@OriginalMember(owner = "client!hb", name = "a", descriptor = "(II[IIIIIIIZ[I)V")
-	public void drawRotatedMasked(@OriginalArg(0) int theta, @OriginalArg(1) int w, @OriginalArg(2) int[] lineStart, @OriginalArg(3) int h, @OriginalArg(4) int anchorY, @OriginalArg(5) int zoom, @OriginalArg(6) int anchorX, @OriginalArg(7) int x, @OriginalArg(8) int y, @OriginalArg(10) int[] lineWidth) {
+	public void drawRotatedMasked(@OriginalArg(7) int x, @OriginalArg(8) int y, @OriginalArg(1) int w, @OriginalArg(3) int h, @OriginalArg(2) int[] lineStart, @OriginalArg(10) int[] lineWidth, @OriginalArg(6) int anchorX, @OriginalArg(4) int anchorY, @OriginalArg(0) int theta, @OriginalArg(5) int zoom) {
 		try {
 			@Pc(16) int centerX = -w / 2;
 			@Pc(21) int centerY = -h / 2;
@@ -509,7 +509,7 @@ public class Pix24 extends Draw2D {
 	}
 
 	@OriginalMember(owner = "client!hb", name = "a", descriptor = "(Lclient!ib;IIB)V")
-	public void drawMasked(@OriginalArg(0) Pix8 mask, @OriginalArg(1) int y, @OriginalArg(2) int x) {
+	public void drawMasked(@OriginalArg(2) int x, @OriginalArg(1) int y, @OriginalArg(0) Pix8 mask) {
 		x += this.cropX;
 		y += this.cropY;
 
@@ -550,12 +550,12 @@ public class Pix24 extends Draw2D {
 		}
 
 		if (w > 0 && h > 0) {
-			this.copyPixelsMasked(w, srcOff, h, srcStep, Draw2D.data, this.pixels, dstStep, mask.pixels, dstOff);
+			this.copyPixelsMasked(w, h, this.pixels, srcOff, srcStep, Draw2D.data, dstStep, dstOff, mask.pixels);
 		}
 	}
 
 	@OriginalMember(owner = "client!hb", name = "a", descriptor = "(IIIIII[I[II[BI)V")
-	private void copyPixelsMasked(@OriginalArg(0) int w, @OriginalArg(1) int srcStep, @OriginalArg(4) int h, @OriginalArg(5) int srcOff, @OriginalArg(6) int[] dst, @OriginalArg(7) int[] src, @OriginalArg(8) int dstOff, @OriginalArg(9) byte[] mask, @OriginalArg(10) int dstStep) {
+	private void copyPixelsMasked(@OriginalArg(0) int w, @OriginalArg(4) int h, @OriginalArg(7) int[] src, @OriginalArg(1) int srcStep, @OriginalArg(5) int srcOff, @OriginalArg(6) int[] dst, @OriginalArg(8) int dstOff, @OriginalArg(10) int dstStep, @OriginalArg(9) byte[] mask) {
 		@Pc(9) int qw = -(w >> 2);
 		w = -(w & 0x3);
 

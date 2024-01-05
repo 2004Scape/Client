@@ -83,7 +83,7 @@ public class ProjectileEntity extends Entity {
 	private int seqCycle;
 
 	@OriginalMember(owner = "client!ab", name = "<init>", descriptor = "(IIIIIIIIIIII)V")
-	public ProjectileEntity(@OriginalArg(0) int offsetY, @OriginalArg(1) int peakPitch, @OriginalArg(2) int srcZ, @OriginalArg(3) int lastCycle, @OriginalArg(4) int level, @OriginalArg(5) int target, @OriginalArg(6) int startCycle, @OriginalArg(7) int arc, @OriginalArg(9) int srcY, @OriginalArg(10) int spotanim, @OriginalArg(11) int srcX) {
+	public ProjectileEntity(@OriginalArg(10) int spotanim, @OriginalArg(4) int level, @OriginalArg(11) int srcX, @OriginalArg(9) int srcY, @OriginalArg(2) int srcZ, @OriginalArg(6) int startCycle, @OriginalArg(3) int lastCycle, @OriginalArg(1) int peakPitch, @OriginalArg(7) int arc, @OriginalArg(5) int target, @OriginalArg(0) int offsetY) {
 		this.spotanim = SpotAnimType.instances[spotanim];
 		this.level = level;
 		this.srcX = srcX;
@@ -99,7 +99,7 @@ public class ProjectileEntity extends Entity {
 	}
 
 	@OriginalMember(owner = "client!ab", name = "a", descriptor = "(IIIII)V")
-	public void updateVelocity(@OriginalArg(0) int dstY, @OriginalArg(1) int dstZ, @OriginalArg(2) int dstX, @OriginalArg(4) int cycle) {
+	public void updateVelocity(@OriginalArg(2) int dstX, @OriginalArg(0) int dstY, @OriginalArg(1) int dstZ, @OriginalArg(4) int cycle) {
 		if (!this.mobile) {
 			@Pc(8) double dx = dstX - this.srcX;
 			@Pc(14) double dz = dstZ - this.srcZ;
@@ -163,7 +163,7 @@ public class ProjectileEntity extends Entity {
 		}
 
 		model.rotateX(this.pitch);
-		model.calculateNormals(64 + this.spotanim.ambient, 850 + this.spotanim.contrast, -30, -50, -30, true);
+		model.calculateNormals(-30, -50, -30, 64 + this.spotanim.ambient, 850 + this.spotanim.contrast, true);
 		return model;
 	}
 }

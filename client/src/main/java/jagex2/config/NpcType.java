@@ -239,14 +239,14 @@ public class NpcType {
 			}
 
 			model.createLabelReferences();
-			model.calculateNormals(64, 850, -30, -50, -30, true);
+			model.calculateNormals(-30, -50, -30, 64, 850, true);
 			modelCache.put(this.index, model);
 		}
 
 		tmp = new Model(model, !this.disposeAlpha);
 
 		if (primaryTransformId != -1 && secondaryTransformId != -1) {
-			tmp.applyTransforms(secondaryTransformId, primaryTransformId, seqMask);
+			tmp.applyTransforms(primaryTransformId, secondaryTransformId, seqMask);
 		} else if (primaryTransformId != -1) {
 			tmp.applyTransform(primaryTransformId);
 		}

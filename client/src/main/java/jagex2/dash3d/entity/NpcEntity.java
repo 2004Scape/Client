@@ -39,7 +39,7 @@ public class NpcEntity extends PathingEntity {
 			model1.scale(spotanim.resizeh, spotanim.resizev, spotanim.resizeh);
 		}
 
-		model1.calculateNormals(64 + spotanim.ambient, 850 + spotanim.contrast, -30, -50, -30, true);
+		model1.calculateNormals(-30, -50, -30, 64 + spotanim.ambient, 850 + spotanim.contrast, true);
 		@Pc(115) Model[] models = new Model[] { model, model1 };
 
 		@Pc(123) Model tmp = new Model(models, 2, true);

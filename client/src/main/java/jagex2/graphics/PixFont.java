@@ -125,12 +125,12 @@ public class PixFont extends Draw2D {
 
 	@OriginalMember(owner = "client!jb", name = "a", descriptor = "(IBILjava/lang/String;I)V")
 	public void drawStringCenter(@OriginalArg(0) int y, @OriginalArg(2) int rgb, @OriginalArg(3) String str, @OriginalArg(4) int x) {
-		this.drawString(x - this.stringWidth(str) / 2, y, rgb, str);
+		this.drawString(x - this.stringWidth(str) / 2, y, str, rgb);
 	}
 
 	@OriginalMember(owner = "client!jb", name = "a", descriptor = "(IIZILjava/lang/String;I)V")
-	public void drawStringTaggableCenter(@OriginalArg(0) int x, @OriginalArg(1) int color, @OriginalArg(2) boolean shadowed, @OriginalArg(3) int y, @OriginalArg(4) String str) {
-		this.drawStringTaggable(x - this.stringWidth(str) / 2, y, str, shadowed, color);
+	public void drawStringTaggableCenter(@OriginalArg(4) String str, @OriginalArg(0) int x, @OriginalArg(3) int y, @OriginalArg(1) int color, @OriginalArg(2) boolean shadowed) {
+		this.drawStringTaggable(x - this.stringWidth(str) / 2, y, str, color, shadowed);
 	}
 
 	@OriginalMember(owner = "client!jb", name = "a", descriptor = "(ZLjava/lang/String;)I")
@@ -152,92 +152,101 @@ public class PixFont extends Draw2D {
 	}
 
 	@OriginalMember(owner = "client!jb", name = "a", descriptor = "(IIZILjava/lang/String;)V")
-	public void drawString(@OriginalArg(0) int x, @OriginalArg(1) int y, @OriginalArg(3) int rgb, @OriginalArg(4) String str) {
-		if (str != null) {
-			@Pc(7) int offY = y - this.height;
+	public void drawString(@OriginalArg(0) int x, @OriginalArg(1) int y, @OriginalArg(4) String str, @OriginalArg(3) int rgb) {
+        if (str == null) {
+            return;
+        }
 
-			for (@Pc(19) int i = 0; i < str.length(); i++) {
-				@Pc(27) int c = CHAR_LOOKUP[str.charAt(i)];
-				if (c != 94) {
-					this.drawChar(this.charMask[c], x + this.charOffsetX[c], offY + this.charOffsetY[c], this.charMaskWidth[c], this.charMaskHeight[c], rgb);
-				}
+        @Pc(7) int offY = y - this.height;
 
-				x += this.charAdvance[c];
-			}
-		}
-	}
+        for (@Pc(19) int i = 0; i < str.length(); i++) {
+            @Pc(27) int c = CHAR_LOOKUP[str.charAt(i)];
+            if (c != 94) {
+                this.drawChar(this.charMask[c], x + this.charOffsetX[c], offY + this.charOffsetY[c], this.charMaskWidth[c], this.charMaskHeight[c], rgb);
+            }
+
+            x += this.charAdvance[c];
+        }
+    }
 
 	@OriginalMember(owner = "client!jb", name = "a", descriptor = "(IBIIILjava/lang/String;)V")
-	public void drawCenteredWave(@OriginalArg(0) int phase, @OriginalArg(2) int x, @OriginalArg(3) int y, @OriginalArg(4) int rgb, @OriginalArg(5) String str) {
-		if (str != null) {
-			x -= this.stringWidth(str) / 2;
-			@Pc(18) int offY = y - this.height;
+	public void drawCenteredWave(@OriginalArg(2) int x, @OriginalArg(3) int y, @OriginalArg(5) String str, @OriginalArg(4) int rgb, @OriginalArg(0) int phase) {
+        if (str == null) {
+            return;
+        }
 
-			for (@Pc(24) int i = 0; i < str.length(); i++) {
-				@Pc(39) int c = CHAR_LOOKUP[str.charAt(i)];
-				if (c != 94) {
-					this.drawChar(this.charMask[c], x + this.charOffsetX[c], offY + this.charOffsetY[c] + (int) (Math.sin((double) i / 2.0D + (double) phase / 5.0D) * 5.0D), this.charMaskWidth[c], this.charMaskHeight[c], rgb);
-				}
+        x -= this.stringWidth(str) / 2;
+        @Pc(18) int offY = y - this.height;
 
-				x += this.charAdvance[c];
-			}
-		}
-	}
+        for (@Pc(24) int i = 0; i < str.length(); i++) {
+            @Pc(39) int c = CHAR_LOOKUP[str.charAt(i)];
+
+            if (c != 94) {
+                this.drawChar(this.charMask[c], x + this.charOffsetX[c], offY + this.charOffsetY[c] + (int) (Math.sin((double) i / 2.0D + (double) phase / 5.0D) * 5.0D), this.charMaskWidth[c], this.charMaskHeight[c], rgb);
+            }
+
+            x += this.charAdvance[c];
+        }
+    }
 
 	@OriginalMember(owner = "client!jb", name = "a", descriptor = "(IIILjava/lang/String;ZI)V")
-	public void drawStringTaggable(@OriginalArg(0) int x, @OriginalArg(2) int y, @OriginalArg(3) String str, @OriginalArg(4) boolean shadowed, @OriginalArg(5) int rgb) {
-		if (str != null) {
-			@Pc(9) int offY = y - this.height;
+	public void drawStringTaggable(@OriginalArg(0) int x, @OriginalArg(2) int y, @OriginalArg(3) String str, @OriginalArg(5) int rgb, @OriginalArg(4) boolean shadowed) {
+        if (str == null) {
+            return;
+        }
 
-			for (@Pc(11) int i = 0; i < str.length(); i++) {
-				if (str.charAt(i) == '@' && i + 4 < str.length() && str.charAt(i + 4) == '@') {
-					rgb = this.evaluateTag(str.substring(i + 1, i + 4));
-					i += 4;
-				} else {
-					@Pc(52) int c = CHAR_LOOKUP[str.charAt(i)];
-					if (c != 94) {
-						if (shadowed) {
-							this.drawChar(this.charMask[c], x + this.charOffsetX[c] + 1, offY + this.charOffsetY[c] + 1, this.charMaskWidth[c], this.charMaskHeight[c], 0);
-						}
+        @Pc(9) int offY = y - this.height;
 
-						this.drawChar(this.charMask[c], x + this.charOffsetX[c], offY + this.charOffsetY[c], this.charMaskWidth[c], this.charMaskHeight[c], rgb);
-					}
+        for (@Pc(11) int i = 0; i < str.length(); i++) {
+            if (str.charAt(i) == '@' && i + 4 < str.length() && str.charAt(i + 4) == '@') {
+                rgb = this.evaluateTag(str.substring(i + 1, i + 4));
+                i += 4;
+            } else {
+                @Pc(52) int c = CHAR_LOOKUP[str.charAt(i)];
+                if (c != 94) {
+                    if (shadowed) {
+                        this.drawChar(this.charMask[c], x + this.charOffsetX[c] + 1, offY + this.charOffsetY[c] + 1, this.charMaskWidth[c], this.charMaskHeight[c], 0);
+                    }
 
-					x += this.charAdvance[c];
-				}
-			}
-		}
-	}
+                    this.drawChar(this.charMask[c], x + this.charOffsetX[c], offY + this.charOffsetY[c], this.charMaskWidth[c], this.charMaskHeight[c], rgb);
+                }
+
+                x += this.charAdvance[c];
+            }
+        }
+    }
 
 	@OriginalMember(owner = "client!jb", name = "a", descriptor = "(IZBIILjava/lang/String;I)V")
-	public void drawStringTooltip(@OriginalArg(0) int seed, @OriginalArg(1) boolean shadowed, @OriginalArg(3) int y, @OriginalArg(4) int color, @OriginalArg(5) String str, @OriginalArg(6) int x) {
-		if (str != null) {
-			this.random.setSeed(seed);
+	public void drawStringTooltip(@OriginalArg(6) int x, @OriginalArg(3) int y, @OriginalArg(5) String str, @OriginalArg(4) int color, @OriginalArg(1) boolean shadowed, @OriginalArg(0) int seed) {
+        if (str == null) {
+            return;
+        }
 
-			@Pc(17) int rand = (this.random.nextInt() & 0x1F) + 192;
-			@Pc(22) int offY = y - this.height;
-			for (@Pc(30) int i = 0; i < str.length(); i++) {
-				if (str.charAt(i) == '@' && i + 4 < str.length() && str.charAt(i + 4) == '@') {
-					color = this.evaluateTag(str.substring(i + 1, i + 4));
-					i += 4;
-				} else {
-					@Pc(71) int c = CHAR_LOOKUP[str.charAt(i)];
-					if (c != 94) {
-						if (shadowed) {
-							this.drawCharAlpha(this.charMask[c], x + this.charOffsetX[c] + 1, this.charMaskHeight[c], 0, offY + this.charOffsetY[c] + 1, 192, this.charMaskWidth[c]);
-						}
+        this.random.setSeed(seed);
 
-						this.drawCharAlpha(this.charMask[c], x + this.charOffsetX[c], this.charMaskHeight[c], color, offY + this.charOffsetY[c], rand, this.charMaskWidth[c]);
-					}
+        @Pc(17) int rand = (this.random.nextInt() & 0x1F) + 192;
+        @Pc(22) int offY = y - this.height;
+        for (@Pc(30) int i = 0; i < str.length(); i++) {
+            if (str.charAt(i) == '@' && i + 4 < str.length() && str.charAt(i + 4) == '@') {
+                color = this.evaluateTag(str.substring(i + 1, i + 4));
+                i += 4;
+            } else {
+                @Pc(71) int c = CHAR_LOOKUP[str.charAt(i)];
+                if (c != 94) {
+                    if (shadowed) {
+                        this.drawCharAlpha(x + this.charOffsetX[c] + 1, offY + this.charOffsetY[c] + 1, this.charMaskWidth[c], this.charMaskHeight[c], 0, 192, this.charMask[c]);
+                    }
 
-					x += this.charAdvance[c];
-					if ((this.random.nextInt() & 0x3) == 0) {
-						x++;
-					}
-				}
-			}
-		}
-	}
+                    this.drawCharAlpha(x + this.charOffsetX[c], offY + this.charOffsetY[c], this.charMaskWidth[c], this.charMaskHeight[c], color, rand, this.charMask[c]);
+                }
+
+                x += this.charAdvance[c];
+                if ((this.random.nextInt() & 0x3) == 0) {
+                    x++;
+                }
+            }
+        }
+    }
 
 	@OriginalMember(owner = "client!jb", name = "a", descriptor = "(ILjava/lang/String;)I")
 	private int evaluateTag(@OriginalArg(1) String tag) {
@@ -318,12 +327,12 @@ public class PixFont extends Draw2D {
 		}
 
 		if (w > 0 && h > 0) {
-			this.drawMask(Draw2D.data, data, rgb, srcOff, dstOff, w, h, dstStep, srcStep);
+			this.drawMask(w, h, data, srcOff, srcStep, Draw2D.data, dstOff, dstStep, rgb);
 		}
 	}
 
 	@OriginalMember(owner = "client!jb", name = "a", descriptor = "([I[BIIIIIII)V")
-	private void drawMask(@OriginalArg(0) int[] dst, @OriginalArg(1) byte[] src, @OriginalArg(2) int rgb, @OriginalArg(3) int srcOff, @OriginalArg(4) int dstOff, @OriginalArg(5) int w, @OriginalArg(6) int h, @OriginalArg(7) int dstStep, @OriginalArg(8) int srcStep) {
+	private void drawMask(@OriginalArg(5) int w, @OriginalArg(6) int h, @OriginalArg(1) byte[] src, @OriginalArg(3) int srcOff, @OriginalArg(8) int srcStep, @OriginalArg(0) int[] dst, @OriginalArg(4) int dstOff, @OriginalArg(7) int dstStep, @OriginalArg(2) int rgb) {
 		@Pc(6) int hw = -(w >> 2);
 		w = -(w & 0x3);
 
@@ -368,7 +377,7 @@ public class PixFont extends Draw2D {
 	}
 
 	@OriginalMember(owner = "client!jb", name = "a", descriptor = "([BBIIIIII)V")
-	private void drawCharAlpha(@OriginalArg(0) byte[] mask, @OriginalArg(2) int x, @OriginalArg(3) int h, @OriginalArg(4) int rgb, @OriginalArg(5) int y, @OriginalArg(6) int alpha, @OriginalArg(7) int w) {
+	private void drawCharAlpha(@OriginalArg(2) int x, @OriginalArg(5) int y, @OriginalArg(7) int w, @OriginalArg(3) int h, @OriginalArg(4) int rgb, @OriginalArg(6) int alpha, @OriginalArg(0) byte[] mask) {
 		@Pc(10) int dstOff = x + y * Draw2D.width2d;
 		@Pc(14) int dstStep = Draw2D.width2d - w;
 
@@ -405,12 +414,12 @@ public class PixFont extends Draw2D {
 		}
 
 		if (w > 0 && h > 0) {
-			this.drawMaskAlpha(h, dstOff, w, Draw2D.data, mask, alpha, srcOff, dstStep, srcStep, rgb);
+			this.drawMaskAlpha(w, h, Draw2D.data, dstOff, dstStep, mask, srcOff, srcStep, rgb, alpha);
 		}
 	}
 
 	@OriginalMember(owner = "client!jb", name = "a", descriptor = "(III[I[BIIIIBI)V")
-	private void drawMaskAlpha(@OriginalArg(0) int h, @OriginalArg(1) int dstOff, @OriginalArg(2) int w, @OriginalArg(3) int[] dst, @OriginalArg(4) byte[] mask, @OriginalArg(5) int alpha, @OriginalArg(6) int maskOff, @OriginalArg(7) int dstStep, @OriginalArg(8) int maskStep, @OriginalArg(10) int color) {
+	private void drawMaskAlpha(@OriginalArg(2) int w, @OriginalArg(0) int h, @OriginalArg(3) int[] dst, @OriginalArg(1) int dstOff, @OriginalArg(7) int dstStep, @OriginalArg(4) byte[] mask, @OriginalArg(6) int maskOff, @OriginalArg(8) int maskStep, @OriginalArg(10) int color, @OriginalArg(5) int alpha) {
 		@Pc(19) int rgb = ((color & 0xFF00FF) * alpha & 0xFF00FF00) + ((color & 0xFF00) * alpha & 0xFF0000) >> 8;
 		@Pc(38) int invAlpha = 256 - alpha;
 

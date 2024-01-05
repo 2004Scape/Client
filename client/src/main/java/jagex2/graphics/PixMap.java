@@ -50,11 +50,11 @@ public class PixMap implements ImageProducer, ImageObserver {
 
 	@OriginalMember(owner = "client!qb", name = "a", descriptor = "(B)V")
 	public void bind() {
-		Draw2D.bind(this.width, this.pixels, this.height);
+		Draw2D.bind(this.width, this.height, this.pixels);
 	}
 
 	@OriginalMember(owner = "client!qb", name = "a", descriptor = "(ILjava/awt/Graphics;II)V")
-	public void draw(@OriginalArg(0) int height, @OriginalArg(1) Graphics g, @OriginalArg(2) int width) {
+	public void draw(@OriginalArg(1) Graphics g, @OriginalArg(2) int width, @OriginalArg(0) int height) {
 		this.setPixels();
 		g.drawImage(this.image, width, height, this);
 	}

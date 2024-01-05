@@ -44,11 +44,11 @@ public class Draw2D extends Hashable {
 	}
 
 	@OriginalMember(owner = "client!fb", name = "a", descriptor = "(I[III)V")
-	public static void bind(@OriginalArg(0) int width, @OriginalArg(1) int[] src, @OriginalArg(3) int height) {
+	public static void bind(@OriginalArg(0) int width, @OriginalArg(3) int height, @OriginalArg(1) int[] src) {
 		data = src;
 		width2d = width;
 		height2d = height;
-		setBounds(height, 0, width, 0);
+		setBounds(height, width, 0, 0);
 	}
 
 	@OriginalMember(owner = "client!fb", name = "a", descriptor = "(I)V")
@@ -62,7 +62,7 @@ public class Draw2D extends Hashable {
 	}
 
 	@OriginalMember(owner = "client!fb", name = "a", descriptor = "(IIIII)V")
-	public static void setBounds(@OriginalArg(0) int bottom, @OriginalArg(1) int top, @OriginalArg(2) int right, @OriginalArg(4) int left) {
+	public static void setBounds(@OriginalArg(0) int bottom, @OriginalArg(2) int right, @OriginalArg(1) int top, @OriginalArg(4) int left) {
 		if (left < 0) {
 			left = 0;
 		}
@@ -97,7 +97,7 @@ public class Draw2D extends Hashable {
 	}
 
 	@OriginalMember(owner = "client!fb", name = "a", descriptor = "(IIIBII)V")
-	public static void fillRect(@OriginalArg(0) int y, @OriginalArg(1) int x, @OriginalArg(2) int rgb, @OriginalArg(4) int width, @OriginalArg(5) int height) {
+	public static void fillRect(@OriginalArg(1) int x, @OriginalArg(0) int y, @OriginalArg(2) int rgb, @OriginalArg(4) int width, @OriginalArg(5) int height) {
 		if (x < left) {
 			width -= left - x;
 			x = left;
@@ -128,53 +128,52 @@ public class Draw2D extends Hashable {
 	}
 
 	@OriginalMember(owner = "client!fb", name = "a", descriptor = "(IIIIII)V")
-	public static void drawRect(@OriginalArg(1) int x, @OriginalArg(2) int rgb, @OriginalArg(3) int height, @OriginalArg(4) int y, @OriginalArg(5) int len) {
-		drawHorizontalLine(rgb, y, len, x);
-		drawHorizontalLine(rgb, y + height - 1, len, x);
-		drawVerticalLine(rgb, y, height, x);
-		drawVerticalLine(rgb, y, height, x + len - 1);
+	public static void drawRect(@OriginalArg(1) int x, @OriginalArg(4) int y, @OriginalArg(2) int rgb, @OriginalArg(5) int width, @OriginalArg(3) int height) {
+		drawHorizontalLine(x, y, rgb, width);
+		drawHorizontalLine(x, y + height - 1, rgb, width);
+		drawVerticalLine(x, y, rgb, height);
+		drawVerticalLine(x + width - 1, y, rgb, height);
 	}
 
 	@OriginalMember(owner = "client!fb", name = "b", descriptor = "(IIIII)V")
-	public static void drawHorizontalLine(@OriginalArg(0) int rgb, @OriginalArg(2) int y, @OriginalArg(3) int len, @OriginalArg(4) int x) {
+	public static void drawHorizontalLine(@OriginalArg(4) int x, @OriginalArg(2) int y, @OriginalArg(0) int rgb, @OriginalArg(3) int width) {
 		if (y < top || y >= bottom) {
 			return;
 		}
 
 		if (x < left) {
-			len -= left - x;
+			width -= left - x;
 			x = left;
 		}
 
-		if (x + len > right) {
-			len = right - x;
+		if (x + width > right) {
+			width = right - x;
 		}
 
 		@Pc(32) int off = x + y * width2d;
-		for (@Pc(37) int i = 0; i < len; i++) {
+		for (@Pc(37) int i = 0; i < width; i++) {
 			data[off + i] = rgb;
 		}
 	}
 
 	@OriginalMember(owner = "client!fb", name = "c", descriptor = "(IIIII)V")
-	public static void drawVerticalLine(@OriginalArg(0) int rgb, @OriginalArg(2) int y, @OriginalArg(3) int len, @OriginalArg(4) int x) {
+	public static void drawVerticalLine(@OriginalArg(4) int x, @OriginalArg(2) int y, @OriginalArg(0) int rgb, @OriginalArg(3) int width) {
 		if (x < left || x >= right) {
 			return;
 		}
 
 		if (y < top) {
-			len -= top - y;
+			width -= top - y;
 			y = top;
 		}
 
-		if (y + len > bottom) {
-			len = bottom - y;
+		if (y + width > bottom) {
+			width = bottom - y;
 		}
 
 		@Pc(32) int off = x + y * width2d;
-		for (@Pc(38) int i = 0; i < len; i++) {
+		for (@Pc(38) int i = 0; i < width; i++) {
 			data[off + i * width2d] = rgb;
 		}
 	}
-
 }

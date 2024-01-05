@@ -34,7 +34,7 @@ public class LocEntity extends Linkable {
 	public int seqCycle;
 
 	@OriginalMember(owner = "client!nb", name = "<init>", descriptor = "(ZIIIILclient!jc;II)V")
-	public LocEntity(@OriginalArg(0) boolean randomFrame, @OriginalArg(1) int index, @OriginalArg(2) int heightmapSW, @OriginalArg(4) int heightmapSE, @OriginalArg(5) SeqType seq, @OriginalArg(6) int heightmapNW, @OriginalArg(7) int heightmapNE) {
+	public LocEntity(@OriginalArg(1) int index, @OriginalArg(2) int heightmapSW, @OriginalArg(4) int heightmapSE, @OriginalArg(7) int heightmapNE, @OriginalArg(6) int heightmapNW, @OriginalArg(5) SeqType seq, @OriginalArg(0) boolean randomFrame) {
 		this.heightmapSW = heightmapSW;
 		this.heightmapSE = heightmapSE;
 		this.heightmapNE = heightmapNE;

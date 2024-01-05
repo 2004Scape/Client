@@ -68,30 +68,21 @@ public class TileOverlay {
 	@OriginalMember(owner = "client!i", name = "t", descriptor = "[I")
 	public static final int[] tmpViewspaceZ = new int[6];
 
-	@OriginalMember(owner = "client!i", name = "u", descriptor = "[I")
-	private static final int[] anIntArray173 = new int[] { 1, 0 };
-
-	@OriginalMember(owner = "client!i", name = "v", descriptor = "[I")
-	private static final int[] anIntArray174 = new int[] { 2, 1 };
-
-	@OriginalMember(owner = "client!i", name = "w", descriptor = "[I")
-	private static final int[] anIntArray175 = new int[] { 3, 3 };
-
 	@OriginalMember(owner = "client!i", name = "x", descriptor = "[[I")
 	public static final int[][] SHAPE_POINTS = new int[][]{
-		{1, 3, 5, 7},
-		{1, 3, 5, 7},
-		{1, 3, 5, 7},
-		{1, 3, 5, 7, 6},
-		{1, 3, 5, 7, 6},
-		{1, 3, 5, 7, 6},
-		{1, 3, 5, 7, 6},
-		{1, 3, 5, 7, 2, 6},
-		{1, 3, 5, 7, 2, 8},
-		{1, 3, 5, 7, 2, 8},
-		{1, 3, 5, 7, 11, 12},
-		{1, 3, 5, 7, 11, 12},
-		{1, 3, 5, 7, 13, 14}
+		{ 1, 3, 5, 7 },
+		{ 1, 3, 5, 7 },
+		{ 1, 3, 5, 7 },
+		{ 1, 3, 5, 7, 6 },
+		{ 1, 3, 5, 7, 6 },
+		{ 1, 3, 5, 7, 6 },
+		{ 1 , 3, 5, 7, 6 },
+		{ 1, 3, 5, 7, 2, 6 },
+		{ 1, 3, 5, 7, 2, 8 },
+		{ 1, 3, 5, 7, 2, 8 },
+		{ 1, 3, 5, 7, 11, 12 },
+		{ 1, 3, 5, 7, 11, 12 },
+		{ 1, 3, 5, 7, 13, 14 }
 	};
 
 	@OriginalMember(owner = "client!i", name = "y", descriptor = "[[I")

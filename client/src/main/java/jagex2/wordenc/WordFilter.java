@@ -35,11 +35,11 @@ public class WordFilter {
 		@Pc(21) Packet bad = new Packet(jag.read("badenc.txt", null));
 		@Pc(31) Packet domain = new Packet(jag.read("domainenc.txt", null));
 		@Pc(41) Packet tld = new Packet(jag.read("tldlist.txt", null));
-		read(fragments, bad, domain, tld);
+		read(bad, domain, fragments, tld);
 	}
 
 	@OriginalMember(owner = "client!mc", name = "a", descriptor = "(Lclient!kb;Lclient!kb;Lclient!kb;Lclient!kb;)V")
-	private static void read(@OriginalArg(0) Packet fragments, @OriginalArg(1) Packet bad, @OriginalArg(2) Packet domain, @OriginalArg(3) Packet tld) {
+	private static void read(@OriginalArg(1) Packet bad, @OriginalArg(2) Packet domain, @OriginalArg(0) Packet fragments, @OriginalArg(3) Packet tld) {
 		readBadWords(bad);
 		readDomains(domain);
 		readFragments(fragments);
@@ -66,7 +66,7 @@ public class WordFilter {
 		@Pc(2) int count = buf.g4();
 		badWords = new char[count][];
 		badCombinations = new byte[count][][];
-		readBadCombinations(badCombinations, badWords, buf);
+		readBadCombinations(buf, badWords, badCombinations);
 	}
 
 	@OriginalMember(owner = "client!mc", name = "a", descriptor = "(Lclient!kb;I)V")
@@ -85,7 +85,7 @@ public class WordFilter {
 	}
 
 	@OriginalMember(owner = "client!mc", name = "a", descriptor = "([[[B[[CLclient!kb;B)V")
-	private static void readBadCombinations(@OriginalArg(0) byte[][][] badCombinations, @OriginalArg(1) char[][] badwords, @OriginalArg(2) Packet buf) {
+	private static void readBadCombinations(@OriginalArg(2) Packet buf, @OriginalArg(1) char[][] badwords, @OriginalArg(0) byte[][][] badCombinations) {
 		for (@Pc(10) int i = 0; i < badwords.length; i++) {
 			@Pc(17) char[] badword = new char[buf.g1()];
 			for (@Pc(19) int j = 0; j < badword.length; j++) {
@@ -258,7 +258,7 @@ public class WordFilter {
 				if (offset >= domain.length) {
 					match = false;
 					@Pc(116) int atFilter = getDomainAtFilterStatus(start, in, filteredAt);
-					@Pc(124) int dotFilter = getDomainDotFilterStatus(filteredDot, in, end - 1);
+					@Pc(124) int dotFilter = getDomainDotFilterStatus(in, filteredDot, end - 1);
 					if (atFilter > 2 || dotFilter > 2) {
 						match = true;
 					}
@@ -298,7 +298,7 @@ public class WordFilter {
 	}
 
 	@OriginalMember(owner = "client!mc", name = "a", descriptor = "([C[CII)I")
-	private static int getDomainDotFilterStatus(@OriginalArg(0) char[] b, @OriginalArg(1) char[] a, @OriginalArg(2) int start) {
+	private static int getDomainDotFilterStatus(@OriginalArg(1) char[] a, @OriginalArg(0) char[] b, @OriginalArg(2) int start) {
 		if (start + 1 == a.length) {
 			return 2;
 		} else {

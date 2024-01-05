@@ -49,13 +49,13 @@ public class Wave {
 	}
 
 	@OriginalMember(owner = "client!yb", name = "a", descriptor = "(BII)Lclient!kb;")
-	public static Packet generate(@OriginalArg(1) int loopCount, @OriginalArg(2) int id) {
+	public static Packet generate(@OriginalArg(2) int id, @OriginalArg(1) int loopCount) {
 		if (tracks[id] == null) {
 			return null;
-		} else {
-			@Pc(12) Wave track = tracks[id];
-			return track.getWave(loopCount);
 		}
+
+		@Pc(12) Wave track = tracks[id];
+		return track.getWave(loopCount);
 	}
 
 	@OriginalMember(owner = "client!yb", name = "a", descriptor = "(ZLclient!kb;)V")

@@ -178,7 +178,7 @@ public class Pix8 extends Draw2D {
 	}
 
 	@OriginalMember(owner = "client!ib", name = "a", descriptor = "(IIZ)V")
-	public void draw(@OriginalArg(0) int y, @OriginalArg(1) int x) {
+	public void draw(@OriginalArg(1) int x, @OriginalArg(0) int y) {
 		x += this.cropX;
 		y += this.cropY;
 
@@ -219,12 +219,12 @@ public class Pix8 extends Draw2D {
 		}
 
 		if (w > 0 && h > 0) {
-			this.copyPixels(Draw2D.data, srcOff, srcStep, this.pixels, h, w, dstOff, dstStep, this.palette);
+			this.copyPixels(w, h, this.pixels, srcOff, srcStep, Draw2D.data, dstOff, dstStep, this.palette);
 		}
 	}
 
 	@OriginalMember(owner = "client!ib", name = "a", descriptor = "([III[BIIIII[I)V")
-	private void copyPixels(@OriginalArg(0) int[] dst, @OriginalArg(1) int srcOff, @OriginalArg(2) int srcStep, @OriginalArg(3) byte[] src, @OriginalArg(4) int h, @OriginalArg(6) int w, @OriginalArg(7) int dstOff, @OriginalArg(8) int dstStep, @OriginalArg(9) int[] palette) {
+	private void copyPixels(@OriginalArg(6) int w, @OriginalArg(4) int h, @OriginalArg(3) byte[] src, @OriginalArg(1) int srcOff, @OriginalArg(2) int srcStep, @OriginalArg(0) int[] dst, @OriginalArg(7) int dstOff, @OriginalArg(8) int dstStep, @OriginalArg(9) int[] palette) {
 		@Pc(6) int qw = -(w >> 2);
 		w = -(w & 0x3);
 

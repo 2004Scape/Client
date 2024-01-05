@@ -246,7 +246,7 @@ public class ObjType {
 		@Pc(94) int _b = Draw2D.bottom;
 
 		Draw3D.jagged = false;
-		Draw2D.bind(32, icon.pixels, 32);
+		Draw2D.bind(32, 32, icon.pixels);
 		Draw2D.fillRect(0, 0, 0, 32, 32);
 		Draw3D.init2D();
 
@@ -287,14 +287,14 @@ public class ObjType {
 			@Pc(354) int h = linkedIcon.cropH;
 			linkedIcon.cropW = 32;
 			linkedIcon.cropH = 32;
-			linkedIcon.crop(22, 5, 22, 5);
+			linkedIcon.crop(5, 5, 22, 22);
 			linkedIcon.cropW = w;
 			linkedIcon.cropH = h;
 		}
 
 		iconCache.put(id, icon);
-		Draw2D.bind(_w, _data, _h);
-		Draw2D.setBounds(_b, _t, _r, _l);
+		Draw2D.bind(_w, _h, _data);
+		Draw2D.setBounds(_b, _r, _t, _l);
 		Draw3D.centerX = _cx;
 		Draw3D.centerY = _cy;
 		Draw3D.lineOffset = _loff;
@@ -505,7 +505,7 @@ public class ObjType {
 			}
 		}
 
-		model.calculateNormals(64, 768, -50, -10, -50, true);
+		model.calculateNormals(-50, -10, -50, 64, 768, true);
 		model.pickable = true;
 		modelCache.put(this.index, model);
 		return model;

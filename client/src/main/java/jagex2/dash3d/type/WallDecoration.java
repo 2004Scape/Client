@@ -20,7 +20,7 @@ public class WallDecoration {
 	public int type;
 
 	@OriginalMember(owner = "client!h", name = "e", descriptor = "I")
-	public int orientation;
+	public int angle;
 
 	@OriginalMember(owner = "client!h", name = "f", descriptor = "Lclient!eb;")
 	public Model model;

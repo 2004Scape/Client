@@ -425,14 +425,14 @@ public class LocType {
 		}
 
 		if (scaled) {
-			modified.scale(this.resizez, this.resizey, this.resizex);
+			modified.scale(this.resizex, this.resizey, this.resizez);
 		}
 
 		if (translated) {
 			modified.translate(this.yoff, this.xoff, this.zoff);
 		}
 
-		modified.calculateNormals(this.ambient + 64, this.contrast * 5 + 768, -50, -10, -50, !this.sharelight);
+		modified.calculateNormals(-50, -10, -50, this.ambient + 64, this.contrast * 5 + 768, !this.sharelight);
 
 		if (this.blockwalk) {
 			modified.objRaise = modified.maxY;

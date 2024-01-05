@@ -194,7 +194,7 @@ public class ComType {
 	private static LruCache modelCache;
 
 	@OriginalMember(owner = "client!hc", name = "a", descriptor = "(Lclient!ub;[Lclient!jb;ILclient!ub;)V")
-	public static void unpack(@OriginalArg(0) Jagfile media, @OriginalArg(1) PixFont[] fonts, @OriginalArg(3) Jagfile jag) {
+	public static void unpack(@OriginalArg(3) Jagfile jag, @OriginalArg(0) Jagfile media, @OriginalArg(1) PixFont[] fonts) {
 		imageCache = new LruCache(50000);
 		modelCache = new LruCache(50000);
 
@@ -294,7 +294,7 @@ public class ComType {
 						@Pc(352) String sprite = dat.gjstr();
 						if (media != null && sprite.length() > 0) {
 							@Pc(361) int spriteIndex = sprite.lastIndexOf(",");
-							com.inventorySlotImage[i] = getImage(media, Integer.parseInt(sprite.substring(spriteIndex + 1)), sprite.substring(0, spriteIndex));
+							com.inventorySlotImage[i] = getImage(media, sprite.substring(0, spriteIndex), Integer.parseInt(sprite.substring(spriteIndex + 1)));
 						}
 					}
 				}
@@ -340,13 +340,13 @@ public class ComType {
 				@Pc(511) String sprite = dat.gjstr();
 				if (media != null && sprite.length() > 0) {
 					int spriteIndex = sprite.lastIndexOf(",");
-					com.image = getImage(media, Integer.parseInt(sprite.substring(spriteIndex + 1)), sprite.substring(0, spriteIndex));
+					com.image = getImage(media, sprite.substring(0, spriteIndex), Integer.parseInt(sprite.substring(spriteIndex + 1)));
 				}
 
 				sprite = dat.gjstr();
 				if (media != null && sprite.length() > 0) {
 					int spriteIndex = sprite.lastIndexOf(",");
-					com.activeImage = getImage(media, Integer.parseInt(sprite.substring(spriteIndex + 1)), sprite.substring(0, spriteIndex));
+					com.activeImage = getImage(media, sprite.substring(0, spriteIndex), Integer.parseInt(sprite.substring(spriteIndex + 1)));
 				}
 			}
 
@@ -431,7 +431,7 @@ public class ComType {
 	}
 
 	@OriginalMember(owner = "client!hc", name = "a", descriptor = "(Lclient!ub;ILjava/lang/String;I)Lclient!hb;")
-	private static Pix24 getImage(@OriginalArg(0) Jagfile media, @OriginalArg(1) int spriteId, @OriginalArg(2) String sprite) {
+	private static Pix24 getImage(@OriginalArg(0) Jagfile media, @OriginalArg(2) String sprite, @OriginalArg(1) int spriteId) {
 		@Pc(8) long uid = (JString.hashCode(sprite) << 8) + (long) spriteId;
 		@Pc(13) Pix24 image = (Pix24) imageCache.get(uid);
 
@@ -489,7 +489,7 @@ public class ComType {
 			tmp.applyTransform(secondaryFrame);
 		}
 
-		tmp.calculateNormals(64, 768, -50, -10, -50, true);
+		tmp.calculateNormals(-50, -10, -50, 64, 768, true);
 		return tmp;
 	}
 }

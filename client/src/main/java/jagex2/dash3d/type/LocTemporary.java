@@ -11,7 +11,7 @@ public class LocTemporary extends Linkable {
 	public int plane;
 
 	@OriginalMember(owner = "client!lb", name = "f", descriptor = "I")
-	public int classType;
+	public int layer;
 
 	@OriginalMember(owner = "client!lb", name = "g", descriptor = "I")
 	public int x;
@@ -23,17 +23,17 @@ public class LocTemporary extends Linkable {
 	public int locIndex;
 
 	@OriginalMember(owner = "client!lb", name = "j", descriptor = "I")
-	public int orientation;
+	public int angle;
 
 	@OriginalMember(owner = "client!lb", name = "k", descriptor = "I")
-	public int type;
+	public int shape;
 
 	@OriginalMember(owner = "client!lb", name = "l", descriptor = "I")
 	public int lastLocIndex;
 
 	@OriginalMember(owner = "client!lb", name = "m", descriptor = "I")
-	public int lastOrientation;
+	public int lastAngle;
 
 	@OriginalMember(owner = "client!lb", name = "n", descriptor = "I")
-	public int lastType;
+	public int lastShape;
 }

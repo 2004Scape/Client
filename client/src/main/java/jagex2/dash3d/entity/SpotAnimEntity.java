@@ -38,7 +38,7 @@ public class SpotAnimEntity extends Entity {
 	public boolean seqComplete = false;
 
 	@OriginalMember(owner = "client!bb", name = "<init>", descriptor = "(IIZIIIII)V")
-	public SpotAnimEntity(@OriginalArg(0) int x, @OriginalArg(1) int id, @OriginalArg(3) int z, @OriginalArg(4) int delay, @OriginalArg(5) int y, @OriginalArg(6) int level, @OriginalArg(7) int cycle) {
+	public SpotAnimEntity(@OriginalArg(1) int id, @OriginalArg(6) int level, @OriginalArg(0) int x, @OriginalArg(3) int z, @OriginalArg(5) int y, @OriginalArg(7) int cycle, @OriginalArg(4) int delay) {
 		this.type = SpotAnimType.instances[id];
 		this.level = level;
 		this.x = x;
@@ -59,24 +59,6 @@ public class SpotAnimEntity extends Entity {
 				this.seqComplete = true;
 			}
 		}
-
-		/*this.seqCycle += delta;
-
-		while (true) {
-			do {
-				do {
-					if (this.seqCycle <= this.type.seq.delay[this.seqFrame]) {
-						return;
-					}
-
-					this.seqCycle -= this.type.seq.delay[this.seqFrame] + 1;
-					this.seqFrame++;
-				} while (this.seqFrame < this.type.seq.frameCount);
-			} while (this.seqFrame >= 0 && this.seqFrame < this.type.seq.frameCount);
-
-			this.seqFrame = 0;
-			this.seqComplete = true;
-		}*/
 	}
 
 	@OriginalMember(owner = "client!bb", name = "a", descriptor = "(Z)Lclient!eb;")
@@ -109,7 +91,7 @@ public class SpotAnimEntity extends Entity {
 			}
 		}
 
-		model.calculateNormals(64 + this.type.ambient, 850 + this.type.contrast, -30, -50, -30, true);
+		model.calculateNormals(-30, -50, -30, 64 + this.type.ambient, 850 + this.type.contrast, true);
 		return model;
 	}
 }
