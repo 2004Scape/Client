@@ -6396,12 +6396,15 @@ public class client extends GameShell {
 		@Pc(34) boolean good = this.frame != null;
 		@Pc(38) String host = this.getHost();
 		if (host.endsWith("2004scape.org")) {
+            // intended domain for players
 			good = true;
 		}
-		if (host.endsWith("localhost")) {
+		if (host.endsWith("localhost") || host.endsWith("127.0.0.1")) {
+            // allow localhost
 			good = true;
 		}
-		if (host.endsWith("127.0.0.1")) {
+		if (host.startsWith("192.168.")) {
+            // allow lan
 			good = true;
 		}
 
