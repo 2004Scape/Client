@@ -897,7 +897,7 @@ public class World3D {
 	}
 
 	@OriginalMember(owner = "client!r", name = "a", descriptor = "(IIIIIZ)V")
-	public void buildModels(@OriginalArg(2) int lightSrcX, @OriginalArg(0) int lightSrcY, @OriginalArg(4) int lightSrcZ, @OriginalArg(1) int lightAmbient, @OriginalArg(3) int lightAttenuation) {
+	public void buildModels(@OriginalArg(1) int lightAmbient, @OriginalArg(3) int lightAttenuation, @OriginalArg(2) int lightSrcX, @OriginalArg(0) int lightSrcY, @OriginalArg(4) int lightSrcZ) {
 		@Pc(16) int lightMagnitude = (int) Math.sqrt(lightSrcX * lightSrcX + lightSrcY * lightSrcY + lightSrcZ * lightSrcZ);
 		@Pc(26) int attenuation = lightAttenuation * lightMagnitude >> 8;
 
@@ -915,23 +915,23 @@ public class World3D {
                         if (wall.modelB != null && wall.modelB.vertexNormal != null) {
                             this.mergeLocNormals(level, tileX, tileZ, 1, 1, wall.modelB);
                             this.mergeNormals(wall.modelA, wall.modelB, 0, 0, 0, false);
-                            wall.modelB.applyLighting(lightSrcX, lightSrcY, lightSrcZ, lightAmbient, attenuation);
+                            wall.modelB.applyLighting(lightAmbient, attenuation, lightSrcX, lightSrcY, lightSrcZ);
                         }
-                        wall.modelA.applyLighting(lightSrcX, lightSrcY, lightSrcZ, lightAmbient, attenuation);
+                        wall.modelA.applyLighting(lightAmbient, attenuation, lightSrcX, lightSrcY, lightSrcZ);
                     }
 
                     for (@Pc(116) int i = 0; i < tile.locCount; i++) {
                         @Pc(123) Loc loc = tile.locs[i];
                         if (loc != null && loc.model != null && loc.model.vertexNormal != null) {
                             this.mergeLocNormals(level, tileX, tileZ, loc.maxSceneTileX + 1 - loc.minSceneTileX, loc.maxSceneTileZ - loc.minSceneTileZ + 1, loc.model);
-                            loc.model.applyLighting(lightSrcX, lightSrcY, lightSrcZ, lightAmbient, attenuation);
+                            loc.model.applyLighting(lightAmbient, attenuation, lightSrcX, lightSrcY, lightSrcZ);
                         }
                     }
 
                     @Pc(170) GroundDecoration decor = tile.groundDecoration;
                     if (decor != null && decor.model.vertexNormal != null) {
                         this.mergeGroundDecorationNormals(level, tileX, tileZ, decor.model);
-                        decor.model.applyLighting(lightSrcX, lightSrcY, lightSrcZ, lightAmbient, attenuation);
+                        decor.model.applyLighting(lightAmbient, attenuation, lightSrcX, lightSrcY, lightSrcZ);
                     }
                 }
 			}

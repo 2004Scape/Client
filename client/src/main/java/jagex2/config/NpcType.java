@@ -239,7 +239,7 @@ public class NpcType {
 			}
 
 			model.createLabelReferences();
-			model.calculateNormals(-30, -50, -30, 64, 850, true);
+			model.calculateNormals(64, 850, -30, -50, -30, true);
 			modelCache.put(this.index, model);
 		}
 

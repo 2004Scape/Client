@@ -505,7 +505,7 @@ public class ObjType {
 			}
 		}
 
-		model.calculateNormals(-50, -10, -50, 64, 768, true);
+		model.calculateNormals(64, 768, -50, -10, -50, true);
 		model.pickable = true;
 		modelCache.put(this.index, model);
 		return model;

@@ -992,7 +992,7 @@ public class World {
 		}
 
 		if (!fullbright) {
-			scene.buildModels(-50, -10, -50, 64, 768);
+			scene.buildModels(64, 768, -50, -10, -50);
 		}
 
 		for (int x = 0; x < this.maxTileX; x++) {

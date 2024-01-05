@@ -163,7 +163,7 @@ public class ProjectileEntity extends Entity {
 		}
 
 		model.rotateX(this.pitch);
-		model.calculateNormals(-30, -50, -30, 64 + this.spotanim.ambient, 850 + this.spotanim.contrast, true);
+		model.calculateNormals(64 + this.spotanim.ambient, 850 + this.spotanim.contrast, -30, -50, -30, true);
 		return model;
 	}
 }

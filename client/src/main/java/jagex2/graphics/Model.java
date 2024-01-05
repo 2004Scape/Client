@@ -1457,7 +1457,7 @@ public class Model extends Hashable {
 	}
 
 	@OriginalMember(owner = "client!eb", name = "a", descriptor = "(IIIIIZ)V")
-	public void calculateNormals(@OriginalArg(2) int lightSrcX, @OriginalArg(3) int lightSrcY, @OriginalArg(4) int lightSrcZ, @OriginalArg(0) int lightAmbient, @OriginalArg(1) int lightAttenuation, @OriginalArg(5) boolean applyLighting) {
+	public void calculateNormals(@OriginalArg(0) int lightAmbient, @OriginalArg(1) int lightAttenuation, @OriginalArg(2) int lightSrcX, @OriginalArg(3) int lightSrcY, @OriginalArg(4) int lightSrcZ, @OriginalArg(5) boolean applyLighting) {
 		@Pc(16) int lightMagnitude = (int) Math.sqrt(lightSrcX * lightSrcX + lightSrcY * lightSrcY + lightSrcZ * lightSrcZ);
 		@Pc(22) int attenuation = lightAttenuation * lightMagnitude >> 8;
 
@@ -1529,7 +1529,7 @@ public class Model extends Hashable {
 		}
 
 		if (applyLighting) {
-			this.applyLighting(lightSrcX, lightSrcY, lightSrcZ, lightAmbient, attenuation);
+			this.applyLighting(lightAmbient, attenuation, lightSrcX, lightSrcY, lightSrcZ);
 		} else {
 			this.vertexNormalOriginal = new VertexNormal[this.vertexCount];
 			for (int v = 0; v < this.vertexCount; v++) {
@@ -1550,7 +1550,7 @@ public class Model extends Hashable {
 	}
 
 	@OriginalMember(owner = "client!eb", name = "a", descriptor = "(IIIII)V")
-	public void applyLighting(@OriginalArg(2) int lightSrcX, @OriginalArg(3) int lightSrcY, @OriginalArg(4) int lightSrcZ, @OriginalArg(0) int lightAmbient, @OriginalArg(1) int lightAttenuation) {
+	public void applyLighting(@OriginalArg(0) int lightAmbient, @OriginalArg(1) int lightAttenuation, @OriginalArg(2) int lightSrcX, @OriginalArg(3) int lightSrcY, @OriginalArg(4) int lightSrcZ) {
 		for (@Pc(3) int f = 0; f < this.faceCount; f++) {
 			int a = this.faceVertexA[f];
 			@Pc(15) int b = this.faceVertexB[f];

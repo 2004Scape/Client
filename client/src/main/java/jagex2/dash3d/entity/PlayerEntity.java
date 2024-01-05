@@ -211,7 +211,7 @@ public class PlayerEntity extends PathingEntity {
 			if (spotanim.resizeh != 128 || spotanim.resizev != 128) {
 				model2.scale(spotanim.resizeh, spotanim.resizev, spotanim.resizeh);
 			}
-			model2.calculateNormals(-30, -50, -30, spotanim.ambient + 64, spotanim.contrast + 850, true);
+			model2.calculateNormals(spotanim.ambient + 64, spotanim.contrast + 850, -30, -50, -30, true);
 
 			@Pc(119) Model[] models = new Model[] { model, model2 };
 			model = new Model(models, 2, true);
@@ -328,7 +328,7 @@ public class PlayerEntity extends PathingEntity {
 			}
 
 			model.createLabelReferences();
-			model.calculateNormals(-30, -50, -30, 64, 850, true);
+			model.calculateNormals(64, 850, -30, -50, -30, true);
 			modelCache.put(hashCode, model);
 		}
 

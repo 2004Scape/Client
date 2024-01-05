@@ -27,7 +27,7 @@ public class GameShell extends Applet implements Runnable, MouseListener, MouseM
 	private final long[] otim = new long[10];
 
 	@OriginalMember(owner = "client!a", name = "k", descriptor = "I")
-	private int fps;
+	public int fps;
 
 	@OriginalMember(owner = "client!a", name = "l", descriptor = "I")
 	protected int screenWidth;

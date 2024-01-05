@@ -124,7 +124,7 @@ public class PixFont extends Draw2D {
 	}
 
 	@OriginalMember(owner = "client!jb", name = "a", descriptor = "(IBILjava/lang/String;I)V")
-	public void drawStringCenter(@OriginalArg(0) int y, @OriginalArg(2) int rgb, @OriginalArg(3) String str, @OriginalArg(4) int x) {
+	public void drawStringCenter(@OriginalArg(4) int x, @OriginalArg(0) int y, @OriginalArg(3) String str, @OriginalArg(2) int rgb) {
 		this.drawString(x - this.stringWidth(str) / 2, y, str, rgb);
 	}
 
@@ -168,6 +168,14 @@ public class PixFont extends Draw2D {
             x += this.charAdvance[c];
         }
     }
+
+	public void drawStringRight(int x, int y, String str, int rgb, boolean shadowed) {
+		if (shadowed) {
+			this.drawString(x + 1 - this.stringWidth(str), y + 1, str, 0x000000);
+		}
+
+		this.drawString(x - this.stringWidth(str), y, str, rgb);
+	}
 
 	@OriginalMember(owner = "client!jb", name = "a", descriptor = "(IBIIILjava/lang/String;)V")
 	public void drawCenteredWave(@OriginalArg(2) int x, @OriginalArg(3) int y, @OriginalArg(5) String str, @OriginalArg(4) int rgb, @OriginalArg(0) int phase) {

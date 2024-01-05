@@ -165,6 +165,11 @@ public class PathingEntity extends Entity {
 	@OriginalMember(owner = "client!x", name = "fb", descriptor = "I")
 	public int seqTrigger;
 
+	public int lastMask = -1;
+	public int lastMaskCycle = -1;
+	public int lastFaceX = -1;
+	public int lastFaceZ = -1;
+
 	@OriginalMember(owner = "client!x", name = "a", descriptor = "(ZZII)V")
 	public final void move(@OriginalArg(1) boolean teleport, @OriginalArg(2) int x, @OriginalArg(3) int z) {
 		if (this.primarySeqId != -1 && SeqType.instances[this.primarySeqId].priority <= 1) {

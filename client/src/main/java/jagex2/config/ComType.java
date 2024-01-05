@@ -489,7 +489,7 @@ public class ComType {
 			tmp.applyTransform(secondaryFrame);
 		}
 
-		tmp.calculateNormals(-50, -10, -50, 64, 768, true);
+		tmp.calculateNormals(64, 768, -50, -10, -50, true);
 		return tmp;
 	}
 }

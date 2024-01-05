@@ -432,7 +432,7 @@ public class LocType {
 			modified.translate(this.yoff, this.xoff, this.zoff);
 		}
 
-		modified.calculateNormals(-50, -10, -50, this.ambient + 64, this.contrast * 5 + 768, !this.sharelight);
+		modified.calculateNormals(this.ambient + 64, this.contrast * 5 + 768, -50, -10, -50, !this.sharelight);
 
 		if (this.blockwalk) {
 			modified.objRaise = modified.maxY;

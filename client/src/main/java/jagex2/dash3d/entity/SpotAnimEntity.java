@@ -91,7 +91,7 @@ public class SpotAnimEntity extends Entity {
 			}
 		}
 
-		model.calculateNormals(-30, -50, -30, 64 + this.type.ambient, 850 + this.type.contrast, true);
+		model.calculateNormals(64 + this.type.ambient, 850 + this.type.contrast, -30, -50, -30, true);
 		return model;
 	}
 }

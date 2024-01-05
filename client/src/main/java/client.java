@@ -31,6 +31,9 @@ import java.util.zip.CRC32;
 @OriginalClass("client!client")
 public class client extends GameShell {
 
+	public boolean showDebug = false;
+	public boolean showPerformance = false;
+
 	@OriginalMember(owner = "client!client", name = "E", descriptor = "I")
 	public static int opHeld1Counter;
 
@@ -1353,74 +1356,207 @@ public class client extends GameShell {
 				entity = this.npcs[this.npcIds[index - this.playerCount]];
 			}
 
-			if (entity != null && entity.isVisible()) {
+            if (entity == null || !entity.isVisible()) {
+                continue;
+            }
+
+			if (this.showDebug) {
+				// true tile overlay
+				if (entity.pathLength > 0 || entity.forceMoveEndCycle >= loopCycle || entity.forceMoveStartCycle > loopCycle) {
+					this.drawTileOverlay(entity.pathTileX[0] * 128 + 64, entity.pathTileZ[0] * 128 + 64, this.currentLevel, 0x666666, true);
+				}
+
+				// local tile overlay
+				this.drawTileOverlay(entity.x, entity.z, this.currentLevel, 0x444444, false);
+
+				int offsetY = 0;
+				this.projectFromGround(entity, entity.height + 30);
+
 				if (index < this.playerCount) {
-					int y = 30;
-					@Pc(66) PlayerEntity player = (PlayerEntity) entity;
-					if (player.headicons != 0) {
-						this.projectFromGround(entity.height + 15, entity);
-						if (this.projectX > -1) {
-							for (int icon = 0; icon < 8; icon++) {
-								if ((player.headicons & 0x1 << icon) != 0) {
-									this.imageHeadicons[icon].draw(this.projectX - 12, this.projectY - y);
-									y -= 25;
-								}
+					// player debug
+					PlayerEntity player = (PlayerEntity) entity;
+
+					this.fontPlain11.drawStringCenter(this.projectX, this.projectY + offsetY, player.name, 0xFFFFFF);
+					offsetY -= 15;
+
+					if (player.lastMask != -1 && loopCycle - player.lastMaskCycle < 30) {
+						if ((player.lastMask & 0x1) == 0x1) {
+							this.fontPlain11.drawStringCenter(this.projectX, this.projectY + offsetY, "Appearance Update", 0xFFFFFF);
+							offsetY -= 15;
+						}
+
+						if ((player.lastMask & 0x2) == 0x2) {
+							this.fontPlain11.drawStringCenter(this.projectX, this.projectY + offsetY, "Play Seq: " + player.primarySeqId, 0xFFFFFF);
+							offsetY -= 15;
+						}
+
+						if ((player.lastMask & 0x4) == 0x4) {
+							int target = player.targetId;
+							if (target > 32767) {
+								target -= 32768;
 							}
+							this.fontPlain11.drawStringCenter(this.projectX, this.projectY + offsetY, "Face Entity: " + target, 0xFFFFFF);
+							offsetY -= 15;
+						}
+
+						if ((player.lastMask & 0x8) == 0x8) {
+							this.fontPlain11.drawStringCenter(this.projectX, this.projectY + offsetY, "Say", 0xFFFFFF);
+							offsetY -= 15;
+						}
+
+						if ((player.lastMask & 0x10) == 0x10) {
+							this.fontPlain11.drawStringCenter(this.projectX, this.projectY + offsetY, "Hit: Type " + player.damageType + " Amount " + player.damage + " HP " + player.health + "/" + player.totalHealth, 0xFFFFFF);
+							offsetY -= 15;
+						}
+
+						if ((player.lastMask & 0x20) == 0x20) {
+							this.fontPlain11.drawStringCenter(this.projectX, this.projectY + offsetY, "Face Coord: " + (player.lastFaceX / 2) + " " + (player.lastFaceZ / 2), 0xFFFFFF);
+							offsetY -= 15;
+						}
+
+						if ((player.lastMask & 0x40) == 0x40) {
+							this.fontPlain11.drawStringCenter(this.projectX, this.projectY + offsetY, "Chat", 0xFFFFFF);
+							offsetY -= 15;
+						}
+
+						if ((player.lastMask & 0x100) == 0x100) {
+							this.fontPlain11.drawStringCenter(this.projectX, this.projectY + offsetY, "Play Spotanim: " + player.spotanimId, 0xFFFFFF);
+							offsetY -= 15;
+						}
+
+						if ((player.lastMask & 0x200) == 0x200) {
+							this.fontPlain11.drawStringCenter(this.projectX, this.projectY + offsetY, "Exact Move", 0xFFFFFF);
+							offsetY -= 15;
 						}
 					}
-					if (index >= 0 && this.hintType == 10 && this.hintPlayer == this.playerIds[index]) {
-						this.projectFromGround(entity.height + 15, entity);
-						if (this.projectX > -1) {
-							this.imageHeadicons[7].draw(this.projectX - 12, this.projectY - y);
+				} else {
+					// npc debug
+					NpcEntity npc = (NpcEntity) entity;
+
+					this.fontPlain11.drawStringCenter(this.projectX, this.projectY + offsetY, npc.type.name, 0xFFFFFF);
+					offsetY -= 15;
+
+					if (npc.lastMask != -1 && loopCycle - npc.lastMaskCycle < 30) {
+						if ((npc.lastMask & 0x2) == 0x2) {
+							this.fontPlain11.drawStringCenter(this.projectX, this.projectY + offsetY, "Play Seq: " + npc.primarySeqId, 0xFFFFFF);
+							offsetY -= 15;
 						}
-					}
-				} else if (this.hintType == 1 && this.hintNpc == this.npcIds[index - this.playerCount] && loopCycle % 20 < 10) {
-					this.projectFromGround(entity.height + 15, entity);
-					if (this.projectX > -1) {
-						this.imageHeadicons[2].draw(this.projectX - 12, this.projectY - 28);
-					}
-				}
-				if (entity.chat != null && (index >= this.playerCount || this.publicChatSetting == 0 || this.publicChatSetting == 3 || this.publicChatSetting == 1 && this.isFriend(((PlayerEntity) entity).name))) {
-					this.projectFromGround(entity.height, entity);
-					if (this.projectX > -1 && this.chatCount < this.MAX_CHATS) {
-						this.chatWidth[this.chatCount] = this.fontBold12.stringWidth(entity.chat) / 2;
-						this.chatHeight[this.chatCount] = this.fontBold12.height;
-						this.chatX[this.chatCount] = this.projectX;
-						this.chatY[this.chatCount] = this.projectY;
-						this.chatColors[this.chatCount] = entity.chatColor;
-						this.chatStyles[this.chatCount] = entity.chatStyle;
-						this.chatTimers[this.chatCount] = entity.chatTimer;
-						this.chats[this.chatCount++] = entity.chat;
-						if (this.chatEffects == 0 && entity.chatStyle == 1) {
-							this.chatHeight[this.chatCount] += 10;
-							this.chatY[this.chatCount] += 5;
+
+						if ((npc.lastMask & 0x4) == 0x4) {
+							int target = npc.targetId;
+							if (target > 32767) {
+								target -= 32768;
+							}
+							this.fontPlain11.drawStringCenter(this.projectX, this.projectY + offsetY, "Face Entity: " + target, 0xFFFFFF);
+							offsetY -= 15;
 						}
-						if (this.chatEffects == 0 && entity.chatStyle == 2) {
-							this.chatWidth[this.chatCount] = 60;
+
+						if ((npc.lastMask & 0x8) == 0x8) {
+							this.fontPlain11.drawStringCenter(this.projectX, this.projectY + offsetY, "Say", 0xFFFFFF);
+							offsetY -= 15;
 						}
-					}
-				}
-				if (entity.combatCycle > loopCycle + 100) {
-					this.projectFromGround(entity.height + 15, entity);
-					if (this.projectX > -1) {
-						int w = entity.health * 30 / entity.totalHealth;
-						if (w > 30) {
-							w = 30;
+
+						if ((npc.lastMask & 0x10) == 0x10) {
+							this.fontPlain11.drawStringCenter(this.projectX, this.projectY + offsetY, "Hit: Type " + npc.damageType + " Amount " + npc.damage + " HP " + npc.health + "/" + npc.totalHealth, 0xFFFFFF);
+							offsetY -= 15;
 						}
-						Draw2D.fillRect(this.projectX - 15, this.projectY - 3, 0xff00, w, 5);
-						Draw2D.fillRect(this.projectX - 15 + w, this.projectY - 3, 0xff0000, 30 - w, 5);
-					}
-				}
-				if (entity.combatCycle > loopCycle + 330) {
-					this.projectFromGround(entity.height / 2, entity);
-					if (this.projectX > -1) {
-						this.imageHitmarks[entity.damageType].draw(this.projectX - 12, this.projectY - 12);
-						this.fontPlain11.drawStringCenter(this.projectY + 4, 0, String.valueOf(entity.damage), this.projectX);
-						this.fontPlain11.drawStringCenter(this.projectY + 3, 0xffffff, String.valueOf(entity.damage), this.projectX - 1);
+
+						if ((npc.lastMask & 0x20) == 0x20) {
+							this.fontPlain11.drawStringCenter(this.projectX, this.projectY + offsetY, "Change Type: " + npc.type.index, 0xFFFFFF);
+							offsetY -= 15;
+						}
+
+						if ((npc.lastMask & 0x40) == 0x40) {
+							this.fontPlain11.drawStringCenter(this.projectX, this.projectY + offsetY, "Play Spotanim: " + npc.spotanimId, 0xFFFFFF);
+							offsetY -= 15;
+						}
+
+						if ((npc.lastMask & 0x80) == 0x80) {
+							this.fontPlain11.drawStringCenter(this.projectX, this.projectY + offsetY, "Face Coord: " + (npc.lastFaceX / 2) + " " + (npc.lastFaceZ / 2), 0xFFFFFF);
+							offsetY -= 15;
+						}
 					}
 				}
 			}
-		}
+
+            if (index < this.playerCount) {
+                int y = 30;
+
+                @Pc(66) PlayerEntity player = (PlayerEntity) entity;
+                if (player.headicons != 0) {
+                    this.projectFromGround(entity, entity.height + 15);
+
+                    if (this.projectX > -1) {
+                        for (int icon = 0; icon < 8; icon++) {
+                            if ((player.headicons & 0x1 << icon) != 0) {
+                                this.imageHeadicons[icon].draw(this.projectX - 12, this.projectY - y);
+                                y -= 25;
+                            }
+                        }
+                    }
+                }
+
+                if (index >= 0 && this.hintType == 10 && this.hintPlayer == this.playerIds[index]) {
+                    this.projectFromGround(entity, entity.height + 15);
+                    if (this.projectX > -1) {
+                        this.imageHeadicons[7].draw(this.projectX - 12, this.projectY - y);
+                    }
+                }
+            } else if (this.hintType == 1 && this.hintNpc == this.npcIds[index - this.playerCount] && loopCycle % 20 < 10) {
+                this.projectFromGround(entity, entity.height + 15);
+                if (this.projectX > -1) {
+                    this.imageHeadicons[2].draw(this.projectX - 12, this.projectY - 28);
+                }
+            }
+
+            if (entity.chat != null && (index >= this.playerCount || this.publicChatSetting == 0 || this.publicChatSetting == 3 || this.publicChatSetting == 1 && this.isFriend(((PlayerEntity) entity).name))) {
+                this.projectFromGround(entity, entity.height);
+
+                if (this.projectX > -1 && this.chatCount < this.MAX_CHATS) {
+                    this.chatWidth[this.chatCount] = this.fontBold12.stringWidth(entity.chat) / 2;
+                    this.chatHeight[this.chatCount] = this.fontBold12.height;
+                    this.chatX[this.chatCount] = this.projectX;
+                    this.chatY[this.chatCount] = this.projectY;
+
+                    this.chatColors[this.chatCount] = entity.chatColor;
+                    this.chatStyles[this.chatCount] = entity.chatStyle;
+                    this.chatTimers[this.chatCount] = entity.chatTimer;
+                    this.chats[this.chatCount++] = entity.chat;
+
+                    if (this.chatEffects == 0 && entity.chatStyle == 1) {
+                        this.chatHeight[this.chatCount] += 10;
+                        this.chatY[this.chatCount] += 5;
+                    }
+
+                    if (this.chatEffects == 0 && entity.chatStyle == 2) {
+                        this.chatWidth[this.chatCount] = 60;
+                    }
+                }
+            }
+
+            if (entity.combatCycle > loopCycle + 100) {
+                this.projectFromGround(entity, entity.height + 15);
+
+                if (this.projectX > -1) {
+                    int w = entity.health * 30 / entity.totalHealth;
+                    if (w > 30) {
+                        w = 30;
+                    }
+                    Draw2D.fillRect(this.projectX - 15, this.projectY - 3, 0xff00, w, 5);
+                    Draw2D.fillRect(this.projectX - 15 + w, this.projectY - 3, 0xff0000, 30 - w, 5);
+                }
+            }
+
+            if (entity.combatCycle > loopCycle + 330) {
+                this.projectFromGround(entity, entity.height / 2);
+
+                if (this.projectX > -1) {
+                    this.imageHitmarks[entity.damageType].draw(this.projectX - 12, this.projectY - 12);
+                    this.fontPlain11.drawStringCenter(this.projectX, this.projectY + 4, String.valueOf(entity.damage), 0);
+                    this.fontPlain11.drawStringCenter(this.projectX - 1, this.projectY + 3, String.valueOf(entity.damage), 0xffffff);
+                }
+            }
+        }
 
 		for (@Pc(483) int i = 0; i < this.chatCount; i++) {
 			int x = this.chatX[i];
@@ -1485,8 +1621,8 @@ public class client extends GameShell {
 					}
 				}
 				if (this.chatStyles[i] == 0) {
-					this.fontBold12.drawStringCenter(this.projectY + 1, 0, message, this.projectX);
-					this.fontBold12.drawStringCenter(this.projectY, color, message, this.projectX);
+					this.fontBold12.drawStringCenter(this.projectX, this.projectY + 1, message, 0);
+					this.fontBold12.drawStringCenter(this.projectX, this.projectY, message, color);
 				}
 				if (this.chatStyles[i] == 1) {
 					this.fontBold12.drawCenteredWave(this.projectX, this.projectY + 1, message, 0, this.sceneCycle);
@@ -1501,8 +1637,8 @@ public class client extends GameShell {
 					Draw2D.resetBounds();
 				}
 			} else {
-				this.fontBold12.drawStringCenter(this.projectY + 1, 0, message, this.projectX);
-				this.fontBold12.drawStringCenter(this.projectY, 16776960, message, this.projectX);
+				this.fontBold12.drawStringCenter(this.projectX, this.projectY + 1, message, 0);
+				this.fontBold12.drawStringCenter(this.projectX, this.projectY, message, 16776960);
 			}
 		}
 	}
@@ -1641,6 +1777,9 @@ public class client extends GameShell {
 			@Pc(13) NpcEntity npc = this.npcs[id];
 			@Pc(16) int mask = buf.g1();
 
+			npc.lastMask = mask;
+			npc.lastMaskCycle = loopCycle;
+
 			if ((mask & 0x2) == 2) {
 				int seqId = buf.g2();
 				if (seqId == 65535) {
@@ -1700,6 +1839,8 @@ public class client extends GameShell {
 			if ((mask & 0x80) == 128) {
 				npc.targetTileX = buf.g2();
 				npc.targetTileZ = buf.g2();
+				npc.lastFaceX = npc.targetTileX;
+				npc.lastFaceZ = npc.targetTileZ;
 			}
 		}
 	}
@@ -2493,6 +2634,9 @@ public class client extends GameShell {
 							}
 
 							this.menuOption[this.menuSize] = "Examine @lre@" + obj.name;
+							if (this.showDebug) {
+								this.menuOption[this.menuSize] += "@whi@ (" + (obj.index) + ")";
+							}
 							this.menuAction[this.menuSize] = 1773;
 							this.menuParamA[this.menuSize] = obj.index;
 							this.menuParamC[this.menuSize] = child.inventorySlotObjCount[slot];
@@ -2816,6 +2960,9 @@ public class client extends GameShell {
             }
 
             this.menuOption[this.menuSize] = "Examine @yel@" + tooltip;
+			if (this.showDebug) {
+				this.menuOption[this.menuSize] += "@whi@ (" + (npc.index) + ")";
+			}
             this.menuAction[this.menuSize] = 1607;
             this.menuParamA[this.menuSize] = a;
             this.menuParamB[this.menuSize] = b;
@@ -2941,9 +3088,25 @@ public class client extends GameShell {
 						}
 
 						if ((key == 13 || key == 10) && this.chatTyped.length() > 0) {
-							if (this.chatTyped.equals("::clientdrop") && super.frame != null) {
-								this.tryReconnect();
-							} else if (this.chatTyped.startsWith("::")) {
+							// if (this.rights) {
+								if (this.chatTyped.equals("::clientdrop") && super.frame != null) {
+									this.tryReconnect();
+								} else if (this.chatTyped.equals("::noclip")) {
+									for (int level = 0; level < 4; level++) {
+										for (int x = 1; x < 103; x++) {
+											for (int z = 1; z < 103; z++) {
+												this.levelCollisionMap[level].flags[x][z] = 0;
+											}
+										}
+									}
+								} else if (this.chatTyped.equals("::debug")) {
+									this.showDebug = !this.showDebug;
+								} else if (this.chatTyped.equals("::perf")) {
+									this.showPerformance = !this.showPerformance;
+								}
+							// }
+
+							if (this.chatTyped.startsWith("::")) {
 								this.out.p1isaac(4);
 								this.out.p1(this.chatTyped.length() - 1);
 								this.out.pjstr(this.chatTyped.substring(2));
@@ -5918,7 +6081,7 @@ public class client extends GameShell {
 
 				model.createLabelReferences();
 				model.applyTransform(SeqType.instances[this.localPlayer.seqStandId].frames[0]);
-				model.calculateNormals(-30, -50, -30, 64, 850, true);
+				model.calculateNormals(64, 850, -30, -50, -30, true);
 				component.model = model;
 			}
 		} else if (contentType == 324) {
@@ -6596,20 +6759,25 @@ public class client extends GameShell {
 		if (this.crossMode == 1) {
 			this.imageCrosses[this.crossCycle / 100].draw(this.crossX - 8 - 8, this.crossY - 8 - 11);
 		}
+
 		if (this.crossMode == 2) {
 			this.imageCrosses[this.crossCycle / 100 + 4].draw(this.crossX - 8 - 8, this.crossY - 8 - 11);
 		}
+
 		if (this.viewportInterfaceID != -1) {
 			this.updateInterfaceAnimation(this.viewportInterfaceID, this.sceneDelta);
 			this.drawInterface(ComType.instances[this.viewportInterfaceID], 0, 0, 0);
 		}
+
 		this.drawWildyLevel();
+
 		if (!this.menuVisible) {
 			this.handleInput();
 			this.drawTooltip();
 		} else if (this.menuArea == 0) {
 			this.drawMenu();
 		}
+
 		if (this.inMultizone == 1) {
 			if (this.wildernessLevel > 0 || this.worldLocationState == 1) {
 				this.imageHeadicons[1].draw(472, 258);
@@ -6617,14 +6785,17 @@ public class client extends GameShell {
 				this.imageHeadicons[1].draw(472, 296);
 			}
 		}
+
 		if (this.wildernessLevel > 0) {
 			this.imageHeadicons[0].draw(472, 296);
-			this.fontPlain12.drawStringCenter(329, 16776960, "Level: " + this.wildernessLevel, 484);
+			this.fontPlain12.drawStringCenter(484, 329, "Level: " + this.wildernessLevel, 16776960);
 		}
+
 		if (this.worldLocationState == 1) {
 			this.imageHeadicons[6].draw(472, 296);
-			this.fontPlain12.drawStringCenter(329, 16776960, "Arena", 484);
+			this.fontPlain12.drawStringCenter(484, 329, "Arena", 16776960);
 		}
+
 		if (this.systemUpdateTimer != 0) {
 			int seconds = this.systemUpdateTimer / 50;
 			@Pc(196) int minutes = seconds / 60;
@@ -6636,6 +6807,55 @@ public class client extends GameShell {
 				this.fontPlain12.drawString(4, 329, "System update in: " + minutes + ":" + seconds, 16776960);
 			}
 		}
+
+		this.drawInfoOverlay();
+	}
+
+	private void drawInfoOverlay() {
+		int x = 507;
+		int y = 13;
+
+		if (this.showPerformance) {
+			this.fontPlain11.drawStringRight(x, y, "FPS: " + super.fps, 0xFFFF00, true);
+			y += 13;
+		}
+	}
+
+	private void drawTileOverlay(int x, int z, int level, int color, boolean crossed) {
+		int height = this.getHeightmapY(level, x, z);
+		int x0 = -1, y0 = -1;
+		int x1 = -1, y1 = -1;
+		int x2 = -1, y2 = -1;
+		int x3 = -1, y3 = -1;
+
+		// x/z should be the center of a tile which is 128 client-units large, so +/- 64 puts us at the edges
+		this.project(x - 64, height, z - 64);
+		x0 = this.projectX;
+		y0 = this.projectY;
+		this.project(x + 64, height, z - 64);
+		x1 = this.projectX;
+		y1 = this.projectY;
+		this.project(x - 64, height, z + 64);
+		x2 = this.projectX;
+		y2 = this.projectY;
+		this.project(x + 64, height, z + 64);
+		x3 = this.projectX;
+		y3 = this.projectY;
+
+		// one of our points failed to project
+		if ((x0 == -1) || (x1 == -1) || (x2 == -1) || (x3 == -1)) {
+			return;
+		}
+
+		if (crossed) {
+			Draw2D.drawLine(x0, y0, x3, y3, (color & 0xFEFEFE) >> 1);
+			Draw2D.drawLine(x1, y1, x2, y2, (color & 0xFEFEFE) >> 1);
+		}
+
+		Draw2D.drawLine(x0, y0, x1, y1, color);
+		Draw2D.drawLine(x0, y0, x2, y2, color);
+		Draw2D.drawLine(x1, y1, x3, y3, color);
+		Draw2D.drawLine(x2, y2, x3, y3, color);
 	}
 
 	@OriginalMember(owner = "client!client", name = "x", descriptor = "(I)V")
@@ -6784,39 +7004,43 @@ public class client extends GameShell {
 	}
 
 	@OriginalMember(owner = "client!client", name = "a", descriptor = "(IZLclient!x;)V")
-	private void projectFromGround(@OriginalArg(0) int height, @OriginalArg(2) PathingEntity entity) {
-		this.projectFromGround(entity.z, entity.x, height);
+	private void projectFromGround(@OriginalArg(2) PathingEntity entity, @OriginalArg(0) int height) {
+		this.projectFromGround(entity.x, height, entity.z);
 	}
 
 	@OriginalMember(owner = "client!client", name = "b", descriptor = "(IIII)V")
-	private void projectFromGround(@OriginalArg(0) int z, @OriginalArg(1) int x, @OriginalArg(3) int height) {
-		if (x >= 128 && z >= 128 && x <= 13056 && z <= 13056) {
-			@Pc(28) int y = this.getHeightmapY(this.currentLevel, x, z) - height;
+	private void projectFromGround(@OriginalArg(1) int x, @OriginalArg(3) int height, @OriginalArg(0) int z) {
+        if (x < 128 || z < 128 || x > 13056 || z > 13056) {
+            this.projectX = -1;
+            this.projectY = -1;
+			return;
+        }
 
-			@Pc(33) int dx = x - this.cameraX;
-			@Pc(38) int dy = y - this.cameraY;
-			@Pc(43) int dz = z - this.cameraZ;
+		@Pc(28) int y = this.getHeightmapY(this.currentLevel, x, z) - height;
+		this.project(x, y, z);
+    }
 
-			@Pc(48) int sinPitch = Model.sin[this.cameraPitch];
-			@Pc(53) int cosPitch = Model.cos[this.cameraPitch];
-			@Pc(58) int sinYaw = Model.sin[this.cameraYaw];
-			@Pc(63) int cosYaw = Model.cos[this.cameraYaw];
+	private void project(int x, int y, int z) {
+		@Pc(33) int dx = x - this.cameraX;
+		@Pc(38) int dy = y - this.cameraY;
+		@Pc(43) int dz = z - this.cameraZ;
 
-			int tmp = dz * sinYaw + dx * cosYaw >> 16;
-			dz = dz * cosYaw - dx * sinYaw >> 16;
-			dx = tmp;
+		@Pc(48) int sinPitch = Model.sin[this.cameraPitch];
+		@Pc(53) int cosPitch = Model.cos[this.cameraPitch];
+		@Pc(58) int sinYaw = Model.sin[this.cameraYaw];
+		@Pc(63) int cosYaw = Model.cos[this.cameraYaw];
 
-			tmp = dy * cosPitch - dz * sinPitch >> 16;
-			dz = dy * sinPitch + dz * cosPitch >> 16;
-			dy = tmp;
+		int tmp = dz * sinYaw + dx * cosYaw >> 16;
+		dz = dz * cosYaw - dx * sinYaw >> 16;
+		dx = tmp;
 
-			if (dz >= 50) {
-				this.projectX = Draw3D.centerX + (dx << 9) / dz;
-				this.projectY = Draw3D.centerY + (dy << 9) / dz;
-			} else {
-				this.projectX = -1;
-				this.projectY = -1;
-			}
+		tmp = dy * cosPitch - dz * sinPitch >> 16;
+		dz = dy * sinPitch + dz * cosPitch >> 16;
+		dy = tmp;
+
+		if (dz >= 50) {
+			this.projectX = Draw3D.centerX + (dx << 9) / dz;
+			this.projectY = Draw3D.centerY + (dy << 9) / dz;
 		} else {
 			this.projectX = -1;
 			this.projectY = -1;
@@ -7390,35 +7614,41 @@ public class client extends GameShell {
 
 	@OriginalMember(owner = "client!client", name = "a", descriptor = "(JI)V")
 	private void addFriend(@OriginalArg(0) long username) {
-		if (username != 0L) {
-			if (this.friendCount >= 100) {
-				this.addMessage(0, "Your friends list is full. Max of 100 hit", "");
-			} else {
-				@Pc(23) String displayName = JString.formatName(JString.fromBase37(username));
-				for (@Pc(25) int i = 0; i < this.friendCount; i++) {
-					if (this.friendName37[i] == username) {
-						this.addMessage(0, displayName + " is already on your friend list", "");
-						return;
-					}
-				}
-				for (@Pc(55) int i = 0; i < this.ignoreCount; i++) {
-					if (this.ignoreName37[i] == username) {
-						this.addMessage(0, "Please remove " + displayName + " from your ignore list first", "");
-						return;
-					}
-				}
-				if (!displayName.equals(this.localPlayer.name)) {
-					this.friendName[this.friendCount] = displayName;
-					this.friendName37[this.friendCount] = username;
-					this.friendWorld[this.friendCount] = 0;
-					this.friendCount++;
-					this.redrawSidebar = true;
-					this.out.p1isaac(118);
-					this.out.p8(username);
-				}
+        if (username == 0L) {
+            return;
+        }
+
+        if (this.friendCount >= 100) {
+            this.addMessage(0, "Your friends list is full. Max of 100 hit", "");
+			return;
+        }
+
+		@Pc(23) String displayName = JString.formatName(JString.fromBase37(username));
+		for (@Pc(25) int i = 0; i < this.friendCount; i++) {
+			if (this.friendName37[i] == username) {
+				this.addMessage(0, displayName + " is already on your friend list", "");
+				return;
 			}
 		}
-	}
+
+		for (@Pc(55) int i = 0; i < this.ignoreCount; i++) {
+			if (this.ignoreName37[i] == username) {
+				this.addMessage(0, "Please remove " + displayName + " from your ignore list first", "");
+				return;
+			}
+		}
+
+		if (!displayName.equals(this.localPlayer.name)) {
+			this.friendName[this.friendCount] = displayName;
+			this.friendName37[this.friendCount] = username;
+			this.friendWorld[this.friendCount] = 0;
+			this.friendCount++;
+			this.redrawSidebar = true;
+
+			this.out.p1isaac(118);
+			this.out.p8(username);
+		}
+    }
 
 	@OriginalMember(owner = "client!client", name = "a", descriptor = "(B)V")
 	@Override
@@ -8272,22 +8502,29 @@ public class client extends GameShell {
 	}
 
 	@OriginalMember(owner = "client!client", name = "a", descriptor = "(ILjava/lang/String;BLjava/lang/String;)V")
-	private void addMessage(@OriginalArg(0) int type, @OriginalArg(1) String message, @OriginalArg(3) String prefix) {
+	private void addMessage(@OriginalArg(0) int type, @OriginalArg(1) String text, @OriginalArg(3) String sender) {
 		if (type == 0 && this.stickyChatInterfaceId != -1) {
-			this.modalMessage = message;
+			this.modalMessage = text;
 			super.mouseClickButton = 0;
 		}
+
 		if (this.chatInterfaceId == -1) {
 			this.redrawChatback = true;
 		}
+
 		for (@Pc(20) int i = 99; i > 0; i--) {
 			this.messageType[i] = this.messageType[i - 1];
 			this.messageSender[i] = this.messageSender[i - 1];
 			this.messageText[i] = this.messageText[i - 1];
 		}
+
+		if (this.showDebug && type == 0) {
+			text = "[" + (loopCycle / 30) + "]: " + text;
+		}
+
 		this.messageType[0] = type;
-		this.messageSender[0] = prefix;
-		this.messageText[0] = message;
+		this.messageSender[0] = sender;
+		this.messageText[0] = text;
 	}
 
 	@OriginalMember(owner = "client!client", name = "i", descriptor = "(II)V")
@@ -8804,10 +9041,10 @@ public class client extends GameShell {
 			this.logout();
 		} else {
 			this.areaViewport.bind();
-			this.fontPlain12.drawStringCenter(144, 0, "Connection lost", 257);
-			this.fontPlain12.drawStringCenter(143, 16777215, "Connection lost", 256);
-			this.fontPlain12.drawStringCenter(159, 0, "Please wait - attempting to reestablish", 257);
-			this.fontPlain12.drawStringCenter(158, 16777215, "Please wait - attempting to reestablish", 256);
+			this.fontPlain12.drawStringCenter(257, 144, "Connection lost", 0);
+			this.fontPlain12.drawStringCenter(256, 143, "Connection lost", 16777215);
+			this.fontPlain12.drawStringCenter(257, 159, "Please wait - attempting to reestablish", 0);
+			this.fontPlain12.drawStringCenter(256, 158, "Please wait - attempting to reestablish", 16777215);
 			this.areaViewport.draw(super.graphics, 8, 11);
 			this.flagSceneTileX = 0;
 			@Pc(60) ClientStream stream = this.stream;
@@ -9473,6 +9710,9 @@ public class client extends GameShell {
                     }
 
                     this.menuOption[this.menuSize] = "Examine @cya@" + loc.name;
+					if (this.showDebug) {
+						this.menuOption[this.menuSize] += "@whi@ (" + (loc.index) + ")";
+					}
                     this.menuAction[this.menuSize] = 1175;
                     this.menuParamA[this.menuSize] = bitset;
                     this.menuParamB[this.menuSize] = x;
@@ -9580,6 +9820,9 @@ public class client extends GameShell {
                         }
 
                         this.menuOption[this.menuSize] = "Examine @lre@" + type.name;
+						if (this.showDebug) {
+							this.menuOption[this.menuSize] += "@whi@ (" + (obj.index) + ")";
+						}
                         this.menuAction[this.menuSize] = 1102;
                         this.menuParamA[this.menuSize] = obj.index;
                         this.menuParamB[this.menuSize] = x;
@@ -9643,7 +9886,8 @@ public class client extends GameShell {
 	@OriginalMember(owner = "client!client", name = "r", descriptor = "(B)V")
 	private void drawTileHint() {
 		if (this.hintType == 2) {
-			this.projectFromGround((this.hintTileZ - this.sceneBaseTileZ << 7) + this.hintOffsetZ, (this.hintTileX - this.sceneBaseTileX << 7) + this.hintOffsetX, this.hintHeight * 2);
+			this.projectFromGround((this.hintTileX - this.sceneBaseTileX << 7) + this.hintOffsetX, this.hintHeight * 2, (this.hintTileZ - this.sceneBaseTileZ << 7) + this.hintOffsetZ);
+
 			if (this.projectX > -1 && loopCycle % 20 < 10) {
 				this.imageHeadicons[2].draw(this.projectX - 12, this.projectY - 28);
 			}
@@ -9699,14 +9943,14 @@ public class client extends GameShell {
 		Draw3D.lineOffset = this.areaChatbackOffsets;
 		this.imageChatback.draw(0, 0);
 		if (this.showSocialInput) {
-			this.fontBold12.drawStringCenter(40, 0, this.socialMessage, 239);
-			this.fontBold12.drawStringCenter(60, 128, this.socialInput + "*", 239);
+			this.fontBold12.drawStringCenter(239, 40, this.socialMessage, 0);
+			this.fontBold12.drawStringCenter(239, 60, this.socialInput + "*", 128);
 		} else if (this.chatbackInputOpen) {
-			this.fontBold12.drawStringCenter(40, 0, "Enter amount:", 239);
-			this.fontBold12.drawStringCenter(60, 128, this.chatbackInput + "*", 239);
+			this.fontBold12.drawStringCenter(239, 40, "Enter amount:", 0);
+			this.fontBold12.drawStringCenter(239, 60, this.chatbackInput + "*", 128);
 		} else if (this.modalMessage != null) {
-			this.fontBold12.drawStringCenter(40, 0, this.modalMessage, 239);
-			this.fontBold12.drawStringCenter(60, 128, "Click to continue", 239);
+			this.fontBold12.drawStringCenter(239, 40, this.modalMessage, 0);
+			this.fontBold12.drawStringCenter(239, 60, "Click to continue", 128);
 		} else if (this.chatInterfaceId != -1) {
 			this.drawInterface(ComType.instances[this.chatInterfaceId], 0, 0, 0);
 		} else if (this.stickyChatInterfaceId == -1) {
@@ -9956,8 +10200,8 @@ public class client extends GameShell {
 				this.sceneBaseTileZ = (this.sceneCenterZoneZ - 6) * 8;
 				this.sceneState = 1;
 				this.areaViewport.bind();
-				this.fontPlain12.drawStringCenter(151, 0, "Loading - please wait.", 257);
-				this.fontPlain12.drawStringCenter(150, 16777215, "Loading - please wait.", 256);
+				this.fontPlain12.drawStringCenter(257, 151, "Loading - please wait.", 0);
+				this.fontPlain12.drawStringCenter(256, 150, "Loading - please wait.", 16777215);
 				this.areaViewport.draw(super.graphics, 8, 11);
 				signlink.looprate(5);
 				int regions = (this.packetSize - 2) / 10;
@@ -10017,8 +10261,8 @@ public class client extends GameShell {
 				signlink.looprate(50);
 				this.areaViewport.bind();
 				if (this.sceneState == 0) {
-					this.fontPlain12.drawStringCenter(166, 0, "Map area updated since last visit, so load will take longer this time only", 257);
-					this.fontPlain12.drawStringCenter(165, 16777215, "Map area updated since last visit, so load will take longer this time only", 256);
+					this.fontPlain12.drawStringCenter(257, 166, "Map area updated since last visit, so load will take longer this time only", 0);
+					this.fontPlain12.drawStringCenter(256, 165, "Map area updated since last visit, so load will take longer this time only", 16777215);
 				}
 				this.areaViewport.draw(super.graphics, 8, 11);
 				int dx = this.sceneBaseTileX - this.mapLastBaseX;
@@ -10891,8 +11135,8 @@ public class client extends GameShell {
 				}
 				if (lowMemory && this.sceneState == 2 && World.levelBuilt != this.currentLevel) {
 					this.areaViewport.bind();
-					this.fontPlain12.drawStringCenter(151, 0, "Loading - please wait.", 257);
-					this.fontPlain12.drawStringCenter(150, 16777215, "Loading - please wait.", 256);
+					this.fontPlain12.drawStringCenter(257, 151, "Loading - please wait.", 0);
+					this.fontPlain12.drawStringCenter(256, 150, "Loading - please wait.", 16777215);
 					this.areaViewport.draw(super.graphics, 8, 11);
 					World.levelBuilt = this.currentLevel;
 					this.buildScene();
@@ -10968,6 +11212,9 @@ public class client extends GameShell {
 
 	@OriginalMember(owner = "client!client", name = "a", descriptor = "(ZIILclient!kb;Lclient!z;)V")
 	private void readPlayerUpdates(@OriginalArg(4) PlayerEntity player, @OriginalArg(1) int index, @OriginalArg(2) int mask, @OriginalArg(3) Packet buf) {
+		player.lastMask = mask;
+		player.lastMaskCycle = loopCycle;
+
 		if ((mask & 0x1) == 1) {
 			int length = buf.g1();
 			@Pc(22) byte[] data = new byte[length];
@@ -11016,6 +11263,8 @@ public class client extends GameShell {
 		if ((mask & 0x20) == 32) {
 			player.targetTileX = buf.g2();
 			player.targetTileZ = buf.g2();
+			player.lastFaceX = player.targetTileX;
+			player.lastFaceZ = player.targetTileZ;
 		}
 		if ((mask & 0x40) == 64) {
 			int colorEffect = buf.g2();
@@ -11092,13 +11341,13 @@ public class client extends GameShell {
 			@Pc(17) short x = 360;
 			@Pc(19) short y = 200;
 			@Pc(21) byte offsetY = 20;
-			this.fontBold12.drawStringCenter(y / 2 - offsetY - 26, 16777215, "RuneScape is loading - please wait...", x / 2);
+			this.fontBold12.drawStringCenter(x / 2, y / 2 - offsetY - 26, "RuneScape is loading - please wait...", 16777215);
 			@Pc(51) int midY = y / 2 - offsetY - 18;
 			Draw2D.drawRect(x / 2 - 152, midY, 9179409, 304, 34);
 			Draw2D.drawRect(x / 2 - 151, midY + 1, 0, 302, 32);
 			Draw2D.fillRect(x / 2 - 150, midY + 2, 9179409, progress * 3, 30);
 			Draw2D.fillRect(x / 2 - 150 + progress * 3, midY + 2, 0, 300 - progress * 3, 30);
-			this.fontBold12.drawStringCenter(y / 2 + 5 - offsetY, 16777215, message, x / 2);
+			this.fontBold12.drawStringCenter(x / 2, y / 2 + 5 - offsetY, message, 16777215);
 			this.imageTitle4.draw(super.graphics, 214, 186);
 			if (this.redrawTitleBackground) {
 				this.redrawTitleBackground = false;
