@@ -69,14 +69,14 @@ public class TileOverlay {
 	public static final int[] tmpViewspaceZ = new int[6];
 
 	@OriginalMember(owner = "client!i", name = "x", descriptor = "[[I")
-	public static final int[][] SHAPE_POINTS = new int[][]{
+	public static final int[][] SHAPE_POINTS = new int[][] {
 		{ 1, 3, 5, 7 },
 		{ 1, 3, 5, 7 },
 		{ 1, 3, 5, 7 },
 		{ 1, 3, 5, 7, 6 },
 		{ 1, 3, 5, 7, 6 },
 		{ 1, 3, 5, 7, 6 },
-		{ 1 , 3, 5, 7, 6 },
+		{ 1, 3, 5, 7, 6 },
 		{ 1, 3, 5, 7, 2, 6 },
 		{ 1, 3, 5, 7, 2, 8 },
 		{ 1, 3, 5, 7, 2, 8 },
@@ -149,7 +149,7 @@ public class TileOverlay {
 			@Pc(147) int y;
 			@Pc(149) int color1;
 			@Pc(151) int color2;
-			
+
 			if (type == 1) {
 				x = sceneX;
 				z = sceneZ;

@@ -18,14 +18,14 @@ public class ViewBox extends Frame {
 		this.setTitle("Jagex");
 		this.setResizable(false);
 
-        this.setLayout(new BorderLayout());
-        this.add(shell);
-        this.pack();
+		this.setLayout(new BorderLayout());
+		this.add(shell);
+		this.pack();
 
-        // for compatibility with Java < 1.4
-        Insets insets = this.getInsets();
-        this.setSize(width + insets.left + insets.bottom, height + insets.top + insets.bottom);
-        this.setVisible(true);
+		// for compatibility with Java < 1.4
+		Insets insets = this.getInsets();
+		this.setSize(width + insets.left + insets.bottom, height + insets.top + insets.bottom);
+		this.setVisible(true);
 
 		this.toFront();
 	}

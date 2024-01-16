@@ -1,4 +1,5 @@
-import jagex2.client.*;
+import jagex2.client.GameShell;
+import jagex2.client.InputTracking;
 import jagex2.config.*;
 import jagex2.dash3d.CollisionMap;
 import jagex2.dash3d.World;
@@ -1231,39 +1232,35 @@ public class client extends GameShell {
 		try {
 			System.out.println("RS2 user client - release #" + signlink.clientversion);
 
-            if (args.length > 0) {
-                nodeId = Integer.parseInt(args[0]);
-            } else {
-                nodeId = 10;
-            }
+			if (args.length > 0) {
+				nodeId = Integer.parseInt(args[0]);
+			} else {
+				nodeId = 10;
+			}
 
-            if (args.length > 1) {
-                portOffset = Integer.parseInt(args[1]);
-            } else {
-                portOffset = 0;
-            }
+			if (args.length > 1) {
+				portOffset = Integer.parseInt(args[1]);
+			} else {
+				portOffset = 0;
+			}
 
-            if (args.length > 2 && args[2].equals("lowmem")) {
-                setLowMemory();
-            } else {
-                setHighMemory();
-            }
+			if (args.length > 2 && args[2].equals("lowmem")) {
+				setLowMemory();
+			} else {
+				setHighMemory();
+			}
 
-            if (args.length > 3 && args[3].equals("free")) {
-                members = false;
-            } else {
-                members = true;
-            }
+			members = args.length <= 3 || !args[3].equals("free");
 
 			String vendor = System.getProperties().getProperty("java.vendor");
 			if (vendor.toLowerCase().indexOf("sun") != -1 || vendor.toLowerCase().indexOf("apple") != -1) {
 				signlink.sunjava = true;
 			}
 
-            signlink.startpriv(InetAddress.getByName("w1.225.2004scape.org"));
+			signlink.startpriv(InetAddress.getByName("w1.225.2004scape.org"));
 
-            @Pc(82) client c = new client();
-            c.initApplication(789, 532);
+			@Pc(82) client c = new client();
+			c.initApplication(789, 532);
 		} catch (@Pc(89) Exception _ex) {
 		}
 	}
@@ -1282,11 +1279,13 @@ public class client extends GameShell {
 		for (@Pc(9) int i = s.length() - 3; i > 0; i -= 3) {
 			s = s.substring(0, i) + "," + s.substring(i);
 		}
+
 		if (s.length() > 8) {
 			s = "@gre@" + s.substring(0, s.length() - 8) + " million @whi@(" + s + ")";
 		} else if (s.length() > 4) {
 			s = "@cya@" + s.substring(0, s.length() - 4) + "K @whi@(" + s + ")";
 		}
+
 		return " " + s;
 	}
 
@@ -1356,9 +1355,9 @@ public class client extends GameShell {
 				entity = this.npcs[this.npcIds[index - this.playerCount]];
 			}
 
-            if (entity == null || !entity.isVisible()) {
-                continue;
-            }
+			if (entity == null || !entity.isVisible()) {
+				continue;
+			}
 
 			if (this.showDebug) {
 				// true tile overlay
@@ -1479,84 +1478,84 @@ public class client extends GameShell {
 				}
 			}
 
-            if (index < this.playerCount) {
-                int y = 30;
+			if (index < this.playerCount) {
+				int y = 30;
 
-                @Pc(66) PlayerEntity player = (PlayerEntity) entity;
-                if (player.headicons != 0) {
-                    this.projectFromGround(entity, entity.height + 15);
+				@Pc(66) PlayerEntity player = (PlayerEntity) entity;
+				if (player.headicons != 0) {
+					this.projectFromGround(entity, entity.height + 15);
 
-                    if (this.projectX > -1) {
-                        for (int icon = 0; icon < 8; icon++) {
-                            if ((player.headicons & 0x1 << icon) != 0) {
-                                this.imageHeadicons[icon].draw(this.projectX - 12, this.projectY - y);
-                                y -= 25;
-                            }
-                        }
-                    }
-                }
+					if (this.projectX > -1) {
+						for (int icon = 0; icon < 8; icon++) {
+							if ((player.headicons & 0x1 << icon) != 0) {
+								this.imageHeadicons[icon].draw(this.projectX - 12, this.projectY - y);
+								y -= 25;
+							}
+						}
+					}
+				}
 
-                if (index >= 0 && this.hintType == 10 && this.hintPlayer == this.playerIds[index]) {
-                    this.projectFromGround(entity, entity.height + 15);
-                    if (this.projectX > -1) {
-                        this.imageHeadicons[7].draw(this.projectX - 12, this.projectY - y);
-                    }
-                }
-            } else if (this.hintType == 1 && this.hintNpc == this.npcIds[index - this.playerCount] && loopCycle % 20 < 10) {
-                this.projectFromGround(entity, entity.height + 15);
-                if (this.projectX > -1) {
-                    this.imageHeadicons[2].draw(this.projectX - 12, this.projectY - 28);
-                }
-            }
+				if (index >= 0 && this.hintType == 10 && this.hintPlayer == this.playerIds[index]) {
+					this.projectFromGround(entity, entity.height + 15);
+					if (this.projectX > -1) {
+						this.imageHeadicons[7].draw(this.projectX - 12, this.projectY - y);
+					}
+				}
+			} else if (this.hintType == 1 && this.hintNpc == this.npcIds[index - this.playerCount] && loopCycle % 20 < 10) {
+				this.projectFromGround(entity, entity.height + 15);
+				if (this.projectX > -1) {
+					this.imageHeadicons[2].draw(this.projectX - 12, this.projectY - 28);
+				}
+			}
 
-            if (entity.chat != null && (index >= this.playerCount || this.publicChatSetting == 0 || this.publicChatSetting == 3 || this.publicChatSetting == 1 && this.isFriend(((PlayerEntity) entity).name))) {
-                this.projectFromGround(entity, entity.height);
+			if (entity.chat != null && (index >= this.playerCount || this.publicChatSetting == 0 || this.publicChatSetting == 3 || this.publicChatSetting == 1 && this.isFriend(((PlayerEntity) entity).name))) {
+				this.projectFromGround(entity, entity.height);
 
-                if (this.projectX > -1 && this.chatCount < this.MAX_CHATS) {
-                    this.chatWidth[this.chatCount] = this.fontBold12.stringWidth(entity.chat) / 2;
-                    this.chatHeight[this.chatCount] = this.fontBold12.height;
-                    this.chatX[this.chatCount] = this.projectX;
-                    this.chatY[this.chatCount] = this.projectY;
+				if (this.projectX > -1 && this.chatCount < this.MAX_CHATS) {
+					this.chatWidth[this.chatCount] = this.fontBold12.stringWidth(entity.chat) / 2;
+					this.chatHeight[this.chatCount] = this.fontBold12.height;
+					this.chatX[this.chatCount] = this.projectX;
+					this.chatY[this.chatCount] = this.projectY;
 
-                    this.chatColors[this.chatCount] = entity.chatColor;
-                    this.chatStyles[this.chatCount] = entity.chatStyle;
-                    this.chatTimers[this.chatCount] = entity.chatTimer;
-                    this.chats[this.chatCount++] = entity.chat;
+					this.chatColors[this.chatCount] = entity.chatColor;
+					this.chatStyles[this.chatCount] = entity.chatStyle;
+					this.chatTimers[this.chatCount] = entity.chatTimer;
+					this.chats[this.chatCount++] = entity.chat;
 
-                    if (this.chatEffects == 0 && entity.chatStyle == 1) {
-                        this.chatHeight[this.chatCount] += 10;
-                        this.chatY[this.chatCount] += 5;
-                    }
+					if (this.chatEffects == 0 && entity.chatStyle == 1) {
+						this.chatHeight[this.chatCount] += 10;
+						this.chatY[this.chatCount] += 5;
+					}
 
-                    if (this.chatEffects == 0 && entity.chatStyle == 2) {
-                        this.chatWidth[this.chatCount] = 60;
-                    }
-                }
-            }
+					if (this.chatEffects == 0 && entity.chatStyle == 2) {
+						this.chatWidth[this.chatCount] = 60;
+					}
+				}
+			}
 
-            if (entity.combatCycle > loopCycle + 100) {
-                this.projectFromGround(entity, entity.height + 15);
+			if (entity.combatCycle > loopCycle + 100) {
+				this.projectFromGround(entity, entity.height + 15);
 
-                if (this.projectX > -1) {
-                    int w = entity.health * 30 / entity.totalHealth;
-                    if (w > 30) {
-                        w = 30;
-                    }
-                    Draw2D.fillRect(this.projectX - 15, this.projectY - 3, 0xff00, w, 5);
-                    Draw2D.fillRect(this.projectX - 15 + w, this.projectY - 3, 0xff0000, 30 - w, 5);
-                }
-            }
+				if (this.projectX > -1) {
+					int w = entity.health * 30 / entity.totalHealth;
+					if (w > 30) {
+						w = 30;
+					}
+					Draw2D.fillRect(this.projectX - 15, this.projectY - 3, 0xff00, w, 5);
+					Draw2D.fillRect(this.projectX - 15 + w, this.projectY - 3, 0xff0000, 30 - w, 5);
+				}
+			}
 
-            if (entity.combatCycle > loopCycle + 330) {
-                this.projectFromGround(entity, entity.height / 2);
+			if (entity.combatCycle > loopCycle + 330) {
+				this.projectFromGround(entity, entity.height / 2);
 
-                if (this.projectX > -1) {
-                    this.imageHitmarks[entity.damageType].draw(this.projectX - 12, this.projectY - 12);
-                    this.fontPlain11.drawStringCenter(this.projectX, this.projectY + 4, String.valueOf(entity.damage), 0);
-                    this.fontPlain11.drawStringCenter(this.projectX - 1, this.projectY + 3, String.valueOf(entity.damage), 0xffffff);
-                }
-            }
-        }
+				if (this.projectX > -1) {
+					this.imageHitmarks[entity.damageType].draw(this.projectX - 12, this.projectY - 12);
+					this.fontPlain11.drawStringCenter(this.projectX, this.projectY + 4, String.valueOf(entity.damage), 0);
+					this.fontPlain11.drawStringCenter(this.projectX - 1, this.projectY + 3, String.valueOf(entity.damage), 0xffffff);
+				}
+			}
+		}
 
 		for (@Pc(483) int i = 0; i < this.chatCount; i++) {
 			int x = this.chatX[i];
@@ -1721,53 +1720,55 @@ public class client extends GameShell {
 
 	@OriginalMember(owner = "client!client", name = "g", descriptor = "(I)V")
 	private void drawPrivateMessages() {
-		if (this.splitPrivateChat != 0) {
-			@Pc(9) PixFont font = this.fontPlain12;
-			@Pc(11) int lineOffset = 0;
-			if (this.systemUpdateTimer != 0) {
-				lineOffset = 1;
+		if (this.splitPrivateChat == 0) {
+			return;
+		}
+
+		@Pc(9) PixFont font = this.fontPlain12;
+		@Pc(11) int lineOffset = 0;
+		if (this.systemUpdateTimer != 0) {
+			lineOffset = 1;
+		}
+
+		for (@Pc(18) int i = 0; i < 100; i++) {
+			if (this.messageText[i] == null) {
+				continue;
 			}
 
-			for (@Pc(18) int i = 0; i < 100; i++) {
-                if (this.messageText[i] == null) {
-                    continue;
-                }
+			@Pc(30) int type = this.messageType[i];
+			@Pc(60) int y;
+			if ((type == 3 || type == 7) && (type == 7 || this.privateChatSetting == 0 || this.privateChatSetting == 1 && this.isFriend(this.messageSender[i]))) {
+				y = 329 - lineOffset * 13;
+				font.drawString(4, y, "From " + this.messageSender[i] + ": " + this.messageText[i], 0);
+				font.drawString(4, y - 1, "From " + this.messageSender[i] + ": " + this.messageText[i], 65535);
 
-                @Pc(30) int type = this.messageType[i];
-                @Pc(60) int y;
-                if ((type == 3 || type == 7) && (type == 7 || this.privateChatSetting == 0 || this.privateChatSetting == 1 && this.isFriend(this.messageSender[i]))) {
-                    y = 329 - lineOffset * 13;
-                    font.drawString(4, y, "From " + this.messageSender[i] + ": " + this.messageText[i], 0);
-                    font.drawString(4, y - 1, "From " + this.messageSender[i] + ": " + this.messageText[i], 65535);
+				lineOffset++;
+				if (lineOffset >= 5) {
+					return;
+				}
+			}
 
-                    lineOffset++;
-                    if (lineOffset >= 5) {
-                        return;
-                    }
-                }
+			if (type == 5 && this.privateChatSetting < 2) {
+				y = 329 - lineOffset * 13;
+				font.drawString(4, y, this.messageText[i], 0);
+				font.drawString(4, y - 1, this.messageText[i], 65535);
 
-                if (type == 5 && this.privateChatSetting < 2) {
-                    y = 329 - lineOffset * 13;
-                    font.drawString(4, y, this.messageText[i], 0);
-                    font.drawString(4, y - 1, this.messageText[i], 65535);
+				lineOffset++;
+				if (lineOffset >= 5) {
+					return;
+				}
+			}
 
-                    lineOffset++;
-                    if (lineOffset >= 5) {
-                        return;
-                    }
-                }
+			if (type == 6 && this.privateChatSetting < 2) {
+				y = 329 - lineOffset * 13;
+				font.drawString(4, y, "To " + this.messageSender[i] + ": " + this.messageText[i], 0);
+				font.drawString(4, y - 1, "To " + this.messageSender[i] + ": " + this.messageText[i], 65535);
 
-                if (type == 6 && this.privateChatSetting < 2) {
-                    y = 329 - lineOffset * 13;
-                    font.drawString(4, y, "To " + this.messageSender[i] + ": " + this.messageText[i], 0);
-                    font.drawString(4, y - 1, "To " + this.messageSender[i] + ": " + this.messageText[i], 65535);
-
-                    lineOffset++;
-                    if (lineOffset >= 5) {
-                        return;
-                    }
-                }
-            }
+				lineOffset++;
+				if (lineOffset >= 5) {
+					return;
+				}
+			}
 		}
 	}
 
@@ -1848,11 +1849,11 @@ public class client extends GameShell {
 
 	@OriginalMember(owner = "client!client", name = "a", descriptor = "(JB)V")
 	private void addIgnore(@OriginalArg(0) long username) {
-        if (username == 0L) {
-            return;
-        }
+		if (username == 0L) {
+			return;
+		}
 
-        if (this.ignoreCount >= 100) {
+		if (this.ignoreCount >= 100) {
 			this.addMessage(0, "Your ignore list is full. Max of 100 hit", "");
 			return;
 		}
@@ -1878,7 +1879,7 @@ public class client extends GameShell {
 		// IGNORELIST_ADD
 		this.out.p1isaac(79);
 		this.out.p8(username);
-    }
+	}
 
 	@OriginalMember(owner = "client!client", name = "a", descriptor = "(BLclient!kb;I)V")
 	private void readZonePacket(@OriginalArg(1) Packet buf, @OriginalArg(2) int opcode) {
@@ -2421,13 +2422,9 @@ public class client extends GameShell {
 				}
 			}
 		} else {
-			for (int i = 0; i < 256; i++) {
-				this.flameGradient[i] = this.flameGradient0[i];
-			}
+			System.arraycopy(this.flameGradient0, 0, this.flameGradient, 0, 256);
 		}
-		for (int i = 0; i < 33920; i++) {
-			this.imageTitle0.pixels[i] = this.imageFlamesLeft.pixels[i];
-		}
+		System.arraycopy(this.imageFlamesLeft.pixels, 0, this.imageTitle0.pixels, 0, 33920);
 
 		@Pc(181) int srcOffset = 0;
 		@Pc(183) int dstOffset = 1152;
@@ -2456,9 +2453,7 @@ public class client extends GameShell {
 
 		this.imageTitle0.draw(super.graphics, 0, 0);
 
-		for (int i = 0; i < 33920; i++) {
-			this.imageTitle1.pixels[i] = this.imageFlamesRight.pixels[i];
-		}
+		System.arraycopy(this.imageFlamesRight.pixels, 0, this.imageTitle1.pixels, 0, 33920);
 
 		srcOffset = 0;
 		dstOffset = 1176;
@@ -2487,34 +2482,34 @@ public class client extends GameShell {
 
 	@OriginalMember(owner = "client!client", name = "a", descriptor = "(IIILclient!hc;III)V")
 	private void handleInterfaceInput(@OriginalArg(3) ComType com, @OriginalArg(1) int mouseX, @OriginalArg(0) int mouseY, @OriginalArg(5) int x, @OriginalArg(2) int y, @OriginalArg(6) int scrollPosition) {
-        if (com.type != 0 || com.childId == null || com.hide || (mouseX < x || mouseY < y || mouseX > x + com.width || mouseY > y + com.height)) {
-            return;
-        }
+		if (com.type != 0 || com.childId == null || com.hide || (mouseX < x || mouseY < y || mouseX > x + com.width || mouseY > y + com.height)) {
+			return;
+		}
 
-        @Pc(34) int children = com.childId.length;
-        for (@Pc(44) int i = 0; i < children; i++) {
-            @Pc(53) int childX = com.childX[i] + x;
-            @Pc(62) int childY = com.childY[i] + y - scrollPosition;
-            @Pc(69) ComType child = ComType.instances[com.childId[i]];
+		@Pc(34) int children = com.childId.length;
+		for (@Pc(44) int i = 0; i < children; i++) {
+			@Pc(53) int childX = com.childX[i] + x;
+			@Pc(62) int childY = com.childY[i] + y - scrollPosition;
+			@Pc(69) ComType child = ComType.instances[com.childId[i]];
 
-            childX += child.x;
-            childY += child.y;
+			childX += child.x;
+			childY += child.y;
 
-            if ((child.delegateHover >= 0 || child.hoverColor != 0) && mouseX >= childX && mouseY >= childY && mouseX < childX + child.width && mouseY < childY + child.height) {
-                if (child.delegateHover >= 0) {
-                    this.lastHoveredInterfaceId = child.delegateHover;
-                } else {
-                    this.lastHoveredInterfaceId = child.id;
-                }
-            }
+			if ((child.delegateHover >= 0 || child.hoverColor != 0) && mouseX >= childX && mouseY >= childY && mouseX < childX + child.width && mouseY < childY + child.height) {
+				if (child.delegateHover >= 0) {
+					this.lastHoveredInterfaceId = child.delegateHover;
+				} else {
+					this.lastHoveredInterfaceId = child.id;
+				}
+			}
 
-            if (child.type == 0) {
-                this.handleInterfaceInput(child, mouseX, mouseY, childX, childY, child.scrollPosition);
+			if (child.type == 0) {
+				this.handleInterfaceInput(child, mouseX, mouseY, childX, childY, child.scrollPosition);
 
-                if (child.scrollableHeight > child.height) {
-                    this.handleScrollInput(mouseX, mouseY, child.scrollableHeight, child.height, true, childX + child.width, childY, child);
-                }
-            } else if (child.type == 2) {
+				if (child.scrollableHeight > child.height) {
+					this.handleScrollInput(mouseX, mouseY, child.scrollableHeight, child.height, true, childX + child.width, childY, child);
+				}
+			} else if (child.type == 2) {
 				@Pc(488) int slot = 0;
 
 				for (@Pc(490) int row = 0; row < child.height; row++) {
@@ -2694,53 +2689,55 @@ public class client extends GameShell {
 					this.menuSize++;
 				}
 			}
-        }
-    }
+		}
+	}
 
 	@OriginalMember(owner = "client!client", name = "j", descriptor = "(I)V")
 	private void handleChatSettingsInput() {
-		if (super.mouseClickButton == 1) {
-			if (super.mouseClickX >= 8 && super.mouseClickX <= 108 && super.mouseClickY >= 490 && super.mouseClickY <= 522) {
-				this.publicChatSetting = (this.publicChatSetting + 1) % 4;
-				this.redrawPrivacySettings = true;
-				this.redrawChatback = true;
+		if (super.mouseClickButton != 1) {
+			return;
+		}
 
-				// CHAT_SETMODE
-				this.out.p1isaac(244);
-				this.out.p1(this.publicChatSetting);
-				this.out.p1(this.privateChatSetting);
-				this.out.p1(this.tradeChatSetting);
-			} else if (super.mouseClickX >= 137 && super.mouseClickX <= 237 && super.mouseClickY >= 490 && super.mouseClickY <= 522) {
-				this.privateChatSetting = (this.privateChatSetting + 1) % 3;
-				this.redrawPrivacySettings = true;
-				this.redrawChatback = true;
+		if (super.mouseClickX >= 8 && super.mouseClickX <= 108 && super.mouseClickY >= 490 && super.mouseClickY <= 522) {
+			this.publicChatSetting = (this.publicChatSetting + 1) % 4;
+			this.redrawPrivacySettings = true;
+			this.redrawChatback = true;
 
-				// CHAT_SETMODE
-				this.out.p1isaac(244);
-				this.out.p1(this.publicChatSetting);
-				this.out.p1(this.privateChatSetting);
-				this.out.p1(this.tradeChatSetting);
-			} else if (super.mouseClickX >= 275 && super.mouseClickX <= 375 && super.mouseClickY >= 490 && super.mouseClickY <= 522) {
-				this.tradeChatSetting = (this.tradeChatSetting + 1) % 3;
-				this.redrawPrivacySettings = true;
-				this.redrawChatback = true;
+			// CHAT_SETMODE
+			this.out.p1isaac(244);
+			this.out.p1(this.publicChatSetting);
+			this.out.p1(this.privateChatSetting);
+			this.out.p1(this.tradeChatSetting);
+		} else if (super.mouseClickX >= 137 && super.mouseClickX <= 237 && super.mouseClickY >= 490 && super.mouseClickY <= 522) {
+			this.privateChatSetting = (this.privateChatSetting + 1) % 3;
+			this.redrawPrivacySettings = true;
+			this.redrawChatback = true;
 
-				// CHAT_SETMODE
-				this.out.p1isaac(244);
-				this.out.p1(this.publicChatSetting);
-				this.out.p1(this.privateChatSetting);
-				this.out.p1(this.tradeChatSetting);
-			} else if (super.mouseClickX >= 416 && super.mouseClickX <= 516 && super.mouseClickY >= 490 && super.mouseClickY <= 522) {
-				this.closeInterfaces();
+			// CHAT_SETMODE
+			this.out.p1isaac(244);
+			this.out.p1(this.publicChatSetting);
+			this.out.p1(this.privateChatSetting);
+			this.out.p1(this.tradeChatSetting);
+		} else if (super.mouseClickX >= 275 && super.mouseClickX <= 375 && super.mouseClickY >= 490 && super.mouseClickY <= 522) {
+			this.tradeChatSetting = (this.tradeChatSetting + 1) % 3;
+			this.redrawPrivacySettings = true;
+			this.redrawChatback = true;
 
-				this.reportAbuseInput = "";
-				this.reportAbuseMuteOption = false;
+			// CHAT_SETMODE
+			this.out.p1isaac(244);
+			this.out.p1(this.publicChatSetting);
+			this.out.p1(this.privateChatSetting);
+			this.out.p1(this.tradeChatSetting);
+		} else if (super.mouseClickX >= 416 && super.mouseClickX <= 516 && super.mouseClickY >= 490 && super.mouseClickY <= 522) {
+			this.closeInterfaces();
 
-				for (@Pc(186) int i = 0; i < ComType.instances.length; i++) {
-					if (ComType.instances[i] != null && ComType.instances[i].contentType == 600) {
-						this.reportAbuseInterfaceID = this.viewportInterfaceId = ComType.instances[i].parentId;
-						return;
-					}
+			this.reportAbuseInput = "";
+			this.reportAbuseMuteOption = false;
+
+			for (@Pc(186) int i = 0; i < ComType.instances.length; i++) {
+				if (ComType.instances[i] != null && ComType.instances[i].contentType == 600) {
+					this.reportAbuseInterfaceID = this.viewportInterfaceId = ComType.instances[i].parentId;
+					return;
 				}
 			}
 		}
@@ -2750,78 +2747,80 @@ public class client extends GameShell {
 	private void handleChatMouseInput(@OriginalArg(2) int mouseX, @OriginalArg(0) int mouseY) {
 		@Pc(1) int line = 0;
 		for (@Pc(3) int i = 0; i < 100; i++) {
-			if (this.messageText[i] != null) {
-				@Pc(15) int type = this.messageType[i];
-				@Pc(26) int y = this.chatScrollOffset + 70 + 4 - line * 14;
-				if (y < -20) {
-					break;
-				}
+			if (this.messageText[i] == null) {
+				continue;
+			}
 
-				if (type == 0) {
-					line++;
-				}
+			@Pc(15) int type = this.messageType[i];
+			@Pc(26) int y = this.chatScrollOffset + 70 + 4 - line * 14;
+			if (y < -20) {
+				break;
+			}
 
-				if ((type == 1 || type == 2) && (type == 1 || this.publicChatSetting == 0 || this.publicChatSetting == 1 && this.isFriend(this.messageSender[i]))) {
-					if (mouseY > y - 14 && mouseY <= y && !this.messageSender[i].equals(this.localPlayer.name)) {
-						if (this.rights) {
-							this.menuOption[this.menuSize] = "Report abuse @whi@" + this.messageSender[i];
-							this.menuAction[this.menuSize] = 34;
-							this.menuSize++;
-						}
+			if (type == 0) {
+				line++;
+			}
 
-						this.menuOption[this.menuSize] = "Add ignore @whi@" + this.messageSender[i];
-						this.menuAction[this.menuSize] = 436;
-						this.menuSize++;
-						this.menuOption[this.menuSize] = "Add friend @whi@" + this.messageSender[i];
-						this.menuAction[this.menuSize] = 406;
+			if ((type == 1 || type == 2) && (type == 1 || this.publicChatSetting == 0 || this.publicChatSetting == 1 && this.isFriend(this.messageSender[i]))) {
+				if (mouseY > y - 14 && mouseY <= y && !this.messageSender[i].equals(this.localPlayer.name)) {
+					if (this.rights) {
+						this.menuOption[this.menuSize] = "Report abuse @whi@" + this.messageSender[i];
+						this.menuAction[this.menuSize] = 34;
 						this.menuSize++;
 					}
 
-					line++;
+					this.menuOption[this.menuSize] = "Add ignore @whi@" + this.messageSender[i];
+					this.menuAction[this.menuSize] = 436;
+					this.menuSize++;
+					this.menuOption[this.menuSize] = "Add friend @whi@" + this.messageSender[i];
+					this.menuAction[this.menuSize] = 406;
+					this.menuSize++;
 				}
 
-				if ((type == 3 || type == 7) && this.splitPrivateChat == 0 && (type == 7 || this.privateChatSetting == 0 || this.privateChatSetting == 1 && this.isFriend(this.messageSender[i]))) {
-					if (mouseY > y - 14 && mouseY <= y) {
-						if (this.rights) {
-							this.menuOption[this.menuSize] = "Report abuse @whi@" + this.messageSender[i];
-							this.menuAction[this.menuSize] = 34;
-							this.menuSize++;
-						}
+				line++;
+			}
 
-						this.menuOption[this.menuSize] = "Add ignore @whi@" + this.messageSender[i];
-						this.menuAction[this.menuSize] = 436;
-						this.menuSize++;
-						this.menuOption[this.menuSize] = "Add friend @whi@" + this.messageSender[i];
-						this.menuAction[this.menuSize] = 406;
-						this.menuSize++;
-					}
-
-					line++;
-				}
-
-				if (type == 4 && (this.tradeChatSetting == 0 || this.tradeChatSetting == 1 && this.isFriend(this.messageSender[i]))) {
-					if (mouseY > y - 14 && mouseY <= y) {
-						this.menuOption[this.menuSize] = "Accept trade @whi@" + this.messageSender[i];
-						this.menuAction[this.menuSize] = 903;
+			if ((type == 3 || type == 7) && this.splitPrivateChat == 0 && (type == 7 || this.privateChatSetting == 0 || this.privateChatSetting == 1 && this.isFriend(this.messageSender[i]))) {
+				if (mouseY > y - 14 && mouseY <= y) {
+					if (this.rights) {
+						this.menuOption[this.menuSize] = "Report abuse @whi@" + this.messageSender[i];
+						this.menuAction[this.menuSize] = 34;
 						this.menuSize++;
 					}
 
-					line++;
+					this.menuOption[this.menuSize] = "Add ignore @whi@" + this.messageSender[i];
+					this.menuAction[this.menuSize] = 436;
+					this.menuSize++;
+					this.menuOption[this.menuSize] = "Add friend @whi@" + this.messageSender[i];
+					this.menuAction[this.menuSize] = 406;
+					this.menuSize++;
 				}
 
-				if ((type == 5 || type == 6) && this.splitPrivateChat == 0 && this.privateChatSetting < 2) {
-					line++;
+				line++;
+			}
+
+			if (type == 4 && (this.tradeChatSetting == 0 || this.tradeChatSetting == 1 && this.isFriend(this.messageSender[i]))) {
+				if (mouseY > y - 14 && mouseY <= y) {
+					this.menuOption[this.menuSize] = "Accept trade @whi@" + this.messageSender[i];
+					this.menuAction[this.menuSize] = 903;
+					this.menuSize++;
 				}
 
-				if (type == 8 && (this.tradeChatSetting == 0 || this.tradeChatSetting == 1 && this.isFriend(this.messageSender[i]))) {
-					if (mouseY > y - 14 && mouseY <= y) {
-						this.menuOption[this.menuSize] = "Accept duel @whi@" + this.messageSender[i];
-						this.menuAction[this.menuSize] = 363;
-						this.menuSize++;
-					}
+				line++;
+			}
 
-					line++;
+			if ((type == 5 || type == 6) && this.splitPrivateChat == 0 && this.privateChatSetting < 2) {
+				line++;
+			}
+
+			if (type == 8 && (this.tradeChatSetting == 0 || this.tradeChatSetting == 1 && this.isFriend(this.messageSender[i]))) {
+				if (mouseY > y - 14 && mouseY <= y) {
+					this.menuOption[this.menuSize] = "Accept duel @whi@" + this.messageSender[i];
+					this.menuAction[this.menuSize] = 363;
+					this.menuSize++;
 				}
+
+				line++;
 			}
 		}
 	}
@@ -2843,35 +2842,35 @@ public class client extends GameShell {
 				id = this.playerIds[i] << 14;
 			}
 
-            if (player == null || !player.isVisible()) {
-                continue;
-            }
+			if (player == null || !player.isVisible()) {
+				continue;
+			}
 
-            player.lowMemory = (lowMemory && this.playerCount > 50 || this.playerCount > 200) && i != -1 && player.secondarySeqId == player.seqStandId;
-            @Pc(87) int stx = player.x >> 7;
-            @Pc(92) int stz = player.z >> 7;
+			player.lowMemory = (lowMemory && this.playerCount > 50 || this.playerCount > 200) && i != -1 && player.secondarySeqId == player.seqStandId;
+			@Pc(87) int stx = player.x >> 7;
+			@Pc(92) int stz = player.z >> 7;
 
-            if (stx < 0 || stx >= 104 || stz < 0 || stz >= 104) {
-                continue;
-            }
+			if (stx < 0 || stx >= 104 || stz < 0 || stz >= 104) {
+				continue;
+			}
 
-            if (player.locModel == null || loopCycle < player.locStartCycle || loopCycle >= player.locStopCycle) {
-                if ((player.x & 0x7F) == 64 && (player.z & 0x7F) == 64) {
-                    if (this.tileLastOccupiedCycle[stx][stz] == this.sceneCycle) {
-                        continue;
-                    }
+			if (player.locModel == null || loopCycle < player.locStartCycle || loopCycle >= player.locStopCycle) {
+				if ((player.x & 0x7F) == 64 && (player.z & 0x7F) == 64) {
+					if (this.tileLastOccupiedCycle[stx][stz] == this.sceneCycle) {
+						continue;
+					}
 
-                    this.tileLastOccupiedCycle[stx][stz] = this.sceneCycle;
-                }
+					this.tileLastOccupiedCycle[stx][stz] = this.sceneCycle;
+				}
 
-                player.y = this.getHeightmapY(this.currentLevel, player.x, player.z);
-                this.scene.addTemporary(this.currentLevel, player.x, player.y, player.z, null, player, id, player.yaw, 60, player.seqStretches);
-            } else {
-                player.lowMemory = false;
-                player.y = this.getHeightmapY(this.currentLevel, player.x, player.z);
-                this.scene.addTemporary(this.currentLevel, player.x, player.y, player.z, player.minTileX, player.minTileZ, player.maxTileX, player.maxTileZ, null, player, id, player.yaw);
-            }
-        }
+				player.y = this.getHeightmapY(this.currentLevel, player.x, player.z);
+				this.scene.addTemporary(this.currentLevel, player.x, player.y, player.z, null, player, id, player.yaw, 60, player.seqStretches);
+			} else {
+				player.lowMemory = false;
+				player.y = this.getHeightmapY(this.currentLevel, player.x, player.z);
+				this.scene.addTemporary(this.currentLevel, player.x, player.y, player.z, player.minTileX, player.minTileZ, player.maxTileX, player.maxTileZ, null, player, id, player.yaw);
+			}
+		}
 	}
 
 	@OriginalMember(owner = "client!client", name = "a", descriptor = "(IIBI)I")
@@ -2892,97 +2891,97 @@ public class client extends GameShell {
 
 	@OriginalMember(owner = "client!client", name = "a", descriptor = "(Lclient!bc;IIII)V")
 	private void addNpcOptions(@OriginalArg(0) NpcType npc, @OriginalArg(4) int a, @OriginalArg(3) int b, @OriginalArg(2) int c) {
-        if (this.menuSize >= 400) {
-            return;
-        }
+		if (this.menuSize >= 400) {
+			return;
+		}
 
-        @Pc(16) String tooltip = npc.name;
-        if (npc.vislevel != 0) {
-            tooltip = tooltip + getCombatLevelColorTag(this.localPlayer.combatLevel, npc.vislevel) + " (level-" + npc.vislevel + ")";
-        }
+		@Pc(16) String tooltip = npc.name;
+		if (npc.vislevel != 0) {
+			tooltip = tooltip + getCombatLevelColorTag(this.localPlayer.combatLevel, npc.vislevel) + " (level-" + npc.vislevel + ")";
+		}
 
-        if (this.objSelected == 1) {
-            this.menuOption[this.menuSize] = "Use " + this.objSelectedName + " with @yel@" + tooltip;
-            this.menuAction[this.menuSize] = 900;
-            this.menuParamA[this.menuSize] = a;
-            this.menuParamB[this.menuSize] = b;
-            this.menuParamC[this.menuSize] = c;
-            this.menuSize++;
-        } else if (this.spellSelected != 1) {
-            @Pc(155) int type;
-            if (npc.ops != null) {
-                for (type = 4; type >= 0; type--) {
-                    if (npc.ops[type] != null && !npc.ops[type].equalsIgnoreCase("attack")) {
-                        this.menuOption[this.menuSize] = npc.ops[type] + " @yel@" + tooltip;
+		if (this.objSelected == 1) {
+			this.menuOption[this.menuSize] = "Use " + this.objSelectedName + " with @yel@" + tooltip;
+			this.menuAction[this.menuSize] = 900;
+			this.menuParamA[this.menuSize] = a;
+			this.menuParamB[this.menuSize] = b;
+			this.menuParamC[this.menuSize] = c;
+			this.menuSize++;
+		} else if (this.spellSelected != 1) {
+			@Pc(155) int type;
+			if (npc.ops != null) {
+				for (type = 4; type >= 0; type--) {
+					if (npc.ops[type] != null && !npc.ops[type].equalsIgnoreCase("attack")) {
+						this.menuOption[this.menuSize] = npc.ops[type] + " @yel@" + tooltip;
 
-                        if (type == 0) {
-                            this.menuAction[this.menuSize] = 728;
-                        } else if (type == 1) {
-                            this.menuAction[this.menuSize] = 542;
-                        } else if (type == 2) {
-                            this.menuAction[this.menuSize] = 6;
-                        } else if (type == 3) {
-                            this.menuAction[this.menuSize] = 963;
-                        } else if (type == 4) {
-                            this.menuAction[this.menuSize] = 245;
-                        }
+						if (type == 0) {
+							this.menuAction[this.menuSize] = 728;
+						} else if (type == 1) {
+							this.menuAction[this.menuSize] = 542;
+						} else if (type == 2) {
+							this.menuAction[this.menuSize] = 6;
+						} else if (type == 3) {
+							this.menuAction[this.menuSize] = 963;
+						} else if (type == 4) {
+							this.menuAction[this.menuSize] = 245;
+						}
 
-                        this.menuParamA[this.menuSize] = a;
-                        this.menuParamB[this.menuSize] = b;
-                        this.menuParamC[this.menuSize] = c;
-                        this.menuSize++;
-                    }
-                }
-            }
+						this.menuParamA[this.menuSize] = a;
+						this.menuParamB[this.menuSize] = b;
+						this.menuParamC[this.menuSize] = c;
+						this.menuSize++;
+					}
+				}
+			}
 
-            if (npc.ops != null) {
-                for (type = 4; type >= 0; type--) {
-                    if (npc.ops[type] != null && npc.ops[type].equalsIgnoreCase("attack")) {
-                        @Pc(279) short action = 0;
-                        if (npc.vislevel > this.localPlayer.combatLevel) {
-                            action = 2000;
-                        }
+			if (npc.ops != null) {
+				for (type = 4; type >= 0; type--) {
+					if (npc.ops[type] != null && npc.ops[type].equalsIgnoreCase("attack")) {
+						@Pc(279) short action = 0;
+						if (npc.vislevel > this.localPlayer.combatLevel) {
+							action = 2000;
+						}
 
-                        this.menuOption[this.menuSize] = npc.ops[type] + " @yel@" + tooltip;
+						this.menuOption[this.menuSize] = npc.ops[type] + " @yel@" + tooltip;
 
-                        if (type == 0) {
-                            this.menuAction[this.menuSize] = action + 728;
-                        } else if (type == 1) {
-                            this.menuAction[this.menuSize] = action + 542;
-                        } else if (type == 2) {
-                            this.menuAction[this.menuSize] = action + 6;
-                        } else if (type == 3) {
-                            this.menuAction[this.menuSize] = action + 963;
-                        } else if (type == 4) {
-                            this.menuAction[this.menuSize] = action + 245;
-                        }
+						if (type == 0) {
+							this.menuAction[this.menuSize] = action + 728;
+						} else if (type == 1) {
+							this.menuAction[this.menuSize] = action + 542;
+						} else if (type == 2) {
+							this.menuAction[this.menuSize] = action + 6;
+						} else if (type == 3) {
+							this.menuAction[this.menuSize] = action + 963;
+						} else if (type == 4) {
+							this.menuAction[this.menuSize] = action + 245;
+						}
 
-                        this.menuParamA[this.menuSize] = a;
-                        this.menuParamB[this.menuSize] = b;
-                        this.menuParamC[this.menuSize] = c;
-                        this.menuSize++;
-                    }
-                }
-            }
+						this.menuParamA[this.menuSize] = a;
+						this.menuParamB[this.menuSize] = b;
+						this.menuParamC[this.menuSize] = c;
+						this.menuSize++;
+					}
+				}
+			}
 
-            this.menuOption[this.menuSize] = "Examine @yel@" + tooltip;
+			this.menuOption[this.menuSize] = "Examine @yel@" + tooltip;
 			if (this.showDebug) {
 				this.menuOption[this.menuSize] += "@whi@ (" + (npc.index) + ")";
 			}
-            this.menuAction[this.menuSize] = 1607;
-            this.menuParamA[this.menuSize] = a;
-            this.menuParamB[this.menuSize] = b;
-            this.menuParamC[this.menuSize] = c;
-            this.menuSize++;
-        } else if ((this.activeSpellFlags & 0x2) == 2) {
-            this.menuOption[this.menuSize] = this.spellCaption + " @yel@" + tooltip;
-            this.menuAction[this.menuSize] = 265;
-            this.menuParamA[this.menuSize] = a;
-            this.menuParamB[this.menuSize] = b;
-            this.menuParamC[this.menuSize] = c;
-            this.menuSize++;
-        }
-    }
+			this.menuAction[this.menuSize] = 1607;
+			this.menuParamA[this.menuSize] = a;
+			this.menuParamB[this.menuSize] = b;
+			this.menuParamC[this.menuSize] = c;
+			this.menuSize++;
+		} else if ((this.activeSpellFlags & 0x2) == 2) {
+			this.menuOption[this.menuSize] = this.spellCaption + " @yel@" + tooltip;
+			this.menuAction[this.menuSize] = 265;
+			this.menuParamA[this.menuSize] = a;
+			this.menuParamB[this.menuSize] = b;
+			this.menuParamC[this.menuSize] = c;
+			this.menuSize++;
+		}
+	}
 
 	@OriginalMember(owner = "client!client", name = "l", descriptor = "(I)V")
 	private void handleInputKey() {
@@ -3098,21 +3097,21 @@ public class client extends GameShell {
 
 						if ((key == 13 || key == 10) && this.chatTyped.length() > 0) {
 							// if (this.rights) {
-								if (this.chatTyped.equals("::clientdrop") && super.frame != null) {
-									this.tryReconnect();
-								} else if (this.chatTyped.equals("::noclip")) {
-									for (int level = 0; level < 4; level++) {
-										for (int x = 1; x < 103; x++) {
-											for (int z = 1; z < 103; z++) {
-												this.levelCollisionMap[level].flags[x][z] = 0;
-											}
+							if (this.chatTyped.equals("::clientdrop") && super.frame != null) {
+								this.tryReconnect();
+							} else if (this.chatTyped.equals("::noclip")) {
+								for (int level = 0; level < 4; level++) {
+									for (int x = 1; x < 103; x++) {
+										for (int z = 1; z < 103; z++) {
+											this.levelCollisionMap[level].flags[x][z] = 0;
 										}
 									}
-								} else if (this.chatTyped.equals("::debug")) {
-									this.showDebug = !this.showDebug;
-								} else if (this.chatTyped.equals("::perf")) {
-									this.showPerformance = !this.showPerformance;
 								}
+							} else if (this.chatTyped.equals("::debug")) {
+								this.showDebug = !this.showDebug;
+							} else if (this.chatTyped.equals("::perf")) {
+								this.showPerformance = !this.showPerformance;
+							}
 							// }
 
 							if (this.chatTyped.startsWith("::")) {
@@ -3711,45 +3710,49 @@ public class client extends GameShell {
 		for (int x = 0; x < 104; x++) {
 			for (@Pc(217) int z = 0; z < 104; z++) {
 				@Pc(227) int bitset = this.scene.getGroundDecorationBitset(this.currentLevel, x, z);
-				if (bitset != 0) {
-					bitset = bitset >> 14 & 0x7FFF;
+				if (bitset == 0) {
+					continue;
+				}
 
-					@Pc(239) int func = LocType.get(bitset).mapfunction;
-					if (func >= 0) {
-						@Pc(243) int stx = x;
-						@Pc(245) int stz = z;
+				bitset = bitset >> 14 & 0x7FFF;
 
-						if (func != 22 && func != 29 && func != 34 && func != 36 && func != 46 && func != 47 && func != 48) {
-							@Pc(268) byte maxX = 104;
-							@Pc(270) byte maxZ = 104;
-							@Pc(277) int[][] flags = this.levelCollisionMap[this.currentLevel].flags;
+				@Pc(239) int func = LocType.get(bitset).mapfunction;
+				if (func < 0) {
+					continue;
+				}
 
-							for (@Pc(279) int i = 0; i < 10; i++) {
-								@Pc(286) int rand = (int) (Math.random() * 4.0D);
-								if (rand == 0 && stx > 0 && stx > x - 3 && (flags[stx - 1][stz] & 0x280108) == 0) {
-									stx--;
-								}
+				@Pc(243) int stx = x;
+				@Pc(245) int stz = z;
 
-								if (rand == 1 && stx < maxX - 1 && stx < x + 3 && (flags[stx + 1][stz] & 0x280180) == 0) {
-									stx++;
-								}
+				if (func != 22 && func != 29 && func != 34 && func != 36 && func != 46 && func != 47 && func != 48) {
+					@Pc(268) byte maxX = 104;
+					@Pc(270) byte maxZ = 104;
+					@Pc(277) int[][] flags = this.levelCollisionMap[this.currentLevel].flags;
 
-								if (rand == 2 && stz > 0 && stz > z - 3 && (flags[stx][stz - 1] & 0x280102) == 0) {
-									stz--;
-								}
-
-								if (rand == 3 && stz < maxZ - 1 && stz < z + 3 && (flags[stx][stz + 1] & 0x280120) == 0) {
-									stz++;
-								}
-							}
+					for (@Pc(279) int i = 0; i < 10; i++) {
+						@Pc(286) int rand = (int) (Math.random() * 4.0D);
+						if (rand == 0 && stx > 0 && stx > x - 3 && (flags[stx - 1][stz] & 0x280108) == 0) {
+							stx--;
 						}
 
-						this.activeMapFunctions[this.activeMapFunctionCount] = this.imageMapfunction[func];
-						this.activeMapFunctionX[this.activeMapFunctionCount] = stx;
-						this.activeMapFunctionZ[this.activeMapFunctionCount] = stz;
-						this.activeMapFunctionCount++;
+						if (rand == 1 && stx < maxX - 1 && stx < x + 3 && (flags[stx + 1][stz] & 0x280180) == 0) {
+							stx++;
+						}
+
+						if (rand == 2 && stz > 0 && stz > z - 3 && (flags[stx][stz - 1] & 0x280102) == 0) {
+							stz--;
+						}
+
+						if (rand == 3 && stz < maxZ - 1 && stz < z + 3 && (flags[stx][stz + 1] & 0x280120) == 0) {
+							stz++;
+						}
 					}
 				}
+
+				this.activeMapFunctions[this.activeMapFunctionCount] = this.imageMapfunction[func];
+				this.activeMapFunctionX[this.activeMapFunctionCount] = stx;
+				this.activeMapFunctionZ[this.activeMapFunctionCount] = stz;
+				this.activeMapFunctionCount++;
 			}
 		}
 	}
@@ -3757,7 +3760,6 @@ public class client extends GameShell {
 	@OriginalMember(owner = "client!client", name = "a", descriptor = "(IIIIII)V")
 	private void drawMinimapLoc(@OriginalArg(3) int tileX, @OriginalArg(5) int tileZ, @OriginalArg(1) int level, @OriginalArg(2) int wallRgb, @OriginalArg(4) int doorRgb) {
 		@Pc(8) int bitset = this.scene.getWallBitset(level, tileX, tileZ);
-
 		if (bitset != 0) {
 			int info = this.scene.getInfo(level, tileX, tileZ, bitset);
 			int angle = info >> 6 & 0x3;
@@ -4117,27 +4119,27 @@ public class client extends GameShell {
 			@Pc(11) NpcEntity npc = this.npcs[this.npcIds[i]];
 			@Pc(20) int bitset = (this.npcIds[i] << 14) + 0x20000000;
 
-            if (npc == null || !npc.isVisible()) {
-                continue;
-            }
+			if (npc == null || !npc.isVisible()) {
+				continue;
+			}
 
-            @Pc(31) int x = npc.x >> 7;
-            @Pc(36) int z = npc.z >> 7;
+			@Pc(31) int x = npc.x >> 7;
+			@Pc(36) int z = npc.z >> 7;
 
-            if (x < 0 || x >= 104 || z < 0 || z >= 104) {
-                continue;
-            }
+			if (x < 0 || x >= 104 || z < 0 || z >= 104) {
+				continue;
+			}
 
-            if (npc.size == 1 && (npc.x & 0x7F) == 64 && (npc.z & 0x7F) == 64) {
-                if (this.tileLastOccupiedCycle[x][z] == this.sceneCycle) {
-                    continue;
-                }
+			if (npc.size == 1 && (npc.x & 0x7F) == 64 && (npc.z & 0x7F) == 64) {
+				if (this.tileLastOccupiedCycle[x][z] == this.sceneCycle) {
+					continue;
+				}
 
-                this.tileLastOccupiedCycle[x][z] = this.sceneCycle;
-            }
+				this.tileLastOccupiedCycle[x][z] = this.sceneCycle;
+			}
 
-            this.scene.addTemporary(this.currentLevel, npc.x, this.getHeightmapY(this.currentLevel, npc.x, npc.z), npc.z, null, npc, bitset, npc.yaw, (npc.size - 1) * 64 + 60, npc.seqStretches);
-        }
+			this.scene.addTemporary(this.currentLevel, npc.x, this.getHeightmapY(this.currentLevel, npc.x, npc.z), npc.z, null, npc, bitset, npc.yaw, (npc.size - 1) * 64 + 60, npc.seqStretches);
+		}
 	}
 
 	@OriginalMember(owner = "client!client", name = "a", descriptor = "(IIZ)V")
@@ -4229,30 +4231,32 @@ public class client extends GameShell {
 
 	@OriginalMember(owner = "client!client", name = "p", descriptor = "(I)V")
 	private void prepareGameScreen() {
-		if (this.areaChatback == null) {
-			this.unloadTitle();
-			super.drawArea = null;
-			this.imageTitle2 = null;
-			this.imageTitle3 = null;
-			this.imageTitle4 = null;
-			this.imageTitle0 = null;
-			this.imageTitle1 = null;
-			this.imageTitle5 = null;
-			this.imageTitle6 = null;
-			this.imageTitle7 = null;
-			this.imageTitle8 = null;
-			this.areaChatback = new PixMap(this.getBaseComponent(), 479, 96);
-			this.areaMapback = new PixMap(this.getBaseComponent(), 168, 160);
-			Draw2D.clear();
-			this.imageMapback.draw(0, 0);
-			this.areaSidebar = new PixMap(this.getBaseComponent(), 190, 261);
-			this.areaViewport = new PixMap(this.getBaseComponent(), 512, 334);
-			Draw2D.clear();
-			this.areaBackbase1 = new PixMap(this.getBaseComponent(), 501, 61);
-			this.areaBackbase2 = new PixMap(this.getBaseComponent(), 288, 40);
-			this.areaBackhmid1 = new PixMap(this.getBaseComponent(), 269, 66);
-			this.redrawTitleBackground = true;
+		if (this.areaChatback != null) {
+			return;
 		}
+
+		this.unloadTitle();
+		super.drawArea = null;
+		this.imageTitle2 = null;
+		this.imageTitle3 = null;
+		this.imageTitle4 = null;
+		this.imageTitle0 = null;
+		this.imageTitle1 = null;
+		this.imageTitle5 = null;
+		this.imageTitle6 = null;
+		this.imageTitle7 = null;
+		this.imageTitle8 = null;
+		this.areaChatback = new PixMap(this.getBaseComponent(), 479, 96);
+		this.areaMapback = new PixMap(this.getBaseComponent(), 168, 160);
+		Draw2D.clear();
+		this.imageMapback.draw(0, 0);
+		this.areaSidebar = new PixMap(this.getBaseComponent(), 190, 261);
+		this.areaViewport = new PixMap(this.getBaseComponent(), 512, 334);
+		Draw2D.clear();
+		this.areaBackbase1 = new PixMap(this.getBaseComponent(), 501, 61);
+		this.areaBackbase2 = new PixMap(this.getBaseComponent(), 288, 40);
+		this.areaBackhmid1 = new PixMap(this.getBaseComponent(), 269, 66);
+		this.redrawTitleBackground = true;
 	}
 
 	@OriginalMember(owner = "client!client", name = "a", descriptor = "(IILclient!kb;)V")
@@ -4325,269 +4329,269 @@ public class client extends GameShell {
 
 	@OriginalMember(owner = "client!client", name = "a", descriptor = "(IIILclient!hc;I)V")
 	private void drawInterface(@OriginalArg(3) ComType com, @OriginalArg(1) int x, @OriginalArg(0) int y, @OriginalArg(4) int scrollY) {
-        if (com.type != 0 || com.childId == null || (com.hide && this.viewportHoveredInterfaceIndex != com.id && this.sidebarHoveredInterfaceIndex != com.id && this.chatHoveredInterfaceIndex != com.id)) {
-            return;
-        }
+		if (com.type != 0 || com.childId == null || (com.hide && this.viewportHoveredInterfaceIndex != com.id && this.sidebarHoveredInterfaceIndex != com.id && this.chatHoveredInterfaceIndex != com.id)) {
+			return;
+		}
 
-        @Pc(29) int left = Draw2D.left;
-        @Pc(31) int top = Draw2D.top;
-        @Pc(33) int right = Draw2D.right;
-        @Pc(35) int bottom = Draw2D.bottom;
+		@Pc(29) int left = Draw2D.left;
+		@Pc(31) int top = Draw2D.top;
+		@Pc(33) int right = Draw2D.right;
+		@Pc(35) int bottom = Draw2D.bottom;
 
-        Draw2D.setBounds(y + com.height, x + com.width, y, x);
-        @Pc(57) int children = com.childId.length;
+		Draw2D.setBounds(y + com.height, x + com.width, y, x);
+		@Pc(57) int children = com.childId.length;
 
-        for (@Pc(59) int i = 0; i < children; i++) {
-            @Pc(68) int childX = com.childX[i] + x;
-            @Pc(77) int childY = com.childY[i] + y - scrollY;
+		for (@Pc(59) int i = 0; i < children; i++) {
+			@Pc(68) int childX = com.childX[i] + x;
+			@Pc(77) int childY = com.childY[i] + y - scrollY;
 
-            @Pc(84) ComType child = ComType.instances[com.childId[i]];
-            childX += child.x;
-            childY += child.y;
+			@Pc(84) ComType child = ComType.instances[com.childId[i]];
+			childX += child.x;
+			childY += child.y;
 
-            if (child.contentType > 0) {
-                this.updateInterfaceContent(child);
-            }
+			if (child.contentType > 0) {
+				this.updateInterfaceContent(child);
+			}
 
-            if (child.type == 0) {
-                if (child.scrollPosition > child.scrollableHeight - child.height) {
-                    child.scrollPosition = child.scrollableHeight - child.height;
-                }
+			if (child.type == 0) {
+				if (child.scrollPosition > child.scrollableHeight - child.height) {
+					child.scrollPosition = child.scrollableHeight - child.height;
+				}
 
-                if (child.scrollPosition < 0) {
-                    child.scrollPosition = 0;
-                }
+				if (child.scrollPosition < 0) {
+					child.scrollPosition = 0;
+				}
 
-                this.drawInterface(child, childX, childY, child.scrollPosition);
-                if (child.scrollableHeight > child.height) {
-                    this.drawScrollbar(childX + child.width, childY, child.scrollPosition, child.scrollableHeight, child.height);
-                }
-            } else if (child.type == 2) {
-                int slot = 0;
+				this.drawInterface(child, childX, childY, child.scrollPosition);
+				if (child.scrollableHeight > child.height) {
+					this.drawScrollbar(childX + child.width, childY, child.scrollPosition, child.scrollableHeight, child.height);
+				}
+			} else if (child.type == 2) {
+				int slot = 0;
 
-                for (int row = 0; row < child.height; row++) {
-                    for (int col = 0; col < child.width; col++) {
-                        int slotX = childX + col * (child.inventoryMarginX + 32);
-                        int slotY = childY + row * (child.inventoryMarginY + 32);
+				for (int row = 0; row < child.height; row++) {
+					for (int col = 0; col < child.width; col++) {
+						int slotX = childX + col * (child.inventoryMarginX + 32);
+						int slotY = childY + row * (child.inventoryMarginY + 32);
 
-                        if (slot < 20) {
-                            slotX += child.inventorySlotOffsetX[slot];
-                            slotY += child.inventorySlotOffsetY[slot];
-                        }
+						if (slot < 20) {
+							slotX += child.inventorySlotOffsetX[slot];
+							slotY += child.inventorySlotOffsetY[slot];
+						}
 
-                        if (child.inventorySlotObjId[slot] > 0) {
-                            int dx = 0;
-                            int dy = 0;
-                            int id = child.inventorySlotObjId[slot] - 1;
+						if (child.inventorySlotObjId[slot] > 0) {
+							int dx = 0;
+							int dy = 0;
+							int id = child.inventorySlotObjId[slot] - 1;
 
-                            if (slotX >= -32 && slotX <= 512 && slotY >= -32 && slotY <= 334 || this.objDragArea != 0 && this.objDragSlot == slot) {
-                                @Pc(251) Pix24 icon = ObjType.getIcon(id, child.inventorySlotObjCount[slot]);
-                                if (this.objDragArea != 0 && this.objDragSlot == slot && this.objDragInterfaceId == child.id) {
-                                    dx = super.mouseX - this.objGrabX;
-                                    dy = super.mouseY - this.objGrabY;
+							if (slotX >= -32 && slotX <= 512 && slotY >= -32 && slotY <= 334 || this.objDragArea != 0 && this.objDragSlot == slot) {
+								@Pc(251) Pix24 icon = ObjType.getIcon(id, child.inventorySlotObjCount[slot]);
+								if (this.objDragArea != 0 && this.objDragSlot == slot && this.objDragInterfaceId == child.id) {
+									dx = super.mouseX - this.objGrabX;
+									dy = super.mouseY - this.objGrabY;
 
-                                    if (dx < 5 && dx > -5) {
-                                        dx = 0;
-                                    }
+									if (dx < 5 && dx > -5) {
+										dx = 0;
+									}
 
-                                    if (dy < 5 && dy > -5) {
-                                        dy = 0;
-                                    }
+									if (dy < 5 && dy > -5) {
+										dy = 0;
+									}
 
-                                    if (this.objDragCycles < 5) {
-                                        dx = 0;
-                                        dy = 0;
-                                    }
+									if (this.objDragCycles < 5) {
+										dx = 0;
+										dy = 0;
+									}
 
-                                    icon.drawAlpha(128, slotX + dx, slotY + dy);
-                                } else if (this.selectedArea != 0 && this.selectedItem == slot && this.selectedInterface == child.id) {
-                                    icon.drawAlpha(128, slotX, slotY);
-                                } else {
-                                    icon.draw(slotX, slotY);
-                                }
+									icon.drawAlpha(128, slotX + dx, slotY + dy);
+								} else if (this.selectedArea != 0 && this.selectedItem == slot && this.selectedInterface == child.id) {
+									icon.drawAlpha(128, slotX, slotY);
+								} else {
+									icon.draw(slotX, slotY);
+								}
 
-                                if (icon.cropW == 33 || child.inventorySlotObjCount[slot] != 1) {
-                                    @Pc(351) int count = child.inventorySlotObjCount[slot];
-                                    this.fontPlain11.drawString(slotX + dx + 1, slotY + 10 + dy, formatObjCount(count), 0);
-                                    this.fontPlain11.drawString(slotX + dx, slotY + 9 + dy, formatObjCount(count), 0xffff00);
-                                }
-                            }
-                        } else if (child.inventorySlotImage != null && slot < 20) {
-                            @Pc(398) Pix24 image = child.inventorySlotImage[slot];
+								if (icon.cropW == 33 || child.inventorySlotObjCount[slot] != 1) {
+									@Pc(351) int count = child.inventorySlotObjCount[slot];
+									this.fontPlain11.drawString(slotX + dx + 1, slotY + 10 + dy, formatObjCount(count), 0);
+									this.fontPlain11.drawString(slotX + dx, slotY + 9 + dy, formatObjCount(count), 0xffff00);
+								}
+							}
+						} else if (child.inventorySlotImage != null && slot < 20) {
+							@Pc(398) Pix24 image = child.inventorySlotImage[slot];
 
-                            if (image != null) {
-                                image.draw(slotX, slotY);
-                            }
-                        }
+							if (image != null) {
+								image.draw(slotX, slotY);
+							}
+						}
 
-                        slot++;
-                    }
-                }
-            } else if (child.type == 3) {
-                if (child.fill) {
-                    Draw2D.fillRect(childX, childY, child.color, child.width, child.height);
-                } else {
-                    Draw2D.drawRect(childX, childY, child.color, child.width, child.height);
-                }
-            } else if (child.type == 4) {
-                PixFont font = child.font;
-                int color = child.color;
-                @Pc(462) String text = child.text;
+						slot++;
+					}
+				}
+			} else if (child.type == 3) {
+				if (child.fill) {
+					Draw2D.fillRect(childX, childY, child.color, child.width, child.height);
+				} else {
+					Draw2D.drawRect(childX, childY, child.color, child.width, child.height);
+				}
+			} else if (child.type == 4) {
+				PixFont font = child.font;
+				int color = child.color;
+				@Pc(462) String text = child.text;
 
-                if ((this.chatHoveredInterfaceIndex == child.id || this.sidebarHoveredInterfaceIndex == child.id || this.viewportHoveredInterfaceIndex == child.id) && child.hoverColor != 0) {
-                    color = child.hoverColor;
-                }
+				if ((this.chatHoveredInterfaceIndex == child.id || this.sidebarHoveredInterfaceIndex == child.id || this.viewportHoveredInterfaceIndex == child.id) && child.hoverColor != 0) {
+					color = child.hoverColor;
+				}
 
-                if (this.executeInterfaceScript(child)) {
-                    color = child.activeColor;
+				if (this.executeInterfaceScript(child)) {
+					color = child.activeColor;
 
-                    if (child.activeText.length() > 0) {
-                        text = child.activeText;
-                    }
-                }
+					if (child.activeText.length() > 0) {
+						text = child.activeText;
+					}
+				}
 
-                if (child.optionType == 6 && this.pressedContinueOption) {
-                    text = "Please wait...";
-                    color = child.color;
-                }
+				if (child.optionType == 6 && this.pressedContinueOption) {
+					text = "Please wait...";
+					color = child.color;
+				}
 
-                for (int lineY = childY + font.height; text.length() > 0; lineY += font.height) {
-                    if (text.indexOf("%") != -1) {
-                        do {
-                            int index = text.indexOf("%1");
-                            if (index == -1) {
-                                break;
-                            }
+				for (int lineY = childY + font.height; text.length() > 0; lineY += font.height) {
+					if (text.indexOf("%") != -1) {
+						do {
+							int index = text.indexOf("%1");
+							if (index == -1) {
+								break;
+							}
 
-                            text = text.substring(0, index) + this.getIntString(this.executeClientscript1(child, 0)) + text.substring(index + 2);
-                        } while (true);
+							text = text.substring(0, index) + this.getIntString(this.executeClientscript1(child, 0)) + text.substring(index + 2);
+						} while (true);
 
-                        do {
-                            int index = text.indexOf("%2");
-                            if (index == -1) {
-                                break;
-                            }
+						do {
+							int index = text.indexOf("%2");
+							if (index == -1) {
+								break;
+							}
 
-                            text = text.substring(0, index) + this.getIntString(this.executeClientscript1(child, 1)) + text.substring(index + 2);
-                        } while (true);
+							text = text.substring(0, index) + this.getIntString(this.executeClientscript1(child, 1)) + text.substring(index + 2);
+						} while (true);
 
-                        do {
-                            int index = text.indexOf("%3");
-                            if (index == -1) {
-                                break;
-                            }
+						do {
+							int index = text.indexOf("%3");
+							if (index == -1) {
+								break;
+							}
 
-                            text = text.substring(0, index) + this.getIntString(this.executeClientscript1(child, 2)) + text.substring(index + 2);
-                        } while (true);
+							text = text.substring(0, index) + this.getIntString(this.executeClientscript1(child, 2)) + text.substring(index + 2);
+						} while (true);
 
-                        do {
-                            int index = text.indexOf("%4");
-                            if (index == -1) {
-                                break;
-                            }
+						do {
+							int index = text.indexOf("%4");
+							if (index == -1) {
+								break;
+							}
 
-                            text = text.substring(0, index) + this.getIntString(this.executeClientscript1(child, 3)) + text.substring(index + 2);
-                        } while (true);
+							text = text.substring(0, index) + this.getIntString(this.executeClientscript1(child, 3)) + text.substring(index + 2);
+						} while (true);
 
-                        do {
-                            int index = text.indexOf("%5");
-                            if (index == -1) {
-                                break;
-                            }
+						do {
+							int index = text.indexOf("%5");
+							if (index == -1) {
+								break;
+							}
 
-                            text = text.substring(0, index) + this.getIntString(this.executeClientscript1(child, 4)) + text.substring(index + 2);
-                        } while (true);
-                    }
+							text = text.substring(0, index) + this.getIntString(this.executeClientscript1(child, 4)) + text.substring(index + 2);
+						} while (true);
+					}
 
-                    int newline = text.indexOf("\\n");
-                    @Pc(704) String split;
+					int newline = text.indexOf("\\n");
+					@Pc(704) String split;
 					if (newline != -1) {
-					split = text.substring(0, newline);
-					text = text.substring(newline + 2);
+						split = text.substring(0, newline);
+						text = text.substring(newline + 2);
 					} else {
-					split = text;
-					text = "";
+						split = text;
+						text = "";
 					}
 
 					if (child.center) {
-                        font.drawStringTaggableCenter(split, childX + child.width / 2, lineY, color, child.shadow);
-                    } else {
-                        font.drawStringTaggable(childX, lineY, split, color, child.shadow);
-                    }
-                }
-            } else if (child.type == 5) {
-                @Pc(766) Pix24 image;
-                if (this.executeInterfaceScript(child)) {
-                    image = child.activeImage;
-                } else {
-                    image = child.image;
-                }
+						font.drawStringTaggableCenter(split, childX + child.width / 2, lineY, color, child.shadow);
+					} else {
+						font.drawStringTaggable(childX, lineY, split, color, child.shadow);
+					}
+				}
+			} else if (child.type == 5) {
+				@Pc(766) Pix24 image;
+				if (this.executeInterfaceScript(child)) {
+					image = child.activeImage;
+				} else {
+					image = child.image;
+				}
 
-                if (image != null) {
-                    image.draw(childX, childY);
-                }
-            } else if (child.type == 6) {
-                int tmpX = Draw3D.centerX;
-                int tmpY = Draw3D.centerY;
+				if (image != null) {
+					image.draw(childX, childY);
+				}
+			} else if (child.type == 6) {
+				int tmpX = Draw3D.centerX;
+				int tmpY = Draw3D.centerY;
 
-                Draw3D.centerX = childX + child.width / 2;
-                Draw3D.centerY = childY + child.height / 2;
+				Draw3D.centerX = childX + child.width / 2;
+				Draw3D.centerY = childY + child.height / 2;
 
-                int eyeY = Draw3D.sin[child.modelPitch] * child.modelZoom >> 16;
-                int eyeZ = Draw3D.cos[child.modelPitch] * child.modelZoom >> 16;
+				int eyeY = Draw3D.sin[child.modelPitch] * child.modelZoom >> 16;
+				int eyeZ = Draw3D.cos[child.modelPitch] * child.modelZoom >> 16;
 
-                @Pc(827) boolean active = this.executeInterfaceScript(child);
-                int seqId;
-                if (active) {
-                    seqId = child.activeSeqId;
-                } else {
-                    seqId = child.seqId;
-                }
+				@Pc(827) boolean active = this.executeInterfaceScript(child);
+				int seqId;
+				if (active) {
+					seqId = child.activeSeqId;
+				} else {
+					seqId = child.seqId;
+				}
 
-                @Pc(846) Model model;
-                if (seqId == -1) {
-                    model = child.getModel(-1, -1, active);
-                } else {
-                    @Pc(852) SeqType seq = SeqType.instances[seqId];
-                    model = child.getModel(seq.frames[child.seqFrame], seq.iframes[child.seqFrame], active);
-                }
+				@Pc(846) Model model;
+				if (seqId == -1) {
+					model = child.getModel(-1, -1, active);
+				} else {
+					@Pc(852) SeqType seq = SeqType.instances[seqId];
+					model = child.getModel(seq.frames[child.seqFrame], seq.iframes[child.seqFrame], active);
+				}
 
-                if (model != null) {
-                    model.drawSimple(0, child.modelYaw, 0, child.modelPitch, 0, eyeY, eyeZ);
-                }
+				if (model != null) {
+					model.drawSimple(0, child.modelYaw, 0, child.modelPitch, 0, eyeY, eyeZ);
+				}
 
-                Draw3D.centerX = tmpX;
-                Draw3D.centerY = tmpY;
-            } else if (child.type == 7) {
-                PixFont font = child.font;
-                int slot = 0;
-                for (int row = 0; row < child.height; row++) {
-                    for (int col = 0; col < child.width; col++) {
-                        if (child.inventorySlotObjId[slot] > 0) {
-                            @Pc(915) ObjType obj = ObjType.get(child.inventorySlotObjId[slot] - 1);
-                            @Pc(918) String text = obj.name;
-                            if (obj.stackable || child.inventorySlotObjCount[slot] != 1) {
-                                text = text + " x" + formatObjCountTagged(child.inventorySlotObjCount[slot]);
-                            }
+				Draw3D.centerX = tmpX;
+				Draw3D.centerY = tmpY;
+			} else if (child.type == 7) {
+				PixFont font = child.font;
+				int slot = 0;
+				for (int row = 0; row < child.height; row++) {
+					for (int col = 0; col < child.width; col++) {
+						if (child.inventorySlotObjId[slot] > 0) {
+							@Pc(915) ObjType obj = ObjType.get(child.inventorySlotObjId[slot] - 1);
+							@Pc(918) String text = obj.name;
+							if (obj.stackable || child.inventorySlotObjCount[slot] != 1) {
+								text = text + " x" + formatObjCountTagged(child.inventorySlotObjCount[slot]);
+							}
 
-                            int textX = childX + col * (child.inventoryMarginX + 115);
-                            int textY = childY + row * (child.inventoryMarginY + 12);
+							int textX = childX + col * (child.inventoryMarginX + 115);
+							int textY = childY + row * (child.inventoryMarginY + 12);
 
-                            if (child.center) {
-                                font.drawStringTaggableCenter(text, textX + child.width / 2, textY, child.color, child.shadow);
-                            } else {
-                                font.drawStringTaggable(textX, textY, text, child.color, child.shadow);
-                            }
-                        }
+							if (child.center) {
+								font.drawStringTaggableCenter(text, textX + child.width / 2, textY, child.color, child.shadow);
+							} else {
+								font.drawStringTaggable(textX, textY, text, child.color, child.shadow);
+							}
+						}
 
-                        slot++;
-                    }
-                }
-            }
-        }
+						slot++;
+					}
+				}
+			}
+		}
 
-        Draw2D.setBounds(bottom, right, top, left);
-    }
+		Draw2D.setBounds(bottom, right, top, left);
+	}
 
 	@OriginalMember(owner = "client!client", name = "a", descriptor = "(ZILclient!kb;)V")
 	private void readPlayerUpdates(@OriginalArg(2) Packet buf, @OriginalArg(1) int size) {
@@ -4605,85 +4609,74 @@ public class client extends GameShell {
 	@OriginalMember(owner = "client!client", name = "d", descriptor = "(II)V")
 	private void updateVarp(@OriginalArg(0) int id) {
 		@Pc(8) int clientcode = VarpType.instances[id].clientcode;
-		if (clientcode != 0) {
-			@Pc(16) int value = this.varps[id];
-			if (clientcode == 1) {
-				if (value == 1) {
-					Draw3D.setBrightness(0.9D);
-				}
-				if (value == 2) {
-					Draw3D.setBrightness(0.8D);
-				}
-				if (value == 3) {
-					Draw3D.setBrightness(0.7D);
-				}
-				if (value == 4) {
-					Draw3D.setBrightness(0.6D);
-				}
-				ObjType.iconCache.clear();
-				this.redrawTitleBackground = true;
+		if (clientcode == 0) {
+			return;
+		}
+
+		@Pc(16) int value = this.varps[id];
+		if (clientcode == 1) {
+			if (value == 1) {
+				Draw3D.setBrightness(0.9D);
+			} else if (value == 2) {
+				Draw3D.setBrightness(0.8D);
+			} else if (value == 3) {
+				Draw3D.setBrightness(0.7D);
+			} else if (value == 4) {
+				Draw3D.setBrightness(0.6D);
 			}
-			if (clientcode == 3) {
-				@Pc(54) boolean lastMidiActive = this.midiActive;
-				if (value == 0) {
-					this.setMidiVolume(0);
-					this.midiActive = true;
-				}
-				if (value == 1) {
-					this.setMidiVolume(-400);
-					this.midiActive = true;
-				}
-				if (value == 2) {
-					this.setMidiVolume(-800);
-					this.midiActive = true;
-				}
-				if (value == 3) {
-					this.setMidiVolume(-1200);
-					this.midiActive = true;
-				}
-				if (value == 4) {
-					this.midiActive = false;
-				}
-				if (this.midiActive != lastMidiActive) {
-					if (this.midiActive) {
-						this.setMidi(this.currentMidi, this.midiCrc, this.midiSize);
-					} else {
-						this.stopMidi();
-					}
-					this.nextMusicDelay = 0;
-				}
+
+			ObjType.iconCache.clear();
+			this.redrawTitleBackground = true;
+		} else if (clientcode == 3) {
+			@Pc(54) boolean lastMidiActive = this.midiActive;
+			if (value == 0) {
+				this.setMidiVolume(0);
+				this.midiActive = true;
+			} else if (value == 1) {
+				this.setMidiVolume(-400);
+				this.midiActive = true;
+			} else if (value == 2) {
+				this.setMidiVolume(-800);
+				this.midiActive = true;
+			} else if (value == 3) {
+				this.setMidiVolume(-1200);
+				this.midiActive = true;
+			} else if (value == 4) {
+				this.midiActive = false;
 			}
-			if (clientcode == 4) {
-				if (value == 0) {
-					this.waveEnabled = true;
-					this.setWaveVolume(0);
+
+			if (this.midiActive != lastMidiActive) {
+				if (this.midiActive) {
+					this.setMidi(this.currentMidi, this.midiCrc, this.midiSize);
+				} else {
+					this.stopMidi();
 				}
-				if (value == 1) {
-					this.waveEnabled = true;
-					this.setWaveVolume(-400);
-				}
-				if (value == 2) {
-					this.waveEnabled = true;
-					this.setWaveVolume(-800);
-				}
-				if (value == 3) {
-					this.waveEnabled = true;
-					this.setWaveVolume(-1200);
-				}
-				if (value == 4) {
-					this.waveEnabled = false;
-				}
+
+				this.nextMusicDelay = 0;
 			}
-			if (clientcode == 5) {
-				this.mouseButtonsOption = value;
+		} else if (clientcode == 4) {
+			if (value == 0) {
+				this.waveEnabled = true;
+				this.setWaveVolume(0);
+			} else if (value == 1) {
+				this.waveEnabled = true;
+				this.setWaveVolume(-400);
+			} else if (value == 2) {
+				this.waveEnabled = true;
+				this.setWaveVolume(-800);
+			} else if (value == 3) {
+				this.waveEnabled = true;
+				this.setWaveVolume(-1200);
+			} else if (value == 4) {
+				this.waveEnabled = false;
 			}
-			if (clientcode == 6) {
-				this.chatEffects = value;
-			}
-			if (clientcode == 8) {
-				this.splitPrivateChat = value;
-				this.redrawChatback = true;
-			}
+		} else if (clientcode == 5) {
+			this.mouseButtonsOption = value;
+		} else if (clientcode == 6) {
+			this.chatEffects = value;
+		} else if (clientcode == 8) {
+			this.splitPrivateChat = value;
+			this.redrawChatback = true;
 		}
 	}
 
@@ -4709,6 +4702,7 @@ public class client extends GameShell {
 			entity.z = entity.pathTileZ[0] * 128 + entity.size * 64;
 			entity.pathLength = 0;
 		}
+
 		if (entity == this.localPlayer && (entity.x < 1536 || entity.z < 1536 || entity.x >= 11776 || entity.z >= 11776)) {
 			entity.primarySeqId = -1;
 			entity.spotanimId = -1;
@@ -4718,6 +4712,7 @@ public class client extends GameShell {
 			entity.z = entity.pathTileZ[0] * 128 + entity.size * 64;
 			entity.pathLength = 0;
 		}
+
 		if (entity.forceMoveEndCycle > loopCycle) {
 			this.updateForceMovement(entity);
 		} else if (entity.forceMoveStartCycle >= loopCycle) {
@@ -4725,6 +4720,7 @@ public class client extends GameShell {
 		} else {
 			this.updateMovement(entity);
 		}
+
 		this.updateFacingDirection(entity);
 		this.updateSequences(entity);
 	}
@@ -5067,12 +5063,15 @@ public class client extends GameShell {
 				this.areaMapback.draw(super.graphics, 561, 5);
 			}
 		}
+
 		if (this.sceneState == 2) {
 			this.drawScene();
 		}
+
 		if (this.menuVisible && this.menuArea == 1) {
 			this.redrawSidebar = true;
 		}
+
 		@Pc(152) boolean redraw;
 		if (this.sidebarInterfaceId != -1) {
 			redraw = this.updateInterfaceAnimation(this.sidebarInterfaceId, this.sceneDelta);
@@ -5080,16 +5079,20 @@ public class client extends GameShell {
 				this.redrawSidebar = true;
 			}
 		}
+
 		if (this.selectedArea == 2) {
 			this.redrawSidebar = true;
 		}
+
 		if (this.objDragArea == 2) {
 			this.redrawSidebar = true;
 		}
+
 		if (this.redrawSidebar) {
 			this.drawSidebar();
 			this.redrawSidebar = false;
 		}
+
 		if (this.chatInterfaceId == -1) {
 			this.chatInterface.scrollPosition = this.chatScrollHeight - this.chatScrollOffset - 77;
 			if (super.mouseX > 453 && super.mouseX < 565 && super.mouseY > 350) {
@@ -5323,253 +5326,253 @@ public class client extends GameShell {
 
 	@OriginalMember(owner = "client!client", name = "f", descriptor = "(II)V")
 	private void useMenuOption(@OriginalArg(1) int optionId) {
-        if (optionId < 0) {
-            return;
-        }
+		if (optionId < 0) {
+			return;
+		}
 
-        if (this.chatbackInputOpen) {
-            this.chatbackInputOpen = false;
-            this.redrawChatback = true;
-        }
+		if (this.chatbackInputOpen) {
+			this.chatbackInputOpen = false;
+			this.redrawChatback = true;
+		}
 
 		@Pc(28) int action = this.menuAction[optionId];
 		@Pc(33) int a = this.menuParamA[optionId];
-        @Pc(18) int b = this.menuParamB[optionId];
-        @Pc(23) int c = this.menuParamC[optionId];
+		@Pc(18) int b = this.menuParamB[optionId];
+		@Pc(23) int c = this.menuParamC[optionId];
 
-        if (action >= 2000) {
-            action -= 2000;
-        }
+		if (action >= 2000) {
+			action -= 2000;
+		}
 
-        if (action == 903 || action == 363) {
-            String option = this.menuOption[optionId];
+		if (action == 903 || action == 363) {
+			String option = this.menuOption[optionId];
 			int tag = option.indexOf("@whi@");
 
-            if (tag != -1) {
-                option = option.substring(tag + 5).trim();
-                String name = JString.formatName(JString.fromBase37(JString.toBase37(option)));
-                @Pc(71) boolean found = false;
+			if (tag != -1) {
+				option = option.substring(tag + 5).trim();
+				String name = JString.formatName(JString.fromBase37(JString.toBase37(option)));
+				@Pc(71) boolean found = false;
 
-                for (int i = 0; i < this.playerCount; i++) {
-                    @Pc(83) PlayerEntity player = this.players[this.playerIds[i]];
+				for (int i = 0; i < this.playerCount; i++) {
+					@Pc(83) PlayerEntity player = this.players[this.playerIds[i]];
 
-                    if (player != null && player.name != null && player.name.equalsIgnoreCase(name)) {
-                        this.tryMove(this.localPlayer.pathTileX[0], this.localPlayer.pathTileZ[0], player.pathTileX[0], player.pathTileZ[0], 2, 1, 1, 0, 0, 0, false);
+					if (player != null && player.name != null && player.name.equalsIgnoreCase(name)) {
+						this.tryMove(this.localPlayer.pathTileX[0], this.localPlayer.pathTileZ[0], player.pathTileX[0], player.pathTileZ[0], 2, 1, 1, 0, 0, 0, false);
 
-                        if (action == 903) {
+						if (action == 903) {
 							// OPPLAYER4
-                            this.out.p1isaac(206);
-                        } else if (action == 363) {
+							this.out.p1isaac(206);
+						} else if (action == 363) {
 							// OPPLAYER1
-                            this.out.p1isaac(164);
-                        }
+							this.out.p1isaac(164);
+						}
 
-                        this.out.p2(this.playerIds[i]);
-                        found = true;
-                        break;
-                    }
-                }
+						this.out.p2(this.playerIds[i]);
+						found = true;
+						break;
+					}
+				}
 
-                if (!found) {
-                    this.addMessage(0, "Unable to find " + name, "");
-                }
-            }
-        } else if (action == 450) {
+				if (!found) {
+					this.addMessage(0, "Unable to find " + name, "");
+				}
+			}
+		} else if (action == 450) {
 			// OPLOCU
 			if (this.interactWithLoc(75, b, c, a)) {
 				this.out.p2(this.objInterface);
 				this.out.p2(this.objSelectedSlot);
 				this.out.p2(this.objSelectedInterface);
 			}
-        } else if (action == 405 || action == 38 || action == 422 || action == 478 || action == 347) {
-            if (action == 478) {
-                if ((b & 0x3) == 0) {
-                    opHeld1Counter++;
-                }
+		} else if (action == 405 || action == 38 || action == 422 || action == 478 || action == 347) {
+			if (action == 478) {
+				if ((b & 0x3) == 0) {
+					opHeld1Counter++;
+				}
 
-                if (opHeld1Counter >= 90) {
+				if (opHeld1Counter >= 90) {
 					// ANTICHEAT_OPLOGIC5
-                    this.out.p1isaac(220);
-                }
+					this.out.p1isaac(220);
+				}
 
 				// OPHELD4
-                this.out.p1isaac(157);
-            } else if (action == 347) {
+				this.out.p1isaac(157);
+			} else if (action == 347) {
 				// OPHELD5
-                this.out.p1isaac(211);
-            } else if (action == 422) {
+				this.out.p1isaac(211);
+			} else if (action == 422) {
 				// OPHELD3
-                this.out.p1isaac(133);
-            } else if (action == 405) {
-                opHeld4Counter += a;
-                if (opHeld4Counter >= 97) {
+				this.out.p1isaac(133);
+			} else if (action == 405) {
+				opHeld4Counter += a;
+				if (opHeld4Counter >= 97) {
 					// ANTICHEAT_OPLOGIC3
-                    this.out.p1isaac(30);
-                    this.out.p3(14953816);
-                }
+					this.out.p1isaac(30);
+					this.out.p3(14953816);
+				}
 
 				// OPHELD1
-                this.out.p1isaac(195);
-            } else if (action == 38) {
+				this.out.p1isaac(195);
+			} else if (action == 38) {
 				// OPHELD2
-                this.out.p1isaac(71);
-            }
+				this.out.p1isaac(71);
+			}
 
-            this.out.p2(a);
-            this.out.p2(b);
-            this.out.p2(c);
-            this.selectedCycle = 0;
-            this.selectedInterface = c;
-            this.selectedItem = b;
-            this.selectedArea = 2;
+			this.out.p2(a);
+			this.out.p2(b);
+			this.out.p2(c);
+			this.selectedCycle = 0;
+			this.selectedInterface = c;
+			this.selectedItem = b;
+			this.selectedArea = 2;
 
-            if (ComType.instances[c].parentId == this.viewportInterfaceId) {
-                this.selectedArea = 1;
-            }
+			if (ComType.instances[c].parentId == this.viewportInterfaceId) {
+				this.selectedArea = 1;
+			}
 
-            if (ComType.instances[c].parentId == this.chatInterfaceId) {
-                this.selectedArea = 3;
-            }
-        } else if (action == 728 || action == 542 || action == 6 || action == 963 || action == 245) {
-            NpcEntity npc = this.npcs[a];
-            if (npc != null) {
+			if (ComType.instances[c].parentId == this.chatInterfaceId) {
+				this.selectedArea = 3;
+			}
+		} else if (action == 728 || action == 542 || action == 6 || action == 963 || action == 245) {
+			NpcEntity npc = this.npcs[a];
+			if (npc != null) {
 				this.tryMove(this.localPlayer.pathTileX[0], this.localPlayer.pathTileZ[0], npc.pathTileX[0], npc.pathTileZ[0], 2, 1, 1, 0, 0, 0, false);
 
-                this.crossX = super.mouseClickX;
-                this.crossY = super.mouseClickY;
-                this.crossMode = 2;
-                this.crossCycle = 0;
+				this.crossX = super.mouseClickX;
+				this.crossY = super.mouseClickY;
+				this.crossMode = 2;
+				this.crossCycle = 0;
 
-                if (action == 542) {
+				if (action == 542) {
 					// OPNPC2
-                    this.out.p1isaac(8);
-                } else if (action == 6) {
-                    if ((a & 0x3) == 0) {
-                        opNpc3Counter++;
-                    }
+					this.out.p1isaac(8);
+				} else if (action == 6) {
+					if ((a & 0x3) == 0) {
+						opNpc3Counter++;
+					}
 
-                    if (opNpc3Counter >= 124) {
+					if (opNpc3Counter >= 124) {
 						// ANTICHEAT_OPLOGIC2
-                        this.out.p1isaac(88);
-                        this.out.p4(0);
-                    }
+						this.out.p1isaac(88);
+						this.out.p4(0);
+					}
 
 					// OPNPC3
-                    this.out.p1isaac(27);
-                } else if (action == 963) {
+					this.out.p1isaac(27);
+				} else if (action == 963) {
 					// OPNPC4
-                    this.out.p1isaac(113);
-                } else if (action == 728) {
+					this.out.p1isaac(113);
+				} else if (action == 728) {
 					// OPNPC1
-                    this.out.p1isaac(194);
-                } else if (action == 245) {
-                    if ((a & 0x3) == 0) {
-                        opNpc5Counter++;
-                    }
+					this.out.p1isaac(194);
+				} else if (action == 245) {
+					if ((a & 0x3) == 0) {
+						opNpc5Counter++;
+					}
 
-                    if (opNpc5Counter >= 85) {
+					if (opNpc5Counter >= 85) {
 						// ANTICHEAT_OPLOGIC4
-                        this.out.p1isaac(176);
-                        this.out.p2(39596);
-                    }
+						this.out.p1isaac(176);
+						this.out.p2(39596);
+					}
 
 					// OPNPC5
-                    this.out.p1isaac(100);
-                }
+					this.out.p1isaac(100);
+				}
 
-                this.out.p2(a);
-            }
-        } else if (action == 217) {
-            boolean success = this.tryMove(this.localPlayer.pathTileX[0], this.localPlayer.pathTileZ[0], b, c, 2, 0, 0, 0, 0, 0, false);
-            if (!success) {
-                this.tryMove(this.localPlayer.pathTileX[0], this.localPlayer.pathTileZ[0], b, c, 2, 1, 1, 0, 0, 0, false);
-            }
+				this.out.p2(a);
+			}
+		} else if (action == 217) {
+			boolean success = this.tryMove(this.localPlayer.pathTileX[0], this.localPlayer.pathTileZ[0], b, c, 2, 0, 0, 0, 0, 0, false);
+			if (!success) {
+				this.tryMove(this.localPlayer.pathTileX[0], this.localPlayer.pathTileZ[0], b, c, 2, 1, 1, 0, 0, 0, false);
+			}
 
-            this.crossX = super.mouseClickX;
-            this.crossY = super.mouseClickY;
-            this.crossMode = 2;
-            this.crossCycle = 0;
+			this.crossX = super.mouseClickX;
+			this.crossY = super.mouseClickY;
+			this.crossMode = 2;
+			this.crossCycle = 0;
 
 			// OPOBJU
-            this.out.p1isaac(239);
-            this.out.p2(b + this.sceneBaseTileX);
-            this.out.p2(c + this.sceneBaseTileZ);
-            this.out.p2(a);
-            this.out.p2(this.objInterface);
-            this.out.p2(this.objSelectedSlot);
-            this.out.p2(this.objSelectedInterface);
-        } else if (action == 1175) {
-            @Pc(586) int locId = a >> 14 & 0x7FFF;
-            @Pc(589) LocType loc = LocType.get(locId);
+			this.out.p1isaac(239);
+			this.out.p2(b + this.sceneBaseTileX);
+			this.out.p2(c + this.sceneBaseTileZ);
+			this.out.p2(a);
+			this.out.p2(this.objInterface);
+			this.out.p2(this.objSelectedSlot);
+			this.out.p2(this.objSelectedInterface);
+		} else if (action == 1175) {
+			@Pc(586) int locId = a >> 14 & 0x7FFF;
+			@Pc(589) LocType loc = LocType.get(locId);
 
 			String examine;
-            if (loc.desc == null) {
+			if (loc.desc == null) {
 				examine = "It's a " + loc.name + ".";
-            } else {
+			} else {
 				examine = loc.desc;
-            }
+			}
 
-            this.addMessage(0, examine, "");
-        } else if (action == 285) {
+			this.addMessage(0, examine, "");
+		} else if (action == 285) {
 			// OPLOC1
-            this.interactWithLoc(245, b, c, a);
-        } else if (action == 881) {
+			this.interactWithLoc(245, b, c, a);
+		} else if (action == 881) {
 			// OPHELDU
-            this.out.p1isaac(130);
-            this.out.p2(a);
-            this.out.p2(b);
-            this.out.p2(c);
-            this.out.p2(this.objInterface);
-            this.out.p2(this.objSelectedSlot);
-            this.out.p2(this.objSelectedInterface);
+			this.out.p1isaac(130);
+			this.out.p2(a);
+			this.out.p2(b);
+			this.out.p2(c);
+			this.out.p2(this.objInterface);
+			this.out.p2(this.objSelectedSlot);
+			this.out.p2(this.objSelectedInterface);
 
-            this.selectedCycle = 0;
-            this.selectedInterface = c;
-            this.selectedItem = b;
-            this.selectedArea = 2;
+			this.selectedCycle = 0;
+			this.selectedInterface = c;
+			this.selectedItem = b;
+			this.selectedArea = 2;
 
-            if (ComType.instances[c].parentId == this.viewportInterfaceId) {
-                this.selectedArea = 1;
-            }
+			if (ComType.instances[c].parentId == this.viewportInterfaceId) {
+				this.selectedArea = 1;
+			}
 
-            if (ComType.instances[c].parentId == this.chatInterfaceId) {
-                this.selectedArea = 3;
-            }
-        } else if (action == 391) {
+			if (ComType.instances[c].parentId == this.chatInterfaceId) {
+				this.selectedArea = 3;
+			}
+		} else if (action == 391) {
 			// OPHELDT
-            this.out.p1isaac(48);
-            this.out.p2(a);
-            this.out.p2(b);
-            this.out.p2(c);
-            this.out.p2(this.activeSpellId);
+			this.out.p1isaac(48);
+			this.out.p2(a);
+			this.out.p2(b);
+			this.out.p2(c);
+			this.out.p2(this.activeSpellId);
 
-            this.selectedCycle = 0;
-            this.selectedInterface = c;
-            this.selectedItem = b;
-            this.selectedArea = 2;
+			this.selectedCycle = 0;
+			this.selectedInterface = c;
+			this.selectedItem = b;
+			this.selectedArea = 2;
 
-            if (ComType.instances[c].parentId == this.viewportInterfaceId) {
-                this.selectedArea = 1;
-            }
+			if (ComType.instances[c].parentId == this.viewportInterfaceId) {
+				this.selectedArea = 1;
+			}
 
-            if (ComType.instances[c].parentId == this.chatInterfaceId) {
-                this.selectedArea = 3;
-            }
-        } else if (action == 660) {
-            if (this.menuVisible) {
-                this.scene.click(b - 8, c - 11);
-            } else {
-                this.scene.click(super.mouseClickX - 8, super.mouseClickY - 11);
-            }
-        } else if (action == 188) {
-            this.objSelected = 1;
-            this.objSelectedSlot = b;
-            this.objSelectedInterface = c;
-            this.objInterface = a;
-            this.objSelectedName = ObjType.get(a).name;
-            this.spellSelected = 0;
+			if (ComType.instances[c].parentId == this.chatInterfaceId) {
+				this.selectedArea = 3;
+			}
+		} else if (action == 660) {
+			if (this.menuVisible) {
+				this.scene.click(b - 8, c - 11);
+			} else {
+				this.scene.click(super.mouseClickX - 8, super.mouseClickY - 11);
+			}
+		} else if (action == 188) {
+			this.objSelected = 1;
+			this.objSelectedSlot = b;
+			this.objSelectedInterface = c;
+			this.objInterface = a;
+			this.objSelectedName = ObjType.get(a).name;
+			this.spellSelected = 0;
 			return;
-        } else if (action == 44) {
+		} else if (action == 44) {
 			if (!this.pressedContinueOption) {
 				// RESUME_PAUSEBUTTON
 				this.out.p1isaac(235);
@@ -5972,7 +5975,7 @@ public class client extends GameShell {
 
 		this.objSelected = 0;
 		this.spellSelected = 0;
-    }
+	}
 
 	@OriginalMember(owner = "client!client", name = "s", descriptor = "(I)Ljava/lang/String;")
 	private String getHost() {
@@ -6022,49 +6025,49 @@ public class client extends GameShell {
 
 	@OriginalMember(owner = "client!client", name = "c", descriptor = "(III)V")
 	private void handlePrivateChatInput(@OriginalArg(0) int mouseX, @OriginalArg(2) int mouseY) {
-        if (this.splitPrivateChat == 0) {
-            return;
-        }
+		if (this.splitPrivateChat == 0) {
+			return;
+		}
 
-        @Pc(5) int lineOffset = 0;
-        if (this.systemUpdateTimer != 0) {
-            lineOffset = 1;
-        }
+		@Pc(5) int lineOffset = 0;
+		if (this.systemUpdateTimer != 0) {
+			lineOffset = 1;
+		}
 
-        for (@Pc(12) int i = 0; i < 100; i++) {
-            if (this.messageText[i] != null) {
-                @Pc(24) int type = this.messageType[i];
-                if ((type == 3 || type == 7) && (type == 7 || this.privateChatSetting == 0 || this.privateChatSetting == 1 && this.isFriend(this.messageSender[i]))) {
-                    @Pc(54) int y = 329 - lineOffset * 13;
-                    if (super.mouseX > 8 && super.mouseX < 520 && mouseY - 11 > y - 10 && mouseY - 11 <= y + 3) {
-                        if (this.rights) {
-                            this.menuOption[this.menuSize] = "Report abuse @whi@" + this.messageSender[i];
-                            this.menuAction[this.menuSize] = 2034;
-                            this.menuSize++;
-                        }
-                        this.menuOption[this.menuSize] = "Add ignore @whi@" + this.messageSender[i];
-                        this.menuAction[this.menuSize] = 2436;
-                        this.menuSize++;
-                        this.menuOption[this.menuSize] = "Add friend @whi@" + this.messageSender[i];
-                        this.menuAction[this.menuSize] = 2406;
-                        this.menuSize++;
-                    }
+		for (@Pc(12) int i = 0; i < 100; i++) {
+			if (this.messageText[i] != null) {
+				@Pc(24) int type = this.messageType[i];
+				if ((type == 3 || type == 7) && (type == 7 || this.privateChatSetting == 0 || this.privateChatSetting == 1 && this.isFriend(this.messageSender[i]))) {
+					@Pc(54) int y = 329 - lineOffset * 13;
+					if (super.mouseX > 8 && super.mouseX < 520 && mouseY - 11 > y - 10 && mouseY - 11 <= y + 3) {
+						if (this.rights) {
+							this.menuOption[this.menuSize] = "Report abuse @whi@" + this.messageSender[i];
+							this.menuAction[this.menuSize] = 2034;
+							this.menuSize++;
+						}
+						this.menuOption[this.menuSize] = "Add ignore @whi@" + this.messageSender[i];
+						this.menuAction[this.menuSize] = 2436;
+						this.menuSize++;
+						this.menuOption[this.menuSize] = "Add friend @whi@" + this.messageSender[i];
+						this.menuAction[this.menuSize] = 2406;
+						this.menuSize++;
+					}
 
-                    lineOffset++;
-                    if (lineOffset >= 5) {
-                        return;
-                    }
-                }
+					lineOffset++;
+					if (lineOffset >= 5) {
+						return;
+					}
+				}
 
-                if ((type == 5 || type == 6) && this.privateChatSetting < 2) {
-                    lineOffset++;
-                    if (lineOffset >= 5) {
-                        return;
-                    }
-                }
-            }
-        }
-    }
+				if ((type == 5 || type == 6) && this.privateChatSetting < 2) {
+					lineOffset++;
+					if (lineOffset >= 5) {
+						return;
+					}
+				}
+			}
+		}
+	}
 
 	@OriginalMember(owner = "client!client", name = "a", descriptor = "(ILclient!hc;)V")
 	private void updateInterfaceContent(@OriginalArg(1) ComType component) {
@@ -6456,18 +6459,17 @@ public class client extends GameShell {
 		@Pc(34) boolean good = this.frame != null;
 		@Pc(38) String host = this.getHost();
 		if (host.endsWith("2004scape.org")) {
-            // intended domain for players
+			// intended domain for players
 			good = true;
 		}
 		if (host.endsWith("localhost") || host.endsWith("127.0.0.1")) {
-            // allow localhost
+			// allow localhost
 			good = true;
 		}
 		if (host.startsWith("192.168.")) {
-            // allow lan
+			// allow lan
 			good = true;
 		}
-
 		if (!good) {
 			this.errorHost = true;
 			return;
@@ -6723,83 +6725,85 @@ public class client extends GameShell {
 
 	@OriginalMember(owner = "client!client", name = "v", descriptor = "(I)V")
 	private void handleInput() {
-		if (this.objDragArea == 0) {
-			this.menuOption[0] = "Cancel";
-			this.menuAction[0] = 1252;
-			this.menuSize = 1;
-			this.handlePrivateChatInput(super.mouseX, super.mouseY);
-			this.lastHoveredInterfaceId = 0;
+		if (this.objDragArea != 0) {
+			return;
+		}
 
-			if (super.mouseX > 8 && super.mouseY > 11 && super.mouseX < 520 && super.mouseY < 345) {
-				if (this.viewportInterfaceId == -1) {
-					this.handleViewportOptions();
-				} else {
-					this.handleInterfaceInput(ComType.instances[this.viewportInterfaceId], super.mouseX, super.mouseY, 8, 11, 0);
-				}
+		this.menuOption[0] = "Cancel";
+		this.menuAction[0] = 1252;
+		this.menuSize = 1;
+		this.handlePrivateChatInput(super.mouseX, super.mouseY);
+		this.lastHoveredInterfaceId = 0;
+
+		if (super.mouseX > 8 && super.mouseY > 11 && super.mouseX < 520 && super.mouseY < 345) {
+			if (this.viewportInterfaceId == -1) {
+				this.handleViewportOptions();
+			} else {
+				this.handleInterfaceInput(ComType.instances[this.viewportInterfaceId], super.mouseX, super.mouseY, 8, 11, 0);
 			}
+		}
 
-			if (this.lastHoveredInterfaceId != this.viewportHoveredInterfaceIndex) {
-				this.viewportHoveredInterfaceIndex = this.lastHoveredInterfaceId;
+		if (this.lastHoveredInterfaceId != this.viewportHoveredInterfaceIndex) {
+			this.viewportHoveredInterfaceIndex = this.lastHoveredInterfaceId;
+		}
+
+		this.lastHoveredInterfaceId = 0;
+
+		if (super.mouseX > 562 && super.mouseY > 231 && super.mouseX < 752 && super.mouseY < 492) {
+			if (this.sidebarInterfaceId != -1) {
+				this.handleInterfaceInput(ComType.instances[this.sidebarInterfaceId], super.mouseX, super.mouseY, 562, 231, 0);
+			} else if (this.tabInterfaceId[this.selectedTab] != -1) {
+				this.handleInterfaceInput(ComType.instances[this.tabInterfaceId[this.selectedTab]], super.mouseX, super.mouseY, 562, 231, 0);
 			}
+		}
 
-			this.lastHoveredInterfaceId = 0;
+		if (this.lastHoveredInterfaceId != this.sidebarHoveredInterfaceIndex) {
+			this.redrawSidebar = true;
+			this.sidebarHoveredInterfaceIndex = this.lastHoveredInterfaceId;
+		}
 
-			if (super.mouseX > 562 && super.mouseY > 231 && super.mouseX < 752 && super.mouseY < 492) {
-				if (this.sidebarInterfaceId != -1) {
-					this.handleInterfaceInput(ComType.instances[this.sidebarInterfaceId], super.mouseX, super.mouseY, 562, 231, 0);
-				} else if (this.tabInterfaceId[this.selectedTab] != -1) {
-					this.handleInterfaceInput(ComType.instances[this.tabInterfaceId[this.selectedTab]], super.mouseX, super.mouseY, 562, 231, 0);
-				}
+		this.lastHoveredInterfaceId = 0;
+
+		if (super.mouseX > 22 && super.mouseY > 375 && super.mouseX < 431 && super.mouseY < 471) {
+			if (this.chatInterfaceId == -1) {
+				this.handleChatMouseInput(super.mouseX - 22, super.mouseY - 375);
+			} else {
+				this.handleInterfaceInput(ComType.instances[this.chatInterfaceId], super.mouseX, super.mouseY, 22, 375, 0);
 			}
+		}
 
-			if (this.lastHoveredInterfaceId != this.sidebarHoveredInterfaceIndex) {
-				this.redrawSidebar = true;
-				this.sidebarHoveredInterfaceIndex = this.lastHoveredInterfaceId;
-			}
+		if (this.chatInterfaceId != -1 && this.lastHoveredInterfaceId != this.chatHoveredInterfaceIndex) {
+			this.redrawChatback = true;
+			this.chatHoveredInterfaceIndex = this.lastHoveredInterfaceId;
+		}
 
-			this.lastHoveredInterfaceId = 0;
+		@Pc(223) boolean done = false;
+		while (!done) {
+			done = true;
 
-			if (super.mouseX > 22 && super.mouseY > 375 && super.mouseX < 431 && super.mouseY < 471) {
-				if (this.chatInterfaceId == -1) {
-					this.handleChatMouseInput(super.mouseX - 22, super.mouseY - 375);
-				} else {
-					this.handleInterfaceInput(ComType.instances[this.chatInterfaceId], super.mouseX, super.mouseY, 22, 375, 0);
-				}
-			}
+			for (@Pc(229) int i = 0; i < this.menuSize - 1; i++) {
+				if (this.menuAction[i] < 1000 && this.menuAction[i + 1] > 1000) {
+					@Pc(250) String tmp0 = this.menuOption[i];
+					this.menuOption[i] = this.menuOption[i + 1];
+					this.menuOption[i + 1] = tmp0;
 
-			if (this.chatInterfaceId != -1 && this.lastHoveredInterfaceId != this.chatHoveredInterfaceIndex) {
-				this.redrawChatback = true;
-				this.chatHoveredInterfaceIndex = this.lastHoveredInterfaceId;
-			}
+					@Pc(272) int tmp1 = this.menuAction[i];
+					this.menuAction[i] = this.menuAction[i + 1];
+					this.menuAction[i + 1] = tmp1;
 
-			@Pc(223) boolean done = false;
-			while (!done) {
-				done = true;
+					@Pc(294) int tmp2 = this.menuParamB[i];
+					this.menuParamB[i] = this.menuParamB[i + 1];
+					this.menuParamB[i + 1] = tmp2;
 
-				for (@Pc(229) int i = 0; i < this.menuSize - 1; i++) {
-					if (this.menuAction[i] < 1000 && this.menuAction[i + 1] > 1000) {
-						@Pc(250) String tmp0 = this.menuOption[i];
-						this.menuOption[i] = this.menuOption[i + 1];
-						this.menuOption[i + 1] = tmp0;
+					@Pc(316) int tmp3 = this.menuParamC[i];
+					this.menuParamC[i] = this.menuParamC[i + 1];
+					this.menuParamC[i + 1] = tmp3;
 
-						@Pc(272) int tmp1 = this.menuAction[i];
-						this.menuAction[i] = this.menuAction[i + 1];
-						this.menuAction[i + 1] = tmp1;
+					@Pc(338) int tmp4 = this.menuParamA[i];
+					this.menuParamA[i] = this.menuParamA[i + 1];
+					this.menuParamA[i + 1] = tmp4;
 
-						@Pc(294) int tmp2 = this.menuParamB[i];
-						this.menuParamB[i] = this.menuParamB[i + 1];
-						this.menuParamB[i + 1] = tmp2;
-
-						@Pc(316) int tmp3 = this.menuParamC[i];
-						this.menuParamC[i] = this.menuParamC[i + 1];
-						this.menuParamC[i + 1] = tmp3;
-
-						@Pc(338) int tmp4 = this.menuParamA[i];
-						this.menuParamA[i] = this.menuParamA[i + 1];
-						this.menuParamA[i + 1] = tmp4;
-
-						done = false;
-					}
+					done = false;
 				}
 			}
 		}
@@ -6886,10 +6890,10 @@ public class client extends GameShell {
 
 	private void drawTileOverlay(int x, int z, int level, int color, boolean crossed) {
 		int height = this.getHeightmapY(level, x, z);
-		int x0 = -1, y0 = -1;
-		int x1 = -1, y1 = -1;
-		int x2 = -1, y2 = -1;
-		int x3 = -1, y3 = -1;
+		int x0, y0;
+		int x1, y1;
+		int x2, y2;
+		int x3, y3;
 
 		// x/z should be the center of a tile which is 128 client-units large, so +/- 64 puts us at the edges
 		this.project(x - 64, height, z - 64);
@@ -7037,25 +7041,25 @@ public class client extends GameShell {
 	private void drawOnMinimap(@OriginalArg(0) int dy, @OriginalArg(2) Pix24 image, @OriginalArg(3) int dx) {
 		@Pc(7) int angle = this.orbitCameraYaw + this.minimapAnticheatAngle & 0x7FF;
 		@Pc(15) int distance = dx * dx + dy * dy;
-        if (distance > 6400) {
-            return;
-        }
+		if (distance > 6400) {
+			return;
+		}
 
-        @Pc(34) int sinAngle = Model.sin[angle];
-        @Pc(38) int cosAngle = Model.cos[angle];
+		@Pc(34) int sinAngle = Model.sin[angle];
+		@Pc(38) int cosAngle = Model.cos[angle];
 
-        sinAngle = sinAngle * 256 / (this.minimapZoom + 256);
-        cosAngle = cosAngle * 256 / (this.minimapZoom + 256);
+		sinAngle = sinAngle * 256 / (this.minimapZoom + 256);
+		cosAngle = cosAngle * 256 / (this.minimapZoom + 256);
 
-        @Pc(66) int x = dy * sinAngle + dx * cosAngle >> 16;
-        @Pc(76) int y = dy * cosAngle - dx * sinAngle >> 16;
+		@Pc(66) int x = dy * sinAngle + dx * cosAngle >> 16;
+		@Pc(76) int y = dy * cosAngle - dx * sinAngle >> 16;
 
-        if (distance > 2500) {
-            image.drawMasked(x + 94 - image.cropW / 2, 83 - y - image.cropH / 2, this.imageMapback);
-        } else {
-            image.draw(x + 94 - image.cropW / 2, 83 - y - image.cropH / 2);
-        }
-    }
+		if (distance > 2500) {
+			image.drawMasked(x + 94 - image.cropW / 2, 83 - y - image.cropH / 2, this.imageMapback);
+		} else {
+			image.draw(x + 94 - image.cropW / 2, 83 - y - image.cropH / 2);
+		}
+	}
 
 	@OriginalMember(owner = "client!client", name = "a", descriptor = "(IIII)I")
 	private int mix(@OriginalArg(0) int src, @OriginalArg(1) int alpha, @OriginalArg(2) int dst) {
@@ -7075,15 +7079,15 @@ public class client extends GameShell {
 
 	@OriginalMember(owner = "client!client", name = "b", descriptor = "(IIII)V")
 	private void projectFromGround(@OriginalArg(1) int x, @OriginalArg(3) int height, @OriginalArg(0) int z) {
-        if (x < 128 || z < 128 || x > 13056 || z > 13056) {
-            this.projectX = -1;
-            this.projectY = -1;
+		if (x < 128 || z < 128 || x > 13056 || z > 13056) {
+			this.projectX = -1;
+			this.projectY = -1;
 			return;
-        }
+		}
 
 		@Pc(28) int y = this.getHeightmapY(this.currentLevel, x, z) - height;
 		this.project(x, y, z);
-    }
+	}
 
 	private void project(int x, int y, int z) {
 		@Pc(33) int dx = x - this.cameraX;
@@ -7127,7 +7131,7 @@ public class client extends GameShell {
 			@Pc(51) int width;
 			@Pc(54) int height;
 
-            if (angle == 0 || angle == 2) {
+			if (angle == 0 || angle == 2) {
 				width = loc.width;
 				height = loc.length;
 			} else {
@@ -7135,22 +7139,22 @@ public class client extends GameShell {
 				height = loc.width;
 			}
 
-            @Pc(65) int forceapproach = loc.forceapproach;
+			@Pc(65) int forceapproach = loc.forceapproach;
 			if (angle != 0) {
 				forceapproach = (forceapproach << angle & 0xF) + (forceapproach >> 4 - angle);
 			}
 
-            this.tryMove(this.localPlayer.pathTileX[0], this.localPlayer.pathTileZ[0], x, z, 2, width, height, 0, 0, forceapproach, false);
+			this.tryMove(this.localPlayer.pathTileX[0], this.localPlayer.pathTileZ[0], x, z, 2, width, height, 0, 0, forceapproach, false);
 		} else {
 			this.tryMove(this.localPlayer.pathTileX[0], this.localPlayer.pathTileZ[0], x, z, 2, 0, 0, angle, type + 1, 0, false);
 		}
 
-        this.crossX = super.mouseClickX;
+		this.crossX = super.mouseClickX;
 		this.crossY = super.mouseClickY;
 		this.crossMode = 2;
 		this.crossCycle = 0;
 
-        this.out.p1isaac(opcode);
+		this.out.p1isaac(opcode);
 		this.out.p2(x + this.sceneBaseTileX);
 		this.out.p2(z + this.sceneBaseTileZ);
 		this.out.p2(locId);
@@ -7248,39 +7252,52 @@ public class client extends GameShell {
 
 	@OriginalMember(owner = "client!client", name = "j", descriptor = "(B)V")
 	private void loadTitle() {
-		if (this.imageTitle2 == null) {
-			super.drawArea = null;
-			this.areaChatback = null;
-			this.areaMapback = null;
-			this.areaSidebar = null;
-			this.areaViewport = null;
-			this.areaBackbase1 = null;
-			this.areaBackbase2 = null;
-			this.areaBackhmid1 = null;
-			this.imageTitle0 = new PixMap(this.getBaseComponent(), 128, 265);
-			Draw2D.clear();
-			this.imageTitle1 = new PixMap(this.getBaseComponent(), 128, 265);
-			Draw2D.clear();
-			this.imageTitle2 = new PixMap(this.getBaseComponent(), 533, 186);
-			Draw2D.clear();
-			this.imageTitle3 = new PixMap(this.getBaseComponent(), 360, 146);
-			Draw2D.clear();
-			this.imageTitle4 = new PixMap(this.getBaseComponent(), 360, 200);
-			Draw2D.clear();
-			this.imageTitle5 = new PixMap(this.getBaseComponent(), 214, 267);
-			Draw2D.clear();
-			this.imageTitle6 = new PixMap(this.getBaseComponent(), 215, 267);
-			Draw2D.clear();
-			this.imageTitle7 = new PixMap(this.getBaseComponent(), 86, 79);
-			Draw2D.clear();
-			this.imageTitle8 = new PixMap(this.getBaseComponent(), 87, 79);
-			Draw2D.clear();
-			if (this.archiveTitle != null) {
-				this.loadTitleBackground();
-				this.loadTitleImages();
-			}
-			this.redrawTitleBackground = true;
+		if (this.imageTitle2 != null) {
+			return;
 		}
+
+		super.drawArea = null;
+		this.areaChatback = null;
+		this.areaMapback = null;
+		this.areaSidebar = null;
+		this.areaViewport = null;
+		this.areaBackbase1 = null;
+		this.areaBackbase2 = null;
+		this.areaBackhmid1 = null;
+
+		this.imageTitle0 = new PixMap(this.getBaseComponent(), 128, 265);
+		Draw2D.clear();
+
+		this.imageTitle1 = new PixMap(this.getBaseComponent(), 128, 265);
+		Draw2D.clear();
+
+		this.imageTitle2 = new PixMap(this.getBaseComponent(), 533, 186);
+		Draw2D.clear();
+
+		this.imageTitle3 = new PixMap(this.getBaseComponent(), 360, 146);
+		Draw2D.clear();
+
+		this.imageTitle4 = new PixMap(this.getBaseComponent(), 360, 200);
+		Draw2D.clear();
+
+		this.imageTitle5 = new PixMap(this.getBaseComponent(), 214, 267);
+		Draw2D.clear();
+
+		this.imageTitle6 = new PixMap(this.getBaseComponent(), 215, 267);
+		Draw2D.clear();
+
+		this.imageTitle7 = new PixMap(this.getBaseComponent(), 86, 79);
+		Draw2D.clear();
+
+		this.imageTitle8 = new PixMap(this.getBaseComponent(), 87, 79);
+		Draw2D.clear();
+
+		if (this.archiveTitle != null) {
+			this.loadTitleBackground();
+			this.loadTitleImages();
+		}
+
+		this.redrawTitleBackground = true;
 	}
 
 	@OriginalMember(owner = "client!client", name = "z", descriptor = "(I)V")
@@ -7378,11 +7395,14 @@ public class client extends GameShell {
 				this.loginMessage1 = "Connecting to server...";
 				this.drawTitleScreen();
 			}
+
 			this.stream = new ClientStream(this, this.openSocket(portOffset + 43594));
 			this.stream.read(this.in.data, 0, 8);
 			this.in.pos = 0;
+
 			this.serverSeed = this.in.g8();
 			@Pc(47) int[] seed = new int[] { (int) (Math.random() * 9.9999999E7D), (int) (Math.random() * 9.9999999E7D), (int) (this.serverSeed >> 32), (int) this.serverSeed };
+
 			this.out.pos = 0;
 			this.out.p1(10);
 			this.out.p4(seed[0]);
@@ -7393,14 +7413,16 @@ public class client extends GameShell {
 			this.out.pjstr(username);
 			this.out.pjstr(password);
 			this.out.rsaenc(RSA_MODULUS, RSA_EXPONENT);
+
 			this.login.pos = 0;
 			if (reconnect) {
 				this.login.p1(18);
 			} else {
 				this.login.p1(16);
 			}
+
 			this.login.p1(this.out.pos + 36 + 1 + 1);
-			this.login.p1(225);
+			this.login.p1(signlink.clientversion);
 			this.login.p1(lowMemory ? 1 : 0);
 			for (@Pc(168) int i = 0; i < 9; i++) {
 				this.login.p4(this.archiveChecksum[i]);
@@ -7412,18 +7434,19 @@ public class client extends GameShell {
 			}
 			this.randomIn = new Isaac(seed);
 			this.stream.write(this.login.data, this.login.pos, 0);
+
 			@Pc(237) int reply = this.stream.read();
 			if (reply == 1) {
 				try {
 					Thread.sleep(2000L);
 				} catch (@Pc(244) Exception ex) {
 				}
+
 				this.login(username, password, reconnect);
-				return;
-			}
-			if (reply == 2 || reply == 18) {
+			} else if (reply == 2 || reply == 18) {
 				this.rights = reply == 18;
 				InputTracking.setDisabled();
+
 				this.ingame = true;
 				this.out.pos = 0;
 				this.in.pos = 0;
@@ -7439,31 +7462,39 @@ public class client extends GameShell {
 				this.menuSize = 0;
 				this.menuVisible = false;
 				super.idleCycles = 0;
+
 				for (@Pc(318) int i = 0; i < 100; i++) {
 					this.messageText[i] = null;
 				}
+
 				this.objSelected = 0;
 				this.spellSelected = 0;
 				this.sceneState = 0;
 				this.waveCount = 0;
+
 				this.cameraAnticheatOffsetX = (int) (Math.random() * 100.0D) - 50;
 				this.cameraAnticheatOffsetZ = (int) (Math.random() * 110.0D) - 55;
 				this.cameraAnticheatAngle = (int) (Math.random() * 80.0D) - 40;
 				this.minimapAnticheatAngle = (int) (Math.random() * 120.0D) - 60;
 				this.minimapZoom = (int) (Math.random() * 30.0D) - 20;
 				this.orbitCameraYaw = (int) (Math.random() * 20.0D) - 10 & 0x7FF;
+
 				this.minimapLevel = -1;
 				this.flagSceneTileX = 0;
 				this.flagSceneTileZ = 0;
+
 				this.playerCount = 0;
 				this.npcCount = 0;
+
 				for (@Pc(408) int i = 0; i < this.MAX_PLAYER_COUNT; i++) {
 					this.players[i] = null;
 					this.playerAppearanceBuffer[i] = null;
 				}
+
 				for (@Pc(427) int i = 0; i < 8192; i++) {
 					this.npcs[i] = null;
 				}
+
 				this.localPlayer = this.players[this.LOCAL_PLAYER_INDEX] = new PlayerEntity();
 				this.projectiles.clear();
 				this.spotanims.clear();
@@ -7475,6 +7506,7 @@ public class client extends GameShell {
 						}
 					}
 				}
+
 				this.spawnedLocations = new LinkList();
 				this.friendCount = 0;
 				this.stickyChatInterfaceId = -1;
@@ -7490,10 +7522,12 @@ public class client extends GameShell {
 				this.inMultizone = 0;
 				this.flashingTab = -1;
 				this.designGenderMale = true;
+
 				this.validateCharacterDesign();
 				for (int i = 0; i < 5; i++) {
 					this.designColors[i] = 0;
 				}
+
 				opLoc4Counter = 0;
 				opNpc3Counter = 0;
 				opHeld4Counter = 0;
@@ -7504,69 +7538,43 @@ public class client extends GameShell {
 				opPlayer2Counter = 0;
 				opHeld9Counter = 0;
 				this.prepareGameScreen();
-				return;
-			}
-			if (reply == 3) {
+			} else if (reply == 3) {
 				this.loginMessage0 = "";
 				this.loginMessage1 = "Invalid username or password.";
-				return;
-			}
-			if (reply == 4) {
+			} else if (reply == 4) {
 				this.loginMessage0 = "Your account has been disabled.";
 				this.loginMessage1 = "Please check your message-centre for details.";
-				return;
-			}
-			if (reply == 5) {
+			} else if (reply == 5) {
 				this.loginMessage0 = "Your account is already logged in.";
 				this.loginMessage1 = "Try again in 60 secs...";
-				return;
-			}
-			if (reply == 6) {
+			} else if (reply == 6) {
 				this.loginMessage0 = "RuneScape has been updated!";
 				this.loginMessage1 = "Please reload this page.";
-				return;
-			}
-			if (reply == 7) {
+			} else if (reply == 7) {
 				this.loginMessage0 = "This world is full.";
 				this.loginMessage1 = "Please use a different world.";
-				return;
-			}
-			if (reply == 8) {
+			} else if (reply == 8) {
 				this.loginMessage0 = "Unable to connect.";
 				this.loginMessage1 = "Login server offline.";
-				return;
-			}
-			if (reply == 9) {
+			} else if (reply == 9) {
 				this.loginMessage0 = "Login limit exceeded.";
 				this.loginMessage1 = "Too many connections from your address.";
-				return;
-			}
-			if (reply == 10) {
+			} else if (reply == 10) {
 				this.loginMessage0 = "Unable to connect.";
 				this.loginMessage1 = "Bad session id.";
-				return;
-			}
-			if (reply == 11) {
-				this.loginMessage1 = "Login server rejected session.";
+			} else if (reply == 11) {
+				// this.loginMessage1 = "Login server rejected session.";
 				this.loginMessage1 = "Please try again.";
-				return;
-			}
-			if (reply == 12) {
+			} else if (reply == 12) {
 				this.loginMessage0 = "You need a members account to login to this world.";
 				this.loginMessage1 = "Please subscribe, or use a different world.";
-				return;
-			}
-			if (reply == 13) {
+			} else if (reply == 13) {
 				this.loginMessage0 = "Could not complete login.";
 				this.loginMessage1 = "Please try using a different world.";
-				return;
-			}
-			if (reply == 14) {
+			} else if (reply == 14) {
 				this.loginMessage0 = "The server is being updated.";
 				this.loginMessage1 = "Please wait 1 minute and try again.";
-				return;
-			}
-			if (reply == 15) {
+			} else if (reply == 15) {
 				this.ingame = true;
 				this.out.pos = 0;
 				this.in.pos = 0;
@@ -7579,14 +7587,10 @@ public class client extends GameShell {
 				this.systemUpdateTimer = 0;
 				this.menuSize = 0;
 				this.menuVisible = false;
-				return;
-			}
-			if (reply == 16) {
+			} else if (reply == 16) {
 				this.loginMessage0 = "Login attempts exceeded.";
 				this.loginMessage1 = "Please wait 1 minute and try again.";
-				return;
-			}
-			if (reply == 17) {
+			} else if (reply == 17) {
 				this.loginMessage0 = "You are standing in a members-only area.";
 				this.loginMessage1 = "To play on this world move to a free area first";
 			}
@@ -7598,95 +7602,95 @@ public class client extends GameShell {
 
 	@OriginalMember(owner = "client!client", name = "a", descriptor = "(IIIIIIII)V")
 	private void addLoc(@OriginalArg(7) int level, @OriginalArg(1) int x, @OriginalArg(2) int z, @OriginalArg(4) int id, @OriginalArg(0) int angle, @OriginalArg(5) int shape, @OriginalArg(3) int layer) {
-        if (x < 1 || z < 1 || x > 102 || z > 102) {
-            return;
-        }
+		if (x < 1 || z < 1 || x > 102 || z > 102) {
+			return;
+		}
 
-        if (lowMemory && level != this.currentLevel) {
-            return;
-        }
+		if (lowMemory && level != this.currentLevel) {
+			return;
+		}
 
-        @Pc(25) int bitset = 0;
+		@Pc(25) int bitset = 0;
 
-        if (layer == 0) {
-            bitset = this.scene.getWallBitset(level, x, z);
-        }
+		if (layer == 0) {
+			bitset = this.scene.getWallBitset(level, x, z);
+		}
 
-        if (layer == 1) {
-            bitset = this.scene.getWallDecorationBitset(level, z, x);
-        }
+		if (layer == 1) {
+			bitset = this.scene.getWallDecorationBitset(level, z, x);
+		}
 
-        if (layer == 2) {
-            bitset = this.scene.getLocBitset(level, x, z);
-        }
+		if (layer == 2) {
+			bitset = this.scene.getLocBitset(level, x, z);
+		}
 
-        if (layer == 3) {
-            bitset = this.scene.getGroundDecorationBitset(level, x, z);
-        }
+		if (layer == 3) {
+			bitset = this.scene.getGroundDecorationBitset(level, x, z);
+		}
 
-        if (bitset != 0) {
-            int otherInfo = this.scene.getInfo(level, x, z, bitset);
-            @Pc(87) int otherId = bitset >> 14 & 0x7FFF;
-            @Pc(91) int otherShape = otherInfo & 0x1F;
-            @Pc(95) int otherRotation = otherInfo >> 6;
+		if (bitset != 0) {
+			int otherInfo = this.scene.getInfo(level, x, z, bitset);
+			@Pc(87) int otherId = bitset >> 14 & 0x7FFF;
+			@Pc(91) int otherShape = otherInfo & 0x1F;
+			@Pc(95) int otherRotation = otherInfo >> 6;
 
-            if (layer == 0) {
-                this.scene.removeWall(level, x, z, 1);
-                LocType type = LocType.get(otherId);
+			if (layer == 0) {
+				this.scene.removeWall(level, x, z, 1);
+				LocType type = LocType.get(otherId);
 
-                if (type.blockwalk) {
-                    this.levelCollisionMap[level].removeWall(x, z, otherShape, otherRotation, type.blockrange);
-                }
-            }
+				if (type.blockwalk) {
+					this.levelCollisionMap[level].removeWall(x, z, otherShape, otherRotation, type.blockrange);
+				}
+			}
 
-            if (layer == 1) {
-                this.scene.removeWallDecoration(level, x, z);
-            }
+			if (layer == 1) {
+				this.scene.removeWallDecoration(level, x, z);
+			}
 
-            if (layer == 2) {
-                this.scene.removeLoc(level, x, z);
-                LocType type = LocType.get(otherId);
+			if (layer == 2) {
+				this.scene.removeLoc(level, x, z);
+				LocType type = LocType.get(otherId);
 
-                if (x + type.width > 103 || z + type.width > 103 || x + type.length > 103 || z + type.length > 103) {
-                    return;
-                }
+				if (x + type.width > 103 || z + type.width > 103 || x + type.length > 103 || z + type.length > 103) {
+					return;
+				}
 
-                if (type.blockwalk) {
-                    this.levelCollisionMap[level].removeLoc(x, z, type.width, type.length, otherRotation, type.blockrange);
-                }
-            }
+				if (type.blockwalk) {
+					this.levelCollisionMap[level].removeLoc(x, z, type.width, type.length, otherRotation, type.blockrange);
+				}
+			}
 
-            if (layer == 3) {
-                this.scene.removeGroundDecoration(level, x, z);
-                LocType type = LocType.get(otherId);
+			if (layer == 3) {
+				this.scene.removeGroundDecoration(level, x, z);
+				LocType type = LocType.get(otherId);
 
-                if (type.blockwalk && type.active) {
-                    this.levelCollisionMap[level].removeBlocked(x, z);
-                }
-            }
-        }
+				if (type.blockwalk && type.active) {
+					this.levelCollisionMap[level].removeBlocked(x, z);
+				}
+			}
+		}
 
-        if (id >= 0) {
-            int tileLevel = level;
+		if (id >= 0) {
+			int tileLevel = level;
 
-            if (level < 3 && (this.levelTileFlags[1][x][z] & 0x2) == 2) {
-                tileLevel = level + 1;
-            }
+			if (level < 3 && (this.levelTileFlags[1][x][z] & 0x2) == 2) {
+				tileLevel = level + 1;
+			}
 
-            World.addLoc(level, x, z, this.scene, this.levelHeightmap, this.locList, this.levelCollisionMap[level], id, shape, angle, tileLevel);
-        }
-    }
+			World.addLoc(level, x, z, this.scene, this.levelHeightmap, this.locList, this.levelCollisionMap[level], id, shape, angle, tileLevel);
+		}
+	}
 
 	@OriginalMember(owner = "client!client", name = "a", descriptor = "(JI)V")
 	private void addFriend(@OriginalArg(0) long username) {
-        if (username == 0L) {
-            return;
-        }
-
-        if (this.friendCount >= 100) {
-            this.addMessage(0, "Your friends list is full. Max of 100 hit", "");
+		if (username == 0L) {
 			return;
-        }
+		}
+
+		if (this.friendCount >= 100) {
+			this.addMessage(0, "Your friends list is full. Max of 100 hit", "");
+			return;
+		}
 
 		@Pc(23) String displayName = JString.formatName(JString.fromBase37(username));
 		for (@Pc(25) int i = 0; i < this.friendCount; i++) {
@@ -7714,18 +7718,20 @@ public class client extends GameShell {
 			this.out.p1isaac(118);
 			this.out.p8(username);
 		}
-    }
+	}
 
 	@OriginalMember(owner = "client!client", name = "a", descriptor = "(B)V")
 	@Override
 	protected void unload() {
 		signlink.reporterror = false;
+
 		try {
 			if (this.stream != null) {
 				this.stream.close();
 			}
 		} catch (@Pc(11) Exception ex) {
 		}
+
 		this.stream = null;
 		this.stopMidi();
 		this.midiThreadActive = false;
@@ -7852,81 +7858,81 @@ public class client extends GameShell {
 
 	@OriginalMember(owner = "client!client", name = "a", descriptor = "(ZIILclient!z;I)V")
 	private void addPlayerOptions(@OriginalArg(3) PlayerEntity player, @OriginalArg(2) int a, @OriginalArg(4) int b, @OriginalArg(1) int c) {
-        if (player == this.localPlayer || this.menuSize >= 400) {
-            return;
-        }
+		if (player == this.localPlayer || this.menuSize >= 400) {
+			return;
+		}
 
-        @Pc(41) String tooltip = player.name + getCombatLevelColorTag(this.localPlayer.combatLevel, player.combatLevel) + " (level-" + player.combatLevel + ")";
-        if (this.objSelected == 1) {
-            this.menuOption[this.menuSize] = "Use " + this.objSelectedName + " with @whi@" + tooltip;
-            this.menuAction[this.menuSize] = 367;
-            this.menuParamA[this.menuSize] = a;
-            this.menuParamB[this.menuSize] = b;
-            this.menuParamC[this.menuSize] = c;
-            this.menuSize++;
-        } else if (this.spellSelected != 1) {
-            this.menuOption[this.menuSize] = "Follow @whi@" + tooltip;
-            this.menuAction[this.menuSize] = 1544;
-            this.menuParamA[this.menuSize] = a;
-            this.menuParamB[this.menuSize] = b;
-            this.menuParamC[this.menuSize] = c;
-            this.menuSize++;
+		@Pc(41) String tooltip = player.name + getCombatLevelColorTag(this.localPlayer.combatLevel, player.combatLevel) + " (level-" + player.combatLevel + ")";
+		if (this.objSelected == 1) {
+			this.menuOption[this.menuSize] = "Use " + this.objSelectedName + " with @whi@" + tooltip;
+			this.menuAction[this.menuSize] = 367;
+			this.menuParamA[this.menuSize] = a;
+			this.menuParamB[this.menuSize] = b;
+			this.menuParamC[this.menuSize] = c;
+			this.menuSize++;
+		} else if (this.spellSelected != 1) {
+			this.menuOption[this.menuSize] = "Follow @whi@" + tooltip;
+			this.menuAction[this.menuSize] = 1544;
+			this.menuParamA[this.menuSize] = a;
+			this.menuParamB[this.menuSize] = b;
+			this.menuParamC[this.menuSize] = c;
+			this.menuSize++;
 
-            if (this.overrideChat == 0) {
-                this.menuOption[this.menuSize] = "Trade with @whi@" + tooltip;
-                this.menuAction[this.menuSize] = 1373;
-                this.menuParamA[this.menuSize] = a;
-                this.menuParamB[this.menuSize] = b;
-                this.menuParamC[this.menuSize] = c;
-                this.menuSize++;
-            }
+			if (this.overrideChat == 0) {
+				this.menuOption[this.menuSize] = "Trade with @whi@" + tooltip;
+				this.menuAction[this.menuSize] = 1373;
+				this.menuParamA[this.menuSize] = a;
+				this.menuParamB[this.menuSize] = b;
+				this.menuParamC[this.menuSize] = c;
+				this.menuSize++;
+			}
 
-            if (this.wildernessLevel > 0) {
-                this.menuOption[this.menuSize] = "Attack @whi@" + tooltip;
-                if (this.localPlayer.combatLevel >= player.combatLevel) {
-                    this.menuAction[this.menuSize] = 151;
-                } else {
-                    this.menuAction[this.menuSize] = 2151;
-                }
-                this.menuParamA[this.menuSize] = a;
-                this.menuParamB[this.menuSize] = b;
-                this.menuParamC[this.menuSize] = c;
-                this.menuSize++;
-            }
+			if (this.wildernessLevel > 0) {
+				this.menuOption[this.menuSize] = "Attack @whi@" + tooltip;
+				if (this.localPlayer.combatLevel >= player.combatLevel) {
+					this.menuAction[this.menuSize] = 151;
+				} else {
+					this.menuAction[this.menuSize] = 2151;
+				}
+				this.menuParamA[this.menuSize] = a;
+				this.menuParamB[this.menuSize] = b;
+				this.menuParamC[this.menuSize] = c;
+				this.menuSize++;
+			}
 
-            if (this.worldLocationState == 1) {
-                this.menuOption[this.menuSize] = "Fight @whi@" + tooltip;
-                this.menuAction[this.menuSize] = 151;
-                this.menuParamA[this.menuSize] = a;
-                this.menuParamB[this.menuSize] = b;
-                this.menuParamC[this.menuSize] = c;
-                this.menuSize++;
-            }
+			if (this.worldLocationState == 1) {
+				this.menuOption[this.menuSize] = "Fight @whi@" + tooltip;
+				this.menuAction[this.menuSize] = 151;
+				this.menuParamA[this.menuSize] = a;
+				this.menuParamB[this.menuSize] = b;
+				this.menuParamC[this.menuSize] = c;
+				this.menuSize++;
+			}
 
-            if (this.worldLocationState == 2) {
-                this.menuOption[this.menuSize] = "Duel-with @whi@" + tooltip;
-                this.menuAction[this.menuSize] = 1101;
-                this.menuParamA[this.menuSize] = a;
-                this.menuParamB[this.menuSize] = b;
-                this.menuParamC[this.menuSize] = c;
-                this.menuSize++;
-            }
-        } else if ((this.activeSpellFlags & 0x8) == 8) {
-            this.menuOption[this.menuSize] = this.spellCaption + " @whi@" + tooltip;
-            this.menuAction[this.menuSize] = 651;
-            this.menuParamA[this.menuSize] = a;
-            this.menuParamB[this.menuSize] = b;
-            this.menuParamC[this.menuSize] = c;
-            this.menuSize++;
-        }
+			if (this.worldLocationState == 2) {
+				this.menuOption[this.menuSize] = "Duel-with @whi@" + tooltip;
+				this.menuAction[this.menuSize] = 1101;
+				this.menuParamA[this.menuSize] = a;
+				this.menuParamB[this.menuSize] = b;
+				this.menuParamC[this.menuSize] = c;
+				this.menuSize++;
+			}
+		} else if ((this.activeSpellFlags & 0x8) == 8) {
+			this.menuOption[this.menuSize] = this.spellCaption + " @whi@" + tooltip;
+			this.menuAction[this.menuSize] = 651;
+			this.menuParamA[this.menuSize] = a;
+			this.menuParamB[this.menuSize] = b;
+			this.menuParamC[this.menuSize] = c;
+			this.menuSize++;
+		}
 
-        for (@Pc(392) int i = 0; i < this.menuSize; i++) {
-            if (this.menuAction[i] == 660) {
-                this.menuOption[i] = "Walk here @whi@" + tooltip;
-                return;
-            }
-        }
-    }
+		for (@Pc(392) int i = 0; i < this.menuSize; i++) {
+			if (this.menuAction[i] == 660) {
+				this.menuOption[i] = "Walk here @whi@" + tooltip;
+				return;
+			}
+		}
+	}
 
 	@OriginalMember(owner = "client!client", name = "j", descriptor = "(Z)V")
 	private void updateGame() {
@@ -8233,25 +8239,25 @@ public class client extends GameShell {
 
 	@OriginalMember(owner = "client!client", name = "k", descriptor = "(Z)V")
 	private void drawTooltip() {
-        if (this.menuSize < 2 && this.objSelected == 0 && this.spellSelected == 0) {
-            return;
-        }
+		if (this.menuSize < 2 && this.objSelected == 0 && this.spellSelected == 0) {
+			return;
+		}
 
-        @Pc(31) String tooltip;
-        if (this.objSelected == 1 && this.menuSize < 2) {
-            tooltip = "Use " + this.objSelectedName + " with...";
-        } else if (this.spellSelected == 1 && this.menuSize < 2) {
-            tooltip = this.spellCaption + "...";
-        } else {
-            tooltip = this.menuOption[this.menuSize - 1];
-        }
+		@Pc(31) String tooltip;
+		if (this.objSelected == 1 && this.menuSize < 2) {
+			tooltip = "Use " + this.objSelectedName + " with...";
+		} else if (this.spellSelected == 1 && this.menuSize < 2) {
+			tooltip = this.spellCaption + "...";
+		} else {
+			tooltip = this.menuOption[this.menuSize - 1];
+		}
 
-        if (this.menuSize > 2) {
-            tooltip = tooltip + "@whi@ / " + (this.menuSize - 2) + " more options";
-        }
+		if (this.menuSize > 2) {
+			tooltip = tooltip + "@whi@ / " + (this.menuSize - 2) + " more options";
+		}
 
-        this.fontBold12.drawStringTooltip(4, 15, tooltip, 16777215, true, loopCycle / 1000);
-    }
+		this.fontBold12.drawStringTooltip(4, 15, tooltip, 16777215, true, loopCycle / 1000);
+	}
 
 	@OriginalMember(owner = "client!client", name = "k", descriptor = "(B)V")
 	private void pushSpotanims() {
@@ -8275,12 +8281,14 @@ public class client extends GameShell {
 		if (signlink.mainapp != null) {
 			return signlink.mainapp.getCodeBase();
 		}
+
 		try {
 			if (super.frame != null) {
 				return new URL("http://w1.225.2004scape.org:" + (portOffset + 80));
 			}
 		} catch (@Pc(21) Exception ex) {
 		}
+
 		return super.getCodeBase();
 	}
 
@@ -8618,26 +8626,26 @@ public class client extends GameShell {
 
 	@OriginalMember(owner = "client!client", name = "a", descriptor = "(IJ)V")
 	private void removeFriend(@OriginalArg(1) long username) {
-        if (username == 0L) {
-            return;
-        }
+		if (username == 0L) {
+			return;
+		}
 
-        for (int i = 0; i < this.friendCount; i++) {
-            if (this.friendName37[i] == username) {
-                this.friendCount--;
-                this.redrawSidebar = true;
-                for (@Pc(38) int j = i; j < this.friendCount; j++) {
-                    this.friendName[j] = this.friendName[j + 1];
-                    this.friendWorld[j] = this.friendWorld[j + 1];
-                    this.friendName37[j] = this.friendName37[j + 1];
-                }
-                // FRIENDLIST_DEL
-                this.out.p1isaac(11);
-                this.out.p8(username);
-                return;
-            }
-        }
-    }
+		for (int i = 0; i < this.friendCount; i++) {
+			if (this.friendName37[i] == username) {
+				this.friendCount--;
+				this.redrawSidebar = true;
+				for (@Pc(38) int j = i; j < this.friendCount; j++) {
+					this.friendName[j] = this.friendName[j + 1];
+					this.friendWorld[j] = this.friendWorld[j + 1];
+					this.friendName37[j] = this.friendName37[j + 1];
+				}
+				// FRIENDLIST_DEL
+				this.out.p1isaac(11);
+				this.out.p8(username);
+				return;
+			}
+		}
+	}
 
 	@OriginalMember(owner = "client!client", name = "a", descriptor = "(Lclient!hc;I)Z")
 	private boolean executeInterfaceScript(@OriginalArg(0) ComType com) {
@@ -8713,126 +8721,126 @@ public class client extends GameShell {
 
 	@OriginalMember(owner = "client!client", name = "m", descriptor = "(B)V")
 	private void handleMouseInput() {
-        if (this.objDragArea != 0) {
-            return;
-        }
+		if (this.objDragArea != 0) {
+			return;
+		}
 
-        @Pc(14) int button = super.mouseClickButton;
-        if (this.spellSelected == 1 && super.mouseClickX >= 520 && super.mouseClickY >= 165 && super.mouseClickX <= 788 && super.mouseClickY <= 230) {
-            button = 0;
-        }
+		@Pc(14) int button = super.mouseClickButton;
+		if (this.spellSelected == 1 && super.mouseClickX >= 520 && super.mouseClickY >= 165 && super.mouseClickX <= 788 && super.mouseClickY <= 230) {
+			button = 0;
+		}
 
-        if (this.menuVisible) {
-            if (button != 1) {
-                int x = super.mouseX;
-                int y = super.mouseY;
+		if (this.menuVisible) {
+			if (button != 1) {
+				int x = super.mouseX;
+				int y = super.mouseY;
 
-                if (this.menuArea == 0) {
-                    x -= 8;
-                    y -= 11;
-                } else if (this.menuArea == 1) {
-                    x -= 562;
-                    y -= 231;
-                } else if (this.menuArea == 2) {
-                    x -= 22;
-                    y -= 375;
-                }
+				if (this.menuArea == 0) {
+					x -= 8;
+					y -= 11;
+				} else if (this.menuArea == 1) {
+					x -= 562;
+					y -= 231;
+				} else if (this.menuArea == 2) {
+					x -= 22;
+					y -= 375;
+				}
 
-                if (x < this.menuX - 10 || x > this.menuX + this.menuWidth + 10 || y < this.menuY - 10 || y > this.menuY + this.menuHeight + 10) {
-                    this.menuVisible = false;
-                    if (this.menuArea == 1) {
-                        this.redrawSidebar = true;
-                    }
-                    if (this.menuArea == 2) {
-                        this.redrawChatback = true;
-                    }
-                }
-            }
+				if (x < this.menuX - 10 || x > this.menuX + this.menuWidth + 10 || y < this.menuY - 10 || y > this.menuY + this.menuHeight + 10) {
+					this.menuVisible = false;
+					if (this.menuArea == 1) {
+						this.redrawSidebar = true;
+					}
+					if (this.menuArea == 2) {
+						this.redrawChatback = true;
+					}
+				}
+			}
 
-            if (button == 1) {
-                int menuX = this.menuX;
-                int menuY = this.menuY;
-                int menuWidth = this.menuWidth;
+			if (button == 1) {
+				int menuX = this.menuX;
+				int menuY = this.menuY;
+				int menuWidth = this.menuWidth;
 
-                @Pc(127) int clickX = super.mouseClickX;
-                @Pc(130) int clickY = super.mouseClickY;
+				@Pc(127) int clickX = super.mouseClickX;
+				@Pc(130) int clickY = super.mouseClickY;
 
-                if (this.menuArea == 0) {
-                    clickX -= 8;
-                    clickY -= 11;
-                } else if (this.menuArea == 1) {
-                    clickX -= 562;
-                    clickY -= 231;
-                } else if (this.menuArea == 2) {
-                    clickX -= 22;
-                    clickY -= 375;
-                }
+				if (this.menuArea == 0) {
+					clickX -= 8;
+					clickY -= 11;
+				} else if (this.menuArea == 1) {
+					clickX -= 562;
+					clickY -= 231;
+				} else if (this.menuArea == 2) {
+					clickX -= 22;
+					clickY -= 375;
+				}
 
-                @Pc(149) int option = -1;
-                for (@Pc(151) int i = 0; i < this.menuSize; i++) {
-                    @Pc(166) int optionY = menuY + (this.menuSize - 1 - i) * 15 + 31;
-                    if (clickX > menuX && clickX < menuX + menuWidth && clickY > optionY - 13 && clickY < optionY + 3) {
-                        option = i;
-                    }
-                }
+				@Pc(149) int option = -1;
+				for (@Pc(151) int i = 0; i < this.menuSize; i++) {
+					@Pc(166) int optionY = menuY + (this.menuSize - 1 - i) * 15 + 31;
+					if (clickX > menuX && clickX < menuX + menuWidth && clickY > optionY - 13 && clickY < optionY + 3) {
+						option = i;
+					}
+				}
 
-                if (option != -1) {
-                    this.useMenuOption(option);
-                }
+				if (option != -1) {
+					this.useMenuOption(option);
+				}
 
-                this.menuVisible = false;
-                if (this.menuArea == 1) {
-                    this.redrawSidebar = true;
-                } else if (this.menuArea == 2) {
-                    this.redrawChatback = true;
-                }
-            }
-        } else {
-            if (button == 1 && this.menuSize > 0) {
-                int action = this.menuAction[this.menuSize - 1];
+				this.menuVisible = false;
+				if (this.menuArea == 1) {
+					this.redrawSidebar = true;
+				} else if (this.menuArea == 2) {
+					this.redrawChatback = true;
+				}
+			}
+		} else {
+			if (button == 1 && this.menuSize > 0) {
+				int action = this.menuAction[this.menuSize - 1];
 
-                if (action == 602 || action == 596 || action == 22 || action == 892 || action == 415 || action == 405 || action == 38 || action == 422 || action == 478 || action == 347 || action == 188) {
-                    int slot = this.menuParamB[this.menuSize - 1];
-                    int comId = this.menuParamC[this.menuSize - 1];
-                    @Pc(283) ComType com = ComType.instances[comId];
+				if (action == 602 || action == 596 || action == 22 || action == 892 || action == 415 || action == 405 || action == 38 || action == 422 || action == 478 || action == 347 || action == 188) {
+					int slot = this.menuParamB[this.menuSize - 1];
+					int comId = this.menuParamC[this.menuSize - 1];
+					@Pc(283) ComType com = ComType.instances[comId];
 
-                    if (com.inventoryDraggable) {
-                        this.objGrabThreshold = false;
-                        this.objDragCycles = 0;
-                        this.objDragInterfaceId = comId;
-                        this.objDragSlot = slot;
-                        this.objDragArea = 2;
-                        this.objGrabX = super.mouseClickX;
-                        this.objGrabY = super.mouseClickY;
+					if (com.inventoryDraggable) {
+						this.objGrabThreshold = false;
+						this.objDragCycles = 0;
+						this.objDragInterfaceId = comId;
+						this.objDragSlot = slot;
+						this.objDragArea = 2;
+						this.objGrabX = super.mouseClickX;
+						this.objGrabY = super.mouseClickY;
 
-                        if (ComType.instances[comId].parentId == this.viewportInterfaceId) {
-                            this.objDragArea = 1;
-                        }
+						if (ComType.instances[comId].parentId == this.viewportInterfaceId) {
+							this.objDragArea = 1;
+						}
 
-                        if (ComType.instances[comId].parentId == this.chatInterfaceId) {
-                            this.objDragArea = 3;
-                        }
+						if (ComType.instances[comId].parentId == this.chatInterfaceId) {
+							this.objDragArea = 3;
+						}
 
-                        return;
-                    }
-                }
-            }
+						return;
+					}
+				}
+			}
 
-            if (button == 1 && (this.mouseButtonsOption == 1 || this.isAddFriendOption(this.menuSize - 1)) && this.menuSize > 2) {
-                button = 2;
-            }
+			if (button == 1 && (this.mouseButtonsOption == 1 || this.isAddFriendOption(this.menuSize - 1)) && this.menuSize > 2) {
+				button = 2;
+			}
 
-            if (button == 1 && this.menuSize > 0) {
-                this.useMenuOption(this.menuSize - 1);
-            }
+			if (button == 1 && this.menuSize > 0) {
+				this.useMenuOption(this.menuSize - 1);
+			}
 
-            if (button != 2 || this.menuSize <= 0) {
-                return;
-            }
+			if (button != 2 || this.menuSize <= 0) {
+				return;
+			}
 
-            this.showContextMenu();
-        }
-    }
+			this.showContextMenu();
+		}
+	}
 
 	@OriginalMember(owner = "client!client", name = "n", descriptor = "(B)V")
 	private void applyCutscene() {
@@ -8951,72 +8959,74 @@ public class client extends GameShell {
 
 	@OriginalMember(owner = "client!client", name = "C", descriptor = "(I)V")
 	private void handleTabInput() {
-		if (super.mouseClickButton == 1) {
-			if (super.mouseClickX >= 549 && super.mouseClickX <= 583 && super.mouseClickY >= 195 && super.mouseClickY < 231 && this.tabInterfaceId[0] != -1) {
-				this.redrawSidebar = true;
-				this.selectedTab = 0;
-				this.redrawSideicons = true;
-			} else if (super.mouseClickX >= 579 && super.mouseClickX <= 609 && super.mouseClickY >= 194 && super.mouseClickY < 231 && this.tabInterfaceId[1] != -1) {
-				this.redrawSidebar = true;
-				this.selectedTab = 1;
-				this.redrawSideicons = true;
-			} else if (super.mouseClickX >= 607 && super.mouseClickX <= 637 && super.mouseClickY >= 194 && super.mouseClickY < 231 && this.tabInterfaceId[2] != -1) {
-				this.redrawSidebar = true;
-				this.selectedTab = 2;
-				this.redrawSideicons = true;
-			} else if (super.mouseClickX >= 635 && super.mouseClickX <= 679 && super.mouseClickY >= 194 && super.mouseClickY < 229 && this.tabInterfaceId[3] != -1) {
-				this.redrawSidebar = true;
-				this.selectedTab = 3;
-				this.redrawSideicons = true;
-			} else if (super.mouseClickX >= 676 && super.mouseClickX <= 706 && super.mouseClickY >= 194 && super.mouseClickY < 231 && this.tabInterfaceId[4] != -1) {
-				this.redrawSidebar = true;
-				this.selectedTab = 4;
-				this.redrawSideicons = true;
-			} else if (super.mouseClickX >= 704 && super.mouseClickX <= 734 && super.mouseClickY >= 194 && super.mouseClickY < 231 && this.tabInterfaceId[5] != -1) {
-				this.redrawSidebar = true;
-				this.selectedTab = 5;
-				this.redrawSideicons = true;
-			} else if (super.mouseClickX >= 732 && super.mouseClickX <= 766 && super.mouseClickY >= 195 && super.mouseClickY < 231 && this.tabInterfaceId[6] != -1) {
-				this.redrawSidebar = true;
-				this.selectedTab = 6;
-				this.redrawSideicons = true;
-			} else if (super.mouseClickX >= 550 && super.mouseClickX <= 584 && super.mouseClickY >= 492 && super.mouseClickY < 528 && this.tabInterfaceId[7] != -1) {
-				this.redrawSidebar = true;
-				this.selectedTab = 7;
-				this.redrawSideicons = true;
-			} else if (super.mouseClickX >= 582 && super.mouseClickX <= 612 && super.mouseClickY >= 492 && super.mouseClickY < 529 && this.tabInterfaceId[8] != -1) {
-				this.redrawSidebar = true;
-				this.selectedTab = 8;
-				this.redrawSideicons = true;
-			} else if (super.mouseClickX >= 609 && super.mouseClickX <= 639 && super.mouseClickY >= 492 && super.mouseClickY < 529 && this.tabInterfaceId[9] != -1) {
-				this.redrawSidebar = true;
-				this.selectedTab = 9;
-				this.redrawSideicons = true;
-			} else if (super.mouseClickX >= 637 && super.mouseClickX <= 681 && super.mouseClickY >= 493 && super.mouseClickY < 528 && this.tabInterfaceId[10] != -1) {
-				this.redrawSidebar = true;
-				this.selectedTab = 10;
-				this.redrawSideicons = true;
-			} else if (super.mouseClickX >= 679 && super.mouseClickX <= 709 && super.mouseClickY >= 492 && super.mouseClickY < 529 && this.tabInterfaceId[11] != -1) {
-				this.redrawSidebar = true;
-				this.selectedTab = 11;
-				this.redrawSideicons = true;
-			} else if (super.mouseClickX >= 706 && super.mouseClickX <= 736 && super.mouseClickY >= 492 && super.mouseClickY < 529 && this.tabInterfaceId[12] != -1) {
-				this.redrawSidebar = true;
-				this.selectedTab = 12;
-				this.redrawSideicons = true;
-			} else if (super.mouseClickX >= 734 && super.mouseClickX <= 768 && super.mouseClickY >= 492 && super.mouseClickY < 528 && this.tabInterfaceId[13] != -1) {
-				this.redrawSidebar = true;
-				this.selectedTab = 13;
-				this.redrawSideicons = true;
-			}
+		if (super.mouseClickButton != 1) {
+			return;
+		}
 
-			sidebarInputCounter++;
-			if (sidebarInputCounter > 150) {
-				sidebarInputCounter = 0;
-				// ANTICHEAT_CYCLELOGIC1
-				this.out.p1isaac(233);
-				this.out.p1(43);
-			}
+		if (super.mouseClickX >= 549 && super.mouseClickX <= 583 && super.mouseClickY >= 195 && super.mouseClickY < 231 && this.tabInterfaceId[0] != -1) {
+			this.redrawSidebar = true;
+			this.selectedTab = 0;
+			this.redrawSideicons = true;
+		} else if (super.mouseClickX >= 579 && super.mouseClickX <= 609 && super.mouseClickY >= 194 && super.mouseClickY < 231 && this.tabInterfaceId[1] != -1) {
+			this.redrawSidebar = true;
+			this.selectedTab = 1;
+			this.redrawSideicons = true;
+		} else if (super.mouseClickX >= 607 && super.mouseClickX <= 637 && super.mouseClickY >= 194 && super.mouseClickY < 231 && this.tabInterfaceId[2] != -1) {
+			this.redrawSidebar = true;
+			this.selectedTab = 2;
+			this.redrawSideicons = true;
+		} else if (super.mouseClickX >= 635 && super.mouseClickX <= 679 && super.mouseClickY >= 194 && super.mouseClickY < 229 && this.tabInterfaceId[3] != -1) {
+			this.redrawSidebar = true;
+			this.selectedTab = 3;
+			this.redrawSideicons = true;
+		} else if (super.mouseClickX >= 676 && super.mouseClickX <= 706 && super.mouseClickY >= 194 && super.mouseClickY < 231 && this.tabInterfaceId[4] != -1) {
+			this.redrawSidebar = true;
+			this.selectedTab = 4;
+			this.redrawSideicons = true;
+		} else if (super.mouseClickX >= 704 && super.mouseClickX <= 734 && super.mouseClickY >= 194 && super.mouseClickY < 231 && this.tabInterfaceId[5] != -1) {
+			this.redrawSidebar = true;
+			this.selectedTab = 5;
+			this.redrawSideicons = true;
+		} else if (super.mouseClickX >= 732 && super.mouseClickX <= 766 && super.mouseClickY >= 195 && super.mouseClickY < 231 && this.tabInterfaceId[6] != -1) {
+			this.redrawSidebar = true;
+			this.selectedTab = 6;
+			this.redrawSideicons = true;
+		} else if (super.mouseClickX >= 550 && super.mouseClickX <= 584 && super.mouseClickY >= 492 && super.mouseClickY < 528 && this.tabInterfaceId[7] != -1) {
+			this.redrawSidebar = true;
+			this.selectedTab = 7;
+			this.redrawSideicons = true;
+		} else if (super.mouseClickX >= 582 && super.mouseClickX <= 612 && super.mouseClickY >= 492 && super.mouseClickY < 529 && this.tabInterfaceId[8] != -1) {
+			this.redrawSidebar = true;
+			this.selectedTab = 8;
+			this.redrawSideicons = true;
+		} else if (super.mouseClickX >= 609 && super.mouseClickX <= 639 && super.mouseClickY >= 492 && super.mouseClickY < 529 && this.tabInterfaceId[9] != -1) {
+			this.redrawSidebar = true;
+			this.selectedTab = 9;
+			this.redrawSideicons = true;
+		} else if (super.mouseClickX >= 637 && super.mouseClickX <= 681 && super.mouseClickY >= 493 && super.mouseClickY < 528 && this.tabInterfaceId[10] != -1) {
+			this.redrawSidebar = true;
+			this.selectedTab = 10;
+			this.redrawSideicons = true;
+		} else if (super.mouseClickX >= 679 && super.mouseClickX <= 709 && super.mouseClickY >= 492 && super.mouseClickY < 529 && this.tabInterfaceId[11] != -1) {
+			this.redrawSidebar = true;
+			this.selectedTab = 11;
+			this.redrawSideicons = true;
+		} else if (super.mouseClickX >= 706 && super.mouseClickX <= 736 && super.mouseClickY >= 492 && super.mouseClickY < 529 && this.tabInterfaceId[12] != -1) {
+			this.redrawSidebar = true;
+			this.selectedTab = 12;
+			this.redrawSideicons = true;
+		} else if (super.mouseClickX >= 734 && super.mouseClickX <= 768 && super.mouseClickY >= 492 && super.mouseClickY < 528 && this.tabInterfaceId[13] != -1) {
+			this.redrawSidebar = true;
+			this.selectedTab = 13;
+			this.redrawSideicons = true;
+		}
+
+		sidebarInputCounter++;
+		if (sidebarInputCounter > 150) {
+			sidebarInputCounter = 0;
+			// ANTICHEAT_CYCLELOGIC1
+			this.out.p1isaac(233);
+			this.out.p1(43);
 		}
 	}
 
@@ -9029,9 +9039,11 @@ public class client extends GameShell {
 			} else {
 				type--;
 			}
+
 			this.menuOption[this.menuSize] = "Remove @whi@" + this.friendName[type];
 			this.menuAction[this.menuSize] = 557;
 			this.menuSize++;
+
 			this.menuOption[this.menuSize] = "Message @whi@" + this.friendName[type];
 			this.menuAction[this.menuSize] = 679;
 			this.menuSize++;
@@ -9129,10 +9141,12 @@ public class client extends GameShell {
 			this.flagSceneTileX = 0;
 			@Pc(60) ClientStream stream = this.stream;
 			this.ingame = false;
+
 			this.login(this.username, this.password, true);
 			if (!this.ingame) {
 				this.logout();
 			}
+
 			try {
 				stream.close();
 			} catch (@Pc(80) Exception ex) {
@@ -9267,6 +9281,7 @@ public class client extends GameShell {
 				// underground pass check
 				if (mapsquareX == 33 && mapsquareZ >= 71 && mapsquareZ <= 73) {
 					World.lowMemory = false;
+					break;
 				}
 			}
 
@@ -9343,13 +9358,15 @@ public class client extends GameShell {
 	@OriginalMember(owner = "client!client", name = "b", descriptor = "(I)V")
 	@Override
 	protected void update() {
-		if (!this.errorStarted && !this.errorLoading && !this.errorHost) {
-			loopCycle++;
-			if (this.ingame) {
-				this.updateGame();
-			} else {
-				this.updateTitle();
-			}
+		if (this.errorStarted || this.errorLoading || this.errorHost) {
+			return;
+		}
+
+		loopCycle++;
+		if (this.ingame) {
+			this.updateGame();
+		} else {
+			this.updateTitle();
 		}
 	}
 
@@ -9568,7 +9585,7 @@ public class client extends GameShell {
 			}
 
 			if (title.width >= 0) {
-				System.arraycopy(mirror, 0, title.pixels, 0 + title.width * y, title.width);
+				System.arraycopy(mirror, 0, title.pixels, title.width * y, title.width);
 			}
 		}
 
@@ -9629,12 +9646,12 @@ public class client extends GameShell {
 				if (loc.seqFrame >= loc.seq.frameCount) {
 					loc.seqFrame -= loc.seq.replayoff;
 
-                    if (loc.seqFrame < 0 || loc.seqFrame >= loc.seq.frameCount) {
+					if (loc.seqFrame < 0 || loc.seqFrame >= loc.seq.frameCount) {
 						loc.unlink();
 						append = false;
 						break;
-                    }
-                }
+					}
+				}
 			}
 
 			if (append) {
@@ -9713,24 +9730,24 @@ public class client extends GameShell {
 
 	@OriginalMember(owner = "client!client", name = "b", descriptor = "(IJ)V")
 	private void removeIgnore(@OriginalArg(1) long username) {
-        if (username == 0L) {
-            return;
-        }
+		if (username == 0L) {
+			return;
+		}
 
-        for (@Pc(14) int i = 0; i < this.ignoreCount; i++) {
-            if (this.ignoreName37[i] == username) {
-                this.ignoreCount--;
-                this.redrawSidebar = true;
-                for (@Pc(34) int j = i; j < this.ignoreCount; j++) {
-                    this.ignoreName37[j] = this.ignoreName37[j + 1];
-                }
-                // IGNORELIST_DEL
-                this.out.p1isaac(171);
-                this.out.p8(username);
-                return;
-            }
-        }
-    }
+		for (@Pc(14) int i = 0; i < this.ignoreCount; i++) {
+			if (this.ignoreName37[i] == username) {
+				this.ignoreCount--;
+				this.redrawSidebar = true;
+				for (@Pc(34) int j = i; j < this.ignoreCount; j++) {
+					this.ignoreName37[j] = this.ignoreName37[j + 1];
+				}
+				// IGNORELIST_DEL
+				this.out.p1isaac(171);
+				this.out.p8(username);
+				return;
+			}
+		}
+	}
 
 	@OriginalMember(owner = "client!client", name = "q", descriptor = "(B)V")
 	private void handleViewportOptions() {
@@ -9750,184 +9767,184 @@ public class client extends GameShell {
 			@Pc(74) int entityType = bitset >> 29 & 0x3;
 			@Pc(80) int typeId = bitset >> 14 & 0x7FFF;
 
-            if (bitset == lastBitset) {
-                continue;
-            }
+			if (bitset == lastBitset) {
+				continue;
+			}
 
-            lastBitset = bitset;
+			lastBitset = bitset;
 
-            if (entityType == 2 && this.scene.getInfo(this.currentLevel, x, z, bitset) >= 0) {
-                @Pc(100) LocType loc = LocType.get(typeId);
-                if (this.objSelected == 1) {
-                    this.menuOption[this.menuSize] = "Use " + this.objSelectedName + " with @cya@" + loc.name;
-                    this.menuAction[this.menuSize] = 450;
-                    this.menuParamA[this.menuSize] = bitset;
-                    this.menuParamB[this.menuSize] = x;
-                    this.menuParamC[this.menuSize] = z;
-                    this.menuSize++;
-                } else if (this.spellSelected != 1) {
-                    if (loc.ops != null) {
-                        for (int op = 4; op >= 0; op--) {
-                            if (loc.ops[op] != null) {
-                                this.menuOption[this.menuSize] = loc.ops[op] + " @cya@" + loc.name;
-                                if (op == 0) {
-                                    this.menuAction[this.menuSize] = 285;
-                                }
+			if (entityType == 2 && this.scene.getInfo(this.currentLevel, x, z, bitset) >= 0) {
+				@Pc(100) LocType loc = LocType.get(typeId);
+				if (this.objSelected == 1) {
+					this.menuOption[this.menuSize] = "Use " + this.objSelectedName + " with @cya@" + loc.name;
+					this.menuAction[this.menuSize] = 450;
+					this.menuParamA[this.menuSize] = bitset;
+					this.menuParamB[this.menuSize] = x;
+					this.menuParamC[this.menuSize] = z;
+					this.menuSize++;
+				} else if (this.spellSelected != 1) {
+					if (loc.ops != null) {
+						for (int op = 4; op >= 0; op--) {
+							if (loc.ops[op] != null) {
+								this.menuOption[this.menuSize] = loc.ops[op] + " @cya@" + loc.name;
+								if (op == 0) {
+									this.menuAction[this.menuSize] = 285;
+								}
 
-                                if (op == 1) {
-                                    this.menuAction[this.menuSize] = 504;
-                                }
+								if (op == 1) {
+									this.menuAction[this.menuSize] = 504;
+								}
 
-                                if (op == 2) {
-                                    this.menuAction[this.menuSize] = 364;
-                                }
+								if (op == 2) {
+									this.menuAction[this.menuSize] = 364;
+								}
 
-                                if (op == 3) {
-                                    this.menuAction[this.menuSize] = 581;
-                                }
+								if (op == 3) {
+									this.menuAction[this.menuSize] = 581;
+								}
 
-                                if (op == 4) {
-                                    this.menuAction[this.menuSize] = 1501;
-                                }
+								if (op == 4) {
+									this.menuAction[this.menuSize] = 1501;
+								}
 
-                                this.menuParamA[this.menuSize] = bitset;
-                                this.menuParamB[this.menuSize] = x;
-                                this.menuParamC[this.menuSize] = z;
-                                this.menuSize++;
-                            }
-                        }
-                    }
+								this.menuParamA[this.menuSize] = bitset;
+								this.menuParamB[this.menuSize] = x;
+								this.menuParamC[this.menuSize] = z;
+								this.menuSize++;
+							}
+						}
+					}
 
-                    this.menuOption[this.menuSize] = "Examine @cya@" + loc.name;
+					this.menuOption[this.menuSize] = "Examine @cya@" + loc.name;
 					if (this.showDebug) {
 						this.menuOption[this.menuSize] += "@whi@ (" + (loc.index) + ")";
 					}
-                    this.menuAction[this.menuSize] = 1175;
-                    this.menuParamA[this.menuSize] = bitset;
-                    this.menuParamB[this.menuSize] = x;
-                    this.menuParamC[this.menuSize] = z;
-                    this.menuSize++;
-                } else if ((this.activeSpellFlags & 0x4) == 4) {
-                    this.menuOption[this.menuSize] = this.spellCaption + " @cya@" + loc.name;
-                    this.menuAction[this.menuSize] = 55;
-                    this.menuParamA[this.menuSize] = bitset;
-                    this.menuParamB[this.menuSize] = x;
-                    this.menuParamC[this.menuSize] = z;
-                    this.menuSize++;
-                }
-            }
+					this.menuAction[this.menuSize] = 1175;
+					this.menuParamA[this.menuSize] = bitset;
+					this.menuParamB[this.menuSize] = x;
+					this.menuParamC[this.menuSize] = z;
+					this.menuSize++;
+				} else if ((this.activeSpellFlags & 0x4) == 4) {
+					this.menuOption[this.menuSize] = this.spellCaption + " @cya@" + loc.name;
+					this.menuAction[this.menuSize] = 55;
+					this.menuParamA[this.menuSize] = bitset;
+					this.menuParamB[this.menuSize] = x;
+					this.menuParamC[this.menuSize] = z;
+					this.menuSize++;
+				}
+			}
 
-            if (entityType == 1) {
-                @Pc(366) NpcEntity npc = this.npcs[typeId];
-                if (npc.type.size == 1 && (npc.x & 0x7F) == 64 && (npc.z & 0x7F) == 64) {
-                    for (int i = 0; i < this.npcCount; i++) {
-                        NpcEntity other = this.npcs[this.npcIds[i]];
+			if (entityType == 1) {
+				@Pc(366) NpcEntity npc = this.npcs[typeId];
+				if (npc.type.size == 1 && (npc.x & 0x7F) == 64 && (npc.z & 0x7F) == 64) {
+					for (int i = 0; i < this.npcCount; i++) {
+						NpcEntity other = this.npcs[this.npcIds[i]];
 
-                        if (other != null && other != npc && other.type.size == 1 && other.x == npc.x && other.z == npc.z) {
-                            this.addNpcOptions(other.type, this.npcIds[i], x, z);
-                        }
-                    }
-                }
+						if (other != null && other != npc && other.type.size == 1 && other.x == npc.x && other.z == npc.z) {
+							this.addNpcOptions(other.type, this.npcIds[i], x, z);
+						}
+					}
+				}
 
-                this.addNpcOptions(npc.type, typeId, x, z);
-            }
+				this.addNpcOptions(npc.type, typeId, x, z);
+			}
 
-            if (entityType == 0) {
-                @Pc(446) PlayerEntity player = this.players[typeId];
-                if ((player.x & 0x7F) == 64 && (player.z & 0x7F) == 64) {
-                    for (int i = 0; i < this.npcCount; i++) {
-                        NpcEntity other = this.npcs[this.npcIds[i]];
+			if (entityType == 0) {
+				@Pc(446) PlayerEntity player = this.players[typeId];
+				if ((player.x & 0x7F) == 64 && (player.z & 0x7F) == 64) {
+					for (int i = 0; i < this.npcCount; i++) {
+						NpcEntity other = this.npcs[this.npcIds[i]];
 
-                        if (other != null && other.type.size == 1 && other.x == player.x && other.z == player.z) {
-                            this.addNpcOptions(other.type, this.npcIds[i], x, z);
-                        }
-                    }
+						if (other != null && other.type.size == 1 && other.x == player.x && other.z == player.z) {
+							this.addNpcOptions(other.type, this.npcIds[i], x, z);
+						}
+					}
 
-                    for (@Pc(505) int i = 0; i < this.playerCount; i++) {
-                        @Pc(515) PlayerEntity other = this.players[this.playerIds[i]];
+					for (@Pc(505) int i = 0; i < this.playerCount; i++) {
+						@Pc(515) PlayerEntity other = this.players[this.playerIds[i]];
 
-                        if (other != null && other != player && other.x == player.x && other.z == player.z) {
-                            this.addPlayerOptions(other, this.playerIds[i], x, z);
-                        }
-                    }
-                }
+						if (other != null && other != player && other.x == player.x && other.z == player.z) {
+							this.addPlayerOptions(other, this.playerIds[i], x, z);
+						}
+					}
+				}
 
-                this.addPlayerOptions(player, typeId, x, z);
-            }
+				this.addPlayerOptions(player, typeId, x, z);
+			}
 
-            if (entityType == 3) {
-                @Pc(565) LinkList objs = this.levelObjStacks[this.currentLevel][x][z];
-                if (objs == null) {
-                    continue;
-                }
+			if (entityType == 3) {
+				@Pc(565) LinkList objs = this.levelObjStacks[this.currentLevel][x][z];
+				if (objs == null) {
+					continue;
+				}
 
-                for (@Pc(572) ObjStackEntity obj = (ObjStackEntity) objs.peekBack(); obj != null; obj = (ObjStackEntity) objs.next()) {
-                    @Pc(578) ObjType type = ObjType.get(obj.index);
-                    if (this.objSelected == 1) {
-                        this.menuOption[this.menuSize] = "Use " + this.objSelectedName + " with @lre@" + type.name;
-                        this.menuAction[this.menuSize] = 217;
-                        this.menuParamA[this.menuSize] = obj.index;
-                        this.menuParamB[this.menuSize] = x;
-                        this.menuParamC[this.menuSize] = z;
-                        this.menuSize++;
-                    } else if (this.spellSelected != 1) {
-                        for (@Pc(695) int op = 4; op >= 0; op--) {
-                            if (type.ops != null && type.ops[op] != null) {
-                                this.menuOption[this.menuSize] = type.ops[op] + " @lre@" + type.name;
-                                if (op == 0) {
-                                    this.menuAction[this.menuSize] = 224;
-                                }
+				for (@Pc(572) ObjStackEntity obj = (ObjStackEntity) objs.peekBack(); obj != null; obj = (ObjStackEntity) objs.next()) {
+					@Pc(578) ObjType type = ObjType.get(obj.index);
+					if (this.objSelected == 1) {
+						this.menuOption[this.menuSize] = "Use " + this.objSelectedName + " with @lre@" + type.name;
+						this.menuAction[this.menuSize] = 217;
+						this.menuParamA[this.menuSize] = obj.index;
+						this.menuParamB[this.menuSize] = x;
+						this.menuParamC[this.menuSize] = z;
+						this.menuSize++;
+					} else if (this.spellSelected != 1) {
+						for (@Pc(695) int op = 4; op >= 0; op--) {
+							if (type.ops != null && type.ops[op] != null) {
+								this.menuOption[this.menuSize] = type.ops[op] + " @lre@" + type.name;
+								if (op == 0) {
+									this.menuAction[this.menuSize] = 224;
+								}
 
-                                if (op == 1) {
-                                    this.menuAction[this.menuSize] = 993;
-                                }
+								if (op == 1) {
+									this.menuAction[this.menuSize] = 993;
+								}
 
-                                if (op == 2) {
-                                    this.menuAction[this.menuSize] = 99;
-                                }
+								if (op == 2) {
+									this.menuAction[this.menuSize] = 99;
+								}
 
-                                if (op == 3) {
-                                    this.menuAction[this.menuSize] = 746;
-                                }
+								if (op == 3) {
+									this.menuAction[this.menuSize] = 746;
+								}
 
-                                if (op == 4) {
-                                    this.menuAction[this.menuSize] = 877;
-                                }
+								if (op == 4) {
+									this.menuAction[this.menuSize] = 877;
+								}
 
-                                this.menuParamA[this.menuSize] = obj.index;
-                                this.menuParamB[this.menuSize] = x;
-                                this.menuParamC[this.menuSize] = z;
-                                this.menuSize++;
-                            } else if (op == 2) {
-                                this.menuOption[this.menuSize] = "Take @lre@" + type.name;
-                                this.menuAction[this.menuSize] = 99;
-                                this.menuParamA[this.menuSize] = obj.index;
-                                this.menuParamB[this.menuSize] = x;
-                                this.menuParamC[this.menuSize] = z;
-                                this.menuSize++;
-                            }
-                        }
+								this.menuParamA[this.menuSize] = obj.index;
+								this.menuParamB[this.menuSize] = x;
+								this.menuParamC[this.menuSize] = z;
+								this.menuSize++;
+							} else if (op == 2) {
+								this.menuOption[this.menuSize] = "Take @lre@" + type.name;
+								this.menuAction[this.menuSize] = 99;
+								this.menuParamA[this.menuSize] = obj.index;
+								this.menuParamB[this.menuSize] = x;
+								this.menuParamC[this.menuSize] = z;
+								this.menuSize++;
+							}
+						}
 
-                        this.menuOption[this.menuSize] = "Examine @lre@" + type.name;
+						this.menuOption[this.menuSize] = "Examine @lre@" + type.name;
 						if (this.showDebug) {
 							this.menuOption[this.menuSize] += "@whi@ (" + (obj.index) + ")";
 						}
-                        this.menuAction[this.menuSize] = 1102;
-                        this.menuParamA[this.menuSize] = obj.index;
-                        this.menuParamB[this.menuSize] = x;
-                        this.menuParamC[this.menuSize] = z;
-                        this.menuSize++;
-                    } else if ((this.activeSpellFlags & 0x1) == 1) {
-                        this.menuOption[this.menuSize] = this.spellCaption + " @lre@" + type.name;
-                        this.menuAction[this.menuSize] = 965;
-                        this.menuParamA[this.menuSize] = obj.index;
-                        this.menuParamB[this.menuSize] = x;
-                        this.menuParamC[this.menuSize] = z;
-                        this.menuSize++;
-                    }
-                }
-            }
-        }
+						this.menuAction[this.menuSize] = 1102;
+						this.menuParamA[this.menuSize] = obj.index;
+						this.menuParamB[this.menuSize] = x;
+						this.menuParamC[this.menuSize] = z;
+						this.menuSize++;
+					} else if ((this.activeSpellFlags & 0x1) == 1) {
+						this.menuOption[this.menuSize] = this.spellCaption + " @lre@" + type.name;
+						this.menuAction[this.menuSize] = 965;
+						this.menuParamA[this.menuSize] = obj.index;
+						this.menuParamB[this.menuSize] = x;
+						this.menuParamC[this.menuSize] = z;
+						this.menuSize++;
+					}
+				}
+			}
+		}
 	}
 
 	@OriginalMember(owner = "client!client", name = "n", descriptor = "(Z)V")
@@ -9975,12 +9992,14 @@ public class client extends GameShell {
 
 	@OriginalMember(owner = "client!client", name = "r", descriptor = "(B)V")
 	private void drawTileHint() {
-		if (this.hintType == 2) {
-			this.projectFromGround((this.hintTileX - this.sceneBaseTileX << 7) + this.hintOffsetX, this.hintHeight * 2, (this.hintTileZ - this.sceneBaseTileZ << 7) + this.hintOffsetZ);
+		if (this.hintType != 2) {
+			return;
+		}
 
-			if (this.projectX > -1 && loopCycle % 20 < 10) {
-				this.imageHeadicons[2].draw(this.projectX - 12, this.projectY - 28);
-			}
+		this.projectFromGround((this.hintTileX - this.sceneBaseTileX << 7) + this.hintOffsetX, this.hintHeight * 2, (this.hintTileZ - this.sceneBaseTileZ << 7) + this.hintOffsetZ);
+
+		if (this.projectX > -1 && loopCycle % 20 < 10) {
+			this.imageHeadicons[2].draw(this.projectX - 12, this.projectY - 28);
 		}
 	}
 
@@ -11278,11 +11297,13 @@ public class client extends GameShell {
 		if (username == null) {
 			return false;
 		}
+
 		for (@Pc(15) int i = 0; i < this.friendCount; i++) {
 			if (username.equalsIgnoreCase(this.friendName[i])) {
 				return true;
 			}
 		}
+
 		return username.equalsIgnoreCase(this.localPlayer.name);
 	}
 

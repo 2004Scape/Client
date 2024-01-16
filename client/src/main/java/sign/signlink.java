@@ -146,7 +146,7 @@ public class signlink implements Runnable {
 	public static String findcachedir() {
 		@Pc(50) String[] paths = new String[] {
 			// prioritize home directories
-            System.getProperty("user.home"),
+			System.getProperty("user.home"),
 			// System.getenv("HOME"), System.getenv("HOMEDRIVE") + System.getenv("HOMEPATH"), System.getenv("USERPROFILE"),
 			// System.getenv("user.home"), "~",
 			// fall back to OS-specific paths

@@ -259,172 +259,172 @@ public class Model extends Hashable {
 
 	@OriginalMember(owner = "client!eb", name = "<init>", descriptor = "(ZI)V")
 	public Model(@OriginalArg(1) int id) {
-        if (metadata == null) {
-            return;
-        }
+		if (metadata == null) {
+			return;
+		}
 
-        @Pc(28) Metadata meta = metadata[id];
-        if (meta == null) {
-            System.out.println("Error model:" + id + " not found!");
-        } else {
-            this.vertexCount = meta.vertexCount;
-            this.faceCount = meta.faceCount;
-            this.texturedFaceCount = meta.texturedFaceCount;
-            this.vertexX = new int[this.vertexCount];
-            this.vertexY = new int[this.vertexCount];
-            this.vertexZ = new int[this.vertexCount];
-            this.faceVertexA = new int[this.faceCount];
-            this.faceVertexB = new int[this.faceCount];
-            this.faceVertexC = new int[this.faceCount];
-            this.texturedVertexA = new int[this.texturedFaceCount];
-            this.texturedVertexB = new int[this.texturedFaceCount];
-            this.texturedVertexC = new int[this.texturedFaceCount];
+		@Pc(28) Metadata meta = metadata[id];
+		if (meta == null) {
+			System.out.println("Error model:" + id + " not found!");
+		} else {
+			this.vertexCount = meta.vertexCount;
+			this.faceCount = meta.faceCount;
+			this.texturedFaceCount = meta.texturedFaceCount;
+			this.vertexX = new int[this.vertexCount];
+			this.vertexY = new int[this.vertexCount];
+			this.vertexZ = new int[this.vertexCount];
+			this.faceVertexA = new int[this.faceCount];
+			this.faceVertexB = new int[this.faceCount];
+			this.faceVertexC = new int[this.faceCount];
+			this.texturedVertexA = new int[this.texturedFaceCount];
+			this.texturedVertexB = new int[this.texturedFaceCount];
+			this.texturedVertexC = new int[this.texturedFaceCount];
 
-            if (meta.vertexLabelsOffset >= 0) {
-                this.vertexLabel = new int[this.vertexCount];
-            }
+			if (meta.vertexLabelsOffset >= 0) {
+				this.vertexLabel = new int[this.vertexCount];
+			}
 
-            if (meta.faceInfosOffset >= 0) {
-                this.faceInfo = new int[this.faceCount];
-            }
+			if (meta.faceInfosOffset >= 0) {
+				this.faceInfo = new int[this.faceCount];
+			}
 
-            if (meta.facePrioritiesOffset >= 0) {
-                this.facePriority = new int[this.faceCount];
-            } else {
-                this.priority = -meta.facePrioritiesOffset - 1;
-            }
+			if (meta.facePrioritiesOffset >= 0) {
+				this.facePriority = new int[this.faceCount];
+			} else {
+				this.priority = -meta.facePrioritiesOffset - 1;
+			}
 
-            if (meta.faceAlphasOffset >= 0) {
-                this.faceAlpha = new int[this.faceCount];
-            }
+			if (meta.faceAlphasOffset >= 0) {
+				this.faceAlpha = new int[this.faceCount];
+			}
 
-            if (meta.faceLabelsOffset >= 0) {
-                this.faceLabel = new int[this.faceCount];
-            }
+			if (meta.faceLabelsOffset >= 0) {
+				this.faceLabel = new int[this.faceCount];
+			}
 
-            this.faceColor = new int[this.faceCount];
+			this.faceColor = new int[this.faceCount];
 
-            point1.pos = meta.vertexFlagsOffset;
-            point2.pos = meta.vertexXOffset;
-            point3.pos = meta.vertexYOffset;
-            point4.pos = meta.vertexZOffset;
-            point5.pos = meta.vertexLabelsOffset;
+			point1.pos = meta.vertexFlagsOffset;
+			point2.pos = meta.vertexXOffset;
+			point3.pos = meta.vertexYOffset;
+			point4.pos = meta.vertexZOffset;
+			point5.pos = meta.vertexLabelsOffset;
 
-            @Pc(175) int dx = 0;
-            @Pc(177) int db = 0;
-            @Pc(179) int dc = 0;
-            @Pc(188) int a;
-            @Pc(197) int b;
-            @Pc(206) int c;
+			@Pc(175) int dx = 0;
+			@Pc(177) int db = 0;
+			@Pc(179) int dc = 0;
+			@Pc(188) int a;
+			@Pc(197) int b;
+			@Pc(206) int c;
 
-            for (@Pc(181) int v = 0; v < this.vertexCount; v++) {
-                int flags = point1.g1();
-                a = 0;
-                if ((flags & 0x1) != 0) {
-                    a = point2.gsmart();
-                }
+			for (@Pc(181) int v = 0; v < this.vertexCount; v++) {
+				int flags = point1.g1();
+				a = 0;
+				if ((flags & 0x1) != 0) {
+					a = point2.gsmart();
+				}
 
-                b = 0;
-                if ((flags & 0x2) != 0) {
-                    b = point3.gsmart();
-                }
+				b = 0;
+				if ((flags & 0x2) != 0) {
+					b = point3.gsmart();
+				}
 
-                c = 0;
-                if ((flags & 0x4) != 0) {
-                    c = point4.gsmart();
-                }
+				c = 0;
+				if ((flags & 0x4) != 0) {
+					c = point4.gsmart();
+				}
 
-                this.vertexX[v] = dx + a;
-                this.vertexY[v] = db + b;
-                this.vertexZ[v] = dc + c;
-                dx = this.vertexX[v];
-                db = this.vertexY[v];
-                dc = this.vertexZ[v];
+				this.vertexX[v] = dx + a;
+				this.vertexY[v] = db + b;
+				this.vertexZ[v] = dc + c;
+				dx = this.vertexX[v];
+				db = this.vertexY[v];
+				dc = this.vertexZ[v];
 
-                if (this.vertexLabel != null) {
-                    this.vertexLabel[v] = point5.g1();
-                }
-            }
+				if (this.vertexLabel != null) {
+					this.vertexLabel[v] = point5.g1();
+				}
+			}
 
-            face1.pos = meta.faceColorsOffset;
-            face2.pos = meta.faceInfosOffset;
-            face3.pos = meta.facePrioritiesOffset;
-            face4.pos = meta.faceAlphasOffset;
-            face5.pos = meta.faceLabelsOffset;
-            for (int f = 0; f < this.faceCount; f++) {
-                this.faceColor[f] = face1.g2();
-                if (this.faceInfo != null) {
-                    this.faceInfo[f] = face2.g1();
-                }
+			face1.pos = meta.faceColorsOffset;
+			face2.pos = meta.faceInfosOffset;
+			face3.pos = meta.facePrioritiesOffset;
+			face4.pos = meta.faceAlphasOffset;
+			face5.pos = meta.faceLabelsOffset;
+			for (int f = 0; f < this.faceCount; f++) {
+				this.faceColor[f] = face1.g2();
+				if (this.faceInfo != null) {
+					this.faceInfo[f] = face2.g1();
+				}
 
-                if (this.facePriority != null) {
-                    this.facePriority[f] = face3.g1();
-                }
+				if (this.facePriority != null) {
+					this.facePriority[f] = face3.g1();
+				}
 
-                if (this.faceAlpha != null) {
-                    this.faceAlpha[f] = face4.g1();
-                }
+				if (this.faceAlpha != null) {
+					this.faceAlpha[f] = face4.g1();
+				}
 
-                if (this.faceLabel != null) {
-                    this.faceLabel[f] = face5.g1();
-                }
-            }
+				if (this.faceLabel != null) {
+					this.faceLabel[f] = face5.g1();
+				}
+			}
 
-            vertex1.pos = meta.faceVerticesOffset;
-            vertex2.pos = meta.faceOrientationsOffset;
+			vertex1.pos = meta.faceVerticesOffset;
+			vertex2.pos = meta.faceOrientationsOffset;
 
-            a = 0;
-            b = 0;
-            c = 0;
-            @Pc(350) int last = 0;
+			a = 0;
+			b = 0;
+			c = 0;
+			@Pc(350) int last = 0;
 
-            for (@Pc(352) int f = 0; f < this.faceCount; f++) {
-                int orientation = vertex2.g1();
+			for (@Pc(352) int f = 0; f < this.faceCount; f++) {
+				int orientation = vertex2.g1();
 
-                if (orientation == 1) {
-                    a = vertex1.gsmart() + last;
-                    b = vertex1.gsmart() + a;
-                    c = vertex1.gsmart() + b;
-                    last = c;
-                    this.faceVertexA[f] = a;
-                    this.faceVertexB[f] = b;
-                    this.faceVertexC[f] = c;
-                } else if (orientation == 2) {
-                    a = a;
-                    b = c;
-                    c = vertex1.gsmart() + last;
-                    last = c;
-                    this.faceVertexA[f] = a;
-                    this.faceVertexB[f] = b;
-                    this.faceVertexC[f] = c;
-                } else if (orientation == 3) {
-                    a = c;
-                    b = b;
-                    c = vertex1.gsmart() + last;
-                    last = c;
-                    this.faceVertexA[f] = a;
-                    this.faceVertexB[f] = b;
-                    this.faceVertexC[f] = c;
-                } else if (orientation == 4) {
-                    @Pc(459) int tmp = a;
-                    a = b;
-                    b = tmp;
-                    c = vertex1.gsmart() + last;
-                    last = c;
-                    this.faceVertexA[f] = a;
-                    this.faceVertexB[f] = tmp;
-                    this.faceVertexC[f] = c;
-                }
-            }
+				if (orientation == 1) {
+					a = vertex1.gsmart() + last;
+					b = vertex1.gsmart() + a;
+					c = vertex1.gsmart() + b;
+					last = c;
+					this.faceVertexA[f] = a;
+					this.faceVertexB[f] = b;
+					this.faceVertexC[f] = c;
+				} else if (orientation == 2) {
+					a = a;
+					b = c;
+					c = vertex1.gsmart() + last;
+					last = c;
+					this.faceVertexA[f] = a;
+					this.faceVertexB[f] = b;
+					this.faceVertexC[f] = c;
+				} else if (orientation == 3) {
+					a = c;
+					b = b;
+					c = vertex1.gsmart() + last;
+					last = c;
+					this.faceVertexA[f] = a;
+					this.faceVertexB[f] = b;
+					this.faceVertexC[f] = c;
+				} else if (orientation == 4) {
+					@Pc(459) int tmp = a;
+					a = b;
+					b = tmp;
+					c = vertex1.gsmart() + last;
+					last = c;
+					this.faceVertexA[f] = a;
+					this.faceVertexB[f] = tmp;
+					this.faceVertexC[f] = c;
+				}
+			}
 
-            axis.pos = meta.faceTextureAxisOffset * 6;
-            for (int f = 0; f < this.texturedFaceCount; f++) {
-                this.texturedVertexA[f] = axis.g2();
-                this.texturedVertexB[f] = axis.g2();
-                this.texturedVertexC[f] = axis.g2();
-            }
-        }
-    }
+			axis.pos = meta.faceTextureAxisOffset * 6;
+			for (int f = 0; f < this.texturedFaceCount; f++) {
+				this.texturedVertexA[f] = axis.g2();
+				this.texturedVertexB[f] = axis.g2();
+				this.texturedVertexC[f] = axis.g2();
+			}
+		}
+	}
 
 	@OriginalMember(owner = "client!eb", name = "<init>", descriptor = "(I[Lclient!eb;I)V")
 	public Model(@OriginalArg(1) Model[] models, @OriginalArg(2) int count) {
@@ -705,9 +705,7 @@ public class Model extends Hashable {
 			this.faceColor = src.faceColor;
 		} else {
 			this.faceColor = new int[this.faceCount];
-			for (int f = 0; f < this.faceCount; f++) {
-				this.faceColor[f] = src.faceColor[f];
-			}
+			System.arraycopy(src.faceColor, 0, this.faceColor, 0, this.faceCount);
 		}
 
 		if (shareAlpha) {
@@ -719,9 +717,7 @@ public class Model extends Hashable {
 					this.faceAlpha[f] = 0;
 				}
 			} else {
-				for (int f = 0; f < this.faceCount; f++) {
-					this.faceAlpha[f] = src.faceAlpha[f];
-				}
+				System.arraycopy(src.faceAlpha, 0, this.faceAlpha, 0, this.faceCount);
 			}
 		}
 
@@ -746,9 +742,7 @@ public class Model extends Hashable {
 
 		if (copyVertexY) {
 			this.vertexY = new int[this.vertexCount];
-			for (int v = 0; v < this.vertexCount; v++) {
-				this.vertexY[v] = src.vertexY[v];
-			}
+			System.arraycopy(src.vertexY, 0, this.vertexY, 0, this.vertexCount);
 		} else {
 			this.vertexY = src.vertexY;
 		}
@@ -769,9 +763,7 @@ public class Model extends Hashable {
 					this.faceInfo[f] = 0;
 				}
 			} else {
-				for (int f = 0; f < this.faceCount; f++) {
-					this.faceInfo[f] = src.faceInfo[f];
-				}
+				System.arraycopy(src.faceInfo, 0, this.faceInfo, 0, this.faceCount);
 			}
 
 			this.vertexNormal = new VertexNormal[this.vertexCount];
@@ -840,9 +832,7 @@ public class Model extends Hashable {
 					this.faceAlpha[f] = 0;
 				}
 			} else {
-				for (int f = 0; f < this.faceCount; f++) {
-					this.faceAlpha[f] = src.faceAlpha[f];
-				}
+				System.arraycopy(src.faceAlpha, 0, this.faceAlpha, 0, this.faceCount);
 			}
 		}
 
@@ -1204,54 +1194,54 @@ public class Model extends Hashable {
 
 	@OriginalMember(owner = "client!eb", name = "a", descriptor = "(III[I)V")
 	public void applyTransforms(@OriginalArg(2) int primaryId, @OriginalArg(0) int secondaryId, @OriginalArg(3) int[] mask) {
-        if (primaryId == -1) {
-            return;
-        }
+		if (primaryId == -1) {
+			return;
+		}
 
-        if (mask == null || secondaryId == -1) {
-            this.applyTransform(primaryId);
-        } else {
-            @Pc(19) SeqFrame primary = SeqFrame.instances[primaryId];
-            @Pc(32) SeqFrame secondary = SeqFrame.instances[secondaryId];
-            @Pc(35) SeqBase skeleton = primary.base;
+		if (mask == null || secondaryId == -1) {
+			this.applyTransform(primaryId);
+		} else {
+			@Pc(19) SeqFrame primary = SeqFrame.instances[primaryId];
+			@Pc(32) SeqFrame secondary = SeqFrame.instances[secondaryId];
+			@Pc(35) SeqBase skeleton = primary.base;
 
-            baseX = 0;
-            baseY = 0;
-            baseZ = 0;
+			baseX = 0;
+			baseY = 0;
+			baseZ = 0;
 
-            @Pc(46) int counter = 0;
-            @Pc(48) int maskBase = mask[counter++];
+			@Pc(46) int counter = 0;
+			@Pc(48) int maskBase = mask[counter++];
 
-            for (@Pc(50) int i = 0; i < primary.length; i++) {
-                int base = primary.bases[i];
-                while (base > maskBase) {
-                    maskBase = mask[counter++];
-                }
+			for (@Pc(50) int i = 0; i < primary.length; i++) {
+				int base = primary.bases[i];
+				while (base > maskBase) {
+					maskBase = mask[counter++];
+				}
 
-                if (base != maskBase || skeleton.types[base] == 0) {
-                    this.applyTransform(primary.x[i], primary.y[i], primary.z[i], skeleton.labels[base], skeleton.types[base]);
-                }
-            }
+				if (base != maskBase || skeleton.types[base] == 0) {
+					this.applyTransform(primary.x[i], primary.y[i], primary.z[i], skeleton.labels[base], skeleton.types[base]);
+				}
+			}
 
-            baseX = 0;
-            baseY = 0;
-            baseZ = 0;
+			baseX = 0;
+			baseY = 0;
+			baseZ = 0;
 
-            counter = 0;
-            maskBase = mask[counter++];
+			counter = 0;
+			maskBase = mask[counter++];
 
-            for (int i = 0; i < secondary.length; i++) {
-                @Pc(124) int base = secondary.bases[i];
-                while (base > maskBase) {
-                    maskBase = mask[counter++];
-                }
+			for (int i = 0; i < secondary.length; i++) {
+				@Pc(124) int base = secondary.bases[i];
+				while (base > maskBase) {
+					maskBase = mask[counter++];
+				}
 
-                if (base == maskBase || skeleton.types[base] == 0) {
-                    this.applyTransform(secondary.x[i], secondary.y[i], secondary.z[i], skeleton.labels[base], skeleton.types[base]);
-                }
-            }
-        }
-    }
+				if (base == maskBase || skeleton.types[base] == 0) {
+					this.applyTransform(secondary.x[i], secondary.y[i], secondary.z[i], skeleton.labels[base], skeleton.types[base]);
+				}
+			}
+		}
+	}
 
 	@OriginalMember(owner = "client!eb", name = "a", descriptor = "(I[IIII)V")
 	private void applyTransform(@OriginalArg(2) int x, @OriginalArg(3) int y, @OriginalArg(4) int z, @OriginalArg(1) int[] labels, @OriginalArg(0) int type) {
@@ -1289,110 +1279,110 @@ public class Model extends Hashable {
 		} else if (type == 1) {
 			for (int g = 0; g < labelCount; g++) {
 				int group = labels[g];
-                if (group >= this.labelVertices.length) {
-                    continue;
-                }
+				if (group >= this.labelVertices.length) {
+					continue;
+				}
 
-                int[] vertices = this.labelVertices[group];
-                for (int i = 0; i < vertices.length; i++) {
-                    int v = vertices[i];
-                    this.vertexX[v] += x;
-                    this.vertexY[v] += y;
-                    this.vertexZ[v] += z;
-                }
-            }
+				int[] vertices = this.labelVertices[group];
+				for (int i = 0; i < vertices.length; i++) {
+					int v = vertices[i];
+					this.vertexX[v] += x;
+					this.vertexY[v] += y;
+					this.vertexZ[v] += z;
+				}
+			}
 		} else if (type == 2) {
 			for (int g = 0; g < labelCount; g++) {
 				int label = labels[g];
-                if (label >= this.labelVertices.length) {
-                    continue;
-                }
+				if (label >= this.labelVertices.length) {
+					continue;
+				}
 
-                int[] vertices = this.labelVertices[label];
-                for (int i = 0; i < vertices.length; i++) {
-                    int v = vertices[i];
-                    this.vertexX[v] -= baseX;
-                    this.vertexY[v] -= baseY;
-                    this.vertexZ[v] -= baseZ;
+				int[] vertices = this.labelVertices[label];
+				for (int i = 0; i < vertices.length; i++) {
+					int v = vertices[i];
+					this.vertexX[v] -= baseX;
+					this.vertexY[v] -= baseY;
+					this.vertexZ[v] -= baseZ;
 
-                    int pitch = (x & 0xFF) * 8;
-                    @Pc(227) int yaw = (y & 0xFF) * 8;
-                    @Pc(233) int roll = (z & 0xFF) * 8;
+					int pitch = (x & 0xFF) * 8;
+					@Pc(227) int yaw = (y & 0xFF) * 8;
+					@Pc(233) int roll = (z & 0xFF) * 8;
 
-                    @Pc(239) int sin;
-                    @Pc(243) int cos;
+					@Pc(239) int sin;
+					@Pc(243) int cos;
 
-                    if (roll != 0) {
-                        sin = Model.sin[roll];
-                        cos = Model.cos[roll];
-                        int x_ = this.vertexY[v] * sin + this.vertexX[v] * cos >> 16;
-                        this.vertexY[v] = this.vertexY[v] * cos - this.vertexX[v] * sin >> 16;
-                        this.vertexX[v] = x_;
-                    }
+					if (roll != 0) {
+						sin = Model.sin[roll];
+						cos = Model.cos[roll];
+						int x_ = this.vertexY[v] * sin + this.vertexX[v] * cos >> 16;
+						this.vertexY[v] = this.vertexY[v] * cos - this.vertexX[v] * sin >> 16;
+						this.vertexX[v] = x_;
+					}
 
-                    if (pitch != 0) {
-                        sin = Model.sin[pitch];
-                        cos = Model.cos[pitch];
-                        int y_ = this.vertexY[v] * cos - this.vertexZ[v] * sin >> 16;
-                        this.vertexZ[v] = this.vertexY[v] * sin + this.vertexZ[v] * cos >> 16;
-                        this.vertexY[v] = y_;
-                    }
+					if (pitch != 0) {
+						sin = Model.sin[pitch];
+						cos = Model.cos[pitch];
+						int y_ = this.vertexY[v] * cos - this.vertexZ[v] * sin >> 16;
+						this.vertexZ[v] = this.vertexY[v] * sin + this.vertexZ[v] * cos >> 16;
+						this.vertexY[v] = y_;
+					}
 
-                    if (yaw != 0) {
-                        sin = Model.sin[yaw];
-                        cos = Model.cos[yaw];
-                        int x_ = this.vertexZ[v] * sin + this.vertexX[v] * cos >> 16;
-                        this.vertexZ[v] = this.vertexZ[v] * cos - this.vertexX[v] * sin >> 16;
-                        this.vertexX[v] = x_;
-                    }
+					if (yaw != 0) {
+						sin = Model.sin[yaw];
+						cos = Model.cos[yaw];
+						int x_ = this.vertexZ[v] * sin + this.vertexX[v] * cos >> 16;
+						this.vertexZ[v] = this.vertexZ[v] * cos - this.vertexX[v] * sin >> 16;
+						this.vertexX[v] = x_;
+					}
 
-                    this.vertexX[v] += baseX;
-                    this.vertexY[v] += baseY;
-                    this.vertexZ[v] += baseZ;
-                }
-            }
+					this.vertexX[v] += baseX;
+					this.vertexY[v] += baseY;
+					this.vertexZ[v] += baseZ;
+				}
+			}
 		} else if (type == 3) {
 			for (int g = 0; g < labelCount; g++) {
 				int label = labels[g];
-                if (label >= this.labelVertices.length) {
-                    continue;
-                }
+				if (label >= this.labelVertices.length) {
+					continue;
+				}
 
-                int[] vertices = this.labelVertices[label];
-                for (int i = 0; i < vertices.length; i++) {
-                    int v = vertices[i];
-                    this.vertexX[v] -= baseX;
-                    this.vertexY[v] -= baseY;
-                    this.vertexZ[v] -= baseZ;
-                    this.vertexX[v] = this.vertexX[v] * x / 128;
-                    this.vertexY[v] = this.vertexY[v] * y / 128;
-                    this.vertexZ[v] = this.vertexZ[v] * z / 128;
-                    this.vertexX[v] += baseX;
-                    this.vertexY[v] += baseY;
-                    this.vertexZ[v] += baseZ;
-                }
-            }
+				int[] vertices = this.labelVertices[label];
+				for (int i = 0; i < vertices.length; i++) {
+					int v = vertices[i];
+					this.vertexX[v] -= baseX;
+					this.vertexY[v] -= baseY;
+					this.vertexZ[v] -= baseZ;
+					this.vertexX[v] = this.vertexX[v] * x / 128;
+					this.vertexY[v] = this.vertexY[v] * y / 128;
+					this.vertexZ[v] = this.vertexZ[v] * z / 128;
+					this.vertexX[v] += baseX;
+					this.vertexY[v] += baseY;
+					this.vertexZ[v] += baseZ;
+				}
+			}
 		} else if (type == 5 && (this.labelFaces != null && this.faceAlpha != null)) {
 			for (int g = 0; g < labelCount; g++) {
 				int label = labels[g];
-                if (label >= this.labelFaces.length) {
-                    continue;
-                }
+				if (label >= this.labelFaces.length) {
+					continue;
+				}
 
-                int[] triangles = this.labelFaces[label];
-                for (int i = 0; i < triangles.length; i++) {
-                    int t = triangles[i];
+				int[] triangles = this.labelFaces[label];
+				for (int i = 0; i < triangles.length; i++) {
+					int t = triangles[i];
 
-                    this.faceAlpha[t] += x * 8;
-                    if (this.faceAlpha[t] < 0) {
-                        this.faceAlpha[t] = 0;
-                    }
+					this.faceAlpha[t] += x * 8;
+					if (this.faceAlpha[t] < 0) {
+						this.faceAlpha[t] = 0;
+					}
 
-                    if (this.faceAlpha[t] > 255) {
-                        this.faceAlpha[t] = 255;
-                    }
-                }
-            }
+					if (this.faceAlpha[t] > 255) {
+						this.faceAlpha[t] = 255;
+					}
+				}
+			}
 		}
 	}
 
@@ -1499,7 +1489,7 @@ public class Model extends Hashable {
 			if (length <= 0) {
 				length = 1;
 			}
-			
+
 			nx = nx * 256 / length;
 			ny = ny * 256 / length;
 			nz = nz * 256 / length;
@@ -2127,7 +2117,7 @@ public class Model extends Hashable {
 			if (x0 < 0 || x1 < 0 || x2 < 0 || x0 > Draw2D.boundX || x1 > Draw2D.boundX || x2 > Draw2D.boundX) {
 				Draw3D.clipX = true;
 			}
-			
+
 			int type;
 			if (this.faceInfo == null) {
 				type = 0;
@@ -2171,7 +2161,7 @@ public class Model extends Hashable {
 				int colorA = palette[this.faceColorA[face]];
 				Draw3D.fillTriangle(x0, x1, x2, y0, y1, y2, colorA);
 				Draw3D.fillTriangle(x0, x2, clippedX[3], y0, y2, clippedY[3], colorA);
-			} if (type == 2) {
+			} else if (type == 2) {
 				int texturedFace = this.faceInfo[face] >> 2;
 				int tA = this.texturedVertexA[texturedFace];
 				int tB = this.texturedVertexB[texturedFace];

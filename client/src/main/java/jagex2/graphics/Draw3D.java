@@ -1437,7 +1437,7 @@ public class Draw3D extends Draw2D {
 	public static void fillTexturedTriangle(@OriginalArg(3) int xA, @OriginalArg(4) int xB, @OriginalArg(5) int xC, @OriginalArg(0) int yA, @OriginalArg(1) int yB, @OriginalArg(2) int yC, @OriginalArg(6) int shadeA, @OriginalArg(7) int shadeB, @OriginalArg(8) int shadeC, @OriginalArg(9) int originX, @OriginalArg(12) int originY, @OriginalArg(15) int originZ, @OriginalArg(10) int txB, @OriginalArg(11) int txC, @OriginalArg(13) int tyB, @OriginalArg(14) int tyC, @OriginalArg(16) int tzB, @OriginalArg(17) int tzC, @OriginalArg(18) int texture) {
 		@Pc(4) int[] texels = getTexels(texture);
 		opaque = !textureTranslucent[texture];
-		
+
 		@Pc(16) int verticalX = originX - txB;
 		@Pc(20) int verticalY = originY - tyB;
 		@Pc(24) int verticalZ = originZ - tzB;

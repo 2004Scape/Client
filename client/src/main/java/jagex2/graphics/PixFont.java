@@ -153,21 +153,21 @@ public class PixFont extends Draw2D {
 
 	@OriginalMember(owner = "client!jb", name = "a", descriptor = "(IIZILjava/lang/String;)V")
 	public void drawString(@OriginalArg(0) int x, @OriginalArg(1) int y, @OriginalArg(4) String str, @OriginalArg(3) int rgb) {
-        if (str == null) {
-            return;
-        }
+		if (str == null) {
+			return;
+		}
 
-        @Pc(7) int offY = y - this.height;
+		@Pc(7) int offY = y - this.height;
 
-        for (@Pc(19) int i = 0; i < str.length(); i++) {
-            @Pc(27) int c = CHAR_LOOKUP[str.charAt(i)];
-            if (c != 94) {
-                this.drawChar(this.charMask[c], x + this.charOffsetX[c], offY + this.charOffsetY[c], this.charMaskWidth[c], this.charMaskHeight[c], rgb);
-            }
+		for (@Pc(19) int i = 0; i < str.length(); i++) {
+			@Pc(27) int c = CHAR_LOOKUP[str.charAt(i)];
+			if (c != 94) {
+				this.drawChar(this.charMask[c], x + this.charOffsetX[c], offY + this.charOffsetY[c], this.charMaskWidth[c], this.charMaskHeight[c], rgb);
+			}
 
-            x += this.charAdvance[c];
-        }
-    }
+			x += this.charAdvance[c];
+		}
+	}
 
 	public void drawStringRight(int x, int y, String str, int rgb, boolean shadowed) {
 		if (shadowed) {
@@ -179,82 +179,82 @@ public class PixFont extends Draw2D {
 
 	@OriginalMember(owner = "client!jb", name = "a", descriptor = "(IBIIILjava/lang/String;)V")
 	public void drawCenteredWave(@OriginalArg(2) int x, @OriginalArg(3) int y, @OriginalArg(5) String str, @OriginalArg(4) int rgb, @OriginalArg(0) int phase) {
-        if (str == null) {
-            return;
-        }
+		if (str == null) {
+			return;
+		}
 
-        x -= this.stringWidth(str) / 2;
-        @Pc(18) int offY = y - this.height;
+		x -= this.stringWidth(str) / 2;
+		@Pc(18) int offY = y - this.height;
 
-        for (@Pc(24) int i = 0; i < str.length(); i++) {
-            @Pc(39) int c = CHAR_LOOKUP[str.charAt(i)];
+		for (@Pc(24) int i = 0; i < str.length(); i++) {
+			@Pc(39) int c = CHAR_LOOKUP[str.charAt(i)];
 
-            if (c != 94) {
-                this.drawChar(this.charMask[c], x + this.charOffsetX[c], offY + this.charOffsetY[c] + (int) (Math.sin((double) i / 2.0D + (double) phase / 5.0D) * 5.0D), this.charMaskWidth[c], this.charMaskHeight[c], rgb);
-            }
+			if (c != 94) {
+				this.drawChar(this.charMask[c], x + this.charOffsetX[c], offY + this.charOffsetY[c] + (int) (Math.sin((double) i / 2.0D + (double) phase / 5.0D) * 5.0D), this.charMaskWidth[c], this.charMaskHeight[c], rgb);
+			}
 
-            x += this.charAdvance[c];
-        }
-    }
+			x += this.charAdvance[c];
+		}
+	}
 
 	@OriginalMember(owner = "client!jb", name = "a", descriptor = "(IIILjava/lang/String;ZI)V")
 	public void drawStringTaggable(@OriginalArg(0) int x, @OriginalArg(2) int y, @OriginalArg(3) String str, @OriginalArg(5) int rgb, @OriginalArg(4) boolean shadowed) {
-        if (str == null) {
-            return;
-        }
+		if (str == null) {
+			return;
+		}
 
-        @Pc(9) int offY = y - this.height;
+		@Pc(9) int offY = y - this.height;
 
-        for (@Pc(11) int i = 0; i < str.length(); i++) {
-            if (str.charAt(i) == '@' && i + 4 < str.length() && str.charAt(i + 4) == '@') {
-                rgb = this.evaluateTag(str.substring(i + 1, i + 4));
-                i += 4;
-            } else {
-                @Pc(52) int c = CHAR_LOOKUP[str.charAt(i)];
-                if (c != 94) {
-                    if (shadowed) {
-                        this.drawChar(this.charMask[c], x + this.charOffsetX[c] + 1, offY + this.charOffsetY[c] + 1, this.charMaskWidth[c], this.charMaskHeight[c], 0);
-                    }
+		for (@Pc(11) int i = 0; i < str.length(); i++) {
+			if (str.charAt(i) == '@' && i + 4 < str.length() && str.charAt(i + 4) == '@') {
+				rgb = this.evaluateTag(str.substring(i + 1, i + 4));
+				i += 4;
+			} else {
+				@Pc(52) int c = CHAR_LOOKUP[str.charAt(i)];
+				if (c != 94) {
+					if (shadowed) {
+						this.drawChar(this.charMask[c], x + this.charOffsetX[c] + 1, offY + this.charOffsetY[c] + 1, this.charMaskWidth[c], this.charMaskHeight[c], 0);
+					}
 
-                    this.drawChar(this.charMask[c], x + this.charOffsetX[c], offY + this.charOffsetY[c], this.charMaskWidth[c], this.charMaskHeight[c], rgb);
-                }
+					this.drawChar(this.charMask[c], x + this.charOffsetX[c], offY + this.charOffsetY[c], this.charMaskWidth[c], this.charMaskHeight[c], rgb);
+				}
 
-                x += this.charAdvance[c];
-            }
-        }
-    }
+				x += this.charAdvance[c];
+			}
+		}
+	}
 
 	@OriginalMember(owner = "client!jb", name = "a", descriptor = "(IZBIILjava/lang/String;I)V")
 	public void drawStringTooltip(@OriginalArg(6) int x, @OriginalArg(3) int y, @OriginalArg(5) String str, @OriginalArg(4) int color, @OriginalArg(1) boolean shadowed, @OriginalArg(0) int seed) {
-        if (str == null) {
-            return;
-        }
+		if (str == null) {
+			return;
+		}
 
-        this.random.setSeed(seed);
+		this.random.setSeed(seed);
 
-        @Pc(17) int rand = (this.random.nextInt() & 0x1F) + 192;
-        @Pc(22) int offY = y - this.height;
-        for (@Pc(30) int i = 0; i < str.length(); i++) {
-            if (str.charAt(i) == '@' && i + 4 < str.length() && str.charAt(i + 4) == '@') {
-                color = this.evaluateTag(str.substring(i + 1, i + 4));
-                i += 4;
-            } else {
-                @Pc(71) int c = CHAR_LOOKUP[str.charAt(i)];
-                if (c != 94) {
-                    if (shadowed) {
-                        this.drawCharAlpha(x + this.charOffsetX[c] + 1, offY + this.charOffsetY[c] + 1, this.charMaskWidth[c], this.charMaskHeight[c], 0, 192, this.charMask[c]);
-                    }
+		@Pc(17) int rand = (this.random.nextInt() & 0x1F) + 192;
+		@Pc(22) int offY = y - this.height;
+		for (@Pc(30) int i = 0; i < str.length(); i++) {
+			if (str.charAt(i) == '@' && i + 4 < str.length() && str.charAt(i + 4) == '@') {
+				color = this.evaluateTag(str.substring(i + 1, i + 4));
+				i += 4;
+			} else {
+				@Pc(71) int c = CHAR_LOOKUP[str.charAt(i)];
+				if (c != 94) {
+					if (shadowed) {
+						this.drawCharAlpha(x + this.charOffsetX[c] + 1, offY + this.charOffsetY[c] + 1, this.charMaskWidth[c], this.charMaskHeight[c], 0, 192, this.charMask[c]);
+					}
 
-                    this.drawCharAlpha(x + this.charOffsetX[c], offY + this.charOffsetY[c], this.charMaskWidth[c], this.charMaskHeight[c], color, rand, this.charMask[c]);
-                }
+					this.drawCharAlpha(x + this.charOffsetX[c], offY + this.charOffsetY[c], this.charMaskWidth[c], this.charMaskHeight[c], color, rand, this.charMask[c]);
+				}
 
-                x += this.charAdvance[c];
-                if ((this.random.nextInt() & 0x3) == 0) {
-                    x++;
-                }
-            }
-        }
-    }
+				x += this.charAdvance[c];
+				if ((this.random.nextInt() & 0x3) == 0) {
+					x++;
+				}
+			}
+		}
+	}
 
 	@OriginalMember(owner = "client!jb", name = "a", descriptor = "(ILjava/lang/String;)I")
 	private int evaluateTag(@OriginalArg(1) String tag) {
