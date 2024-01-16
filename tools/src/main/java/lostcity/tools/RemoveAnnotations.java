@@ -38,6 +38,7 @@ public class RemoveAnnotations {
                 String contents = FileUtils.readFileToString(file);
                 contents = contents.replaceAll("compileOnly project\\(':deob-annotations'\\)", "");
                 contents = contents.replaceAll("sourceCompatibility = JavaVersion\\.VERSION_1_8", "sourceCompatibility = JavaVersion.VERSION_1_2");
+                contents = contents.replaceAll("targetCompatibility = JavaVersion\\.VERSION_1_8", "targetCompatibility = JavaVersion.VERSION_1_1");
                 FileUtils.writeStringToFile(file, contents);
             } catch (IOException ex) {
                 ex.printStackTrace();
