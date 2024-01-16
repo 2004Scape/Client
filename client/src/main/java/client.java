@@ -695,7 +695,7 @@ public class client extends GameShell {
 	private String reportAbuseInput = "";
 
 	@OriginalMember(owner = "client!client", name = "sf", descriptor = "I")
-	private int viewportInterfaceID = -1;
+	private int viewportInterfaceId = -1;
 
 	@OriginalMember(owner = "client!client", name = "tf", descriptor = "I")
 	private int titleLoginField;
@@ -1645,6 +1645,7 @@ public class client extends GameShell {
 
 	@OriginalMember(owner = "client!client", name = "c", descriptor = "(B)V")
 	private void closeInterfaces() {
+		// CLOSE_MODAL
 		this.out.p1isaac(231);
 
 		if (this.sidebarInterfaceId != -1) {
@@ -1660,7 +1661,7 @@ public class client extends GameShell {
 			this.pressedContinueOption = false;
 		}
 
-		this.viewportInterfaceID = -1;
+		this.viewportInterfaceId = -1;
 	}
 
 	@OriginalMember(owner = "client!client", name = "e", descriptor = "(I)V")
@@ -1874,6 +1875,7 @@ public class client extends GameShell {
 
 		this.ignoreName37[this.ignoreCount++] = username;
 		this.redrawSidebar = true;
+		// IGNORELIST_ADD
 		this.out.p1isaac(79);
 		this.out.p8(username);
     }
@@ -2249,6 +2251,7 @@ public class client extends GameShell {
 			drawCounter++;
 			if (drawCounter > 1802) {
 				drawCounter = 0;
+				// ANTICHEAT_CYCLELOGIC2
 				this.out.p1isaac(146);
 				this.out.p1(0);
 				int start = this.out.pos;
@@ -2702,6 +2705,7 @@ public class client extends GameShell {
 				this.redrawPrivacySettings = true;
 				this.redrawChatback = true;
 
+				// CHAT_SETMODE
 				this.out.p1isaac(244);
 				this.out.p1(this.publicChatSetting);
 				this.out.p1(this.privateChatSetting);
@@ -2711,6 +2715,7 @@ public class client extends GameShell {
 				this.redrawPrivacySettings = true;
 				this.redrawChatback = true;
 
+				// CHAT_SETMODE
 				this.out.p1isaac(244);
 				this.out.p1(this.publicChatSetting);
 				this.out.p1(this.privateChatSetting);
@@ -2720,6 +2725,7 @@ public class client extends GameShell {
 				this.redrawPrivacySettings = true;
 				this.redrawChatback = true;
 
+				// CHAT_SETMODE
 				this.out.p1isaac(244);
 				this.out.p1(this.publicChatSetting);
 				this.out.p1(this.privateChatSetting);
@@ -2732,7 +2738,7 @@ public class client extends GameShell {
 
 				for (@Pc(186) int i = 0; i < ComType.instances.length; i++) {
 					if (ComType.instances[i] != null && ComType.instances[i].contentType == 600) {
-						this.reportAbuseInterfaceID = this.viewportInterfaceID = ComType.instances[i].parentId;
+						this.reportAbuseInterfaceID = this.viewportInterfaceId = ComType.instances[i].parentId;
 						return;
 					}
 				}
@@ -2989,7 +2995,7 @@ public class client extends GameShell {
 						return;
 					}
 
-					if (this.viewportInterfaceID != -1 && this.viewportInterfaceID == this.reportAbuseInterfaceID) {
+					if (this.viewportInterfaceId != -1 && this.viewportInterfaceId == this.reportAbuseInterfaceID) {
 						if (key == 8 && this.reportAbuseInput.length() > 0) {
 							this.reportAbuseInput = this.reportAbuseInput.substring(0, this.reportAbuseInput.length() - 1);
 						}
@@ -3023,6 +3029,7 @@ public class client extends GameShell {
 							}
 
 							if (this.socialAction == 3 && this.socialInput.length() > 0) {
+								// MESSAGE_PRIVATE
 								this.out.p1isaac(148);
 								this.out.p1(0);
 								int start = this.out.pos;
@@ -3035,6 +3042,7 @@ public class client extends GameShell {
 								if (this.privateChatSetting == 2) {
 									this.privateChatSetting = 1;
 									this.redrawPrivacySettings = true;
+									// CHAT_SETMODE
 									this.out.p1isaac(244);
 									this.out.p1(this.publicChatSetting);
 									this.out.p1(this.privateChatSetting);
@@ -3070,6 +3078,7 @@ public class client extends GameShell {
 									value = Integer.parseInt(this.chatbackInput);
 								} catch (@Pc(369) Exception ignored) {
 								}
+								// RESUME_P_COUNTDIALOG
 								this.out.p1isaac(237);
 								this.out.p4(value);
 							}
@@ -3107,6 +3116,7 @@ public class client extends GameShell {
 							// }
 
 							if (this.chatTyped.startsWith("::")) {
+								// CLIENT_CHEAT
 								this.out.p1isaac(4);
 								this.out.p1(this.chatTyped.length() - 1);
 								this.out.pjstr(this.chatTyped.substring(2));
@@ -3160,6 +3170,7 @@ public class client extends GameShell {
 									this.chatTyped = this.chatTyped.substring(7);
 								}
 
+								// MESSAGE_PUBLIC
 								this.out.p1isaac(158);
 								this.out.p1(0);
 								@Pc(693) int start = this.out.pos;
@@ -3179,6 +3190,7 @@ public class client extends GameShell {
 								if (this.publicChatSetting == 2) {
 									this.publicChatSetting = 3;
 									this.redrawPrivacySettings = true;
+									// CHAT_SETMODE
 									this.out.p1isaac(244);
 									this.out.p1(this.publicChatSetting);
 									this.out.p1(this.privateChatSetting);
@@ -3646,6 +3658,7 @@ public class client extends GameShell {
 			updateLocCounter++;
 			if (updateLocCounter > 85) {
 				updateLocCounter = 0;
+				// ANTICHEAT_CYCLELOGIC5
 				this.out.p1isaac(85);
 			}
 		}
@@ -5138,6 +5151,7 @@ public class client extends GameShell {
 		if (this.redrawSideicons) {
 			if (this.flashingTab != -1 && this.flashingTab == this.selectedTab) {
 				this.flashingTab = -1;
+				// TUTORIAL_CLICKSIDE
 				this.out.p1isaac(175);
 				this.out.p1(this.selectedTab);
 			}
@@ -5343,8 +5357,10 @@ public class client extends GameShell {
                         this.tryMove(this.localPlayer.pathTileX[0], this.localPlayer.pathTileZ[0], player.pathTileX[0], player.pathTileZ[0], 2, 1, 1, 0, 0, 0, false);
 
                         if (action == 903) {
+							// OPPLAYER4
                             this.out.p1isaac(206);
                         } else if (action == 363) {
+							// OPPLAYER1
                             this.out.p1isaac(164);
                         }
 
@@ -5358,10 +5374,13 @@ public class client extends GameShell {
                     this.addMessage(0, "Unable to find " + name, "");
                 }
             }
-        } else if (action == 450 && this.interactWithLoc(75, b, c, a)) {
-            this.out.p2(this.objInterface);
-            this.out.p2(this.objSelectedSlot);
-            this.out.p2(this.objSelectedInterface);
+        } else if (action == 450) {
+			// OPLOCU
+			if (this.interactWithLoc(75, b, c, a)) {
+				this.out.p2(this.objInterface);
+				this.out.p2(this.objSelectedSlot);
+				this.out.p2(this.objSelectedInterface);
+			}
         } else if (action == 405 || action == 38 || action == 422 || action == 478 || action == 347) {
             if (action == 478) {
                 if ((b & 0x3) == 0) {
@@ -5369,22 +5388,30 @@ public class client extends GameShell {
                 }
 
                 if (opHeld1Counter >= 90) {
+					// ANTICHEAT_OPLOGIC5
                     this.out.p1isaac(220);
                 }
 
+				// OPHELD4
                 this.out.p1isaac(157);
             } else if (action == 347) {
+				// OPHELD5
                 this.out.p1isaac(211);
             } else if (action == 422) {
+				// OPHELD3
                 this.out.p1isaac(133);
             } else if (action == 405) {
                 opHeld4Counter += a;
                 if (opHeld4Counter >= 97) {
+					// ANTICHEAT_OPLOGIC3
                     this.out.p1isaac(30);
                     this.out.p3(14953816);
                 }
+
+				// OPHELD1
                 this.out.p1isaac(195);
             } else if (action == 38) {
+				// OPHELD2
                 this.out.p1isaac(71);
             }
 
@@ -5396,7 +5423,7 @@ public class client extends GameShell {
             this.selectedItem = b;
             this.selectedArea = 2;
 
-            if (ComType.instances[c].parentId == this.viewportInterfaceID) {
+            if (ComType.instances[c].parentId == this.viewportInterfaceId) {
                 this.selectedArea = 1;
             }
 
@@ -5414,40 +5441,39 @@ public class client extends GameShell {
                 this.crossCycle = 0;
 
                 if (action == 542) {
+					// OPNPC2
                     this.out.p1isaac(8);
-                }
-
-                if (action == 6) {
+                } else if (action == 6) {
                     if ((a & 0x3) == 0) {
                         opNpc3Counter++;
                     }
 
                     if (opNpc3Counter >= 124) {
+						// ANTICHEAT_OPLOGIC2
                         this.out.p1isaac(88);
                         this.out.p4(0);
                     }
 
+					// OPNPC3
                     this.out.p1isaac(27);
-                }
-
-                if (action == 963) {
+                } else if (action == 963) {
+					// OPNPC4
                     this.out.p1isaac(113);
-                }
-
-                if (action == 728) {
+                } else if (action == 728) {
+					// OPNPC1
                     this.out.p1isaac(194);
-                }
-
-                if (action == 245) {
+                } else if (action == 245) {
                     if ((a & 0x3) == 0) {
                         opNpc5Counter++;
                     }
 
                     if (opNpc5Counter >= 85) {
+						// ANTICHEAT_OPLOGIC4
                         this.out.p1isaac(176);
                         this.out.p2(39596);
                     }
 
+					// OPNPC5
                     this.out.p1isaac(100);
                 }
 
@@ -5464,6 +5490,7 @@ public class client extends GameShell {
             this.crossMode = 2;
             this.crossCycle = 0;
 
+			// OPOBJU
             this.out.p1isaac(239);
             this.out.p2(b + this.sceneBaseTileX);
             this.out.p2(c + this.sceneBaseTileZ);
@@ -5484,8 +5511,10 @@ public class client extends GameShell {
 
             this.addMessage(0, examine, "");
         } else if (action == 285) {
+			// OPLOC1
             this.interactWithLoc(245, b, c, a);
         } else if (action == 881) {
+			// OPHELDU
             this.out.p1isaac(130);
             this.out.p2(a);
             this.out.p2(b);
@@ -5499,7 +5528,7 @@ public class client extends GameShell {
             this.selectedItem = b;
             this.selectedArea = 2;
 
-            if (ComType.instances[c].parentId == this.viewportInterfaceID) {
+            if (ComType.instances[c].parentId == this.viewportInterfaceId) {
                 this.selectedArea = 1;
             }
 
@@ -5507,6 +5536,7 @@ public class client extends GameShell {
                 this.selectedArea = 3;
             }
         } else if (action == 391) {
+			// OPHELDT
             this.out.p1isaac(48);
             this.out.p2(a);
             this.out.p2(b);
@@ -5518,7 +5548,7 @@ public class client extends GameShell {
             this.selectedItem = b;
             this.selectedArea = 2;
 
-            if (ComType.instances[c].parentId == this.viewportInterfaceID) {
+            if (ComType.instances[c].parentId == this.viewportInterfaceId) {
                 this.selectedArea = 1;
             }
 
@@ -5541,6 +5571,7 @@ public class client extends GameShell {
 			return;
         } else if (action == 44) {
 			if (!this.pressedContinueOption) {
+				// RESUME_PAUSEBUTTON
 				this.out.p1isaac(235);
 				this.out.p2(c);
 				this.pressedContinueOption = true;
@@ -5567,6 +5598,7 @@ public class client extends GameShell {
 				this.crossY = super.mouseClickY;
 				this.crossMode = 2;
 				this.crossCycle = 0;
+				// OPNPCU
 				this.out.p1isaac(202);
 				this.out.p2(a);
 				this.out.p2(this.objInterface);
@@ -5584,17 +5616,23 @@ public class client extends GameShell {
 				this.crossCycle = 0;
 
 				if (action == 1101) {
+					// OPPLAYER1
 					this.out.p1isaac(164);
 				} else if (action == 151) {
 					opPlayer2Counter++;
 					if (opPlayer2Counter >= 90) {
+						// ANTICHEAT_OPLOGIC8
 						this.out.p1isaac(2);
 						this.out.p2(31114);
 					}
+
+					// OPPLAYER2
 					this.out.p1isaac(53);
 				} else if (action == 1373) {
+					// OPPLAYER4
 					this.out.p1isaac(206);
 				} else if (action == 1544) {
+					// OPPLAYER3
 					this.out.p1isaac(185);
 				}
 
@@ -5610,6 +5648,7 @@ public class client extends GameShell {
 				this.crossMode = 2;
 				this.crossCycle = 0;
 
+				// OPNPCT
 				this.out.p1isaac(134);
 				this.out.p2(a);
 				this.out.p2(this.activeSpellId);
@@ -5639,6 +5678,7 @@ public class client extends GameShell {
 				}
 			}
 		} else if (action == 55) {
+			// OPLOCT
 			if (this.interactWithLoc(9, b, c, a)) {
 				this.out.p2(this.activeSpellId);
 			}
@@ -5654,22 +5694,19 @@ public class client extends GameShell {
 			this.crossCycle = 0;
 
 			if (action == 224) {
+				// OPOBJ1
 				this.out.p1isaac(140);
-			}
-
-			if (action == 746) {
+			} else if (action == 746) {
+				// OPOBJ4
 				this.out.p1isaac(178);
-			}
-
-			if (action == 877) {
+			} else if (action == 877) {
+				// OPOBJ5
 				this.out.p1isaac(247);
-			}
-
-			if (action == 99) {
+			} else if (action == 99) {
+				// OPOBJ3
 				this.out.p1isaac(200);
-			}
-
-			if (action == 993) {
+			} else if (action == 993) {
+				// OPOBJ2
 				this.out.p1isaac(40);
 			}
 
@@ -5690,6 +5727,7 @@ public class client extends GameShell {
 				this.addMessage(0, examine, "");
 			}
 		} else if (action == 504) {
+			// OPLOC2
 			this.interactWithLoc(172, b, c, a);
 		} else if (action == 930) {
 			ComType com = ComType.instances[c];
@@ -5725,22 +5763,29 @@ public class client extends GameShell {
 			}
 
 			if (notify) {
+				// IF_BUTTON
 				this.out.p1isaac(155);
 				this.out.p2(c);
 			}
 		} else if (action == 602 || action == 596 || action == 22 || action == 892 || action == 415) {
 			if (action == 22) {
+				// INV_BUTTON3
 				this.out.p1isaac(212);
 			} else if (action == 415) {
 				if ((c & 0x3) == 0) {
 					ifButton5Counter++;
 				}
+
 				if (ifButton5Counter >= 55) {
+					// ANTICHEAT_OPLOGIC7
 					this.out.p1isaac(17);
 					this.out.p4(0);
 				}
+
+				// INV_BUTTON5
 				this.out.p1isaac(6);
 			} else if (action == 602) {
+				// INV_BUTTON1
 				this.out.p1isaac(31);
 			} else if (action == 892) {
 				if ((b & 0x3) == 0) {
@@ -5748,12 +5793,15 @@ public class client extends GameShell {
 				}
 
 				if (opHeld9Counter >= 130) {
+					// ANTICHEAT_OPLOGIC9
 					this.out.p1isaac(238);
 					this.out.p1(177);
 				}
 
+				// INV_BUTTON4
 				this.out.p1isaac(38);
 			} else if (action == 596) {
+				// INV_BUTTON2
 				this.out.p1isaac(59);
 			}
 
@@ -5766,7 +5814,7 @@ public class client extends GameShell {
 			this.selectedItem = b;
 			this.selectedArea = 2;
 
-			if (ComType.instances[c].parentId == this.viewportInterfaceID) {
+			if (ComType.instances[c].parentId == this.viewportInterfaceId) {
 				this.selectedArea = 1;
 			}
 
@@ -5779,10 +5827,12 @@ public class client extends GameShell {
 			}
 
 			if (opLoc4Counter >= 99) {
+				// ANTICHEAT_OPLOGIC1
 				this.out.p1isaac(7);
 				this.out.p4(0);
 			}
 
+			// OPLOC4
 			this.interactWithLoc(97, b, c, a);
 		} else if (action == 965) {
 			boolean success = this.tryMove(this.localPlayer.pathTileX[0], this.localPlayer.pathTileZ[0], b, c, 2, 0, 0, 0, 0, 0, false);
@@ -5795,6 +5845,7 @@ public class client extends GameShell {
 			this.crossMode = 2;
 			this.crossCycle = 0;
 
+			// OPOBJT
 			this.out.p1isaac(138);
 			this.out.p2(b + this.sceneBaseTileX);
 			this.out.p2(c + this.sceneBaseTileZ);
@@ -5803,12 +5854,15 @@ public class client extends GameShell {
 		} else if (action == 1501) {
 			opLoc5Counter += this.sceneBaseTileZ;
 			if (opLoc5Counter >= 92) {
+				// ANTICHEAT_OPLOGIC6
 				this.out.p1isaac(66);
 				this.out.p4(0);
 			}
 
+			// OPLOC5
 			this.interactWithLoc(116, b, c, a);
 		} else if (action == 364) {
+			// OPLOC3
 			this.interactWithLoc(96, b, c, a);
 		} else if (action == 1102) {
 			ObjType obj = ObjType.get(a);
@@ -5821,6 +5875,7 @@ public class client extends GameShell {
 			}
 			this.addMessage(0, examine, "");
 		} else if (action == 960) {
+			// IF_BUTTON
 			this.out.p1isaac(155);
 			this.out.p2(c);
 
@@ -5845,7 +5900,7 @@ public class client extends GameShell {
 
 				for (@Pc(1957) int i = 0; i < ComType.instances.length; i++) {
 					if (ComType.instances[i] != null && ComType.instances[i].contentType == 600) {
-						this.reportAbuseInterfaceID = this.viewportInterfaceID = ComType.instances[i].parentId;
+						this.reportAbuseInterfaceID = this.viewportInterfaceId = ComType.instances[i].parentId;
 						break;
 					}
 				}
@@ -5862,6 +5917,7 @@ public class client extends GameShell {
 				this.crossMode = 2;
 				this.crossCycle = 0;
 
+				// OPPLAYERU
 				this.out.p1isaac(248);
 				this.out.p2(a);
 				this.out.p2(this.objInterface);
@@ -5869,6 +5925,7 @@ public class client extends GameShell {
 				this.out.p2(this.objSelectedInterface);
 			}
 		} else if (action == 465) {
+			// IF_BUTTON
 			this.out.p1isaac(155);
 			this.out.p2(c);
 
@@ -5906,6 +5963,7 @@ public class client extends GameShell {
 				this.crossMode = 2;
 				this.crossCycle = 0;
 
+				// OPPLAYERT
 				this.out.p1isaac(177);
 				this.out.p2(a);
 				this.out.p2(this.activeSpellId);
@@ -6343,6 +6401,7 @@ public class client extends GameShell {
 		}
 
 		if (contentType == 326) {
+			// IF_DESIGN
 			this.out.p1isaac(52);
 			this.out.p1(this.designGenderMale ? 0 : 1);
 			for (int i = 0; i < 7; i++) {
@@ -6362,6 +6421,7 @@ public class client extends GameShell {
 			this.closeInterfaces();
 
 			if (this.reportAbuseInput.length() > 0) {
+				// BUG_REPORT
 				this.out.p1isaac(190);
 				this.out.p8(JString.toBase37(this.reportAbuseInput));
 				this.out.p1(contentType - 601);
@@ -6671,10 +6731,10 @@ public class client extends GameShell {
 			this.lastHoveredInterfaceId = 0;
 
 			if (super.mouseX > 8 && super.mouseY > 11 && super.mouseX < 520 && super.mouseY < 345) {
-				if (this.viewportInterfaceID == -1) {
+				if (this.viewportInterfaceId == -1) {
 					this.handleViewportOptions();
 				} else {
-					this.handleInterfaceInput(ComType.instances[this.viewportInterfaceID], super.mouseX, super.mouseY, 8, 11, 0);
+					this.handleInterfaceInput(ComType.instances[this.viewportInterfaceId], super.mouseX, super.mouseY, 8, 11, 0);
 				}
 			}
 
@@ -6767,9 +6827,9 @@ public class client extends GameShell {
 			this.imageCrosses[this.crossCycle / 100 + 4].draw(this.crossX - 8 - 8, this.crossY - 8 - 11);
 		}
 
-		if (this.viewportInterfaceID != -1) {
-			this.updateInterfaceAnimation(this.viewportInterfaceID, this.sceneDelta);
-			this.drawInterface(ComType.instances[this.viewportInterfaceID], 0, 0, 0);
+		if (this.viewportInterfaceId != -1) {
+			this.updateInterfaceAnimation(this.viewportInterfaceId, this.sceneDelta);
+			this.drawInterface(ComType.instances[this.viewportInterfaceId], 0, 0, 0);
 		}
 
 		this.drawWildyLevel();
@@ -6977,23 +7037,25 @@ public class client extends GameShell {
 	private void drawOnMinimap(@OriginalArg(0) int dy, @OriginalArg(2) Pix24 image, @OriginalArg(3) int dx) {
 		@Pc(7) int angle = this.orbitCameraYaw + this.minimapAnticheatAngle & 0x7FF;
 		@Pc(15) int distance = dx * dx + dy * dy;
-		if (distance <= 6400) {
-			@Pc(34) int sinAngle = Model.sin[angle];
-			@Pc(38) int cosAngle = Model.cos[angle];
+        if (distance > 6400) {
+            return;
+        }
 
-			sinAngle = sinAngle * 256 / (this.minimapZoom + 256);
-			cosAngle = cosAngle * 256 / (this.minimapZoom + 256);
+        @Pc(34) int sinAngle = Model.sin[angle];
+        @Pc(38) int cosAngle = Model.cos[angle];
 
-			@Pc(66) int x = dy * sinAngle + dx * cosAngle >> 16;
-			@Pc(76) int y = dy * cosAngle - dx * sinAngle >> 16;
+        sinAngle = sinAngle * 256 / (this.minimapZoom + 256);
+        cosAngle = cosAngle * 256 / (this.minimapZoom + 256);
 
-			if (distance > 2500) {
-				image.drawMasked(x + 94 - image.cropW / 2, 83 - y - image.cropH / 2, this.imageMapback);
-			} else {
-				image.draw(x + 94 - image.cropW / 2, 83 - y - image.cropH / 2);
-			}
-		}
-	}
+        @Pc(66) int x = dy * sinAngle + dx * cosAngle >> 16;
+        @Pc(76) int y = dy * cosAngle - dx * sinAngle >> 16;
+
+        if (distance > 2500) {
+            image.drawMasked(x + 94 - image.cropW / 2, 83 - y - image.cropH / 2, this.imageMapback);
+        } else {
+            image.draw(x + 94 - image.cropW / 2, 83 - y - image.cropH / 2);
+        }
+    }
 
 	@OriginalMember(owner = "client!client", name = "a", descriptor = "(IIII)I")
 	private int mix(@OriginalArg(0) int src, @OriginalArg(1) int alpha, @OriginalArg(2) int dst) {
@@ -7417,7 +7479,7 @@ public class client extends GameShell {
 				this.friendCount = 0;
 				this.stickyChatInterfaceId = -1;
 				this.chatInterfaceId = -1;
-				this.viewportInterfaceID = -1;
+				this.viewportInterfaceId = -1;
 				this.sidebarInterfaceId = -1;
 				this.pressedContinueOption = false;
 				this.selectedTab = 3;
@@ -7648,6 +7710,7 @@ public class client extends GameShell {
 			this.friendCount++;
 			this.redrawSidebar = true;
 
+			// FRIENDLIST_ADD
 			this.out.p1isaac(118);
 			this.out.p8(username);
 		}
@@ -7930,6 +7993,7 @@ public class client extends GameShell {
 
 			@Pc(250) Packet tracking = InputTracking.flush();
 			if (tracking != null) {
+				// EVENT_TRACKING
 				this.out.p1isaac(81);
 				this.out.p2(tracking.pos);
 				this.out.pdata(tracking.data, tracking.pos, 0);
@@ -7948,6 +8012,7 @@ public class client extends GameShell {
 
 			if ((super.actionKey[1] == 1 || super.actionKey[2] == 1 || super.actionKey[3] == 1 || super.actionKey[4] == 1) && this.cameraMovedWrite++ > 5) {
 				this.cameraMovedWrite = 0;
+				// EVENT_CAMERA_POSITION
 				this.out.p1isaac(189);
 				this.out.p2(this.orbitCameraPitch);
 				this.out.p2(this.orbitCameraYaw);
@@ -8004,6 +8069,7 @@ public class client extends GameShell {
 							com.inventorySlotObjCount[this.hoveredSlot] = com.inventorySlotObjCount[this.objDragSlot];
 							com.inventorySlotObjCount[this.objDragSlot] = count;
 
+							// INV_BUTTOND
 							this.out.p1isaac(159);
 							this.out.p2(this.objDragInterfaceId);
 							this.out.p2(this.objDragSlot);
@@ -8023,6 +8089,7 @@ public class client extends GameShell {
 			updateCounter++;
 			if (updateCounter > 127) {
 				updateCounter = 0;
+				// ANTICHEAT_CYCLELOGIC3
 				this.out.p1isaac(215);
 				this.out.p3(4991788);
 			}
@@ -8072,6 +8139,7 @@ public class client extends GameShell {
 			if (super.idleCycles > 4500) {
 				this.idleTimeout = 250;
 				super.idleCycles -= 500;
+				// IDLE_TIMER
 				this.out.p1isaac(70);
 			}
 
@@ -8138,12 +8206,14 @@ public class client extends GameShell {
 			update2Counter++;
 			if (update2Counter > 110) {
 				update2Counter = 0;
+				// ANTICHEAT_CYCLELOGIC4
 				this.out.p1isaac(236);
 				this.out.p4(0);
 			}
 
 			this.heartbeatTimer++;
 			if (this.heartbeatTimer > 50) {
+				// NO_TIMEOUT
 				this.out.p1isaac(108);
 			}
 
@@ -8404,12 +8474,15 @@ public class client extends GameShell {
 			int startZ = this.bfsStepZ[length];
 
 			if (type == 0) {
+				// MOVE_GAMECLICK
 				this.out.p1isaac(181);
 				this.out.p1(bufferSize + bufferSize + 3);
 			} else if (type == 1) {
+				// MOVE_MINIMAPCLICK
 				this.out.p1isaac(165);
 				this.out.p1(bufferSize + bufferSize + 3 + 14);
 			} else if (type == 2) {
+				// MOVE_OPCLICK
 				this.out.p1isaac(93);
 				this.out.p1(bufferSize + bufferSize + 3);
 			}
@@ -8545,23 +8618,26 @@ public class client extends GameShell {
 
 	@OriginalMember(owner = "client!client", name = "a", descriptor = "(IJ)V")
 	private void removeFriend(@OriginalArg(1) long username) {
-		if (username != 0L) {
-			for (int i = 0; i < this.friendCount; i++) {
-				if (this.friendName37[i] == username) {
-					this.friendCount--;
-					this.redrawSidebar = true;
-					for (@Pc(38) int j = i; j < this.friendCount; j++) {
-						this.friendName[j] = this.friendName[j + 1];
-						this.friendWorld[j] = this.friendWorld[j + 1];
-						this.friendName37[j] = this.friendName37[j + 1];
-					}
-					this.out.p1isaac(11);
-					this.out.p8(username);
-					return;
-				}
-			}
-		}
-	}
+        if (username == 0L) {
+            return;
+        }
+
+        for (int i = 0; i < this.friendCount; i++) {
+            if (this.friendName37[i] == username) {
+                this.friendCount--;
+                this.redrawSidebar = true;
+                for (@Pc(38) int j = i; j < this.friendCount; j++) {
+                    this.friendName[j] = this.friendName[j + 1];
+                    this.friendWorld[j] = this.friendWorld[j + 1];
+                    this.friendName37[j] = this.friendName37[j + 1];
+                }
+                // FRIENDLIST_DEL
+                this.out.p1isaac(11);
+                this.out.p8(username);
+                return;
+            }
+        }
+    }
 
 	@OriginalMember(owner = "client!client", name = "a", descriptor = "(Lclient!hc;I)Z")
 	private boolean executeInterfaceScript(@OriginalArg(0) ComType com) {
@@ -8729,7 +8805,7 @@ public class client extends GameShell {
                         this.objGrabX = super.mouseClickX;
                         this.objGrabY = super.mouseClickY;
 
-                        if (ComType.instances[comId].parentId == this.viewportInterfaceID) {
+                        if (ComType.instances[comId].parentId == this.viewportInterfaceId) {
                             this.objDragArea = 1;
                         }
 
@@ -8937,6 +9013,7 @@ public class client extends GameShell {
 			sidebarInputCounter++;
 			if (sidebarInputCounter > 150) {
 				sidebarInputCounter = 0;
+				// ANTICHEAT_CYCLELOGIC1
 				this.out.p1isaac(233);
 				this.out.p1(43);
 			}
@@ -9200,6 +9277,8 @@ public class client extends GameShell {
 			}
 
 			@Pc(56) byte[] data = new byte[100000];
+
+			// NO_TIMEOUT
 			this.out.p1isaac(108);
 			for (int i = 0; i < maps; i++) {
 				int x = (this.sceneMapIndex[i] >> 8) * 64 - this.sceneBaseTileX;
@@ -9215,6 +9294,7 @@ public class client extends GameShell {
 				}
 			}
 
+			// NO_TIMEOUT
 			this.out.p1isaac(108);
 			for (int i = 0; i < maps; i++) {
 				@Pc(216) byte[] src = this.sceneMapLocData[i];
@@ -9227,9 +9307,12 @@ public class client extends GameShell {
 				}
 			}
 
+			// NO_TIMEOUT
 			this.out.p1isaac(108);
 			world.build(this.scene, this.levelCollisionMap);
 			this.areaViewport.bind();
+
+			// NO_TIMEOUT
 			this.out.p1isaac(108);
 			for (@Pc(301) LocEntity loc = (LocEntity) this.locList.peekFront(); loc != null; loc = (LocEntity) this.locList.prev()) {
 				if ((this.levelTileFlags[1][loc.heightmapNE][loc.heightmapNW] & 0x2) == 2) {
@@ -9630,21 +9713,24 @@ public class client extends GameShell {
 
 	@OriginalMember(owner = "client!client", name = "b", descriptor = "(IJ)V")
 	private void removeIgnore(@OriginalArg(1) long username) {
-		if (username != 0L) {
-			for (@Pc(14) int i = 0; i < this.ignoreCount; i++) {
-				if (this.ignoreName37[i] == username) {
-					this.ignoreCount--;
-					this.redrawSidebar = true;
-					for (@Pc(34) int j = i; j < this.ignoreCount; j++) {
-						this.ignoreName37[j] = this.ignoreName37[j + 1];
-					}
-					this.out.p1isaac(171);
-					this.out.p8(username);
-					return;
-				}
-			}
-		}
-	}
+        if (username == 0L) {
+            return;
+        }
+
+        for (@Pc(14) int i = 0; i < this.ignoreCount; i++) {
+            if (this.ignoreName37[i] == username) {
+                this.ignoreCount--;
+                this.redrawSidebar = true;
+                for (@Pc(34) int j = i; j < this.ignoreCount; j++) {
+                    this.ignoreName37[j] = this.ignoreName37[j + 1];
+                }
+                // IGNORELIST_DEL
+                this.out.p1isaac(171);
+                this.out.p8(username);
+                return;
+            }
+        }
+    }
 
 	@OriginalMember(owner = "client!client", name = "q", descriptor = "(B)V")
 	private void handleViewportOptions() {
@@ -9863,6 +9949,7 @@ public class client extends GameShell {
 		updatePlayersCounter++;
 		if (updatePlayersCounter > 1406) {
 			updatePlayersCounter = 0;
+			// ANTICHEAT_CYCLELOGIC6
 			this.out.p1isaac(219);
 			this.out.p1(0);
 			int start = this.out.pos;
@@ -10190,7 +10277,7 @@ public class client extends GameShell {
 				return true;
 			}
 			if (this.packetType == 237) {
-				// LOAD_AREA
+				// REBUILD_NORMAL
 				int zoneX = this.in.g2();
 				int zoneZ = this.in.g2();
 				if (this.sceneCenterZoneX == zoneX && this.sceneCenterZoneZ == zoneZ && this.sceneState != 0) {
@@ -10211,6 +10298,7 @@ public class client extends GameShell {
 				this.sceneMapLandData = new byte[regions][];
 				this.sceneMapLocData = new byte[regions][];
 				this.sceneMapIndex = new int[regions];
+				// REBUILD_GETMAPS
 				this.out.p1isaac(150);
 				this.out.p1(0);
 				int mapCount = 0;
@@ -10346,6 +10434,7 @@ public class client extends GameShell {
 				return true;
 			}
 			if (this.packetType == 25) {
+				// HINT_ARROW
 				this.hintType = this.in.g1();
 				if (this.hintType == 1) {
 					this.hintNpc = this.in.g2();
@@ -10421,7 +10510,7 @@ public class client extends GameShell {
 				return true;
 			}
 			if (this.packetType == 19) {
-				// CLEAR_WALKING_QUEUE
+				// UNSET_MAP_FLAG
 				this.flagSceneTileX = 0;
 				this.packetType = -1;
 				return true;
@@ -10439,7 +10528,7 @@ public class client extends GameShell {
 				return true;
 			}
 			if (this.packetType == 28) {
-				// IF_OPENMAINMODALSIDEOVERLAY
+				// IF_OPENMAINSIDEMODAL
 				int main = this.in.g2();
 				int side = this.in.g2();
 				if (this.chatInterfaceId != -1) {
@@ -10450,7 +10539,7 @@ public class client extends GameShell {
 					this.chatbackInputOpen = false;
 					this.redrawChatback = true;
 				}
-				this.viewportInterfaceID = main;
+				this.viewportInterfaceId = main;
 				this.sidebarInterfaceId = side;
 				this.redrawSidebar = true;
 				this.redrawSideicons = true;
@@ -10483,7 +10572,7 @@ public class client extends GameShell {
 				return true;
 			}
 			if (this.packetType == 167) {
-				// IF_SETTAB
+				// IF_OPENSIDEOVERLAY
 				int com = this.in.g2();
 				int tab = this.in.g1();
 				if (com == 65535) {
@@ -10556,7 +10645,7 @@ public class client extends GameShell {
 				return true;
 			}
 			if (this.packetType == 243) {
-				// IF_IAMOUNT
+				// P_COUNTDIALOG
 				this.showSocialInput = false;
 				this.chatbackInputOpen = true;
 				this.chatbackInput = "";
@@ -10581,7 +10670,7 @@ public class client extends GameShell {
 				this.daysSinceLastLogin = this.in.g2();
 				this.daysSinceRecoveriesChanged = this.in.g1();
 				this.unreadMessages = this.in.g2();
-				if (this.lastAddress != 0 && this.viewportInterfaceID == -1) {
+				if (this.lastAddress != 0 && this.viewportInterfaceId == -1) {
 					signlink.dnslookup(JString.formatIPv4(this.lastAddress));
 					this.closeInterfaces();
 					@Pc(1915) short contentType = 650;
@@ -10592,7 +10681,7 @@ public class client extends GameShell {
 					this.reportAbuseMuteOption = false;
 					for (int i = 0; i < ComType.instances.length; i++) {
 						if (ComType.instances[i] != null && ComType.instances[i].contentType == contentType) {
-							this.viewportInterfaceID = ComType.instances[i].parentId;
+							this.viewportInterfaceId = ComType.instances[i].parentId;
 							break;
 						}
 					}
@@ -10601,7 +10690,7 @@ public class client extends GameShell {
 				return true;
 			}
 			if (this.packetType == 126) {
-				// IF_SETTAB_FLASH
+				// TUTORIAL_FLASHSIDE
 				this.flashingTab = this.in.g1();
 				if (this.flashingTab == this.selectedTab) {
 					if (this.flashingTab == 3) {
@@ -10629,7 +10718,7 @@ public class client extends GameShell {
 				return true;
 			}
 			if (this.packetType == 254) {
-				// IF_MULTIZONE
+				// SET_MULTIWAY
 				this.inMultizone = this.in.g1();
 				this.packetType = -1;
 				return true;
@@ -10665,7 +10754,7 @@ public class client extends GameShell {
 				return true;
 			}
 			if (this.packetType == 103) {
-				// IF_SETMODEL_COLOUR
+				// IF_SETRECOL
 				int com = this.in.g2();
 				int src = this.in.g2();
 				int dst = this.in.g2();
@@ -10688,7 +10777,7 @@ public class client extends GameShell {
 				return true;
 			}
 			if (this.packetType == 195) {
-				// IF_OPENSIDEOVERLAY
+				// IF_OPENSIDEMODAL
 				int com = this.in.g2();
 				this.resetInterfaceAnimation(com);
 				if (this.chatInterfaceId != -1) {
@@ -10702,13 +10791,13 @@ public class client extends GameShell {
 				this.sidebarInterfaceId = com;
 				this.redrawSidebar = true;
 				this.redrawSideicons = true;
-				this.viewportInterfaceID = -1;
+				this.viewportInterfaceId = -1;
 				this.pressedContinueOption = false;
 				this.packetType = -1;
 				return true;
 			}
 			if (this.packetType == 14) {
-				// IF_OPENCHAT
+				// IF_OPENCHATMODAL
 				int com = this.in.g2();
 				this.resetInterfaceAnimation(com);
 				if (this.sidebarInterfaceId != -1) {
@@ -10718,7 +10807,7 @@ public class client extends GameShell {
 				}
 				this.chatInterfaceId = com;
 				this.redrawChatback = true;
-				this.viewportInterfaceID = -1;
+				this.viewportInterfaceId = -1;
 				this.pressedContinueOption = false;
 				this.packetType = -1;
 				return true;
@@ -10851,7 +10940,7 @@ public class client extends GameShell {
 				return true;
 			}
 			if (this.packetType == 185) {
-				// IF_OPENCHATSTICKY
+				// TUTORIAL_OPENCHAT
 				int com = this.in.g2b();
 				this.stickyChatInterfaceId = com;
 				this.redrawChatback = true;
@@ -10896,7 +10985,7 @@ public class client extends GameShell {
 				return true;
 			}
 			if (this.packetType == 84) {
-				// IF_SETTAB_ACTIVE
+				// IF_SHOWSIDE
 				this.selectedTab = this.in.g1();
 				this.redrawSidebar = true;
 				this.redrawSideicons = true;
@@ -10953,7 +11042,7 @@ public class client extends GameShell {
 				return true;
 			}
 			if (this.packetType == 168) {
-				// IF_OPENMAIN
+				// IF_OPENMAINMODAL
 				int com = this.in.g2();
 				this.resetInterfaceAnimation(com);
 				if (this.sidebarInterfaceId != -1) {
@@ -10969,7 +11058,7 @@ public class client extends GameShell {
 					this.chatbackInputOpen = false;
 					this.redrawChatback = true;
 				}
-				this.viewportInterfaceID = com;
+				this.viewportInterfaceId = com;
 				this.pressedContinueOption = false;
 				this.packetType = -1;
 				return true;
@@ -11041,7 +11130,7 @@ public class client extends GameShell {
 					this.chatbackInputOpen = false;
 					this.redrawChatback = true;
 				}
-				this.viewportInterfaceID = -1;
+				this.viewportInterfaceId = -1;
 				this.pressedContinueOption = false;
 				this.packetType = -1;
 				return true;
