@@ -145,46 +145,33 @@ public class signlink implements Runnable {
 	@OriginalMember(owner = "client!sign/signlink", name = "findcachedir", descriptor = "()Ljava/lang/String;")
 	public static String findcachedir() {
 		@Pc(50) String[] paths = new String[] {
-			// prioritize home directories
-			System.getProperty("user.home"),
-			// System.getenv("HOME"), System.getenv("HOMEDRIVE") + System.getenv("HOMEPATH"), System.getenv("USERPROFILE"),
-			// System.getenv("user.home"), "~",
-			// fall back to OS-specific paths
-			"c:", "c:/windows", "c:/winnt", "d:/windows", "d:/winnt", "e:/windows", "e:/winnt", "f:/windows", "f:/winnt",
-			// fall back to temporary cache directories (RAM or browser cache)
-			"/tmp", ""
+			"c:/windows/", "c:/winnt/", "d:/windows/", "d:/winnt/", "e:/windows/", "e:/winnt/", "f:/windows/", "f:/winnt/", "c:/",
+			"~/", "/tmp/", ""
 		};
-		@Pc(52) String dir = ".lostcity";
+		@Pc(52) String store = ".file_store_32";
 
 		for (@Pc(54) int i = 0; i < paths.length; i++) {
 			try {
-				@Pc(59) String path = paths[i];
-				@Pc(67) File file;
+				@Pc(59) String dir = paths[i];
+				@Pc(67) File cache;
 
-				if (path == null) {
-					continue;
-				}
+				if (dir.length() > 0) {
+					cache = new File(dir);
 
-				if (path.length() > 0) {
-					file = new File(path);
-
-					if (!file.exists()) {
+					if (!cache.exists() || !cache.canWrite()) {
+						System.out.println("Unable to find or write to cache directory: " + dir);
 						continue;
 					}
 				}
 
-				file = new File(path + "/" + dir);
-				if ((!file.exists() && !file.mkdir()) || !file.canWrite()) {
+				cache = new File(dir + store);
+				if ((!cache.exists() && !cache.mkdir()) || !cache.canWrite()) {
+					System.out.println("Unable to find or write to cache directory: " + dir + store + "/");
 					continue;
 				}
 
-				file = new File(path + "/" + dir + "/" + signlink.clientversion);
-				if ((!file.exists() && !file.mkdir()) || !file.canWrite()) {
-					continue;
-				}
-
-				return path + "/" + dir + "/" + signlink.clientversion + "/";
-			} catch (@Pc(102) Exception ignored) {
+				return dir + store + "/";
+			} catch (@Pc(102) Exception _ex) {
 			}
 		}
 
@@ -398,6 +385,9 @@ public class signlink implements Runnable {
 
 		@Pc(3) String cacheDir = findcachedir();
 		uid = getuid(cacheDir);
+		if (cacheDir == null) {
+			cacheDir = "";
+		}
 
 		@Pc(8) int threadId = threadliveid;
 		while (threadliveid == threadId) {

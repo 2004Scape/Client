@@ -3635,13 +3635,16 @@ public class client extends GameShell {
 	}
 
 	@OriginalMember(owner = "client!client", name = "b", descriptor = "(B)Ljava/awt/Component;")
-	@Override
 	protected Component getBaseComponent() {
-		if (signlink.mainapp == null) {
-			return this;
-		} else {
+		if (signlink.mainapp != null) {
 			return signlink.mainapp;
 		}
+
+		if (super.frame != null) {
+			return super.frame;
+		}
+
+		return this;
 	}
 
 	@OriginalMember(owner = "client!client", name = "m", descriptor = "(I)V")
@@ -3930,10 +3933,10 @@ public class client extends GameShell {
 	@OriginalMember(owner = "client!client", name = "a", descriptor = "(Ljava/lang/Runnable;I)V")
 	@Override
 	public void startThread(@OriginalArg(0) Runnable runnable, @OriginalArg(1) int priority) {
-		if (signlink.mainapp == null) {
-			super.startThread(runnable, priority);
-		} else {
+		if (signlink.mainapp != null) {
 			signlink.startthread(runnable, priority);
+		} else {
+			super.startThread(runnable, priority);
 		}
 	}
 
@@ -5979,11 +5982,15 @@ public class client extends GameShell {
 
 	@OriginalMember(owner = "client!client", name = "s", descriptor = "(I)Ljava/lang/String;")
 	private String getHost() {
-		if (signlink.mainapp == null) {
-			return super.frame == null ? super.getDocumentBase().getHost().toLowerCase() : "runescape.com";
-		} else {
+		if (signlink.mainapp != null) {
 			return signlink.mainapp.getDocumentBase().getHost().toLowerCase();
 		}
+
+		if (super.frame != null) {
+			return "2004scape.org";
+		}
+
+		return super.getDocumentBase().getHost().toLowerCase();
 	}
 
 	@OriginalMember(owner = "client!client", name = "t", descriptor = "(I)V")
@@ -7247,7 +7254,11 @@ public class client extends GameShell {
 
 	@OriginalMember(owner = "client!client", name = "a", descriptor = "(Ljava/lang/String;)Ljava/io/DataInputStream;")
 	private DataInputStream openUrl(@OriginalArg(0) String url) throws IOException {
-		return signlink.mainapp == null ? new DataInputStream((new URL(this.getCodeBase(), url)).openStream()) : signlink.openurl(url);
+		if (signlink.mainapp != null) {
+			return signlink.openurl(url);
+		}
+
+		return new DataInputStream((new URL(this.getCodeBase(), url)).openStream());
 	}
 
 	@OriginalMember(owner = "client!client", name = "j", descriptor = "(B)V")
@@ -7853,7 +7864,11 @@ public class client extends GameShell {
 
 	@OriginalMember(owner = "client!client", name = "A", descriptor = "(I)Ljava/net/Socket;")
 	private Socket openSocket(@OriginalArg(0) int port) throws IOException {
-		return signlink.mainapp == null ? new Socket(InetAddress.getByName(this.getCodeBase().getHost()), port) : signlink.opensocket(port);
+		if (signlink.mainapp != null) {
+			return signlink.opensocket(port);
+		}
+
+		return new Socket(InetAddress.getByName(this.getCodeBase().getHost()), port);
 	}
 
 	@OriginalMember(owner = "client!client", name = "a", descriptor = "(ZIILclient!z;I)V")
@@ -9124,7 +9139,11 @@ public class client extends GameShell {
 	@OriginalMember(owner = "client!client", name = "getParameter", descriptor = "(Ljava/lang/String;)Ljava/lang/String;")
 	@Override
 	public String getParameter(@OriginalArg(0) String name) {
-		return signlink.mainapp == null ? super.getParameter(name) : signlink.mainapp.getParameter(name);
+		if (signlink.mainapp != null) {
+			return signlink.mainapp.getParameter(name);
+		}
+
+		return super.getParameter(name);
 	}
 
 	@OriginalMember(owner = "client!client", name = "l", descriptor = "(Z)V")
@@ -9522,7 +9541,7 @@ public class client extends GameShell {
 			g.setColor(Color.white);
 			g.drawString("Error - unable to load game!", 50, 50);
 			g.drawString("To play RuneScape make sure you play from", 50, 100);
-			g.drawString("http://www.runescape.com", 50, 150);
+			g.drawString("http://2004scape.org", 50, 150);
 		}
 
 		if (this.errorStarted) {
@@ -11312,14 +11331,17 @@ public class client extends GameShell {
 	public void init() {
 		nodeId = Integer.parseInt(this.getParameter("nodeid"));
 		portOffset = Integer.parseInt(this.getParameter("portoff"));
+
 		@Pc(15) String lowmem = this.getParameter("lowmem");
 		if (lowmem != null && lowmem.equals("1")) {
 			setLowMemory();
 		} else {
 			setHighMemory();
 		}
+
 		@Pc(31) String free = this.getParameter("free");
 		members = free == null || !free.equals("1");
+
 		this.initApplet(789, 532);
 	}
 

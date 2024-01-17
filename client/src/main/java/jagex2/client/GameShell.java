@@ -10,6 +10,9 @@ import org.openrs2.deob.annotation.Pc;
 import java.applet.Applet;
 import java.awt.*;
 import java.awt.event.*;
+import java.net.InetAddress;
+
+import sign.signlink;
 
 @OriginalClass("client!a")
 public class GameShell extends Applet implements Runnable, MouseListener, MouseMotionListener, KeyListener, FocusListener, WindowListener {
@@ -87,7 +90,6 @@ public class GameShell extends Applet implements Runnable, MouseListener, MouseM
 	protected final void initApplication(@OriginalArg(1) int width, @OriginalArg(0) int height) {
 		this.screenWidth = width;
 		this.screenHeight = height;
-		// this.setPreferredSize(new Dimension(this.screenWidth, this.screenHeight));
 		this.frame = new ViewBox(this, this.screenWidth, this.screenHeight);
 		this.graphics = this.getBaseComponent().getGraphics();
 		this.drawArea = new PixMap(this.getBaseComponent(), this.screenWidth, this.screenHeight);
@@ -274,9 +276,10 @@ public class GameShell extends Applet implements Runnable, MouseListener, MouseM
 		@Pc(2) int x = e.getX();
 		@Pc(5) int y = e.getY();
 
-		Insets insets = this.getInsets();
-		x -= insets.left;
-		y -= insets.top;
+		if (this.frame != null) {
+			x -= this.frame.insets.left;
+			y -= this.frame.insets.top;
+		}
 
 		this.idleCycles = 0;
 		this.mouseClickX = x;
@@ -348,9 +351,10 @@ public class GameShell extends Applet implements Runnable, MouseListener, MouseM
 		@Pc(2) int x = e.getX();
 		@Pc(5) int y = e.getY();
 
-		Insets insets = this.getInsets();
-		x -= insets.left;
-		y -= insets.top;
+		if (this.frame != null) {
+			x -= this.frame.insets.left;
+			y -= this.frame.insets.top;
+		}
 
 		this.idleCycles = 0;
 		this.mouseX = x;
@@ -366,9 +370,10 @@ public class GameShell extends Applet implements Runnable, MouseListener, MouseM
 		@Pc(2) int x = e.getX();
 		@Pc(5) int y = e.getY();
 
-		Insets insets = this.getInsets();
-		x -= insets.left;
-		y -= insets.top;
+		if (this.frame != null) {
+			x -= this.frame.insets.left;
+			y -= this.frame.insets.top;
+		}
 
 		this.idleCycles = 0;
 		this.mouseX = x;
@@ -566,6 +571,10 @@ public class GameShell extends Applet implements Runnable, MouseListener, MouseM
 
 	@OriginalMember(owner = "client!a", name = "b", descriptor = "(B)Ljava/awt/Component;")
 	protected Component getBaseComponent() {
+		if (this.frame != null) {
+			return this.frame;
+		}
+
 		return this;
 	}
 
