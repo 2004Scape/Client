@@ -13,7 +13,7 @@ public class ViewBox extends Frame {
 	@OriginalMember(owner = "client!b", name = "b", descriptor = "Lclient!a;")
 	private final GameShell shell;
 
-	public final Insets insets;
+	public Insets insets;
 
 	@OriginalMember(owner = "client!b", name = "<init>", descriptor = "(IILclient!a;I)V")
 	public ViewBox(@OriginalArg(2) GameShell shell, @OriginalArg(3) int width, @OriginalArg(0) int height) {
@@ -30,7 +30,9 @@ public class ViewBox extends Frame {
 	@Override
 	public Graphics getGraphics() {
 		@Pc(2) Graphics g = super.getGraphics();
-		g.translate(this.insets.left, this.insets.top);
+        if (this.insets != null) {
+		    g.translate(this.insets.left, this.insets.top);
+        }
 		return g;
 	}
 

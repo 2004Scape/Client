@@ -1362,11 +1362,12 @@ public class client extends GameShell {
 			if (this.showDebug) {
 				// true tile overlay
 				if (entity.pathLength > 0 || entity.forceMoveEndCycle >= loopCycle || entity.forceMoveStartCycle > loopCycle) {
-					this.drawTileOverlay(entity.pathTileX[0] * 128 + 64, entity.pathTileZ[0] * 128 + 64, this.currentLevel, 0x666666, true);
+                    int halfUnit = 64 * entity.size;
+                    this.drawTileOverlay(entity.pathTileX[0] * 128 + halfUnit, entity.pathTileZ[0] * 128 + halfUnit, this.currentLevel, entity.size, 0x666666, true);
 				}
 
 				// local tile overlay
-				this.drawTileOverlay(entity.x, entity.z, this.currentLevel, 0x444444, false);
+				this.drawTileOverlay(entity.x, entity.z, this.currentLevel, entity.size, 0x444444, false);
 
 				int offsetY = 0;
 				this.projectFromGround(entity, entity.height + 30);
@@ -2875,8 +2876,8 @@ public class client extends GameShell {
 
 	@OriginalMember(owner = "client!client", name = "a", descriptor = "(IIBI)I")
 	private int getHeightmapY(@OriginalArg(0) int level, @OriginalArg(1) int sceneX, @OriginalArg(3) int sceneZ) {
-		@Pc(11) int tileX = sceneX >> 7;
-		@Pc(15) int tileZ = sceneZ >> 7;
+		@Pc(11) int tileX = Math.min(sceneX >> 7, 103);
+		@Pc(15) int tileZ = Math.min(sceneZ >> 7, 103);
 		@Pc(17) int realLevel = level;
 		if (level < 3 && (this.levelTileFlags[1][tileX][tileZ] & 0x2) == 2) {
 			realLevel = level + 1;
@@ -6895,24 +6896,24 @@ public class client extends GameShell {
 		}
 	}
 
-	private void drawTileOverlay(int x, int z, int level, int color, boolean crossed) {
+	private void drawTileOverlay(int x, int z, int level, int size, int color, boolean crossed) {
 		int height = this.getHeightmapY(level, x, z);
 		int x0, y0;
 		int x1, y1;
 		int x2, y2;
 		int x3, y3;
 
-		// x/z should be the center of a tile which is 128 client-units large, so +/- 64 puts us at the edges
-		this.project(x - 64, height, z - 64);
+        int halfUnit = 64 * size;
+		this.project(x - halfUnit, height, z - halfUnit);
 		x0 = this.projectX;
 		y0 = this.projectY;
-		this.project(x + 64, height, z - 64);
+		this.project(x + halfUnit, height, z - halfUnit);
 		x1 = this.projectX;
 		y1 = this.projectY;
-		this.project(x - 64, height, z + 64);
+		this.project(x - halfUnit, height, z + halfUnit);
 		x2 = this.projectX;
 		y2 = this.projectY;
-		this.project(x + 64, height, z + 64);
+		this.project(x + halfUnit, height, z + halfUnit);
 		x3 = this.projectX;
 		y3 = this.projectY;
 
