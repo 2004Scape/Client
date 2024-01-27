@@ -396,22 +396,36 @@ public class GameShell extends Applet implements Runnable, MouseListener, MouseM
 		}
 
 		if (code == 37) {
+			// KEY_LEFT
 			ch = 1;
 		} else if (code == 39) {
+			// KEY_RIGHT
 			ch = 2;
 		} else if (code == 38) {
+			// KEY_UP
 			ch = 3;
 		} else if (code == 40) {
+			// KEY_DOWN
 			ch = 4;
 		} else if (code == 17) {
+			// CONTROL
 			ch = 5;
+		} else if (code == 16) {
+			// SHIFT
+			ch = 6; // (custom)
+		} else if (code == 18) {
+			// ALT
+			ch = 7; // (custom)
 		} else if (code == 8) {
+			// BACKSPACE
 			ch = 8;
 		} else if (code == 127) {
+			// DELETE
 			ch = 8;
 		} else if (code == 9) {
 			ch = 9;
 		} else if (code == 10) {
+			// ENTER
 			ch = 10;
 		} else if (code >= 112 && code <= 123) {
 			ch = code + 1008 - 112;
@@ -451,22 +465,36 @@ public class GameShell extends Applet implements Runnable, MouseListener, MouseM
 		}
 
 		if (code == 37) {
+			// KEY_LEFT
 			ch = 1;
 		} else if (code == 39) {
+			// KEY_RIGHT
 			ch = 2;
 		} else if (code == 38) {
+			// KEY_UP
 			ch = 3;
 		} else if (code == 40) {
+			// KEY_DOWN
 			ch = 4;
 		} else if (code == 17) {
+			// CONTROL
 			ch = 5;
+		} else if (code == 16) {
+			// SHIFT
+			ch = 6; // (custom)
+		} else if (code == 18) {
+			// ALT
+			ch = 7; // (custom)
 		} else if (code == 8) {
+			// BACKSPACE
 			ch = 8;
 		} else if (code == 127) {
+			// DELETE
 			ch = 8;
 		} else if (code == 9) {
 			ch = 9;
 		} else if (code == 10) {
+			// ENTER
 			ch = 10;
 		} else if (code >= 112 && code <= 123) {
 			ch = code + 1008 - 112;

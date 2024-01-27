@@ -1123,17 +1123,17 @@ public class World3D {
 
 		int shape = overlay.shape;
 		@Pc(71) int angle = overlay.rotation;
-		@Pc(74) int bcakground = overlay.backgroundRgb;
+		@Pc(74) int background = overlay.backgroundRgb;
 		@Pc(77) int foreground = overlay.foregroundRgb;
 		@Pc(82) int[] mask = this.MINIMAP_TILE_MASK[shape];
 		@Pc(87) int[] rotation = this.MINIMAP_TILE_ROTATION_MAP[angle];
 		@Pc(89) int off = 0;
-		if (bcakground != 0) {
+		if (background != 0) {
 			for (int i = 0; i < 4; i++) {
-				dst[offset] = mask[rotation[off++]] == 0 ? bcakground : foreground;
-				dst[offset + 1] = mask[rotation[off++]] == 0 ? bcakground : foreground;
-				dst[offset + 2] = mask[rotation[off++]] == 0 ? bcakground : foreground;
-				dst[offset + 3] = mask[rotation[off++]] == 0 ? bcakground : foreground;
+				dst[offset] = mask[rotation[off++]] == 0 ? background : foreground;
+				dst[offset + 1] = mask[rotation[off++]] == 0 ? background : foreground;
+				dst[offset + 2] = mask[rotation[off++]] == 0 ? background : foreground;
+				dst[offset + 3] = mask[rotation[off++]] == 0 ? background : foreground;
 				offset += step;
 			}
 			return;

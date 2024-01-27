@@ -7,6 +7,7 @@ import jagex2.dash3d.World3D;
 import jagex2.dash3d.entity.*;
 import jagex2.dash3d.type.LocSpawned;
 import jagex2.dash3d.type.LocTemporary;
+import jagex2.dash3d.type.Tile;
 import jagex2.datastruct.JString;
 import jagex2.datastruct.LinkList;
 import jagex2.graphics.*;
@@ -34,6 +35,10 @@ public class client extends GameShell {
 
 	public boolean showDebug = false;
 	public boolean showPerformance = false;
+
+	// alt+shift click to add a tile overlay
+	public Tile[] userTileMarkers = new Tile[4];
+	public int userTileMarkerIndex = 0;
 
 	@OriginalMember(owner = "client!client", name = "E", descriptor = "I")
 	public static int opHeld1Counter;
@@ -1257,7 +1262,7 @@ public class client extends GameShell {
 				signlink.sunjava = true;
 			}
 
-			signlink.startpriv(InetAddress.getByName("w1.225.2004scape.org"));
+			signlink.startpriv(InetAddress.getByName("localhost"));
 
 			@Pc(82) client c = new client();
 			c.initApplication(789, 532);
@@ -1362,12 +1367,12 @@ public class client extends GameShell {
 			if (this.showDebug) {
 				// true tile overlay
 				if (entity.pathLength > 0 || entity.forceMoveEndCycle >= loopCycle || entity.forceMoveStartCycle > loopCycle) {
-                    int halfUnit = 64 * entity.size;
-                    this.drawTileOverlay(entity.pathTileX[0] * 128 + halfUnit, entity.pathTileZ[0] * 128 + halfUnit, this.currentLevel, entity.size, 0x666666, true);
+					int halfUnit = 64 * entity.size;
+					this.drawTileOverlay(entity.pathTileX[0] * 128 + halfUnit, entity.pathTileZ[0] * 128 + halfUnit, this.currentLevel, entity.size, 0x00FFFF, false);
 				}
 
 				// local tile overlay
-				this.drawTileOverlay(entity.x, entity.z, this.currentLevel, entity.size, 0x444444, false);
+				this.drawTileOverlay(entity.x, entity.z, this.currentLevel, entity.size, 0x666666, false);
 
 				int offsetY = 0;
 				this.projectFromGround(entity, entity.height + 30);
@@ -1557,6 +1562,16 @@ public class client extends GameShell {
 				}
 			}
 		}
+
+        if (this.showDebug) {
+            for (int i = 0; i < this.userTileMarkers.length; i++) {
+                if (this.userTileMarkers[i] == null || this.userTileMarkers[i].level != this.currentLevel || this.userTileMarkers[i].x < 0 || this.userTileMarkers[i].z < 0 || this.userTileMarkers[i].x >= 104 || this.userTileMarkers[i].z >= 104) {
+                    continue;
+                }
+
+                this.drawTileOverlay(this.userTileMarkers[i].x * 128 + 64, this.userTileMarkers[i].z * 128 + 64, this.userTileMarkers[i].level, 1, 0xFFFF00, false);
+            }
+        }
 
 		for (@Pc(483) int i = 0; i < this.chatCount; i++) {
 			int x = this.chatX[i];
@@ -6903,7 +6918,7 @@ public class client extends GameShell {
 		int x2, y2;
 		int x3, y3;
 
-        int halfUnit = 64 * size;
+		int halfUnit = 64 * size;
 		this.project(x - halfUnit, height, z - halfUnit);
 		x0 = this.projectX;
 		y0 = this.projectY;
@@ -8300,7 +8315,7 @@ public class client extends GameShell {
 
 		try {
 			if (super.frame != null) {
-				return new URL("http://w1.225.2004scape.org:" + (portOffset + 80));
+				return new URL("http://localhost:" + (portOffset + 80));
 			}
 		} catch (@Pc(21) Exception ex) {
 		}
@@ -8496,6 +8511,21 @@ public class client extends GameShell {
 
 			int startX = this.bfsStepX[length];
 			int startZ = this.bfsStepZ[length];
+
+			if (this.showDebug && super.actionKey[6] == 1 && super.actionKey[7] == 1) {
+                // check if tile is already added, if so remove it
+                for (int i = 0; i < this.userTileMarkers.length; i++) {
+                    if (this.userTileMarkers[i] != null && this.userTileMarkers[i].x == World3D.clickTileX && this.userTileMarkers[i].z == World3D.clickTileZ) {
+                        this.userTileMarkers[i] = null;
+                        return false;
+                    }
+                }
+
+                // add new
+                this.userTileMarkers[this.userTileMarkerIndex] = new Tile(this.currentLevel, World3D.clickTileX, World3D.clickTileZ);
+                this.userTileMarkerIndex = this.userTileMarkerIndex + 1 & (this.userTileMarkers.length - 1);
+                return false;
+			}
 
 			if (type == 0) {
 				// MOVE_GAMECLICK
@@ -10053,6 +10083,10 @@ public class client extends GameShell {
 				}
 			} else if (updateType == 3) {
 				this.currentLevel = buf.gBit(2);
+                if (this.showDebug) {
+                    this.userTileMarkers = new Tile[4];
+                    this.userTileMarkerIndex = 0;
+                }
 				int localX = buf.gBit(7);
 				int localZ = buf.gBit(7);
 				int jump = buf.gBit(1);
