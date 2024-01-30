@@ -188,7 +188,7 @@ public class World {
 		@Pc(57) int y = heightSW + heightSE + heightNW + heightNE >> 2;
 
 		@Pc(60) LocType loc = LocType.get(locId);
-		@Pc(72) int bitset = x + (z << 7) + (locId << 14) + 1073741824;
+		@Pc(72) int bitset = x + (z << 7) + (locId << 14) + 0x40000000;
 		if (!loc.active) {
 			bitset += Integer.MIN_VALUE;
 		}
@@ -199,8 +199,8 @@ public class World {
 		@Pc(430) int offset;
 		@Pc(452) Model model2;
 
-		if (shape == 22) {
-			model1 = loc.getModel(22, rotation, heightSW, heightSE, heightNW, heightNE, -1);
+		if (shape == LocType.GROUNDDECOR) {
+			model1 = loc.getModel(LocType.GROUNDDECOR, rotation, heightSW, heightSE, heightNW, heightNE, -1);
 			scene.addGroundDecoration(model1, level, x, z, y, bitset, info);
 
 			if (loc.blockwalk && loc.active) {
@@ -210,11 +210,11 @@ public class World {
 			if (loc.anim != -1) {
 				locs.pushBack(new LocEntity(locId, level, 3, x, z, SeqType.instances[loc.anim], true));
 			}
-		} else if (shape == 10 || shape == 11) {
-			model1 = loc.getModel(10, rotation, heightSW, heightSE, heightNW, heightNE, -1);
+		} else if (shape == LocType.CENTREPIECE_STRAIGHT || shape == LocType.CENTREPIECE_DIAGONAL) {
+			model1 = loc.getModel(LocType.CENTREPIECE_STRAIGHT, rotation, heightSW, heightSE, heightNW, heightNE, -1);
 			if (model1 != null) {
 				@Pc(161) int yaw = 0;
-				if (shape == 11) {
+				if (shape == LocType.CENTREPIECE_DIAGONAL) {
 					yaw += 256;
 				}
 
@@ -237,7 +237,7 @@ public class World {
 			if (loc.anim != -1) {
 				locs.pushBack(new LocEntity(locId, level, 2, x, z, SeqType.instances[loc.anim], true));
 			}
-		} else if (shape >= 12) {
+		} else if (shape >= LocType.ROOF_STRAIGHT) {
 			model1 = loc.getModel(shape, rotation, heightSW, heightSE, heightNW, heightNE, -1);
 			scene.addLoc(level, x, z, y, model1, null, bitset, info, 1, 1, 0);
 
@@ -248,8 +248,8 @@ public class World {
 			if (loc.anim != -1) {
 				locs.pushBack(new LocEntity(locId, level, 2, x, z, SeqType.instances[loc.anim], true));
 			}
-		} else if (shape == 0) {
-			model1 = loc.getModel(0, rotation, heightSW, heightSE, heightNW, heightNE, -1);
+		} else if (shape == LocType.WALL_STRAIGHT) {
+			model1 = loc.getModel(LocType.WALL_STRAIGHT, rotation, heightSW, heightSE, heightNW, heightNE, -1);
 			scene.addWall(level, x, z, y, ROTATION_WALL_TYPE[rotation], 0, model1, null, bitset, info);
 
 			if (loc.blockwalk) {
@@ -259,8 +259,8 @@ public class World {
 			if (loc.anim != -1) {
 				locs.pushBack(new LocEntity(locId, level, 0, x, z, SeqType.instances[loc.anim], true));
 			}
-		} else if (shape == 1) {
-			model1 = loc.getModel(1, rotation, heightSW, heightSE, heightNW, heightNE, -1);
+		} else if (shape == LocType.WALL_DIAGONALCORNER) {
+			model1 = loc.getModel(LocType.WALL_DIAGONALCORNER, rotation, heightSW, heightSE, heightNW, heightNE, -1);
 			scene.addWall(level, x, z, y, ROTATION_WALL_CORNER_TYPE[rotation], 0, model1, null, bitset, info);
 
 			if (loc.blockwalk) {
@@ -270,11 +270,11 @@ public class World {
 			if (loc.anim != -1) {
 				locs.pushBack(new LocEntity(locId, level, 0, x, z, SeqType.instances[loc.anim], true));
 			}
-		} else if (shape == 2) {
-			offset = rotation + 1 & 0x3;
-			@Pc(442) Model model3 = loc.getModel(2, rotation + 4, heightSW, heightSE, heightNW, heightNE, -1);
-			model2 = loc.getModel(2, offset, heightSW, heightSE, heightNW, heightNE, -1);
-			scene.addWall(level, x, z, y, ROTATION_WALL_TYPE[rotation], ROTATION_WALL_TYPE[offset], model3, model2, bitset, info);
+		} else if (shape == LocType.WALL_L) {
+			int nextRotation = rotation + 1 & 0x3;
+			@Pc(442) Model model3 = loc.getModel(LocType.WALL_L, rotation + 4, heightSW, heightSE, heightNW, heightNE, -1);
+			model2 = loc.getModel(LocType.WALL_L, nextRotation, heightSW, heightSE, heightNW, heightNE, -1);
+			scene.addWall(level, x, z, y, ROTATION_WALL_TYPE[rotation], ROTATION_WALL_TYPE[nextRotation], model3, model2, bitset, info);
 
 			if (loc.blockwalk) {
 				collision.addWall(x, z, shape, rotation, loc.blockrange);
@@ -283,8 +283,8 @@ public class World {
 			if (loc.anim != -1) {
 				locs.pushBack(new LocEntity(locId, level, 0, x, z, SeqType.instances[loc.anim], true));
 			}
-		} else if (shape == 3) {
-			model1 = loc.getModel(3, rotation, heightSW, heightSE, heightNW, heightNE, -1);
+		} else if (shape == LocType.WALL_SQUARECORNER) {
+			model1 = loc.getModel(LocType.WALL_SQUARECORNER, rotation, heightSW, heightSE, heightNW, heightNE, -1);
 			scene.addWall(level, x, z, y, ROTATION_WALL_CORNER_TYPE[rotation], 0, model1, null, bitset, info);
 
 			if (loc.blockwalk) {
@@ -294,7 +294,7 @@ public class World {
 			if (loc.anim != -1) {
 				locs.pushBack(new LocEntity(locId, level, 0, x, z, SeqType.instances[loc.anim], true));
 			}
-		} else if (shape == 9) {
+		} else if (shape == LocType.WALL_DIAGONAL) {
 			model1 = loc.getModel(shape, rotation, heightSW, heightSE, heightNW, heightNE, -1);
 			scene.addLoc(level, x, z, y, model1, null, bitset, info, 1, 1, 0);
 
@@ -305,14 +305,14 @@ public class World {
 			if (loc.anim != -1) {
 				locs.pushBack(new LocEntity(locId, level, 2, x, z, SeqType.instances[loc.anim], true));
 			}
-		} else if (shape == 4) {
-			model1 = loc.getModel(4, 0, heightSW, heightSE, heightNW, heightNE, -1);
+		} else if (shape == LocType.WALLDECOR_STRAIGHT_NOOFFSET) {
+			model1 = loc.getModel(LocType.WALLDECOR_STRAIGHT_NOOFFSET, 0, heightSW, heightSE, heightNW, heightNE, -1);
 			scene.setWallDecoration(level, x, z, y, 0, 0, bitset, model1, info, rotation * 512, ROTATION_WALL_TYPE[rotation]);
 
 			if (loc.anim != -1) {
 				locs.pushBack(new LocEntity(locId, level, 1, x, z, SeqType.instances[loc.anim], true));
 			}
-		} else if (shape == 5) {
+		} else if (shape == LocType.WALLDECOR_STRAIGHT_OFFSET) {
 			offset = 16;
 			width = scene.getWallBitset(level, x, z);
 
@@ -320,28 +320,28 @@ public class World {
 				offset = LocType.get(width >> 14 & 0x7FFF).walloff;
 			}
 
-			model2 = loc.getModel(4, 0, heightSW, heightSE, heightNW, heightNE, -1);
+			model2 = loc.getModel(LocType.WALLDECOR_STRAIGHT_NOOFFSET, 0, heightSW, heightSE, heightNW, heightNE, -1);
 			scene.setWallDecoration(level, x, z, y, WALL_DECORATION_ROTATION_FORWARD_X[rotation] * offset, WALL_DECORATION_ROTATION_FORWARD_Z[rotation] * offset, bitset, model2, info, rotation * 512, ROTATION_WALL_TYPE[rotation]);
 
 			if (loc.anim != -1) {
 				locs.pushBack(new LocEntity(locId, level, 1, x, z, SeqType.instances[loc.anim], true));
 			}
-		} else if (shape == 6) {
-			model1 = loc.getModel(4, 0, heightSW, heightSE, heightNW, heightNE, -1);
+		} else if (shape == LocType.WALLDECOR_DIAGONAL_OFFSET) {
+			model1 = loc.getModel(LocType.WALLDECOR_STRAIGHT_NOOFFSET, 0, heightSW, heightSE, heightNW, heightNE, -1);
 			scene.setWallDecoration(level, x, z, y, 0, 0, bitset, model1, info, rotation, 256);
 
 			if (loc.anim != -1) {
 				locs.pushBack(new LocEntity(locId, level, 1, x, z, SeqType.instances[loc.anim], true));
 			}
-		} else if (shape == 7) {
-			model1 = loc.getModel(4, 0, heightSW, heightSE, heightNW, heightNE, -1);
+		} else if (shape == LocType.WALLDECOR_DIAGONAL_NOOFFSET) {
+			model1 = loc.getModel(LocType.WALLDECOR_STRAIGHT_NOOFFSET, 0, heightSW, heightSE, heightNW, heightNE, -1);
 			scene.setWallDecoration(level, x, z, y, 0, 0, bitset, model1, info, rotation, 512);
 
 			if (loc.anim != -1) {
 				locs.pushBack(new LocEntity(locId, level, 1, x, z, SeqType.instances[loc.anim], true));
 			}
-		} else if (shape == 8) {
-			model1 = loc.getModel(4, 0, heightSW, heightSE, heightNW, heightNE, -1);
+		} else if (shape == LocType.WALLDECOR_DIAGONAL_BOTH) {
+			model1 = loc.getModel(LocType.WALLDECOR_STRAIGHT_NOOFFSET, 0, heightSW, heightSE, heightNW, heightNE, -1);
 			scene.setWallDecoration(level, x, z, y, 0, 0, bitset, model1, info, rotation, 768);
 
 			if (loc.anim != -1) {
@@ -362,13 +362,15 @@ public class World {
 
 		for (@Pc(33) int z = startX; z < startX + endX; z++) {
 			for (@Pc(37) int x = startZ; x < startZ + endZ; x++) {
-				if (x >= 0 && x < this.maxTileX && z >= 0 && z < this.maxTileZ) {
-					this.levelTileOverlayIds[0][x][z] = waterOverlay;
+				if (x < 0 || x >= this.maxTileX || z < 0 || z >= this.maxTileZ) {
+					continue;
+				}
 
-					for (@Pc(62) int level = 0; level < 4; level++) {
-						this.levelHeightmap[level][x][z] = 0;
-						this.levelTileFlags[level][x][z] = 0;
-					}
+				this.levelTileOverlayIds[0][x][z] = waterOverlay;
+
+				for (@Pc(62) int level = 0; level < 4; level++) {
+					this.levelHeightmap[level][x][z] = 0;
+					this.levelTileFlags[level][x][z] = 0;
 				}
 			}
 		}
@@ -521,24 +523,27 @@ public class World {
 		@Pc(810) int offset;
 		@Pc(832) Model model1;
 
-		if (shape == 22) {
-			if (!lowMemory || loc.active || loc.forcedecor) {
-				model = loc.getModel(22, rotation, heightSW, heightSE, heightNW, heightNE, -1);
-				scene.addGroundDecoration(model, level, x, z, y, bitset, info);
-
-				if (loc.blockwalk && loc.active && collision != null) {
-					collision.setBlocked(x, z);
-				}
-
-				if (loc.anim != -1) {
-					locs.pushBack(new LocEntity(locId, level, 3, x, z, SeqType.instances[loc.anim], true));
-				}
+		if (shape == LocType.GROUNDDECOR) {
+			if (lowMemory && !loc.active && !loc.forcedecor) {
+				return;
 			}
-		} else if (shape == 10 || shape == 11) {
-			model = loc.getModel(10, rotation, heightSW, heightSE, heightNW, heightNE, -1);
+
+			model = loc.getModel(LocType.GROUNDDECOR, rotation, heightSW, heightSE, heightNW, heightNE, -1);
+			scene.addGroundDecoration(model, level, x, z, y, bitset, info);
+
+			if (loc.blockwalk && loc.active && collision != null) {
+				collision.setBlocked(x, z);
+			}
+
+			if (loc.anim != -1) {
+				locs.pushBack(new LocEntity(locId, level, 3, x, z, SeqType.instances[loc.anim], true));
+			}
+		} else if (shape == LocType.CENTREPIECE_STRAIGHT || shape == LocType.CENTREPIECE_DIAGONAL) {
+			model = loc.getModel(LocType.CENTREPIECE_STRAIGHT, rotation, heightSW, heightSE, heightNW, heightNE, -1);
+
 			if (model != null) {
 				@Pc(196) int yaw = 0;
-				if (shape == 11) {
+				if (shape == LocType.CENTREPIECE_DIAGONAL) {
 					yaw += 256;
 				}
 
@@ -574,11 +579,11 @@ public class World {
 			if (loc.anim != -1) {
 				locs.pushBack(new LocEntity(locId, level, 2, x, z, SeqType.instances[loc.anim], true));
 			}
-		} else if (shape >= 12) {
+		} else if (shape >= LocType.ROOF_STRAIGHT) {
 			model = loc.getModel(shape, rotation, heightSW, heightSE, heightNW, heightNE, -1);
 			scene.addLoc(level, x, z, y, model, null, bitset, info, 1, 1, 0);
 
-			if (shape >= 12 && shape <= 17 && shape != 13 && level > 0) {
+			if (shape >= LocType.ROOF_STRAIGHT && shape <= LocType.ROOF_FLAT && shape != LocType.ROOF_DIAGONAL_WITH_ROOFEDGE && level > 0) {
 				this.levelOccludemap[level][x][z] |= 0x924;
 			}
 
@@ -589,8 +594,8 @@ public class World {
 			if (loc.anim != -1) {
 				locs.pushBack(new LocEntity(locId, level, 2, x, z, SeqType.instances[loc.anim], true));
 			}
-		} else if (shape == 0) {
-			model = loc.getModel(0, rotation, heightSW, heightSE, heightNW, heightNE, -1);
+		} else if (shape == LocType.WALL_STRAIGHT) {
+			model = loc.getModel(LocType.WALL_STRAIGHT, rotation, heightSW, heightSE, heightNW, heightNE, -1);
 			scene.addWall(level, x, z, y, ROTATION_WALL_TYPE[rotation], 0, model, null, bitset, info);
 
 			if (rotation == 0) {
@@ -642,8 +647,8 @@ public class World {
 			if (loc.walloff != 16) {
 				scene.setWallDecorationOffset(level, x, z, loc.walloff);
 			}
-		} else if (shape == 1) {
-			model = loc.getModel(1, rotation, heightSW, heightSE, heightNW, heightNE, -1);
+		} else if (shape == LocType.WALL_DIAGONALCORNER) {
+			model = loc.getModel(LocType.WALL_DIAGONALCORNER, rotation, heightSW, heightSE, heightNW, heightNE, -1);
 			scene.addWall(level, x, z, y, ROTATION_WALL_CORNER_TYPE[rotation], 0, model, null, bitset, info);
 
 			if (loc.shadow) {
@@ -665,11 +670,11 @@ public class World {
 			if (loc.anim != -1) {
 				locs.pushBack(new LocEntity(locId, level, 0, x, z, SeqType.instances[loc.anim], true));
 			}
-		} else if (shape == 2) {
-			offset = rotation + 1 & 0x3;
-			@Pc(822) Model model3 = loc.getModel(2, rotation + 4, heightSW, heightSE, heightNW, heightNE, -1);
-			model1 = loc.getModel(2, offset, heightSW, heightSE, heightNW, heightNE, -1);
-			scene.addWall(level, x, z, y, ROTATION_WALL_TYPE[rotation], ROTATION_WALL_TYPE[offset], model3, model1, bitset, info);
+		} else if (shape == LocType.WALL_L) {
+			int nextRotation = rotation + 1 & 0x3;
+			@Pc(822) Model model3 = loc.getModel(LocType.WALL_L, rotation + 4, heightSW, heightSE, heightNW, heightNE, -1);
+			model1 = loc.getModel(LocType.WALL_L, nextRotation, heightSW, heightSE, heightNW, heightNE, -1);
+			scene.addWall(level, x, z, y, ROTATION_WALL_TYPE[rotation], ROTATION_WALL_TYPE[nextRotation], model3, model1, bitset, info);
 
 			if (loc.occlude) {
 				if (rotation == 0) {
@@ -698,8 +703,8 @@ public class World {
 			if (loc.walloff != 16) {
 				scene.setWallDecorationOffset(level, x, z, loc.walloff);
 			}
-		} else if (shape == 3) {
-			model = loc.getModel(3, rotation, heightSW, heightSE, heightNW, heightNE, -1);
+		} else if (shape == LocType.WALL_SQUARECORNER) {
+			model = loc.getModel(LocType.WALL_SQUARECORNER, rotation, heightSW, heightSE, heightNW, heightNE, -1);
 			scene.addWall(level, x, z, y, ROTATION_WALL_CORNER_TYPE[rotation], 0, model, null, bitset, info);
 
 			if (loc.shadow) {
@@ -721,7 +726,7 @@ public class World {
 			if (loc.anim != -1) {
 				locs.pushBack(new LocEntity(locId, level, 0, x, z, SeqType.instances[loc.anim], true));
 			}
-		} else if (shape == 9) {
+		} else if (shape == LocType.WALL_DIAGONAL) {
 			model = loc.getModel(shape, rotation, heightSW, heightSE, heightNW, heightNE, -1);
 			scene.addLoc(level, x, z, y, model, null, bitset, info, 1, 1, 0);
 
@@ -732,42 +737,42 @@ public class World {
 			if (loc.anim != -1) {
 				locs.pushBack(new LocEntity(locId, level, 2, x, z, SeqType.instances[loc.anim], true));
 			}
-		} else if (shape == 4) {
-			model = loc.getModel(4, 0, heightSW, heightSE, heightNW, heightNE, -1);
+		} else if (shape == LocType.WALLDECOR_STRAIGHT_NOOFFSET) {
+			model = loc.getModel(LocType.WALLDECOR_STRAIGHT_NOOFFSET, 0, heightSW, heightSE, heightNW, heightNE, -1);
 			scene.setWallDecoration(level, x, z, y, 0, 0, bitset, model, info, rotation * 512, ROTATION_WALL_TYPE[rotation]);
 
 			if (loc.anim != -1) {
 				locs.pushBack(new LocEntity(locId, level, 1, x, z, SeqType.instances[loc.anim], true));
 			}
-		} else if (shape == 5) {
+		} else if (shape == LocType.WALLDECOR_STRAIGHT_OFFSET) {
 			offset = 16;
 			width = scene.getWallBitset(level, x, z);
 			if (width > 0) {
 				offset = LocType.get(width >> 14 & 0x7FFF).walloff;
 			}
 
-			model1 = loc.getModel(4, 0, heightSW, heightSE, heightNW, heightNE, -1);
+			model1 = loc.getModel(LocType.WALLDECOR_STRAIGHT_NOOFFSET, 0, heightSW, heightSE, heightNW, heightNE, -1);
 			scene.setWallDecoration(level, x, z, y, WALL_DECORATION_ROTATION_FORWARD_X[rotation] * offset, WALL_DECORATION_ROTATION_FORWARD_Z[rotation] * offset, bitset, model1, info, rotation * 512, ROTATION_WALL_TYPE[rotation]);
 
 			if (loc.anim != -1) {
 				locs.pushBack(new LocEntity(locId, level, 1, x, z, SeqType.instances[loc.anim], true));
 			}
-		} else if (shape == 6) {
-			model = loc.getModel(4, 0, heightSW, heightSE, heightNW, heightNE, -1);
+		} else if (shape == LocType.WALLDECOR_DIAGONAL_OFFSET) {
+			model = loc.getModel(LocType.WALLDECOR_STRAIGHT_NOOFFSET, 0, heightSW, heightSE, heightNW, heightNE, -1);
 			scene.setWallDecoration(level, x, z, y, 0, 0, bitset, model, info, rotation, 256);
 
 			if (loc.anim != -1) {
 				locs.pushBack(new LocEntity(locId, level, 1, x, z, SeqType.instances[loc.anim], true));
 			}
-		} else if (shape == 7) {
-			model = loc.getModel(4, 0, heightSW, heightSE, heightNW, heightNE, -1);
+		} else if (shape == LocType.WALLDECOR_DIAGONAL_NOOFFSET) {
+			model = loc.getModel(LocType.WALLDECOR_STRAIGHT_NOOFFSET, 0, heightSW, heightSE, heightNW, heightNE, -1);
 			scene.setWallDecoration(level, x, z, y, 0, 0, bitset, model, info, rotation, 512);
 
 			if (loc.anim != -1) {
 				locs.pushBack(new LocEntity(locId, level, 1, x, z, SeqType.instances[loc.anim], true));
 			}
-		} else if (shape == 8) {
-			model = loc.getModel(4, 0, heightSW, heightSE, heightNW, heightNE, -1);
+		} else if (shape == LocType.WALLDECOR_DIAGONAL_BOTH) {
+			model = loc.getModel(LocType.WALLDECOR_STRAIGHT_NOOFFSET, 0, heightSW, heightSE, heightNW, heightNE, -1);
 			scene.setWallDecoration(level, x, z, y, 0, 0, bitset, model, info, rotation, 768);
 
 			if (loc.anim != -1) {

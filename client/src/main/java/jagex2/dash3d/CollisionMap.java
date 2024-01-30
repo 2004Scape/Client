@@ -1,5 +1,6 @@
 package jagex2.dash3d;
 
+import jagex2.config.LocType;
 import org.openrs2.deob.annotation.OriginalArg;
 import org.openrs2.deob.annotation.OriginalClass;
 import org.openrs2.deob.annotation.OriginalMember;
@@ -38,7 +39,7 @@ public class CollisionMap {
 		for (@Pc(3) int x = 0; x < this.sizeX; x++) {
 			for (@Pc(7) int z = 0; z < this.sizeZ; z++) {
 				if (x == 0 || z == 0 || x == this.sizeX - 1 || z == this.sizeZ - 1) {
-					this.flags[x][z] = 0xffffff;
+					this.flags[x][z] = 0xFFFFFF;
 				} else {
 					this.flags[x][z] = 0;
 				}
@@ -51,100 +52,100 @@ public class CollisionMap {
 		@Pc(4) int x = tileX - this.offsetX;
 		@Pc(19) int z = tileZ - this.offsetZ;
 
-		if (shape == 0) {
+		if (shape == LocType.WALL_STRAIGHT) {
 			if (rotation == 0) {
-				this.add(x, z, 128);
-				this.add(x - 1, z, 8);
+				this.add(x, z, 0x80);
+				this.add(x - 1, z, 0x8);
 			} else if (rotation == 1) {
-				this.add(x, z, 2);
-				this.add(x, z + 1, 32);
+				this.add(x, z, 0x2);
+				this.add(x, z + 1, 0x20);
 			} else if (rotation == 2) {
-				this.add(x, z, 8);
-				this.add(x + 1, z, 128);
+				this.add(x, z, 0x8);
+				this.add(x + 1, z, 0x80);
 			} else if (rotation == 3) {
 				this.add(x, z, 32);
-				this.add(x, z - 1, 2);
+				this.add(x, z - 1, 0x2);
 			}
-		} else if (shape == 1 || shape == 3) {
+		} else if (shape == LocType.WALL_DIAGONALCORNER || shape == LocType.WALL_SQUARECORNER) {
 			if (rotation == 0) {
-				this.add(x, z, 1);
-				this.add(x - 1, z + 1, 16);
+				this.add(x, z, 0x1);
+				this.add(x - 1, z + 1, 0x10);
 			} else if (rotation == 1) {
-				this.add(x, z, 4);
-				this.add(x + 1, z + 1, 64);
+				this.add(x, z, 0x4);
+				this.add(x + 1, z + 1, 0x40);
 			} else if (rotation == 2) {
-				this.add(x, z, 16);
-				this.add(x + 1, z - 1, 1);
+				this.add(x, z, 0x10);
+				this.add(x + 1, z - 1, 0x1);
 			} else if (rotation == 3) {
 				this.add(x, z, 64);
-				this.add(x - 1, z - 1, 4);
+				this.add(x - 1, z - 1, 0x4);
 			}
-		} else if (shape == 2) {
+		} else if (shape == LocType.WALL_L) {
 			if (rotation == 0) {
-				this.add(x, z, 130);
-				this.add(x - 1, z, 8);
-				this.add(x, z + 1, 32);
+				this.add(x, z, 0x82);
+				this.add(x - 1, z, 0x8);
+				this.add(x, z + 1, 0x20);
 			} else if (rotation == 1) {
-				this.add(x, z, 10);
-				this.add(x, z + 1, 32);
-				this.add(x + 1, z, 128);
+				this.add(x, z, 0xA);
+				this.add(x, z + 1, 0x20);
+				this.add(x + 1, z, 0x80);
 			} else if (rotation == 2) {
-				this.add(x, z, 40);
-				this.add(x + 1, z, 128);
-				this.add(x, z - 1, 2);
+				this.add(x, z, 0x28);
+				this.add(x + 1, z, 0x80);
+				this.add(x, z - 1, 0x2);
 			} else if (rotation == 3) {
-				this.add(x, z, 160);
-				this.add(x, z - 1, 2);
-				this.add(x - 1, z, 8);
+				this.add(x, z, 0xA0);
+				this.add(x, z - 1, 0x2);
+				this.add(x - 1, z, 0x8);
 			}
 		}
 
 		if (blockrange) {
-			if (shape == 0) {
+			if (shape == LocType.WALL_STRAIGHT) {
 				if (rotation == 0) {
-					this.add(x, z, 65536);
-					this.add(x - 1, z, 4096);
+					this.add(x, z, 0x10000);
+					this.add(x - 1, z, 0x1000);
 				} else if (rotation == 1) {
-					this.add(x, z, 1024);
-					this.add(x, z + 1, 16384);
+					this.add(x, z, 0x400);
+					this.add(x, z + 1, 0x4000);
 				} else if (rotation == 2) {
-					this.add(x, z, 4096);
-					this.add(x + 1, z, 65536);
+					this.add(x, z, 0x1000);
+					this.add(x + 1, z, 0x10000);
 				} else if (rotation == 3) {
-					this.add(x, z, 16384);
-					this.add(x, z - 1, 1024);
+					this.add(x, z, 0x4000);
+					this.add(x, z - 1, 0x400);
 				}
-			} else if (shape == 1 || shape == 3) {
+			} else if (shape == LocType.WALL_DIAGONAL || shape == LocType.WALL_SQUARECORNER) {
 				if (rotation == 0) {
-					this.add(x, z, 512);
-					this.add(x - 1, z + 1, 8192);
+					this.add(x, z, 0x200);
+					this.add(x - 1, z + 1, 0x2000);
 				} else if (rotation == 1) {
-					this.add(x, z, 2048);
-					this.add(x + 1, z + 1, 32768);
+					this.add(x, z, 0x800);
+					this.add(x + 1, z + 1, 0x8000);
 				} else if (rotation == 2) {
-					this.add(x, z, 8192);
-					this.add(x + 1, z - 1, 512);
+					this.add(x, z, 0x2000);
+					this.add(x + 1, z - 1, 0x200);
 				} else if (rotation == 3) {
-					this.add(x, z, 32768);
-					this.add(x - 1, z - 1, 2048);
+					this.add(x, z, 0x8000);
+					this.add(x - 1, z - 1, 0x800);
 				}
-			} else if (shape == 2) {
+			} else if (shape == LocType.WALL_L) {
 				if (rotation == 0) {
-					this.add(x, z, 66560);
-					this.add(x - 1, z, 4096);
-					this.add(x, z + 1, 16384);
+					this.add(x, z, 0x10400);
+					this.add(x - 1, z, 0x1000);
+					this.add(x, z + 1, 0x4000);
 				} else if (rotation == 1) {
-					this.add(x, z, 5120);
-					this.add(x, z + 1, 16384);
-					this.add(x + 1, z, 65536);
+					this.add(x, z, 0x1400);
+					this.add(x, z + 1, 0x4000);
+					this.add(x + 1, z, 0x10000);
 				} else if (rotation == 2) {
-					this.add(x, z, 20480);
-					this.add(x + 1, z, 65536);
-					this.add(x, z - 1, 1024);
+					this.add(x, z, 0x5000);
+					this.add(x + 1, z, 0x10000);
+					this.add(x, z - 1, 0x400);
 				} else if (rotation == 3) {
-					this.add(x, z, 81920);
-					this.add(x, z - 1, 1024);
-					this.add(x - 1, z, 4096);
+					this.add(x, z, 0x14000);
+					this.add(x, z - 1, 0x400);
+					this.add(x - 1, z, 0x1000);
 				}
 			}
 		}
@@ -152,9 +153,9 @@ public class CollisionMap {
 
 	@OriginalMember(owner = "client!ec", name = "a", descriptor = "(IIIIIIZ)V")
 	public void addLoc(@OriginalArg(3) int tileX, @OriginalArg(5) int tileZ, @OriginalArg(2) int sizeX, @OriginalArg(1) int sizeZ, @OriginalArg(0) int rotation, @OriginalArg(6) boolean blockrange) {
-		@Pc(3) int flags = 256;
+		@Pc(3) int flags = 0x100;
 		if (blockrange) {
-			flags += 131072;
+			flags += 0x20000;
 		}
 
 		@Pc(14) int x = tileX - this.offsetX;
@@ -167,12 +168,16 @@ public class CollisionMap {
 		}
 
 		for (int tx = x; tx < x + sizeX; tx++) {
-			if (tx >= 0 && tx < this.sizeX) {
-				for (int tz = z; tz < z + sizeZ; tz++) {
-					if (tz >= 0 && tz < this.sizeZ) {
-						this.add(tx, tz, flags);
-					}
+			if (tx < 0 || tx >= this.sizeX) {
+				continue;
+			}
+
+			for (int tz = z; tz < z + sizeZ; tz++) {
+				if (tz < 0 || tz >= this.sizeZ) {
+					continue;
 				}
+
+				this.add(tx, tz, flags);
 			}
 		}
 	}
@@ -194,100 +199,100 @@ public class CollisionMap {
 		@Pc(8) int x = tileX - this.offsetX;
 		@Pc(13) int z = tileZ - this.offsetZ;
 
-		if (shape == 0) {
+		if (shape == LocType.WALL_STRAIGHT) {
 			if (rotation == 0) {
-				this.remove(x, z, 128);
-				this.remove(x - 1, z, 8);
+				this.remove(x, z, 0x80);
+				this.remove(x - 1, z, 0x8);
 			} else if (rotation == 1) {
-				this.remove(x, z, 2);
-				this.remove(x, z + 1, 32);
+				this.remove(x, z, 0x2);
+				this.remove(x, z + 1, 0x20);
 			} else if (rotation == 2) {
-				this.remove(x, z, 8);
-				this.remove(x + 1, z, 128);
+				this.remove(x, z, 0x8);
+				this.remove(x + 1, z, 0x80);
 			} else if (rotation == 3) {
-				this.remove(x, z, 32);
-				this.remove(x, z - 1, 2);
+				this.remove(x, z, 0x20);
+				this.remove(x, z - 1, 0x2);
 			}
-		} else if (shape == 1 || shape == 3) {
+		} else if (shape == LocType.WALL_DIAGONALCORNER || shape == LocType.WALL_SQUARECORNER) {
 			if (rotation == 0) {
-				this.remove(x, z, 1);
-				this.remove(x - 1, z + 1, 16);
+				this.remove(x, z, 0x1);
+				this.remove(x - 1, z + 1, 0x10);
 			} else if (rotation == 1) {
-				this.remove(x, z, 4);
-				this.remove(x + 1, z + 1, 64);
+				this.remove(x, z, 0x4);
+				this.remove(x + 1, z + 1, 0x40);
 			} else if (rotation == 2) {
-				this.remove(x, z, 16);
-				this.remove(x + 1, z - 1, 1);
+				this.remove(x, z, 0x10);
+				this.remove(x + 1, z - 1, 0x1);
 			} else if (rotation == 3) {
-				this.remove(x, z, 64);
-				this.remove(x - 1, z - 1, 4);
+				this.remove(x, z, 0x40);
+				this.remove(x - 1, z - 1, 0x4);
 			}
-		} else if (shape == 2) {
+		} else if (shape == LocType.WALL_L) {
 			if (rotation == 0) {
-				this.remove(x, z, 130);
-				this.remove(x - 1, z, 8);
-				this.remove(x, z + 1, 32);
+				this.remove(x, z, 0x82);
+				this.remove(x - 1, z, 0x8);
+				this.remove(x, z + 1, 0x20);
 			} else if (rotation == 1) {
-				this.remove(x, z, 10);
-				this.remove(x, z + 1, 32);
-				this.remove(x + 1, z, 128);
+				this.remove(x, z, 0xA);
+				this.remove(x, z + 1, 0x20);
+				this.remove(x + 1, z, 0x80);
 			} else if (rotation == 2) {
-				this.remove(x, z, 40);
-				this.remove(x + 1, z, 128);
-				this.remove(x, z - 1, 2);
+				this.remove(x, z, 0x28);
+				this.remove(x + 1, z, 0x80);
+				this.remove(x, z - 1, 0x2);
 			} else if (rotation == 3) {
-				this.remove(x, z, 160);
-				this.remove(x, z - 1, 2);
-				this.remove(x - 1, z, 8);
+				this.remove(x, z, 0xA0);
+				this.remove(x, z - 1, 0x2);
+				this.remove(x - 1, z, 0x8);
 			}
 		}
 
 		if (blockrange) {
-			if (shape == 0) {
+			if (shape == LocType.WALL_STRAIGHT) {
 				if (rotation == 0) {
-					this.remove(x, z, 65536);
-					this.remove(x - 1, z, 4096);
+					this.remove(x, z, 0x10000);
+					this.remove(x - 1, z, 0x1000);
 				} else if (rotation == 1) {
-					this.remove(x, z, 1024);
-					this.remove(x, z + 1, 16384);
+					this.remove(x, z, 0x400);
+					this.remove(x, z + 1, 0x4000);
 				} else if (rotation == 2) {
-					this.remove(x, z, 4096);
-					this.remove(x + 1, z, 65536);
+					this.remove(x, z, 0x1000);
+					this.remove(x + 1, z, 0x10000);
 				} else if (rotation == 3) {
-					this.remove(x, z, 16384);
-					this.remove(x, z - 1, 1024);
+					this.remove(x, z, 0x4000);
+					this.remove(x, z - 1, 0x400);
 				}
-			} else if (shape == 1 || shape == 3) {
+			} else if (shape == LocType.WALL_DIAGONALCORNER || shape == LocType.WALL_SQUARECORNER) {
 				if (rotation == 0) {
-					this.remove(x, z, 512);
-					this.remove(x - 1, z + 1, 8192);
+					this.remove(x, z, 0x200);
+					this.remove(x - 1, z + 1, 0x2000);
 				} else if (rotation == 1) {
-					this.remove(x, z, 2048);
-					this.remove(x + 1, z + 1, 32768);
+					this.remove(x, z, 0x800);
+					this.remove(x + 1, z + 1, 0x8000);
 				} else if (rotation == 2) {
-					this.remove(x, z, 8192);
-					this.remove(x + 1, z - 1, 512);
+					this.remove(x, z, 0x2000);
+					this.remove(x + 1, z - 1, 0x200);
 				} else if (rotation == 3) {
-					this.remove(x, z, 32768);
-					this.remove(x - 1, z - 1, 2048);
+					this.remove(x, z, 0x8000);
+					this.remove(x - 1, z - 1, 0x800);
 				}
-			} else if (shape == 2) {
+			} else if (shape == LocType.WALL_L) {
 				if (rotation == 0) {
-					this.remove(x, z, 66560);
-					this.remove(x - 1, z, 4096);
-					this.remove(x, z + 1, 16384);
+					this.remove(x, z, 0x10400);
+					this.remove(x - 1, z, 0x1000);
+					this.remove(x, z + 1, 0x4000);
 				} else if (rotation == 1) {
-					this.remove(x, z, 5120);
-					this.remove(x, z + 1, 16384);
-					this.remove(x + 1, z, 65536);
+					this.remove(x, z, 0x1400);
+					this.remove(x, z + 1, 0x4000);
+					this.remove(x + 1, z, 0x10000);
 				} else if (rotation == 2) {
-					this.remove(x, z, 20480);
-					this.remove(x + 1, z, 65536);
-					this.remove(x, z - 1, 1024);
+					this.remove(x, z, 0x5000);
+					this.remove(x + 1, z, 0x10000);
+					this.remove(x, z - 1, 0x400);
 				} else if (rotation == 3) {
-					this.remove(x, z, 81920);
-					this.remove(x, z - 1, 1024);
-					this.remove(x - 1, z, 4096);
+					this.remove(x, z, 0x14000);
+					this.remove(x, z - 1, 0x400);
+					this.remove(x - 1, z, 0x1000);
 				}
 			}
 		}
@@ -295,9 +300,9 @@ public class CollisionMap {
 
 	@OriginalMember(owner = "client!ec", name = "a", descriptor = "(IIIIZZI)V")
 	public void removeLoc(@OriginalArg(1) int tileX, @OriginalArg(0) int tileZ, @OriginalArg(3) int sizeX, @OriginalArg(6) int sizeZ, @OriginalArg(2) int rotation, @OriginalArg(5) boolean blockrange) {
-		@Pc(3) int flags = 256;
+		@Pc(3) int flags = 0x100;
 		if (blockrange) {
-			flags += 131072;
+			flags += 0x20000;
 		}
 
 		@Pc(14) int x = tileX - this.offsetX;
@@ -310,19 +315,23 @@ public class CollisionMap {
 		}
 
 		for (int tx = x; tx < x + sizeX; tx++) {
-			if (tx >= 0 && tx < this.sizeX) {
-				for (@Pc(48) int tz = z; tz < z + sizeZ; tz++) {
-					if (tz >= 0 && tz < this.sizeZ) {
-						this.remove(tx, tz, flags);
-					}
+			if (tx < 0 || tx >= this.sizeX) {
+				continue;
+			}
+
+			for (@Pc(48) int tz = z; tz < z + sizeZ; tz++) {
+				if (tz < 0 || tz >= this.sizeZ) {
+					continue;
 				}
+
+				this.remove(tx, tz, flags);
 			}
 		}
 	}
 
 	@OriginalMember(owner = "client!ec", name = "a", descriptor = "(IBII)V")
 	private void remove(@OriginalArg(2) int x, @OriginalArg(0) int z, @OriginalArg(3) int flags) {
-		this.flags[x][z] &= 16777215 - flags;
+		this.flags[x][z] &= 0xFFFFFF - flags;
 	}
 
 	@OriginalMember(owner = "client!ec", name = "b", descriptor = "(III)V")
@@ -343,7 +352,7 @@ public class CollisionMap {
 		@Pc(29) int dx = destX - this.offsetX;
 		@Pc(34) int dz = destZ - this.offsetZ;
 
-		if (shape == 0) {
+		if (shape == LocType.WALL_STRAIGHT) {
 			if (rotation == 0) {
 				if (sx == dx - 1 && sz == dz) {
 					return true;
@@ -377,7 +386,7 @@ public class CollisionMap {
 					return true;
 				}
 			}
-		} else if (shape == 2) {
+		} else if (shape == LocType.WALL_L) {
 			if (rotation == 0) {
 				if (sx == dx - 1 && sz == dz) {
 					return true;
@@ -419,7 +428,7 @@ public class CollisionMap {
 					return true;
 				}
 			}
-		} else if (shape == 9) {
+		} else if (shape == LocType.WALL_DIAGONAL) {
 			if (sx == dx && sz == dz + 1 && (this.flags[sx][sz] & 0x20) == 0) {
 				return true;
 			} else if (sx == dx && sz == dz - 1 && (this.flags[sx][sz] & 0x2) == 0) {
@@ -445,8 +454,8 @@ public class CollisionMap {
 		@Pc(29) int dx = destX - this.offsetX;
 		@Pc(34) int dz = destZ - this.offsetZ;
 
-		if (shape == 6 || shape == 7) {
-			if (shape == 7) {
+		if (shape == LocType.WALLDECOR_DIAGONAL_NOOFFSET || shape == LocType.WALLDECOR_DIAGONAL_OFFSET) {
+			if (shape == LocType.WALLDECOR_DIAGONAL_OFFSET) {
 				rotation = rotation + 2 & 0x3;
 			}
 
@@ -475,7 +484,7 @@ public class CollisionMap {
 					return true;
 				}
 			}
-		} else if (shape == 8) {
+		} else if (shape == LocType.WALLDECOR_DIAGONAL_BOTH) {
 			if (sx == dx && sz == dz + 1 && (this.flags[sx][sz] & 0x20) == 0) {
 				return true;
 			} else if (sx == dx && sz == dz - 1 && (this.flags[sx][sz] & 0x2) == 0) {

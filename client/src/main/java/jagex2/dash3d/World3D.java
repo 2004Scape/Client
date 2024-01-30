@@ -172,11 +172,31 @@ public class World3D {
 
 	@OriginalMember(owner = "client!r", name = "hb", descriptor = "I")
 	private int tmpMergeIndex;
+
 	@OriginalMember(owner = "client!r", name = "ib", descriptor = "[[I")
-	private final int[][] MINIMAP_TILE_MASK = new int[][] { new int[16], { 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 }, { 1, 0, 0, 0, 1, 1, 0, 0, 1, 1, 1, 0, 1, 1, 1, 1 }, { 1, 1, 0, 0, 1, 1, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0 }, { 0, 0, 1, 1, 0, 0, 1, 1, 0, 0, 0, 1, 0, 0, 0, 1 }, { 0, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 }, { 1, 1, 1, 0, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1 }, { 1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 0, 0 }, { 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1, 1, 0, 0 }, { 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 0, 0, 1, 1 }, { 1, 1, 1, 1, 1, 1, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0 }, { 0, 0, 0, 0, 0, 0, 1, 1, 0, 1, 1, 1, 0, 1, 1, 1 }, { 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 1, 1, 1, 1 } };
+	private final int[][] MINIMAP_OVERLAY_SHAPE = new int[][] {
+		{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
+		{ 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 }, // PLAIN_SHAPE
+		{ 1, 0, 0, 0, 1, 1, 0, 0, 1, 1, 1, 0, 1, 1, 1, 1 }, // DIAGONAL_SHAPE
+		{ 1, 1, 0, 0, 1, 1, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0 }, // LEFT_SEMI_DIAGONAL_SMALL_SHAPE
+		{ 0, 0, 1, 1, 0, 0, 1, 1, 0, 0, 0, 1, 0, 0, 0, 1 }, // RIGHT_SEMI_DIAGONAL_SMALL_SHAPE
+		{ 0, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 }, // LEFT_SEMI_DIAGONAL_BIG_SHAPE
+		{ 1, 1, 1, 0, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1 }, // RIGHT_SEMI_DIAGONAL_BIG_SHAPE
+		{ 1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 0, 0 }, // HALF_SQUARE_SHAPE
+		{ 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1, 1, 0, 0 }, // CORNER_SMALL_SHAPE
+		{ 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 0, 0, 1, 1 }, // CORNER_BIG_SHAPE
+		{ 1, 1, 1, 1, 1, 1, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0 }, // FAN_SMALL_SHAPE
+		{ 0, 0, 0, 0, 0, 0, 1, 1, 0, 1, 1, 1, 0, 1, 1, 1 }, // FAN_BIG_SHAPE
+		{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 1, 1, 1, 1 }  // TRAPEZIUM_SHAPE
+	};
 
 	@OriginalMember(owner = "client!r", name = "jb", descriptor = "[[I")
-	private final int[][] MINIMAP_TILE_ROTATION_MAP = new int[][] { { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15 }, { 12, 8, 4, 0, 13, 9, 5, 1, 14, 10, 6, 2, 15, 11, 7, 3 }, { 15, 14, 13, 12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1, 0 }, { 3, 7, 11, 15, 2, 6, 10, 14, 1, 5, 9, 13, 0, 4, 8, 12 } };
+	private final int[][] MINIMAP_OVERLAY_ROTATION = new int[][] {
+		{ 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15 },
+		{ 12, 8, 4, 0, 13, 9, 5, 1, 14, 10, 6, 2, 15, 11, 7, 3 },
+		{ 15, 14, 13, 12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1, 0 },
+		{ 3, 7, 11, 15, 2, 6, 10, 14, 1, 5, 9, 13, 0, 4, 8, 12 }
+	};
 
 	@OriginalMember(owner = "client!r", name = "kb", descriptor = "[[[[Z")
 	public static boolean[][][][] visibilityMatrix = new boolean[8][32][51][51];
@@ -1104,15 +1124,18 @@ public class World3D {
 		@Pc(16) TileUnderlay underlay = tile.underlay;
 		if (underlay != null) {
 			@Pc(21) int rgb = underlay.rgb;
-			if (rgb != 0) {
-				for (int i = 0; i < 4; i++) {
-					dst[offset] = rgb;
-					dst[offset + 1] = rgb;
-					dst[offset + 2] = rgb;
-					dst[offset + 3] = rgb;
-					offset += step;
-				}
+			if (rgb == 0) {
+				return;
 			}
+
+			for (int i = 0; i < 4; i++) {
+				dst[offset] = rgb;
+				dst[offset + 1] = rgb;
+				dst[offset + 2] = rgb;
+				dst[offset + 3] = rgb;
+				offset += step;
+			}
+
 			return;
 		}
 
@@ -1125,8 +1148,9 @@ public class World3D {
 		@Pc(71) int angle = overlay.rotation;
 		@Pc(74) int background = overlay.backgroundRgb;
 		@Pc(77) int foreground = overlay.foregroundRgb;
-		@Pc(82) int[] mask = this.MINIMAP_TILE_MASK[shape];
-		@Pc(87) int[] rotation = this.MINIMAP_TILE_ROTATION_MAP[angle];
+		@Pc(82) int[] mask = this.MINIMAP_OVERLAY_SHAPE[shape];
+		@Pc(87) int[] rotation = this.MINIMAP_OVERLAY_ROTATION[angle];
+
 		@Pc(89) int off = 0;
 		if (background != 0) {
 			for (int i = 0; i < 4; i++) {
@@ -1136,6 +1160,7 @@ public class World3D {
 				dst[offset + 3] = mask[rotation[off++]] == 0 ? background : foreground;
 				offset += step;
 			}
+
 			return;
 		}
 
@@ -1143,15 +1168,19 @@ public class World3D {
 			if (mask[rotation[off++]] != 0) {
 				dst[offset] = foreground;
 			}
+
 			if (mask[rotation[off++]] != 0) {
 				dst[offset + 1] = foreground;
 			}
+
 			if (mask[rotation[off++]] != 0) {
 				dst[offset + 2] = foreground;
 			}
+
 			if (mask[rotation[off++]] != 0) {
 				dst[offset + 3] = foreground;
 			}
+
 			offset += step;
 		}
 	}

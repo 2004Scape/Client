@@ -3794,7 +3794,7 @@ public class client extends GameShell {
 
 			@Pc(61) LocType loc = LocType.get(locId);
 			if (loc.mapscene == -1) {
-				if (shape == 0 || shape == 2) {
+				if (shape == LocType.WALL_STRAIGHT || shape == LocType.WALL_L) {
 					if (angle == 0) {
 						dst[offset] = rgb;
 						dst[offset + 512] = rgb;
@@ -3818,7 +3818,7 @@ public class client extends GameShell {
 					}
 				}
 
-				if (shape == 3) {
+				if (shape == LocType.WALL_SQUARECORNER) {
 					if (angle == 0) {
 						dst[offset] = rgb;
 					} else if (angle == 1) {
@@ -3830,7 +3830,7 @@ public class client extends GameShell {
 					}
 				}
 
-				if (shape == 2) {
+				if (shape == LocType.WALL_L) {
 					if (angle == 3) {
 						dst[offset] = rgb;
 						dst[offset + 512] = rgb;
@@ -3878,7 +3878,7 @@ public class client extends GameShell {
 					int offsetY = (loc.length * 4 - scene.height) / 2;
 					scene.draw(tileX * 4 + 48 + offsetX, (104 - tileZ - loc.length) * 4 + offsetY + 48);
 				}
-			} else if (shape == 9) {
+			} else if (shape == LocType.WALL_DIAGONAL) {
 				int rgb = 0xeeeeee;
 				if (bitset > 0) {
 					rgb = 0xee0000;
@@ -8362,12 +8362,14 @@ public class client extends GameShell {
 			}
 
 			if (locShape != 0) {
-				if ((locShape < 5 || locShape == 10) && this.levelCollisionMap[this.currentLevel].reachedWall(x, z, dx, dz, locShape - 1, locRotation)) {
+				int shape = locShape - 1;
+
+				if ((shape <= LocType.WALL_SQUARECORNER || shape == LocType.WALL_DIAGONAL) && this.levelCollisionMap[this.currentLevel].reachedWall(x, z, dx, dz, shape, locRotation)) {
 					arrived = true;
 					break;
 				}
 
-				if (locShape < 10 && this.levelCollisionMap[this.currentLevel].reachedWallDecoration(x, z, dx, dz, locShape - 1, locRotation)) {
+				if (shape <= LocType.WALLDECOR_DIAGONAL_BOTH && this.levelCollisionMap[this.currentLevel].reachedWallDecoration(x, z, dx, dz, shape, locRotation)) {
 					arrived = true;
 					break;
 				}
@@ -9743,25 +9745,26 @@ public class client extends GameShell {
 						int info = this.scene.getInfo(level, x, z, bitset);
 						int shape = info & 0x1F;
 						int rotation = info >> 6;
-						if (shape == 11) {
-							shape = 10;
+
+						if (shape == LocType.CENTREPIECE_DIAGONAL) {
+							shape = LocType.CENTREPIECE_STRAIGHT;
 						}
 
 						Model model = type.getModel(shape, rotation, heightmapSW, heightmapSE, heightmapNE, heightmapNW, seqId);
 						this.scene.setLocModel(level, x, z, model);
 					} else if (loc.heightmapSE == 1) {
-						@Pc(282) Model model = type.getModel(4, 0, heightmapSW, heightmapSE, heightmapNE, heightmapNW, seqId);
+						@Pc(282) Model model = type.getModel(LocType.WALLDECOR_STRAIGHT_NOOFFSET, 0, heightmapSW, heightmapSE, heightmapNE, heightmapNW, seqId);
 						this.scene.setWallDecorationModel(level, x, z, model);
 					} else if (loc.heightmapSE == 0) {
 						int info = this.scene.getInfo(level, x, z, bitset);
 						int shape = info & 0x1F;
 						int rotation = info >> 6;
 
-						if (shape == 2) {
+						if (shape == LocType.WALL_L) {
 							@Pc(320) int nextRotation = rotation + 1 & 0x3;
-							@Pc(332) Model model1 = type.getModel(2, rotation + 4, heightmapSW, heightmapSE, heightmapNE, heightmapNW, seqId);
-							@Pc(342) Model mmodel2 = type.getModel(2, nextRotation, heightmapSW, heightmapSE, heightmapNE, heightmapNW, seqId);
-							this.scene.setWallModels(x, z, level, model1, mmodel2);
+							@Pc(332) Model model1 = type.getModel(LocType.WALL_L, rotation + 4, heightmapSW, heightmapSE, heightmapNE, heightmapNW, seqId);
+							@Pc(342) Model model2 = type.getModel(LocType.WALL_L, nextRotation, heightmapSW, heightmapSE, heightmapNE, heightmapNW, seqId);
+							this.scene.setWallModels(x, z, level, model1, model2);
 						} else {
 							Model model = type.getModel(shape, rotation, heightmapSW, heightmapSE, heightmapNE, heightmapNW, seqId);
 							this.scene.setWallModel(level, x, z, model);
@@ -9769,7 +9772,7 @@ public class client extends GameShell {
 					} else if (loc.heightmapSE == 3) {
 						int info = this.scene.getInfo(level, x, z, bitset);
 						int rotation = info >> 6;
-						@Pc(400) Model model = type.getModel(22, rotation, heightmapSW, heightmapSE, heightmapNE, heightmapNW, seqId);
+						@Pc(400) Model model = type.getModel(LocType.GROUNDDECOR, rotation, heightmapSW, heightmapSE, heightmapNE, heightmapNW, seqId);
 						this.scene.setGroundDecorationModel(level, x, z, model);
 					}
 				} else {

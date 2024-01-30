@@ -71,35 +71,35 @@ public class TileOverlay {
 	@OriginalMember(owner = "client!i", name = "x", descriptor = "[[I")
 	public static final int[][] SHAPE_POINTS = new int[][] {
 		{ 1, 3, 5, 7 },
-		{ 1, 3, 5, 7 },
-		{ 1, 3, 5, 7 },
-		{ 1, 3, 5, 7, 6 },
-		{ 1, 3, 5, 7, 6 },
-		{ 1, 3, 5, 7, 6 },
-		{ 1, 3, 5, 7, 6 },
-		{ 1, 3, 5, 7, 2, 6 },
-		{ 1, 3, 5, 7, 2, 8 },
-		{ 1, 3, 5, 7, 2, 8 },
-		{ 1, 3, 5, 7, 11, 12 },
-		{ 1, 3, 5, 7, 11, 12 },
-		{ 1, 3, 5, 7, 13, 14 }
+		{ 1, 3, 5, 7 }, // PLAIN_SHAPE
+		{ 1, 3, 5, 7 }, // DIAGONAL_SHAPE
+		{ 1, 3, 5, 7, 6 }, // LEFT_SEMI_DIAGONAL_SMALL_SHAPE
+		{ 1, 3, 5, 7, 6 }, // RIGHT_SEMI_DIAGONAL_SMALL_SHAPE
+		{ 1, 3, 5, 7, 6 }, // LEFT_SEMI_DIAGONAL_BIG_SHAPE
+		{ 1, 3, 5, 7, 6 }, // RIGHT_SEMI_DIAGONAL_BIG_SHAPE
+		{ 1, 3, 5, 7, 2, 6 }, // HALF_SQUARE_SHAPE
+		{ 1, 3, 5, 7, 2, 8 }, // CORNER_SMALL_SHAPE
+		{ 1, 3, 5, 7, 2, 8 }, // CORNER_BIG_SHAPE
+		{ 1, 3, 5, 7, 11, 12 }, // FAN_SMALL_SHAPE
+		{ 1, 3, 5, 7, 11, 12 }, // FAN_BIG_SHAPE
+		{ 1, 3, 5, 7, 13, 14 } // TRAPEZIUM_SHAPE
 	};
 
 	@OriginalMember(owner = "client!i", name = "y", descriptor = "[[I")
 	public static final int[][] SHAPE_PATHS = new int[][] {
 		{ 0, 1, 2, 3, 0, 0, 1, 3 },
-		{ 1, 1, 2, 3, 1, 0, 1, 3 },
-		{ 0, 1, 2, 3, 1, 0, 1, 3 },
-		{ 0, 0, 1, 2, 0, 0, 2, 4, 1, 0, 4, 3 },
-		{ 0, 0, 1, 4, 0, 0, 4, 3, 1, 1, 2, 4 },
-		{ 0, 0, 4, 3, 1, 0, 1, 2, 1, 0, 2, 4 },
-		{ 0, 1, 2, 4, 1, 0, 1, 4, 1, 0, 4, 3 },
-		{ 0, 4, 1, 2, 0, 4, 2, 5, 1, 0, 4, 5, 1, 0, 5, 3 },
-		{ 0, 4, 1, 2, 0, 4, 2, 3, 0, 4, 3, 5, 1, 0, 4, 5 },
-		{ 0, 0, 4, 5, 1, 4, 1, 2, 1, 4, 2, 3, 1, 4, 3, 5 },
-		{ 0, 0, 1, 5, 0, 1, 4, 5, 0, 1, 2, 4, 1, 0, 5, 3, 1, 5, 4, 3, 1, 4, 2, 3 },
-		{ 1, 0, 1, 5, 1, 1, 4, 5, 1, 1, 2, 4, 0, 0, 5, 3, 0, 5, 4, 3, 0, 4, 2, 3 },
-		{ 1, 0, 5, 4, 1, 0, 1, 5, 0, 0, 4, 3, 0, 4, 5, 3, 0, 5, 2, 3, 0, 1, 2, 5 }
+		{ 1, 1, 2, 3, 1, 0, 1, 3 }, // PLAIN_SHAPE
+		{ 0, 1, 2, 3, 1, 0, 1, 3 }, // DIAGONAL_SHAPE
+		{ 0, 0, 1, 2, 0, 0, 2, 4, 1, 0, 4, 3 }, // LEFT_SEMI_DIAGONAL_SMALL_SHAPE
+		{ 0, 0, 1, 4, 0, 0, 4, 3, 1, 1, 2, 4 }, // RIGHT_SEMI_DIAGONAL_SMALL_SHAPE
+		{ 0, 0, 4, 3, 1, 0, 1, 2, 1, 0, 2, 4 }, // LEFT_SEMI_DIAGONAL_BIG_SHAPE
+		{ 0, 1, 2, 4, 1, 0, 1, 4, 1, 0, 4, 3 }, // RIGHT_SEMI_DIAGONAL_BIG_SHAPE
+		{ 0, 4, 1, 2, 0, 4, 2, 5, 1, 0, 4, 5, 1, 0, 5, 3 }, // HALF_SQUARE_SHAPE
+		{ 0, 4, 1, 2, 0, 4, 2, 3, 0, 4, 3, 5, 1, 0, 4, 5 }, // CORNER_SMALL_SHAPE
+		{ 0, 0, 4, 5, 1, 4, 1, 2, 1, 4, 2, 3, 1, 4, 3, 5 }, // CORNER_BIG_SHAPE
+		{ 0, 0, 1, 5, 0, 1, 4, 5, 0, 1, 2, 4, 1, 0, 5, 3, 1, 5, 4, 3, 1, 4, 2, 3 }, // FAN_SMALL_SHAPE
+		{ 1, 0, 1, 5, 1, 1, 4, 5, 1, 1, 2, 4, 0, 0, 5, 3, 0, 5, 4, 3, 0, 4, 2, 3 }, // FAN_BIG_SHAPE
+		{ 1, 0, 5, 4, 1, 0, 1, 5, 0, 0, 4, 3, 0, 4, 5, 3, 0, 5, 2, 3, 0, 1, 2, 5 } // TRAPEZIUM_SHAPE
 	};
 
 	@OriginalMember(owner = "client!i", name = "<init>", descriptor = "(IIIIIIIIIIIIIIIIIIII)V")
