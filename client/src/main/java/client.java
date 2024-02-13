@@ -6490,7 +6490,7 @@ public class client extends GameShell {
 			// allow localhost
 			good = true;
 		}
-		if (host.startsWith("192.168.")) {
+		if (host.startsWith("192.168.") || host.startsWith("172.16.") || host.startsWith("10.")) {
 			// allow lan
 			good = true;
 		}
