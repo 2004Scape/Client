@@ -6564,6 +6564,11 @@ public class client extends GameShell {
 
 			try {
 				for (int i = 0; i < 50; i++) {
+					if (i == 22) {
+						// weird debug sprite along water
+						continue;
+					}
+
 					this.imageMapscene[i] = new Pix8(media, "mapscene", i);
 				}
 			} catch (@Pc(468) Exception ex) {
