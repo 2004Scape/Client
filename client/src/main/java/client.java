@@ -35,6 +35,7 @@ public class client extends GameShell {
 
 	public boolean showDebug = false;
 	public boolean showPerformance = false;
+    public boolean cameraEditor = false;
 
 	// alt+shift click to add a tile overlay
 	public Tile[] userTileMarkers = new Tile[4];
@@ -3127,7 +3128,36 @@ public class client extends GameShell {
 								this.showDebug = !this.showDebug;
 							} else if (this.chatTyped.equals("::perf")) {
 								this.showPerformance = !this.showPerformance;
-							}
+							} else if (this.chatTyped.equals("::camera")) {
+                                this.cameraEditor = !this.cameraEditor;
+                                this.cutscene = this.cameraEditor;
+                                this.cutsceneDstLocalTileX = 52;
+                                this.cutsceneDstLocalTileZ = 52;
+                                this.cutsceneSrcLocalTileX = 52;
+                                this.cutsceneSrcLocalTileZ = 52;
+                                this.cutsceneSrcHeight = 1000;
+                                this.cutsceneDstHeight = 1000;
+                            } else if (this.chatTyped.startsWith("::camsrc ")) {
+                                String[] args = this.chatTyped.split(" ");
+                                if (args.length == 3) {
+                                    this.cutsceneSrcLocalTileX = Integer.parseInt(args[1]);
+                                    this.cutsceneSrcLocalTileZ = Integer.parseInt(args[2]);
+                                } else if (args.length == 4) {
+                                    this.cutsceneSrcLocalTileX = Integer.parseInt(args[1]);
+                                    this.cutsceneSrcLocalTileZ = Integer.parseInt(args[2]);
+                                    this.cutsceneSrcHeight = Integer.parseInt(args[3]);
+                                }
+                            } else if (this.chatTyped.startsWith("::camdst ")) {
+                                String[] args = this.chatTyped.split(" ");
+                                if (args.length == 3) {
+                                    this.cutsceneDstLocalTileX = Integer.parseInt(args[1]);
+                                    this.cutsceneDstLocalTileZ = Integer.parseInt(args[2]);
+                                } else if (args.length == 4) {
+                                    this.cutsceneDstLocalTileX = Integer.parseInt(args[1]);
+                                    this.cutsceneDstLocalTileZ = Integer.parseInt(args[2]);
+                                    this.cutsceneDstHeight = Integer.parseInt(args[3]);
+                                }
+                            }
 							// }
 
 							if (this.chatTyped.startsWith("::")) {
@@ -6003,7 +6033,7 @@ public class client extends GameShell {
 		}
 
 		if (super.frame != null) {
-			return "2004scape.org";
+			return "localhost";
 		}
 
 		return super.getDocumentBase().getHost().toLowerCase();
@@ -6915,6 +6945,41 @@ public class client extends GameShell {
 			this.fontPlain11.drawStringRight(x, y, "FPS: " + super.fps, 0xFFFF00, true);
 			y += 13;
 		}
+
+        if (this.cameraEditor || this.showDebug) {
+            this.fontPlain11.drawStringRight(x, y, "Local Pos: " + this.localPlayer.x + ", " + this.localPlayer.z + ", " + this.localPlayer.y, 0xFFFF00, true);
+            y += 13;
+
+            this.fontPlain11.drawStringRight(x, y, "Camera Pos: " + this.cameraX + ", " + this.cameraZ + ", " + this.cameraY, 0xFFFF00, true);
+            y += 13;
+
+            this.fontPlain11.drawStringRight(x, y, "Camera Angle: " + this.cameraYaw + ", " + this.cameraPitch, 0xFFFF00, true);
+            y += 13;
+
+            this.fontPlain11.drawStringRight(x, y, "Cutscene Source: " + this.cutsceneSrcLocalTileX + ", " + this.cutsceneSrcLocalTileZ + " " + this.cutsceneSrcHeight + "; " + this.cutsceneMoveSpeed + ", " + this.cutsceneMoveAcceleration, 0xFFFF00, true);
+            y += 13;
+
+            this.fontPlain11.drawStringRight(x, y, "Cutscene Destination: " + this.cutsceneDstLocalTileX + ", " + this.cutsceneDstLocalTileZ + " " + this.cutsceneDstHeight + "; " + this.cutsceneRotateSpeed + ", " + this.cutsceneRotateAcceleration, 0xFFFF00, true);
+            y += 13;
+        }
+
+        if (this.cameraEditor) {
+            y += 13;
+            this.fontPlain11.drawStringRight(x, y, "Instructions:", 0xFFFF00, true);
+            y += 13;
+
+            this.fontPlain11.drawStringRight(x, y, "- Arrows to move Camera", 0xFFFF00, true);
+            y += 13;
+
+            this.fontPlain11.drawStringRight(x, y, "- Shift to control Source or Dest", 0xFFFF00, true);
+            y += 13;
+
+            this.fontPlain11.drawStringRight(x, y, "- Alt to control Height", 0xFFFF00, true);
+            y += 13;
+
+            this.fontPlain11.drawStringRight(x, y, "- Ctrl to control Modifier", 0xFFFF00, true);
+            y += 13;
+        }
 	}
 
 	private void drawTileOverlay(int x, int z, int level, int size, int color, boolean crossed) {
@@ -6953,6 +7018,112 @@ public class client extends GameShell {
 		Draw2D.drawLine(x1, y1, x3, y3, color);
 		Draw2D.drawLine(x2, y2, x3, y3, color);
 	}
+
+	private void updateCameraEditor() {
+        // holding ctrl
+        int modifier = super.actionKey[5] == 1 ? 2 : 1;
+
+        if (super.actionKey[6] == 1) {
+            // holding shift
+            if (super.actionKey[1] == 1) {
+                // left
+                this.cutsceneDstLocalTileX -= 1 * modifier;
+                if (this.cutsceneDstLocalTileX < 1) {
+                    this.cutsceneDstLocalTileX = 1;
+                }
+            } else if (super.actionKey[2] == 1) {
+                // right
+                this.cutsceneDstLocalTileX += 1 * modifier;
+                if (this.cutsceneDstLocalTileX > 102) {
+                    this.cutsceneDstLocalTileX = 102;
+                }
+            }
+
+            if (super.actionKey[3] == 1) {
+                // up
+                if (super.actionKey[7] == 1) {
+                    // holding alt
+                    this.cutsceneDstHeight += 2 * modifier;
+                } else {
+                    this.cutsceneDstLocalTileZ += 1;
+                    if (this.cutsceneDstLocalTileZ > 102) {
+                        this.cutsceneDstLocalTileZ = 102;
+                    }
+                }
+            } else if (super.actionKey[4] == 1) {
+                // down
+                if (super.actionKey[7] == 1) {
+                    // holding alt
+                    this.cutsceneDstHeight -= 2 * modifier;
+                } else {
+                    this.cutsceneDstLocalTileZ -= 1;
+                    if (this.cutsceneDstLocalTileZ < 1) {
+                        this.cutsceneDstLocalTileZ = 1;
+                    }
+                }
+            }
+        } else {
+            if (super.actionKey[1] == 1) {
+                // left
+                this.cutsceneSrcLocalTileX -= 1 * modifier;
+                if (this.cutsceneSrcLocalTileX < 1) {
+                    this.cutsceneSrcLocalTileX = 1;
+                }
+            } else if (super.actionKey[2] == 1) {
+                // right
+                this.cutsceneSrcLocalTileX += 1 * modifier;
+                if (this.cutsceneSrcLocalTileX > 102) {
+                    this.cutsceneSrcLocalTileX = 102;
+                }
+            }
+
+            if (super.actionKey[3] == 1) {
+                // up
+                if (super.actionKey[7] == 1) {
+                    // holding alt
+                    this.cutsceneSrcHeight += 2 * modifier;
+                } else {
+                    this.cutsceneSrcLocalTileZ += 1 * modifier;
+                    if (this.cutsceneSrcLocalTileZ > 102) {
+                        this.cutsceneSrcLocalTileZ = 102;
+                    }
+                }
+            } else if (super.actionKey[4] == 1) {
+                // down
+                if (super.actionKey[7] == 1) {
+                    // holding alt
+                    this.cutsceneSrcHeight -= 2 * modifier;
+                } else {
+                    this.cutsceneSrcLocalTileZ -= 1 * modifier;
+                    if (this.cutsceneSrcLocalTileZ < 1) {
+                        this.cutsceneSrcLocalTileZ = 1;
+                    }
+                }
+            }
+        }
+
+        this.cameraX = this.cutsceneSrcLocalTileX * 128 + 64;
+        this.cameraZ = this.cutsceneSrcLocalTileZ * 128 + 64;
+        this.cameraY = this.getHeightmapY(this.currentLevel, this.cutsceneSrcLocalTileX, this.cutsceneSrcLocalTileZ) - this.cutsceneSrcHeight;
+
+        int sceneX = this.cutsceneDstLocalTileX * 128 + 64;
+        int sceneZ = this.cutsceneDstLocalTileZ * 128 + 64;
+        int sceneY = this.getHeightmapY(this.currentLevel, this.cutsceneDstLocalTileX, this.cutsceneDstLocalTileZ) - this.cutsceneDstHeight;
+        int deltaX = sceneX - this.cameraX;
+        int deltaY = sceneY - this.cameraY;
+        int deltaZ = sceneZ - this.cameraZ;
+        int distance = (int) Math.sqrt(deltaX * deltaX + deltaZ * deltaZ);
+
+        this.cameraPitch = (int) (Math.atan2(deltaY, distance) * 325.949D) & 0x7FF;
+        this.cameraYaw = (int) (Math.atan2(deltaX, deltaZ) * -325.949D) & 0x7FF;
+        if (this.cameraPitch < 128) {
+            this.cameraPitch = 128;
+        }
+
+        if (this.cameraPitch > 383) {
+            this.cameraPitch = 383;
+        }
+    }
 
 	@OriginalMember(owner = "client!client", name = "x", descriptor = "(I)V")
 	private void updateOrbitCamera() {
@@ -8167,7 +8338,11 @@ public class client extends GameShell {
 			}
 
 			if (this.sceneState == 2) {
-				this.updateOrbitCamera();
+                if (this.cameraEditor) {
+                    this.updateCameraEditor();
+                } else {
+    				this.updateOrbitCamera();
+                }
 			}
 			if (this.sceneState == 2 && this.cutscene) {
 				this.applyCutscene();
@@ -10906,7 +11081,7 @@ public class client extends GameShell {
 				return true;
 			}
 			if (this.packetType == 3) {
-				// CAM_LOOKAT
+				// CAM_MOVETO
 				this.cutscene = true;
 				this.cutsceneSrcLocalTileX = this.in.g1();
 				this.cutsceneSrcLocalTileZ = this.in.g1();
@@ -11039,7 +11214,7 @@ public class client extends GameShell {
 				return true;
 			}
 			if (this.packetType == 74) {
-				// CAM_MOVETO
+				// CAM_LOOKAT
 				this.cutscene = true;
 				this.cutsceneDstLocalTileX = this.in.g1();
 				this.cutsceneDstLocalTileZ = this.in.g1();
