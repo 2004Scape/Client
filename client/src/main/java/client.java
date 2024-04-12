@@ -1918,7 +1918,7 @@ public class client extends GameShell {
 			}
 			if (x >= 0 && z >= 0 && x < 104 && z < 104) {
 				@Pc(69) LocTemporary loc = null;
-				for (@Pc(74) LocTemporary next = (LocTemporary) this.spawnedLocations.peekFront(); next != null; next = (LocTemporary) this.spawnedLocations.prev()) {
+				for (@Pc(74) LocTemporary next = (LocTemporary) this.spawnedLocations.head(); next != null; next = (LocTemporary) this.spawnedLocations.next()) {
 					if (next.plane == this.currentLevel && next.x == x && next.z == z && next.layer == layer) {
 						loc = next;
 						break;
@@ -1955,7 +1955,7 @@ public class client extends GameShell {
 					loc.lastLocIndex = otherId;
 					loc.lastShape = otherShape;
 					loc.lastAngle = otherAngle;
-					this.spawnedLocations.pushBack(loc);
+					this.spawnedLocations.addTail(loc);
 				}
 				loc.locIndex = id;
 				loc.shape = shape;
@@ -1984,7 +1984,7 @@ public class client extends GameShell {
 				}
 				if (bitset != 0) {
 					@Pc(348) LocEntity loc = new LocEntity(bitset >> 14 & 0x7FFF, this.currentLevel, layer, x, z, SeqType.instances[id], false);
-					this.locList.pushBack(loc);
+					this.locList.addTail(loc);
 				}
 			}
 		} else if (opcode == 223) {
@@ -1998,7 +1998,7 @@ public class client extends GameShell {
 				if (this.levelObjStacks[this.currentLevel][x][z] == null) {
 					this.levelObjStacks[this.currentLevel][x][z] = new LinkList();
 				}
-				this.levelObjStacks[this.currentLevel][x][z].pushBack(obj);
+				this.levelObjStacks[this.currentLevel][x][z].addTail(obj);
 				this.sortObjStacks(x, z);
 			}
 		} else if (opcode == 49) {
@@ -2007,13 +2007,13 @@ public class client extends GameShell {
 			if (x >= 0 && z >= 0 && x < 104 && z < 104) {
 				@Pc(485) LinkList list = this.levelObjStacks[this.currentLevel][x][z];
 				if (list != null) {
-					for (ObjStackEntity next = (ObjStackEntity) list.peekFront(); next != null; next = (ObjStackEntity) list.prev()) {
+					for (ObjStackEntity next = (ObjStackEntity) list.head(); next != null; next = (ObjStackEntity) list.next()) {
 						if (next.index == (id & 0x7FFF)) {
 							next.unlink();
 							break;
 						}
 					}
-					if (list.peekFront() == null) {
+					if (list.head() == null) {
 						this.levelObjStacks[this.currentLevel][x][z] = null;
 					}
 					this.sortObjStacks(x, z);
@@ -2038,7 +2038,7 @@ public class client extends GameShell {
 				dz = dz * 128 + 64;
 				@Pc(657) ProjectileEntity proj = new ProjectileEntity(spotanim, this.currentLevel, x, this.getHeightmapY(this.currentLevel, x, z) - srcHeight, z, startDelay + loopCycle, endDelay + loopCycle, peak, arc, target, dstHeight);
 				proj.updateVelocity(dx, this.getHeightmapY(this.currentLevel, dx, dz) - dstHeight, dz, startDelay + loopCycle);
-				this.projectiles.pushBack(proj);
+				this.projectiles.addTail(proj);
 			}
 		} else if (opcode == 191) {
 			// MAP_ANIM
@@ -2049,7 +2049,7 @@ public class client extends GameShell {
 				x = x * 128 + 64;
 				z = z * 128 + 64;
 				@Pc(753) SpotAnimEntity spotanim = new SpotAnimEntity(id, this.currentLevel, x, z, this.getHeightmapY(this.currentLevel, x, z) - height, loopCycle, delay);
-				this.spotanims.pushBack(spotanim);
+				this.spotanims.addTail(spotanim);
 			}
 		} else if (opcode == 50) {
 			// OBJ_REVEAL
@@ -2063,7 +2063,7 @@ public class client extends GameShell {
 				if (this.levelObjStacks[this.currentLevel][x][z] == null) {
 					this.levelObjStacks[this.currentLevel][x][z] = new LinkList();
 				}
-				this.levelObjStacks[this.currentLevel][x][z].pushBack(obj);
+				this.levelObjStacks[this.currentLevel][x][z].addTail(obj);
 				this.sortObjStacks(x, z);
 			}
 		} else if (opcode == 23) {
@@ -2090,10 +2090,10 @@ public class client extends GameShell {
 
 			if (player != null) {
 				@Pc(946) LocSpawned loc1 = new LocSpawned(this.currentLevel, layer, x, z, -1, angle, shape, start + loopCycle);
-				this.temporaryLocs.pushBack(loc1);
+				this.temporaryLocs.addTail(loc1);
 
 				@Pc(966) LocSpawned loc2 = new LocSpawned(this.currentLevel, layer, x, z, id, angle, shape, end + loopCycle);
-				this.temporaryLocs.pushBack(loc2);
+				this.temporaryLocs.addTail(loc2);
 
 				@Pc(980) int y0 = this.levelHeightmap[this.currentLevel][x][z];
 				@Pc(992) int y1 = this.levelHeightmap[this.currentLevel][x + 1][z];
@@ -2142,7 +2142,7 @@ public class client extends GameShell {
 			if (x >= 0 && z >= 0 && x < 104 && z < 104) {
 				@Pc(1178) LinkList list = this.levelObjStacks[this.currentLevel][x][z];
 				if (list != null) {
-					for (@Pc(1184) ObjStackEntity next = (ObjStackEntity) list.peekFront(); next != null; next = (ObjStackEntity) list.prev()) {
+					for (@Pc(1184) ObjStackEntity next = (ObjStackEntity) list.head(); next != null; next = (ObjStackEntity) list.next()) {
 						if (next.index == (id & 0x7FFF) && next.count == oldCount) {
 							next.count = newCount;
 							break;
@@ -3696,7 +3696,7 @@ public class client extends GameShell {
 	@OriginalMember(owner = "client!client", name = "m", descriptor = "(I)V")
 	private void updateTemporaryLocs() {
 		if (this.sceneState == 2) {
-			for (@Pc(12) LocSpawned loc = (LocSpawned) this.temporaryLocs.peekFront(); loc != null; loc = (LocSpawned) this.temporaryLocs.prev()) {
+			for (@Pc(12) LocSpawned loc = (LocSpawned) this.temporaryLocs.head(); loc != null; loc = (LocSpawned) this.temporaryLocs.next()) {
 				if (loopCycle >= loc.lastCycle) {
 					this.addLoc(loc.plane, loc.x, loc.z, loc.locIndex, loc.angle, loc.shape, loc.layer);
 					loc.unlink();
@@ -7201,7 +7201,7 @@ public class client extends GameShell {
 
 	@OriginalMember(owner = "client!client", name = "i", descriptor = "(B)V")
 	private void pushProjectiles() {
-		for (@Pc(12) ProjectileEntity proj = (ProjectileEntity) this.projectiles.peekFront(); proj != null; proj = (ProjectileEntity) this.projectiles.prev()) {
+		for (@Pc(12) ProjectileEntity proj = (ProjectileEntity) this.projectiles.head(); proj != null; proj = (ProjectileEntity) this.projectiles.next()) {
 			if (proj.level != this.currentLevel || loopCycle > proj.lastCycle) {
 				proj.unlink();
 			} else if (loopCycle >= proj.startCycle) {
@@ -8473,7 +8473,7 @@ public class client extends GameShell {
 
 	@OriginalMember(owner = "client!client", name = "k", descriptor = "(B)V")
 	private void pushSpotanims() {
-		for (@Pc(13) SpotAnimEntity entity = (SpotAnimEntity) this.spotanims.peekFront(); entity != null; entity = (SpotAnimEntity) this.spotanims.prev()) {
+		for (@Pc(13) SpotAnimEntity entity = (SpotAnimEntity) this.spotanims.head(); entity != null; entity = (SpotAnimEntity) this.spotanims.next()) {
 			if (entity.level != this.currentLevel || entity.seqComplete) {
 				entity.unlink();
 			} else if (loopCycle >= entity.startCycle) {
@@ -9439,7 +9439,7 @@ public class client extends GameShell {
 		@Pc(21) int topCost = -99999999;
 		@Pc(23) ObjStackEntity topObj = null;
 
-		for (ObjStackEntity obj = (ObjStackEntity) objStacks.peekFront(); obj != null; obj = (ObjStackEntity) objStacks.prev()) {
+		for (ObjStackEntity obj = (ObjStackEntity) objStacks.head(); obj != null; obj = (ObjStackEntity) objStacks.next()) {
 			@Pc(32) ObjType type = ObjType.get(obj.index);
 			int cost = type.cost;
 
@@ -9453,13 +9453,13 @@ public class client extends GameShell {
 			}
 		}
 
-		objStacks.pushFront(topObj);
+		objStacks.addHead(topObj);
 
 		@Pc(65) int bottomObjId = -1;
 		int middleObjId = -1;
 		@Pc(69) int bottomObjCount = 0;
 		@Pc(71) int middleObjCount = 0;
-		for (ObjStackEntity obj = (ObjStackEntity) objStacks.peekFront(); obj != null; obj = (ObjStackEntity) objStacks.prev()) {
+		for (ObjStackEntity obj = (ObjStackEntity) objStacks.head(); obj != null; obj = (ObjStackEntity) objStacks.next()) {
 			if (obj.index != topObj.index && bottomObjId == -1) {
 				bottomObjId = obj.index;
 				bottomObjCount = obj.count;
@@ -9562,7 +9562,7 @@ public class client extends GameShell {
 
 			// NO_TIMEOUT
 			this.out.p1isaac(108);
-			for (@Pc(301) LocEntity loc = (LocEntity) this.locList.peekFront(); loc != null; loc = (LocEntity) this.locList.prev()) {
+			for (@Pc(301) LocEntity loc = (LocEntity) this.locList.head(); loc != null; loc = (LocEntity) this.locList.next()) {
 				if ((this.levelTileFlags[1][loc.heightmapNE][loc.heightmapNW] & 0x2) == 2) {
 					loc.heightmapSW--;
 					if (loc.heightmapSW < 0) {
@@ -9577,7 +9577,7 @@ public class client extends GameShell {
 				}
 			}
 
-			for (@Pc(361) LocTemporary loc = (LocTemporary) this.spawnedLocations.peekFront(); loc != null; loc = (LocTemporary) this.spawnedLocations.prev()) {
+			for (@Pc(361) LocTemporary loc = (LocTemporary) this.spawnedLocations.head(); loc != null; loc = (LocTemporary) this.spawnedLocations.next()) {
 				this.addLoc(loc.plane, loc.x, loc.z, loc.locIndex, loc.angle, loc.shape, loc.layer);
 			}
 		} catch (@Pc(390) Exception ignored) {
@@ -9862,7 +9862,7 @@ public class client extends GameShell {
 
 	@OriginalMember(owner = "client!client", name = "E", descriptor = "(I)V")
 	private void pushLocs() {
-		for (@Pc(10) LocEntity loc = (LocEntity) this.locList.peekFront(); loc != null; loc = (LocEntity) this.locList.prev()) {
+		for (@Pc(10) LocEntity loc = (LocEntity) this.locList.head(); loc != null; loc = (LocEntity) this.locList.next()) {
 			@Pc(14) boolean append = false;
 			loc.seqCycle += this.sceneDelta;
 			if (loc.seqFrame == -1) {
@@ -10112,7 +10112,7 @@ public class client extends GameShell {
 					continue;
 				}
 
-				for (@Pc(572) ObjStackEntity obj = (ObjStackEntity) objs.peekBack(); obj != null; obj = (ObjStackEntity) objs.next()) {
+				for (@Pc(572) ObjStackEntity obj = (ObjStackEntity) objs.tail(); obj != null; obj = (ObjStackEntity) objs.prev()) {
 					@Pc(578) ObjType type = ObjType.get(obj.index);
 					if (this.objSelected == 1) {
 						this.menuOption[this.menuSize] = "Use " + this.objSelectedName + " with @lre@" + type.name;
@@ -10668,7 +10668,7 @@ public class client extends GameShell {
 						}
 					}
 				}
-				for (@Pc(1066) LocTemporary loc = (LocTemporary) this.spawnedLocations.peekFront(); loc != null; loc = (LocTemporary) this.spawnedLocations.prev()) {
+				for (@Pc(1066) LocTemporary loc = (LocTemporary) this.spawnedLocations.head(); loc != null; loc = (LocTemporary) this.spawnedLocations.next()) {
 					loc.x -= dx;
 					loc.z -= dz;
 					if (loc.x < 0 || loc.z < 0 || loc.x >= 104 || loc.z >= 104) {
@@ -11108,7 +11108,7 @@ public class client extends GameShell {
 						}
 					}
 				}
-				for (@Pc(2487) LocTemporary loc = (LocTemporary) this.spawnedLocations.peekFront(); loc != null; loc = (LocTemporary) this.spawnedLocations.prev()) {
+				for (@Pc(2487) LocTemporary loc = (LocTemporary) this.spawnedLocations.head(); loc != null; loc = (LocTemporary) this.spawnedLocations.next()) {
 					if (loc.x >= this.baseX && loc.x < this.baseX + 8 && loc.z >= this.baseZ && loc.z < this.baseZ + 8 && loc.plane == this.currentLevel) {
 						this.addLoc(loc.plane, loc.x, loc.z, loc.lastLocIndex, loc.lastAngle, loc.lastShape, loc.layer);
 						loc.unlink();

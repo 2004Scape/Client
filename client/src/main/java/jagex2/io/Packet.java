@@ -85,13 +85,13 @@ public class Packet extends Hashable {
 			@Pc(7) Packet cached = null;
 			if (type == 0 && cacheMinCount > 0) {
 				cacheMinCount--;
-				cached = (Packet) cacheMin.pollFront();
+				cached = (Packet) cacheMin.removeHead();
 			} else if (type == 1 && cacheMidCount > 0) {
 				cacheMidCount--;
-				cached = (Packet) cacheMid.pollFront();
+				cached = (Packet) cacheMid.removeHead();
 			} else if (type == 2 && cacheMaxCount > 0) {
 				cacheMaxCount--;
-				cached = (Packet) cacheMax.pollFront();
+				cached = (Packet) cacheMax.removeHead();
 			}
 
 			if (cached != null) {
@@ -118,13 +118,13 @@ public class Packet extends Hashable {
 			this.pos = 0;
 
 			if (this.data.length == 100 && cacheMinCount < 1000) {
-				cacheMin.pushBack(this);
+				cacheMin.addTail(this);
 				cacheMinCount++;
 			} else if (this.data.length == 5000 && cacheMidCount < 250) {
-				cacheMid.pushBack(this);
+				cacheMid.addTail(this);
 				cacheMidCount++;
 			} else if (this.data.length == 30000 && cacheMaxCount < 50) {
-				cacheMax.pushBack(this);
+				cacheMax.addTail(this);
 				cacheMaxCount++;
 			}
 		}

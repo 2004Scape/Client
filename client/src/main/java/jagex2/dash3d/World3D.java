@@ -1378,13 +1378,13 @@ public class World3D {
 
 	@OriginalMember(owner = "client!r", name = "a", descriptor = "(Lclient!cb;Z)V")
 	private void drawTile(@OriginalArg(0) Tile next, @OriginalArg(1) boolean checkAdjacent, int loopCycle) {
-		drawTileQueue.pushBack(next);
+		drawTileQueue.addTail(next);
 
 		while (true) {
 			Tile tile;
 
 			do {
-				tile = (Tile) drawTileQueue.pollFront();
+				tile = (Tile) drawTileQueue.removeHead();
 
 				if (tile == null) {
 					return;
@@ -1602,28 +1602,28 @@ public class World3D {
 					if (tileX < eyeTileX && (spans & 0x4) != 0) {
 						Tile adjacent = tiles[tileX + 1][tileZ];
 						if (adjacent != null && adjacent.update) {
-							drawTileQueue.pushBack(adjacent);
+							drawTileQueue.addTail(adjacent);
 						}
 					}
 
 					if (tileZ < eyeTileZ && (spans & 0x2) != 0) {
 						Tile adjacent = tiles[tileX][tileZ + 1];
 						if (adjacent != null && adjacent.update) {
-							drawTileQueue.pushBack(adjacent);
+							drawTileQueue.addTail(adjacent);
 						}
 					}
 
 					if (tileX > eyeTileX && (spans & 0x1) != 0) {
 						Tile adjacent = tiles[tileX - 1][tileZ];
 						if (adjacent != null && adjacent.update) {
-							drawTileQueue.pushBack(adjacent);
+							drawTileQueue.addTail(adjacent);
 						}
 					}
 
 					if (tileZ > eyeTileZ && (spans & 0x8) != 0) {
 						Tile adjacent = tiles[tileX][tileZ - 1];
 						if (adjacent != null && adjacent.update) {
-							drawTileQueue.pushBack(adjacent);
+							drawTileQueue.addTail(adjacent);
 						}
 					}
 				}
@@ -1754,9 +1754,9 @@ public class World3D {
 							@Pc(1243) Tile occupied = tiles[x][z];
 
 							if (occupied.checkLocSpans != 0) {
-								drawTileQueue.pushBack(occupied);
+								drawTileQueue.addTail(occupied);
 							} else if ((x != tileX || z != tileZ) && occupied.update) {
-								drawTileQueue.pushBack(occupied);
+								drawTileQueue.addTail(occupied);
 							}
 						}
 					}
@@ -1872,35 +1872,35 @@ public class World3D {
 			if (level < this.maxLevel - 1) {
 				Tile above = this.levelTiles[level + 1][tileX][tileZ];
 				if (above != null && above.update) {
-					drawTileQueue.pushBack(above);
+					drawTileQueue.addTail(above);
 				}
 			}
 
 			if (tileX < eyeTileX) {
 				Tile adjacent = tiles[tileX + 1][tileZ];
 				if (adjacent != null && adjacent.update) {
-					drawTileQueue.pushBack(adjacent);
+					drawTileQueue.addTail(adjacent);
 				}
 			}
 
 			if (tileZ < eyeTileZ) {
 				Tile adjacent = tiles[tileX][tileZ + 1];
 				if (adjacent != null && adjacent.update) {
-					drawTileQueue.pushBack(adjacent);
+					drawTileQueue.addTail(adjacent);
 				}
 			}
 
 			if (tileX > eyeTileX) {
 				Tile adjacent = tiles[tileX - 1][tileZ];
 				if (adjacent != null && adjacent.update) {
-					drawTileQueue.pushBack(adjacent);
+					drawTileQueue.addTail(adjacent);
 				}
 			}
 
 			if (tileZ > eyeTileZ) {
 				Tile adjacent = tiles[tileX][tileZ - 1];
 				if (adjacent != null && adjacent.update) {
-					drawTileQueue.pushBack(adjacent);
+					drawTileQueue.addTail(adjacent);
 				}
 			}
 		}
