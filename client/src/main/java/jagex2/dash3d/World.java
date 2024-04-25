@@ -317,7 +317,7 @@ public class World {
 			width = scene.getWallBitset(level, x, z);
 
 			if (width > 0) {
-				offset = LocType.get(width >> 14 & 0x7FFF).walloff;
+				offset = LocType.get(width >> 14 & 0x7FFF).wallwidth;
 			}
 
 			model2 = loc.getModel(LocType.WALLDECOR_STRAIGHT_NOOFFSET, 0, heightSW, heightSE, heightNW, heightNE, -1);
@@ -644,8 +644,8 @@ public class World {
 				locs.addTail(new LocEntity(locId, level, 0, x, z, SeqType.instances[loc.anim], true));
 			}
 
-			if (loc.walloff != 16) {
-				scene.setWallDecorationOffset(level, x, z, loc.walloff);
+			if (loc.wallwidth != 16) {
+				scene.setWallDecorationOffset(level, x, z, loc.wallwidth);
 			}
 		} else if (shape == LocType.WALL_DIAGONALCORNER) {
 			model = loc.getModel(LocType.WALL_DIAGONALCORNER, rotation, heightSW, heightSE, heightNW, heightNE, -1);
@@ -700,8 +700,8 @@ public class World {
 				locs.addTail(new LocEntity(locId, level, 0, x, z, SeqType.instances[loc.anim], true));
 			}
 
-			if (loc.walloff != 16) {
-				scene.setWallDecorationOffset(level, x, z, loc.walloff);
+			if (loc.wallwidth != 16) {
+				scene.setWallDecorationOffset(level, x, z, loc.wallwidth);
 			}
 		} else if (shape == LocType.WALL_SQUARECORNER) {
 			model = loc.getModel(LocType.WALL_SQUARECORNER, rotation, heightSW, heightSE, heightNW, heightNE, -1);
@@ -748,7 +748,7 @@ public class World {
 			offset = 16;
 			width = scene.getWallBitset(level, x, z);
 			if (width > 0) {
-				offset = LocType.get(width >> 14 & 0x7FFF).walloff;
+				offset = LocType.get(width >> 14 & 0x7FFF).wallwidth;
 			}
 
 			model1 = loc.getModel(LocType.WALLDECOR_STRAIGHT_NOOFFSET, 0, heightSW, heightSE, heightNW, heightNE, -1);

@@ -70,19 +70,19 @@ public class NpcType {
 	private int[] recol_d;
 
 	@OriginalMember(owner = "client!bc", name = "u", descriptor = "[Ljava/lang/String;")
-	public String[] ops;
+	public String[] op;
 
 	@OriginalMember(owner = "client!bc", name = "v", descriptor = "I")
-	private int code90 = -1;
+	private int resizex = -1;
 
 	@OriginalMember(owner = "client!bc", name = "w", descriptor = "I")
-	private int code91 = -1;
+	private int resizey = -1;
 
 	@OriginalMember(owner = "client!bc", name = "x", descriptor = "I")
-	private int code92 = -1;
+	private int resizez = -1;
 
 	@OriginalMember(owner = "client!bc", name = "y", descriptor = "Z")
-	public boolean visonmap = true;
+	public boolean minimap = true;
 
 	@OriginalMember(owner = "client!bc", name = "z", descriptor = "I")
 	public int vislevel = -1;
@@ -173,13 +173,13 @@ public class NpcType {
 				this.walkanim_r = dat.g2();
 				this.walkanim_l = dat.g2();
 			} else if (code >= 30 && code < 40) {
-				if (this.ops == null) {
-					this.ops = new String[5];
+				if (this.op == null) {
+					this.op = new String[5];
 				}
 
-				this.ops[code - 30] = dat.gjstr();
-				if (this.ops[code - 30].equalsIgnoreCase("hidden")) {
-					this.ops[code - 30] = null;
+				this.op[code - 30] = dat.gjstr();
+				if (this.op[code - 30].equalsIgnoreCase("hidden")) {
+					this.op[code - 30] = null;
 				}
 			} else if (code == 40) {
 				int count = dat.g1();
@@ -198,13 +198,16 @@ public class NpcType {
 					this.heads[i] = dat.g2();
 				}
 			} else if (code == 90) {
-				this.code90 = dat.g2();
+				// unused
+				this.resizex = dat.g2();
 			} else if (code == 91) {
-				this.code91 = dat.g2();
+				// unused
+				this.resizey = dat.g2();
 			} else if (code == 92) {
-				this.code92 = dat.g2();
+				// unused
+				this.resizez = dat.g2();
 			} else if (code == 93) {
-				this.visonmap = false;
+				this.minimap = false;
 			} else if (code == 95) {
 				this.vislevel = dat.g2();
 			} else if (code == 97) {

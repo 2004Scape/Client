@@ -34,7 +34,7 @@ public class Draw3D extends Draw2D {
 	public static int[] reciprocal15 = new int[512];
 
 	@OriginalMember(owner = "client!gb", name = "I", descriptor = "[I")
-	public static final int[] reciprocal16 = new int[2048];
+	public static int[] reciprocal16 = new int[2048];
 
 	@OriginalMember(owner = "client!gb", name = "J", descriptor = "[I")
 	public static int[] sin = new int[2048];
@@ -96,7 +96,7 @@ public class Draw3D extends Draw2D {
 	@OriginalMember(owner = "client!gb", name = "a", descriptor = "(Z)V")
 	public static void unload() {
 		reciprocal15 = null;
-		reciprocal15 = null;
+		reciprocal16 = null; // original typo: reciprocal15 = null; (yes twice)
 		sin = null;
 		cos = null;
 		lineOffset = null;
@@ -273,7 +273,8 @@ public class Draw3D extends Draw2D {
 
 	@OriginalMember(owner = "client!gb", name = "a", descriptor = "(ZD)V")
 	public static void setBrightness(@OriginalArg(1) double brightness) {
-		@Pc(9) double randomBrightness = brightness + Math.random() * 0.03D - 0.015D;
+		@Pc(9) double randomized = brightness + Math.random() * 0.03D - 0.015D;
+
 		@Pc(11) int offset = 0;
 		for (@Pc(13) int y = 0; y < 512; y++) {
 			@Pc(24) double hue = (double) (y / 8) / 64.0D + 0.0078125D;
@@ -331,16 +332,17 @@ public class Draw3D extends Draw2D {
 				@Pc(264) int intG = (int) (g * 256.0D);
 				@Pc(269) int intB = (int) (b * 256.0D);
 				@Pc(279) int rgb = (intR << 16) + (intG << 8) + intB;
-				@Pc(283) int rgbAdjusted = setGamma(rgb, randomBrightness);
+				@Pc(283) int rgbAdjusted = setGamma(rgb, randomized);
 				palette[offset++] = rgbAdjusted;
 			}
 		}
+
 		for (@Pc(298) int id = 0; id < 50; id++) {
 			if (textures[id] != null) {
 				@Pc(309) int[] palette = textures[id].palette;
 				texturePalette[id] = new int[palette.length];
 				for (@Pc(317) int i = 0; i < palette.length; i++) {
-					texturePalette[id][i] = setGamma(palette[i], randomBrightness);
+					texturePalette[id][i] = setGamma(palette[i], randomized);
 				}
 			}
 		}
@@ -355,9 +357,11 @@ public class Draw3D extends Draw2D {
 		@Pc(6) double r = (double) (rgb >> 16) / 256.0D;
 		@Pc(15) double g = (double) (rgb >> 8 & 0xFF) / 256.0D;
 		@Pc(22) double b = (double) (rgb & 0xFF) / 256.0D;
+
 		@Pc(26) double powR = Math.pow(r, gamma);
 		@Pc(30) double powG = Math.pow(g, gamma);
 		@Pc(34) double powB = Math.pow(b, gamma);
+
 		@Pc(39) int intR = (int) (powR * 256.0D);
 		@Pc(44) int intG = (int) (powG * 256.0D);
 		@Pc(49) int intB = (int) (powB * 256.0D);

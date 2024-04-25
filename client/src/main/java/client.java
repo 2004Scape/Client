@@ -42,7 +42,7 @@ public class client extends GameShell {
 	public int userTileMarkerIndex = 0;
 
 	@OriginalMember(owner = "client!client", name = "E", descriptor = "I")
-	public static int opHeld1Counter;
+	public static int oplogic5;
 
 	@OriginalMember(owner = "client!client", name = "F", descriptor = "Ljava/lang/String;")
 	public static final String CHARSET = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!\"£$%^&*()-_=+[{]};:'@#~,<.>/?\\| ";
@@ -168,7 +168,7 @@ public class client extends GameShell {
 	private byte[][] sceneMapLandData;
 
 	@OriginalMember(owner = "client!client", name = "Ab", descriptor = "I")
-	public static int opLoc4Counter;
+	public static int oplogic1;
 
 	@OriginalMember(owner = "client!client", name = "Bb", descriptor = "[I")
 	private int[] friendWorld = new int[100];
@@ -231,7 +231,7 @@ public class client extends GameShell {
 	private Packet in = Packet.alloc(1);
 
 	@OriginalMember(owner = "client!client", name = "Zb", descriptor = "I")
-	public static int opNpc5Counter;
+	public static int oplogic4;
 
 	@OriginalMember(owner = "client!client", name = "ac", descriptor = "Lclient!kb;")
 	private Packet out = Packet.alloc(1);
@@ -249,10 +249,10 @@ public class client extends GameShell {
 	private int overrideChat;
 
 	@OriginalMember(owner = "client!client", name = "gc", descriptor = "I")
-	public static int drawCounter;
+	public static int cyclelogic2;
 
 	@OriginalMember(owner = "client!client", name = "ic", descriptor = "I")
-	public static int opHeld4Counter;
+	public static int oplogic3;
 
 	@OriginalMember(owner = "client!client", name = "jc", descriptor = "[I")
 	private final int[] skillLevel = new int[50];
@@ -393,7 +393,7 @@ public class client extends GameShell {
 	private final int[] compassMaskLineOffsets = new int[33];
 
 	@OriginalMember(owner = "client!client", name = "hd", descriptor = "I")
-	public static int opLoc5Counter;
+	public static int oplogic6;
 
 	@OriginalMember(owner = "client!client", name = "id", descriptor = "[I")
 	private final int[] waveDelay = new int[50];
@@ -417,7 +417,7 @@ public class client extends GameShell {
 	private boolean errorLoading = false;
 
 	@OriginalMember(owner = "client!client", name = "rd", descriptor = "I")
-	public static int opNpc3Counter;
+	public static int oplogic2;
 
 	@OriginalMember(owner = "client!client", name = "sd", descriptor = "I")
 	private int lastHoveredInterfaceId;
@@ -438,7 +438,7 @@ public class client extends GameShell {
 	private int flameGradientCycle1;
 
 	@OriginalMember(owner = "client!client", name = "Ad", descriptor = "I")
-	public static int opHeld9Counter;
+	public static int oplogic9;
 
 	@OriginalMember(owner = "client!client", name = "Cd", descriptor = "[I")
 	private final int[] messageIds = new int[100];
@@ -453,7 +453,7 @@ public class client extends GameShell {
 	private boolean reportAbuseMuteOption = false;
 
 	@OriginalMember(owner = "client!client", name = "Gd", descriptor = "I")
-	public static int sidebarInputCounter;
+	public static int cyclelogic1;
 
 	@OriginalMember(owner = "client!client", name = "Id", descriptor = "Lclient!ob;")
 	private LinkList spawnedLocations = new LinkList();
@@ -474,7 +474,7 @@ public class client extends GameShell {
 	public static boolean lowMemory;
 
 	@OriginalMember(owner = "client!client", name = "Od", descriptor = "I")
-	public static int opPlayer2Counter;
+	public static int oplogic8;
 
 	@OriginalMember(owner = "client!client", name = "Pd", descriptor = "Lclient!ib;")
 	private Pix8 imageRedstone1;
@@ -537,7 +537,7 @@ public class client extends GameShell {
 	private int hintType;
 
 	@OriginalMember(owner = "client!client", name = "le", descriptor = "I")
-	public static int updatePlayersCounter;
+	public static int cyclelogic6;
 
 	@OriginalMember(owner = "client!client", name = "me", descriptor = "I")
 	private int orbitCameraX;
@@ -606,7 +606,7 @@ public class client extends GameShell {
 	private String modalMessage;
 
 	@OriginalMember(owner = "client!client", name = "Je", descriptor = "I")
-	public static int ifButton5Counter;
+	public static int oplogic7;
 
 	@OriginalMember(owner = "client!client", name = "Ke", descriptor = "[I")
 	private int[] varps = new int[2000];
@@ -780,7 +780,7 @@ public class client extends GameShell {
 	private Pix24 imageMapflag;
 
 	@OriginalMember(owner = "client!client", name = "Tf", descriptor = "I")
-	public static int updateCounter;
+	public static int cyclelogic3;
 
 	@OriginalMember(owner = "client!client", name = "Uf", descriptor = "Lclient!d;")
 	private ClientStream stream;
@@ -1035,7 +1035,7 @@ public class client extends GameShell {
 	private int friendCount;
 
 	@OriginalMember(owner = "client!client", name = "Hh", descriptor = "I")
-	public static int update2Counter;
+	public static int cyclelogic4;
 
 	@OriginalMember(owner = "client!client", name = "Ih", descriptor = "I")
 	private int chatCount;
@@ -1083,7 +1083,7 @@ public class client extends GameShell {
 	private final int[] LOC_KIND_TO_CLASS_ID = new int[] { 0, 0, 0, 0, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 3 };
 
 	@OriginalMember(owner = "client!client", name = "Zh", descriptor = "I")
-	public static int updateLocCounter;
+	public static int cyclelogic5;
 
 	@OriginalMember(owner = "client!client", name = "ai", descriptor = "I")
 	private int titleScreenState;
@@ -2266,9 +2266,9 @@ public class client extends GameShell {
 			int yaw = this.orbitCameraYaw + this.cameraAnticheatAngle & 0x7FF;
 			this.orbitCamera(this.orbitCameraX, this.getHeightmapY(this.currentLevel, this.localPlayer.x, this.localPlayer.z) - 50, this.orbitCameraZ, yaw, pitch, pitch * 3 + 600);
 
-			drawCounter++;
-			if (drawCounter > 1802) {
-				drawCounter = 0;
+			cyclelogic2++;
+			if (cyclelogic2 > 1802) {
+				cyclelogic2 = 0;
 				// ANTICHEAT_CYCLELOGIC2
 				this.out.p1isaac(146);
 				this.out.p1(0);
@@ -2575,8 +2575,8 @@ public class client extends GameShell {
 						} else {
 							if (child.interactable) {
 								for (int op = 4; op >= 3; op--) {
-									if (obj.iops != null && obj.iops[op] != null) {
-										this.menuOption[this.menuSize] = obj.iops[op] + " @lre@" + obj.name;
+									if (obj.iop != null && obj.iop[op] != null) {
+										this.menuOption[this.menuSize] = obj.iop[op] + " @lre@" + obj.name;
 										if (op == 3) {
 											this.menuAction[this.menuSize] = 478;
 										} else if (op == 4) {
@@ -2606,10 +2606,10 @@ public class client extends GameShell {
 								this.menuSize++;
 							}
 
-							if (child.interactable && obj.iops != null) {
+							if (child.interactable && obj.iop != null) {
 								for (int op = 2; op >= 0; op--) {
-									if (obj.iops[op] != null) {
-										this.menuOption[this.menuSize] = obj.iops[op] + " @lre@" + obj.name;
+									if (obj.iop[op] != null) {
+										this.menuOption[this.menuSize] = obj.iop[op] + " @lre@" + obj.name;
 										if (op == 0) {
 											this.menuAction[this.menuSize] = 405;
 										} else if (op == 1) {
@@ -2926,10 +2926,10 @@ public class client extends GameShell {
 			this.menuSize++;
 		} else if (this.spellSelected != 1) {
 			@Pc(155) int type;
-			if (npc.ops != null) {
+			if (npc.op != null) {
 				for (type = 4; type >= 0; type--) {
-					if (npc.ops[type] != null && !npc.ops[type].equalsIgnoreCase("attack")) {
-						this.menuOption[this.menuSize] = npc.ops[type] + " @yel@" + tooltip;
+					if (npc.op[type] != null && !npc.op[type].equalsIgnoreCase("attack")) {
+						this.menuOption[this.menuSize] = npc.op[type] + " @yel@" + tooltip;
 
 						if (type == 0) {
 							this.menuAction[this.menuSize] = 728;
@@ -2951,15 +2951,15 @@ public class client extends GameShell {
 				}
 			}
 
-			if (npc.ops != null) {
+			if (npc.op != null) {
 				for (type = 4; type >= 0; type--) {
-					if (npc.ops[type] != null && npc.ops[type].equalsIgnoreCase("attack")) {
+					if (npc.op[type] != null && npc.op[type].equalsIgnoreCase("attack")) {
 						@Pc(279) short action = 0;
 						if (npc.vislevel > this.localPlayer.combatLevel) {
 							action = 2000;
 						}
 
-						this.menuOption[this.menuSize] = npc.ops[type] + " @yel@" + tooltip;
+						this.menuOption[this.menuSize] = npc.op[type] + " @yel@" + tooltip;
 
 						if (type == 0) {
 							this.menuAction[this.menuSize] = action + 728;
@@ -3640,7 +3640,7 @@ public class client extends GameShell {
 
 		for (int i = 0; i < this.npcCount; i++) {
 			@Pc(189) NpcEntity npc = this.npcs[this.npcIds[i]];
-			if (npc != null && npc.isVisible() && npc.type.visonmap) {
+			if (npc != null && npc.isVisible() && npc.type.minimap) {
 				anchorX = npc.x / 32 - this.localPlayer.x / 32;
 				anchorY = npc.z / 32 - this.localPlayer.z / 32;
 				this.drawOnMinimap(anchorY, this.imageMapdot1, anchorX);
@@ -3703,9 +3703,9 @@ public class client extends GameShell {
 				}
 			}
 
-			updateLocCounter++;
-			if (updateLocCounter > 85) {
-				updateLocCounter = 0;
+			cyclelogic5++;
+			if (cyclelogic5 > 85) {
+				cyclelogic5 = 0;
 				// ANTICHEAT_CYCLELOGIC5
 				this.out.p1isaac(85);
 			}
@@ -4847,7 +4847,7 @@ public class client extends GameShell {
 
 		if (entity.primarySeqId != -1 && entity.primarySeqDelay == 0) {
 			@Pc(28) SeqType seq = SeqType.instances[entity.primarySeqId];
-			if (seq.labelGroups == null) {
+			if (seq.walkmerge == null) {
 				entity.seqTrigger++;
 				return;
 			}
@@ -5436,10 +5436,10 @@ public class client extends GameShell {
 		} else if (action == 405 || action == 38 || action == 422 || action == 478 || action == 347) {
 			if (action == 478) {
 				if ((b & 0x3) == 0) {
-					opHeld1Counter++;
+					oplogic5++;
 				}
 
-				if (opHeld1Counter >= 90) {
+				if (oplogic5 >= 90) {
 					// ANTICHEAT_OPLOGIC5
 					this.out.p1isaac(220);
 				}
@@ -5453,8 +5453,8 @@ public class client extends GameShell {
 				// OPHELD3
 				this.out.p1isaac(133);
 			} else if (action == 405) {
-				opHeld4Counter += a;
-				if (opHeld4Counter >= 97) {
+				oplogic3 += a;
+				if (oplogic3 >= 97) {
 					// ANTICHEAT_OPLOGIC3
 					this.out.p1isaac(30);
 					this.out.p3(14953816);
@@ -5497,10 +5497,10 @@ public class client extends GameShell {
 					this.out.p1isaac(8);
 				} else if (action == 6) {
 					if ((a & 0x3) == 0) {
-						opNpc3Counter++;
+						oplogic2++;
 					}
 
-					if (opNpc3Counter >= 124) {
+					if (oplogic2 >= 124) {
 						// ANTICHEAT_OPLOGIC2
 						this.out.p1isaac(88);
 						this.out.p4(0);
@@ -5516,10 +5516,10 @@ public class client extends GameShell {
 					this.out.p1isaac(194);
 				} else if (action == 245) {
 					if ((a & 0x3) == 0) {
-						opNpc5Counter++;
+						oplogic4++;
 					}
 
-					if (opNpc5Counter >= 85) {
+					if (oplogic4 >= 85) {
 						// ANTICHEAT_OPLOGIC4
 						this.out.p1isaac(176);
 						this.out.p2(39596);
@@ -5671,8 +5671,8 @@ public class client extends GameShell {
 					// OPPLAYER1
 					this.out.p1isaac(164);
 				} else if (action == 151) {
-					opPlayer2Counter++;
-					if (opPlayer2Counter >= 90) {
+					oplogic8++;
+					if (oplogic8 >= 90) {
 						// ANTICHEAT_OPLOGIC8
 						this.out.p1isaac(2);
 						this.out.p2(31114);
@@ -5825,10 +5825,10 @@ public class client extends GameShell {
 				this.out.p1isaac(212);
 			} else if (action == 415) {
 				if ((c & 0x3) == 0) {
-					ifButton5Counter++;
+					oplogic7++;
 				}
 
-				if (ifButton5Counter >= 55) {
+				if (oplogic7 >= 55) {
 					// ANTICHEAT_OPLOGIC7
 					this.out.p1isaac(17);
 					this.out.p4(0);
@@ -5841,10 +5841,10 @@ public class client extends GameShell {
 				this.out.p1isaac(31);
 			} else if (action == 892) {
 				if ((b & 0x3) == 0) {
-					opHeld9Counter++;
+					oplogic9++;
 				}
 
-				if (opHeld9Counter >= 130) {
+				if (oplogic9 >= 130) {
 					// ANTICHEAT_OPLOGIC9
 					this.out.p1isaac(238);
 					this.out.p1(177);
@@ -5875,10 +5875,10 @@ public class client extends GameShell {
 			}
 		} else if (action == 581) {
 			if ((a & 0x3) == 0) {
-				opLoc4Counter++;
+				oplogic1++;
 			}
 
-			if (opLoc4Counter >= 99) {
+			if (oplogic1 >= 99) {
 				// ANTICHEAT_OPLOGIC1
 				this.out.p1isaac(7);
 				this.out.p4(0);
@@ -5904,8 +5904,8 @@ public class client extends GameShell {
 			this.out.p2(a);
 			this.out.p2(this.activeSpellId);
 		} else if (action == 1501) {
-			opLoc5Counter += this.sceneBaseTileZ;
-			if (opLoc5Counter >= 92) {
+			oplogic6 += this.sceneBaseTileZ;
+			if (oplogic6 >= 92) {
 				// ANTICHEAT_OPLOGIC6
 				this.out.p1isaac(66);
 				this.out.p4(0);
@@ -6458,7 +6458,7 @@ public class client extends GameShell {
 		}
 
 		if (clientCode == 326) {
-			// IF_DESIGN
+			// IF_PLAYERDESIGN
 			this.out.p1isaac(52);
 			this.out.p1(this.designGenderMale ? 0 : 1);
 			for (int i = 0; i < 7; i++) {
@@ -7732,15 +7732,16 @@ public class client extends GameShell {
 					this.designColors[i] = 0;
 				}
 
-				opLoc4Counter = 0;
-				opNpc3Counter = 0;
-				opHeld4Counter = 0;
-				opNpc5Counter = 0;
-				opHeld1Counter = 0;
-				opLoc5Counter = 0;
-				ifButton5Counter = 0;
-				opPlayer2Counter = 0;
-				opHeld9Counter = 0;
+				oplogic1 = 0;
+				oplogic2 = 0;
+				oplogic3 = 0;
+				oplogic4 = 0;
+				oplogic5 = 0;
+				oplogic6 = 0;
+				oplogic7 = 0;
+				oplogic8 = 0;
+				oplogic9 = 0;
+
 				this.prepareGameScreen();
 			} else if (reply == 3) {
 				this.loginMessage0 = "";
@@ -8300,9 +8301,9 @@ public class client extends GameShell {
 				}
 			}
 
-			updateCounter++;
-			if (updateCounter > 127) {
-				updateCounter = 0;
+			cyclelogic3++;
+			if (cyclelogic3 > 127) {
+				cyclelogic3 = 0;
 				// ANTICHEAT_CYCLELOGIC3
 				this.out.p1isaac(215);
 				this.out.p3(4991788);
@@ -8421,9 +8422,9 @@ public class client extends GameShell {
 				this.minimapZoomModifier = -1;
 			}
 
-			update2Counter++;
-			if (update2Counter > 110) {
-				update2Counter = 0;
+			cyclelogic4++;
+			if (cyclelogic4 > 110) {
+				cyclelogic4 = 0;
 				// ANTICHEAT_CYCLELOGIC4
 				this.out.p1isaac(236);
 				this.out.p4(0);
@@ -9250,9 +9251,9 @@ public class client extends GameShell {
 			this.redrawSideicons = true;
 		}
 
-		sidebarInputCounter++;
-		if (sidebarInputCounter > 150) {
-			sidebarInputCounter = 0;
+		cyclelogic1++;
+		if (cyclelogic1 > 150) {
+			cyclelogic1 = 0;
 			// ANTICHEAT_CYCLELOGIC1
 			this.out.p1isaac(233);
 			this.out.p1(43);
@@ -10017,10 +10018,10 @@ public class client extends GameShell {
 					this.menuParamC[this.menuSize] = z;
 					this.menuSize++;
 				} else if (this.spellSelected != 1) {
-					if (loc.ops != null) {
+					if (loc.op != null) {
 						for (int op = 4; op >= 0; op--) {
-							if (loc.ops[op] != null) {
-								this.menuOption[this.menuSize] = loc.ops[op] + " @cya@" + loc.name;
+							if (loc.op[op] != null) {
+								this.menuOption[this.menuSize] = loc.op[op] + " @cya@" + loc.name;
 								if (op == 0) {
 									this.menuAction[this.menuSize] = 285;
 								}
@@ -10123,8 +10124,8 @@ public class client extends GameShell {
 						this.menuSize++;
 					} else if (this.spellSelected != 1) {
 						for (@Pc(695) int op = 4; op >= 0; op--) {
-							if (type.ops != null && type.ops[op] != null) {
-								this.menuOption[this.menuSize] = type.ops[op] + " @lre@" + type.name;
+							if (type.op != null && type.op[op] != null) {
+								this.menuOption[this.menuSize] = type.op[op] + " @lre@" + type.name;
 								if (op == 0) {
 									this.menuAction[this.menuSize] = 224;
 								}
@@ -10197,9 +10198,9 @@ public class client extends GameShell {
 			}
 		}
 
-		updatePlayersCounter++;
-		if (updatePlayersCounter > 1406) {
-			updatePlayersCounter = 0;
+		cyclelogic6++;
+		if (cyclelogic6 > 1406) {
+			cyclelogic6 = 0;
 			// ANTICHEAT_CYCLELOGIC6
 			this.out.p1isaac(219);
 			this.out.p1(0);
@@ -10866,6 +10867,7 @@ public class client extends GameShell {
 				// FINISH_TRACKING
 				@Pc(1701) Packet tracking = InputTracking.stop();
 				if (tracking != null) {
+                    // EVENT_TRACKING
 					this.out.p1isaac(81);
 					this.out.p2(tracking.pos);
 					this.out.pdata(tracking.data, tracking.pos, 0);

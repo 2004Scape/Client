@@ -104,7 +104,7 @@ public class LocType {
 	public int anim;
 
 	@OriginalMember(owner = "client!ac", name = "y", descriptor = "I")
-	public int walloff;
+	public int wallwidth;
 
 	@OriginalMember(owner = "client!ac", name = "z", descriptor = "B")
 	private byte ambient;
@@ -113,7 +113,7 @@ public class LocType {
 	private byte contrast;
 
 	@OriginalMember(owner = "client!ac", name = "B", descriptor = "[Ljava/lang/String;")
-	public String[] ops;
+	public String[] op;
 
 	@OriginalMember(owner = "client!ac", name = "C", descriptor = "Z")
 	private boolean disposeAlpha;
@@ -140,13 +140,13 @@ public class LocType {
 	private int resizez;
 
 	@OriginalMember(owner = "client!ac", name = "K", descriptor = "I")
-	private int xoff;
+	private int offsetx;
 
 	@OriginalMember(owner = "client!ac", name = "L", descriptor = "I")
-	private int yoff;
+	private int offsety;
 
 	@OriginalMember(owner = "client!ac", name = "M", descriptor = "I")
-	private int zoff;
+	private int offsetz;
 
 	@OriginalMember(owner = "client!ac", name = "N", descriptor = "I")
 	public int forceapproach;
@@ -223,10 +223,10 @@ public class LocType {
 		this.sharelight = false;
 		this.occlude = false;
 		this.anim = -1;
-		this.walloff = 16;
+		this.wallwidth = 16;
 		this.ambient = 0;
 		this.contrast = 0;
-		this.ops = null;
+		this.op = null;
 		this.disposeAlpha = false;
 		this.mapfunction = -1;
 		this.mapscene = -1;
@@ -236,9 +236,9 @@ public class LocType {
 		this.resizey = 128;
 		this.resizez = 128;
 		this.forceapproach = 0;
-		this.xoff = 0;
-		this.yoff = 0;
-		this.zoff = 0;
+		this.offsetx = 0;
+		this.offsety = 0;
+		this.offsetz = 0;
 		this.forcedecor = false;
 	}
 
@@ -293,19 +293,19 @@ public class LocType {
 			} else if (code == 25) {
 				this.disposeAlpha = true;
 			} else if (code == 28) {
-				this.walloff = dat.g1();
+				this.wallwidth = dat.g1();
 			} else if (code == 29) {
 				this.ambient = dat.g1b();
 			} else if (code == 39) {
 				this.contrast = dat.g1b();
 			} else if (code >= 30 && code < 39) {
-				if (this.ops == null) {
-					this.ops = new String[5];
+				if (this.op == null) {
+					this.op = new String[5];
 				}
 
-				this.ops[code - 30] = dat.gjstr();
-				if (this.ops[code - 30].equalsIgnoreCase("hidden")) {
-					this.ops[code - 30] = null;
+				this.op[code - 30] = dat.gjstr();
+				if (this.op[code - 30].equalsIgnoreCase("hidden")) {
+					this.op[code - 30] = null;
 				}
 			} else if (code == 40) {
 				int count = dat.g1();
@@ -333,11 +333,11 @@ public class LocType {
 			} else if (code == 69) {
 				this.forceapproach = dat.g1();
 			} else if (code == 70) {
-				this.xoff = dat.g2b();
+				this.offsetx = dat.g2b();
 			} else if (code == 71) {
-				this.yoff = dat.g2b();
+				this.offsety = dat.g2b();
 			} else if (code == 72) {
-				this.zoff = dat.g2b();
+				this.offsetz = dat.g2b();
 			} else if (code == 73) {
 				this.forcedecor = true;
 			}
@@ -350,7 +350,7 @@ public class LocType {
 		if (active == -1) {
 			this.active = this.shapes.length > 0 && this.shapes[0] == 10;
 
-			if (this.ops != null) {
+			if (this.op != null) {
 				this.active = true;
 			}
 		}
@@ -429,7 +429,7 @@ public class LocType {
 		}
 
 		@Pc(235) boolean scaled = this.resizex != 128 || this.resizey != 128 || this.resizez != 128;
-		@Pc(250) boolean translated = this.xoff != 0 || this.yoff != 0 || this.zoff != 0;
+		@Pc(250) boolean translated = this.offsetx != 0 || this.offsety != 0 || this.offsetz != 0;
 
 		@Pc(284) Model modified = new Model(model, this.recol_s == null, !this.disposeAlpha, rotation == 0 && transformId == -1 && !scaled && !translated);
 		if (transformId != -1) {
@@ -454,7 +454,7 @@ public class LocType {
 		}
 
 		if (translated) {
-			modified.translate(this.yoff, this.xoff, this.zoff);
+			modified.translate(this.offsety, this.offsetx, this.offsetz);
 		}
 
 		modified.calculateNormals(this.ambient + 64, this.contrast * 5 + 768, -50, -10, -50, !this.sharelight);

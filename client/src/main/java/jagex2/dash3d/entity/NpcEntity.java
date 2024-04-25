@@ -58,7 +58,7 @@ public class NpcEntity extends PathingEntity {
 			if (super.secondarySeqId >= 0 && super.secondarySeqId != super.seqStandId) {
 				secondaryTransformId = SeqType.instances[super.secondarySeqId].frames[super.secondarySeqFrame];
 			}
-			return this.type.getSequencedModel(primaryTransformId, secondaryTransformId, SeqType.instances[super.primarySeqId].labelGroups);
+			return this.type.getSequencedModel(primaryTransformId, secondaryTransformId, SeqType.instances[super.primarySeqId].walkmerge);
 		}
 
 		int transformId = -1;

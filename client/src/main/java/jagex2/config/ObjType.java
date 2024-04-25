@@ -85,10 +85,10 @@ public class ObjType {
 	public boolean members;
 
 	@OriginalMember(owner = "client!cc", name = "B", descriptor = "[Ljava/lang/String;")
-	public String[] ops;
+	public String[] op;
 
 	@OriginalMember(owner = "client!cc", name = "C", descriptor = "[Ljava/lang/String;")
-	public String[] iops;
+	public String[] iop;
 
 	@OriginalMember(owner = "client!cc", name = "D", descriptor = "I")
 	private int manwear;
@@ -195,8 +195,8 @@ public class ObjType {
 		if (!membersWorld && obj.members) {
 			obj.name = "Members Object";
 			obj.desc = "Login to a members' server to use this object.";
-			obj.ops = null;
-			obj.iops = null;
+			obj.op = null;
+			obj.iop = null;
 		}
 
 		return obj;
@@ -326,8 +326,8 @@ public class ObjType {
 		this.stackable = false;
 		this.cost = 1;
 		this.members = false;
-		this.ops = null;
-		this.iops = null;
+		this.op = null;
+		this.iop = null;
 		this.manwear = -1;
 		this.manwear2 = -1;
 		this.manwearOffsetY = 0;
@@ -397,20 +397,20 @@ public class ObjType {
 			} else if (code == 26) {
 				this.womanwear2 = dat.g2();
 			} else if (code >= 30 && code < 35) {
-				if (this.ops == null) {
-					this.ops = new String[5];
+				if (this.op == null) {
+					this.op = new String[5];
 				}
 
-				this.ops[code - 30] = dat.gjstr();
-				if (this.ops[code - 30].equalsIgnoreCase("hidden")) {
-					this.ops[code - 30] = null;
+				this.op[code - 30] = dat.gjstr();
+				if (this.op[code - 30].equalsIgnoreCase("hidden")) {
+					this.op[code - 30] = null;
 				}
 			} else if (code >= 35 && code < 40) {
-				if (this.iops == null) {
-					this.iops = new String[5];
+				if (this.iop == null) {
+					this.iop = new String[5];
 				}
 
-				this.iops[code - 35] = dat.gjstr();
+				this.iop[code - 35] = dat.gjstr();
 			} else if (code == 40) {
 				@Pc(260) int count = dat.g1();
 				this.recol_s = new int[count];
