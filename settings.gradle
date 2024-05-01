@@ -4,5 +4,6 @@ include(
     "deob-annotations",
     "client",
     "loader",
-    "tools"
+    "tools",
+    "mapview"
 )
