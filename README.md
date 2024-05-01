@@ -6,11 +6,15 @@ The TeaVM webclient is in the `webclient` branch until it can be made compatible
 
 ## Project Structure
 
-`client` - Decompiled client source code. Some class names are original.
+`client` - Decompiled client source code.
+
+`runetek3` - Decompiled client engine source code. Some class names are original.
 
 `deob-annotations` - OpenRS2 dedobfuscator annotations library. Useful for making the namings of everything reusable if starting again from scratch or comparing to the original bytecode.
 
 `loader` - Decompiled loader source code. Class names are all original.
+
+`mapview` - Decompiled mapview source code.
 
 `tools` - Tooling specific to the client or loader.
 
@@ -21,3 +25,7 @@ Thanks to these individuals' projects for shedding light on some things - this w
 * [Dane's 317 refactor](https://github.com/thedaneeffect/RuneScape-317)
 * [Dane's 186 refactor](https://github.com/thedaneeffect/RuneScape-Beta-Public)
 * [James Monger's 317 refactor](https://github.com/Jameskmonger/317refactor)
+
+## Running
+
+Because there are multiple entry points, instead of `gradle run` you have to execute `gradle client:run` or `gradle mapview:run` else it will launch both sequentially.
