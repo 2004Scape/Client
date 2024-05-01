@@ -127,6 +127,76 @@ public class Draw2D extends Hashable {
 		}
 	}
 
+	@OriginalMember(owner = "mapview!e", name = "a", descriptor = "(IIIIII)V")
+	public static void fillRectAlpha(@OriginalArg(0) int x, @OriginalArg(1) int y, @OriginalArg(2) int width, @OriginalArg(3) int height, @OriginalArg(4) int rgb, @OriginalArg(5) int alpha) {
+		if (x < left) {
+			width -= left - x;
+			x = left;
+		}
+		if (y < top) {
+			height -= top - y;
+			y = top;
+		}
+		if (x + width > right) {
+			width = right - x;
+		}
+		if (y + height > bottom) {
+			height = bottom - y;
+		}
+		@Pc(45) int invAlpha = 256 - alpha;
+		@Pc(53) int r0 = (rgb >> 16 & 0xFF) * alpha;
+		@Pc(61) int g0 = (rgb >> 8 & 0xFF) * alpha;
+		@Pc(67) int b0 = (rgb & 0xFF) * alpha;
+		@Pc(71) int step = width2d - width;
+		@Pc(77) int offset = x + y * width2d;
+		for (@Pc(79) int i = 0; i < height; i++) {
+			for (@Pc(84) int j = -width; j < 0; j++) {
+				@Pc(96) int r1 = (data[offset] >> 16 & 0xFF) * invAlpha;
+				@Pc(106) int g1 = (data[offset] >> 8 & 0xFF) * invAlpha;
+				@Pc(114) int b1 = (data[offset] & 0xFF) * invAlpha;
+				@Pc(136) int color = (r0 + r1 >> 8 << 16) + (g0 + g1 >> 8 << 8) + (b0 + b1 >> 8);
+				data[offset++] = color;
+			}
+			offset += step;
+		}
+	}
+
+	@OriginalMember(owner = "mapview!e", name = "c", descriptor = "(IIIII)V")
+	public static void fillCircle(@OriginalArg(0) int arg0, @OriginalArg(1) int yCenter, @OriginalArg(2) int yRadius, @OriginalArg(3) int rgb, @OriginalArg(4) int alpha) {
+		@Pc(5) int invAlpha = 256 - alpha;
+		@Pc(13) int r0 = (rgb >> 16 & 0xFF) * alpha;
+		@Pc(21) int g0 = (rgb >> 8 & 0xFF) * alpha;
+		@Pc(27) int b0 = (rgb & 0xFF) * alpha;
+		@Pc(31) int yStart = yCenter - yRadius;
+		if (yStart < 0) {
+			yStart = 0;
+		}
+		@Pc(39) int yEnd = yCenter + yRadius;
+		if (yEnd >= height2d) {
+			yEnd = height2d - 1;
+		}
+		for (@Pc(48) int y = yStart; y <= yEnd; y++) {
+			@Pc(54) int midpoint = y - yCenter;
+			@Pc(65) int xRadius = (int) Math.sqrt((double) (yRadius * yRadius - midpoint * midpoint));
+			@Pc(69) int xStart = arg0 - xRadius;
+			if (xStart < 0) {
+				xStart = 0;
+			}
+			@Pc(77) int xEnd = arg0 + xRadius;
+			if (xEnd >= width2d) {
+				xEnd = width2d - 1;
+			}
+			@Pc(90) int offset = xStart + y * width2d;
+			for (@Pc(92) int x = xStart; x <= xEnd; x++) {
+				@Pc(104) int r1 = (data[offset] >> 16 & 0xFF) * invAlpha;
+				@Pc(114) int g1 = (data[offset] >> 8 & 0xFF) * invAlpha;
+				@Pc(122) int b1 = (data[offset] & 0xFF) * invAlpha;
+				@Pc(144) int color = (r0 + r1 >> 8 << 16) + (g0 + g1 >> 8 << 8) + (b0 + b1 >> 8);
+				data[offset++] = color;
+			}
+		}
+	}
+
 	@OriginalMember(owner = "client!fb", name = "a", descriptor = "(IIIIII)V")
 	public static void drawRect(@OriginalArg(1) int x, @OriginalArg(4) int y, @OriginalArg(2) int rgb, @OriginalArg(5) int width, @OriginalArg(3) int height) {
 		drawHorizontalLine(x, y, rgb, width);
@@ -157,22 +227,22 @@ public class Draw2D extends Hashable {
 	}
 
 	@OriginalMember(owner = "client!fb", name = "c", descriptor = "(IIIII)V")
-	public static void drawVerticalLine(@OriginalArg(4) int x, @OriginalArg(2) int y, @OriginalArg(0) int rgb, @OriginalArg(3) int width) {
+	public static void drawVerticalLine(@OriginalArg(4) int x, @OriginalArg(2) int y, @OriginalArg(0) int rgb, @OriginalArg(3) int height) {
 		if (x < left || x >= right) {
 			return;
 		}
 
 		if (y < top) {
-			width -= top - y;
+			height -= top - y;
 			y = top;
 		}
 
-		if (y + width > bottom) {
-			width = bottom - y;
+		if (y + height > bottom) {
+			height = bottom - y;
 		}
 
 		@Pc(32) int off = x + y * width2d;
-		for (@Pc(38) int i = 0; i < width; i++) {
+		for (@Pc(38) int i = 0; i < height; i++) {
 			data[off + i * width2d] = rgb;
 		}
 	}

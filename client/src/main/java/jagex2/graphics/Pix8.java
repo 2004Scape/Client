@@ -272,4 +272,83 @@ public class Pix8 extends Draw2D {
 			srcOff += srcStep;
 		}
 	}
+
+	@OriginalMember(owner = "mapview!h", name = "d", descriptor = "(IIII)V")
+	public void clip(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2, @OriginalArg(3) int arg3) {
+		try {
+			@Pc(2) int local2 = this.width;
+			@Pc(5) int local5 = this.height;
+			@Pc(7) int local7 = 0;
+			@Pc(9) int local9 = 0;
+			@Pc(15) int local15 = (local2 << 16) / arg2;
+			@Pc(21) int local21 = (local5 << 16) / arg3;
+			@Pc(24) int local24 = this.cropW;
+			@Pc(27) int local27 = this.cropH;
+			@Pc(33) int local33 = (local24 << 16) / arg2;
+			@Pc(39) int local39 = (local27 << 16) / arg3;
+			arg0 += (this.cropX * arg2 + local24 - 1) / local24;
+			arg1 += (this.cropY * arg3 + local27 - 1) / local27;
+			if (this.cropX * arg2 % local24 != 0) {
+				local7 = (local24 - this.cropX * arg2 % local24 << 16) / arg2;
+			}
+			if (this.cropY * arg3 % local27 != 0) {
+				local9 = (local27 - this.cropY * arg3 % local27 << 16) / arg3;
+			}
+			arg2 = arg2 * (this.width - (local7 >> 16)) / local24;
+			arg3 = arg3 * (this.height - (local9 >> 16)) / local27;
+			@Pc(133) int local133 = arg0 + arg1 * Draw2D.width2d;
+			@Pc(137) int local137 = Draw2D.width2d - arg2;
+			@Pc(144) int local144;
+			if (arg1 < Draw2D.top) {
+				local144 = Draw2D.top - arg1;
+				arg3 -= local144;
+				arg1 = 0;
+				local133 += local144 * Draw2D.width2d;
+				local9 += local39 * local144;
+			}
+			if (arg1 + arg3 > Draw2D.bottom) {
+				arg3 -= arg1 + arg3 - Draw2D.bottom;
+			}
+			if (arg0 < Draw2D.left) {
+				local144 = Draw2D.left - arg0;
+				arg2 -= local144;
+				arg0 = 0;
+				local133 += local144;
+				local7 += local33 * local144;
+				local137 += local144;
+			}
+			if (arg0 + arg2 > Draw2D.right) {
+				local144 = arg0 + arg2 - Draw2D.right;
+				arg2 -= local144;
+				local137 += local144;
+			}
+			this.plot_scale(Draw2D.data, this.pixels, this.palette, local7, local9, local133, local137, arg2, arg3, local33, local39, local2);
+		} catch (@Pc(239) Exception local239) {
+			System.out.println("error in sprite clipping routine");
+		}
+	}
+
+	@OriginalMember(owner = "mapview!h", name = "a", descriptor = "([I[B[IIIIIIIIII)V")
+	private void plot_scale(@OriginalArg(0) int[] arg0, @OriginalArg(1) byte[] arg1, @OriginalArg(2) int[] arg2, @OriginalArg(3) int arg3, @OriginalArg(4) int arg4, @OriginalArg(5) int arg5, @OriginalArg(6) int arg6, @OriginalArg(7) int arg7, @OriginalArg(8) int arg8, @OriginalArg(9) int arg9, @OriginalArg(10) int arg10, @OriginalArg(11) int arg11) {
+		try {
+			@Pc(3) int local3 = arg3;
+			for (@Pc(6) int local6 = -arg8; local6 < 0; local6++) {
+				@Pc(14) int local14 = (arg4 >> 16) * arg11;
+				for (@Pc(17) int local17 = -arg7; local17 < 0; local17++) {
+					@Pc(27) byte local27 = arg1[(arg3 >> 16) + local14];
+					if (local27 == 0) {
+						arg5++;
+					} else {
+						arg0[arg5++] = arg2[local27 & 0xFF];
+					}
+					arg3 += arg9;
+				}
+				arg4 += arg10;
+				arg3 = local3;
+				arg5 += arg6;
+			}
+		} catch (@Pc(63) Exception local63) {
+			System.out.println("error in plot_scale");
+		}
+	}
 }

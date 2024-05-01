@@ -3681,7 +3681,7 @@ public class client extends GameShell {
 	}
 
 	@OriginalMember(owner = "client!client", name = "b", descriptor = "(B)Ljava/awt/Component;")
-	protected Component getBaseComponent() {
+	public Component getBaseComponent() {
 		if (signlink.mainapp != null) {
 			return signlink.mainapp;
 		}

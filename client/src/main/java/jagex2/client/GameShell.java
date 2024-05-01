@@ -598,7 +598,7 @@ public class GameShell extends Applet implements Runnable, MouseListener, MouseM
 	}
 
 	@OriginalMember(owner = "client!a", name = "b", descriptor = "(B)Ljava/awt/Component;")
-	protected Component getBaseComponent() {
+	public Component getBaseComponent() {
 		if (this.frame != null) {
 			return this.frame;
 		}

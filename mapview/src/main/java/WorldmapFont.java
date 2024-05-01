@@ -4,6 +4,9 @@ import java.awt.FontMetrics;
 import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.image.PixelGrabber;
+
+import jagex2.client.GameShell;
+import jagex2.graphics.Draw2D;
 import org.openrs2.deob.annotation.OriginalArg;
 import org.openrs2.deob.annotation.OriginalClass;
 import org.openrs2.deob.annotation.OriginalMember;
@@ -85,7 +88,7 @@ public final class WorldmapFont extends Draw2D {
 		@Pc(50) int local50 = arg1.getMaxAscent();
 		@Pc(56) int local56 = arg1.getMaxAscent() + arg1.getMaxDescent();
 		@Pc(59) int local59 = arg1.getHeight();
-		@Pc(65) Image local65 = arg5.method105().createImage(local5, local56);
+		@Pc(65) Image local65 = arg5.getBaseComponent().createImage(local5, local56);
 		@Pc(68) Graphics local68 = local65.getGraphics();
 		local68.setColor(Color.black);
 		local68.fillRect(0, 0, local5, local56);
@@ -191,7 +194,7 @@ public final class WorldmapFont extends Draw2D {
 	public void method33(@OriginalArg(0) String arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2, @OriginalArg(3) int arg3, @OriginalArg(4) boolean arg4) {
 		@Pc(5) int local5 = this.method36(arg0) / 2;
 		@Pc(8) int local8 = this.method39();
-		if (arg1 - local5 <= Draw2D.anInt90 && (arg1 + local5 >= Draw2D.anInt89 && (arg2 - local8 <= Draw2D.anInt88 && arg2 >= 0))) {
+		if (arg1 - local5 <= Draw2D.right && (arg1 + local5 >= Draw2D.left && (arg2 - local8 <= Draw2D.bottom && arg2 >= 0))) {
 			this.method32(arg0, arg1 - local5, arg2, arg3, arg4);
 		}
 	}
@@ -242,31 +245,31 @@ public final class WorldmapFont extends Draw2D {
 		@Pc(21) int local21 = arg4[arg0 + 3];
 		@Pc(27) int local27 = arg4[arg0 + 4];
 		@Pc(47) int local47 = arg4[arg0] * 16384 + arg4[arg0 + 1] * 128 + arg4[arg0 + 2];
-		@Pc(53) int local53 = local7 + local15 * Draw2D.anInt85;
-		@Pc(57) int local57 = Draw2D.anInt85 - local21;
+		@Pc(53) int local53 = local7 + local15 * Draw2D.width2d;
+		@Pc(57) int local57 = Draw2D.width2d - local21;
 		@Pc(59) int local59 = 0;
 		@Pc(66) int local66;
-		if (local15 < Draw2D.anInt87) {
-			local66 = Draw2D.anInt87 - local15;
+		if (local15 < Draw2D.top) {
+			local66 = Draw2D.top - local15;
 			local27 -= local66;
-			local15 = Draw2D.anInt87;
+			local15 = Draw2D.top;
 			local47 += local66 * local21;
-			local53 += local66 * Draw2D.anInt85;
+			local53 += local66 * Draw2D.width2d;
 		}
-		if (local15 + local27 >= Draw2D.anInt88) {
-			local27 -= local15 + local27 - Draw2D.anInt88 + 1;
+		if (local15 + local27 >= Draw2D.bottom) {
+			local27 -= local15 + local27 - Draw2D.bottom + 1;
 		}
-		if (local7 < Draw2D.anInt89) {
-			local66 = Draw2D.anInt89 - local7;
+		if (local7 < Draw2D.left) {
+			local66 = Draw2D.left - local7;
 			local21 -= local66;
-			local7 = Draw2D.anInt89;
+			local7 = Draw2D.left;
 			local47 += local66;
 			local53 += local66;
 			local59 += local66;
 			local57 += local66;
 		}
-		if (local7 + local21 >= Draw2D.anInt90) {
-			local66 = local7 + local21 - Draw2D.anInt90 + 1;
+		if (local7 + local21 >= Draw2D.right) {
+			local66 = local7 + local21 - Draw2D.right + 1;
 			local21 -= local66;
 			local59 += local66;
 			local57 += local66;
@@ -275,9 +278,9 @@ public final class WorldmapFont extends Draw2D {
 			return;
 		}
 		if (arg5) {
-			this.method34(Draw2D.anIntArray10, arg4, arg3, local47, local53, local21, local27, local57, local59);
+			this.method34(Draw2D.data, arg4, arg3, local47, local53, local21, local27, local57, local59);
 		} else {
-			this.method38(Draw2D.anIntArray10, arg4, arg3, local47, local53, local21, local27, local57, local59);
+			this.method38(Draw2D.data, arg4, arg3, local47, local53, local21, local27, local57, local59);
 		}
 	}
 
