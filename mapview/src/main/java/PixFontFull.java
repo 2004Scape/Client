@@ -1,4 +1,7 @@
 import java.util.Random;
+
+import jagex2.io.Jagfile;
+import jagex2.io.Packet;
 import org.openrs2.deob.annotation.OriginalArg;
 import org.openrs2.deob.annotation.OriginalClass;
 import org.openrs2.deob.annotation.OriginalMember;
@@ -36,32 +39,32 @@ public final class PixFontFull extends Draw2D {
 
 	@OriginalMember(owner = "mapview!i", name = "<init>", descriptor = "(Lmapview!o;Ljava/lang/String;Z)V")
 	public PixFontFull(@OriginalArg(0) Jagfile arg0, @OriginalArg(1) String arg1, @OriginalArg(2) boolean arg2) {
-		@Pc(53) Packet local53 = new Packet(arg0.method124(arg1 + ".dat", null));
-		@Pc(61) Packet local61 = new Packet(arg0.method124("index.dat", null));
+		@Pc(53) Packet local53 = new Packet(arg0.read(arg1 + ".dat", null));
+		@Pc(61) Packet local61 = new Packet(arg0.read("index.dat", null));
 		@Pc(63) boolean local63 = true;
-		local61.anInt98 = local53.method83() + 4;
-		@Pc(72) int local72 = local61.method81();
+		local61.pos = local53.g2() + 4;
+		@Pc(72) int local72 = local61.g1();
 		if (local72 > 0) {
-			local61.anInt98 += (local72 - 1) * 3;
+			local61.pos += (local72 - 1) * 3;
 		}
 		for (@Pc(86) int local86 = 0; local86 < 256; local86++) {
-			this.anIntArray13[local86] = local61.method81();
-			this.anIntArray14[local86] = local61.method81();
-			@Pc(115) int local115 = this.anIntArray11[local86] = local61.method83();
-			@Pc(123) int local123 = this.anIntArray12[local86] = local61.method83();
-			@Pc(126) int local126 = local61.method81();
+			this.anIntArray13[local86] = local61.g1();
+			this.anIntArray14[local86] = local61.g1();
+			@Pc(115) int local115 = this.anIntArray11[local86] = local61.g2();
+			@Pc(123) int local123 = this.anIntArray12[local86] = local61.g2();
+			@Pc(126) int local126 = local61.g1();
 			@Pc(130) int local130 = local115 * local123;
 			this.aByteArrayArray1[local86] = new byte[local130];
 			@Pc(140) int local140;
 			@Pc(165) int local165;
 			if (local126 == 0) {
 				for (local140 = 0; local140 < local130; local140++) {
-					this.aByteArrayArray1[local86][local140] = local53.method82();
+					this.aByteArrayArray1[local86][local140] = local53.g1b();
 				}
 			} else if (local126 == 1) {
 				for (local140 = 0; local140 < local115; local140++) {
 					for (local165 = 0; local165 < local123; local165++) {
-						this.aByteArrayArray1[local86][local140 + local165 * local115] = local53.method82();
+						this.aByteArrayArray1[local86][local140 + local165 * local115] = local53.g1b();
 					}
 				}
 			}

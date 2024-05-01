@@ -7,6 +7,9 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.URL;
 import java.security.MessageDigest;
+
+import jagex2.io.Jagfile;
+import jagex2.io.Packet;
 import org.openrs2.deob.annotation.OriginalArg;
 import org.openrs2.deob.annotation.OriginalClass;
 import org.openrs2.deob.annotation.OriginalMember;
@@ -252,41 +255,41 @@ public final class mapview extends GameShell {
 	protected void method101() {
 		@Pc(4) Jagfile local4 = this.method117();
 		this.method98(100, "Please wait... Rendering Map");
-		@Pc(16) Packet local16 = new Packet(local4.method124("size.dat", null));
-		anInt129 = local16.method83();
-		anInt130 = local16.method83();
-		anInt131 = local16.method83();
-		anInt132 = local16.method83();
+		@Pc(16) Packet local16 = new Packet(local4.read("size.dat", null));
+		anInt129 = local16.g2();
+		anInt130 = local16.g2();
+		anInt131 = local16.g2();
+		anInt132 = local16.g2();
 		anInt154 = 3200 - anInt129;
 		anInt155 = anInt130 + anInt132 - 3200;
 		this.anInt144 = 180;
 		this.anInt145 = anInt131 * this.anInt144 / anInt132;
 		this.anInt146 = 635 - this.anInt145 - 5;
 		this.anInt147 = 503 - this.anInt144 - 20;
-		@Pc(73) Packet local73 = new Packet(local4.method124("labels.dat", null));
-		this.anInt152 = local73.method83();
+		@Pc(73) Packet local73 = new Packet(local4.read("labels.dat", null));
+		this.anInt152 = local73.g2();
 		for (@Pc(79) int local79 = 0; local79 < this.anInt152; local79++) {
-			this.aStringArray1[local79] = local73.method84();
-			this.anIntArray29[local79] = local73.method83();
-			this.anIntArray30[local79] = local73.method83();
-			this.anIntArray31[local79] = local73.method81();
+			this.aStringArray1[local79] = local73.gjstr();
+			this.anIntArray29[local79] = local73.g2();
+			this.anIntArray30[local79] = local73.g2();
+			this.anIntArray31[local79] = local73.g1();
 		}
-		local16 = new Packet(local4.method124("floorcol.dat", null));
-		@Pc(121) int local121 = local16.method83();
+		local16 = new Packet(local4.read("floorcol.dat", null));
+		@Pc(121) int local121 = local16.g2();
 		this.anIntArray21 = new int[local121 + 1];
 		this.anIntArray22 = new int[local121 + 1];
 		for (@Pc(135) int local135 = 0; local135 < local121; local135++) {
-			this.anIntArray21[local135 + 1] = local16.method80();
-			this.anIntArray22[local135 + 1] = local16.method80();
+			this.anIntArray21[local135 + 1] = local16.g4();
+			this.anIntArray22[local135 + 1] = local16.g4();
 		}
-		@Pc(162) byte[] local162 = local4.method124("underlay.dat", null);
+		@Pc(162) byte[] local162 = local4.read("underlay.dat", null);
 		@Pc(166) byte[][] local166 = new byte[anInt131][anInt132];
 		this.method110(local162, local166);
-		@Pc(175) byte[] local175 = local4.method124("overlay.dat", null);
+		@Pc(175) byte[] local175 = local4.read("overlay.dat", null);
 		this.anIntArrayArray2 = new int[anInt131][anInt132];
 		this.aByteArrayArray2 = new byte[anInt131][anInt132];
 		this.method111(local175, this.anIntArrayArray2, this.aByteArrayArray2);
-		@Pc(197) byte[] local197 = local4.method124("loc.dat", null);
+		@Pc(197) byte[] local197 = local4.read("loc.dat", null);
 		this.aByteArrayArray3 = new byte[anInt131][anInt132];
 		this.aByteArrayArray5 = new byte[anInt131][anInt132];
 		this.aByteArrayArray4 = new byte[anInt131][anInt132];

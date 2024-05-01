@@ -1,3 +1,5 @@
+import jagex2.io.Jagfile;
+import jagex2.io.Packet;
 import org.openrs2.deob.annotation.OriginalArg;
 import org.openrs2.deob.annotation.OriginalClass;
 import org.openrs2.deob.annotation.OriginalMember;
@@ -37,41 +39,41 @@ public final class Pix24 extends Draw2D {
 
 	@OriginalMember(owner = "mapview!g", name = "<init>", descriptor = "(Lmapview!o;Ljava/lang/String;I)V")
 	public Pix24(@OriginalArg(0) Jagfile arg0, @OriginalArg(1) String arg1, @OriginalArg(2) int arg2) {
-		@Pc(18) Packet local18 = new Packet(arg0.method124(arg1 + ".dat", null));
-		@Pc(26) Packet local26 = new Packet(arg0.method124("index.dat", null));
-		local26.anInt98 = local18.method83();
-		this.anInt63 = local26.method83();
-		this.anInt64 = local26.method83();
-		@Pc(41) int local41 = local26.method81();
+		@Pc(18) Packet local18 = new Packet(arg0.read(arg1 + ".dat", null));
+		@Pc(26) Packet local26 = new Packet(arg0.read("index.dat", null));
+		local26.pos = local18.g2();
+		this.anInt63 = local26.g2();
+		this.anInt64 = local26.g2();
+		@Pc(41) int local41 = local26.g1();
 		@Pc(44) int[] local44 = new int[local41];
 		@Pc(46) int local46;
 		for (local46 = 0; local46 < local41 - 1; local46++) {
-			local44[local46 + 1] = local26.method85();
+			local44[local46 + 1] = local26.g3();
 			if (local44[local46 + 1] == 0) {
 				local44[local46 + 1] = 1;
 			}
 		}
 		for (local46 = 0; local46 < arg2; local46++) {
-			local26.anInt98 += 2;
-			local18.anInt98 += local26.method83() * local26.method83();
-			local26.anInt98++;
+			local26.pos += 2;
+			local18.pos += local26.g2() * local26.g2();
+			local26.pos++;
 		}
-		this.anInt61 = local26.method81();
-		this.anInt62 = local26.method81();
-		this.anInt59 = local26.method83();
-		this.anInt60 = local26.method83();
-		local46 = local26.method81();
+		this.anInt61 = local26.g1();
+		this.anInt62 = local26.g1();
+		this.anInt59 = local26.g2();
+		this.anInt60 = local26.g2();
+		local46 = local26.g1();
 		@Pc(128) int local128 = this.anInt59 * this.anInt60;
 		this.anIntArray7 = new int[local128];
 		@Pc(136) int local136;
 		if (local46 == 0) {
 			for (local136 = 0; local136 < local128; local136++) {
-				this.anIntArray7[local136] = local44[local18.method81()];
+				this.anIntArray7[local136] = local44[local18.g1()];
 			}
 		} else if (local46 == 1) {
 			for (local136 = 0; local136 < this.anInt59; local136++) {
 				for (@Pc(161) int local161 = 0; local161 < this.anInt60; local161++) {
-					this.anIntArray7[local136 + local161 * this.anInt59] = local44[local18.method81()];
+					this.anIntArray7[local136 + local161 * this.anInt59] = local44[local18.g1()];
 				}
 			}
 		}
