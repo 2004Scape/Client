@@ -4,7 +4,7 @@ import org.openrs2.deob.annotation.OriginalMember;
 import org.openrs2.deob.annotation.Pc;
 
 @OriginalClass("mapview!h")
-public final class Class1_Sub1_Sub1_Sub3 extends Class1_Sub1_Sub1 {
+public final class Pix8 extends Draw2D {
 
 	@OriginalMember(owner = "mapview!h", name = "v", descriptor = "I")
 	private int anInt81;
@@ -31,9 +31,9 @@ public final class Class1_Sub1_Sub1_Sub3 extends Class1_Sub1_Sub1 {
 	private byte[] aByteArray2;
 
 	@OriginalMember(owner = "mapview!h", name = "<init>", descriptor = "(Lmapview!o;Ljava/lang/String;I)V")
-	public Class1_Sub1_Sub1_Sub3(@OriginalArg(0) Class6 arg0, @OriginalArg(1) String arg1, @OriginalArg(2) int arg2) {
-		@Pc(18) Class1_Sub1_Sub2 local18 = new Class1_Sub1_Sub2(arg0.method124(arg1 + ".dat", null));
-		@Pc(26) Class1_Sub1_Sub2 local26 = new Class1_Sub1_Sub2(arg0.method124("index.dat", null));
+	public Pix8(@OriginalArg(0) Jagfile arg0, @OriginalArg(1) String arg1, @OriginalArg(2) int arg2) {
+		@Pc(18) Packet local18 = new Packet(arg0.method124(arg1 + ".dat", null));
+		@Pc(26) Packet local26 = new Packet(arg0.method124("index.dat", null));
 		local26.anInt98 = local18.method83();
 		this.anInt81 = local26.method83();
 		this.anInt82 = local26.method83();
@@ -92,33 +92,33 @@ public final class Class1_Sub1_Sub1_Sub3 extends Class1_Sub1_Sub1 {
 			}
 			arg2 = arg2 * (this.anInt77 - (local7 >> 16)) / local24;
 			arg3 = arg3 * (this.anInt78 - (local9 >> 16)) / local27;
-			@Pc(133) int local133 = arg0 + arg1 * Class1_Sub1_Sub1.anInt85;
-			@Pc(137) int local137 = Class1_Sub1_Sub1.anInt85 - arg2;
+			@Pc(133) int local133 = arg0 + arg1 * Draw2D.anInt85;
+			@Pc(137) int local137 = Draw2D.anInt85 - arg2;
 			@Pc(144) int local144;
-			if (arg1 < Class1_Sub1_Sub1.anInt87) {
-				local144 = Class1_Sub1_Sub1.anInt87 - arg1;
+			if (arg1 < Draw2D.anInt87) {
+				local144 = Draw2D.anInt87 - arg1;
 				arg3 -= local144;
 				arg1 = 0;
-				local133 += local144 * Class1_Sub1_Sub1.anInt85;
+				local133 += local144 * Draw2D.anInt85;
 				local9 += local39 * local144;
 			}
-			if (arg1 + arg3 > Class1_Sub1_Sub1.anInt88) {
-				arg3 -= arg1 + arg3 - Class1_Sub1_Sub1.anInt88;
+			if (arg1 + arg3 > Draw2D.anInt88) {
+				arg3 -= arg1 + arg3 - Draw2D.anInt88;
 			}
-			if (arg0 < Class1_Sub1_Sub1.anInt89) {
-				local144 = Class1_Sub1_Sub1.anInt89 - arg0;
+			if (arg0 < Draw2D.anInt89) {
+				local144 = Draw2D.anInt89 - arg0;
 				arg2 -= local144;
 				arg0 = 0;
 				local133 += local144;
 				local7 += local33 * local144;
 				local137 += local144;
 			}
-			if (arg0 + arg2 > Class1_Sub1_Sub1.anInt90) {
-				local144 = arg0 + arg2 - Class1_Sub1_Sub1.anInt90;
+			if (arg0 + arg2 > Draw2D.anInt90) {
+				local144 = arg0 + arg2 - Draw2D.anInt90;
 				arg2 -= local144;
 				local137 += local144;
 			}
-			this.method64(Class1_Sub1_Sub1.anIntArray10, this.aByteArray2, this.anIntArray9, local7, local9, local133, local137, arg2, arg3, local33, local39, local2);
+			this.method64(Draw2D.anIntArray10, this.aByteArray2, this.anIntArray9, local7, local9, local133, local137, arg2, arg3, local33, local39, local2);
 		} catch (@Pc(239) Exception local239) {
 			System.out.println("error in sprite clipping routine");
 		}

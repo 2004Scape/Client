@@ -4,7 +4,7 @@ import org.openrs2.deob.annotation.OriginalMember;
 import org.openrs2.deob.annotation.Pc;
 
 @OriginalClass("mapview!g")
-public final class Class1_Sub1_Sub1_Sub2 extends Class1_Sub1_Sub1 {
+public final class Pix24 extends Draw2D {
 
 	@OriginalMember(owner = "mapview!g", name = "p", descriptor = "[I")
 	public int[] anIntArray7;
@@ -28,7 +28,7 @@ public final class Class1_Sub1_Sub1_Sub2 extends Class1_Sub1_Sub1 {
 	private int anInt61;
 
 	@OriginalMember(owner = "mapview!g", name = "<init>", descriptor = "(II)V")
-	public Class1_Sub1_Sub1_Sub2(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1) {
+	public Pix24(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1) {
 		this.anIntArray7 = new int[arg0 * arg1];
 		this.anInt59 = this.anInt63 = arg0;
 		this.anInt60 = this.anInt64 = arg1;
@@ -36,9 +36,9 @@ public final class Class1_Sub1_Sub1_Sub2 extends Class1_Sub1_Sub1 {
 	}
 
 	@OriginalMember(owner = "mapview!g", name = "<init>", descriptor = "(Lmapview!o;Ljava/lang/String;I)V")
-	public Class1_Sub1_Sub1_Sub2(@OriginalArg(0) Class6 arg0, @OriginalArg(1) String arg1, @OriginalArg(2) int arg2) {
-		@Pc(18) Class1_Sub1_Sub2 local18 = new Class1_Sub1_Sub2(arg0.method124(arg1 + ".dat", null));
-		@Pc(26) Class1_Sub1_Sub2 local26 = new Class1_Sub1_Sub2(arg0.method124("index.dat", null));
+	public Pix24(@OriginalArg(0) Jagfile arg0, @OriginalArg(1) String arg1, @OriginalArg(2) int arg2) {
+		@Pc(18) Packet local18 = new Packet(arg0.method124(arg1 + ".dat", null));
+		@Pc(26) Packet local26 = new Packet(arg0.method124("index.dat", null));
 		local26.anInt98 = local18.method83();
 		this.anInt63 = local26.method83();
 		this.anInt64 = local26.method83();
@@ -79,47 +79,47 @@ public final class Class1_Sub1_Sub1_Sub2 extends Class1_Sub1_Sub1 {
 
 	@OriginalMember(owner = "mapview!g", name = "b", descriptor = "()V")
 	public void method49() {
-		Class1_Sub1_Sub1.method70(this.anIntArray7, this.anInt59, this.anInt60);
+		Draw2D.method70(this.anIntArray7, this.anInt59, this.anInt60);
 	}
 
 	@OriginalMember(owner = "mapview!g", name = "a", descriptor = "(II)V")
 	public void method50(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1) {
 		arg0 += this.anInt61;
 		arg1 += this.anInt62;
-		@Pc(15) int local15 = arg0 + arg1 * Class1_Sub1_Sub1.anInt85;
+		@Pc(15) int local15 = arg0 + arg1 * Draw2D.anInt85;
 		@Pc(17) int local17 = 0;
 		@Pc(20) int local20 = this.anInt60;
 		@Pc(23) int local23 = this.anInt59;
-		@Pc(27) int local27 = Class1_Sub1_Sub1.anInt85 - local23;
+		@Pc(27) int local27 = Draw2D.anInt85 - local23;
 		@Pc(29) int local29 = 0;
 		@Pc(36) int local36;
-		if (arg1 < Class1_Sub1_Sub1.anInt87) {
-			local36 = Class1_Sub1_Sub1.anInt87 - arg1;
+		if (arg1 < Draw2D.anInt87) {
+			local36 = Draw2D.anInt87 - arg1;
 			local20 -= local36;
-			arg1 = Class1_Sub1_Sub1.anInt87;
+			arg1 = Draw2D.anInt87;
 			local17 += local36 * local23;
-			local15 += local36 * Class1_Sub1_Sub1.anInt85;
+			local15 += local36 * Draw2D.anInt85;
 		}
-		if (arg1 + local20 > Class1_Sub1_Sub1.anInt88) {
-			local20 -= arg1 + local20 - Class1_Sub1_Sub1.anInt88;
+		if (arg1 + local20 > Draw2D.anInt88) {
+			local20 -= arg1 + local20 - Draw2D.anInt88;
 		}
-		if (arg0 < Class1_Sub1_Sub1.anInt89) {
-			local36 = Class1_Sub1_Sub1.anInt89 - arg0;
+		if (arg0 < Draw2D.anInt89) {
+			local36 = Draw2D.anInt89 - arg0;
 			local23 -= local36;
-			arg0 = Class1_Sub1_Sub1.anInt89;
+			arg0 = Draw2D.anInt89;
 			local17 += local36;
 			local15 += local36;
 			local29 += local36;
 			local27 += local36;
 		}
-		if (arg0 + local23 > Class1_Sub1_Sub1.anInt90) {
-			local36 = arg0 + local23 - Class1_Sub1_Sub1.anInt90;
+		if (arg0 + local23 > Draw2D.anInt90) {
+			local36 = arg0 + local23 - Draw2D.anInt90;
 			local23 -= local36;
 			local29 += local36;
 			local27 += local36;
 		}
 		if (local23 > 0 && local20 > 0) {
-			this.method51(Class1_Sub1_Sub1.anIntArray10, this.anIntArray7, 0, local17, local15, local23, local20, local27, local29);
+			this.method51(Draw2D.anIntArray10, this.anIntArray7, 0, local17, local15, local23, local20, local27, local29);
 		}
 	}
 
@@ -173,40 +173,40 @@ public final class Class1_Sub1_Sub1_Sub2 extends Class1_Sub1_Sub1 {
 	public void method52(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1) {
 		arg0 += this.anInt61;
 		arg1 += this.anInt62;
-		@Pc(15) int local15 = arg0 + arg1 * Class1_Sub1_Sub1.anInt85;
+		@Pc(15) int local15 = arg0 + arg1 * Draw2D.anInt85;
 		@Pc(17) int local17 = 0;
 		@Pc(20) int local20 = this.anInt60;
 		@Pc(23) int local23 = this.anInt59;
-		@Pc(27) int local27 = Class1_Sub1_Sub1.anInt85 - local23;
+		@Pc(27) int local27 = Draw2D.anInt85 - local23;
 		@Pc(29) int local29 = 0;
 		@Pc(36) int local36;
-		if (arg1 < Class1_Sub1_Sub1.anInt87) {
-			local36 = Class1_Sub1_Sub1.anInt87 - arg1;
+		if (arg1 < Draw2D.anInt87) {
+			local36 = Draw2D.anInt87 - arg1;
 			local20 -= local36;
-			arg1 = Class1_Sub1_Sub1.anInt87;
+			arg1 = Draw2D.anInt87;
 			local17 += local36 * local23;
-			local15 += local36 * Class1_Sub1_Sub1.anInt85;
+			local15 += local36 * Draw2D.anInt85;
 		}
-		if (arg1 + local20 > Class1_Sub1_Sub1.anInt88) {
-			local20 -= arg1 + local20 - Class1_Sub1_Sub1.anInt88;
+		if (arg1 + local20 > Draw2D.anInt88) {
+			local20 -= arg1 + local20 - Draw2D.anInt88;
 		}
-		if (arg0 < Class1_Sub1_Sub1.anInt89) {
-			local36 = Class1_Sub1_Sub1.anInt89 - arg0;
+		if (arg0 < Draw2D.anInt89) {
+			local36 = Draw2D.anInt89 - arg0;
 			local23 -= local36;
-			arg0 = Class1_Sub1_Sub1.anInt89;
+			arg0 = Draw2D.anInt89;
 			local17 += local36;
 			local15 += local36;
 			local29 += local36;
 			local27 += local36;
 		}
-		if (arg0 + local23 > Class1_Sub1_Sub1.anInt90) {
-			local36 = arg0 + local23 - Class1_Sub1_Sub1.anInt90;
+		if (arg0 + local23 > Draw2D.anInt90) {
+			local36 = arg0 + local23 - Draw2D.anInt90;
 			local23 -= local36;
 			local29 += local36;
 			local27 += local36;
 		}
 		if (local23 > 0 && local20 > 0) {
-			this.method53(Class1_Sub1_Sub1.anIntArray10, this.anIntArray7, local17, local15, local23, local20, local27, local29);
+			this.method53(Draw2D.anIntArray10, this.anIntArray7, local17, local15, local23, local20, local27, local29);
 		}
 	}
 

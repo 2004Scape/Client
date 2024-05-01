@@ -4,7 +4,7 @@ import org.openrs2.deob.annotation.OriginalMember;
 import org.openrs2.deob.annotation.Pc;
 
 @OriginalClass("mapview!o")
-public final class Class6 {
+public final class Jagfile {
 
 	@OriginalMember(owner = "mapview!o", name = "a", descriptor = "[B")
 	private byte[] aByteArray10;
@@ -28,13 +28,13 @@ public final class Class6 {
 	private boolean aBoolean18;
 
 	@OriginalMember(owner = "mapview!o", name = "<init>", descriptor = "([B)V")
-	public Class6(@OriginalArg(0) byte[] arg0) {
+	public Jagfile(@OriginalArg(0) byte[] arg0) {
 		this.method123(arg0);
 	}
 
 	@OriginalMember(owner = "mapview!o", name = "a", descriptor = "([B)V")
 	private void method123(@OriginalArg(0) byte[] arg0) {
-		@Pc(6) Class1_Sub1_Sub2 local6 = new Class1_Sub1_Sub2(arg0);
+		@Pc(6) Packet local6 = new Packet(arg0);
 		@Pc(9) int local9 = local6.method85();
 		@Pc(12) int local12 = local6.method85();
 		if (local12 == local9) {
@@ -42,9 +42,9 @@ public final class Class6 {
 			this.aBoolean18 = false;
 		} else {
 			@Pc(18) byte[] local18 = new byte[local9];
-			Class4.method95(local18, local9, arg0, local12, 6);
+			BZip2.method95(local18, local9, arg0, local12, 6);
 			this.aByteArray10 = local18;
-			local6 = new Class1_Sub1_Sub2(this.aByteArray10);
+			local6 = new Packet(this.aByteArray10);
 			this.aBoolean18 = true;
 		}
 		this.anInt185 = local6.method83();
@@ -80,7 +80,7 @@ public final class Class6 {
 						arg1[local67] = this.aByteArray10[this.anIntArray41[local8] + local67];
 					}
 				} else {
-					Class4.method95(arg1, this.anIntArray39[local8], this.aByteArray10, this.anIntArray40[local8], this.anIntArray41[local8]);
+					BZip2.method95(arg1, this.anIntArray39[local8], this.aByteArray10, this.anIntArray40[local8], this.anIntArray41[local8]);
 				}
 				return arg1;
 			}

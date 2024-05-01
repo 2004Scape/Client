@@ -19,7 +19,7 @@ import org.openrs2.deob.annotation.OriginalMember;
 import org.openrs2.deob.annotation.Pc;
 
 @OriginalClass("mapview!a")
-public class Applet_Sub1 extends Applet implements Runnable, MouseListener, MouseMotionListener, KeyListener, FocusListener, WindowListener {
+public class GameShell extends Applet implements Runnable, MouseListener, MouseMotionListener, KeyListener, FocusListener, WindowListener {
 
 	@OriginalMember(owner = "mapview!a", name = "g", descriptor = "I")
 	private int anInt108;
@@ -31,10 +31,10 @@ public class Applet_Sub1 extends Applet implements Runnable, MouseListener, Mous
 	protected Graphics aGraphics2;
 
 	@OriginalMember(owner = "mapview!a", name = "j", descriptor = "Lmapview!l;")
-	protected Class3 aClass3_2;
+	protected PixMap aClass3_2;
 
 	@OriginalMember(owner = "mapview!a", name = "l", descriptor = "Lmapview!b;")
-	protected Frame_Sub1 aFrame_Sub1_2;
+	protected ViewBox aFrame_Sub1_2;
 
 	@OriginalMember(owner = "mapview!a", name = "a", descriptor = "I")
 	private int anInt104 = 0;
@@ -55,7 +55,7 @@ public class Applet_Sub1 extends Applet implements Runnable, MouseListener, Mous
 	private boolean aBoolean8 = false;
 
 	@OriginalMember(owner = "mapview!a", name = "k", descriptor = "[Lmapview!g;")
-	private Class1_Sub1_Sub1_Sub2[] aClass1_Sub1_Sub1_Sub2Array2 = new Class1_Sub1_Sub1_Sub2[6];
+	private Pix24[] aClass1_Sub1_Sub1_Sub2Array2 = new Pix24[6];
 
 	@OriginalMember(owner = "mapview!a", name = "m", descriptor = "Z")
 	private boolean aBoolean9 = true;
@@ -308,9 +308,9 @@ public class Applet_Sub1 extends Applet implements Runnable, MouseListener, Mous
 	protected final void method102(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1) {
 		this.anInt108 = arg0;
 		this.anInt109 = arg1;
-		this.aFrame_Sub1_2 = new Frame_Sub1(this, this.anInt108, this.anInt109);
+		this.aFrame_Sub1_2 = new ViewBox(this, this.anInt108, this.anInt109);
 		this.aGraphics2 = this.method105().getGraphics();
-		this.aClass3_2 = new Class3(this.anInt108, this.anInt109, this.method105());
+		this.aClass3_2 = new PixMap(this.anInt108, this.anInt109, this.method105());
 		this.method99(this, 1);
 	}
 
@@ -379,7 +379,7 @@ public class Applet_Sub1 extends Applet implements Runnable, MouseListener, Mous
 		this.anInt108 = arg0;
 		this.anInt109 = arg1;
 		this.aGraphics2 = this.method105().getGraphics();
-		this.aClass3_2 = new Class3(this.anInt108, this.anInt109, this.method105());
+		this.aClass3_2 = new PixMap(this.anInt108, this.anInt109, this.method105());
 		this.method99(this, 1);
 	}
 

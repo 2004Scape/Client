@@ -5,7 +5,7 @@ import org.openrs2.deob.annotation.OriginalMember;
 import org.openrs2.deob.annotation.Pc;
 
 @OriginalClass("mapview!i")
-public final class Class1_Sub1_Sub1_Sub4 extends Class1_Sub1_Sub1 {
+public final class PixFontFull extends Draw2D {
 
 	@OriginalMember(owner = "mapview!i", name = "p", descriptor = "[[B")
 	private byte[][] aByteArrayArray1 = new byte[256][];
@@ -35,9 +35,9 @@ public final class Class1_Sub1_Sub1_Sub4 extends Class1_Sub1_Sub1 {
 	private boolean aBoolean6 = false;
 
 	@OriginalMember(owner = "mapview!i", name = "<init>", descriptor = "(Lmapview!o;Ljava/lang/String;Z)V")
-	public Class1_Sub1_Sub1_Sub4(@OriginalArg(0) Class6 arg0, @OriginalArg(1) String arg1, @OriginalArg(2) boolean arg2) {
-		@Pc(53) Class1_Sub1_Sub2 local53 = new Class1_Sub1_Sub2(arg0.method124(arg1 + ".dat", null));
-		@Pc(61) Class1_Sub1_Sub2 local61 = new Class1_Sub1_Sub2(arg0.method124("index.dat", null));
+	public PixFontFull(@OriginalArg(0) Jagfile arg0, @OriginalArg(1) String arg1, @OriginalArg(2) boolean arg2) {
+		@Pc(53) Packet local53 = new Packet(arg0.method124(arg1 + ".dat", null));
+		@Pc(61) Packet local61 = new Packet(arg0.method124("index.dat", null));
 		@Pc(63) boolean local63 = true;
 		local61.anInt98 = local53.method83() + 4;
 		@Pc(72) int local72 = local61.method81();
@@ -132,38 +132,38 @@ public final class Class1_Sub1_Sub1_Sub4 extends Class1_Sub1_Sub1 {
 
 	@OriginalMember(owner = "mapview!i", name = "a", descriptor = "([BIIIII)V")
 	private void method78(@OriginalArg(0) byte[] arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2, @OriginalArg(3) int arg3, @OriginalArg(4) int arg4, @OriginalArg(5) int arg5) {
-		@Pc(5) int local5 = arg1 + arg2 * Class1_Sub1_Sub1.anInt85;
-		@Pc(9) int local9 = Class1_Sub1_Sub1.anInt85 - arg3;
+		@Pc(5) int local5 = arg1 + arg2 * Draw2D.anInt85;
+		@Pc(9) int local9 = Draw2D.anInt85 - arg3;
 		@Pc(11) int local11 = 0;
 		@Pc(13) int local13 = 0;
 		@Pc(20) int local20;
-		if (arg2 < Class1_Sub1_Sub1.anInt87) {
-			local20 = Class1_Sub1_Sub1.anInt87 - arg2;
+		if (arg2 < Draw2D.anInt87) {
+			local20 = Draw2D.anInt87 - arg2;
 			arg4 -= local20;
-			arg2 = Class1_Sub1_Sub1.anInt87;
+			arg2 = Draw2D.anInt87;
 			local13 += local20 * arg3;
-			local5 += local20 * Class1_Sub1_Sub1.anInt85;
+			local5 += local20 * Draw2D.anInt85;
 		}
-		if (arg2 + arg4 >= Class1_Sub1_Sub1.anInt88) {
-			arg4 -= arg2 + arg4 - Class1_Sub1_Sub1.anInt88 + 1;
+		if (arg2 + arg4 >= Draw2D.anInt88) {
+			arg4 -= arg2 + arg4 - Draw2D.anInt88 + 1;
 		}
-		if (arg1 < Class1_Sub1_Sub1.anInt89) {
-			local20 = Class1_Sub1_Sub1.anInt89 - arg1;
+		if (arg1 < Draw2D.anInt89) {
+			local20 = Draw2D.anInt89 - arg1;
 			arg3 -= local20;
-			arg1 = Class1_Sub1_Sub1.anInt89;
+			arg1 = Draw2D.anInt89;
 			local13 += local20;
 			local5 += local20;
 			local11 += local20;
 			local9 += local20;
 		}
-		if (arg1 + arg3 >= Class1_Sub1_Sub1.anInt90) {
-			local20 = arg1 + arg3 - Class1_Sub1_Sub1.anInt90 + 1;
+		if (arg1 + arg3 >= Draw2D.anInt90) {
+			local20 = arg1 + arg3 - Draw2D.anInt90 + 1;
 			arg3 -= local20;
 			local11 += local20;
 			local9 += local20;
 		}
 		if (arg3 > 0 && arg4 > 0) {
-			this.method79(Class1_Sub1_Sub1.anIntArray10, arg0, arg5, local13, local5, arg3, arg4, local9, local11);
+			this.method79(Draw2D.anIntArray10, arg0, arg5, local13, local5, arg3, arg4, local9, local11);
 		}
 	}
 
