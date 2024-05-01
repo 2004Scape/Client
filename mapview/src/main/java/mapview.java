@@ -264,18 +264,21 @@ public final class mapview extends GameShell {
         //    originX = local16.g2();
         //    originY = local16.g2();
         //}
-		// 2004 worldmap.jag has no size.dat, so we use feb 2005's info til we have an original applet to compare
+
+		// 2004 worldmap.jag has no size.dat, so I matched based on the official worldmap renders of the time
 		centerX = 2112;
-		centerY = 2624;
-		originX = 1536;
-		originY = 1408;
+		centerY = 2816;
+		originX = 1472;
+		originY = 1216;
 
         offsetX = 3200 - centerX;
 		offsetY = centerY + originY - 3200;
+
 		this.imageOverviewHeight = 180;
 		this.imageOverviewWidth = originX * this.imageOverviewHeight / originY;
 		this.overviewX = 635 - this.imageOverviewWidth - 5;
 		this.overviewY = 503 - this.imageOverviewHeight - 20;
+
 		@Pc(73) Packet local73 = new Packet(local4.read("labels.dat", null));
 		this.labelCount = local73.g2();
 		for (@Pc(79) int local79 = 0; local79 < this.labelCount; local79++) {
