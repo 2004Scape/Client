@@ -12,6 +12,7 @@ import jagex2.client.GameShell;
 import jagex2.graphics.Draw2D;
 import jagex2.graphics.Pix24;
 import jagex2.graphics.Pix8;
+import jagex2.graphics.PixFont;
 import jagex2.io.Jagfile;
 import jagex2.io.Packet;
 import org.openrs2.deob.annotation.OriginalArg;
@@ -74,7 +75,7 @@ public final class mapview extends GameShell {
 	private byte[][] locScenes;
 
 	@OriginalMember(owner = "mapview!mapview", name = "cb", descriptor = "Lmapview!i;")
-	private PixFontFull b12;
+	private PixFont b12;
 
 	@OriginalMember(owner = "mapview!mapview", name = "db", descriptor = "Lmapview!f;")
 	private WorldmapFont f11;
@@ -236,16 +237,12 @@ public final class mapview extends GameShell {
 	private double zoomY = 4.0D;
 
 	@OriginalMember(owner = "mapview!mapview", name = "Yb", descriptor = "[Ljava/lang/String;")
-	private String[] keyNames = new String[] { "General Store", "Sword Shop", "Magic Shop", "Axe Shop", "Helmet Shop", "Bank", "Quest Start", "Amulet Shop", "Mining Site", "Furnace", "Anvil", "Combat Training", "Dungeon", "Staff Shop", "Platebody Shop", "Platelegs Shop", "Scimitar Shop", "Archery Shop", "Shield Shop", "Altar", "Herbalist", "Jewelery", "Gem Shop", "Crafting Shop", "Candle Shop", "Fishing Shop", "Fishing Spot", "Clothes Shop", "Apothecary", "Silk Trader", "Kebab Seller", "Pub/Bar", "Mace Shop", "Tannery", "Rare Trees", "Spinning Wheel", "Food Shop", "Cookery Shop", "Mini-Game", "Water Source", "Cooking Range", "Skirt Shop", "Potters Wheel", "Windmill", "Mining Shop", "Chainmail Shop", "Silver Shop", "Fur Trader", "Spice Shop", "Agility Training", "Vegetable Store", "Slayer Master", "Hair Dressers", "???", "Makeover Mage" };
+	private String[] keyNames = new String[] { "General Store", "Sword Shop", "Magic Shop", "Axe Shop", "Helmet Shop", "Bank", "Quest Start", "Amulet Shop", "Mining Site", "Furnace", "Anvil", "Combat Training", "Dungeon", "Staff Shop", "Platebody Shop", "Platelegs Shop", "Scimitar Shop", "Archery Shop", "Shield Shop", "Altar", "Herbalist", "Jewelery", "Gem Shop", "Crafting Shop", "Candle Shop", "Fishing Shop", "Fishing Spot", "Clothes Shop", "Apothecary", "Silk Trader", "Kebab Seller", "Pub/Bar", "Mace Shop", "Tannery", "Rare Trees", "Spinning Wheel", "Food Shop", "Cookery Shop", "Mini-Game", "Water Source", "Cooking Range", "Skirt Shop", "Potters Wheel", "Windmill", "Mining Shop", "Chainmail Shop", "Silver Shop", "Fur Trader", "Spice Shop", "Agility Training", "Vegetable Store", "???", "Hair Dressers", "???", "Makeover Mage" };
 
 	@OriginalMember(owner = "mapview!mapview", name = "main", descriptor = "([Ljava/lang/String;)V")
 	public static void main(@OriginalArg(0) String[] arg0) {
 		@Pc(3) mapview local3 = new mapview();
 		local3.initApplication(635, 503);
-	}
-
-	@OriginalMember(owner = "mapview!mapview", name = "<init>", descriptor = "()V")
-	private mapview() {
 	}
 
 	@OriginalMember(owner = "mapview!mapview", name = "init", descriptor = "()V")
@@ -259,12 +256,21 @@ public final class mapview extends GameShell {
 	protected void load() {
 		@Pc(4) Jagfile local4 = this.getWorldmap();
 		this.drawProgress("Please wait... Rendering Map", 100);
-		@Pc(16) Packet local16 = new Packet(local4.read("size.dat", null));
-		centerX = local16.g2();
-		centerY = local16.g2();
-		originX = local16.g2();
-		originY = local16.g2();
-		offsetX = 3200 - centerX;
+
+		//@Pc(16) Packet local16 = new Packet(local4.read("size.dat", null));
+        //if (local16.data != null) {
+        //    centerX = local16.g2();
+        //    centerY = local16.g2();
+        //    originX = local16.g2();
+        //    originY = local16.g2();
+        //}
+		// 2004 worldmap.jag has no size.dat, so we use feb 2005's info til we have an original applet to compare
+		centerX = 2112;
+		centerY = 2624;
+		originX = 1536;
+		originY = 1408;
+
+        offsetX = 3200 - centerX;
 		offsetY = centerY + originY - 3200;
 		this.imageOverviewHeight = 180;
 		this.imageOverviewWidth = originX * this.imageOverviewHeight / originY;
@@ -278,7 +284,7 @@ public final class mapview extends GameShell {
 			this.labelY[local79] = local73.g2();
 			this.labelType[local79] = local73.g1();
 		}
-		local16 = new Packet(local4.read("floorcol.dat", null));
+		Packet local16 = new Packet(local4.read("floorcol.dat", null));
 		@Pc(121) int local121 = local16.g2();
 		this.floormapsUnderlay = new int[local121 + 1];
 		this.floormapsOverlay = new int[local121 + 1];
@@ -311,7 +317,7 @@ public final class mapview extends GameShell {
 			}
 		} catch (@Pc(261) Exception local261) {
 		}
-		this.b12 = new PixFontFull(local4, "b12_full", false);
+		this.b12 = new PixFont(local4, "b12");
 		this.f11 = new WorldmapFont(11, true, this);
 		this.f12 = new WorldmapFont(12, true, this);
 		this.f14 = new WorldmapFont(14, true, this);
@@ -571,6 +577,7 @@ public final class mapview extends GameShell {
 			offsetX = (int) ((double) offsetX + 16.0D / this.zoomX);
 			this.shouldDraw = true;
 		}
+
 		if (super.actionKey[3] == 1) {
 			offsetY = (int) ((double) offsetY - 16.0D / this.zoomX);
 			this.shouldDraw = true;
@@ -579,193 +586,192 @@ public final class mapview extends GameShell {
 			offsetY = (int) ((double) offsetY + 16.0D / this.zoomX);
 			this.shouldDraw = true;
 		}
-		@Pc(75) int local75 = 1;
-		while (true) {
-			@Pc(192) int local192;
-			@Pc(199) int local199;
-			do {
-				do {
-					if (local75 <= 0) {
-						if (super.mouseClickButton == 1) {
-							this.lastMouseClickX = super.mouseClickX;
-							this.lastMouseClickY = super.mouseClickY;
-							this.lastOffsetX = offsetX;
-							this.lastOffsetY = offsetY;
-							if (super.mouseClickX > 170 && super.mouseClickX < 220 && super.mouseClickY > 471 && super.mouseClickY < 503) {
-								this.zoomY = 3.0D;
-								this.lastMouseClickX = -1;
-							}
-							if (super.mouseClickX > 230 && super.mouseClickX < 280 && super.mouseClickY > 471 && super.mouseClickY < 503) {
-								this.zoomY = 4.0D;
-								this.lastMouseClickX = -1;
-							}
-							if (super.mouseClickX > 290 && super.mouseClickX < 340 && super.mouseClickY > 471 && super.mouseClickY < 503) {
-								this.zoomY = 6.0D;
-								this.lastMouseClickX = -1;
-							}
-							if (super.mouseClickX > 350 && super.mouseClickX < 400 && super.mouseClickY > 471 && super.mouseClickY < 503) {
-								this.zoomY = 8.0D;
-								this.lastMouseClickX = -1;
-							}
-							if (super.mouseClickX > this.keyX && super.mouseClickY > this.keyY + this.keyOffset && super.mouseClickX < this.keyX + this.keyWidth && super.mouseClickY < 503) {
-								this.showKey = !this.showKey;
-								this.lastMouseClickX = -1;
-							}
-							if (super.mouseClickX > this.overviewX && super.mouseClickY > this.overviewY + this.imageOverviewHeight && super.mouseClickX < this.overviewX + this.imageOverviewWidth && super.mouseClickY < 503) {
-								this.showOverview = !this.showOverview;
-								this.lastMouseClickX = -1;
-							}
-							if (this.showKey) {
-								if (super.mouseClickX > this.keyX && super.mouseClickY > this.keyY && super.mouseClickX < this.keyX + this.keyWidth && super.mouseClickY < this.keyY + this.keyOffset) {
-									this.lastMouseClickX = -1;
-								}
-								if (super.mouseClickX > this.keyX && super.mouseClickY > this.keyY && super.mouseClickX < this.keyX + this.keyWidth && super.mouseClickY < this.keyY + 18 && this.keyPage > 0) {
-									this.keyPage -= 25;
-								}
-								if (super.mouseClickX > this.keyX && super.mouseClickY > this.keyY + this.keyOffset - 18 && super.mouseClickX < this.keyX + this.keyWidth && super.mouseClickY < this.keyY + this.keyOffset && this.keyPage < 50) {
-									this.keyPage += 25;
-								}
-							}
-							this.shouldDraw = true;
-						}
-						@Pc(603) int local603;
-						if (this.showKey) {
-							this.currentKeyHover = -1;
-							if (super.mouseX > this.keyX && super.mouseX < this.keyX + this.keyWidth) {
-								local603 = this.keyY + 21 + 5;
-								for (local192 = 0; local192 < 25; local192++) {
-									if (local192 + this.lastKeyPage >= this.keyNames.length || !this.keyNames[local192 + this.lastKeyPage].equals("???")) {
-										if (super.mouseY >= local603 && super.mouseY < local603 + 17) {
-											this.currentKeyHover = local192 + this.lastKeyPage;
-											if (super.mouseClickButton == 1) {
-												this.currentKey = local192 + this.lastKeyPage;
-												this.flashTimer = 50;
-											}
-										}
-										local603 += 17;
-									}
-								}
-							}
-							if (this.currentKeyHover != this.lastKeyHover) {
-								this.lastKeyHover = this.currentKeyHover;
-								this.shouldDraw = true;
-							}
-						}
-						if ((super.mouseButton == 1 || super.mouseClickButton == 1) && this.showOverview) {
-							local603 = super.mouseClickX;
-							local192 = super.mouseClickY;
-							if (super.mouseButton == 1) {
-								local603 = super.mouseX;
-								local192 = super.mouseY;
-							}
-							if (local603 > this.overviewX && local192 > this.overviewY && local603 < this.overviewX + this.imageOverviewWidth && local192 < this.overviewY + this.imageOverviewHeight) {
-								offsetX = (local603 - this.overviewX) * originX / this.imageOverviewWidth;
-								offsetY = (local192 - this.overviewY) * originY / this.imageOverviewHeight;
-								this.lastMouseClickX = -1;
-								this.shouldDraw = true;
-							}
-						}
-						if (super.mouseButton == 1 && this.lastMouseClickX != -1) {
-							offsetX = this.lastOffsetX + (int) ((double) (this.lastMouseClickX - super.mouseX) * 2.0D / this.zoomY);
-							offsetY = this.lastOffsetY + (int) ((double) (this.lastMouseClickY - super.mouseY) * 2.0D / this.zoomY);
-							this.shouldDraw = true;
-						}
-						if (this.zoomX < this.zoomY) {
-							this.shouldDraw = true;
-							this.zoomX += this.zoomX / 30.0D;
-							if (this.zoomX > this.zoomY) {
-								this.zoomX = this.zoomY;
-							}
-						}
-						if (this.zoomX > this.zoomY) {
-							this.shouldDraw = true;
-							this.zoomX -= this.zoomX / 30.0D;
-							if (this.zoomX < this.zoomY) {
-								this.zoomX = this.zoomY;
-							}
-						}
-						if (this.lastKeyPage < this.keyPage) {
-							this.shouldDraw = true;
-							this.lastKeyPage++;
-						}
-						if (this.lastKeyPage > this.keyPage) {
-							this.shouldDraw = true;
-							this.lastKeyPage--;
-						}
-						if (this.flashTimer > 0) {
-							this.shouldDraw = true;
-							this.flashTimer--;
-						}
-						local603 = offsetX - (int) (635.0D / this.zoomX);
-						local192 = offsetY - (int) (503.0D / this.zoomX);
-						@Pc(909) int local909 = offsetX + (int) (635.0D / this.zoomX);
-						local199 = offsetY + (int) (503.0D / this.zoomX);
-						if (local603 < 48) {
-							offsetX = (int) (635.0D / this.zoomX) + 48;
-						}
-						if (local192 < 48) {
-							offsetY = (int) (503.0D / this.zoomX) + 48;
-						}
-						if (local909 > originX - 48) {
-							offsetX = originX - 48 - (int) (635.0D / this.zoomX);
-						}
-						if (local199 > originY - 48) {
-							offsetY = originY - 48 - (int) (503.0D / this.zoomX);
-						}
-						return;
-					}
-					local75 = this.pollKey();
-					if (local75 == 49) {
-						this.zoomY = 3.0D;
-						this.shouldDraw = true;
-					}
-					if (local75 == 50) {
-						this.zoomY = 4.0D;
-						this.shouldDraw = true;
-					}
-					if (local75 == 51) {
-						this.zoomY = 6.0D;
-						this.shouldDraw = true;
-					}
-					if (local75 == 52) {
-						this.zoomY = 8.0D;
-						this.shouldDraw = true;
-					}
-					if (local75 == 107 || local75 == 75) {
-						this.showKey = !this.showKey;
-						this.shouldDraw = true;
-					}
-					if (local75 == 111 || local75 == 79) {
-						this.showOverview = !this.showOverview;
-						this.shouldDraw = true;
-					}
-				} while (super.frame == null);
-			} while (local75 != 101);
-			System.out.println("Starting export...");
-			@Pc(169) Pix24 local169 = new Pix24(originX * 2, originY * 2);
-			local169.bind();
-			this.drawMap(0, 0, originX, originY, 0, 0, originX * 2, originY * 2);
-			super.drawArea.bind();
-			local192 = local169.pixels.length;
-			@Pc(197) byte[] local197 = new byte[local192 * 3];
-			local199 = 0;
-			for (@Pc(201) int local201 = 0; local201 < local192; local201++) {
-				@Pc(208) int local208 = local169.pixels[local201];
-				local197[local199++] = (byte) (local208 >> 16);
-				local197[local199++] = (byte) (local208 >> 8);
-				local197[local199++] = (byte) local208;
+
+		@Pc(192) int local192;
+		@Pc(199) int local199;
+
+		@Pc(75) int key = 1;
+		while (key > 0) {
+			key = this.pollKey();
+			if (key == 49) {
+				this.zoomY = 3.0D;
+				this.shouldDraw = true;
 			}
-			System.out.println("Saving to disk");
-			try {
-				@Pc(261) BufferedOutputStream local261 = new BufferedOutputStream(new FileOutputStream("map-" + originX * 2 + "-" + originY * 2 + "-rgb.raw"));
-				local261.write(local197);
-				local261.close();
-			} catch (@Pc(268) Exception local268) {
-				local268.printStackTrace();
+			if (key == 50) {
+				this.zoomY = 4.0D;
+				this.shouldDraw = true;
 			}
-			System.out.println("Done export: " + originX * 2 + "," + originY * 2);
+			if (key == 51) {
+				this.zoomY = 6.0D;
+				this.shouldDraw = true;
+			}
+			if (key == 52) {
+				this.zoomY = 8.0D;
+				this.shouldDraw = true;
+			}
+			if (key == 107 || key == 75) {
+				this.showKey = !this.showKey;
+				this.shouldDraw = true;
+			}
+			if (key == 111 || key == 79) {
+				this.showOverview = !this.showOverview;
+				this.shouldDraw = true;
+			}
+
+			if (key == 101 && super.frame != null) {
+				System.out.println("Starting export...");
+				@Pc(169) Pix24 local169 = new Pix24(originX * 2, originY * 2);
+				local169.bind();
+				this.drawMap(0, 0, originX, originY, 0, 0, originX * 2, originY * 2);
+				super.drawArea.bind();
+				local192 = local169.pixels.length;
+				@Pc(197) byte[] local197 = new byte[local192 * 3];
+				local199 = 0;
+				for (@Pc(201) int local201 = 0; local201 < local192; local201++) {
+					@Pc(208) int local208 = local169.pixels[local201];
+					local197[local199++] = (byte) (local208 >> 16);
+					local197[local199++] = (byte) (local208 >> 8);
+					local197[local199++] = (byte) local208;
+				}
+				System.out.println("Saving to disk");
+				try {
+					@Pc(261) BufferedOutputStream local261 = new BufferedOutputStream(new FileOutputStream("map-" + originX * 2 + "-" + originY * 2 + "-rgb.raw"));
+					local261.write(local197);
+					local261.close();
+				} catch (@Pc(268) Exception local268) {
+					local268.printStackTrace();
+				}
+				System.out.println("Done export: " + originX * 2 + "," + originY * 2);
+			}
 		}
-	}
+
+        if (super.mouseClickButton == 1) {
+            this.lastMouseClickX = super.mouseClickX;
+            this.lastMouseClickY = super.mouseClickY;
+            this.lastOffsetX = offsetX;
+            this.lastOffsetY = offsetY;
+            if (super.mouseClickX > 170 && super.mouseClickX < 220 && super.mouseClickY > 471 && super.mouseClickY < 503) {
+                this.zoomY = 3.0D;
+                this.lastMouseClickX = -1;
+            }
+            if (super.mouseClickX > 230 && super.mouseClickX < 280 && super.mouseClickY > 471 && super.mouseClickY < 503) {
+                this.zoomY = 4.0D;
+                this.lastMouseClickX = -1;
+            }
+            if (super.mouseClickX > 290 && super.mouseClickX < 340 && super.mouseClickY > 471 && super.mouseClickY < 503) {
+                this.zoomY = 6.0D;
+                this.lastMouseClickX = -1;
+            }
+            if (super.mouseClickX > 350 && super.mouseClickX < 400 && super.mouseClickY > 471 && super.mouseClickY < 503) {
+                this.zoomY = 8.0D;
+                this.lastMouseClickX = -1;
+            }
+            if (super.mouseClickX > this.keyX && super.mouseClickY > this.keyY + this.keyOffset && super.mouseClickX < this.keyX + this.keyWidth && super.mouseClickY < 503) {
+                this.showKey = !this.showKey;
+                this.lastMouseClickX = -1;
+            }
+            if (super.mouseClickX > this.overviewX && super.mouseClickY > this.overviewY + this.imageOverviewHeight && super.mouseClickX < this.overviewX + this.imageOverviewWidth && super.mouseClickY < 503) {
+                this.showOverview = !this.showOverview;
+                this.lastMouseClickX = -1;
+            }
+            if (this.showKey) {
+                if (super.mouseClickX > this.keyX && super.mouseClickY > this.keyY && super.mouseClickX < this.keyX + this.keyWidth && super.mouseClickY < this.keyY + this.keyOffset) {
+                    this.lastMouseClickX = -1;
+                }
+                if (super.mouseClickX > this.keyX && super.mouseClickY > this.keyY && super.mouseClickX < this.keyX + this.keyWidth && super.mouseClickY < this.keyY + 18 && this.keyPage > 0) {
+                    this.keyPage -= 25;
+                }
+                if (super.mouseClickX > this.keyX && super.mouseClickY > this.keyY + this.keyOffset - 18 && super.mouseClickX < this.keyX + this.keyWidth && super.mouseClickY < this.keyY + this.keyOffset && this.keyPage < 50) {
+                    this.keyPage += 25;
+                }
+            }
+            this.shouldDraw = true;
+        }
+        @Pc(603) int local603;
+        if (this.showKey) {
+            this.currentKeyHover = -1;
+            if (super.mouseX > this.keyX && super.mouseX < this.keyX + this.keyWidth) {
+                local603 = this.keyY + 21 + 5;
+                for (local192 = 0; local192 < 25; local192++) {
+                    if (local192 + this.lastKeyPage >= this.keyNames.length || !this.keyNames[local192 + this.lastKeyPage].equals("???")) {
+                        if (super.mouseY >= local603 && super.mouseY < local603 + 17) {
+                            this.currentKeyHover = local192 + this.lastKeyPage;
+                            if (super.mouseClickButton == 1) {
+                                this.currentKey = local192 + this.lastKeyPage;
+                                this.flashTimer = 50;
+                            }
+                        }
+                        local603 += 17;
+                    }
+                }
+            }
+            if (this.currentKeyHover != this.lastKeyHover) {
+                this.lastKeyHover = this.currentKeyHover;
+                this.shouldDraw = true;
+            }
+        }
+        if ((super.mouseButton == 1 || super.mouseClickButton == 1) && this.showOverview) {
+            local603 = super.mouseClickX;
+			local192 = super.mouseClickY;
+            if (super.mouseButton == 1) {
+                local603 = super.mouseX;
+                local192 = super.mouseY;
+            }
+            if (local603 > this.overviewX && local192 > this.overviewY && local603 < this.overviewX + this.imageOverviewWidth && local192 < this.overviewY + this.imageOverviewHeight) {
+                offsetX = (local603 - this.overviewX) * originX / this.imageOverviewWidth;
+                offsetY = (local192 - this.overviewY) * originY / this.imageOverviewHeight;
+                this.lastMouseClickX = -1;
+                this.shouldDraw = true;
+            }
+        }
+        if (super.mouseButton == 1 && this.lastMouseClickX != -1) {
+            offsetX = this.lastOffsetX + (int) ((double) (this.lastMouseClickX - super.mouseX) * 2.0D / this.zoomY);
+            offsetY = this.lastOffsetY + (int) ((double) (this.lastMouseClickY - super.mouseY) * 2.0D / this.zoomY);
+            this.shouldDraw = true;
+        }
+        if (this.zoomX < this.zoomY) {
+            this.shouldDraw = true;
+            this.zoomX += this.zoomX / 30.0D;
+            if (this.zoomX > this.zoomY) {
+                this.zoomX = this.zoomY;
+            }
+        }
+        if (this.zoomX > this.zoomY) {
+            this.shouldDraw = true;
+            this.zoomX -= this.zoomX / 30.0D;
+            if (this.zoomX < this.zoomY) {
+                this.zoomX = this.zoomY;
+            }
+        }
+        if (this.lastKeyPage < this.keyPage) {
+            this.shouldDraw = true;
+            this.lastKeyPage++;
+        }
+        if (this.lastKeyPage > this.keyPage) {
+            this.shouldDraw = true;
+            this.lastKeyPage--;
+        }
+        if (this.flashTimer > 0) {
+            this.shouldDraw = true;
+            this.flashTimer--;
+        }
+        local603 = offsetX - (int) (635.0D / this.zoomX);
+		local192 = offsetY - (int) (503.0D / this.zoomX);
+        @Pc(909) int local909 = offsetX + (int) (635.0D / this.zoomX);
+		local199 = offsetY + (int) (503.0D / this.zoomX);
+        if (local603 < 48) {
+            offsetX = (int) (635.0D / this.zoomX) + 48;
+        }
+        if (local192 < 48) {
+            offsetY = (int) (503.0D / this.zoomX) + 48;
+        }
+        if (local909 > originX - 48) {
+            offsetX = originX - 48 - (int) (635.0D / this.zoomX);
+        }
+        if (local199 > originY - 48) {
+            offsetY = originY - 48 - (int) (503.0D / this.zoomX);
+        }
+    }
 
 	@OriginalMember(owner = "mapview!mapview", name = "e", descriptor = "()V")
 	@Override
@@ -1120,7 +1126,7 @@ public final class mapview extends GameShell {
                     local100 = arg4 + (arg6 - arg4) * (local706 + 64 - arg0) / (arg2 - arg0);
                     local116 = arg5 + (arg7 - arg5) * (local80 - arg1) / (arg3 - arg1);
                     Draw2D.drawRect(local88, local96, 16777215, local100 - local88, local116 - local96);
-                    this.b12.drawStringRight(local100 - 5, local116 - 5, local218 + "_" + local222, 16777215);
+                    this.b12.drawStringRight(local100 - 5, local116 - 5, local218 + "_" + local222, 16777215, false);
                     if (local218 == 33 && local222 >= 71 && local222 <= 73) {
                         this.b12.drawStringCenter((local100 + local88) / 2, (local116 + local96) / 2, "u_pass", 16711680);
                     } else if (local218 >= 32 && local218 <= 34 && local222 >= 70 && local222 <= 74) {

@@ -1,11 +1,5 @@
-import org.openrs2.deob.annotation.OriginalClass;
-import org.openrs2.deob.annotation.OriginalMember;
+public class sig  {
+	public static final int len = 235659;
 
-@OriginalClass("mapview!p")
-public final class sig {
-
-	@OriginalMember(owner = "mapview!p", name = "a", descriptor = "[I")
-	public static final int[] sha = new int[] { -5, 16, 104, -38, -84, -78, 104, -102, 40, -71, -11, -7, -25, -78, 44, -117, 119, -54, -18, 92 };
-
-	public static final int len = 300691;
+	public static final int[] sha = { -57, 7, -45, 125, -91, -52, 102, 78, 70, -20, 33, 42, -122, -77, 42, -41, 7, -73, 31, -6 };
 }
