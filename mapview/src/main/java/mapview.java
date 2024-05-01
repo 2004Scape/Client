@@ -665,14 +665,14 @@ public final class mapview extends Applet_Sub1 {
 						}
 						if (this.aDouble1 < this.aDouble2) {
 							this.aBoolean13 = true;
-							this.aDouble1 /= 30.0D;
+							this.aDouble1 += this.aDouble1 / 30.0D;
 							if (this.aDouble1 > this.aDouble2) {
 								this.aDouble1 = this.aDouble2;
 							}
 						}
 						if (this.aDouble1 > this.aDouble2) {
 							this.aBoolean13 = true;
-							this.aDouble1 /= 30.0D;
+							this.aDouble1 -= this.aDouble1 / 30.0D;
 							if (this.aDouble1 < this.aDouble2) {
 								this.aDouble1 = this.aDouble2;
 							}
