@@ -12,8 +12,6 @@ import java.awt.*;
 import java.awt.event.*;
 import java.net.InetAddress;
 
-import sign.signlink;
-
 @OriginalClass("client!a")
 public class GameShell extends Applet implements Runnable, MouseListener, MouseMotionListener, KeyListener, FocusListener, WindowListener {
 

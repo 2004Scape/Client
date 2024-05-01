@@ -1,11 +1,10 @@
 plugins {
     id 'java'
-    id 'application'
+    id 'java-library'
 }
 
 dependencies {
     compileOnly project(':deob-annotations')
-    implementation project(':runetek3')
 }
 
 java {
@@ -13,20 +12,7 @@ java {
     targetCompatibility = JavaVersion.VERSION_1_8
 }
 
-application {
-    mainClass = "client"
-}
-
-jar {
-    from { configurations.compileClasspath.collect { it.isDirectory() ? it : zipTree(it) } }
-    duplicatesStrategy = DuplicatesStrategy.INCLUDE
-}
-
 tasks.withType(JavaCompile) {
     options.encoding = 'UTF-8'
     options.compilerArgs << '-Xlint:unchecked' << '-Xlint:deprecation'
-}
-
-tasks.withType(JavaExec) {
-    workingDir = project.rootDir
 }

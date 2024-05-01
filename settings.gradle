@@ -2,8 +2,9 @@ rootProject.name = "rs2"
 
 include(
     "deob-annotations",
+    "runetek3",
     "client",
-    "loader",
+    "mapview",
     "tools",
-    "mapview"
+    "loader",
 )

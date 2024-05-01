@@ -11,6 +11,7 @@ public class RemoveAnnotations {
     public static void main(String[] args) {
         // in order to build for ancient Java versions, iterate through every single .java file and remove annotations (Java 5+)
         Collection<File> source = FileUtils.listFiles(new File("client/src/main/java"), new String[]{ "java" }, true);
+        source.addAll(FileUtils.listFiles(new File("mapview/src/main/java"), new String[]{ "java" }, true));
         for (Iterator<File> iterator = source.iterator(); iterator.hasNext();) {
             File file = iterator.next();
 

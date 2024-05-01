@@ -5,7 +5,7 @@ plugins {
 
 dependencies {
     compileOnly project(':deob-annotations')
-    implementation project(':client')
+    implementation project(':runetek3')
 }
 
 java {
@@ -15,6 +15,11 @@ java {
 
 application {
     mainClass = "mapview"
+}
+
+jar {
+    from { configurations.compileClasspath.collect { it.isDirectory() ? it : zipTree(it) } }
+    duplicatesStrategy = DuplicatesStrategy.INCLUDE
 }
 
 tasks.withType(JavaCompile) {
