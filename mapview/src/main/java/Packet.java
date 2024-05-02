@@ -4,7 +4,7 @@ import org.openrs2.deob.annotation.OriginalMember;
 import org.openrs2.deob.annotation.Pc;
 
 @OriginalClass("mapview!k")
-public final class Class2_Sub1_Sub2 extends Class2_Sub1 {
+public final class Packet extends Hashable {
 
 	@OriginalMember(owner = "mapview!k", name = "g", descriptor = "[I")
 	private static int[] anIntArray18 = new int[256];
@@ -22,13 +22,13 @@ public final class Class2_Sub1_Sub2 extends Class2_Sub1 {
 	private static int anInt92;
 
 	@OriginalMember(owner = "mapview!k", name = "l", descriptor = "Lmapview!l;")
-	private static Class3 aClass3_1;
+	private static LinkList aClass3_1;
 
 	@OriginalMember(owner = "mapview!k", name = "m", descriptor = "Lmapview!l;")
-	private static Class3 aClass3_2;
+	private static LinkList aClass3_2;
 
 	@OriginalMember(owner = "mapview!k", name = "n", descriptor = "Lmapview!l;")
-	private static Class3 aClass3_3;
+	private static LinkList aClass3_3;
 
 	@OriginalMember(owner = "mapview!k", name = "e", descriptor = "[B")
 	private byte[] aByteArray3;
@@ -55,33 +55,33 @@ public final class Class2_Sub1_Sub2 extends Class2_Sub1 {
 		anInt90 = 0;
 		anInt91 = 0;
 		anInt92 = 0;
-		aClass3_1 = new Class3();
-		aClass3_2 = new Class3();
-		aClass3_3 = new Class3();
+		aClass3_1 = new LinkList();
+		aClass3_2 = new LinkList();
+		aClass3_3 = new LinkList();
 	}
 
 	@OriginalMember(owner = "mapview!k", name = "b", descriptor = "(I)Lmapview!k;")
-	public static Class2_Sub1_Sub2 method104(@OriginalArg(0) int arg0) {
-		@Pc(4) Class3 local4 = aClass3_2;
-		@Pc(7) Class2_Sub1_Sub2 local7;
+	public static Packet method104(@OriginalArg(0) int arg0) {
+		@Pc(4) LinkList local4 = aClass3_2;
+		@Pc(7) Packet local7;
 		synchronized (aClass3_2) {
 			local7 = null;
 			if (arg0 == 0 && anInt90 > 0) {
 				anInt90 += -1;
-				local7 = (Class2_Sub1_Sub2) aClass3_1.method106();
+				local7 = (Packet) aClass3_1.method106();
 			} else if (arg0 == 1 && anInt91 > 0) {
 				anInt91 += -1;
-				local7 = (Class2_Sub1_Sub2) aClass3_2.method106();
+				local7 = (Packet) aClass3_2.method106();
 			} else if (arg0 == 2 && anInt92 > 0) {
 				anInt92 += -1;
-				local7 = (Class2_Sub1_Sub2) aClass3_3.method106();
+				local7 = (Packet) aClass3_3.method106();
 			}
 			if (local7 != null) {
 				local7.anInt89 = 0;
 				return local7;
 			}
 		}
-		local7 = new Class2_Sub1_Sub2();
+		local7 = new Packet();
 		local7.anInt89 = 0;
 		if (arg0 == 0) {
 			local7.aByteArray3 = new byte[100];
@@ -94,11 +94,11 @@ public final class Class2_Sub1_Sub2 extends Class2_Sub1 {
 	}
 
 	@OriginalMember(owner = "mapview!k", name = "<init>", descriptor = "()V")
-	private Class2_Sub1_Sub2() {
+	private Packet() {
 	}
 
 	@OriginalMember(owner = "mapview!k", name = "<init>", descriptor = "([B)V")
-	public Class2_Sub1_Sub2(@OriginalArg(0) byte[] arg0) {
+	public Packet(@OriginalArg(0) byte[] arg0) {
 		this.aByteArray3 = arg0;
 		this.anInt89 = 0;
 	}

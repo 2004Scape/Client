@@ -6,13 +6,13 @@ import org.openrs2.deob.annotation.OriginalMember;
 import org.openrs2.deob.annotation.Pc;
 
 @OriginalClass("mapview!b")
-public final class Frame_Sub1 extends Frame {
+public final class ViewBox extends Frame {
 
 	@OriginalMember(owner = "mapview!b", name = "a", descriptor = "Lmapview!a;")
-	private Applet_Sub1 anApplet_Sub1_1;
+	private GameShell anApplet_Sub1_1;
 
 	@OriginalMember(owner = "mapview!b", name = "<init>", descriptor = "(Lmapview!a;II)V")
-	public Frame_Sub1(@OriginalArg(0) Applet_Sub1 arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2) {
+	public ViewBox(@OriginalArg(0) GameShell arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2) {
 		this.anApplet_Sub1_1 = arg0;
 		this.setTitle("Jagex");
 		this.setResizable(false);

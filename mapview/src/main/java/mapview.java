@@ -12,7 +12,7 @@ import org.openrs2.deob.annotation.OriginalMember;
 import org.openrs2.deob.annotation.Pc;
 
 @OriginalClass("mapview!mapview")
-public final class mapview extends Applet_Sub1 {
+public final class mapview extends GameShell {
 
 	@OriginalMember(owner = "mapview!mapview", name = "M", descriptor = "I")
 	private int anInt119;
@@ -42,31 +42,31 @@ public final class mapview extends Applet_Sub1 {
 	private byte[][] aByteArrayArray5;
 
 	@OriginalMember(owner = "mapview!mapview", name = "X", descriptor = "Lmapview!j;")
-	private Class2_Sub1_Sub1_Sub4 aClass2_Sub1_Sub1_Sub4_1;
+	private PixFont aClass2_Sub1_Sub1_Sub4_1;
 
 	@OriginalMember(owner = "mapview!mapview", name = "Y", descriptor = "Lmapview!g;")
-	private Class2_Sub1_Sub1_Sub1 aClass2_Sub1_Sub1_Sub1_1;
+	private WorldmapFont aClass2_Sub1_Sub1_Sub1_1;
 
 	@OriginalMember(owner = "mapview!mapview", name = "Z", descriptor = "Lmapview!g;")
-	private Class2_Sub1_Sub1_Sub1 aClass2_Sub1_Sub1_Sub1_2;
+	private WorldmapFont aClass2_Sub1_Sub1_Sub1_2;
 
 	@OriginalMember(owner = "mapview!mapview", name = "ab", descriptor = "Lmapview!g;")
-	private Class2_Sub1_Sub1_Sub1 aClass2_Sub1_Sub1_Sub1_3;
+	private WorldmapFont aClass2_Sub1_Sub1_Sub1_3;
 
 	@OriginalMember(owner = "mapview!mapview", name = "bb", descriptor = "Lmapview!g;")
-	private Class2_Sub1_Sub1_Sub1 aClass2_Sub1_Sub1_Sub1_4;
+	private WorldmapFont aClass2_Sub1_Sub1_Sub1_4;
 
 	@OriginalMember(owner = "mapview!mapview", name = "cb", descriptor = "Lmapview!g;")
-	private Class2_Sub1_Sub1_Sub1 aClass2_Sub1_Sub1_Sub1_5;
+	private WorldmapFont aClass2_Sub1_Sub1_Sub1_5;
 
 	@OriginalMember(owner = "mapview!mapview", name = "db", descriptor = "Lmapview!g;")
-	private Class2_Sub1_Sub1_Sub1 aClass2_Sub1_Sub1_Sub1_6;
+	private WorldmapFont aClass2_Sub1_Sub1_Sub1_6;
 
 	@OriginalMember(owner = "mapview!mapview", name = "eb", descriptor = "Lmapview!g;")
-	private Class2_Sub1_Sub1_Sub1 aClass2_Sub1_Sub1_Sub1_7;
+	private WorldmapFont aClass2_Sub1_Sub1_Sub1_7;
 
 	@OriginalMember(owner = "mapview!mapview", name = "fb", descriptor = "Lmapview!g;")
-	private Class2_Sub1_Sub1_Sub1 aClass2_Sub1_Sub1_Sub1_8;
+	private WorldmapFont aClass2_Sub1_Sub1_Sub1_8;
 
 	@OriginalMember(owner = "mapview!mapview", name = "jb", descriptor = "I")
 	private int anInt120;
@@ -81,7 +81,7 @@ public final class mapview extends Applet_Sub1 {
 	private int anInt130;
 
 	@OriginalMember(owner = "mapview!mapview", name = "Db", descriptor = "Lmapview!h;")
-	private Class2_Sub1_Sub1_Sub2 aClass2_Sub1_Sub1_Sub2_1;
+	private Pix24 aClass2_Sub1_Sub1_Sub2_1;
 
 	@OriginalMember(owner = "mapview!mapview", name = "Eb", descriptor = "I")
 	private int anInt135;
@@ -120,10 +120,10 @@ public final class mapview extends Applet_Sub1 {
 	private boolean aBoolean25 = true;
 
 	@OriginalMember(owner = "mapview!mapview", name = "V", descriptor = "[Lmapview!i;")
-	private Class2_Sub1_Sub1_Sub3[] aClass2_Sub1_Sub1_Sub3Array1 = new Class2_Sub1_Sub1_Sub3[50];
+	private Pix8[] aClass2_Sub1_Sub1_Sub3Array1 = new Pix8[50];
 
 	@OriginalMember(owner = "mapview!mapview", name = "W", descriptor = "[Lmapview!h;")
-	private Class2_Sub1_Sub1_Sub2[] aClass2_Sub1_Sub1_Sub2Array3 = new Class2_Sub1_Sub1_Sub2[50];
+	private Pix24[] aClass2_Sub1_Sub1_Sub2Array3 = new Pix24[50];
 
 	@OriginalMember(owner = "mapview!mapview", name = "gb", descriptor = "[I")
 	private int[] anIntArray25 = new int[2000];
@@ -231,9 +231,9 @@ public final class mapview extends Applet_Sub1 {
 	@OriginalMember(owner = "mapview!mapview", name = "c", descriptor = "()V")
 	@Override
 	protected void method114() {
-		@Pc(4) Class7 local4 = this.method130();
+		@Pc(4) Jagfile local4 = this.method130();
 		this.method111(100, "Please wait... Rendering Map");
-		@Pc(16) Class2_Sub1_Sub2 local16 = new Class2_Sub1_Sub2(local4.method145("labels.dat", null));
+		@Pc(16) Packet local16 = new Packet(local4.method145("labels.dat", null));
 		this.anInt139 = local16.method100();
 		for (@Pc(22) int local22 = 0; local22 < this.anInt139; local22++) {
 			this.aStringArray1[local22] = local16.method102();
@@ -241,7 +241,7 @@ public final class mapview extends Applet_Sub1 {
 			this.anIntArray32[local22] = local16.method100();
 			this.anIntArray33[local22] = local16.method98();
 		}
-		@Pc(61) Class2_Sub1_Sub2 local61 = new Class2_Sub1_Sub2(local4.method145("floorcol.dat", null));
+		@Pc(61) Packet local61 = new Packet(local4.method145("floorcol.dat", null));
 		@Pc(64) int local64 = local61.method100();
 		this.anIntArray23 = new int[local64 + 1];
 		this.anIntArray24 = new int[local64 + 1];
@@ -264,32 +264,32 @@ public final class mapview extends Applet_Sub1 {
 		@Pc(166) int local166;
 		try {
 			for (local166 = 0; local166 < 50; local166++) {
-				this.aClass2_Sub1_Sub1_Sub3Array1[local166] = new Class2_Sub1_Sub1_Sub3(local4, "mapscene", local166);
+				this.aClass2_Sub1_Sub1_Sub3Array1[local166] = new Pix8(local4, "mapscene", local166);
 			}
 		} catch (@Pc(184) Exception local184) {
 		}
 		try {
 			for (local166 = 0; local166 < 50; local166++) {
-				this.aClass2_Sub1_Sub1_Sub2Array3[local166] = new Class2_Sub1_Sub1_Sub2(local4, "mapfunction", local166);
+				this.aClass2_Sub1_Sub1_Sub2Array3[local166] = new Pix24(local4, "mapfunction", local166);
 			}
 		} catch (@Pc(204) Exception local204) {
 		}
-		this.aClass2_Sub1_Sub1_Sub4_1 = new Class2_Sub1_Sub1_Sub4(local4, "b12");
-		this.aClass2_Sub1_Sub1_Sub1_1 = new Class2_Sub1_Sub1_Sub1(11, true, this);
-		this.aClass2_Sub1_Sub1_Sub1_2 = new Class2_Sub1_Sub1_Sub1(12, true, this);
-		this.aClass2_Sub1_Sub1_Sub1_3 = new Class2_Sub1_Sub1_Sub1(14, true, this);
-		this.aClass2_Sub1_Sub1_Sub1_4 = new Class2_Sub1_Sub1_Sub1(17, true, this);
-		this.aClass2_Sub1_Sub1_Sub1_5 = new Class2_Sub1_Sub1_Sub1(19, true, this);
-		this.aClass2_Sub1_Sub1_Sub1_6 = new Class2_Sub1_Sub1_Sub1(22, true, this);
-		this.aClass2_Sub1_Sub1_Sub1_7 = new Class2_Sub1_Sub1_Sub1(26, true, this);
-		this.aClass2_Sub1_Sub1_Sub1_8 = new Class2_Sub1_Sub1_Sub1(30, true, this);
+		this.aClass2_Sub1_Sub1_Sub4_1 = new PixFont(local4, "b12");
+		this.aClass2_Sub1_Sub1_Sub1_1 = new WorldmapFont(11, true, this);
+		this.aClass2_Sub1_Sub1_Sub1_2 = new WorldmapFont(12, true, this);
+		this.aClass2_Sub1_Sub1_Sub1_3 = new WorldmapFont(14, true, this);
+		this.aClass2_Sub1_Sub1_Sub1_4 = new WorldmapFont(17, true, this);
+		this.aClass2_Sub1_Sub1_Sub1_5 = new WorldmapFont(19, true, this);
+		this.aClass2_Sub1_Sub1_Sub1_6 = new WorldmapFont(22, true, this);
+		this.aClass2_Sub1_Sub1_Sub1_7 = new WorldmapFont(26, true, this);
+		this.aClass2_Sub1_Sub1_Sub1_8 = new WorldmapFont(30, true, this);
 		this.anIntArrayArray1 = new int[1280][1216];
 		this.method125(local109, this.anIntArrayArray1);
-		this.aClass2_Sub1_Sub1_Sub2_1 = new Class2_Sub1_Sub1_Sub2(this.anInt132, this.anInt131);
+		this.aClass2_Sub1_Sub1_Sub2_1 = new Pix24(this.anInt132, this.anInt131);
 		this.aClass2_Sub1_Sub1_Sub2_1.method64();
 		this.method128(0, 0, 1280, 1216, 0, 0, this.anInt132, this.anInt131);
-		Class2_Sub1_Sub1.method86(0, 0, this.anInt132, this.anInt131, 0);
-		Class2_Sub1_Sub1.method86(1, 1, this.anInt132 - 2, this.anInt131 - 2, this.anInt113);
+		Draw2D.method86(0, 0, this.anInt132, this.anInt131, 0);
+		Draw2D.method86(1, 1, this.anInt132 - 2, this.anInt131 - 2, this.anInt113);
 		super.aClass4_2.method107();
 	}
 
@@ -708,7 +708,7 @@ public final class mapview extends Applet_Sub1 {
 		if (this.aBoolean25) {
 			this.aBoolean25 = false;
 			this.anInt119 = 0;
-			Class2_Sub1_Sub1.method89();
+			Draw2D.method89();
 			@Pc(20) int local20 = this.anInt141 - (int) (635.0D / this.aDouble1);
 			@Pc(29) int local29 = this.anInt142 - (int) (503.0D / this.aDouble1);
 			@Pc(38) int local38 = this.anInt141 + (int) (635.0D / this.aDouble1);
@@ -719,14 +719,14 @@ public final class mapview extends Applet_Sub1 {
 			@Pc(186) int local186;
 			if (this.aBoolean27) {
 				this.aClass2_Sub1_Sub1_Sub2_1.method67(this.anInt133, this.anInt134);
-				Class2_Sub1_Sub1.method85(this.anInt133 + this.anInt132 * local20 / 1280, this.anInt134 + this.anInt131 * local29 / 1216, (local38 - local20) * this.anInt132 / 1280, (local47 - local29) * this.anInt131 / 1216, 16711680, 128);
-				Class2_Sub1_Sub1.method86(this.anInt133 + this.anInt132 * local20 / 1280, this.anInt134 + this.anInt131 * local29 / 1216, (local38 - local20) * this.anInt132 / 1280, (local47 - local29) * this.anInt131 / 1216, 16711680);
+				Draw2D.method85(this.anInt133 + this.anInt132 * local20 / 1280, this.anInt134 + this.anInt131 * local29 / 1216, (local38 - local20) * this.anInt132 / 1280, (local47 - local29) * this.anInt131 / 1216, 16711680, 128);
+				Draw2D.method86(this.anInt133 + this.anInt132 * local20 / 1280, this.anInt134 + this.anInt131 * local29 / 1216, (local38 - local20) * this.anInt132 / 1280, (local47 - local29) * this.anInt131 / 1216, 16711680);
 				if (this.anInt130 > 0 && this.anInt130 % 10 < 5) {
 					for (local151 = 0; local151 < this.anInt120; local151++) {
 						if (this.anIntArray30[local151] == this.anInt129) {
 							local173 = this.anInt133 + this.anInt132 * this.anIntArray28[local151] / 1280;
 							local186 = this.anInt134 + this.anInt131 * this.anIntArray29[local151] / 1216;
-							Class2_Sub1_Sub1.method90(local173, local186, 2, 16776960, 256);
+							Draw2D.method90(local173, local186, 2, 16776960, 256);
 						}
 					}
 				}
@@ -793,16 +793,16 @@ public final class mapview extends Applet_Sub1 {
 
 	@OriginalMember(owner = "mapview!mapview", name = "a", descriptor = "(IIIIIIILjava/lang/String;)V")
 	private void method127(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2, @OriginalArg(3) int arg3, @OriginalArg(4) int arg4, @OriginalArg(5) int arg5, @OriginalArg(6) int arg6, @OriginalArg(7) String arg7) {
-		Class2_Sub1_Sub1.method86(arg0, arg1, arg2, arg3, 0);
+		Draw2D.method86(arg0, arg1, arg2, arg3, 0);
 		@Pc(6) int local6 = arg0 + 1;
 		@Pc(7) int local7 = arg1 + 1;
 		@Pc(8) int local8 = arg2 - 2;
 		@Pc(9) int local9 = arg3 - 2;
-		Class2_Sub1_Sub1.method88(local6, local7, local8, local9, arg5);
-		Class2_Sub1_Sub1.method82(local6, local7, local8, arg4);
-		Class2_Sub1_Sub1.method83(local6, local7, local9, arg4);
-		Class2_Sub1_Sub1.method82(local6, local7 + local9 - 1, local8, arg6);
-		Class2_Sub1_Sub1.method83(local6 + local8 - 1, local7, local9, arg6);
+		Draw2D.method88(local6, local7, local8, local9, arg5);
+		Draw2D.method82(local6, local7, local8, arg4);
+		Draw2D.method83(local6, local7, local9, arg4);
+		Draw2D.method82(local6, local7 + local9 - 1, local8, arg6);
+		Draw2D.method83(local6 + local8 - 1, local7, local9, arg6);
 		this.aClass2_Sub1_Sub1_Sub4_1.method92(arg7, local6 + local8 / 2 + 1, local7 + local9 / 2 + 1 + 4, 0);
 		this.aClass2_Sub1_Sub1_Sub4_1.method92(arg7, local6 + local8 / 2, local7 + local9 / 2 + 4, 16777215);
 	}
@@ -842,14 +842,14 @@ public final class mapview extends Applet_Sub1 {
 						local96 += arg5;
 						local116 = local71[local80 + arg1];
 						if (local116 == 0) {
-							Class2_Sub1_Sub1.method88(local35, local88, local43 - local35, local96 - local88, local64[local80 + arg1]);
+							Draw2D.method88(local35, local88, local43 - local35, local96 - local88, local64[local80 + arg1]);
 						} else {
 							@Pc(140) byte local140 = local78[local80 + arg1];
 							local144 = local140 & 0xFC;
 							if (local144 == 0 || local47 <= 1 || local100 <= 1) {
-								Class2_Sub1_Sub1.method88(local35, local88, local47, local100, local116);
+								Draw2D.method88(local35, local88, local47, local100, local116);
 							} else {
-								this.method129(Class2_Sub1_Sub1.anIntArray10, local88 * Class2_Sub1_Sub1.anInt78 + local35, local64[local80 + arg1], local116, local47, local100, local144 >> 2, local140 & 0x3);
+								this.method129(Draw2D.anIntArray10, local88 * Draw2D.anInt78 + local35, local64[local80 + arg1], local116, local47, local100, local144 >> 2, local140 & 0x3);
 							}
 						}
 					}
@@ -895,42 +895,42 @@ public final class mapview extends Applet_Sub1 {
 								local144 -= 4;
 							}
 							if (local144 == 1) {
-								Class2_Sub1_Sub1.method83(local47, local100, local267, local303);
+								Draw2D.method83(local47, local100, local267, local303);
 							} else if (local144 == 2) {
-								Class2_Sub1_Sub1.method82(local47, local100, local222, local303);
+								Draw2D.method82(local47, local100, local222, local303);
 							} else if (local144 == 3) {
-								Class2_Sub1_Sub1.method83(local284, local100, local267, local303);
+								Draw2D.method83(local284, local100, local267, local303);
 							} else if (local144 == 4) {
-								Class2_Sub1_Sub1.method82(local47, local295, local222, local303);
+								Draw2D.method82(local47, local295, local222, local303);
 							} else if (local144 == 9) {
-								Class2_Sub1_Sub1.method83(local47, local100, local267, 16777215);
-								Class2_Sub1_Sub1.method82(local47, local100, local222, local303);
+								Draw2D.method83(local47, local100, local267, 16777215);
+								Draw2D.method82(local47, local100, local222, local303);
 							} else if (local144 == 10) {
-								Class2_Sub1_Sub1.method83(local284, local100, local267, 16777215);
-								Class2_Sub1_Sub1.method82(local47, local100, local222, local303);
+								Draw2D.method83(local284, local100, local267, 16777215);
+								Draw2D.method82(local47, local100, local222, local303);
 							} else if (local144 == 11) {
-								Class2_Sub1_Sub1.method83(local284, local100, local267, 16777215);
-								Class2_Sub1_Sub1.method82(local47, local295, local222, local303);
+								Draw2D.method83(local284, local100, local267, 16777215);
+								Draw2D.method82(local47, local295, local222, local303);
 							} else if (local144 == 12) {
-								Class2_Sub1_Sub1.method83(local47, local100, local267, 16777215);
-								Class2_Sub1_Sub1.method82(local47, local295, local222, local303);
+								Draw2D.method83(local47, local100, local267, 16777215);
+								Draw2D.method82(local47, local295, local222, local303);
 							} else if (local144 == 17) {
-								Class2_Sub1_Sub1.method82(local47, local100, 1, local303);
+								Draw2D.method82(local47, local100, 1, local303);
 							} else if (local144 == 18) {
-								Class2_Sub1_Sub1.method82(local284, local100, 1, local303);
+								Draw2D.method82(local284, local100, 1, local303);
 							} else if (local144 == 19) {
-								Class2_Sub1_Sub1.method82(local284, local295, 1, local303);
+								Draw2D.method82(local284, local295, 1, local303);
 							} else if (local144 == 20) {
-								Class2_Sub1_Sub1.method82(local47, local295, 1, local303);
+								Draw2D.method82(local47, local295, 1, local303);
 							} else {
 								@Pc(475) int local475;
 								if (local144 == 25) {
 									for (local475 = 0; local475 < local267; local475++) {
-										Class2_Sub1_Sub1.method82(local47 + local475, local295 - local475, 1, local303);
+										Draw2D.method82(local47 + local475, local295 - local475, 1, local303);
 									}
 								} else if (local144 == 26) {
 									for (local475 = 0; local475 < local267; local475++) {
-										Class2_Sub1_Sub1.method82(local47 + local475, local100 + local475, 1, local303);
+										Draw2D.method82(local47 + local475, local100 + local475, 1, local303);
 									}
 								}
 							}
@@ -958,8 +958,8 @@ public final class mapview extends Applet_Sub1 {
 				if (this.anIntArray27[local218] == this.anInt129) {
 					this.aClass2_Sub1_Sub1_Sub2Array3[this.anIntArray27[local218]].method65(this.anIntArray25[local218] - 7, this.anIntArray26[local218] - 7);
 					if (this.anInt130 % 10 < 5) {
-						Class2_Sub1_Sub1.method90(this.anIntArray25[local218], this.anIntArray26[local218], 15, 16776960, 128);
-						Class2_Sub1_Sub1.method90(this.anIntArray25[local218], this.anIntArray26[local218], 7, 16777215, 256);
+						Draw2D.method90(this.anIntArray25[local218], this.anIntArray26[local218], 15, 16776960, 128);
+						Draw2D.method90(this.anIntArray25[local218], this.anIntArray26[local218], 7, 16777215, 256);
 					}
 				}
 			}
@@ -976,7 +976,7 @@ public final class mapview extends Applet_Sub1 {
 			local88 = arg5 + (arg7 - arg5) * (local709 - arg1) / (arg3 - arg1);
 			local96 = this.anIntArray33[local218];
 			local100 = 16777215;
-			@Pc(746) Class2_Sub1_Sub1_Sub1 local746 = null;
+			@Pc(746) WorldmapFont local746 = null;
 			if (local96 == 0) {
 				if (this.aDouble1 == 3.0D) {
 					local746 = this.aClass2_Sub1_Sub1_Sub1_1;
@@ -1047,7 +1047,7 @@ public final class mapview extends Applet_Sub1 {
 
 	@OriginalMember(owner = "mapview!mapview", name = "a", descriptor = "([IIIIIIII)V")
 	private void method129(@OriginalArg(0) int[] arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2, @OriginalArg(3) int arg3, @OriginalArg(4) int arg4, @OriginalArg(5) int arg5, @OriginalArg(6) int arg6, @OriginalArg(7) int arg7) {
-		@Pc(5) int local5 = Class2_Sub1_Sub1.anInt78 - arg4;
+		@Pc(5) int local5 = Draw2D.anInt78 - arg4;
 		if (arg6 == 9) {
 			arg6 = 1;
 			arg7 = arg7 + 1 & 0x3;
@@ -1457,7 +1457,7 @@ public final class mapview extends Applet_Sub1 {
 	}
 
 	@OriginalMember(owner = "mapview!mapview", name = "i", descriptor = "()Lmapview!p;")
-	private Class7 method130() {
+	private Jagfile method130() {
 		@Pc(1) Object local1 = null;
 		@Pc(3) String local3 = null;
 		@Pc(17) byte[] local17;
@@ -1468,7 +1468,7 @@ public final class mapview extends Applet_Sub1 {
 				local17 = null;
 			}
 			if (local17 != null) {
-				return new Class7(local17);
+				return new Jagfile(local17);
 			}
 		} catch (@Pc(31) Throwable local31) {
 		}
@@ -1479,7 +1479,7 @@ public final class mapview extends Applet_Sub1 {
 			} catch (@Pc(51) Throwable local51) {
 			}
 		}
-		return new Class7(local17);
+		return new Jagfile(local17);
 	}
 
 	@OriginalMember(owner = "mapview!mapview", name = "j", descriptor = "()[B")
@@ -1489,7 +1489,7 @@ public final class mapview extends Applet_Sub1 {
 		try {
 			@Pc(10) String local10 = "";
 			for (@Pc(12) int local12 = 0; local12 < 10; local12++) {
-				local10 = local10 + Class8.anIntArray44[local12];
+				local10 = local10 + sig.anIntArray44[local12];
 			}
 			@Pc(40) DataInputStream local40;
 			if (super.aFrame_Sub1_2 == null) {
@@ -1581,7 +1581,7 @@ public final class mapview extends Applet_Sub1 {
 		local6.update(arg0);
 		@Pc(14) byte[] local14 = local6.digest();
 		for (@Pc(16) int local16 = 0; local16 < 20; local16++) {
-			if (local14[local16] != Class8.anIntArray44[local16]) {
+			if (local14[local16] != sig.anIntArray44[local16]) {
 				return false;
 			}
 		}

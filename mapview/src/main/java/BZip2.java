@@ -4,18 +4,18 @@ import org.openrs2.deob.annotation.OriginalMember;
 import org.openrs2.deob.annotation.Pc;
 
 @OriginalClass("mapview!n")
-public final class Class5 {
+public final class BZip2 {
 
 	@OriginalMember(owner = "mapview!n", name = "a", descriptor = "Lmapview!o;")
-	private static Class6 aClass6_1 = new Class6();
+	private static BZip2State aClass6_1 = new BZip2State();
 
 	@OriginalMember(owner = "mapview!n", name = "a", descriptor = "(Lmapview!o;)B")
-	private static byte method136(@OriginalArg(0) Class6 arg0) {
+	private static byte method136(@OriginalArg(0) BZip2State arg0) {
 		return (byte) method143(8, arg0);
 	}
 
 	@OriginalMember(owner = "mapview!n", name = "b", descriptor = "(Lmapview!o;)V")
-	private static void method137(@OriginalArg(0) Class6 arg0) {
+	private static void method137(@OriginalArg(0) BZip2State arg0) {
 		@Pc(3) boolean local3 = false;
 		@Pc(5) boolean local5 = false;
 		@Pc(7) boolean local7 = false;
@@ -41,8 +41,8 @@ public final class Class5 {
 		@Pc(47) int[] local47 = null;
 		@Pc(49) int[] local49 = null;
 		arg0.anInt164 = 1;
-		if (Class6.anIntArray37 == null) {
-			Class6.anIntArray37 = new int[arg0.anInt164 * 100000];
+		if (BZip2State.anIntArray37 == null) {
+			BZip2State.anIntArray37 = new int[arg0.anInt164 * 100000];
 		}
 		@Pc(62) boolean local62 = true;
 		while (true) {
@@ -233,7 +233,7 @@ public final class Class5 {
 							local66 = arg0.aByteArray6[arg0.aByteArray7[arg0.anIntArray38[0]] & 0xFF];
 							arg0.anIntArray34[local66 & 0xFF] += local606;
 							while (local606 > 0) {
-								Class6.anIntArray37[local528] = local66 & 0xFF;
+								BZip2State.anIntArray37[local528] = local66 & 0xFF;
 								local528++;
 								local606--;
 							}
@@ -285,7 +285,7 @@ public final class Class5 {
 								}
 							}
 							arg0.anIntArray34[arg0.aByteArray6[local66 & 0xFF] & 0xFF]++;
-							Class6.anIntArray37[local528] = arg0.aByteArray6[local66 & 0xFF] & 0xFF;
+							BZip2State.anIntArray37[local528] = arg0.aByteArray6[local66 & 0xFF] & 0xFF;
 							local528++;
 							if (local559 == 0) {
 								local477++;
@@ -315,13 +315,13 @@ public final class Class5 {
 						arg0.anIntArray35[local166] += arg0.anIntArray35[local166 - 1];
 					}
 					for (local166 = 0; local166 < local528; local166++) {
-						local66 = (byte) (Class6.anIntArray37[local166] & 0xFF);
-						Class6.anIntArray37[arg0.anIntArray35[local66 & 0xFF]] |= local166 << 8;
+						local66 = (byte) (BZip2State.anIntArray37[local166] & 0xFF);
+						BZip2State.anIntArray37[arg0.anIntArray35[local66 & 0xFF]] |= local166 << 8;
 						arg0.anIntArray35[local66 & 0xFF]++;
 					}
-					arg0.anInt167 = Class6.anIntArray37[arg0.anInt166] >> 8;
+					arg0.anInt167 = BZip2State.anIntArray37[arg0.anInt166] >> 8;
 					arg0.anInt169 = 0;
-					arg0.anInt167 = Class6.anIntArray37[arg0.anInt167];
+					arg0.anInt167 = BZip2State.anIntArray37[arg0.anInt167];
 					arg0.anInt168 = (byte) (arg0.anInt167 & 0xFF);
 					arg0.anInt167 >>= 0x8;
 					arg0.anInt169++;
@@ -340,12 +340,12 @@ public final class Class5 {
 	}
 
 	@OriginalMember(owner = "mapview!n", name = "c", descriptor = "(Lmapview!o;)V")
-	private static void method138(@OriginalArg(0) Class6 arg0) {
+	private static void method138(@OriginalArg(0) BZip2State arg0) {
 		@Pc(4) byte local4 = arg0.aByte1;
 		@Pc(7) int local7 = arg0.anInt161;
 		@Pc(10) int local10 = arg0.anInt169;
 		@Pc(13) int local13 = arg0.anInt168;
-		@Pc(15) int[] local15 = Class6.anIntArray37;
+		@Pc(15) int[] local15 = BZip2State.anIntArray37;
 		@Pc(18) int local18 = arg0.anInt167;
 		@Pc(21) byte[] local21 = arg0.aByteArray5;
 		@Pc(24) int local24 = arg0.anInt157;
@@ -449,7 +449,7 @@ public final class Class5 {
 		arg0.anInt161 = local7;
 		arg0.anInt169 = local10;
 		arg0.anInt168 = local13;
-		Class6.anIntArray37 = local15;
+		BZip2State.anIntArray37 = local15;
 		arg0.anInt167 = local18;
 		arg0.aByteArray5 = local21;
 		arg0.anInt157 = local24;
@@ -457,7 +457,7 @@ public final class Class5 {
 	}
 
 	@OriginalMember(owner = "mapview!n", name = "d", descriptor = "(Lmapview!o;)V")
-	private static void method139(@OriginalArg(0) Class6 arg0) {
+	private static void method139(@OriginalArg(0) BZip2State arg0) {
 		arg0.anInt170 = 0;
 		for (@Pc(4) int local4 = 0; local4 < 256; local4++) {
 			if (arg0.aBooleanArray1[local4]) {
@@ -468,7 +468,7 @@ public final class Class5 {
 	}
 
 	@OriginalMember(owner = "mapview!n", name = "e", descriptor = "(Lmapview!o;)B")
-	private static byte method140(@OriginalArg(0) Class6 arg0) {
+	private static byte method140(@OriginalArg(0) BZip2State arg0) {
 		return (byte) method143(1, arg0);
 	}
 
@@ -509,7 +509,7 @@ public final class Class5 {
 
 	@OriginalMember(owner = "mapview!n", name = "a", descriptor = "([BI[BII)I")
 	public static int method142(@OriginalArg(0) byte[] arg0, @OriginalArg(1) int arg1, @OriginalArg(2) byte[] arg2, @OriginalArg(3) int arg3, @OriginalArg(4) int arg4) {
-		@Pc(4) Class6 local4 = aClass6_1;
+		@Pc(4) BZip2State local4 = aClass6_1;
 		synchronized (aClass6_1) {
 			aClass6_1.aByteArray4 = arg2;
 			aClass6_1.anInt153 = arg4;
@@ -530,7 +530,7 @@ public final class Class5 {
 	}
 
 	@OriginalMember(owner = "mapview!n", name = "a", descriptor = "(ILmapview!o;)I")
-	private static int method143(@OriginalArg(0) int arg0, @OriginalArg(1) Class6 arg1) {
+	private static int method143(@OriginalArg(0) int arg0, @OriginalArg(1) BZip2State arg1) {
 		while (arg1.anInt163 < arg0) {
 			arg1.anInt162 = arg1.anInt162 << 8 | arg1.aByteArray4[arg1.anInt153] & 0xFF;
 			arg1.anInt163 += 8;

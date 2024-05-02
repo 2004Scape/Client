@@ -2,7 +2,7 @@ import org.openrs2.deob.annotation.OriginalClass;
 import org.openrs2.deob.annotation.OriginalMember;
 
 @OriginalClass("mapview!o")
-public final class Class6 {
+public final class BZip2State {
 
 	@OriginalMember(owner = "mapview!o", name = "I", descriptor = "[I")
 	public static int[] anIntArray37;

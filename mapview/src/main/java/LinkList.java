@@ -3,21 +3,21 @@ import org.openrs2.deob.annotation.OriginalMember;
 import org.openrs2.deob.annotation.Pc;
 
 @OriginalClass("mapview!l")
-public final class Class3 {
+public final class LinkList {
 
 	@OriginalMember(owner = "mapview!l", name = "a", descriptor = "Lmapview!d;")
-	private Class2 aClass2_17 = new Class2();
+	private Linkable aClass2_17 = new Linkable();
 
 	@OriginalMember(owner = "mapview!l", name = "<init>", descriptor = "()V")
-	public Class3() {
+	public LinkList() {
 		this.aClass2_17.aClass2_15 = this.aClass2_17;
 		this.aClass2_17.aClass2_16 = this.aClass2_17;
 	}
 
 	@OriginalMember(owner = "mapview!l", name = "a", descriptor = "()Lmapview!d;")
-	public Class2 method106() {
-		@Pc(1) boolean local1 = Class2_Sub1.aBoolean19;
-		@Pc(5) Class2 local5 = this.aClass2_17.aClass2_15;
+	public Linkable method106() {
+		@Pc(1) boolean local1 = Hashable.aBoolean19;
+		@Pc(5) Linkable local5 = this.aClass2_17.aClass2_15;
 		if (local5 == this.aClass2_17) {
 			return null;
 		} else {

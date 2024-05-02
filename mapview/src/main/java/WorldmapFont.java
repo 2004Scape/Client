@@ -10,7 +10,7 @@ import org.openrs2.deob.annotation.OriginalMember;
 import org.openrs2.deob.annotation.Pc;
 
 @OriginalClass("mapview!g")
-public final class Class2_Sub1_Sub1_Sub1 extends Class2_Sub1_Sub1 {
+public final class WorldmapFont extends Draw2D {
 
 	@OriginalMember(owner = "mapview!g", name = "s", descriptor = "[I")
 	private static int[] anIntArray5 = new int[256];
@@ -35,7 +35,7 @@ public final class Class2_Sub1_Sub1_Sub1 extends Class2_Sub1_Sub1 {
 	}
 
 	@OriginalMember(owner = "mapview!g", name = "<init>", descriptor = "(IZLmapview!a;)V")
-	public Class2_Sub1_Sub1_Sub1(@OriginalArg(0) int arg0, @OriginalArg(1) boolean arg1, @OriginalArg(2) Applet_Sub1 arg2) {
+	public WorldmapFont(@OriginalArg(0) int arg0, @OriginalArg(1) boolean arg1, @OriginalArg(2) GameShell arg2) {
 		this.anInt44 = 855;
 		this.aBoolean11 = false;
 		@Pc(30) Font local30 = new Font("Helvetica", arg1 ? 1 : 0, arg0);
@@ -68,7 +68,7 @@ public final class Class2_Sub1_Sub1_Sub1 extends Class2_Sub1_Sub1 {
 	}
 
 	@OriginalMember(owner = "mapview!g", name = "a", descriptor = "(Ljava/awt/Font;Ljava/awt/FontMetrics;CIZLmapview!a;)V")
-	private void method45(@OriginalArg(0) Font arg0, @OriginalArg(1) FontMetrics arg1, @OriginalArg(2) char arg2, @OriginalArg(3) int arg3, @OriginalArg(4) boolean arg4, @OriginalArg(5) Applet_Sub1 arg5) {
+	private void method45(@OriginalArg(0) Font arg0, @OriginalArg(1) FontMetrics arg1, @OriginalArg(2) char arg2, @OriginalArg(3) int arg3, @OriginalArg(4) boolean arg4, @OriginalArg(5) GameShell arg5) {
 		@Pc(5) int local5 = arg1.charWidth(arg2);
 		@Pc(7) int local7 = local5;
 		if (arg4) {
@@ -191,7 +191,7 @@ public final class Class2_Sub1_Sub1_Sub1 extends Class2_Sub1_Sub1 {
 	public void method47(@OriginalArg(0) String arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2, @OriginalArg(3) int arg3, @OriginalArg(4) boolean arg4) {
 		@Pc(5) int local5 = this.method50(arg0) / 2;
 		@Pc(8) int local8 = this.method53();
-		if (arg1 - local5 <= Class2_Sub1_Sub1.anInt83 && (arg1 + local5 >= Class2_Sub1_Sub1.anInt82 && (arg2 - local8 <= Class2_Sub1_Sub1.anInt81 && arg2 >= 0))) {
+		if (arg1 - local5 <= Draw2D.anInt83 && (arg1 + local5 >= Draw2D.anInt82 && (arg2 - local8 <= Draw2D.anInt81 && arg2 >= 0))) {
 			this.method46(arg0, arg1 - local5, arg2, arg3, arg4);
 		}
 	}
@@ -242,31 +242,31 @@ public final class Class2_Sub1_Sub1_Sub1 extends Class2_Sub1_Sub1 {
 		@Pc(21) int local21 = arg4[arg0 + 3];
 		@Pc(27) int local27 = arg4[arg0 + 4];
 		@Pc(47) int local47 = arg4[arg0] * 16384 + arg4[arg0 + 1] * 128 + arg4[arg0 + 2];
-		@Pc(53) int local53 = local7 + local15 * Class2_Sub1_Sub1.anInt78;
-		@Pc(57) int local57 = Class2_Sub1_Sub1.anInt78 - local21;
+		@Pc(53) int local53 = local7 + local15 * Draw2D.anInt78;
+		@Pc(57) int local57 = Draw2D.anInt78 - local21;
 		@Pc(59) int local59 = 0;
 		@Pc(66) int local66;
-		if (local15 < Class2_Sub1_Sub1.anInt80) {
-			local66 = Class2_Sub1_Sub1.anInt80 - local15;
+		if (local15 < Draw2D.anInt80) {
+			local66 = Draw2D.anInt80 - local15;
 			local27 -= local66;
-			local15 = Class2_Sub1_Sub1.anInt80;
+			local15 = Draw2D.anInt80;
 			local47 += local66 * local21;
-			local53 += local66 * Class2_Sub1_Sub1.anInt78;
+			local53 += local66 * Draw2D.anInt78;
 		}
-		if (local15 + local27 >= Class2_Sub1_Sub1.anInt81) {
-			local27 -= local15 + local27 - Class2_Sub1_Sub1.anInt81 + 1;
+		if (local15 + local27 >= Draw2D.anInt81) {
+			local27 -= local15 + local27 - Draw2D.anInt81 + 1;
 		}
-		if (local7 < Class2_Sub1_Sub1.anInt82) {
-			local66 = Class2_Sub1_Sub1.anInt82 - local7;
+		if (local7 < Draw2D.anInt82) {
+			local66 = Draw2D.anInt82 - local7;
 			local21 -= local66;
-			local7 = Class2_Sub1_Sub1.anInt82;
+			local7 = Draw2D.anInt82;
 			local47 += local66;
 			local53 += local66;
 			local59 += local66;
 			local57 += local66;
 		}
-		if (local7 + local21 >= Class2_Sub1_Sub1.anInt83) {
-			local66 = local7 + local21 - Class2_Sub1_Sub1.anInt83 + 1;
+		if (local7 + local21 >= Draw2D.anInt83) {
+			local66 = local7 + local21 - Draw2D.anInt83 + 1;
 			local21 -= local66;
 			local59 += local66;
 			local57 += local66;
@@ -275,9 +275,9 @@ public final class Class2_Sub1_Sub1_Sub1 extends Class2_Sub1_Sub1 {
 			return;
 		}
 		if (arg5) {
-			this.method48(Class2_Sub1_Sub1.anIntArray10, arg4, arg3, local47, local53, local21, local27, local57, local59);
+			this.method48(Draw2D.anIntArray10, arg4, arg3, local47, local53, local21, local27, local57, local59);
 		} else {
-			this.method52(Class2_Sub1_Sub1.anIntArray10, arg4, arg3, local47, local53, local21, local27, local57, local59);
+			this.method52(Draw2D.anIntArray10, arg4, arg3, local47, local53, local21, local27, local57, local59);
 		}
 	}
 

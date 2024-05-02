@@ -6,13 +6,13 @@ import java.awt.image.DirectColorModel;
 import java.awt.image.ImageConsumer;
 import java.awt.image.ImageObserver;
 import java.awt.image.ImageProducer;
-import java.util.Hashtable;
+
 import org.openrs2.deob.annotation.OriginalArg;
 import org.openrs2.deob.annotation.OriginalClass;
 import org.openrs2.deob.annotation.OriginalMember;
 
 @OriginalClass("mapview!m")
-public final class Class4 implements ImageProducer, ImageObserver {
+public final class PixMap implements ImageProducer, ImageObserver {
 
 	@OriginalMember(owner = "mapview!m", name = "e", descriptor = "Ljava/awt/image/ImageConsumer;")
 	private ImageConsumer anImageConsumer1;
@@ -33,7 +33,7 @@ public final class Class4 implements ImageProducer, ImageObserver {
 	private Image anImage1;
 
 	@OriginalMember(owner = "mapview!m", name = "<init>", descriptor = "(IILjava/awt/Component;)V")
-	public Class4(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(2) Component arg2) {
+	public PixMap(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(2) Component arg2) {
 		this.anInt93 = arg0;
 		this.anInt94 = arg1;
 		this.anIntArray20 = new int[arg0 * arg1];
@@ -50,7 +50,7 @@ public final class Class4 implements ImageProducer, ImageObserver {
 
 	@OriginalMember(owner = "mapview!m", name = "a", descriptor = "()V")
 	public void method107() {
-		Class2_Sub1_Sub1.method87(this.anIntArray20, this.anInt93, this.anInt94);
+		Draw2D.method87(this.anIntArray20, this.anInt93, this.anInt94);
 	}
 
 	@OriginalMember(owner = "mapview!m", name = "imageUpdate", descriptor = "(Ljava/awt/Image;IIIII)Z")

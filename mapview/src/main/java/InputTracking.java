@@ -4,16 +4,16 @@ import org.openrs2.deob.annotation.OriginalMember;
 import org.openrs2.deob.annotation.Pc;
 
 @OriginalClass("mapview!c")
-public final class Class1 {
+public final class InputTracking {
 
 	@OriginalMember(owner = "mapview!c", name = "a", descriptor = "Z")
 	public static boolean aBoolean5 = false;
 
 	@OriginalMember(owner = "mapview!c", name = "b", descriptor = "Lmapview!k;")
-	private static Class2_Sub1_Sub2 aClass2_Sub1_Sub2_1 = null;
+	private static Packet aClass2_Sub1_Sub2_1 = null;
 
 	@OriginalMember(owner = "mapview!c", name = "c", descriptor = "Lmapview!k;")
-	private static Class2_Sub1_Sub2 aClass2_Sub1_Sub2_2 = null;
+	private static Packet aClass2_Sub1_Sub2_2 = null;
 
 	@OriginalMember(owner = "mapview!c", name = "d", descriptor = "J")
 	private static long aLong3 = 0L;
@@ -30,8 +30,8 @@ public final class Class1 {
 	@OriginalMember(owner = "mapview!c", name = "a", descriptor = "(I)V")
 	private static synchronized void method13(@OriginalArg(0) int arg0) {
 		if (aClass2_Sub1_Sub2_1.anInt89 + arg0 >= 500) {
-			@Pc(7) Class2_Sub1_Sub2 local7 = aClass2_Sub1_Sub2_1;
-			aClass2_Sub1_Sub2_1 = Class2_Sub1_Sub2.method104(1);
+			@Pc(7) Packet local7 = aClass2_Sub1_Sub2_1;
+			aClass2_Sub1_Sub2_1 = Packet.method104(1);
 			aClass2_Sub1_Sub2_2 = local7;
 		}
 	}

@@ -4,7 +4,7 @@ import org.openrs2.deob.annotation.OriginalMember;
 import org.openrs2.deob.annotation.Pc;
 
 @OriginalClass("mapview!f")
-public class Class2_Sub1_Sub1 extends Class2_Sub1 {
+public class Draw2D extends Hashable {
 
 	@OriginalMember(owner = "mapview!f", name = "e", descriptor = "[I")
 	public static int[] anIntArray10;
@@ -217,6 +217,6 @@ public class Class2_Sub1_Sub1 extends Class2_Sub1 {
 	}
 
 	@OriginalMember(owner = "mapview!f", name = "<init>", descriptor = "()V")
-	protected Class2_Sub1_Sub1() {
+	protected Draw2D() {
 	}
 }

@@ -19,7 +19,7 @@ import org.openrs2.deob.annotation.OriginalMember;
 import org.openrs2.deob.annotation.Pc;
 
 @OriginalClass("mapview!a")
-public class Applet_Sub1 extends Applet implements Runnable, MouseListener, MouseMotionListener, KeyListener, FocusListener, WindowListener {
+public class GameShell extends Applet implements Runnable, MouseListener, MouseMotionListener, KeyListener, FocusListener, WindowListener {
 
 	@OriginalMember(owner = "mapview!a", name = "g", descriptor = "I")
 	private int anInt99;
@@ -31,10 +31,10 @@ public class Applet_Sub1 extends Applet implements Runnable, MouseListener, Mous
 	protected Graphics aGraphics2;
 
 	@OriginalMember(owner = "mapview!a", name = "j", descriptor = "Lmapview!m;")
-	protected Class4 aClass4_2;
+	protected PixMap aClass4_2;
 
 	@OriginalMember(owner = "mapview!a", name = "l", descriptor = "Lmapview!b;")
-	protected Frame_Sub1 aFrame_Sub1_2;
+	protected ViewBox aFrame_Sub1_2;
 
 	@OriginalMember(owner = "mapview!a", name = "a", descriptor = "I")
 	private int anInt95 = 0;
@@ -55,7 +55,7 @@ public class Applet_Sub1 extends Applet implements Runnable, MouseListener, Mous
 	private boolean aBoolean21 = false;
 
 	@OriginalMember(owner = "mapview!a", name = "k", descriptor = "[Lmapview!h;")
-	private Class2_Sub1_Sub1_Sub2[] aClass2_Sub1_Sub1_Sub2Array2 = new Class2_Sub1_Sub1_Sub2[6];
+	private Pix24[] aClass2_Sub1_Sub1_Sub2Array2 = new Pix24[6];
 
 	@OriginalMember(owner = "mapview!a", name = "m", descriptor = "Z")
 	private boolean aBoolean22 = true;
@@ -162,8 +162,8 @@ public class Applet_Sub1 extends Applet implements Runnable, MouseListener, Mous
 	public final void mouseReleased(@OriginalArg(0) MouseEvent arg0) {
 		this.anInt101 = 0;
 		this.anInt102 = 0;
-		if (Class1.aBoolean5) {
-			Class1.method18(arg0.isMetaDown() ? 1 : 0);
+		if (InputTracking.aBoolean5) {
+			InputTracking.method18(arg0.isMetaDown() ? 1 : 0);
 		}
 	}
 
@@ -225,8 +225,8 @@ public class Applet_Sub1 extends Applet implements Runnable, MouseListener, Mous
 			this.anIntArray22[this.anInt112] = local8;
 			this.anInt112 = this.anInt112 + 1 & 0x7F;
 		}
-		if (Class1.aBoolean5) {
-			Class1.method19(local8);
+		if (InputTracking.aBoolean5) {
+			InputTracking.method19(local8);
 		}
 	}
 
@@ -273,8 +273,8 @@ public class Applet_Sub1 extends Applet implements Runnable, MouseListener, Mous
 	@OriginalMember(owner = "mapview!a", name = "mouseEntered", descriptor = "(Ljava/awt/event/MouseEvent;)V")
 	@Override
 	public final void mouseEntered(@OriginalArg(0) MouseEvent arg0) {
-		if (Class1.aBoolean5) {
-			Class1.method20();
+		if (InputTracking.aBoolean5) {
+			InputTracking.method20();
 		}
 	}
 
@@ -284,8 +284,8 @@ public class Applet_Sub1 extends Applet implements Runnable, MouseListener, Mous
 		this.anInt101 = 0;
 		this.anInt103 = -1;
 		this.anInt104 = -1;
-		if (Class1.aBoolean5) {
-			Class1.method21();
+		if (InputTracking.aBoolean5) {
+			InputTracking.method21();
 		}
 	}
 
@@ -320,9 +320,9 @@ public class Applet_Sub1 extends Applet implements Runnable, MouseListener, Mous
 	protected final void method115(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1) {
 		this.anInt99 = arg0;
 		this.anInt100 = arg1;
-		this.aFrame_Sub1_2 = new Frame_Sub1(this, this.anInt99, this.anInt100);
+		this.aFrame_Sub1_2 = new ViewBox(this, this.anInt99, this.anInt100);
 		this.aGraphics2 = this.method118().getGraphics();
-		this.aClass4_2 = new Class4(this.anInt99, this.anInt100, this.method118());
+		this.aClass4_2 = new PixMap(this.anInt99, this.anInt100, this.method118());
 		this.method112(this, 1);
 	}
 
@@ -370,8 +370,8 @@ public class Applet_Sub1 extends Applet implements Runnable, MouseListener, Mous
 			this.anInt105 = 1;
 			this.anInt102 = 1;
 		}
-		if (Class1.aBoolean5) {
-			Class1.method16(local2, local5, arg0.isMetaDown() ? 1 : 0);
+		if (InputTracking.aBoolean5) {
+			InputTracking.method16(local2, local5, arg0.isMetaDown() ? 1 : 0);
 		}
 	}
 
@@ -387,8 +387,8 @@ public class Applet_Sub1 extends Applet implements Runnable, MouseListener, Mous
 		this.anInt101 = 0;
 		this.anInt103 = local2;
 		this.anInt104 = local5;
-		if (Class1.aBoolean5) {
-			Class1.method14(local2, local5);
+		if (InputTracking.aBoolean5) {
+			InputTracking.method14(local2, local5);
 		}
 	}
 
@@ -397,7 +397,7 @@ public class Applet_Sub1 extends Applet implements Runnable, MouseListener, Mous
 		this.anInt99 = arg0;
 		this.anInt100 = arg1;
 		this.aGraphics2 = this.method118().getGraphics();
-		this.aClass4_2 = new Class4(this.anInt99, this.anInt100, this.method118());
+		this.aClass4_2 = new PixMap(this.anInt99, this.anInt100, this.method118());
 		this.method112(this, 1);
 	}
 
@@ -413,8 +413,8 @@ public class Applet_Sub1 extends Applet implements Runnable, MouseListener, Mous
 		this.anInt101 = 0;
 		this.anInt103 = local2;
 		this.anInt104 = local5;
-		if (Class1.aBoolean5) {
-			Class1.method14(local2, local5);
+		if (InputTracking.aBoolean5) {
+			InputTracking.method14(local2, local5);
 		}
 	}
 
@@ -463,8 +463,8 @@ public class Applet_Sub1 extends Applet implements Runnable, MouseListener, Mous
 	@Override
 	public final void focusLost(@OriginalArg(0) FocusEvent arg0) {
 		this.aBoolean23 = false;
-		if (Class1.aBoolean5) {
-			Class1.method17();
+		if (InputTracking.aBoolean5) {
+			InputTracking.method17();
 		}
 	}
 
@@ -507,8 +507,8 @@ public class Applet_Sub1 extends Applet implements Runnable, MouseListener, Mous
 		if (local8 > '\u0000' && local8 < '\u0080') {
 			this.anIntArray21[local8] = 0;
 		}
-		if (Class1.aBoolean5) {
-			Class1.method22(local8);
+		if (InputTracking.aBoolean5) {
+			InputTracking.method22(local8);
 		}
 	}
 
@@ -628,8 +628,8 @@ public class Applet_Sub1 extends Applet implements Runnable, MouseListener, Mous
 		this.aBoolean23 = true;
 		this.aBoolean22 = true;
 		this.method110();
-		if (Class1.aBoolean5) {
-			Class1.method15();
+		if (InputTracking.aBoolean5) {
+			InputTracking.method15();
 		}
 	}
 
