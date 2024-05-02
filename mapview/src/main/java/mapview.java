@@ -38,7 +38,7 @@ public final class mapview extends GameShell {
 	private int[][] overlayTiles;
 
 	@OriginalMember(owner = "mapview!mapview", name = "R", descriptor = "[[B")
-	private byte[][] overlayShapes;
+	private byte[][] overlayInfo;
 
 	@OriginalMember(owner = "mapview!mapview", name = "S", descriptor = "[[B")
 	private byte[][] locWalls;
@@ -170,7 +170,7 @@ public final class mapview extends GameShell {
 	private int currentKeyHover = -1;
 
 	@OriginalMember(owner = "mapview!mapview", name = "vb", descriptor = "I")
-	private int anInt128 = -1;
+	private int lastKeyHover = -1;
 
 	@OriginalMember(owner = "mapview!mapview", name = "wb", descriptor = "I")
 	private int currentKey = -1;
@@ -263,8 +263,8 @@ public final class mapview extends GameShell {
 
 		@Pc(118) byte[] overlayData = worldmap.read("overlay.dat", null);
 		this.overlayTiles = new int[1280][1216];
-		this.overlayShapes = new byte[1280][1216];
-		this.readOverlayData(overlayData, this.overlayTiles, this.overlayShapes);
+		this.overlayInfo = new byte[1280][1216];
+		this.readOverlayData(overlayData, this.overlayTiles, this.overlayInfo);
 
 		@Pc(140) byte[] locData = worldmap.read("loc.dat", null);
 		this.locWalls = new byte[1280][1216];
@@ -392,19 +392,19 @@ public final class mapview extends GameShell {
 					@Pc(63) int zIndex = 1216 - mz - 1;
 
 					for (@Pc(65) int z = -64; z < 0; z++) {
-						int info = data[pos++];
-						if (info == 0) {
+						int opcode = data[pos++];
+						if (opcode == 0) {
 							tile[zIndex--] = 0;
 						} else {
 							shape[zIndex] = data[pos++];
-							tile[zIndex--] = this.floorcolOverlay[info];
+							tile[zIndex--] = this.floorcolOverlay[opcode];
 						}
 					}
 				}
 			} else {
 				for (int i = -4096; i < 0; i++) {
-					int info = data[pos++];
-					if (info != 0) {
+					int opcode = data[pos++];
+					if (opcode != 0) {
 						pos++;
 					}
 				}
@@ -522,7 +522,7 @@ public final class mapview extends GameShell {
 			this.floorcolOverlay = null;
 			this.floormapColors = null;
 			this.overlayTiles = null;
-			this.overlayShapes = null;
+			this.overlayInfo = null;
 			this.locWalls = null;
 			this.locMapfunctions = null;
 			this.locMapscenes = null;
@@ -621,7 +621,9 @@ public final class mapview extends GameShell {
             if (this.showKey) {
                 if (super.mouseClickX > this.keyX && super.mouseClickY > this.keyY && super.mouseClickX < this.keyX + this.keyWidth && super.mouseClickY < this.keyY + this.keyHeight) {
                     this.lastMouseClickX = -1;
-                } else if (super.mouseClickX > this.keyX && super.mouseClickY > this.keyY && super.mouseClickX < this.keyX + this.keyWidth && super.mouseClickY < this.keyY + 18) {
+                }
+
+				if (super.mouseClickX > this.keyX && super.mouseClickY > this.keyY && super.mouseClickX < this.keyX + this.keyWidth && super.mouseClickY < this.keyY + 18) {
                     this.keyPage = 0;
                 } else if (super.mouseClickX > this.keyX && super.mouseClickY > this.keyY + this.keyHeight - 18 && super.mouseClickX < this.keyX + this.keyWidth && super.mouseClickY < this.keyY + this.keyHeight) {
                     this.keyPage = 25;
@@ -633,39 +635,43 @@ public final class mapview extends GameShell {
 
         if (this.showKey) {
             this.currentKeyHover = -1;
+
             if (super.mouseX > this.keyX && super.mouseX < this.keyX + this.keyWidth) {
-                int local463 = this.keyY + 21 + 5;
-                for (int local465 = 0; local465 < 25; local465++) {
-                    if (local465 + this.lastKeyPage >= this.keyNames.length || !this.keyNames[local465 + this.lastKeyPage].equals("???")) {
-                        if (super.mouseY >= local463 && super.mouseY < local463 + 17) {
-                            this.currentKeyHover = local465 + this.lastKeyPage;
+                int y = this.keyY + 21 + 5;
+
+                for (int row = 0; row < 25; row++) {
+                    if (row + this.lastKeyPage >= this.keyNames.length || !this.keyNames[row + this.lastKeyPage].equals("???")) {
+                        if (super.mouseY >= y && super.mouseY < y + 17) {
+                            this.currentKeyHover = row + this.lastKeyPage;
+
                             if (super.mouseClickButton == 1) {
-                                this.currentKey = local465 + this.lastKeyPage;
+                                this.currentKey = row + this.lastKeyPage;
                                 this.flashTimer = 50;
                             }
                         }
-                        local463 += 17;
+
+                        y += 17;
                     }
                 }
             }
 
-            if (this.currentKeyHover != this.anInt128) {
-                this.anInt128 = this.currentKeyHover;
+            if (this.currentKeyHover != this.lastKeyHover) {
+                this.lastKeyHover = this.currentKeyHover;
                 this.redraw = true;
             }
         }
 
         if ((super.mouseButton == 1 || super.mouseClickButton == 1) && this.showOverview) {
-			int local463 = super.mouseClickX;
-			int local465 = super.mouseClickY;
+			int mouseClickX = super.mouseClickX;
+			int mouseClickY = super.mouseClickY;
             if (super.mouseButton == 1) {
-                local463 = super.mouseX;
-                local465 = super.mouseY;
+                mouseClickX = super.mouseX;
+                mouseClickY = super.mouseY;
             }
 
-            if (local463 > this.overviewX && local465 > this.overviewY && local463 < this.overviewX + this.imageOverviewWidth && local465 < this.overviewY + this.imageOverviewHeight) {
-                this.offsetX = (local463 - this.overviewX) * 1280 / this.imageOverviewWidth;
-                this.offsetY = (local465 - this.overviewY) * 1216 / this.imageOverviewHeight;
+            if (mouseClickX > this.overviewX && mouseClickY > this.overviewY && mouseClickX < this.overviewX + this.imageOverviewWidth && mouseClickY < this.overviewY + this.imageOverviewHeight) {
+                this.offsetX = (mouseClickX - this.overviewX) * 1280 / this.imageOverviewWidth;
+                this.offsetY = (mouseClickY - this.overviewY) * 1216 / this.imageOverviewHeight;
                 this.lastMouseClickX = -1;
                 this.redraw = true;
             }
@@ -708,20 +714,20 @@ public final class mapview extends GameShell {
             this.flashTimer--;
         }
 
-		int local463 = this.offsetX - (int) (635.0D / this.zoomX);
-		int local465 = this.offsetY - (int) (503.0D / this.zoomX);
-        @Pc(776) int local776 = this.offsetX + (int) (635.0D / this.zoomX);
-        @Pc(785) int local785 = this.offsetY + (int) (503.0D / this.zoomX);
-        if (local463 < 48) {
+		int left = this.offsetX - (int) (635.0D / this.zoomX);
+		int top = this.offsetY - (int) (503.0D / this.zoomX);
+        @Pc(776) int right = this.offsetX + (int) (635.0D / this.zoomX);
+        @Pc(785) int bottom = this.offsetY + (int) (503.0D / this.zoomX);
+        if (left < 48) {
             this.offsetX = (int) (635.0D / this.zoomX) + 48;
         }
-        if (local465 < 48) {
+        if (top < 48) {
             this.offsetY = (int) (503.0D / this.zoomX) + 48;
         }
-        if (local776 > 1232) {
+        if (right > 1232) {
             this.offsetX = 1232 - (int) (635.0D / this.zoomX);
         }
-        if (local785 > 1168) {
+        if (bottom > 1168) {
             this.offsetY = 1168 - (int) (503.0D / this.zoomX);
         }
     }
@@ -732,76 +738,89 @@ public final class mapview extends GameShell {
 		if (this.redraw) {
 			this.redraw = false;
 			this.redrawTimer = 0;
+
 			Draw2D.clear();
-			@Pc(20) int local20 = this.offsetX - (int) (635.0D / this.zoomX);
-			@Pc(29) int local29 = this.offsetY - (int) (503.0D / this.zoomX);
-			@Pc(38) int local38 = this.offsetX + (int) (635.0D / this.zoomX);
-			@Pc(47) int local47 = this.offsetY + (int) (503.0D / this.zoomX);
-			this.drawMap(local20, local29, local38, local47, 0, 0, 635, 503);
-			@Pc(151) int local151;
-			@Pc(173) int local173;
-			@Pc(186) int local186;
+
+			@Pc(20) int left = this.offsetX - (int) (635.0D / this.zoomX);
+			@Pc(29) int top = this.offsetY - (int) (503.0D / this.zoomX);
+			@Pc(38) int right = this.offsetX + (int) (635.0D / this.zoomX);
+			@Pc(47) int bottom = this.offsetY + (int) (503.0D / this.zoomX);
+			this.drawMap(left, top, right, bottom, 0, 0, 635, 503);
+
 			if (this.showOverview) {
 				this.imageOverview.blitOpaque(this.overviewX, this.overviewY);
-				Draw2D.fillRectAlpha(this.overviewX + this.imageOverviewWidth * local20 / 1280, this.overviewY + this.imageOverviewHeight * local29 / 1216, (local38 - local20) * this.imageOverviewWidth / 1280, (local47 - local29) * this.imageOverviewHeight / 1216, 0xff0000, 0x80);
-				Draw2D.drawRect(this.overviewX + this.imageOverviewWidth * local20 / 1280, this.overviewY + this.imageOverviewHeight * local29 / 1216, 0xff0000, (local38 - local20) * this.imageOverviewWidth / 1280, (local47 - local29) * this.imageOverviewHeight / 1216);
+				Draw2D.fillRectAlpha(this.overviewX + this.imageOverviewWidth * left / 1280, this.overviewY + this.imageOverviewHeight * top / 1216, (right - left) * this.imageOverviewWidth / 1280, (bottom - top) * this.imageOverviewHeight / 1216, 0xff0000, 0x80);
+				Draw2D.drawRect(this.overviewX + this.imageOverviewWidth * left / 1280, this.overviewY + this.imageOverviewHeight * top / 1216, 0xff0000, (right - left) * this.imageOverviewWidth / 1280, (bottom - top) * this.imageOverviewHeight / 1216);
+
 				if (this.flashTimer > 0 && this.flashTimer % 10 < 5) {
-					for (local151 = 0; local151 < this.activeMapFunctionCount; local151++) {
-						if (this.activeMapFunctions[local151] == this.currentKey) {
-							local173 = this.overviewX + this.imageOverviewWidth * this.activeMapFunctionX[local151] / 1280;
-							local186 = this.overviewY + this.imageOverviewHeight * this.activeMapFunctionZ[local151] / 1216;
-							Draw2D.fillCircle(local173, local186, 2, 0xffff00, 256);
+					for (int i = 0; i < this.activeMapFunctionCount; i++) {
+						if (this.activeMapFunctions[i] == this.currentKey) {
+							int x = this.overviewX + this.imageOverviewWidth * this.activeMapFunctionX[i] / 1280;
+							int y = this.overviewY + this.imageOverviewHeight * this.activeMapFunctionZ[i] / 1216;
+							Draw2D.fillCircle(x, y, 2, 0xffff00, 256);
 						}
 					}
 				}
 			}
+
 			if (this.showKey) {
 				this.drawString(this.keyX, this.keyY, this.keyWidth, 18, 0x999999, 0x777777, 0x555555, "Prev page");
 				this.drawString(this.keyX, this.keyY + 18, this.keyWidth, this.keyHeight - 36, 0x999999, 0x777777, 0x555555, "");
 				this.drawString(this.keyX, this.keyY + this.keyHeight - 18, this.keyWidth, 18, 0x999999, 0x777777, 0x555555, "Next page");
-				local151 = this.keyY + 3 + 18;
-				for (local173 = 0; local173 < 25; local173++) {
-					if (local173 + this.lastKeyPage < this.imageMapfunction.length && local173 + this.lastKeyPage < this.keyNames.length) {
-						if (this.keyNames[local173 + this.lastKeyPage].equals("???")) {
+
+				int y = this.keyY + 3 + 18;
+				for (int row = 0; row < 25; row++) {
+					if (row + this.lastKeyPage < this.imageMapfunction.length && row + this.lastKeyPage < this.keyNames.length) {
+						if (this.keyNames[row + this.lastKeyPage].equals("???")) {
 							continue;
 						}
-						this.imageMapfunction[local173 + this.lastKeyPage].draw(this.keyX + 3, local151);
-						this.b12.drawString(this.keyX + 21, local151 + 14, this.keyNames[local173 + this.lastKeyPage], 0);
-						local186 = 0xffffff;
-						if (this.currentKeyHover == local173 + this.lastKeyPage) {
-							local186 = 0xbbaaaa;
+
+						this.imageMapfunction[row + this.lastKeyPage].draw(this.keyX + 3, y);
+						this.b12.drawString(this.keyX + 21, y + 14, this.keyNames[row + this.lastKeyPage], 0);
+
+						int rgb = 0xffffff;
+						if (this.currentKeyHover == row + this.lastKeyPage) {
+							rgb = 0xbbaaaa;
 						}
-						if (this.flashTimer > 0 && this.flashTimer % 10 < 5 && this.currentKey == local173 + this.lastKeyPage) {
-							local186 = 0xffff00;
+						if (this.flashTimer > 0 && this.flashTimer % 10 < 5 && this.currentKey == row + this.lastKeyPage) {
+							rgb = 0xffff00;
 						}
-						this.b12.drawString(this.keyX + 20, local151 + 13, this.keyNames[local173 + this.lastKeyPage], local186);
+
+						this.b12.drawString(this.keyX + 20, y + 13, this.keyNames[row + this.lastKeyPage], rgb);
 					}
-					local151 += 17;
+
+					y += 17;
 				}
 			}
+
 			this.drawString(this.overviewX, this.overviewY + this.imageOverviewHeight, this.imageOverviewWidth, 18, this.colorInactiveBorderTL, this.colorInactive, this.colorInactiveBorderBR, "Overview");
 			this.drawString(this.keyX, this.keyY + this.keyHeight, this.keyWidth, 18, this.colorInactiveBorderTL, this.colorInactive, this.colorInactiveBorderBR, "Key");
+
 			if (this.zoomY == 3.0D) {
 				this.drawString(170, 471, 50, 30, this.colorActiveBorderTL, this.colorActive, this.colorActiveBorderBR, "37%");
 			} else {
 				this.drawString(170, 471, 50, 30, this.colorInactiveBorderTL, this.colorInactive, this.colorInactiveBorderBR, "37%");
 			}
+
 			if (this.zoomY == 4.0D) {
 				this.drawString(230, 471, 50, 30, this.colorActiveBorderTL, this.colorActive, this.colorActiveBorderBR, "50%");
 			} else {
 				this.drawString(230, 471, 50, 30, this.colorInactiveBorderTL, this.colorInactive, this.colorInactiveBorderBR, "50%");
 			}
+
 			if (this.zoomY == 6.0D) {
 				this.drawString(290, 471, 50, 30, this.colorActiveBorderTL, this.colorActive, this.colorActiveBorderBR, "75%");
 			} else {
 				this.drawString(290, 471, 50, 30, this.colorInactiveBorderTL, this.colorInactive, this.colorInactiveBorderBR, "75%");
 			}
+
 			if (this.zoomY == 8.0D) {
 				this.drawString(350, 471, 50, 30, this.colorActiveBorderTL, this.colorActive, this.colorActiveBorderBR, "100%");
 			} else {
 				this.drawString(350, 471, 50, 30, this.colorInactiveBorderTL, this.colorInactive, this.colorInactiveBorderBR, "100%");
 			}
 		}
+
 		this.redrawTimer--;
 		if (this.redrawTimer <= 0) {
 			super.drawArea.draw(super.graphics, 0, 0);
@@ -816,269 +835,260 @@ public final class mapview extends GameShell {
 	}
 
 	@OriginalMember(owner = "mapview!mapview", name = "a", descriptor = "(IIIIIIILjava/lang/String;)V")
-	private void drawString(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2, @OriginalArg(3) int arg3, @OriginalArg(4) int arg4, @OriginalArg(5) int arg5, @OriginalArg(6) int arg6, @OriginalArg(7) String arg7) {
-		Draw2D.drawRect(arg0, arg1, 0, arg2, arg3);
-		@Pc(6) int local6 = arg0 + 1;
-		@Pc(7) int local7 = arg1 + 1;
-		@Pc(8) int local8 = arg2 - 2;
-		@Pc(9) int local9 = arg3 - 2;
-		Draw2D.fillRect(local6, local7, arg5, local8, local9);
-		Draw2D.drawHorizontalLine(local6, local7, arg4, local8);
-		Draw2D.drawVerticalLine(local6, local7, arg4, local9);
-		Draw2D.drawHorizontalLine(local6, local7 + local9 - 1, arg6, local8);
-		Draw2D.drawVerticalLine(local6 + local8 - 1, local7, arg6, local9);
-		this.b12.drawStringCenter(local6 + local8 / 2 + 1, local7 + local9 / 2 + 1 + 4, arg7, 0);
-		this.b12.drawStringCenter(local6 + local8 / 2, local7 + local9 / 2 + 4, arg7, 0xffffff);
+	private void drawString(@OriginalArg(0) int x, @OriginalArg(1) int y, @OriginalArg(2) int width, @OriginalArg(3) int height, @OriginalArg(4) int colorBorderTL, @OriginalArg(5) int fillColor, @OriginalArg(6) int colorBorderBR, @OriginalArg(7) String str) {
+		Draw2D.drawRect(x, y, 0, width, height);
+
+		@Pc(6) int xPad = x + 1;
+		@Pc(7) int yPad = y + 1;
+		@Pc(8) int widthPad = width - 2;
+		@Pc(9) int heightPad = height - 2;
+
+		Draw2D.fillRect(xPad, yPad, fillColor, widthPad, heightPad);
+		Draw2D.drawHorizontalLine(xPad, yPad, colorBorderTL, widthPad);
+		Draw2D.drawVerticalLine(xPad, yPad, colorBorderTL, heightPad);
+		Draw2D.drawHorizontalLine(xPad, yPad + heightPad - 1, colorBorderBR, widthPad);
+		Draw2D.drawVerticalLine(xPad + widthPad - 1, yPad, colorBorderBR, heightPad);
+
+		this.b12.drawStringCenter(xPad + widthPad / 2 + 1, yPad + heightPad / 2 + 1 + 4, str, 0);
+		this.b12.drawStringCenter(xPad + widthPad / 2, yPad + heightPad / 2 + 4, str, 0xffffff);
 	}
 
 	@OriginalMember(owner = "mapview!mapview", name = "a", descriptor = "(IIIIIIII)V")
-	private void drawMap(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2, @OriginalArg(3) int arg3, @OriginalArg(4) int arg4, @OriginalArg(5) int arg5, @OriginalArg(6) int arg6, @OriginalArg(7) int arg7) {
-		@Pc(5) int local5 = arg2 - arg0;
-		@Pc(9) int local9 = arg3 - arg1;
-		@Pc(17) int local17 = (arg6 - arg4 << 16) / local5;
-		@Pc(25) int local25 = (arg7 - arg5 << 16) / local9;
-		@Pc(35) int local35;
-		@Pc(43) int local43;
-		@Pc(47) int local47;
-		@Pc(78) byte[] local78;
-		@Pc(80) int local80;
-		@Pc(88) int local88;
-		@Pc(96) int local96;
-		@Pc(100) int local100;
-		@Pc(116) int local116;
-		@Pc(144) int local144;
+	private void drawMap(@OriginalArg(0) int left, @OriginalArg(1) int top, @OriginalArg(2) int right, @OriginalArg(3) int bottom, @OriginalArg(4) int widthOffset, @OriginalArg(5) int heightOffset, @OriginalArg(6) int width, @OriginalArg(7) int height) {
+		@Pc(5) int visibleX = right - left;
+		@Pc(9) int visibleY = bottom - top;
+		@Pc(17) int widthRatio = (width - widthOffset << 16) / visibleX;
+		@Pc(25) int heightRatio = (height - heightOffset << 16) / visibleY;
 
-		for (@Pc(27) int local27 = 0; local27 < local5; local27++) {
-			local35 = local17 * local27 >> 16;
-			local43 = local17 * (local27 + 1) >> 16;
-			local47 = local43 - local35;
-            if (local47 <= 0) {
+		for (@Pc(27) int x = 0; x < visibleX; x++) {
+			int startX = widthRatio * x >> 16;
+			int endX = widthRatio * (x + 1) >> 16;
+			int lengthX = endX - startX;
+            if (lengthX <= 0) {
                 continue;
             }
 
-            local35 += arg4;
-            local43 += arg4;
-            @Pc(64) int[] local64 = this.floormapColors[local27 + arg0];
-            @Pc(71) int[] local71 = this.overlayTiles[local27 + arg0];
-            local78 = this.overlayShapes[local27 + arg0];
-            for (local80 = 0; local80 < local9; local80++) {
-                local88 = local25 * local80 >> 16;
-                local96 = local25 * (local80 + 1) >> 16;
-                local100 = local96 - local88;
-                if (local100 <= 0) {
+            startX += widthOffset;
+            endX += widthOffset;
+
+            @Pc(64) int[] colors = this.floormapColors[x + left];
+            @Pc(71) int[] overlays = this.overlayTiles[x + left];
+            byte[] shapes = this.overlayInfo[x + left];
+
+            for (int y = 0; y < visibleY; y++) {
+				int startY = heightRatio * y >> 16;
+				int endY = heightRatio * (y + 1) >> 16;
+				int lengthY = endY - startY;
+                if (lengthY <= 0) {
                     continue;
                 }
 
-                local88 += arg5;
-                local96 += arg5;
-                local116 = local71[local80 + arg1];
-                if (local116 == 0) {
-                    Draw2D.fillRect(local35, local88, local64[local80 + arg1], local43 - local35, local96 - local88);
+                startY += heightOffset;
+                endY += heightOffset;
+
+				int overlay = overlays[y + top];
+                if (overlay == 0) {
+                    Draw2D.fillRect(startX, startY, colors[y + top], endX - startX, endY - startY);
                 } else {
-                    @Pc(140) byte local140 = local78[local80 + arg1];
-                    local144 = local140 & 0xFC;
-                    if (local144 == 0 || local47 <= 1 || local100 <= 1) {
-                        Draw2D.fillRect(local35, local88, local116, local47, local100);
+                    @Pc(140) byte info = shapes[y + top];
+					int shape = info & 0xFC;
+                    if (shape == 0 || lengthX <= 1 || lengthY <= 1) {
+                        Draw2D.fillRect(startX, startY, overlay, lengthX, lengthY);
                     } else {
-                        this.drawSmoothEdges(Draw2D.data, local88 * Draw2D.width2d + local35, local64[local80 + arg1], local116, local47, local100, local144 >> 2, local140 & 0x3);
+                        this.drawSmoothEdges(Draw2D.data, startY * Draw2D.width2d + startX, colors[y + top], overlay, lengthX, lengthY, shape >> 2, info & 0x3);
                     }
                 }
             }
         }
 
-		if (arg2 - arg0 > arg6 - arg4) {
+		if (right - left > width - widthOffset) {
 			return;
 		}
 
-		local35 = 0;
-		@Pc(284) int local284;
-		@Pc(295) int local295;
-		@Pc(218) int local218;
-		@Pc(222) int local222;
-		for (local43 = 0; local43 < local5; local43++) {
-			local47 = local17 * local43 >> 16;
-			local218 = local17 * (local43 + 1) >> 16;
-			local222 = local218 - local47;
-            if (local222 <= 0) {
+		int visibleMapFunctionCount = 0;
+		for (int x = 0; x < visibleX; x++) {
+			int startX = widthRatio * x >> 16;
+			int endX = widthRatio * (x + 1) >> 16;
+			int lengthX = endX - startX;
+            if (lengthX <= 0) {
                 continue;
             }
 
-			local78 = this.locWalls[local43 + arg0];
-			@Pc(238) byte[] local238 = this.locMapscenes[local43 + arg0];
-			@Pc(245) byte[] local245 = this.locMapfunctions[local43 + arg0];
-			for (local96 = 0; local96 < local9; local96++) {
-				local100 = local25 * local96 >> 16;
-				local116 = local25 * (local96 + 1) >> 16;
-				@Pc(267) int local267 = local116 - local100;
-				if (local267 <= 0) {
+			byte[] walls = this.locWalls[x + left];
+			@Pc(238) byte[] mapscenes = this.locMapscenes[x + left];
+			@Pc(245) byte[] mapfunctions = this.locMapfunctions[x + left];
+			for (int y = 0; y < visibleY; y++) {
+				int startY = heightRatio * y >> 16;
+				int endY = heightRatio * (y + 1) >> 16;
+				@Pc(267) int lengthY = endY - startY;
+				if (lengthY <= 0) {
 					continue;
 				}
 
-				local144 = local78[local96 + arg1] & 0xFF;
-				if (local144 != 0) {
-					if (local222 == 1) {
-						local284 = local47;
+				int wall = walls[y + top] & 0xFF;
+				if (wall != 0) {
+					int edgeX;
+					if (lengthX == 1) {
+						edgeX = startX;
 					} else {
-						local284 = local218 - 1;
+						edgeX = endX - 1;
 					}
 
-					if (local267 == 1) {
-						local295 = local100;
+					int edgeY;
+					if (lengthY == 1) {
+						edgeY = startY;
 					} else {
-						local295 = local116 - 1;
+						edgeY = endY - 1;
 					}
 
-					@Pc(303) int local303 = 0xcccccc;
-					if (local144 >= 5 && local144 <= 8 || local144 >= 13 && local144 <= 16 || local144 >= 21 && local144 <= 24 || local144 == 27 || local144 == 28) {
-						local303 = 0xcc0000;
-						local144 -= 4;
+					@Pc(303) int rgb = 0xcccccc;
+					if (wall >= 5 && wall <= 8 || wall >= 13 && wall <= 16 || wall >= 21 && wall <= 24 || wall == 27 || wall == 28) {
+						rgb = 0xcc0000;
+						wall -= 4;
 					}
 
-					if (local144 == 1) {
-						Draw2D.drawVerticalLine(local47, local100, local303, local267);
-					} else if (local144 == 2) {
-						Draw2D.drawHorizontalLine(local47, local100, local303, local222);
-					} else if (local144 == 3) {
-						Draw2D.drawVerticalLine(local284, local100, local303, local267);
-					} else if (local144 == 4) {
-						Draw2D.drawHorizontalLine(local47, local295, local303, local222);
-					} else if (local144 == 9) {
-						Draw2D.drawVerticalLine(local47, local100, 0xffffff, local267);
-						Draw2D.drawHorizontalLine(local47, local100, local303, local222);
-					} else if (local144 == 10) {
-						Draw2D.drawVerticalLine(local284, local100, 0xffffff, local267);
-						Draw2D.drawHorizontalLine(local47, local100, local303, local222);
-					} else if (local144 == 11) {
-						Draw2D.drawVerticalLine(local284, local100, 0xffffff, local267);
-						Draw2D.drawHorizontalLine(local47, local295, local303, local222);
-					} else if (local144 == 12) {
-						Draw2D.drawVerticalLine(local47, local100, 0xffffff, local267);
-						Draw2D.drawHorizontalLine(local47, local295, local303, local222);
-					} else if (local144 == 17) {
-						Draw2D.drawHorizontalLine(local47, local100, local303, 1);
-					} else if (local144 == 18) {
-						Draw2D.drawHorizontalLine(local284, local100, local303, 1);
-					} else if (local144 == 19) {
-						Draw2D.drawHorizontalLine(local284, local295, local303, 1);
-					} else if (local144 == 20) {
-						Draw2D.drawHorizontalLine(local47, local295, local303, 1);
-					} else if (local144 == 25) {
-						for (int local475 = 0; local475 < local267; local475++) {
-							Draw2D.drawHorizontalLine(local47 + local475, local295 - local475, local303, 1);
+					if (wall == 1) {
+						Draw2D.drawVerticalLine(startX, startY, rgb, lengthY);
+					} else if (wall == 2) {
+						Draw2D.drawHorizontalLine(startX, startY, rgb, lengthX);
+					} else if (wall == 3) {
+						Draw2D.drawVerticalLine(edgeX, startY, rgb, lengthY);
+					} else if (wall == 4) {
+						Draw2D.drawHorizontalLine(startX, edgeY, rgb, lengthX);
+					} else if (wall == 9) {
+						Draw2D.drawVerticalLine(startX, startY, 0xffffff, lengthY);
+						Draw2D.drawHorizontalLine(startX, startY, rgb, lengthX);
+					} else if (wall == 10) {
+						Draw2D.drawVerticalLine(edgeX, startY, 0xffffff, lengthY);
+						Draw2D.drawHorizontalLine(startX, startY, rgb, lengthX);
+					} else if (wall == 11) {
+						Draw2D.drawVerticalLine(edgeX, startY, 0xffffff, lengthY);
+						Draw2D.drawHorizontalLine(startX, edgeY, rgb, lengthX);
+					} else if (wall == 12) {
+						Draw2D.drawVerticalLine(startX, startY, 0xffffff, lengthY);
+						Draw2D.drawHorizontalLine(startX, edgeY, rgb, lengthX);
+					} else if (wall == 17) {
+						Draw2D.drawHorizontalLine(startX, startY, rgb, 1);
+					} else if (wall == 18) {
+						Draw2D.drawHorizontalLine(edgeX, startY, rgb, 1);
+					} else if (wall == 19) {
+						Draw2D.drawHorizontalLine(edgeX, edgeY, rgb, 1);
+					} else if (wall == 20) {
+						Draw2D.drawHorizontalLine(startX, edgeY, rgb, 1);
+					} else if (wall == 25) {
+						for (int i = 0; i < lengthY; i++) {
+							Draw2D.drawHorizontalLine(startX + i, edgeY - i, rgb, 1);
 						}
-					} else if (local144 == 26) {
-						for (int local475 = 0; local475 < local267; local475++) {
-							Draw2D.drawHorizontalLine(local47 + local475, local100 + local475, local303, 1);
+					} else if (wall == 26) {
+						for (int i = 0; i < lengthY; i++) {
+							Draw2D.drawHorizontalLine(startX + i, startY + i, rgb, 1);
 						}
 					}
 				}
 
-				local284 = local238[local96 + arg1] & 0xFF;
-				if (local284 != 0) {
-					this.imageMapscene[local284 - 1].clip(local47 - local222 / 2, local100 - local267 / 2, local222 * 2, local267 * 2);
+				int mapscene = mapscenes[y + top] & 0xFF;
+				if (mapscene != 0) {
+					this.imageMapscene[mapscene - 1].clip(startX - lengthX / 2, startY - lengthY / 2, lengthX * 2, lengthY * 2);
 				}
 
-				local295 = local245[local96 + arg1] & 0xFF;
-				if (local295 != 0) {
-					this.visibleMapFunctions[local35] = local295 - 1;
-					this.visibleMapFunctionsX[local35] = local47 + local222 / 2;
-					this.visibleMapFunctionsY[local35] = local100 + local267 / 2;
-					local35++;
+				int mapfunction = mapfunctions[y + top] & 0xFF;
+				if (mapfunction != 0) {
+					this.visibleMapFunctions[visibleMapFunctionCount] = mapfunction - 1;
+					this.visibleMapFunctionsX[visibleMapFunctionCount] = startX + lengthX / 2;
+					this.visibleMapFunctionsY[visibleMapFunctionCount] = startY + lengthY / 2;
+					visibleMapFunctionCount++;
 				}
 			}
         }
 
-		for (local47 = 0; local47 < local35; local47++) {
-			this.imageMapfunction[this.visibleMapFunctions[local47]].draw(this.visibleMapFunctionsX[local47] - 7, this.visibleMapFunctionsY[local47] - 7);
+		for (int i = 0; i < visibleMapFunctionCount; i++) {
+			this.imageMapfunction[this.visibleMapFunctions[i]].draw(this.visibleMapFunctionsX[i] - 7, this.visibleMapFunctionsY[i] - 7);
 		}
 
 		if (this.flashTimer > 0) {
-			for (local218 = 0; local218 < local35; local218++) {
-				if (this.visibleMapFunctions[local218] == this.currentKey) {
-					this.imageMapfunction[this.visibleMapFunctions[local218]].draw(this.visibleMapFunctionsX[local218] - 7, this.visibleMapFunctionsY[local218] - 7);
+			for (int i = 0; i < visibleMapFunctionCount; i++) {
+				if (this.visibleMapFunctions[i] == this.currentKey) {
+					this.imageMapfunction[this.visibleMapFunctions[i]].draw(this.visibleMapFunctionsX[i] - 7, this.visibleMapFunctionsY[i] - 7);
+
 					if (this.flashTimer % 10 < 5) {
-						Draw2D.fillCircle(this.visibleMapFunctionsX[local218], this.visibleMapFunctionsY[local218], 15, 0xffff00, 128);
-						Draw2D.fillCircle(this.visibleMapFunctionsX[local218], this.visibleMapFunctionsY[local218], 7, 0xffffff, 256);
+						Draw2D.fillCircle(this.visibleMapFunctionsX[i], this.visibleMapFunctionsY[i], 15, 0xffff00, 128);
+						Draw2D.fillCircle(this.visibleMapFunctionsX[i], this.visibleMapFunctionsY[i], 7, 0xffffff, 256);
 					}
 				}
 			}
 		}
 
         if (this.zoomX == this.zoomY) {
-            for (local218 = 0; local218 < this.labelCount; local218++) {
-                local222 = this.labelX[local218];
-                @Pc(704) int local704 = this.labelY[local218];
-                local222 -= 2304;
-                @Pc(709) int local709 = 4032 - local704;
-                local80 = arg4 + (arg6 - arg4) * (local222 - arg0) / (arg2 - arg0);
-                local88 = arg5 + (arg7 - arg5) * (local709 - arg1) / (arg3 - arg1);
-                local96 = this.labelFont[local218];
-                local100 = 0xffffff;
-                @Pc(746) WorldmapFont local746 = null;
-                if (local96 == 0) {
+            for (int i = 0; i < this.labelCount; i++) {
+				int x = this.labelX[i];
+                @Pc(704) int y = this.labelY[i];
+                x -= 2304;
+                y = 4032 - y;
+
+				int drawX = widthOffset + (width - widthOffset) * (x - left) / (right - left);
+				int drawY = heightOffset + (height - heightOffset) * (y - top) / (bottom - top);
+				int fontType = this.labelFont[i];
+				int rgb = 0xffffff;
+
+                @Pc(746) WorldmapFont font = null;
+                if (fontType == 0) {
                     if (this.zoomX == 3.0D) {
-                        local746 = this.f11;
+                        font = this.f11;
+                    } else if (this.zoomX == 4.0D) {
+                        font = this.f12;
+                    } else if (this.zoomX == 6.0D) {
+                        font = this.f14;
+                    } else if (this.zoomX == 8.0D) {
+                        font = this.f17;
                     }
-                    if (this.zoomX == 4.0D) {
-                        local746 = this.f12;
-                    }
-                    if (this.zoomX == 6.0D) {
-                        local746 = this.f14;
-                    }
-                    if (this.zoomX == 8.0D) {
-                        local746 = this.f17;
-                    }
-                }
-                if (local96 == 1) {
+                } else if (fontType == 1) {
                     if (this.zoomX == 3.0D) {
-                        local746 = this.f14;
+                        font = this.f14;
+                    } else if (this.zoomX == 4.0D) {
+                        font = this.f17;
+                    } else if (this.zoomX == 6.0D) {
+                        font = this.f19;
+                    } else if (this.zoomX == 8.0D) {
+                        font = this.f22;
                     }
-                    if (this.zoomX == 4.0D) {
-                        local746 = this.f17;
-                    }
-                    if (this.zoomX == 6.0D) {
-                        local746 = this.f19;
-                    }
-                    if (this.zoomX == 8.0D) {
-                        local746 = this.f22;
-                    }
-                }
-                if (local96 == 2) {
-                    local100 = 16755200;
+                } else if (fontType == 2) {
+                    rgb = 0xffaa00;
+
                     if (this.zoomX == 3.0D) {
-                        local746 = this.f19;
-                    }
-                    if (this.zoomX == 4.0D) {
-                        local746 = this.f22;
-                    }
-                    if (this.zoomX == 6.0D) {
-                        local746 = this.f26;
-                    }
-                    if (this.zoomX == 8.0D) {
-                        local746 = this.f30;
+                        font = this.f19;
+                    } else if (this.zoomX == 4.0D) {
+                        font = this.f22;
+                    } else if (this.zoomX == 6.0D) {
+                        font = this.f26;
+                    } else if (this.zoomX == 8.0D) {
+                        font = this.f30;
                     }
                 }
 
-                if (local746 != null) {
-                    @Pc(859) String local859 = this.labelText[local218];
-                    local144 = 1;
-                    for (local284 = 0; local284 < local859.length(); local284++) {
-                        if (local859.charAt(local284) == '/') {
-                            local144++;
+                if (font != null) {
+                    @Pc(859) String label = this.labelText[i];
+					int lineCount = 1;
+                    for (int j = 0; j < label.length(); j++) {
+                        if (label.charAt(j) == '/') {
+                            lineCount++;
                         }
                     }
-                    local88 -= local746.getHeight() * (local144 - 1) / 2;
-                    local88 += local746.getYOffset() / 2;
+
+                    drawY -= font.getHeight() * (lineCount - 1) / 2;
+                    drawY += font.getYOffset() / 2;
+
                     while (true) {
-                        local295 = local859.indexOf("/");
-                        if (local295 == -1) {
-                            local746.drawStringCenter(local859, local80, local88, local100, true);
+						int newline = label.indexOf("/");
+                        if (newline == -1) {
+                            font.drawStringCenter(label, drawX, drawY, rgb, true);
                             break;
                         }
-                        @Pc(915) String local915 = local859.substring(0, local295);
-                        local746.drawStringCenter(local915, local80, local88, local100, true);
-                        local88 += local746.getHeight();
-                        local859 = local859.substring(local295 + 1);
+
+                        @Pc(915) String part = label.substring(0, newline);
+                        font.drawStringCenter(part, drawX, drawY, rgb, true);
+
+                        drawY += font.getHeight();
+                        label = label.substring(newline + 1);
                     }
                 }
             }
@@ -1086,545 +1096,540 @@ public final class mapview extends GameShell {
     }
 
 	@OriginalMember(owner = "mapview!mapview", name = "a", descriptor = "([IIIIIIII)V")
-	private void drawSmoothEdges(@OriginalArg(0) int[] arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2, @OriginalArg(3) int arg3, @OriginalArg(4) int arg4, @OriginalArg(5) int arg5, @OriginalArg(6) int arg6, @OriginalArg(7) int arg7) {
-		@Pc(5) int local5 = Draw2D.width2d - arg4;
-		if (arg6 == 9) {
-			arg6 = 1;
-			arg7 = arg7 + 1 & 0x3;
+	private void drawSmoothEdges(@OriginalArg(0) int[] data, @OriginalArg(1) int off, @OriginalArg(2) int color, @OriginalArg(3) int overlay, @OriginalArg(4) int width, @OriginalArg(5) int height, @OriginalArg(6) int shape, @OriginalArg(7) int rotation) {
+		@Pc(5) int step = Draw2D.width2d - width;
+		if (shape == 9) {
+			shape = 1;
+			rotation = rotation + 1 & 0x3;
+		} else if (shape == 10) {
+			shape = 1;
+			rotation = rotation + 3 & 0x3;
+		} else if (shape == 11) {
+			shape = 8;
+			rotation = rotation + 3 & 0x3;
 		}
-		if (arg6 == 10) {
-			arg6 = 1;
-			arg7 = arg7 + 3 & 0x3;
-		}
-		if (arg6 == 11) {
-			arg6 = 8;
-			arg7 = arg7 + 3 & 0x3;
-		}
-		@Pc(45) int local45;
-		@Pc(49) int local49;
-		if (arg6 == 1) {
-			if (arg7 == 0) {
-				for (local45 = 0; local45 < arg5; local45++) {
-					for (local49 = 0; local49 < arg4; local49++) {
-						if (local49 <= local45) {
-							arg0[arg1++] = arg3;
+
+		if (shape == 1) {
+			if (rotation == 0) {
+				for (int y = 0; y < height; y++) {
+					for (int x = 0; x < width; x++) {
+						if (x <= y) {
+							data[off++] = overlay;
 						} else {
-							arg0[arg1++] = arg2;
+							data[off++] = color;
 						}
 					}
-					arg1 += local5;
+					off += step;
 				}
-			} else if (arg7 == 1) {
-				for (local45 = arg5 - 1; local45 >= 0; local45--) {
-					for (local49 = 0; local49 < arg4; local49++) {
-						if (local49 <= local45) {
-							arg0[arg1++] = arg3;
+			} else if (rotation == 1) {
+				for (int y = height - 1; y >= 0; y--) {
+					for (int x = 0; x < width; x++) {
+						if (x <= y) {
+							data[off++] = overlay;
 						} else {
-							arg0[arg1++] = arg2;
+							data[off++] = color;
 						}
 					}
-					arg1 += local5;
+					off += step;
 				}
-			} else if (arg7 == 2) {
-				for (local45 = 0; local45 < arg5; local45++) {
-					for (local49 = 0; local49 < arg4; local49++) {
-						if (local49 >= local45) {
-							arg0[arg1++] = arg3;
+			} else if (rotation == 2) {
+				for (int y = 0; y < height; y++) {
+					for (int x = 0; x < width; x++) {
+						if (x >= y) {
+							data[off++] = overlay;
 						} else {
-							arg0[arg1++] = arg2;
+							data[off++] = color;
 						}
 					}
-					arg1 += local5;
+					off += step;
 				}
-			} else if (arg7 == 3) {
-				for (local45 = arg5 - 1; local45 >= 0; local45--) {
-					for (local49 = 0; local49 < arg4; local49++) {
-						if (local49 >= local45) {
-							arg0[arg1++] = arg3;
+			} else if (rotation == 3) {
+				for (int y = height - 1; y >= 0; y--) {
+					for (int x = 0; x < width; x++) {
+						if (x >= y) {
+							data[off++] = overlay;
 						} else {
-							arg0[arg1++] = arg2;
+							data[off++] = color;
 						}
 					}
-					arg1 += local5;
+					off += step;
 				}
 			}
-		} else if (arg6 == 2) {
-			if (arg7 == 0) {
-				for (local45 = arg5 - 1; local45 >= 0; local45--) {
-					for (local49 = 0; local49 < arg4; local49++) {
-						if (local49 <= local45 >> 1) {
-							arg0[arg1++] = arg3;
+		} else if (shape == 2) {
+			if (rotation == 0) {
+				for (int y = height - 1; y >= 0; y--) {
+					for (int x = 0; x < width; x++) {
+						if (x <= y >> 1) {
+							data[off++] = overlay;
 						} else {
-							arg0[arg1++] = arg2;
+							data[off++] = color;
 						}
 					}
-					arg1 += local5;
+					off += step;
 				}
-			} else if (arg7 == 1) {
-				for (local45 = 0; local45 < arg5; local45++) {
-					for (local49 = 0; local49 < arg4; local49++) {
-						if (local49 >= local45 << 1) {
-							arg0[arg1++] = arg3;
+			} else if (rotation == 1) {
+				for (int y = 0; y < height; y++) {
+					for (int x = 0; x < width; x++) {
+						if (x >= y << 1) {
+							data[off++] = overlay;
 						} else {
-							arg0[arg1++] = arg2;
+							data[off++] = color;
 						}
 					}
-					arg1 += local5;
+					off += step;
 				}
-			} else if (arg7 == 2) {
-				for (local45 = 0; local45 < arg5; local45++) {
-					for (local49 = arg4 - 1; local49 >= 0; local49--) {
-						if (local49 <= local45 >> 1) {
-							arg0[arg1++] = arg3;
+			} else if (rotation == 2) {
+				for (int y = 0; y < height; y++) {
+					for (int x = width - 1; x >= 0; x--) {
+						if (x <= y >> 1) {
+							data[off++] = overlay;
 						} else {
-							arg0[arg1++] = arg2;
+							data[off++] = color;
 						}
 					}
-					arg1 += local5;
+					off += step;
 				}
-			} else if (arg7 == 3) {
-				for (local45 = arg5 - 1; local45 >= 0; local45--) {
-					for (local49 = arg4 - 1; local49 >= 0; local49--) {
-						if (local49 >= local45 << 1) {
-							arg0[arg1++] = arg3;
+			} else if (rotation == 3) {
+				for (int y = height - 1; y >= 0; y--) {
+					for (int x = width - 1; x >= 0; x--) {
+						if (x >= y << 1) {
+							data[off++] = overlay;
 						} else {
-							arg0[arg1++] = arg2;
+							data[off++] = color;
 						}
 					}
-					arg1 += local5;
+					off += step;
 				}
 			}
-		} else if (arg6 == 3) {
-			if (arg7 == 0) {
-				for (local45 = arg5 - 1; local45 >= 0; local45--) {
-					for (local49 = arg4 - 1; local49 >= 0; local49--) {
-						if (local49 <= local45 >> 1) {
-							arg0[arg1++] = arg3;
+		} else if (shape == 3) {
+			if (rotation == 0) {
+				for (int y = height - 1; y >= 0; y--) {
+					for (int x = width - 1; x >= 0; x--) {
+						if (x <= y >> 1) {
+							data[off++] = overlay;
 						} else {
-							arg0[arg1++] = arg2;
+							data[off++] = color;
 						}
 					}
-					arg1 += local5;
+					off += step;
 				}
-			} else if (arg7 == 1) {
-				for (local45 = arg5 - 1; local45 >= 0; local45--) {
-					for (local49 = 0; local49 < arg4; local49++) {
-						if (local49 >= local45 << 1) {
-							arg0[arg1++] = arg3;
+			} else if (rotation == 1) {
+				for (int y = height - 1; y >= 0; y--) {
+					for (int x = 0; x < width; x++) {
+						if (x >= y << 1) {
+							data[off++] = overlay;
 						} else {
-							arg0[arg1++] = arg2;
+							data[off++] = color;
 						}
 					}
-					arg1 += local5;
+					off += step;
 				}
-			} else if (arg7 == 2) {
-				for (local45 = 0; local45 < arg5; local45++) {
-					for (local49 = 0; local49 < arg4; local49++) {
-						if (local49 <= local45 >> 1) {
-							arg0[arg1++] = arg3;
+			} else if (rotation == 2) {
+				for (int y = 0; y < height; y++) {
+					for (int x = 0; x < width; x++) {
+						if (x <= y >> 1) {
+							data[off++] = overlay;
 						} else {
-							arg0[arg1++] = arg2;
+							data[off++] = color;
 						}
 					}
-					arg1 += local5;
+					off += step;
 				}
-			} else if (arg7 == 3) {
-				for (local45 = 0; local45 < arg5; local45++) {
-					for (local49 = arg4 - 1; local49 >= 0; local49--) {
-						if (local49 >= local45 << 1) {
-							arg0[arg1++] = arg3;
+			} else if (rotation == 3) {
+				for (int y = 0; y < height; y++) {
+					for (int x = width - 1; x >= 0; x--) {
+						if (x >= y << 1) {
+							data[off++] = overlay;
 						} else {
-							arg0[arg1++] = arg2;
+							data[off++] = color;
 						}
 					}
-					arg1 += local5;
+					off += step;
 				}
 			}
-		} else if (arg6 == 4) {
-			if (arg7 == 0) {
-				for (local45 = arg5 - 1; local45 >= 0; local45--) {
-					for (local49 = 0; local49 < arg4; local49++) {
-						if (local49 >= local45 >> 1) {
-							arg0[arg1++] = arg3;
+		} else if (shape == 4) {
+			if (rotation == 0) {
+				for (int y = height - 1; y >= 0; y--) {
+					for (int x = 0; x < width; x++) {
+						if (x >= y >> 1) {
+							data[off++] = overlay;
 						} else {
-							arg0[arg1++] = arg2;
+							data[off++] = color;
 						}
 					}
-					arg1 += local5;
+					off += step;
 				}
-			} else if (arg7 == 1) {
-				for (local45 = 0; local45 < arg5; local45++) {
-					for (local49 = 0; local49 < arg4; local49++) {
-						if (local49 <= local45 << 1) {
-							arg0[arg1++] = arg3;
+			} else if (rotation == 1) {
+				for (int y = 0; y < height; y++) {
+					for (int x = 0; x < width; x++) {
+						if (x <= y << 1) {
+							data[off++] = overlay;
 						} else {
-							arg0[arg1++] = arg2;
+							data[off++] = color;
 						}
 					}
-					arg1 += local5;
+					off += step;
 				}
-			} else if (arg7 == 2) {
-				for (local45 = 0; local45 < arg5; local45++) {
-					for (local49 = arg4 - 1; local49 >= 0; local49--) {
-						if (local49 >= local45 >> 1) {
-							arg0[arg1++] = arg3;
+			} else if (rotation == 2) {
+				for (int y = 0; y < height; y++) {
+					for (int x = width - 1; x >= 0; x--) {
+						if (x >= y >> 1) {
+							data[off++] = overlay;
 						} else {
-							arg0[arg1++] = arg2;
+							data[off++] = color;
 						}
 					}
-					arg1 += local5;
+					off += step;
 				}
-			} else if (arg7 == 3) {
-				for (local45 = arg5 - 1; local45 >= 0; local45--) {
-					for (local49 = arg4 - 1; local49 >= 0; local49--) {
-						if (local49 <= local45 << 1) {
-							arg0[arg1++] = arg3;
+			} else if (rotation == 3) {
+				for (int y = height - 1; y >= 0; y--) {
+					for (int x = width - 1; x >= 0; x--) {
+						if (x <= y << 1) {
+							data[off++] = overlay;
 						} else {
-							arg0[arg1++] = arg2;
+							data[off++] = color;
 						}
 					}
-					arg1 += local5;
+					off += step;
 				}
 			}
-		} else if (arg6 != 5) {
-			if (arg6 == 6) {
-				if (arg7 == 0) {
-					for (local45 = 0; local45 < arg5; local45++) {
-						for (local49 = 0; local49 < arg4; local49++) {
-							if (local49 <= arg4 / 2) {
-								arg0[arg1++] = arg3;
-							} else {
-								arg0[arg1++] = arg2;
-							}
+		} else if (shape == 5) {
+            if (rotation == 0) {
+                for (int y = height - 1; y >= 0; y--) {
+                    for (int x = width - 1; x >= 0; x--) {
+                        if (x >= y >> 1) {
+                            data[off++] = overlay;
+                        } else {
+                            data[off++] = color;
+                        }
+                    }
+                    off += step;
+                }
+            } else if (rotation == 1) {
+                for (int y = height - 1; y >= 0; y--) {
+                    for (int x = 0; x < width; x++) {
+                        if (x <= y << 1) {
+                            data[off++] = overlay;
+                        } else {
+                            data[off++] = color;
+                        }
+                    }
+                    off += step;
+                }
+            } else if (rotation == 2) {
+                for (int y = 0; y < height; y++) {
+                    for (int x = 0; x < width; x++) {
+                        if (x >= y >> 1) {
+                            data[off++] = overlay;
+                        } else {
+                            data[off++] = color;
+                        }
+                    }
+                    off += step;
+                }
+            } else if (rotation == 3) {
+                for (int y = 0; y < height; y++) {
+                    for (int x = width - 1; x >= 0; x--) {
+                        if (x <= y << 1) {
+                            data[off++] = overlay;
+                        } else {
+                            data[off++] = color;
+                        }
+                    }
+                    off += step;
+                }
+            }
+        } else if (shape == 6) {
+			if (rotation == 0) {
+				for (int y = 0; y < height; y++) {
+					for (int x = 0; x < width; x++) {
+						if (x <= width / 2) {
+							data[off++] = overlay;
+						} else {
+							data[off++] = color;
 						}
-						arg1 += local5;
 					}
-					return;
+					off += step;
 				}
-				if (arg7 == 1) {
-					for (local45 = 0; local45 < arg5; local45++) {
-						for (local49 = 0; local49 < arg4; local49++) {
-							if (local45 <= arg5 / 2) {
-								arg0[arg1++] = arg3;
-							} else {
-								arg0[arg1++] = arg2;
-							}
+			} else if (rotation == 1) {
+				for (int y = 0; y < height; y++) {
+					for (int x = 0; x < width; x++) {
+						if (y <= height / 2) {
+							data[off++] = overlay;
+						} else {
+							data[off++] = color;
 						}
-						arg1 += local5;
 					}
-					return;
+					off += step;
 				}
-				if (arg7 == 2) {
-					for (local45 = 0; local45 < arg5; local45++) {
-						for (local49 = 0; local49 < arg4; local49++) {
-							if (local49 >= arg4 / 2) {
-								arg0[arg1++] = arg3;
-							} else {
-								arg0[arg1++] = arg2;
-							}
+			} else if (rotation == 2) {
+				for (int y = 0; y < height; y++) {
+					for (int x = 0; x < width; x++) {
+						if (x >= width / 2) {
+							data[off++] = overlay;
+						} else {
+							data[off++] = color;
 						}
-						arg1 += local5;
 					}
-					return;
+					off += step;
 				}
-				if (arg7 == 3) {
-					for (local45 = 0; local45 < arg5; local45++) {
-						for (local49 = 0; local49 < arg4; local49++) {
-							if (local45 >= arg5 / 2) {
-								arg0[arg1++] = arg3;
-							} else {
-								arg0[arg1++] = arg2;
-							}
+			} else if (rotation == 3) {
+				for (int y = 0; y < height; y++) {
+					for (int x = 0; x < width; x++) {
+						if (y >= height / 2) {
+							data[off++] = overlay;
+						} else {
+							data[off++] = color;
 						}
-						arg1 += local5;
 					}
-					return;
+					off += step;
 				}
 			}
-			if (arg6 == 7) {
-				if (arg7 == 0) {
-					for (local45 = 0; local45 < arg5; local45++) {
-						for (local49 = 0; local49 < arg4; local49++) {
-							if (local49 <= local45 - arg5 / 2) {
-								arg0[arg1++] = arg3;
-							} else {
-								arg0[arg1++] = arg2;
-							}
+		} else if (shape == 7) {
+			if (rotation == 0) {
+				for (int y = 0; y < height; y++) {
+					for (int x = 0; x < width; x++) {
+						if (x <= y - height / 2) {
+							data[off++] = overlay;
+						} else {
+							data[off++] = color;
 						}
-						arg1 += local5;
 					}
-					return;
+					off += step;
 				}
-				if (arg7 == 1) {
-					for (local45 = arg5 - 1; local45 >= 0; local45--) {
-						for (local49 = 0; local49 < arg4; local49++) {
-							if (local49 <= local45 - arg5 / 2) {
-								arg0[arg1++] = arg3;
-							} else {
-								arg0[arg1++] = arg2;
-							}
+			} else if (rotation == 1) {
+				for (int y = height - 1; y >= 0; y--) {
+					for (int x = 0; x < width; x++) {
+						if (x <= y - height / 2) {
+							data[off++] = overlay;
+						} else {
+							data[off++] = color;
 						}
-						arg1 += local5;
 					}
-					return;
+					off += step;
 				}
-				if (arg7 == 2) {
-					for (local45 = arg5 - 1; local45 >= 0; local45--) {
-						for (local49 = arg4 - 1; local49 >= 0; local49--) {
-							if (local49 <= local45 - arg5 / 2) {
-								arg0[arg1++] = arg3;
-							} else {
-								arg0[arg1++] = arg2;
-							}
+			} else if (rotation == 2) {
+				for (int y = height - 1; y >= 0; y--) {
+					for (int x = width - 1; x >= 0; x--) {
+						if (x <= y - height / 2) {
+							data[off++] = overlay;
+						} else {
+							data[off++] = color;
 						}
-						arg1 += local5;
 					}
-					return;
+					off += step;
 				}
-				if (arg7 == 3) {
-					for (local45 = 0; local45 < arg5; local45++) {
-						for (local49 = arg4 - 1; local49 >= 0; local49--) {
-							if (local49 <= local45 - arg5 / 2) {
-								arg0[arg1++] = arg3;
-							} else {
-								arg0[arg1++] = arg2;
-							}
+			} else if (rotation == 3) {
+				for (int y = 0; y < height; y++) {
+					for (int x = width - 1; x >= 0; x--) {
+						if (x <= y - height / 2) {
+							data[off++] = overlay;
+						} else {
+							data[off++] = color;
 						}
-						arg1 += local5;
 					}
-					return;
+					off += step;
 				}
 			}
-			if (arg6 == 8) {
-				if (arg7 == 0) {
-					for (local45 = 0; local45 < arg5; local45++) {
-						for (local49 = 0; local49 < arg4; local49++) {
-							if (local49 >= local45 - arg5 / 2) {
-								arg0[arg1++] = arg3;
-							} else {
-								arg0[arg1++] = arg2;
-							}
+		} else if (shape == 8) {
+			if (rotation == 0) {
+				for (int y = 0; y < height; y++) {
+					for (int x = 0; x < width; x++) {
+						if (x >= y - height / 2) {
+							data[off++] = overlay;
+						} else {
+							data[off++] = color;
 						}
-						arg1 += local5;
 					}
-					return;
+					off += step;
 				}
-				if (arg7 == 1) {
-					for (local45 = arg5 - 1; local45 >= 0; local45--) {
-						for (local49 = 0; local49 < arg4; local49++) {
-							if (local49 >= local45 - arg5 / 2) {
-								arg0[arg1++] = arg3;
-							} else {
-								arg0[arg1++] = arg2;
-							}
+			} else if (rotation == 1) {
+				for (int y = height - 1; y >= 0; y--) {
+					for (int x = 0; x < width; x++) {
+						if (x >= y - height / 2) {
+							data[off++] = overlay;
+						} else {
+							data[off++] = color;
 						}
-						arg1 += local5;
 					}
-					return;
+					off += step;
 				}
-				if (arg7 == 2) {
-					for (local45 = arg5 - 1; local45 >= 0; local45--) {
-						for (local49 = arg4 - 1; local49 >= 0; local49--) {
-							if (local49 >= local45 - arg5 / 2) {
-								arg0[arg1++] = arg3;
-							} else {
-								arg0[arg1++] = arg2;
-							}
+			} else if (rotation == 2) {
+				for (int y = height - 1; y >= 0; y--) {
+					for (int x = width - 1; x >= 0; x--) {
+						if (x >= y - height / 2) {
+							data[off++] = overlay;
+						} else {
+							data[off++] = color;
 						}
-						arg1 += local5;
 					}
-					return;
+					off += step;
 				}
-				if (arg7 == 3) {
-					for (local45 = 0; local45 < arg5; local45++) {
-						for (local49 = arg4 - 1; local49 >= 0; local49--) {
-							if (local49 >= local45 - arg5 / 2) {
-								arg0[arg1++] = arg3;
-							} else {
-								arg0[arg1++] = arg2;
-							}
+			} else if (rotation == 3) {
+				for (int y = 0; y < height; y++) {
+					for (int x = width - 1; x >= 0; x--) {
+						if (x >= y - height / 2) {
+							data[off++] = overlay;
+						} else {
+							data[off++] = color;
 						}
-						arg1 += local5;
 					}
-					return;
+					off += step;
 				}
-			}
-		} else if (arg7 == 0) {
-			for (local45 = arg5 - 1; local45 >= 0; local45--) {
-				for (local49 = arg4 - 1; local49 >= 0; local49--) {
-					if (local49 >= local45 >> 1) {
-						arg0[arg1++] = arg3;
-					} else {
-						arg0[arg1++] = arg2;
-					}
-				}
-				arg1 += local5;
-			}
-		} else if (arg7 == 1) {
-			for (local45 = arg5 - 1; local45 >= 0; local45--) {
-				for (local49 = 0; local49 < arg4; local49++) {
-					if (local49 <= local45 << 1) {
-						arg0[arg1++] = arg3;
-					} else {
-						arg0[arg1++] = arg2;
-					}
-				}
-				arg1 += local5;
-			}
-		} else if (arg7 == 2) {
-			for (local45 = 0; local45 < arg5; local45++) {
-				for (local49 = 0; local49 < arg4; local49++) {
-					if (local49 >= local45 >> 1) {
-						arg0[arg1++] = arg3;
-					} else {
-						arg0[arg1++] = arg2;
-					}
-				}
-				arg1 += local5;
-			}
-		} else if (arg7 == 3) {
-			for (local45 = 0; local45 < arg5; local45++) {
-				for (local49 = arg4 - 1; local49 >= 0; local49--) {
-					if (local49 <= local45 << 1) {
-						arg0[arg1++] = arg3;
-					} else {
-						arg0[arg1++] = arg2;
-					}
-				}
-				arg1 += local5;
 			}
 		}
-	}
+    }
 
 	@OriginalMember(owner = "mapview!mapview", name = "i", descriptor = "()Lmapview!p;")
 	private Jagfile loadWorldmap() {
-		@Pc(1) Object local1 = null;
-		@Pc(3) String local3 = null;
-		@Pc(17) byte[] local17;
+		@Pc(3) String cachedir = null;
+		@Pc(17) byte[] data;
 		try {
-			local3 = this.findcachedir();
-			local17 = this.cacheload(local3 + "/worldmap.dat");
-			if (!this.checksha(local17)) {
-				local17 = null;
+			cachedir = this.findcachedir();
+			data = this.cacheload(cachedir + "/worldmap.dat");
+			if (!this.checksha(data)) {
+				data = null;
 			}
-			if (local17 != null) {
-				return new Jagfile(local17);
+			if (data != null) {
+				return new Jagfile(data);
 			}
-		} catch (@Pc(31) Throwable local31) {
+		} catch (@Pc(31) Throwable ignore) {
 		}
-		local17 = this.updateWorldmap();
-		if (local3 != null && local17 != null) {
+
+		data = this.updateWorldmap();
+		if (cachedir != null && data != null) {
 			try {
-				this.cachesave(local3 + "/worldmap.dat", local17);
-			} catch (@Pc(51) Throwable local51) {
+				this.cachesave(cachedir + "/worldmap.dat", data);
+			} catch (@Pc(51) Throwable ignore) {
 			}
 		}
-		return new Jagfile(local17);
+
+		return new Jagfile(data);
 	}
 
 	@OriginalMember(owner = "mapview!mapview", name = "j", descriptor = "()[B")
 	private byte[] updateWorldmap() {
 		System.out.println("Updating");
 		this.drawProgress("Requesting map", 0);
+
 		try {
-			@Pc(10) String local10 = "";
-			for (@Pc(12) int local12 = 0; local12 < 10; local12++) {
-				local10 = local10 + sig.sha[local12];
+			@Pc(10) String uriSha = "";
+			for (@Pc(12) int i = 0; i < 10; i++) {
+				uriSha += sig.sha[i];
 			}
-			@Pc(40) DataInputStream local40;
+
+			@Pc(40) DataInputStream stream;
 			if (super.frame == null) {
-				local40 = new DataInputStream((new URL(this.getCodeBase(), "worldmap" + local10 + ".jag")).openStream());
+				stream = new DataInputStream((new URL(this.getCodeBase(), "worldmap" + uriSha + ".jag")).openStream());
 			} else {
-				local40 = new DataInputStream(new FileInputStream("worldmap.jag"));
+				stream = new DataInputStream(new FileInputStream("worldmap.jag"));
 			}
-			@Pc(63) int local63 = 0;
-			@Pc(65) int local65 = 0;
-			@Pc(67) int local67 = sig.len;
-			@Pc(70) byte[] local70 = new byte[local67];
-			while (local65 < local67) {
-				@Pc(76) int local76 = local67 - local65;
-				if (local76 > 1000) {
-					local76 = 1000;
+
+			@Pc(63) int lastProgress = 0;
+			@Pc(65) int offset = 0;
+			@Pc(67) int length = sig.len;
+			@Pc(70) byte[] data = new byte[length];
+			while (offset < length) {
+				@Pc(76) int remaining = length - offset;
+				if (remaining > 1000) {
+					remaining = 1000;
 				}
-				@Pc(87) int local87 = local40.read(local70, local65, local76);
-				if (local87 < 0) {
+
+				@Pc(87) int read = stream.read(data, offset, remaining);
+				if (read < 0) {
 					throw new IOException("EOF");
 				}
-				local65 += local87;
-				@Pc(104) int local104 = local65 * 100 / local67;
-				if (local104 != local63) {
-					this.drawProgress("Loading map - " + local104 + "%", local104);
+
+				offset += read;
+
+				@Pc(104) int progress = offset * 100 / length;
+				if (progress != lastProgress) {
+					this.drawProgress("Loading map - " + progress + "%", progress);
 				}
-				local63 = local104;
+
+				lastProgress = progress;
 			}
-			local40.close();
-			return local70;
-		} catch (@Pc(129) IOException local129) {
+
+			stream.close();
+			return data;
+		} catch (@Pc(129) IOException ex) {
 			System.out.println("Error loading");
-			local129.printStackTrace();
+			ex.printStackTrace();
 			return null;
 		}
 	}
 
 	@OriginalMember(owner = "mapview!mapview", name = "k", descriptor = "()Ljava/lang/String;")
 	private String findcachedir() {
-		@Pc(50) String[] local50 = new String[] { "c:/windows/", "c:/winnt/", "d:/windows/", "d:/winnt/", "e:/windows/", "e:/winnt/", "f:/windows/", "f:/winnt/", "c:/", "~/", "/tmp/", "" };
-		@Pc(52) String local52 = ".file_store_32";
-		for (@Pc(54) int local54 = 0; local54 < local50.length; local54++) {
+		@Pc(50) String[] paths = new String[] {
+			"c:/windows/", "c:/winnt/", "d:/windows/", "d:/winnt/", "e:/windows/", "e:/winnt/", "f:/windows/", "f:/winnt/", "c:/",
+			"~/", "/tmp/", ""
+		};
+		@Pc(52) String store = ".file_store_32";
+
+		for (@Pc(54) int i = 0; i < paths.length; i++) {
 			try {
-				@Pc(60) String local60 = local50[local54];
-				@Pc(68) File local68;
-				if (local60.length() > 0) {
-					local68 = new File(local60);
-					if (!local68.exists()) {
+				@Pc(60) String dir = paths[i];
+				@Pc(68) File cache;
+
+				if (dir.length() > 0) {
+					cache = new File(dir);
+
+					if (!cache.exists()) {
 						continue;
 					}
 				}
-				local68 = new File(local60 + local52);
-				if (local68.exists() || local68.mkdir()) {
-					return local60 + local52 + "/";
+
+				cache = new File(dir + store);
+				if (cache.exists() || cache.mkdir()) {
+					return dir + store + "/";
 				}
-			} catch (@Pc(103) Exception local103) {
+			} catch (@Pc(103) Exception ignore) {
 			}
 		}
+
 		return null;
 	}
 
 	@OriginalMember(owner = "mapview!mapview", name = "a", descriptor = "(Ljava/lang/String;)[B")
-	private byte[] cacheload(@OriginalArg(0) String arg0) throws IOException {
-		@Pc(4) File local4 = new File(arg0);
-		if (!local4.exists()) {
+	private byte[] cacheload(@OriginalArg(0) String name) throws IOException {
+		@Pc(4) File file = new File(name);
+		if (!file.exists()) {
 			return null;
 		}
-		@Pc(13) int local13 = (int) local4.length();
-		@Pc(16) byte[] local16 = new byte[local13];
-		@Pc(27) DataInputStream local27 = new DataInputStream(new BufferedInputStream(new FileInputStream(arg0)));
-		local27.readFully(local16, 0, local13);
-		local27.close();
-		return local16;
+
+		@Pc(13) int length = (int) file.length();
+		@Pc(16) byte[] data = new byte[length];
+		@Pc(27) DataInputStream stream = new DataInputStream(new BufferedInputStream(new FileInputStream(name)));
+		stream.readFully(data, 0, length);
+		stream.close();
+		return data;
 	}
 
 	@OriginalMember(owner = "mapview!mapview", name = "a", descriptor = "(Ljava/lang/String;[B)V")
-	private void cachesave(@OriginalArg(0) String arg0, @OriginalArg(1) byte[] arg1) throws IOException {
-		@Pc(4) FileOutputStream local4 = new FileOutputStream(arg0);
-		local4.write(arg1, 0, arg1.length);
-		local4.close();
+	private void cachesave(@OriginalArg(0) String name, @OriginalArg(1) byte[] data) throws IOException {
+		@Pc(4) FileOutputStream stream = new FileOutputStream(name);
+		stream.write(data, 0, data.length);
+		stream.close();
 	}
 
 	@OriginalMember(owner = "mapview!mapview", name = "a", descriptor = "([B)Z")
-	private boolean checksha(@OriginalArg(0) byte[] arg0) throws Exception {
-		if (arg0 == null) {
+	private boolean checksha(@OriginalArg(0) byte[] data) throws Exception {
+		if (data == null) {
 			return false;
 		}
-		@Pc(6) MessageDigest local6 = MessageDigest.getInstance("SHA");
-		local6.reset();
-		local6.update(arg0);
-		@Pc(14) byte[] local14 = local6.digest();
-		for (@Pc(16) int local16 = 0; local16 < 20; local16++) {
-			if (local14[local16] != sig.sha[local16]) {
+
+		@Pc(6) MessageDigest shaDigest = MessageDigest.getInstance("SHA");
+		shaDigest.reset();
+		shaDigest.update(data);
+
+		@Pc(14) byte[] computedSha = shaDigest.digest();
+		for (@Pc(16) int i = 0; i < 20; i++) {
+			if (computedSha[i] != sig.sha[i]) {
 				return false;
 			}
 		}
+
 		return true;
 	}
 }
