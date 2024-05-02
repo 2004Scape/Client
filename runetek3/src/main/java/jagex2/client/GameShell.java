@@ -341,6 +341,7 @@ public class GameShell extends Applet implements Runnable, MouseListener, MouseM
 
 	@OriginalMember(owner = "client!a", name = "mouseExited", descriptor = "(Ljava/awt/event/MouseEvent;)V")
 	public final void mouseExited(@OriginalArg(0) MouseEvent e) {
+		// mapview applet
 		this.idleCycles = 0;
 		this.mouseX = -1;
 		this.mouseY = -1;
