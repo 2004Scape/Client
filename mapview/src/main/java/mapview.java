@@ -1048,17 +1048,17 @@ public final class mapview extends GameShell {
                             local144++;
                         }
                     }
-                    local88 -= local746.method49() * (local144 - 1) / 2;
-                    local88 += local746.method53() / 2;
+                    local88 -= local746.getHeight() * (local144 - 1) / 2;
+                    local88 += local746.getYOffset() / 2;
                     while (true) {
                         local295 = local859.indexOf("/");
                         if (local295 == -1) {
-                            local746.method47(local859, local80, local88, local100, true);
+                            local746.drawStringCenter(local859, local80, local88, local100, true);
                             break;
                         }
                         @Pc(915) String local915 = local859.substring(0, local295);
-                        local746.method47(local915, local80, local88, local100, true);
-                        local88 += local746.method49();
+                        local746.drawStringCenter(local915, local80, local88, local100, true);
+                        local88 += local746.getHeight();
                         local859 = local859.substring(local295 + 1);
                     }
                 }
