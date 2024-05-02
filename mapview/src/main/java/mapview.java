@@ -1,5 +1,4 @@
 import java.io.BufferedInputStream;
-import java.io.BufferedOutputStream;
 import java.io.DataInputStream;
 import java.io.File;
 import java.io.FileInputStream;
@@ -7,352 +6,307 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.URL;
 import java.security.MessageDigest;
-
-import jagex2.client.GameShell;
-import jagex2.graphics.Draw2D;
-import jagex2.graphics.Pix24;
-import jagex2.graphics.Pix8;
-import jagex2.graphics.PixFont;
-import jagex2.io.Jagfile;
-import jagex2.io.Packet;
 import org.openrs2.deob.annotation.OriginalArg;
 import org.openrs2.deob.annotation.OriginalClass;
 import org.openrs2.deob.annotation.OriginalMember;
 import org.openrs2.deob.annotation.Pc;
 
 @OriginalClass("mapview!mapview")
-public final class mapview extends GameShell {
+public final class mapview extends Applet_Sub1 {
 
-	@OriginalMember(owner = "mapview!mapview", name = "F", descriptor = "Z")
-	private static boolean shouldDrawBorders = false;
+	@OriginalMember(owner = "mapview!mapview", name = "M", descriptor = "I")
+	private int anInt119;
 
-	@OriginalMember(owner = "mapview!mapview", name = "O", descriptor = "I")
-	private static int centerX;
+	@OriginalMember(owner = "mapview!mapview", name = "N", descriptor = "[I")
+	private int[] anIntArray23;
 
-	@OriginalMember(owner = "mapview!mapview", name = "P", descriptor = "I")
-	private static int centerY;
+	@OriginalMember(owner = "mapview!mapview", name = "O", descriptor = "[I")
+	private int[] anIntArray24;
 
-	@OriginalMember(owner = "mapview!mapview", name = "Q", descriptor = "I")
-	private static int originX;
+	@OriginalMember(owner = "mapview!mapview", name = "P", descriptor = "[[I")
+	private int[][] anIntArrayArray1;
 
-	@OriginalMember(owner = "mapview!mapview", name = "R", descriptor = "I")
-	private static int originY;
+	@OriginalMember(owner = "mapview!mapview", name = "Q", descriptor = "[[I")
+	private int[][] anIntArrayArray2;
 
-	@OriginalMember(owner = "mapview!mapview", name = "Wb", descriptor = "I")
-	private static int offsetX;
+	@OriginalMember(owner = "mapview!mapview", name = "R", descriptor = "[[B")
+	private byte[][] aByteArrayArray2;
 
-	@OriginalMember(owner = "mapview!mapview", name = "Xb", descriptor = "I")
-	private static int offsetY;
+	@OriginalMember(owner = "mapview!mapview", name = "S", descriptor = "[[B")
+	private byte[][] aByteArrayArray3;
 
-	@OriginalMember(owner = "mapview!mapview", name = "Nb", descriptor = "Z")
-	private static boolean shouldDrawLabels = true;
+	@OriginalMember(owner = "mapview!mapview", name = "T", descriptor = "[[B")
+	private byte[][] aByteArrayArray4;
 
-	@OriginalMember(owner = "mapview!mapview", name = "N", descriptor = "I")
-	private int drawTimer;
+	@OriginalMember(owner = "mapview!mapview", name = "U", descriptor = "[[B")
+	private byte[][] aByteArrayArray5;
 
-	@OriginalMember(owner = "mapview!mapview", name = "S", descriptor = "[I")
-	private int[] floormapsUnderlay;
+	@OriginalMember(owner = "mapview!mapview", name = "X", descriptor = "Lmapview!j;")
+	private Class2_Sub1_Sub1_Sub4 aClass2_Sub1_Sub1_Sub4_1;
 
-	@OriginalMember(owner = "mapview!mapview", name = "T", descriptor = "[I")
-	private int[] floormapsOverlay;
+	@OriginalMember(owner = "mapview!mapview", name = "Y", descriptor = "Lmapview!g;")
+	private Class2_Sub1_Sub1_Sub1 aClass2_Sub1_Sub1_Sub1_1;
 
-	@OriginalMember(owner = "mapview!mapview", name = "U", descriptor = "[[I")
-	private int[][] floormapColors;
+	@OriginalMember(owner = "mapview!mapview", name = "Z", descriptor = "Lmapview!g;")
+	private Class2_Sub1_Sub1_Sub1 aClass2_Sub1_Sub1_Sub1_2;
 
-	@OriginalMember(owner = "mapview!mapview", name = "V", descriptor = "[[I")
-	private int[][] overlayColors;
+	@OriginalMember(owner = "mapview!mapview", name = "ab", descriptor = "Lmapview!g;")
+	private Class2_Sub1_Sub1_Sub1 aClass2_Sub1_Sub1_Sub1_3;
 
-	@OriginalMember(owner = "mapview!mapview", name = "W", descriptor = "[[B")
-	private byte[][] overlayTypes;
+	@OriginalMember(owner = "mapview!mapview", name = "bb", descriptor = "Lmapview!g;")
+	private Class2_Sub1_Sub1_Sub1 aClass2_Sub1_Sub1_Sub1_4;
 
-	@OriginalMember(owner = "mapview!mapview", name = "X", descriptor = "[[B")
-	private byte[][] locWalls;
+	@OriginalMember(owner = "mapview!mapview", name = "cb", descriptor = "Lmapview!g;")
+	private Class2_Sub1_Sub1_Sub1 aClass2_Sub1_Sub1_Sub1_5;
 
-	@OriginalMember(owner = "mapview!mapview", name = "Y", descriptor = "[[B")
-	private byte[][] locIcons;
+	@OriginalMember(owner = "mapview!mapview", name = "db", descriptor = "Lmapview!g;")
+	private Class2_Sub1_Sub1_Sub1 aClass2_Sub1_Sub1_Sub1_6;
 
-	@OriginalMember(owner = "mapview!mapview", name = "Z", descriptor = "[[B")
-	private byte[][] locScenes;
+	@OriginalMember(owner = "mapview!mapview", name = "eb", descriptor = "Lmapview!g;")
+	private Class2_Sub1_Sub1_Sub1 aClass2_Sub1_Sub1_Sub1_7;
 
-	@OriginalMember(owner = "mapview!mapview", name = "cb", descriptor = "Lmapview!i;")
-	private PixFont b12;
+	@OriginalMember(owner = "mapview!mapview", name = "fb", descriptor = "Lmapview!g;")
+	private Class2_Sub1_Sub1_Sub1 aClass2_Sub1_Sub1_Sub1_8;
 
-	@OriginalMember(owner = "mapview!mapview", name = "db", descriptor = "Lmapview!f;")
-	private WorldmapFont f11;
+	@OriginalMember(owner = "mapview!mapview", name = "jb", descriptor = "I")
+	private int anInt120;
 
-	@OriginalMember(owner = "mapview!mapview", name = "eb", descriptor = "Lmapview!f;")
-	private WorldmapFont f12;
-
-	@OriginalMember(owner = "mapview!mapview", name = "fb", descriptor = "Lmapview!f;")
-	private WorldmapFont f14;
-
-	@OriginalMember(owner = "mapview!mapview", name = "gb", descriptor = "Lmapview!f;")
-	private WorldmapFont f17;
-
-	@OriginalMember(owner = "mapview!mapview", name = "hb", descriptor = "Lmapview!f;")
-	private WorldmapFont f19;
-
-	@OriginalMember(owner = "mapview!mapview", name = "ib", descriptor = "Lmapview!f;")
-	private WorldmapFont f22;
-
-	@OriginalMember(owner = "mapview!mapview", name = "jb", descriptor = "Lmapview!f;")
-	private WorldmapFont f26;
-
-	@OriginalMember(owner = "mapview!mapview", name = "kb", descriptor = "Lmapview!f;")
-	private WorldmapFont f30;
-
-	@OriginalMember(owner = "mapview!mapview", name = "ob", descriptor = "I")
-	private int mapIconCount;
-
-	@OriginalMember(owner = "mapview!mapview", name = "wb", descriptor = "I")
-	private int lastKeyPage;
-
-	@OriginalMember(owner = "mapview!mapview", name = "xb", descriptor = "I")
-	private int keyPage;
-
-	@OriginalMember(owner = "mapview!mapview", name = "Cb", descriptor = "I")
-	private int flashTimer;
-
-	@OriginalMember(owner = "mapview!mapview", name = "Db", descriptor = "I")
-	private int imageOverviewHeight;
-
-	@OriginalMember(owner = "mapview!mapview", name = "Eb", descriptor = "I")
-	private int imageOverviewWidth;
-
-	@OriginalMember(owner = "mapview!mapview", name = "Fb", descriptor = "I")
-	private int overviewX;
-
-	@OriginalMember(owner = "mapview!mapview", name = "Gb", descriptor = "I")
-	private int overviewY;
-
-	@OriginalMember(owner = "mapview!mapview", name = "Ib", descriptor = "Lmapview!g;")
-	private Pix24 imageOverview;
-
-	@OriginalMember(owner = "mapview!mapview", name = "Jb", descriptor = "I")
-	private int lastMouseClickX;
-
-	@OriginalMember(owner = "mapview!mapview", name = "Kb", descriptor = "I")
-	private int lastMouseClickY;
-
-	@OriginalMember(owner = "mapview!mapview", name = "Lb", descriptor = "I")
-	private int lastOffsetX;
-
-	@OriginalMember(owner = "mapview!mapview", name = "Mb", descriptor = "I")
-	private int lastOffsetY;
-
-	@OriginalMember(owner = "mapview!mapview", name = "Ob", descriptor = "I")
-	private int labelCount;
-
-	@OriginalMember(owner = "mapview!mapview", name = "G", descriptor = "I")
-	private int oclorInactiveBorderTL = 0x887755;
-
-	@OriginalMember(owner = "mapview!mapview", name = "H", descriptor = "I")
-	private int colorInactive = 0x776644;
-
-	@OriginalMember(owner = "mapview!mapview", name = "I", descriptor = "I")
-	private int colorInactiveBorderBR = 0x665533;
-
-	@OriginalMember(owner = "mapview!mapview", name = "J", descriptor = "I")
-	private int colorActiveBorderTL = 0xaa0000;
-
-	@OriginalMember(owner = "mapview!mapview", name = "K", descriptor = "I")
-	private int colorActive = 0x990000;
-
-	@OriginalMember(owner = "mapview!mapview", name = "L", descriptor = "I")
-	private int colorActiveBorderBR = 0x880000;
-
-	@OriginalMember(owner = "mapview!mapview", name = "M", descriptor = "Z")
-	private boolean shouldDraw = true;
-
-	@OriginalMember(owner = "mapview!mapview", name = "ab", descriptor = "[Lmapview!h;")
-	private Pix8[] mapScenes = new Pix8[100];
-
-	@OriginalMember(owner = "mapview!mapview", name = "bb", descriptor = "[Lmapview!g;")
-	private Pix24[] mapFunctions = new Pix24[100];
-
-	@OriginalMember(owner = "mapview!mapview", name = "lb", descriptor = "[I")
-	private int[] visibleMapIconsX = new int[2000];
-
-	@OriginalMember(owner = "mapview!mapview", name = "mb", descriptor = "[I")
-	private int[] visibleMapIconsY = new int[2000];
-
-	@OriginalMember(owner = "mapview!mapview", name = "nb", descriptor = "[I")
-	private int[] visibleMapIcons = new int[2000];
-
-	@OriginalMember(owner = "mapview!mapview", name = "pb", descriptor = "[I")
-	private int[] mapIconsX = new int[2000];
-
-	@OriginalMember(owner = "mapview!mapview", name = "qb", descriptor = "[I")
-	private int[] mapIconsY = new int[2000];
-
-	@OriginalMember(owner = "mapview!mapview", name = "rb", descriptor = "[I")
-	private int[] mapIcons = new int[2000];
+	@OriginalMember(owner = "mapview!mapview", name = "rb", descriptor = "I")
+	private int anInt125;
 
 	@OriginalMember(owner = "mapview!mapview", name = "sb", descriptor = "I")
-	private int keyX = 5;
+	private int anInt126;
 
-	@OriginalMember(owner = "mapview!mapview", name = "tb", descriptor = "I")
-	private int keyY = 13;
+	@OriginalMember(owner = "mapview!mapview", name = "xb", descriptor = "I")
+	private int anInt130;
+
+	@OriginalMember(owner = "mapview!mapview", name = "Db", descriptor = "Lmapview!h;")
+	private Class2_Sub1_Sub1_Sub2 aClass2_Sub1_Sub1_Sub2_1;
+
+	@OriginalMember(owner = "mapview!mapview", name = "Eb", descriptor = "I")
+	private int anInt135;
+
+	@OriginalMember(owner = "mapview!mapview", name = "Fb", descriptor = "I")
+	private int anInt136;
+
+	@OriginalMember(owner = "mapview!mapview", name = "Gb", descriptor = "I")
+	private int anInt137;
+
+	@OriginalMember(owner = "mapview!mapview", name = "Hb", descriptor = "I")
+	private int anInt138;
+
+	@OriginalMember(owner = "mapview!mapview", name = "Ib", descriptor = "I")
+	private int anInt139;
+
+	@OriginalMember(owner = "mapview!mapview", name = "F", descriptor = "I")
+	private int anInt113 = 8943445;
+
+	@OriginalMember(owner = "mapview!mapview", name = "G", descriptor = "I")
+	private int anInt114 = 7824964;
+
+	@OriginalMember(owner = "mapview!mapview", name = "H", descriptor = "I")
+	private int anInt115 = 6706483;
+
+	@OriginalMember(owner = "mapview!mapview", name = "I", descriptor = "I")
+	private int anInt116 = 11141120;
+
+	@OriginalMember(owner = "mapview!mapview", name = "J", descriptor = "I")
+	private int anInt117 = 10027008;
+
+	@OriginalMember(owner = "mapview!mapview", name = "K", descriptor = "I")
+	private int anInt118 = 8912896;
+
+	@OriginalMember(owner = "mapview!mapview", name = "L", descriptor = "Z")
+	private boolean aBoolean25 = true;
+
+	@OriginalMember(owner = "mapview!mapview", name = "V", descriptor = "[Lmapview!i;")
+	private Class2_Sub1_Sub1_Sub3[] aClass2_Sub1_Sub1_Sub3Array1 = new Class2_Sub1_Sub1_Sub3[50];
+
+	@OriginalMember(owner = "mapview!mapview", name = "W", descriptor = "[Lmapview!h;")
+	private Class2_Sub1_Sub1_Sub2[] aClass2_Sub1_Sub1_Sub2Array3 = new Class2_Sub1_Sub1_Sub2[50];
+
+	@OriginalMember(owner = "mapview!mapview", name = "gb", descriptor = "[I")
+	private int[] anIntArray25 = new int[2000];
+
+	@OriginalMember(owner = "mapview!mapview", name = "hb", descriptor = "[I")
+	private int[] anIntArray26 = new int[2000];
+
+	@OriginalMember(owner = "mapview!mapview", name = "ib", descriptor = "[I")
+	private int[] anIntArray27 = new int[2000];
+
+	@OriginalMember(owner = "mapview!mapview", name = "kb", descriptor = "[I")
+	private int[] anIntArray28 = new int[2000];
+
+	@OriginalMember(owner = "mapview!mapview", name = "lb", descriptor = "[I")
+	private int[] anIntArray29 = new int[2000];
+
+	@OriginalMember(owner = "mapview!mapview", name = "mb", descriptor = "[I")
+	private int[] anIntArray30 = new int[2000];
+
+	@OriginalMember(owner = "mapview!mapview", name = "nb", descriptor = "I")
+	private int anInt121 = 5;
+
+	@OriginalMember(owner = "mapview!mapview", name = "ob", descriptor = "I")
+	private int anInt122 = 13;
+
+	@OriginalMember(owner = "mapview!mapview", name = "pb", descriptor = "I")
+	private int anInt123 = 140;
+
+	@OriginalMember(owner = "mapview!mapview", name = "qb", descriptor = "I")
+	private int anInt124 = 470;
+
+	@OriginalMember(owner = "mapview!mapview", name = "tb", descriptor = "Z")
+	private boolean aBoolean26 = false;
 
 	@OriginalMember(owner = "mapview!mapview", name = "ub", descriptor = "I")
-	private int keyWidth = 140;
+	private int anInt127 = -1;
 
 	@OriginalMember(owner = "mapview!mapview", name = "vb", descriptor = "I")
-	private int keyOffset = 470;
+	private int anInt128 = -1;
 
-	@OriginalMember(owner = "mapview!mapview", name = "yb", descriptor = "Z")
-	private boolean showKey = false;
+	@OriginalMember(owner = "mapview!mapview", name = "wb", descriptor = "I")
+	private int anInt129 = -1;
+
+	@OriginalMember(owner = "mapview!mapview", name = "yb", descriptor = "I")
+	private int anInt131 = 200;
 
 	@OriginalMember(owner = "mapview!mapview", name = "zb", descriptor = "I")
-	private int currentKeyHover = -1;
+	private int anInt132 = this.anInt131 * 1280 / 1216;
 
 	@OriginalMember(owner = "mapview!mapview", name = "Ab", descriptor = "I")
-	private int lastKeyHover = -1;
+	private int anInt133 = 635 - this.anInt132 - 5;
 
 	@OriginalMember(owner = "mapview!mapview", name = "Bb", descriptor = "I")
-	private int currentKey = -1;
+	private int anInt134 = 503 - this.anInt131 - 20;
 
-	@OriginalMember(owner = "mapview!mapview", name = "Hb", descriptor = "Z")
-	private boolean showOverview = false;
+	@OriginalMember(owner = "mapview!mapview", name = "Cb", descriptor = "Z")
+	private boolean aBoolean27 = false;
 
-	@OriginalMember(owner = "mapview!mapview", name = "Pb", descriptor = "I")
-	private int maxLabels = 1000;
+	@OriginalMember(owner = "mapview!mapview", name = "Jb", descriptor = "I")
+	private int anInt140 = 1000;
 
-	@OriginalMember(owner = "mapview!mapview", name = "Qb", descriptor = "[Ljava/lang/String;")
-	private String[] labelText = new String[this.maxLabels];
+	@OriginalMember(owner = "mapview!mapview", name = "Kb", descriptor = "[Ljava/lang/String;")
+	private String[] aStringArray1 = new String[this.anInt140];
 
-	@OriginalMember(owner = "mapview!mapview", name = "Rb", descriptor = "[I")
-	private int[] labelX = new int[this.maxLabels];
+	@OriginalMember(owner = "mapview!mapview", name = "Lb", descriptor = "[I")
+	private int[] anIntArray31 = new int[this.anInt140];
 
-	@OriginalMember(owner = "mapview!mapview", name = "Sb", descriptor = "[I")
-	private int[] labelY = new int[this.maxLabels];
+	@OriginalMember(owner = "mapview!mapview", name = "Mb", descriptor = "[I")
+	private int[] anIntArray32 = new int[this.anInt140];
 
-	@OriginalMember(owner = "mapview!mapview", name = "Tb", descriptor = "[I")
-	private int[] labelType = new int[this.maxLabels];
+	@OriginalMember(owner = "mapview!mapview", name = "Nb", descriptor = "[I")
+	private int[] anIntArray33 = new int[this.anInt140];
 
-	@OriginalMember(owner = "mapview!mapview", name = "Ub", descriptor = "D")
-	private double zoomX = 4.0D;
+	@OriginalMember(owner = "mapview!mapview", name = "Ob", descriptor = "D")
+	private double aDouble1 = 4.0D;
 
-	@OriginalMember(owner = "mapview!mapview", name = "Vb", descriptor = "D")
-	private double zoomY = 4.0D;
+	@OriginalMember(owner = "mapview!mapview", name = "Pb", descriptor = "D")
+	private double aDouble2 = 4.0D;
 
-	@OriginalMember(owner = "mapview!mapview", name = "Yb", descriptor = "[Ljava/lang/String;")
-	private String[] keyNames = new String[] { "General Store", "Sword Shop", "Magic Shop", "Axe Shop", "Helmet Shop", "Bank", "Quest Start", "Amulet Shop", "Mining Site", "Furnace", "Anvil", "Combat Training", "Dungeon", "Staff Shop", "Platebody Shop", "Platelegs Shop", "Scimitar Shop", "Archery Shop", "Shield Shop", "Altar", "Herbalist", "Jewelery", "Gem Shop", "Crafting Shop", "Candle Shop", "Fishing Shop", "Fishing Spot", "Clothes Shop", "Apothecary", "Silk Trader", "Kebab Seller", "Pub/Bar", "Mace Shop", "Tannery", "Rare Trees", "Spinning Wheel", "Food Shop", "Cookery Shop", "Mini-Game", "Water Source", "Cooking Range", "Skirt Shop", "Potters Wheel", "Windmill", "Mining Shop", "Chainmail Shop", "Silver Shop", "Fur Trader", "Spice Shop", "Agility Training", "Vegetable Store", "???", "Hair Dressers", "???", "Makeover Mage" };
+	@OriginalMember(owner = "mapview!mapview", name = "Qb", descriptor = "I")
+	private int anInt141 = 896;
+
+	@OriginalMember(owner = "mapview!mapview", name = "Rb", descriptor = "I")
+	private int anInt142 = 832;
+
+	@OriginalMember(owner = "mapview!mapview", name = "Sb", descriptor = "[Ljava/lang/String;")
+	private String[] aStringArray2 = new String[] { "General Store", "Sword Shop", "Magic Shop", "Axe Shop", "Helmet Shop", "Bank", "Quest Start", "Amulet Shop", "Mining Site", "Furnace", "Anvil", "Combat Training", "Dungeon", "Staff Shop", "Platebody Shop", "Platelegs Shop", "Scimitar Shop", "Archery Shop", "Shield Shop", "Altar", "Herbalist", "Jewelery", "Gem Shop", "Crafting Shop", "Candle Shop", "Fishing Shop", "Fishing Spot", "Clothes Shop", "Apothecary", "Silk Trader", "Kebab Seller", "Pub/Bar", "Mace Shop", "Tannery", "Rare Trees", "Spinning Wheel", "Food Shop", "Cookery Shop", "???", "Water Source", "Cooking Range", "Skirt Shop", "Potters Wheel", "Windmill", "Mining Shop", "Chainmail Shop", "Silver Shop", "Fur Trader", "Spice Shop" };
 
 	@OriginalMember(owner = "mapview!mapview", name = "main", descriptor = "([Ljava/lang/String;)V")
 	public static void main(@OriginalArg(0) String[] arg0) {
 		@Pc(3) mapview local3 = new mapview();
-		local3.initApplication(635, 503);
+		local3.method115(635, 503);
+	}
+
+	@OriginalMember(owner = "mapview!mapview", name = "<init>", descriptor = "()V")
+	private mapview() {
 	}
 
 	@OriginalMember(owner = "mapview!mapview", name = "init", descriptor = "()V")
 	@Override
 	public void init() {
-		this.initApplet(635, 503);
+		this.method119(635, 503);
 	}
 
 	@OriginalMember(owner = "mapview!mapview", name = "c", descriptor = "()V")
 	@Override
-	protected void load() {
-		@Pc(4) Jagfile local4 = this.getWorldmap();
-		this.drawProgress("Please wait... Rendering Map", 100);
-
-		//@Pc(16) Packet local16 = new Packet(local4.read("size.dat", null));
-        //if (local16.data != null) {
-        //    centerX = local16.g2();
-        //    centerY = local16.g2();
-        //    originX = local16.g2();
-        //    originY = local16.g2();
-        //}
-
-		// 2004 worldmap.jag has no size.dat, so I matched based on the official worldmap renders of the time
-		centerX = 2112;
-		centerY = 2816;
-		originX = 1472;
-		originY = 1216;
-
-        offsetX = 3200 - centerX;
-		offsetY = centerY + originY - 3200;
-
-		this.imageOverviewHeight = 180;
-		this.imageOverviewWidth = originX * this.imageOverviewHeight / originY;
-		this.overviewX = 635 - this.imageOverviewWidth - 5;
-		this.overviewY = 503 - this.imageOverviewHeight - 20;
-
-		@Pc(73) Packet local73 = new Packet(local4.read("labels.dat", null));
-		this.labelCount = local73.g2();
-		for (@Pc(79) int local79 = 0; local79 < this.labelCount; local79++) {
-			this.labelText[local79] = local73.gjstr();
-			this.labelX[local79] = local73.g2();
-			this.labelY[local79] = local73.g2();
-			this.labelType[local79] = local73.g1();
+	protected void method114() {
+		@Pc(4) Class7 local4 = this.method130();
+		this.method111(100, "Please wait... Rendering Map");
+		@Pc(16) Class2_Sub1_Sub2 local16 = new Class2_Sub1_Sub2(local4.method145("labels.dat", null));
+		this.anInt139 = local16.method100();
+		for (@Pc(22) int local22 = 0; local22 < this.anInt139; local22++) {
+			this.aStringArray1[local22] = local16.method102();
+			this.anIntArray31[local22] = local16.method100();
+			this.anIntArray32[local22] = local16.method100();
+			this.anIntArray33[local22] = local16.method98();
 		}
-		Packet local16 = new Packet(local4.read("floorcol.dat", null));
-		@Pc(121) int local121 = local16.g2();
-		this.floormapsUnderlay = new int[local121 + 1];
-		this.floormapsOverlay = new int[local121 + 1];
-		for (@Pc(135) int local135 = 0; local135 < local121; local135++) {
-			this.floormapsUnderlay[local135 + 1] = local16.g4();
-			this.floormapsOverlay[local135 + 1] = local16.g4();
+		@Pc(61) Class2_Sub1_Sub2 local61 = new Class2_Sub1_Sub2(local4.method145("floorcol.dat", null));
+		@Pc(64) int local64 = local61.method100();
+		this.anIntArray23 = new int[local64 + 1];
+		this.anIntArray24 = new int[local64 + 1];
+		for (@Pc(78) int local78 = 0; local78 < local64; local78++) {
+			this.anIntArray23[local78 + 1] = local61.method97();
+			this.anIntArray24[local78 + 1] = local61.method97();
 		}
-		@Pc(162) byte[] local162 = local4.read("underlay.dat", null);
-		@Pc(166) byte[][] local166 = new byte[originX][originY];
-		this.decodeUnderlay(local162, local166);
-		@Pc(175) byte[] local175 = local4.read("overlay.dat", null);
-		this.overlayColors = new int[originX][originY];
-		this.overlayTypes = new byte[originX][originY];
-		this.decodeOverlay(local175, this.overlayColors, this.overlayTypes);
-		@Pc(197) byte[] local197 = local4.read("loc.dat", null);
-		this.locWalls = new byte[originX][originY];
-		this.locScenes = new byte[originX][originY];
-		this.locIcons = new byte[originX][originY];
-		this.decodeLoc(local197, this.locWalls, this.locScenes, this.locIcons);
-		@Pc(223) int local223;
+		@Pc(105) byte[] local105 = local4.method145("underlay.dat", null);
+		@Pc(109) byte[][] local109 = new byte[1280][1216];
+		this.method123(local105, local109);
+		@Pc(118) byte[] local118 = local4.method145("overlay.dat", null);
+		this.anIntArrayArray2 = new int[1280][1216];
+		this.aByteArrayArray2 = new byte[1280][1216];
+		this.method124(local118, this.anIntArrayArray2, this.aByteArrayArray2);
+		@Pc(140) byte[] local140 = local4.method145("loc.dat", null);
+		this.aByteArrayArray3 = new byte[1280][1216];
+		this.aByteArrayArray5 = new byte[1280][1216];
+		this.aByteArrayArray4 = new byte[1280][1216];
+		this.method122(local140, this.aByteArrayArray3, this.aByteArrayArray5, this.aByteArrayArray4);
+		@Pc(166) int local166;
 		try {
-			for (local223 = 0; local223 < 100; local223++) {
-				this.mapScenes[local223] = new Pix8(local4, "mapscene", local223);
+			for (local166 = 0; local166 < 50; local166++) {
+				this.aClass2_Sub1_Sub1_Sub3Array1[local166] = new Class2_Sub1_Sub1_Sub3(local4, "mapscene", local166);
 			}
-		} catch (@Pc(241) Exception local241) {
+		} catch (@Pc(184) Exception local184) {
 		}
 		try {
-			for (local223 = 0; local223 < 100; local223++) {
-				this.mapFunctions[local223] = new Pix24(local4, "mapfunction", local223);
+			for (local166 = 0; local166 < 50; local166++) {
+				this.aClass2_Sub1_Sub1_Sub2Array3[local166] = new Class2_Sub1_Sub1_Sub2(local4, "mapfunction", local166);
 			}
-		} catch (@Pc(261) Exception local261) {
+		} catch (@Pc(204) Exception local204) {
 		}
-		this.b12 = new PixFont(local4, "b12");
-		this.f11 = new WorldmapFont(11, true, this);
-		this.f12 = new WorldmapFont(12, true, this);
-		this.f14 = new WorldmapFont(14, true, this);
-		this.f17 = new WorldmapFont(17, true, this);
-		this.f19 = new WorldmapFont(19, true, this);
-		this.f22 = new WorldmapFont(22, true, this);
-		this.f26 = new WorldmapFont(26, true, this);
-		this.f30 = new WorldmapFont(30, true, this);
-		this.floormapColors = new int[originX][originY];
-		this.averageUnderlayColors(local166, this.floormapColors);
-		this.imageOverview = new Pix24(this.imageOverviewWidth, this.imageOverviewHeight);
-		this.imageOverview.bind();
-		this.drawMap(0, 0, originX, originY, 0, 0, this.imageOverviewWidth, this.imageOverviewHeight);
-		Draw2D.drawRect(0, 0, 0, this.imageOverviewWidth, this.imageOverviewHeight);
-		Draw2D.drawRect(1, 1, this.oclorInactiveBorderTL, this.imageOverviewWidth - 2, this.imageOverviewHeight - 2);
-		super.drawArea.bind();
+		this.aClass2_Sub1_Sub1_Sub4_1 = new Class2_Sub1_Sub1_Sub4(local4, "b12");
+		this.aClass2_Sub1_Sub1_Sub1_1 = new Class2_Sub1_Sub1_Sub1(11, true, this);
+		this.aClass2_Sub1_Sub1_Sub1_2 = new Class2_Sub1_Sub1_Sub1(12, true, this);
+		this.aClass2_Sub1_Sub1_Sub1_3 = new Class2_Sub1_Sub1_Sub1(14, true, this);
+		this.aClass2_Sub1_Sub1_Sub1_4 = new Class2_Sub1_Sub1_Sub1(17, true, this);
+		this.aClass2_Sub1_Sub1_Sub1_5 = new Class2_Sub1_Sub1_Sub1(19, true, this);
+		this.aClass2_Sub1_Sub1_Sub1_6 = new Class2_Sub1_Sub1_Sub1(22, true, this);
+		this.aClass2_Sub1_Sub1_Sub1_7 = new Class2_Sub1_Sub1_Sub1(26, true, this);
+		this.aClass2_Sub1_Sub1_Sub1_8 = new Class2_Sub1_Sub1_Sub1(30, true, this);
+		this.anIntArrayArray1 = new int[1280][1216];
+		this.method125(local109, this.anIntArrayArray1);
+		this.aClass2_Sub1_Sub1_Sub2_1 = new Class2_Sub1_Sub1_Sub2(this.anInt132, this.anInt131);
+		this.aClass2_Sub1_Sub1_Sub2_1.method64();
+		this.method128(0, 0, 1280, 1216, 0, 0, this.anInt132, this.anInt131);
+		Class2_Sub1_Sub1.method86(0, 0, this.anInt132, this.anInt131, 0);
+		Class2_Sub1_Sub1.method86(1, 1, this.anInt132 - 2, this.anInt131 - 2, this.anInt113);
+		super.aClass4_2.method107();
 	}
 
 	@OriginalMember(owner = "mapview!mapview", name = "a", descriptor = "([B[[B[[B[[B)V")
-	private void decodeLoc(@OriginalArg(0) byte[] arg0, @OriginalArg(1) byte[][] arg1, @OriginalArg(2) byte[][] arg2, @OriginalArg(3) byte[][] arg3) {
+	private void method122(@OriginalArg(0) byte[] arg0, @OriginalArg(1) byte[][] arg1, @OriginalArg(2) byte[][] arg2, @OriginalArg(3) byte[][] arg3) {
 		@Pc(3) int local3 = 0;
 		while (true) {
 			while (local3 < arg0.length) {
-				@Pc(16) int local16 = (arg0[local3++] & 0xFF) * 64 - centerX;
-				@Pc(27) int local27 = (arg0[local3++] & 0xFF) * 64 - centerY;
+				@Pc(16) int local16 = (arg0[local3++] & 0xFF) * 64 - 2304;
+				@Pc(27) int local27 = (arg0[local3++] & 0xFF) * 64 - 2816;
 				@Pc(43) int local43;
-				if (local16 > 0 && local27 > 0 && local16 + 64 < originX && local27 + 64 < originY) {
+				if (local16 > 0 && local27 > 0 && local16 + 64 < 1280 && local27 + 64 < 1216) {
 					for (local43 = 0; local43 < 64; local43++) {
 						@Pc(51) byte[] local51 = arg1[local43 + local16];
 						@Pc(57) byte[] local57 = arg2[local43 + local16];
 						@Pc(63) byte[] local63 = arg3[local43 + local16];
-						@Pc(69) int local69 = originY - local27 - 1;
+						@Pc(69) int local69 = 1216 - local27 - 1;
 						for (@Pc(71) int local71 = -64; local71 < 0; local71++) {
 							while (true) {
 								@Pc(80) int local80 = arg0[local3++] & 0xFF;
@@ -366,10 +320,10 @@ public final class mapview extends GameShell {
 									local57[local69] = (byte) (local80 - 28);
 								} else {
 									local63[local69] = (byte) (local80 - 159);
-									this.mapIconsX[this.mapIconCount] = local43 + local16;
-									this.mapIconsY[this.mapIconCount] = local69;
-									this.mapIcons[this.mapIconCount] = local80 - 160;
-									this.mapIconCount++;
+									this.anIntArray28[this.anInt120] = local43 + local16;
+									this.anIntArray29[this.anInt120] = local69;
+									this.anIntArray30[this.anInt120] = local80 - 160;
+									this.anInt120++;
 								}
 							}
 						}
@@ -390,16 +344,16 @@ public final class mapview extends GameShell {
 	}
 
 	@OriginalMember(owner = "mapview!mapview", name = "a", descriptor = "([B[[B)V")
-	private void decodeUnderlay(@OriginalArg(0) byte[] arg0, @OriginalArg(1) byte[][] arg1) {
+	private void method123(@OriginalArg(0) byte[] arg0, @OriginalArg(1) byte[][] arg1) {
 		@Pc(3) int local3 = 0;
 		while (true) {
 			while (local3 < arg0.length) {
-				@Pc(16) int local16 = (arg0[local3++] & 0xFF) * 64 - centerX;
-				@Pc(27) int local27 = (arg0[local3++] & 0xFF) * 64 - centerY;
-				if (local16 > 0 && local27 > 0 && local16 + 64 < originX && local27 + 64 < originY) {
+				@Pc(16) int local16 = (arg0[local3++] & 0xFF) * 64 - 2304;
+				@Pc(27) int local27 = (arg0[local3++] & 0xFF) * 64 - 2816;
+				if (local16 > 0 && local27 > 0 && local16 + 64 < 1280 && local27 + 64 < 1216) {
 					for (@Pc(43) int local43 = 0; local43 < 64; local43++) {
 						@Pc(51) byte[] local51 = arg1[local43 + local16];
-						@Pc(57) int local57 = originY - local27 - 1;
+						@Pc(57) int local57 = 1216 - local27 - 1;
 						for (@Pc(59) int local59 = -64; local59 < 0; local59++) {
 							local51[local57--] = arg0[local3++];
 						}
@@ -413,26 +367,26 @@ public final class mapview extends GameShell {
 	}
 
 	@OriginalMember(owner = "mapview!mapview", name = "a", descriptor = "([B[[I[[B)V")
-	private void decodeOverlay(@OriginalArg(0) byte[] arg0, @OriginalArg(1) int[][] arg1, @OriginalArg(2) byte[][] arg2) {
+	private void method124(@OriginalArg(0) byte[] arg0, @OriginalArg(1) int[][] arg1, @OriginalArg(2) byte[][] arg2) {
 		@Pc(3) int local3 = 0;
 		while (true) {
 			while (local3 < arg0.length) {
-				@Pc(16) int local16 = (arg0[local3++] & 0xFF) * 64 - centerX;
-				@Pc(27) int local27 = (arg0[local3++] & 0xFF) * 64 - centerY;
+				@Pc(16) int local16 = (arg0[local3++] & 0xFF) * 64 - 2304;
+				@Pc(27) int local27 = (arg0[local3++] & 0xFF) * 64 - 2816;
 				@Pc(72) byte local72;
 				@Pc(43) int local43;
-				if (local16 > 0 && local27 > 0 && local16 + 64 < originX && local27 + 64 < originY) {
+				if (local16 > 0 && local27 > 0 && local16 + 64 < 1280 && local27 + 64 < 1216) {
 					for (local43 = 0; local43 < 64; local43++) {
 						@Pc(51) int[] local51 = arg1[local43 + local16];
 						@Pc(57) byte[] local57 = arg2[local43 + local16];
-						@Pc(63) int local63 = originY - local27 - 1;
+						@Pc(63) int local63 = 1216 - local27 - 1;
 						for (@Pc(65) int local65 = -64; local65 < 0; local65++) {
 							local72 = arg0[local3++];
 							if (local72 == 0) {
 								local51[local63--] = 0;
 							} else {
 								local57[local63] = arg0[local3++];
-								local51[local63--] = this.floormapsOverlay[local72];
+								local51[local63--] = this.anIntArray24[local72];
 							}
 						}
 					}
@@ -450,9 +404,9 @@ public final class mapview extends GameShell {
 	}
 
 	@OriginalMember(owner = "mapview!mapview", name = "a", descriptor = "([[B[[I)V")
-	private void averageUnderlayColors(@OriginalArg(0) byte[][] arg0, @OriginalArg(1) int[][] arg1) {
-		@Pc(3) int local3 = originX;
-		@Pc(5) int local5 = originY;
+	private void method125(@OriginalArg(0) byte[][] arg0, @OriginalArg(1) int[][] arg1) {
+		@Pc(3) short local3 = 1280;
+		@Pc(5) short local5 = 1216;
 		@Pc(8) int[] local8 = new int[local5];
 		for (@Pc(10) int local10 = 0; local10 < local5; local10++) {
 			local8[local10] = 0;
@@ -461,7 +415,7 @@ public final class mapview extends GameShell {
 			@Pc(30) byte[] local30 = arg0[local22 + 5];
 			@Pc(36) byte[] local36 = arg0[local22 - 5];
 			for (@Pc(38) int local38 = 0; local38 < local5; local38++) {
-				local8[local38] += this.floormapsUnderlay[local30[local38] & 0xFF] - this.floormapsUnderlay[local36[local38] & 0xFF];
+				local8[local38] += this.anIntArray23[local30[local38] & 0xFF] - this.anIntArray23[local36[local38] & 0xFF];
 			}
 			if (local22 > 10 && local22 < local3 - 10) {
 				@Pc(77) int local77 = 0;
@@ -475,7 +429,7 @@ public final class mapview extends GameShell {
 					local79 += (local101 >> 10 & 0x3FF) - (local95 >> 10 & 0x3FF);
 					local81 += (local101 & 0x3FF) - (local95 & 0x3FF);
 					if (local81 > 0) {
-						local85[local87] = this.convertHSL((double) local77 / 8533.0D, (double) local79 / 8533.0D, (double) local81 / 8533.0D);
+						local85[local87] = this.method126((double) local77 / 8533.0D, (double) local79 / 8533.0D, (double) local81 / 8533.0D);
 					}
 				}
 			}
@@ -483,7 +437,7 @@ public final class mapview extends GameShell {
 	}
 
 	@OriginalMember(owner = "mapview!mapview", name = "a", descriptor = "(DDD)I")
-	private int convertHSL(@OriginalArg(0) double arg0, @OriginalArg(1) double arg1, @OriginalArg(2) double arg2) {
+	private int method126(@OriginalArg(0) double arg0, @OriginalArg(1) double arg1, @OriginalArg(2) double arg2) {
 		@Pc(3) double local3 = arg2;
 		@Pc(5) double local5 = arg2;
 		@Pc(7) double local7 = arg2;
@@ -539,31 +493,31 @@ public final class mapview extends GameShell {
 
 	@OriginalMember(owner = "mapview!mapview", name = "g", descriptor = "()V")
 	@Override
-	protected void unload() {
+	protected void method120() {
 		try {
-			this.floormapsUnderlay = null;
-			this.floormapsOverlay = null;
-			this.floormapColors = null;
-			this.overlayColors = null;
-			this.overlayTypes = null;
-			this.locWalls = null;
-			this.locIcons = null;
-			this.locScenes = null;
-			this.mapScenes = null;
-			this.mapFunctions = null;
-			this.b12 = null;
-			this.visibleMapIconsX = null;
-			this.visibleMapIconsY = null;
-			this.visibleMapIcons = null;
-			this.mapIconsX = null;
-			this.mapIconsY = null;
-			this.mapIcons = null;
-			this.imageOverview = null;
-			this.labelText = null;
-			this.labelX = null;
-			this.labelY = null;
-			this.labelType = null;
-			this.keyNames = null;
+			this.anIntArray23 = null;
+			this.anIntArray24 = null;
+			this.anIntArrayArray1 = null;
+			this.anIntArrayArray2 = null;
+			this.aByteArrayArray2 = null;
+			this.aByteArrayArray3 = null;
+			this.aByteArrayArray4 = null;
+			this.aByteArrayArray5 = null;
+			this.aClass2_Sub1_Sub1_Sub3Array1 = null;
+			this.aClass2_Sub1_Sub1_Sub2Array3 = null;
+			this.aClass2_Sub1_Sub1_Sub4_1 = null;
+			this.anIntArray25 = null;
+			this.anIntArray26 = null;
+			this.anIntArray27 = null;
+			this.anIntArray28 = null;
+			this.anIntArray29 = null;
+			this.anIntArray30 = null;
+			this.aClass2_Sub1_Sub1_Sub2_1 = null;
+			this.aStringArray1 = null;
+			this.anIntArray31 = null;
+			this.anIntArray32 = null;
+			this.anIntArray33 = null;
+			this.aStringArray2 = null;
 			System.gc();
 		} catch (@Pc(71) Throwable local71) {
 		}
@@ -571,318 +525,290 @@ public final class mapview extends GameShell {
 
 	@OriginalMember(owner = "mapview!mapview", name = "h", descriptor = "()V")
 	@Override
-	protected void update() {
-		if (super.actionKey[1] == 1) {
-			offsetX = (int) ((double) offsetX - 16.0D / this.zoomX);
-			this.shouldDraw = true;
+	protected void method121() {
+		if (super.anIntArray21[1] == 1) {
+			this.anInt141 = (int) ((double) this.anInt141 - 16.0D / this.aDouble1);
+			this.aBoolean25 = true;
 		}
-		if (super.actionKey[2] == 1) {
-			offsetX = (int) ((double) offsetX + 16.0D / this.zoomX);
-			this.shouldDraw = true;
+		if (super.anIntArray21[2] == 1) {
+			this.anInt141 = (int) ((double) this.anInt141 + 16.0D / this.aDouble1);
+			this.aBoolean25 = true;
 		}
-
-		if (super.actionKey[3] == 1) {
-			offsetY = (int) ((double) offsetY - 16.0D / this.zoomX);
-			this.shouldDraw = true;
+		if (super.anIntArray21[3] == 1) {
+			this.anInt142 = (int) ((double) this.anInt142 - 16.0D / this.aDouble1);
+			this.aBoolean25 = true;
 		}
-		if (super.actionKey[4] == 1) {
-			offsetY = (int) ((double) offsetY + 16.0D / this.zoomX);
-			this.shouldDraw = true;
+		if (super.anIntArray21[4] == 1) {
+			this.anInt142 = (int) ((double) this.anInt142 + 16.0D / this.aDouble1);
+			this.aBoolean25 = true;
 		}
-
-		@Pc(192) int local192;
-		@Pc(199) int local199;
-
-		@Pc(75) int key = 1;
-		while (key > 0) {
-			key = this.pollKey();
-			if (key == 49) {
-				this.zoomY = 3.0D;
-				this.shouldDraw = true;
-			}
-			if (key == 50) {
-				this.zoomY = 4.0D;
-				this.shouldDraw = true;
-			}
-			if (key == 51) {
-				this.zoomY = 6.0D;
-				this.shouldDraw = true;
-			}
-			if (key == 52) {
-				this.zoomY = 8.0D;
-				this.shouldDraw = true;
-			}
-			if (key == 107 || key == 75) {
-				this.showKey = !this.showKey;
-				this.shouldDraw = true;
-			}
-			if (key == 111 || key == 79) {
-				this.showOverview = !this.showOverview;
-				this.shouldDraw = true;
-			}
-
-			if (key == 101 && super.frame != null) {
-				System.out.println("Starting export...");
-				@Pc(169) Pix24 local169 = new Pix24(originX * 2, originY * 2);
-				local169.bind();
-				this.drawMap(0, 0, originX, originY, 0, 0, originX * 2, originY * 2);
-				super.drawArea.bind();
-				local192 = local169.pixels.length;
-				@Pc(197) byte[] local197 = new byte[local192 * 3];
-				local199 = 0;
-				for (@Pc(201) int local201 = 0; local201 < local192; local201++) {
-					@Pc(208) int local208 = local169.pixels[local201];
-					local197[local199++] = (byte) (local208 >> 16);
-					local197[local199++] = (byte) (local208 >> 8);
-					local197[local199++] = (byte) local208;
+		@Pc(83) int local83 = 1;
+		while (true) {
+			do {
+				if (local83 <= 0) {
+					if (super.anInt108 == 1) {
+						this.anInt135 = super.anInt109;
+						this.anInt136 = super.anInt110;
+						this.anInt137 = this.anInt141;
+						this.anInt138 = this.anInt142;
+						if (super.anInt109 > 170 && super.anInt109 < 220 && super.anInt110 > 471 && super.anInt110 < 503) {
+							this.aDouble2 = 3.0D;
+							this.anInt135 = -1;
+						}
+						if (super.anInt109 > 230 && super.anInt109 < 280 && super.anInt110 > 471 && super.anInt110 < 503) {
+							this.aDouble2 = 4.0D;
+							this.anInt135 = -1;
+						}
+						if (super.anInt109 > 290 && super.anInt109 < 340 && super.anInt110 > 471 && super.anInt110 < 503) {
+							this.aDouble2 = 6.0D;
+							this.anInt135 = -1;
+						}
+						if (super.anInt109 > 350 && super.anInt109 < 400 && super.anInt110 > 471 && super.anInt110 < 503) {
+							this.aDouble2 = 8.0D;
+							this.anInt135 = -1;
+						}
+						if (super.anInt109 > this.anInt121 && super.anInt110 > this.anInt122 + this.anInt124 && super.anInt109 < this.anInt121 + this.anInt123 && super.anInt110 < 503) {
+							this.aBoolean26 = !this.aBoolean26;
+							this.anInt135 = -1;
+						}
+						if (super.anInt109 > this.anInt133 && super.anInt110 > this.anInt134 + this.anInt131 && super.anInt109 < this.anInt133 + this.anInt132 && super.anInt110 < 503) {
+							this.aBoolean27 = !this.aBoolean27;
+							this.anInt135 = -1;
+						}
+						if (this.aBoolean26) {
+							if (super.anInt109 > this.anInt121 && super.anInt110 > this.anInt122 && super.anInt109 < this.anInt121 + this.anInt123 && super.anInt110 < this.anInt122 + this.anInt124) {
+								this.anInt135 = -1;
+							}
+							if (super.anInt109 > this.anInt121 && super.anInt110 > this.anInt122 && super.anInt109 < this.anInt121 + this.anInt123 && super.anInt110 < this.anInt122 + 18) {
+								this.anInt126 = 0;
+							}
+							if (super.anInt109 > this.anInt121 && super.anInt110 > this.anInt122 + this.anInt124 - 18 && super.anInt109 < this.anInt121 + this.anInt123 && super.anInt110 < this.anInt122 + this.anInt124) {
+								this.anInt126 = 25;
+							}
+						}
+						this.aBoolean25 = true;
+					}
+					@Pc(463) int local463;
+					@Pc(465) int local465;
+					if (this.aBoolean26) {
+						this.anInt127 = -1;
+						if (super.anInt103 > this.anInt121 && super.anInt103 < this.anInt121 + this.anInt123) {
+							local463 = this.anInt122 + 21 + 5;
+							for (local465 = 0; local465 < 25; local465++) {
+								if (local465 + this.anInt125 >= this.aStringArray2.length || !this.aStringArray2[local465 + this.anInt125].equals("???")) {
+									if (super.anInt104 >= local463 && super.anInt104 < local463 + 17) {
+										this.anInt127 = local465 + this.anInt125;
+										if (super.anInt108 == 1) {
+											this.anInt129 = local465 + this.anInt125;
+											this.anInt130 = 50;
+										}
+									}
+									local463 += 17;
+								}
+							}
+						}
+						if (this.anInt127 != this.anInt128) {
+							this.anInt128 = this.anInt127;
+							this.aBoolean25 = true;
+						}
+					}
+					if ((super.anInt102 == 1 || super.anInt108 == 1) && this.aBoolean27) {
+						local463 = super.anInt109;
+						local465 = super.anInt110;
+						if (super.anInt102 == 1) {
+							local463 = super.anInt103;
+							local465 = super.anInt104;
+						}
+						if (local463 > this.anInt133 && local465 > this.anInt134 && local463 < this.anInt133 + this.anInt132 && local465 < this.anInt134 + this.anInt131) {
+							this.anInt141 = (local463 - this.anInt133) * 1280 / this.anInt132;
+							this.anInt142 = (local465 - this.anInt134) * 1216 / this.anInt131;
+							this.anInt135 = -1;
+							this.aBoolean25 = true;
+						}
+					}
+					if (super.anInt102 == 1 && this.anInt135 != -1) {
+						this.anInt141 = this.anInt137 + (int) ((double) (this.anInt135 - super.anInt103) * 2.0D / this.aDouble2);
+						this.anInt142 = this.anInt138 + (int) ((double) (this.anInt136 - super.anInt104) * 2.0D / this.aDouble2);
+						this.aBoolean25 = true;
+					}
+					if (this.aDouble1 < this.aDouble2) {
+						this.aBoolean25 = true;
+						this.aDouble1 /= 30.0D;
+						if (this.aDouble1 > this.aDouble2) {
+							this.aDouble1 = this.aDouble2;
+						}
+					}
+					if (this.aDouble1 > this.aDouble2) {
+						this.aBoolean25 = true;
+						this.aDouble1 /= 30.0D;
+						if (this.aDouble1 < this.aDouble2) {
+							this.aDouble1 = this.aDouble2;
+						}
+					}
+					if (this.anInt125 < this.anInt126) {
+						this.aBoolean25 = true;
+						this.anInt125++;
+					}
+					if (this.anInt125 > this.anInt126) {
+						this.aBoolean25 = true;
+						this.anInt125--;
+					}
+					if (this.anInt130 > 0) {
+						this.aBoolean25 = true;
+						this.anInt130--;
+					}
+					local463 = this.anInt141 - (int) (635.0D / this.aDouble1);
+					local465 = this.anInt142 - (int) (503.0D / this.aDouble1);
+					@Pc(776) int local776 = this.anInt141 + (int) (635.0D / this.aDouble1);
+					@Pc(785) int local785 = this.anInt142 + (int) (503.0D / this.aDouble1);
+					if (local463 < 48) {
+						this.anInt141 = (int) (635.0D / this.aDouble1) + 48;
+					}
+					if (local465 < 48) {
+						this.anInt142 = (int) (503.0D / this.aDouble1) + 48;
+					}
+					if (local776 > 1232) {
+						this.anInt141 = 1232 - (int) (635.0D / this.aDouble1);
+					}
+					if (local785 > 1168) {
+						this.anInt142 = 1168 - (int) (503.0D / this.aDouble1);
+					}
+					return;
 				}
-				System.out.println("Saving to disk");
-				try {
-					@Pc(261) BufferedOutputStream local261 = new BufferedOutputStream(new FileOutputStream("map-" + originX * 2 + "-" + originY * 2 + "-rgb.raw"));
-					local261.write(local197);
-					local261.close();
-				} catch (@Pc(268) Exception local268) {
-					local268.printStackTrace();
+				local83 = this.method116();
+				if (local83 == 49) {
+					this.aDouble2 = 3.0D;
+					this.aBoolean25 = true;
 				}
-				System.out.println("Done export: " + originX * 2 + "," + originY * 2);
-			}
+				if (local83 == 50) {
+					this.aDouble2 = 4.0D;
+					this.aBoolean25 = true;
+				}
+				if (local83 == 51) {
+					this.aDouble2 = 6.0D;
+					this.aBoolean25 = true;
+				}
+				if (local83 == 52) {
+					this.aDouble2 = 8.0D;
+					this.aBoolean25 = true;
+				}
+				if (local83 == 107 || local83 == 75) {
+					this.aBoolean26 = !this.aBoolean26;
+					this.aBoolean25 = true;
+				}
+			} while (local83 != 111 && local83 != 79);
+			this.aBoolean27 = !this.aBoolean27;
+			this.aBoolean25 = true;
 		}
-
-        if (super.mouseClickButton == 1) {
-            this.lastMouseClickX = super.mouseClickX;
-            this.lastMouseClickY = super.mouseClickY;
-            this.lastOffsetX = offsetX;
-            this.lastOffsetY = offsetY;
-            if (super.mouseClickX > 170 && super.mouseClickX < 220 && super.mouseClickY > 471 && super.mouseClickY < 503) {
-                this.zoomY = 3.0D;
-                this.lastMouseClickX = -1;
-            }
-            if (super.mouseClickX > 230 && super.mouseClickX < 280 && super.mouseClickY > 471 && super.mouseClickY < 503) {
-                this.zoomY = 4.0D;
-                this.lastMouseClickX = -1;
-            }
-            if (super.mouseClickX > 290 && super.mouseClickX < 340 && super.mouseClickY > 471 && super.mouseClickY < 503) {
-                this.zoomY = 6.0D;
-                this.lastMouseClickX = -1;
-            }
-            if (super.mouseClickX > 350 && super.mouseClickX < 400 && super.mouseClickY > 471 && super.mouseClickY < 503) {
-                this.zoomY = 8.0D;
-                this.lastMouseClickX = -1;
-            }
-            if (super.mouseClickX > this.keyX && super.mouseClickY > this.keyY + this.keyOffset && super.mouseClickX < this.keyX + this.keyWidth && super.mouseClickY < 503) {
-                this.showKey = !this.showKey;
-                this.lastMouseClickX = -1;
-            }
-            if (super.mouseClickX > this.overviewX && super.mouseClickY > this.overviewY + this.imageOverviewHeight && super.mouseClickX < this.overviewX + this.imageOverviewWidth && super.mouseClickY < 503) {
-                this.showOverview = !this.showOverview;
-                this.lastMouseClickX = -1;
-            }
-            if (this.showKey) {
-                if (super.mouseClickX > this.keyX && super.mouseClickY > this.keyY && super.mouseClickX < this.keyX + this.keyWidth && super.mouseClickY < this.keyY + this.keyOffset) {
-                    this.lastMouseClickX = -1;
-                }
-                if (super.mouseClickX > this.keyX && super.mouseClickY > this.keyY && super.mouseClickX < this.keyX + this.keyWidth && super.mouseClickY < this.keyY + 18 && this.keyPage > 0) {
-                    this.keyPage -= 25;
-                }
-                if (super.mouseClickX > this.keyX && super.mouseClickY > this.keyY + this.keyOffset - 18 && super.mouseClickX < this.keyX + this.keyWidth && super.mouseClickY < this.keyY + this.keyOffset && this.keyPage < 50) {
-                    this.keyPage += 25;
-                }
-            }
-            this.shouldDraw = true;
-        }
-        @Pc(603) int local603;
-        if (this.showKey) {
-            this.currentKeyHover = -1;
-            if (super.mouseX > this.keyX && super.mouseX < this.keyX + this.keyWidth) {
-                local603 = this.keyY + 21 + 5;
-                for (local192 = 0; local192 < 25; local192++) {
-                    if (local192 + this.lastKeyPage >= this.keyNames.length || !this.keyNames[local192 + this.lastKeyPage].equals("???")) {
-                        if (super.mouseY >= local603 && super.mouseY < local603 + 17) {
-                            this.currentKeyHover = local192 + this.lastKeyPage;
-                            if (super.mouseClickButton == 1) {
-                                this.currentKey = local192 + this.lastKeyPage;
-                                this.flashTimer = 50;
-                            }
-                        }
-                        local603 += 17;
-                    }
-                }
-            }
-            if (this.currentKeyHover != this.lastKeyHover) {
-                this.lastKeyHover = this.currentKeyHover;
-                this.shouldDraw = true;
-            }
-        }
-        if ((super.mouseButton == 1 || super.mouseClickButton == 1) && this.showOverview) {
-            local603 = super.mouseClickX;
-			local192 = super.mouseClickY;
-            if (super.mouseButton == 1) {
-                local603 = super.mouseX;
-                local192 = super.mouseY;
-            }
-            if (local603 > this.overviewX && local192 > this.overviewY && local603 < this.overviewX + this.imageOverviewWidth && local192 < this.overviewY + this.imageOverviewHeight) {
-                offsetX = (local603 - this.overviewX) * originX / this.imageOverviewWidth;
-                offsetY = (local192 - this.overviewY) * originY / this.imageOverviewHeight;
-                this.lastMouseClickX = -1;
-                this.shouldDraw = true;
-            }
-        }
-        if (super.mouseButton == 1 && this.lastMouseClickX != -1) {
-            offsetX = this.lastOffsetX + (int) ((double) (this.lastMouseClickX - super.mouseX) * 2.0D / this.zoomY);
-            offsetY = this.lastOffsetY + (int) ((double) (this.lastMouseClickY - super.mouseY) * 2.0D / this.zoomY);
-            this.shouldDraw = true;
-        }
-        if (this.zoomX < this.zoomY) {
-            this.shouldDraw = true;
-            this.zoomX += this.zoomX / 30.0D;
-            if (this.zoomX > this.zoomY) {
-                this.zoomX = this.zoomY;
-            }
-        }
-        if (this.zoomX > this.zoomY) {
-            this.shouldDraw = true;
-            this.zoomX -= this.zoomX / 30.0D;
-            if (this.zoomX < this.zoomY) {
-                this.zoomX = this.zoomY;
-            }
-        }
-        if (this.lastKeyPage < this.keyPage) {
-            this.shouldDraw = true;
-            this.lastKeyPage++;
-        }
-        if (this.lastKeyPage > this.keyPage) {
-            this.shouldDraw = true;
-            this.lastKeyPage--;
-        }
-        if (this.flashTimer > 0) {
-            this.shouldDraw = true;
-            this.flashTimer--;
-        }
-        local603 = offsetX - (int) (635.0D / this.zoomX);
-		local192 = offsetY - (int) (503.0D / this.zoomX);
-        @Pc(909) int local909 = offsetX + (int) (635.0D / this.zoomX);
-		local199 = offsetY + (int) (503.0D / this.zoomX);
-        if (local603 < 48) {
-            offsetX = (int) (635.0D / this.zoomX) + 48;
-        }
-        if (local192 < 48) {
-            offsetY = (int) (503.0D / this.zoomX) + 48;
-        }
-        if (local909 > originX - 48) {
-            offsetX = originX - 48 - (int) (635.0D / this.zoomX);
-        }
-        if (local199 > originY - 48) {
-            offsetY = originY - 48 - (int) (503.0D / this.zoomX);
-        }
-    }
+	}
 
 	@OriginalMember(owner = "mapview!mapview", name = "e", descriptor = "()V")
 	@Override
-	protected void draw() {
-		if (this.shouldDraw) {
-			this.shouldDraw = false;
-			this.drawTimer = 0;
-			Draw2D.clear();
-			@Pc(19) int local19 = offsetX - (int) (635.0D / this.zoomX);
-			@Pc(27) int local27 = offsetY - (int) (503.0D / this.zoomX);
-			@Pc(35) int local35 = offsetX + (int) (635.0D / this.zoomX);
-			@Pc(43) int local43 = offsetY + (int) (503.0D / this.zoomX);
-			this.drawMap(local19, local27, local35, local43, 0, 0, 635, 503);
-			@Pc(147) int local147;
-			@Pc(169) int local169;
-			@Pc(182) int local182;
-			if (this.showOverview) {
-				this.imageOverview.blitOpaque(this.overviewX, this.overviewY);
-				Draw2D.fillRectAlpha(this.overviewX + this.imageOverviewWidth * local19 / originX, this.overviewY + this.imageOverviewHeight * local27 / originY, (local35 - local19) * this.imageOverviewWidth / originX, (local43 - local27) * this.imageOverviewHeight / originY, 16711680, 128);
-				Draw2D.drawRect(this.overviewX + this.imageOverviewWidth * local19 / originX, this.overviewY + this.imageOverviewHeight * local27 / originY, 16711680, (local35 - local19) * this.imageOverviewWidth / originX, (local43 - local27) * this.imageOverviewHeight / originY);
-				if (this.flashTimer > 0 && this.flashTimer % 10 < 5) {
-					for (local147 = 0; local147 < this.mapIconCount; local147++) {
-						if (this.mapIcons[local147] == this.currentKey) {
-							local169 = this.overviewX + this.imageOverviewWidth * this.mapIconsX[local147] / originX;
-							local182 = this.overviewY + this.imageOverviewHeight * this.mapIconsY[local147] / originY;
-							Draw2D.fillCircle(local169, local182, 2, 16776960, 256);
+	protected void method117() {
+		if (this.aBoolean25) {
+			this.aBoolean25 = false;
+			this.anInt119 = 0;
+			Class2_Sub1_Sub1.method89();
+			@Pc(20) int local20 = this.anInt141 - (int) (635.0D / this.aDouble1);
+			@Pc(29) int local29 = this.anInt142 - (int) (503.0D / this.aDouble1);
+			@Pc(38) int local38 = this.anInt141 + (int) (635.0D / this.aDouble1);
+			@Pc(47) int local47 = this.anInt142 + (int) (503.0D / this.aDouble1);
+			this.method128(local20, local29, local38, local47, 0, 0, 635, 503);
+			@Pc(151) int local151;
+			@Pc(173) int local173;
+			@Pc(186) int local186;
+			if (this.aBoolean27) {
+				this.aClass2_Sub1_Sub1_Sub2_1.method67(this.anInt133, this.anInt134);
+				Class2_Sub1_Sub1.method85(this.anInt133 + this.anInt132 * local20 / 1280, this.anInt134 + this.anInt131 * local29 / 1216, (local38 - local20) * this.anInt132 / 1280, (local47 - local29) * this.anInt131 / 1216, 16711680, 128);
+				Class2_Sub1_Sub1.method86(this.anInt133 + this.anInt132 * local20 / 1280, this.anInt134 + this.anInt131 * local29 / 1216, (local38 - local20) * this.anInt132 / 1280, (local47 - local29) * this.anInt131 / 1216, 16711680);
+				if (this.anInt130 > 0 && this.anInt130 % 10 < 5) {
+					for (local151 = 0; local151 < this.anInt120; local151++) {
+						if (this.anIntArray30[local151] == this.anInt129) {
+							local173 = this.anInt133 + this.anInt132 * this.anIntArray28[local151] / 1280;
+							local186 = this.anInt134 + this.anInt131 * this.anIntArray29[local151] / 1216;
+							Class2_Sub1_Sub1.method90(local173, local186, 2, 16776960, 256);
 						}
 					}
 				}
 			}
-			if (this.showKey) {
-				this.drawString(this.keyX, this.keyY, this.keyWidth, 18, 10066329, 7829367, 5592405, "Prev page");
-				this.drawString(this.keyX, this.keyY + 18, this.keyWidth, this.keyOffset - 36, 10066329, 7829367, 5592405, "");
-				this.drawString(this.keyX, this.keyY + this.keyOffset - 18, this.keyWidth, 18, 10066329, 7829367, 5592405, "Next page");
-				local147 = this.keyY + 3 + 18;
-				for (local169 = 0; local169 < 25; local169++) {
-					if (local169 + this.lastKeyPage < this.mapFunctions.length && local169 + this.lastKeyPage < this.keyNames.length) {
-						if (this.keyNames[local169 + this.lastKeyPage].equals("???")) {
+			if (this.aBoolean26) {
+				this.method127(this.anInt121, this.anInt122, this.anInt123, 18, 10066329, 7829367, 5592405, "Prev page");
+				this.method127(this.anInt121, this.anInt122 + 18, this.anInt123, this.anInt124 - 36, 10066329, 7829367, 5592405, "");
+				this.method127(this.anInt121, this.anInt122 + this.anInt124 - 18, this.anInt123, 18, 10066329, 7829367, 5592405, "Next page");
+				local151 = this.anInt122 + 3 + 18;
+				for (local173 = 0; local173 < 25; local173++) {
+					if (local173 + this.anInt125 < this.aClass2_Sub1_Sub1_Sub2Array3.length && local173 + this.anInt125 < this.aStringArray2.length) {
+						if (this.aStringArray2[local173 + this.anInt125].equals("???")) {
 							continue;
 						}
-						this.mapFunctions[local169 + this.lastKeyPage].draw(this.keyX + 3, local147);
-						this.b12.drawString(this.keyX + 21, local147 + 14, this.keyNames[local169 + this.lastKeyPage], 0);
-						local182 = 16777215;
-						if (this.currentKeyHover == local169 + this.lastKeyPage) {
-							local182 = 12298922;
+						this.aClass2_Sub1_Sub1_Sub2Array3[local173 + this.anInt125].method65(this.anInt121 + 3, local151);
+						this.aClass2_Sub1_Sub1_Sub4_1.method91(this.aStringArray2[local173 + this.anInt125], this.anInt121 + 21, local151 + 14, 0);
+						local186 = 16777215;
+						if (this.anInt127 == local173 + this.anInt125) {
+							local186 = 12298922;
 						}
-						if (this.flashTimer > 0 && this.flashTimer % 10 < 5 && this.currentKey == local169 + this.lastKeyPage) {
-							local182 = 16776960;
+						if (this.anInt130 > 0 && this.anInt130 % 10 < 5 && this.anInt129 == local173 + this.anInt125) {
+							local186 = 16776960;
 						}
-						this.b12.drawString(this.keyX + 20, local147 + 13, this.keyNames[local169 + this.lastKeyPage], local182);
+						this.aClass2_Sub1_Sub1_Sub4_1.method91(this.aStringArray2[local173 + this.anInt125], this.anInt121 + 20, local151 + 13, local186);
 					}
-					local147 += 17;
+					local151 += 17;
 				}
 			}
-			this.drawString(this.overviewX, this.overviewY + this.imageOverviewHeight, this.imageOverviewWidth, 18, this.oclorInactiveBorderTL, this.colorInactive, this.colorInactiveBorderBR, "Overview");
-			this.drawString(this.keyX, this.keyY + this.keyOffset, this.keyWidth, 18, this.oclorInactiveBorderTL, this.colorInactive, this.colorInactiveBorderBR, "Key");
-			if (this.zoomY == 3.0D) {
-				this.drawString(170, 471, 50, 30, this.colorActiveBorderTL, this.colorActive, this.colorActiveBorderBR, "37%");
+			this.method127(this.anInt133, this.anInt134 + this.anInt131, this.anInt132, 18, this.anInt113, this.anInt114, this.anInt115, "Overview");
+			this.method127(this.anInt121, this.anInt122 + this.anInt124, this.anInt123, 18, this.anInt113, this.anInt114, this.anInt115, "Key");
+			if (this.aDouble2 == 3.0D) {
+				this.method127(170, 471, 50, 30, this.anInt116, this.anInt117, this.anInt118, "37%");
 			} else {
-				this.drawString(170, 471, 50, 30, this.oclorInactiveBorderTL, this.colorInactive, this.colorInactiveBorderBR, "37%");
+				this.method127(170, 471, 50, 30, this.anInt113, this.anInt114, this.anInt115, "37%");
 			}
-			if (this.zoomY == 4.0D) {
-				this.drawString(230, 471, 50, 30, this.colorActiveBorderTL, this.colorActive, this.colorActiveBorderBR, "50%");
+			if (this.aDouble2 == 4.0D) {
+				this.method127(230, 471, 50, 30, this.anInt116, this.anInt117, this.anInt118, "50%");
 			} else {
-				this.drawString(230, 471, 50, 30, this.oclorInactiveBorderTL, this.colorInactive, this.colorInactiveBorderBR, "50%");
+				this.method127(230, 471, 50, 30, this.anInt113, this.anInt114, this.anInt115, "50%");
 			}
-			if (this.zoomY == 6.0D) {
-				this.drawString(290, 471, 50, 30, this.colorActiveBorderTL, this.colorActive, this.colorActiveBorderBR, "75%");
+			if (this.aDouble2 == 6.0D) {
+				this.method127(290, 471, 50, 30, this.anInt116, this.anInt117, this.anInt118, "75%");
 			} else {
-				this.drawString(290, 471, 50, 30, this.oclorInactiveBorderTL, this.colorInactive, this.colorInactiveBorderBR, "75%");
+				this.method127(290, 471, 50, 30, this.anInt113, this.anInt114, this.anInt115, "75%");
 			}
-			if (this.zoomY == 8.0D) {
-				this.drawString(350, 471, 50, 30, this.colorActiveBorderTL, this.colorActive, this.colorActiveBorderBR, "100%");
+			if (this.aDouble2 == 8.0D) {
+				this.method127(350, 471, 50, 30, this.anInt116, this.anInt117, this.anInt118, "100%");
 			} else {
-				this.drawString(350, 471, 50, 30, this.oclorInactiveBorderTL, this.colorInactive, this.colorInactiveBorderBR, "100%");
+				this.method127(350, 471, 50, 30, this.anInt113, this.anInt114, this.anInt115, "100%");
 			}
 		}
-		this.drawTimer--;
-		if (this.drawTimer <= 0) {
-			super.drawArea.draw(super.graphics, 0, 0);
-			this.drawTimer = 50;
+		this.anInt119--;
+		if (this.anInt119 <= 0) {
+			super.aClass4_2.method108(super.aGraphics2, 0, 0);
+			this.anInt119 = 50;
 		}
 	}
 
 	@OriginalMember(owner = "mapview!mapview", name = "a", descriptor = "()V")
 	@Override
-	protected void refresh() {
-		this.drawTimer = 0;
+	protected void method110() {
+		this.anInt119 = 0;
 	}
 
 	@OriginalMember(owner = "mapview!mapview", name = "a", descriptor = "(IIIIIIILjava/lang/String;)V")
-	private void drawString(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2, @OriginalArg(3) int arg3, @OriginalArg(4) int arg4, @OriginalArg(5) int arg5, @OriginalArg(6) int arg6, @OriginalArg(7) String arg7) {
-		Draw2D.drawRect(arg0, arg1, 0, arg2, arg3);
+	private void method127(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2, @OriginalArg(3) int arg3, @OriginalArg(4) int arg4, @OriginalArg(5) int arg5, @OriginalArg(6) int arg6, @OriginalArg(7) String arg7) {
+		Class2_Sub1_Sub1.method86(arg0, arg1, arg2, arg3, 0);
 		@Pc(6) int local6 = arg0 + 1;
 		@Pc(7) int local7 = arg1 + 1;
 		@Pc(8) int local8 = arg2 - 2;
 		@Pc(9) int local9 = arg3 - 2;
-		Draw2D.fillRect(local6, local7, arg5, local8, local9);
-		Draw2D.drawHorizontalLine(local6, local7, arg4, local8);
-		Draw2D.drawVerticalLine(local6, local7, arg4, local9);
-		Draw2D.drawHorizontalLine(local6, local7 + local9 - 1, arg6, local8);
-		Draw2D.drawVerticalLine(local6 + local8 - 1, local7, arg6, local9);
-		this.b12.drawStringCenter(local6 + local8 / 2 + 1, local7 + local9 / 2 + 1 + 4, arg7, 0);
-		this.b12.drawStringCenter(local6 + local8 / 2, local7 + local9 / 2 + 4, arg7, 16777215);
+		Class2_Sub1_Sub1.method88(local6, local7, local8, local9, arg5);
+		Class2_Sub1_Sub1.method82(local6, local7, local8, arg4);
+		Class2_Sub1_Sub1.method83(local6, local7, local9, arg4);
+		Class2_Sub1_Sub1.method82(local6, local7 + local9 - 1, local8, arg6);
+		Class2_Sub1_Sub1.method83(local6 + local8 - 1, local7, local9, arg6);
+		this.aClass2_Sub1_Sub1_Sub4_1.method92(arg7, local6 + local8 / 2 + 1, local7 + local9 / 2 + 1 + 4, 0);
+		this.aClass2_Sub1_Sub1_Sub4_1.method92(arg7, local6 + local8 / 2, local7 + local9 / 2 + 4, 16777215);
 	}
 
 	@OriginalMember(owner = "mapview!mapview", name = "a", descriptor = "(IIIIIIII)V")
-	private void drawMap(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2, @OriginalArg(3) int arg3, @OriginalArg(4) int arg4, @OriginalArg(5) int arg5, @OriginalArg(6) int arg6, @OriginalArg(7) int arg7) {
+	private void method128(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2, @OriginalArg(3) int arg3, @OriginalArg(4) int arg4, @OriginalArg(5) int arg5, @OriginalArg(6) int arg6, @OriginalArg(7) int arg7) {
 		@Pc(5) int local5 = arg2 - arg0;
 		@Pc(9) int local9 = arg3 - arg1;
 		@Pc(17) int local17 = (arg6 - arg4 << 16) / local5;
@@ -904,9 +830,9 @@ public final class mapview extends GameShell {
 			if (local47 > 0) {
 				local35 += arg4;
 				local43 += arg4;
-				@Pc(64) int[] local64 = this.floormapColors[local27 + arg0];
-				@Pc(71) int[] local71 = this.overlayColors[local27 + arg0];
-				local78 = this.overlayTypes[local27 + arg0];
+				@Pc(64) int[] local64 = this.anIntArrayArray1[local27 + arg0];
+				@Pc(71) int[] local71 = this.anIntArrayArray2[local27 + arg0];
+				local78 = this.aByteArrayArray2[local27 + arg0];
 				for (local80 = 0; local80 < local9; local80++) {
 					local88 = local25 * local80 >> 16;
 					local96 = local25 * (local80 + 1) >> 16;
@@ -916,14 +842,14 @@ public final class mapview extends GameShell {
 						local96 += arg5;
 						local116 = local71[local80 + arg1];
 						if (local116 == 0) {
-							Draw2D.fillRect(local35, local88, local64[local80 + arg1], local43 - local35, local96 - local88);
+							Class2_Sub1_Sub1.method88(local35, local88, local43 - local35, local96 - local88, local64[local80 + arg1]);
 						} else {
 							@Pc(140) byte local140 = local78[local80 + arg1];
 							local144 = local140 & 0xFC;
 							if (local144 == 0 || local47 <= 1 || local100 <= 1) {
-								Draw2D.fillRect(local35, local88, local116, local47, local100);
+								Class2_Sub1_Sub1.method88(local35, local88, local47, local100, local116);
 							} else {
-								this.drawSmoothEdges(Draw2D.data, local88 * Draw2D.width2d + local35, local64[local80 + arg1], local116, local47, local100, local144 >> 2, local140 & 0x3);
+								this.method129(Class2_Sub1_Sub1.anIntArray10, local88 * Class2_Sub1_Sub1.anInt78 + local35, local64[local80 + arg1], local116, local47, local100, local144 >> 2, local140 & 0x3);
 							}
 						}
 					}
@@ -943,9 +869,9 @@ public final class mapview extends GameShell {
 			local218 = local17 * (local43 + 1) >> 16;
 			local222 = local218 - local47;
 			if (local222 > 0) {
-				local78 = this.locWalls[local43 + arg0];
-				@Pc(238) byte[] local238 = this.locScenes[local43 + arg0];
-				@Pc(245) byte[] local245 = this.locIcons[local43 + arg0];
+				local78 = this.aByteArrayArray3[local43 + arg0];
+				@Pc(238) byte[] local238 = this.aByteArrayArray5[local43 + arg0];
+				@Pc(245) byte[] local245 = this.aByteArrayArray4[local43 + arg0];
 				for (local96 = 0; local96 < local9; local96++) {
 					local100 = local25 * local96 >> 16;
 					local116 = local25 * (local96 + 1) >> 16;
@@ -969,55 +895,55 @@ public final class mapview extends GameShell {
 								local144 -= 4;
 							}
 							if (local144 == 1) {
-								Draw2D.drawVerticalLine(local47, local100, local303, local267);
+								Class2_Sub1_Sub1.method83(local47, local100, local267, local303);
 							} else if (local144 == 2) {
-								Draw2D.drawHorizontalLine(local47, local100, local303, local222);
+								Class2_Sub1_Sub1.method82(local47, local100, local222, local303);
 							} else if (local144 == 3) {
-								Draw2D.drawVerticalLine(local284, local100, local303, local267);
+								Class2_Sub1_Sub1.method83(local284, local100, local267, local303);
 							} else if (local144 == 4) {
-								Draw2D.drawHorizontalLine(local47, local295, local303, local222);
+								Class2_Sub1_Sub1.method82(local47, local295, local222, local303);
 							} else if (local144 == 9) {
-								Draw2D.drawVerticalLine(local47, local100, 16777215, local267);
-								Draw2D.drawHorizontalLine(local47, local100, local303, local222);
+								Class2_Sub1_Sub1.method83(local47, local100, local267, 16777215);
+								Class2_Sub1_Sub1.method82(local47, local100, local222, local303);
 							} else if (local144 == 10) {
-								Draw2D.drawVerticalLine(local284, local100, 16777215, local267);
-								Draw2D.drawHorizontalLine(local47, local100, local303, local222);
+								Class2_Sub1_Sub1.method83(local284, local100, local267, 16777215);
+								Class2_Sub1_Sub1.method82(local47, local100, local222, local303);
 							} else if (local144 == 11) {
-								Draw2D.drawVerticalLine(local284, local100, 16777215, local267);
-								Draw2D.drawHorizontalLine(local47, local295, local303, local222);
+								Class2_Sub1_Sub1.method83(local284, local100, local267, 16777215);
+								Class2_Sub1_Sub1.method82(local47, local295, local222, local303);
 							} else if (local144 == 12) {
-								Draw2D.drawVerticalLine(local47, local100, 16777215, local267);
-								Draw2D.drawHorizontalLine(local47, local295, local303, local222);
+								Class2_Sub1_Sub1.method83(local47, local100, local267, 16777215);
+								Class2_Sub1_Sub1.method82(local47, local295, local222, local303);
 							} else if (local144 == 17) {
-								Draw2D.drawHorizontalLine(local47, local100, local303, 1);
+								Class2_Sub1_Sub1.method82(local47, local100, 1, local303);
 							} else if (local144 == 18) {
-								Draw2D.drawHorizontalLine(local284, local100, local303, 1);
+								Class2_Sub1_Sub1.method82(local284, local100, 1, local303);
 							} else if (local144 == 19) {
-								Draw2D.drawHorizontalLine(local284, local295, local303, 1);
+								Class2_Sub1_Sub1.method82(local284, local295, 1, local303);
 							} else if (local144 == 20) {
-								Draw2D.drawHorizontalLine(local47, local295, local303, 1);
+								Class2_Sub1_Sub1.method82(local47, local295, 1, local303);
 							} else {
 								@Pc(475) int local475;
 								if (local144 == 25) {
 									for (local475 = 0; local475 < local267; local475++) {
-										Draw2D.drawHorizontalLine(local47 + local475, local295 - local475, local303, 1);
+										Class2_Sub1_Sub1.method82(local47 + local475, local295 - local475, 1, local303);
 									}
 								} else if (local144 == 26) {
 									for (local475 = 0; local475 < local267; local475++) {
-										Draw2D.drawHorizontalLine(local47 + local475, local100 + local475, local303, 1);
+										Class2_Sub1_Sub1.method82(local47 + local475, local100 + local475, 1, local303);
 									}
 								}
 							}
 						}
 						local284 = local238[local96 + arg1] & 0xFF;
 						if (local284 != 0) {
-							this.mapScenes[local284 - 1].clip(local47 - local222 / 2, local100 - local267 / 2, local222 * 2, local267 * 2);
+							this.aClass2_Sub1_Sub1_Sub3Array1[local284 - 1].method79(local47 - local222 / 2, local100 - local267 / 2, local222 * 2, local267 * 2);
 						}
 						local295 = local245[local96 + arg1] & 0xFF;
 						if (local295 != 0) {
-							this.visibleMapIcons[local35] = local295 - 1;
-							this.visibleMapIconsX[local35] = local47 + local222 / 2;
-							this.visibleMapIconsY[local35] = local100 + local267 / 2;
+							this.anIntArray27[local35] = local295 - 1;
+							this.anIntArray25[local35] = local47 + local222 / 2;
+							this.anIntArray26[local35] = local100 + local267 / 2;
 							local35++;
 						}
 					}
@@ -1025,124 +951,103 @@ public final class mapview extends GameShell {
 			}
 		}
 		for (local47 = 0; local47 < local35; local47++) {
-			this.mapFunctions[this.visibleMapIcons[local47]].draw(this.visibleMapIconsX[local47] - 7, this.visibleMapIconsY[local47] - 7);
+			this.aClass2_Sub1_Sub1_Sub2Array3[this.anIntArray27[local47]].method65(this.anIntArray25[local47] - 7, this.anIntArray26[local47] - 7);
 		}
-		if (this.flashTimer > 0) {
+		if (this.anInt130 > 0) {
 			for (local218 = 0; local218 < local35; local218++) {
-				if (this.visibleMapIcons[local218] == this.currentKey) {
-					this.mapFunctions[this.visibleMapIcons[local218]].draw(this.visibleMapIconsX[local218] - 7, this.visibleMapIconsY[local218] - 7);
-					if (this.flashTimer % 10 < 5) {
-						Draw2D.fillCircle(this.visibleMapIconsX[local218], this.visibleMapIconsY[local218], 15, 16776960, 128);
-						Draw2D.fillCircle(this.visibleMapIconsX[local218], this.visibleMapIconsY[local218], 7, 16777215, 256);
+				if (this.anIntArray27[local218] == this.anInt129) {
+					this.aClass2_Sub1_Sub1_Sub2Array3[this.anIntArray27[local218]].method65(this.anIntArray25[local218] - 7, this.anIntArray26[local218] - 7);
+					if (this.anInt130 % 10 < 5) {
+						Class2_Sub1_Sub1.method90(this.anIntArray25[local218], this.anIntArray26[local218], 15, 16776960, 128);
+						Class2_Sub1_Sub1.method90(this.anIntArray25[local218], this.anIntArray26[local218], 7, 16777215, 256);
 					}
 				}
 			}
 		}
-		@Pc(706) int local706;
-		if (this.zoomX == this.zoomY && shouldDrawLabels) {
-			for (local218 = 0; local218 < this.labelCount; local218++) {
-				local222 = this.labelX[local218];
-				local706 = this.labelY[local218];
-				local222 -= centerX;
-				@Pc(716) int local716 = centerY + originY - local706;
-				local80 = arg4 + (arg6 - arg4) * (local222 - arg0) / (arg2 - arg0);
-				local88 = arg5 + (arg7 - arg5) * (local716 - arg1) / (arg3 - arg1);
-				local96 = this.labelType[local218];
-				local100 = 16777215;
-				@Pc(753) WorldmapFont local753 = null;
-				if (local96 == 0) {
-					if (this.zoomX == 3.0D) {
-						local753 = this.f11;
-					}
-					if (this.zoomX == 4.0D) {
-						local753 = this.f12;
-					}
-					if (this.zoomX == 6.0D) {
-						local753 = this.f14;
-					}
-					if (this.zoomX == 8.0D) {
-						local753 = this.f17;
+		if (this.aDouble1 != this.aDouble2) {
+			return;
+		}
+		for (local218 = 0; local218 < this.anInt139; local218++) {
+			local222 = this.anIntArray31[local218];
+			@Pc(704) int local704 = this.anIntArray32[local218];
+			local222 -= 2304;
+			@Pc(709) int local709 = 4032 - local704;
+			local80 = arg4 + (arg6 - arg4) * (local222 - arg0) / (arg2 - arg0);
+			local88 = arg5 + (arg7 - arg5) * (local709 - arg1) / (arg3 - arg1);
+			local96 = this.anIntArray33[local218];
+			local100 = 16777215;
+			@Pc(746) Class2_Sub1_Sub1_Sub1 local746 = null;
+			if (local96 == 0) {
+				if (this.aDouble1 == 3.0D) {
+					local746 = this.aClass2_Sub1_Sub1_Sub1_1;
+				}
+				if (this.aDouble1 == 4.0D) {
+					local746 = this.aClass2_Sub1_Sub1_Sub1_2;
+				}
+				if (this.aDouble1 == 6.0D) {
+					local746 = this.aClass2_Sub1_Sub1_Sub1_3;
+				}
+				if (this.aDouble1 == 8.0D) {
+					local746 = this.aClass2_Sub1_Sub1_Sub1_4;
+				}
+			}
+			if (local96 == 1) {
+				if (this.aDouble1 == 3.0D) {
+					local746 = this.aClass2_Sub1_Sub1_Sub1_3;
+				}
+				if (this.aDouble1 == 4.0D) {
+					local746 = this.aClass2_Sub1_Sub1_Sub1_4;
+				}
+				if (this.aDouble1 == 6.0D) {
+					local746 = this.aClass2_Sub1_Sub1_Sub1_5;
+				}
+				if (this.aDouble1 == 8.0D) {
+					local746 = this.aClass2_Sub1_Sub1_Sub1_6;
+				}
+			}
+			if (local96 == 2) {
+				local100 = 16755200;
+				if (this.aDouble1 == 3.0D) {
+					local746 = this.aClass2_Sub1_Sub1_Sub1_5;
+				}
+				if (this.aDouble1 == 4.0D) {
+					local746 = this.aClass2_Sub1_Sub1_Sub1_6;
+				}
+				if (this.aDouble1 == 6.0D) {
+					local746 = this.aClass2_Sub1_Sub1_Sub1_7;
+				}
+				if (this.aDouble1 == 8.0D) {
+					local746 = this.aClass2_Sub1_Sub1_Sub1_8;
+				}
+			}
+			if (local746 != null) {
+				@Pc(859) String local859 = this.aStringArray1[local218];
+				local144 = 1;
+				for (local284 = 0; local284 < local859.length(); local284++) {
+					if (local859.charAt(local284) == '/') {
+						local144++;
 					}
 				}
-				if (local96 == 1) {
-					if (this.zoomX == 3.0D) {
-						local753 = this.f14;
+				local88 -= local746.method49() * (local144 - 1) / 2;
+				local88 += local746.method53() / 2;
+				while (true) {
+					local295 = local859.indexOf("/");
+					if (local295 == -1) {
+						local746.method47(local859, local80, local88, local100, true);
+						break;
 					}
-					if (this.zoomX == 4.0D) {
-						local753 = this.f17;
-					}
-					if (this.zoomX == 6.0D) {
-						local753 = this.f19;
-					}
-					if (this.zoomX == 8.0D) {
-						local753 = this.f22;
-					}
-				}
-				if (local96 == 2) {
-					local100 = 16755200;
-					if (this.zoomX == 3.0D) {
-						local753 = this.f19;
-					}
-					if (this.zoomX == 4.0D) {
-						local753 = this.f22;
-					}
-					if (this.zoomX == 6.0D) {
-						local753 = this.f26;
-					}
-					if (this.zoomX == 8.0D) {
-						local753 = this.f30;
-					}
-				}
-				if (local753 != null) {
-					@Pc(866) String local866 = this.labelText[local218];
-					local144 = 1;
-					for (local284 = 0; local284 < local866.length(); local284++) {
-						if (local866.charAt(local284) == '/') {
-							local144++;
-						}
-					}
-					local88 -= local753.method35() * (local144 - 1) / 2;
-					local88 += local753.method39() / 2;
-					while (true) {
-						local295 = local866.indexOf("/");
-						if (local295 == -1) {
-							local753.method33(local866, local80, local88, local100, true);
-							break;
-						}
-						@Pc(922) String local922 = local866.substring(0, local295);
-						local753.method33(local922, local80, local88, local100, true);
-						local88 += local753.method35();
-						local866 = local866.substring(local295 + 1);
-					}
+					@Pc(915) String local915 = local859.substring(0, local295);
+					local746.method47(local915, local80, local88, local100, true);
+					local88 += local746.method49();
+					local859 = local859.substring(local295 + 1);
 				}
 			}
 		}
-        if (shouldDrawBorders) {
-            for (local218 = centerX / 64; local218 < (centerX + originX) / 64; local218++) {
-                for (local222 = centerY / 64; local222 < (centerY + originY) / 64; local222++) {
-                    local706 = local218 * 64;
-                    local80 = local222 * 64;
-                    local706 -= centerX;
-                    local80 = centerY + originY - local80;
-                    local88 = arg4 + (arg6 - arg4) * (local706 - arg0) / (arg2 - arg0);
-                    local96 = arg5 + (arg7 - arg5) * (local80 - 64 - arg1) / (arg3 - arg1);
-                    local100 = arg4 + (arg6 - arg4) * (local706 + 64 - arg0) / (arg2 - arg0);
-                    local116 = arg5 + (arg7 - arg5) * (local80 - arg1) / (arg3 - arg1);
-                    Draw2D.drawRect(local88, local96, 16777215, local100 - local88, local116 - local96);
-                    this.b12.drawStringRight(local100 - 5, local116 - 5, local218 + "_" + local222, 16777215, false);
-                    if (local218 == 33 && local222 >= 71 && local222 <= 73) {
-                        this.b12.drawStringCenter((local100 + local88) / 2, (local116 + local96) / 2, "u_pass", 16711680);
-                    } else if (local218 >= 32 && local218 <= 34 && local222 >= 70 && local222 <= 74) {
-                        this.b12.drawStringCenter((local100 + local88) / 2, (local116 + local96) / 2, "u_pass", 16776960);
-                    }
-                }
-            }
-        }
-    }
+	}
 
 	@OriginalMember(owner = "mapview!mapview", name = "a", descriptor = "([IIIIIIII)V")
-	private void drawSmoothEdges(@OriginalArg(0) int[] arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2, @OriginalArg(3) int arg3, @OriginalArg(4) int arg4, @OriginalArg(5) int arg5, @OriginalArg(6) int arg6, @OriginalArg(7) int arg7) {
-		@Pc(5) int local5 = Draw2D.width2d - arg4;
+	private void method129(@OriginalArg(0) int[] arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2, @OriginalArg(3) int arg3, @OriginalArg(4) int arg4, @OriginalArg(5) int arg5, @OriginalArg(6) int arg6, @OriginalArg(7) int arg7) {
+		@Pc(5) int local5 = Class2_Sub1_Sub1.anInt78 - arg4;
 		if (arg6 == 9) {
 			arg6 = 1;
 			arg7 = arg7 + 1 & 0x3;
@@ -1551,50 +1456,50 @@ public final class mapview extends GameShell {
 		}
 	}
 
-	@OriginalMember(owner = "mapview!mapview", name = "i", descriptor = "()Lmapview!o;")
-	private Jagfile getWorldmap() {
+	@OriginalMember(owner = "mapview!mapview", name = "i", descriptor = "()Lmapview!p;")
+	private Class7 method130() {
 		@Pc(1) Object local1 = null;
 		@Pc(3) String local3 = null;
 		@Pc(17) byte[] local17;
 		try {
-			local3 = this.findcachedir();
-			local17 = this.cacheload(local3 + "/worldmap.dat");
-			if (!this.checksha(local17)) {
+			local3 = this.method132();
+			local17 = this.method133(local3 + "/worldmap.dat");
+			if (!this.method135(local17)) {
 				local17 = null;
 			}
 			if (local17 != null) {
-				return new Jagfile(local17);
+				return new Class7(local17);
 			}
 		} catch (@Pc(31) Throwable local31) {
 		}
-		local17 = this.getLatestWorldmap();
+		local17 = this.method131();
 		if (local3 != null && local17 != null) {
 			try {
-				this.cachesave(local3 + "/worldmap.dat", local17);
+				this.method134(local3 + "/worldmap.dat", local17);
 			} catch (@Pc(51) Throwable local51) {
 			}
 		}
-		return new Jagfile(local17);
+		return new Class7(local17);
 	}
 
 	@OriginalMember(owner = "mapview!mapview", name = "j", descriptor = "()[B")
-	private byte[] getLatestWorldmap() {
+	private byte[] method131() {
 		System.out.println("Updating");
-		this.drawProgress("Requesting map", 0);
+		this.method111(0, "Requesting map");
 		try {
 			@Pc(10) String local10 = "";
 			for (@Pc(12) int local12 = 0; local12 < 10; local12++) {
-				local10 = local10 + sig.sha[local12];
+				local10 = local10 + Class8.anIntArray44[local12];
 			}
 			@Pc(40) DataInputStream local40;
-			if (super.frame == null) {
+			if (super.aFrame_Sub1_2 == null) {
 				local40 = new DataInputStream((new URL(this.getCodeBase(), "worldmap" + local10 + ".jag")).openStream());
 			} else {
 				local40 = new DataInputStream(new FileInputStream("worldmap.jag"));
 			}
 			@Pc(63) int local63 = 0;
 			@Pc(65) int local65 = 0;
-			@Pc(67) int local67 = sig.len;
+			@Pc(67) int local67 = 220637;
 			@Pc(70) byte[] local70 = new byte[local67];
 			while (local65 < local67) {
 				@Pc(76) int local76 = local67 - local65;
@@ -1608,7 +1513,7 @@ public final class mapview extends GameShell {
 				local65 += local87;
 				@Pc(104) int local104 = local65 * 100 / local67;
 				if (local104 != local63) {
-					this.drawProgress("Loading map - " + local104 + "%", local104);
+					this.method111(local104, "Loading map - " + local104 + "%");
 				}
 				local63 = local104;
 			}
@@ -1622,7 +1527,7 @@ public final class mapview extends GameShell {
 	}
 
 	@OriginalMember(owner = "mapview!mapview", name = "k", descriptor = "()Ljava/lang/String;")
-	private String findcachedir() {
+	private String method132() {
 		@Pc(50) String[] local50 = new String[] { "c:/windows/", "c:/winnt/", "d:/windows/", "d:/winnt/", "e:/windows/", "e:/winnt/", "f:/windows/", "f:/winnt/", "c:/", "~/", "/tmp/", "" };
 		@Pc(52) String local52 = ".file_store_32";
 		for (@Pc(54) int local54 = 0; local54 < local50.length; local54++) {
@@ -1646,7 +1551,7 @@ public final class mapview extends GameShell {
 	}
 
 	@OriginalMember(owner = "mapview!mapview", name = "a", descriptor = "(Ljava/lang/String;)[B")
-	private byte[] cacheload(@OriginalArg(0) String arg0) throws IOException {
+	private byte[] method133(@OriginalArg(0) String arg0) throws IOException {
 		@Pc(4) File local4 = new File(arg0);
 		if (!local4.exists()) {
 			return null;
@@ -1660,14 +1565,14 @@ public final class mapview extends GameShell {
 	}
 
 	@OriginalMember(owner = "mapview!mapview", name = "a", descriptor = "(Ljava/lang/String;[B)V")
-	private void cachesave(@OriginalArg(0) String arg0, @OriginalArg(1) byte[] arg1) throws IOException {
+	private void method134(@OriginalArg(0) String arg0, @OriginalArg(1) byte[] arg1) throws IOException {
 		@Pc(4) FileOutputStream local4 = new FileOutputStream(arg0);
 		local4.write(arg1, 0, arg1.length);
 		local4.close();
 	}
 
 	@OriginalMember(owner = "mapview!mapview", name = "a", descriptor = "([B)Z")
-	private boolean checksha(@OriginalArg(0) byte[] arg0) throws Exception {
+	private boolean method135(@OriginalArg(0) byte[] arg0) throws Exception {
 		if (arg0 == null) {
 			return false;
 		}
@@ -1676,7 +1581,7 @@ public final class mapview extends GameShell {
 		local6.update(arg0);
 		@Pc(14) byte[] local14 = local6.digest();
 		for (@Pc(16) int local16 = 0; local16 < 20; local16++) {
-			if (local14[local16] != sig.sha[local16]) {
+			if (local14[local16] != Class8.anIntArray44[local16]) {
 				return false;
 			}
 		}
