@@ -127,7 +127,7 @@ public class Draw2D extends Hashable {
 		}
 	}
 
-	@OriginalMember(owner = "mapview!e", name = "a", descriptor = "(IIIIII)V")
+	@OriginalMember(owner = "mapview!f", name = "a", descriptor = "(IIIIII)V")
 	public static void fillRectAlpha(@OriginalArg(0) int x, @OriginalArg(1) int y, @OriginalArg(2) int width, @OriginalArg(3) int height, @OriginalArg(4) int rgb, @OriginalArg(5) int alpha) {
 		if (x < left) {
 			width -= left - x;
@@ -161,8 +161,8 @@ public class Draw2D extends Hashable {
 		}
 	}
 
-	@OriginalMember(owner = "mapview!e", name = "c", descriptor = "(IIIII)V")
-	public static void fillCircle(@OriginalArg(0) int arg0, @OriginalArg(1) int yCenter, @OriginalArg(2) int yRadius, @OriginalArg(3) int rgb, @OriginalArg(4) int alpha) {
+	@OriginalMember(owner = "mapview!f", name = "c", descriptor = "(IIIII)V")
+	public static void fillCircle(@OriginalArg(0) int xCenter, @OriginalArg(1) int yCenter, @OriginalArg(2) int yRadius, @OriginalArg(3) int rgb, @OriginalArg(4) int alpha) {
 		@Pc(5) int invAlpha = 256 - alpha;
 		@Pc(13) int r0 = (rgb >> 16 & 0xFF) * alpha;
 		@Pc(21) int g0 = (rgb >> 8 & 0xFF) * alpha;
@@ -178,11 +178,11 @@ public class Draw2D extends Hashable {
 		for (@Pc(48) int y = yStart; y <= yEnd; y++) {
 			@Pc(54) int midpoint = y - yCenter;
 			@Pc(65) int xRadius = (int) Math.sqrt((double) (yRadius * yRadius - midpoint * midpoint));
-			@Pc(69) int xStart = arg0 - xRadius;
+			@Pc(69) int xStart = xCenter - xRadius;
 			if (xStart < 0) {
 				xStart = 0;
 			}
-			@Pc(77) int xEnd = arg0 + xRadius;
+			@Pc(77) int xEnd = xCenter + xRadius;
 			if (xEnd >= width2d) {
 				xEnd = width2d - 1;
 			}

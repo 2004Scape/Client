@@ -84,6 +84,8 @@ public class GameShell extends Applet implements Runnable, MouseListener, MouseM
 	@OriginalMember(owner = "client!a", name = "C", descriptor = "I")
 	private int keyQueueWritePos;
 
+	private boolean hasFocus = true;
+
 	@OriginalMember(owner = "client!a", name = "a", descriptor = "(III)V")
 	protected final void initApplication(@OriginalArg(1) int width, @OriginalArg(0) int height) {
 		this.screenWidth = width;
@@ -339,6 +341,10 @@ public class GameShell extends Applet implements Runnable, MouseListener, MouseM
 
 	@OriginalMember(owner = "client!a", name = "mouseExited", descriptor = "(Ljava/awt/event/MouseEvent;)V")
 	public final void mouseExited(@OriginalArg(0) MouseEvent e) {
+		this.idleCycles = 0;
+		this.mouseX = -1;
+		this.mouseY = -1;
+
 		if (InputTracking.enabled) {
 			InputTracking.mouseExited();
 		}
@@ -521,6 +527,7 @@ public class GameShell extends Applet implements Runnable, MouseListener, MouseM
 
 	@OriginalMember(owner = "client!a", name = "focusGained", descriptor = "(Ljava/awt/event/FocusEvent;)V")
 	public final void focusGained(@OriginalArg(0) FocusEvent e) {
+		this.hasFocus = true; // mapview applet
 		this.refresh = true;
 		this.refresh();
 
@@ -531,6 +538,7 @@ public class GameShell extends Applet implements Runnable, MouseListener, MouseM
 
 	@OriginalMember(owner = "client!a", name = "focusLost", descriptor = "(Ljava/awt/event/FocusEvent;)V")
 	public final void focusLost(@OriginalArg(0) FocusEvent e) {
+		this.hasFocus = false; // mapview applet
 		if (InputTracking.enabled) {
 			InputTracking.focusLost();
 		}

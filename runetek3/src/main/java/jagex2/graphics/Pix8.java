@@ -273,7 +273,7 @@ public class Pix8 extends Draw2D {
 		}
 	}
 
-	@OriginalMember(owner = "mapview!h", name = "d", descriptor = "(IIII)V")
+	@OriginalMember(owner = "mapview!i", name = "d", descriptor = "(IIII)V")
 	public void clip(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2, @OriginalArg(3) int arg3) {
 		try {
 			@Pc(2) int local2 = this.width;
@@ -328,7 +328,7 @@ public class Pix8 extends Draw2D {
 		}
 	}
 
-	@OriginalMember(owner = "mapview!h", name = "a", descriptor = "([I[B[IIIIIIIIII)V")
+	@OriginalMember(owner = "mapview!i", name = "a", descriptor = "([I[B[IIIIIIIIII)V")
 	private void plot_scale(@OriginalArg(0) int[] arg0, @OriginalArg(1) byte[] arg1, @OriginalArg(2) int[] arg2, @OriginalArg(3) int arg3, @OriginalArg(4) int arg4, @OriginalArg(5) int arg5, @OriginalArg(6) int arg6, @OriginalArg(7) int arg7, @OriginalArg(8) int arg8, @OriginalArg(9) int arg9, @OriginalArg(10) int arg10, @OriginalArg(11) int arg11) {
 		try {
 			@Pc(3) int local3 = arg3;

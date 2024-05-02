@@ -6,6 +6,14 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.URL;
 import java.security.MessageDigest;
+
+import jagex2.client.GameShell;
+import jagex2.graphics.Draw2D;
+import jagex2.graphics.Pix24;
+import jagex2.graphics.Pix8;
+import jagex2.graphics.PixFont;
+import jagex2.io.Jagfile;
+import jagex2.io.Packet;
 import org.openrs2.deob.annotation.OriginalArg;
 import org.openrs2.deob.annotation.OriginalClass;
 import org.openrs2.deob.annotation.OriginalMember;
@@ -215,48 +223,44 @@ public final class mapview extends GameShell {
 	@OriginalMember(owner = "mapview!mapview", name = "main", descriptor = "([Ljava/lang/String;)V")
 	public static void main(@OriginalArg(0) String[] arg0) {
 		@Pc(3) mapview local3 = new mapview();
-		local3.method115(635, 503);
-	}
-
-	@OriginalMember(owner = "mapview!mapview", name = "<init>", descriptor = "()V")
-	private mapview() {
+		local3.initApplication(635, 503);
 	}
 
 	@OriginalMember(owner = "mapview!mapview", name = "init", descriptor = "()V")
 	@Override
 	public void init() {
-		this.method119(635, 503);
+		this.initApplet(635, 503);
 	}
 
 	@OriginalMember(owner = "mapview!mapview", name = "c", descriptor = "()V")
 	@Override
-	protected void method114() {
+	protected void load() {
 		@Pc(4) Jagfile local4 = this.method130();
-		this.method111(100, "Please wait... Rendering Map");
-		@Pc(16) Packet local16 = new Packet(local4.method145("labels.dat", null));
-		this.anInt139 = local16.method100();
+		this.drawProgress("Please wait... Rendering Map", 100);
+		@Pc(16) Packet local16 = new Packet(local4.read("labels.dat", null));
+		this.anInt139 = local16.g2();
 		for (@Pc(22) int local22 = 0; local22 < this.anInt139; local22++) {
-			this.aStringArray1[local22] = local16.method102();
-			this.anIntArray31[local22] = local16.method100();
-			this.anIntArray32[local22] = local16.method100();
-			this.anIntArray33[local22] = local16.method98();
+			this.aStringArray1[local22] = local16.gjstr();
+			this.anIntArray31[local22] = local16.g2();
+			this.anIntArray32[local22] = local16.g2();
+			this.anIntArray33[local22] = local16.g1();
 		}
-		@Pc(61) Packet local61 = new Packet(local4.method145("floorcol.dat", null));
-		@Pc(64) int local64 = local61.method100();
+		@Pc(61) Packet local61 = new Packet(local4.read("floorcol.dat", null));
+		@Pc(64) int local64 = local61.g2();
 		this.anIntArray23 = new int[local64 + 1];
 		this.anIntArray24 = new int[local64 + 1];
 		for (@Pc(78) int local78 = 0; local78 < local64; local78++) {
-			this.anIntArray23[local78 + 1] = local61.method97();
-			this.anIntArray24[local78 + 1] = local61.method97();
+			this.anIntArray23[local78 + 1] = local61.g4();
+			this.anIntArray24[local78 + 1] = local61.g4();
 		}
-		@Pc(105) byte[] local105 = local4.method145("underlay.dat", null);
+		@Pc(105) byte[] local105 = local4.read("underlay.dat", null);
 		@Pc(109) byte[][] local109 = new byte[1280][1216];
 		this.method123(local105, local109);
-		@Pc(118) byte[] local118 = local4.method145("overlay.dat", null);
+		@Pc(118) byte[] local118 = local4.read("overlay.dat", null);
 		this.anIntArrayArray2 = new int[1280][1216];
 		this.aByteArrayArray2 = new byte[1280][1216];
 		this.method124(local118, this.anIntArrayArray2, this.aByteArrayArray2);
-		@Pc(140) byte[] local140 = local4.method145("loc.dat", null);
+		@Pc(140) byte[] local140 = local4.read("loc.dat", null);
 		this.aByteArrayArray3 = new byte[1280][1216];
 		this.aByteArrayArray5 = new byte[1280][1216];
 		this.aByteArrayArray4 = new byte[1280][1216];
@@ -286,11 +290,11 @@ public final class mapview extends GameShell {
 		this.anIntArrayArray1 = new int[1280][1216];
 		this.method125(local109, this.anIntArrayArray1);
 		this.aClass2_Sub1_Sub1_Sub2_1 = new Pix24(this.anInt132, this.anInt131);
-		this.aClass2_Sub1_Sub1_Sub2_1.method64();
+		this.aClass2_Sub1_Sub1_Sub2_1.bind();
 		this.method128(0, 0, 1280, 1216, 0, 0, this.anInt132, this.anInt131);
-		Draw2D.method86(0, 0, this.anInt132, this.anInt131, 0);
-		Draw2D.method86(1, 1, this.anInt132 - 2, this.anInt131 - 2, this.anInt113);
-		super.aClass4_2.method107();
+		Draw2D.drawRect(0, 0, 0, this.anInt132, this.anInt131);
+		Draw2D.drawRect(1, 1, this.anInt113, this.anInt132 - 2, this.anInt131 - 2);
+		super.drawArea.bind();
 	}
 
 	@OriginalMember(owner = "mapview!mapview", name = "a", descriptor = "([B[[B[[B[[B)V")
@@ -493,7 +497,7 @@ public final class mapview extends GameShell {
 
 	@OriginalMember(owner = "mapview!mapview", name = "g", descriptor = "()V")
 	@Override
-	protected void method120() {
+	protected void unload() {
 		try {
 			this.anIntArray23 = null;
 			this.anIntArray24 = null;
@@ -525,20 +529,20 @@ public final class mapview extends GameShell {
 
 	@OriginalMember(owner = "mapview!mapview", name = "h", descriptor = "()V")
 	@Override
-	protected void method121() {
-		if (super.anIntArray21[1] == 1) {
+	protected void update() {
+		if (super.actionKey[1] == 1) {
 			this.anInt141 = (int) ((double) this.anInt141 - 16.0D / this.aDouble1);
 			this.aBoolean25 = true;
 		}
-		if (super.anIntArray21[2] == 1) {
+		if (super.actionKey[2] == 1) {
 			this.anInt141 = (int) ((double) this.anInt141 + 16.0D / this.aDouble1);
 			this.aBoolean25 = true;
 		}
-		if (super.anIntArray21[3] == 1) {
+		if (super.actionKey[3] == 1) {
 			this.anInt142 = (int) ((double) this.anInt142 - 16.0D / this.aDouble1);
 			this.aBoolean25 = true;
 		}
-		if (super.anIntArray21[4] == 1) {
+		if (super.actionKey[4] == 1) {
 			this.anInt142 = (int) ((double) this.anInt142 + 16.0D / this.aDouble1);
 			this.aBoolean25 = true;
 		}
@@ -546,43 +550,43 @@ public final class mapview extends GameShell {
 		while (true) {
 			do {
 				if (local83 <= 0) {
-					if (super.anInt108 == 1) {
-						this.anInt135 = super.anInt109;
-						this.anInt136 = super.anInt110;
+					if (super.mouseClickButton == 1) {
+						this.anInt135 = super.mouseClickX;
+						this.anInt136 = super.mouseClickY;
 						this.anInt137 = this.anInt141;
 						this.anInt138 = this.anInt142;
-						if (super.anInt109 > 170 && super.anInt109 < 220 && super.anInt110 > 471 && super.anInt110 < 503) {
+						if (super.mouseClickX > 170 && super.mouseClickX < 220 && super.mouseClickY > 471 && super.mouseClickY < 503) {
 							this.aDouble2 = 3.0D;
 							this.anInt135 = -1;
 						}
-						if (super.anInt109 > 230 && super.anInt109 < 280 && super.anInt110 > 471 && super.anInt110 < 503) {
+						if (super.mouseClickX > 230 && super.mouseClickX < 280 && super.mouseClickY > 471 && super.mouseClickY < 503) {
 							this.aDouble2 = 4.0D;
 							this.anInt135 = -1;
 						}
-						if (super.anInt109 > 290 && super.anInt109 < 340 && super.anInt110 > 471 && super.anInt110 < 503) {
+						if (super.mouseClickX > 290 && super.mouseClickX < 340 && super.mouseClickY > 471 && super.mouseClickY < 503) {
 							this.aDouble2 = 6.0D;
 							this.anInt135 = -1;
 						}
-						if (super.anInt109 > 350 && super.anInt109 < 400 && super.anInt110 > 471 && super.anInt110 < 503) {
+						if (super.mouseClickX > 350 && super.mouseClickX < 400 && super.mouseClickY > 471 && super.mouseClickY < 503) {
 							this.aDouble2 = 8.0D;
 							this.anInt135 = -1;
 						}
-						if (super.anInt109 > this.anInt121 && super.anInt110 > this.anInt122 + this.anInt124 && super.anInt109 < this.anInt121 + this.anInt123 && super.anInt110 < 503) {
+						if (super.mouseClickX > this.anInt121 && super.mouseClickY > this.anInt122 + this.anInt124 && super.mouseClickX < this.anInt121 + this.anInt123 && super.mouseClickY < 503) {
 							this.aBoolean26 = !this.aBoolean26;
 							this.anInt135 = -1;
 						}
-						if (super.anInt109 > this.anInt133 && super.anInt110 > this.anInt134 + this.anInt131 && super.anInt109 < this.anInt133 + this.anInt132 && super.anInt110 < 503) {
+						if (super.mouseClickX > this.anInt133 && super.mouseClickY > this.anInt134 + this.anInt131 && super.mouseClickX < this.anInt133 + this.anInt132 && super.mouseClickY < 503) {
 							this.aBoolean27 = !this.aBoolean27;
 							this.anInt135 = -1;
 						}
 						if (this.aBoolean26) {
-							if (super.anInt109 > this.anInt121 && super.anInt110 > this.anInt122 && super.anInt109 < this.anInt121 + this.anInt123 && super.anInt110 < this.anInt122 + this.anInt124) {
+							if (super.mouseClickX > this.anInt121 && super.mouseClickY > this.anInt122 && super.mouseClickX < this.anInt121 + this.anInt123 && super.mouseClickY < this.anInt122 + this.anInt124) {
 								this.anInt135 = -1;
 							}
-							if (super.anInt109 > this.anInt121 && super.anInt110 > this.anInt122 && super.anInt109 < this.anInt121 + this.anInt123 && super.anInt110 < this.anInt122 + 18) {
+							if (super.mouseClickX > this.anInt121 && super.mouseClickY > this.anInt122 && super.mouseClickX < this.anInt121 + this.anInt123 && super.mouseClickY < this.anInt122 + 18) {
 								this.anInt126 = 0;
 							}
-							if (super.anInt109 > this.anInt121 && super.anInt110 > this.anInt122 + this.anInt124 - 18 && super.anInt109 < this.anInt121 + this.anInt123 && super.anInt110 < this.anInt122 + this.anInt124) {
+							if (super.mouseClickX > this.anInt121 && super.mouseClickY > this.anInt122 + this.anInt124 - 18 && super.mouseClickX < this.anInt121 + this.anInt123 && super.mouseClickY < this.anInt122 + this.anInt124) {
 								this.anInt126 = 25;
 							}
 						}
@@ -592,13 +596,13 @@ public final class mapview extends GameShell {
 					@Pc(465) int local465;
 					if (this.aBoolean26) {
 						this.anInt127 = -1;
-						if (super.anInt103 > this.anInt121 && super.anInt103 < this.anInt121 + this.anInt123) {
+						if (super.mouseX > this.anInt121 && super.mouseX < this.anInt121 + this.anInt123) {
 							local463 = this.anInt122 + 21 + 5;
 							for (local465 = 0; local465 < 25; local465++) {
 								if (local465 + this.anInt125 >= this.aStringArray2.length || !this.aStringArray2[local465 + this.anInt125].equals("???")) {
-									if (super.anInt104 >= local463 && super.anInt104 < local463 + 17) {
+									if (super.mouseY >= local463 && super.mouseY < local463 + 17) {
 										this.anInt127 = local465 + this.anInt125;
-										if (super.anInt108 == 1) {
+										if (super.mouseClickButton == 1) {
 											this.anInt129 = local465 + this.anInt125;
 											this.anInt130 = 50;
 										}
@@ -612,12 +616,12 @@ public final class mapview extends GameShell {
 							this.aBoolean25 = true;
 						}
 					}
-					if ((super.anInt102 == 1 || super.anInt108 == 1) && this.aBoolean27) {
-						local463 = super.anInt109;
-						local465 = super.anInt110;
-						if (super.anInt102 == 1) {
-							local463 = super.anInt103;
-							local465 = super.anInt104;
+					if ((super.mouseButton == 1 || super.mouseClickButton == 1) && this.aBoolean27) {
+						local463 = super.mouseClickX;
+						local465 = super.mouseClickY;
+						if (super.mouseButton == 1) {
+							local463 = super.mouseX;
+							local465 = super.mouseY;
 						}
 						if (local463 > this.anInt133 && local465 > this.anInt134 && local463 < this.anInt133 + this.anInt132 && local465 < this.anInt134 + this.anInt131) {
 							this.anInt141 = (local463 - this.anInt133) * 1280 / this.anInt132;
@@ -626,9 +630,9 @@ public final class mapview extends GameShell {
 							this.aBoolean25 = true;
 						}
 					}
-					if (super.anInt102 == 1 && this.anInt135 != -1) {
-						this.anInt141 = this.anInt137 + (int) ((double) (this.anInt135 - super.anInt103) * 2.0D / this.aDouble2);
-						this.anInt142 = this.anInt138 + (int) ((double) (this.anInt136 - super.anInt104) * 2.0D / this.aDouble2);
+					if (super.mouseButton == 1 && this.anInt135 != -1) {
+						this.anInt141 = this.anInt137 + (int) ((double) (this.anInt135 - super.mouseX) * 2.0D / this.aDouble2);
+						this.anInt142 = this.anInt138 + (int) ((double) (this.anInt136 - super.mouseY) * 2.0D / this.aDouble2);
 						this.aBoolean25 = true;
 					}
 					if (this.aDouble1 < this.aDouble2) {
@@ -675,7 +679,7 @@ public final class mapview extends GameShell {
 					}
 					return;
 				}
-				local83 = this.method116();
+				local83 = this.pollKey();
 				if (local83 == 49) {
 					this.aDouble2 = 3.0D;
 					this.aBoolean25 = true;
@@ -704,11 +708,11 @@ public final class mapview extends GameShell {
 
 	@OriginalMember(owner = "mapview!mapview", name = "e", descriptor = "()V")
 	@Override
-	protected void method117() {
+	protected void draw() {
 		if (this.aBoolean25) {
 			this.aBoolean25 = false;
 			this.anInt119 = 0;
-			Draw2D.method89();
+			Draw2D.clear();
 			@Pc(20) int local20 = this.anInt141 - (int) (635.0D / this.aDouble1);
 			@Pc(29) int local29 = this.anInt142 - (int) (503.0D / this.aDouble1);
 			@Pc(38) int local38 = this.anInt141 + (int) (635.0D / this.aDouble1);
@@ -718,15 +722,15 @@ public final class mapview extends GameShell {
 			@Pc(173) int local173;
 			@Pc(186) int local186;
 			if (this.aBoolean27) {
-				this.aClass2_Sub1_Sub1_Sub2_1.method67(this.anInt133, this.anInt134);
-				Draw2D.method85(this.anInt133 + this.anInt132 * local20 / 1280, this.anInt134 + this.anInt131 * local29 / 1216, (local38 - local20) * this.anInt132 / 1280, (local47 - local29) * this.anInt131 / 1216, 16711680, 128);
-				Draw2D.method86(this.anInt133 + this.anInt132 * local20 / 1280, this.anInt134 + this.anInt131 * local29 / 1216, (local38 - local20) * this.anInt132 / 1280, (local47 - local29) * this.anInt131 / 1216, 16711680);
+				this.aClass2_Sub1_Sub1_Sub2_1.blitOpaque(this.anInt133, this.anInt134);
+				Draw2D.fillRectAlpha(this.anInt133 + this.anInt132 * local20 / 1280, this.anInt134 + this.anInt131 * local29 / 1216, (local38 - local20) * this.anInt132 / 1280, (local47 - local29) * this.anInt131 / 1216, 16711680, 128);
+				Draw2D.drawRect(this.anInt133 + this.anInt132 * local20 / 1280, this.anInt134 + this.anInt131 * local29 / 1216, 16711680, (local38 - local20) * this.anInt132 / 1280, (local47 - local29) * this.anInt131 / 1216);
 				if (this.anInt130 > 0 && this.anInt130 % 10 < 5) {
 					for (local151 = 0; local151 < this.anInt120; local151++) {
 						if (this.anIntArray30[local151] == this.anInt129) {
 							local173 = this.anInt133 + this.anInt132 * this.anIntArray28[local151] / 1280;
 							local186 = this.anInt134 + this.anInt131 * this.anIntArray29[local151] / 1216;
-							Draw2D.method90(local173, local186, 2, 16776960, 256);
+							Draw2D.fillCircle(local173, local186, 2, 16776960, 256);
 						}
 					}
 				}
@@ -741,8 +745,8 @@ public final class mapview extends GameShell {
 						if (this.aStringArray2[local173 + this.anInt125].equals("???")) {
 							continue;
 						}
-						this.aClass2_Sub1_Sub1_Sub2Array3[local173 + this.anInt125].method65(this.anInt121 + 3, local151);
-						this.aClass2_Sub1_Sub1_Sub4_1.method91(this.aStringArray2[local173 + this.anInt125], this.anInt121 + 21, local151 + 14, 0);
+						this.aClass2_Sub1_Sub1_Sub2Array3[local173 + this.anInt125].draw(this.anInt121 + 3, local151);
+						this.aClass2_Sub1_Sub1_Sub4_1.drawString(this.anInt121 + 21, local151 + 14, this.aStringArray2[local173 + this.anInt125], 0);
 						local186 = 16777215;
 						if (this.anInt127 == local173 + this.anInt125) {
 							local186 = 12298922;
@@ -750,7 +754,7 @@ public final class mapview extends GameShell {
 						if (this.anInt130 > 0 && this.anInt130 % 10 < 5 && this.anInt129 == local173 + this.anInt125) {
 							local186 = 16776960;
 						}
-						this.aClass2_Sub1_Sub1_Sub4_1.method91(this.aStringArray2[local173 + this.anInt125], this.anInt121 + 20, local151 + 13, local186);
+						this.aClass2_Sub1_Sub1_Sub4_1.drawString(this.anInt121 + 20, local151 + 13, this.aStringArray2[local173 + this.anInt125], local186);
 					}
 					local151 += 17;
 				}
@@ -780,31 +784,31 @@ public final class mapview extends GameShell {
 		}
 		this.anInt119--;
 		if (this.anInt119 <= 0) {
-			super.aClass4_2.method108(super.aGraphics2, 0, 0);
+			super.drawArea.draw(super.graphics, 0, 0);
 			this.anInt119 = 50;
 		}
 	}
 
 	@OriginalMember(owner = "mapview!mapview", name = "a", descriptor = "()V")
 	@Override
-	protected void method110() {
+	protected void refresh() {
 		this.anInt119 = 0;
 	}
 
 	@OriginalMember(owner = "mapview!mapview", name = "a", descriptor = "(IIIIIIILjava/lang/String;)V")
 	private void method127(@OriginalArg(0) int arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2, @OriginalArg(3) int arg3, @OriginalArg(4) int arg4, @OriginalArg(5) int arg5, @OriginalArg(6) int arg6, @OriginalArg(7) String arg7) {
-		Draw2D.method86(arg0, arg1, arg2, arg3, 0);
+		Draw2D.drawRect(arg0, arg1, 0, arg2, arg3);
 		@Pc(6) int local6 = arg0 + 1;
 		@Pc(7) int local7 = arg1 + 1;
 		@Pc(8) int local8 = arg2 - 2;
 		@Pc(9) int local9 = arg3 - 2;
-		Draw2D.method88(local6, local7, local8, local9, arg5);
-		Draw2D.method82(local6, local7, local8, arg4);
-		Draw2D.method83(local6, local7, local9, arg4);
-		Draw2D.method82(local6, local7 + local9 - 1, local8, arg6);
-		Draw2D.method83(local6 + local8 - 1, local7, local9, arg6);
-		this.aClass2_Sub1_Sub1_Sub4_1.method92(arg7, local6 + local8 / 2 + 1, local7 + local9 / 2 + 1 + 4, 0);
-		this.aClass2_Sub1_Sub1_Sub4_1.method92(arg7, local6 + local8 / 2, local7 + local9 / 2 + 4, 16777215);
+		Draw2D.fillRect(local6, local7, arg5, local8, local9);
+		Draw2D.drawHorizontalLine(local6, local7, arg4, local8);
+		Draw2D.drawVerticalLine(local6, local7, arg4, local9);
+		Draw2D.drawHorizontalLine(local6, local7 + local9 - 1, arg6, local8);
+		Draw2D.drawVerticalLine(local6 + local8 - 1, local7, arg6, local9);
+		this.aClass2_Sub1_Sub1_Sub4_1.drawStringCenter(local6 + local8 / 2 + 1, local7 + local9 / 2 + 1 + 4, arg7, 0);
+		this.aClass2_Sub1_Sub1_Sub4_1.drawStringCenter(local6 + local8 / 2, local7 + local9 / 2 + 4, arg7, 16777215);
 	}
 
 	@OriginalMember(owner = "mapview!mapview", name = "a", descriptor = "(IIIIIIII)V")
@@ -842,14 +846,14 @@ public final class mapview extends GameShell {
 						local96 += arg5;
 						local116 = local71[local80 + arg1];
 						if (local116 == 0) {
-							Draw2D.method88(local35, local88, local43 - local35, local96 - local88, local64[local80 + arg1]);
+							Draw2D.fillRect(local35, local88, local64[local80 + arg1], local43 - local35, local96 - local88);
 						} else {
 							@Pc(140) byte local140 = local78[local80 + arg1];
 							local144 = local140 & 0xFC;
 							if (local144 == 0 || local47 <= 1 || local100 <= 1) {
-								Draw2D.method88(local35, local88, local47, local100, local116);
+								Draw2D.fillRect(local35, local88, local116, local47, local100);
 							} else {
-								this.method129(Draw2D.anIntArray10, local88 * Draw2D.anInt78 + local35, local64[local80 + arg1], local116, local47, local100, local144 >> 2, local140 & 0x3);
+								this.method129(Draw2D.data, local88 * Draw2D.width2d + local35, local64[local80 + arg1], local116, local47, local100, local144 >> 2, local140 & 0x3);
 							}
 						}
 					}
@@ -895,49 +899,49 @@ public final class mapview extends GameShell {
 								local144 -= 4;
 							}
 							if (local144 == 1) {
-								Draw2D.method83(local47, local100, local267, local303);
+								Draw2D.drawVerticalLine(local47, local100, local303, local267);
 							} else if (local144 == 2) {
-								Draw2D.method82(local47, local100, local222, local303);
+								Draw2D.drawHorizontalLine(local47, local100, local303, local222);
 							} else if (local144 == 3) {
-								Draw2D.method83(local284, local100, local267, local303);
+								Draw2D.drawVerticalLine(local284, local100, local303, local267);
 							} else if (local144 == 4) {
-								Draw2D.method82(local47, local295, local222, local303);
+								Draw2D.drawHorizontalLine(local47, local295, local303, local222);
 							} else if (local144 == 9) {
-								Draw2D.method83(local47, local100, local267, 16777215);
-								Draw2D.method82(local47, local100, local222, local303);
+								Draw2D.drawVerticalLine(local47, local100, 16777215, local267);
+								Draw2D.drawHorizontalLine(local47, local100, local303, local222);
 							} else if (local144 == 10) {
-								Draw2D.method83(local284, local100, local267, 16777215);
-								Draw2D.method82(local47, local100, local222, local303);
+								Draw2D.drawVerticalLine(local284, local100, 16777215, local267);
+								Draw2D.drawHorizontalLine(local47, local100, local303, local222);
 							} else if (local144 == 11) {
-								Draw2D.method83(local284, local100, local267, 16777215);
-								Draw2D.method82(local47, local295, local222, local303);
+								Draw2D.drawVerticalLine(local284, local100, 16777215, local267);
+								Draw2D.drawHorizontalLine(local47, local295, local303, local222);
 							} else if (local144 == 12) {
-								Draw2D.method83(local47, local100, local267, 16777215);
-								Draw2D.method82(local47, local295, local222, local303);
+								Draw2D.drawVerticalLine(local47, local100, 16777215, local267);
+								Draw2D.drawHorizontalLine(local47, local295, local303, local222);
 							} else if (local144 == 17) {
-								Draw2D.method82(local47, local100, 1, local303);
+								Draw2D.drawHorizontalLine(local47, local100, local303, 1);
 							} else if (local144 == 18) {
-								Draw2D.method82(local284, local100, 1, local303);
+								Draw2D.drawHorizontalLine(local284, local100, local303, 1);
 							} else if (local144 == 19) {
-								Draw2D.method82(local284, local295, 1, local303);
+								Draw2D.drawHorizontalLine(local284, local295, local303, 1);
 							} else if (local144 == 20) {
-								Draw2D.method82(local47, local295, 1, local303);
+								Draw2D.drawHorizontalLine(local47, local295, local303, 1);
 							} else {
 								@Pc(475) int local475;
 								if (local144 == 25) {
 									for (local475 = 0; local475 < local267; local475++) {
-										Draw2D.method82(local47 + local475, local295 - local475, 1, local303);
+										Draw2D.drawHorizontalLine(local47 + local475, local295 - local475, local303, 1);
 									}
 								} else if (local144 == 26) {
 									for (local475 = 0; local475 < local267; local475++) {
-										Draw2D.method82(local47 + local475, local100 + local475, 1, local303);
+										Draw2D.drawHorizontalLine(local47 + local475, local100 + local475, local303, 1);
 									}
 								}
 							}
 						}
 						local284 = local238[local96 + arg1] & 0xFF;
 						if (local284 != 0) {
-							this.aClass2_Sub1_Sub1_Sub3Array1[local284 - 1].method79(local47 - local222 / 2, local100 - local267 / 2, local222 * 2, local267 * 2);
+							this.aClass2_Sub1_Sub1_Sub3Array1[local284 - 1].clip(local47 - local222 / 2, local100 - local267 / 2, local222 * 2, local267 * 2);
 						}
 						local295 = local245[local96 + arg1] & 0xFF;
 						if (local295 != 0) {
@@ -951,15 +955,15 @@ public final class mapview extends GameShell {
 			}
 		}
 		for (local47 = 0; local47 < local35; local47++) {
-			this.aClass2_Sub1_Sub1_Sub2Array3[this.anIntArray27[local47]].method65(this.anIntArray25[local47] - 7, this.anIntArray26[local47] - 7);
+			this.aClass2_Sub1_Sub1_Sub2Array3[this.anIntArray27[local47]].draw(this.anIntArray25[local47] - 7, this.anIntArray26[local47] - 7);
 		}
 		if (this.anInt130 > 0) {
 			for (local218 = 0; local218 < local35; local218++) {
 				if (this.anIntArray27[local218] == this.anInt129) {
-					this.aClass2_Sub1_Sub1_Sub2Array3[this.anIntArray27[local218]].method65(this.anIntArray25[local218] - 7, this.anIntArray26[local218] - 7);
+					this.aClass2_Sub1_Sub1_Sub2Array3[this.anIntArray27[local218]].draw(this.anIntArray25[local218] - 7, this.anIntArray26[local218] - 7);
 					if (this.anInt130 % 10 < 5) {
-						Draw2D.method90(this.anIntArray25[local218], this.anIntArray26[local218], 15, 16776960, 128);
-						Draw2D.method90(this.anIntArray25[local218], this.anIntArray26[local218], 7, 16777215, 256);
+						Draw2D.fillCircle(this.anIntArray25[local218], this.anIntArray26[local218], 15, 16776960, 128);
+						Draw2D.fillCircle(this.anIntArray25[local218], this.anIntArray26[local218], 7, 16777215, 256);
 					}
 				}
 			}
@@ -1047,7 +1051,7 @@ public final class mapview extends GameShell {
 
 	@OriginalMember(owner = "mapview!mapview", name = "a", descriptor = "([IIIIIIII)V")
 	private void method129(@OriginalArg(0) int[] arg0, @OriginalArg(1) int arg1, @OriginalArg(2) int arg2, @OriginalArg(3) int arg3, @OriginalArg(4) int arg4, @OriginalArg(5) int arg5, @OriginalArg(6) int arg6, @OriginalArg(7) int arg7) {
-		@Pc(5) int local5 = Draw2D.anInt78 - arg4;
+		@Pc(5) int local5 = Draw2D.width2d - arg4;
 		if (arg6 == 9) {
 			arg6 = 1;
 			arg7 = arg7 + 1 & 0x3;
@@ -1485,14 +1489,14 @@ public final class mapview extends GameShell {
 	@OriginalMember(owner = "mapview!mapview", name = "j", descriptor = "()[B")
 	private byte[] method131() {
 		System.out.println("Updating");
-		this.method111(0, "Requesting map");
+		this.drawProgress("Requesting map", 0);
 		try {
 			@Pc(10) String local10 = "";
 			for (@Pc(12) int local12 = 0; local12 < 10; local12++) {
 				local10 = local10 + sig.anIntArray44[local12];
 			}
 			@Pc(40) DataInputStream local40;
-			if (super.aFrame_Sub1_2 == null) {
+			if (super.frame == null) {
 				local40 = new DataInputStream((new URL(this.getCodeBase(), "worldmap" + local10 + ".jag")).openStream());
 			} else {
 				local40 = new DataInputStream(new FileInputStream("worldmap.jag"));
@@ -1513,7 +1517,7 @@ public final class mapview extends GameShell {
 				local65 += local87;
 				@Pc(104) int local104 = local65 * 100 / local67;
 				if (local104 != local63) {
-					this.method111(local104, "Loading map - " + local104 + "%");
+					this.drawProgress("Loading map - " + local104 + "%", local104);
 				}
 				local63 = local104;
 			}
