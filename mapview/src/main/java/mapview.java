@@ -1,9 +1,4 @@
-import java.io.BufferedInputStream;
-import java.io.DataInputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
+import java.io.*;
 import java.net.URL;
 import java.security.MessageDigest;
 
@@ -21,6 +16,10 @@ import org.openrs2.deob.annotation.Pc;
 
 @OriginalClass("mapview!mapview")
 public final class mapview extends GameShell {
+
+	// 2005 mapview applet features
+	private static final boolean shouldDrawBorders = false;
+	private static final boolean shouldDrawLabels = true;
 
 	@OriginalMember(owner = "mapview!mapview", name = "M", descriptor = "I")
 	private int redrawTimer;
@@ -304,6 +303,7 @@ public final class mapview extends GameShell {
 		this.drawMap(0, 0, 1280, 1216, 0, 0, this.imageOverviewWidth, this.imageOverviewHeight);
 		Draw2D.drawRect(0, 0, 0, this.imageOverviewWidth, this.imageOverviewHeight);
 		Draw2D.drawRect(1, 1, this.colorInactiveBorderTL, this.imageOverviewWidth - 2, this.imageOverviewHeight - 2);
+
 		super.drawArea.bind();
 	}
 
@@ -418,16 +418,13 @@ public final class mapview extends GameShell {
 		@Pc(5) short maxZ = 1216;
 
 		@Pc(8) int[] average = new int[maxZ];
-		for (@Pc(10) int i = 0; i < maxZ; i++) {
-			average[i] = 0;
-		}
 
 		for (@Pc(22) int x = 5; x < maxX - 5; x++) {
 			@Pc(30) byte[] tileEast = tiles[x + 5];
 			@Pc(36) byte[] tileWest = tiles[x - 5];
 
-			for (@Pc(38) int i = 0; i < maxZ; i++) {
-				average[i] += this.floorcolUnderlay[tileEast[i] & 0xFF] - this.floorcolUnderlay[tileWest[i] & 0xFF];
+			for (@Pc(38) int z = 0; z < maxZ; z++) {
+				average[z] += this.floorcolUnderlay[tileEast[z] & 0xFF] - this.floorcolUnderlay[tileWest[z] & 0xFF];
 			}
 
 			if (x > 10 && x < maxX - 10) {
@@ -589,6 +586,37 @@ public final class mapview extends GameShell {
 			} else if (key == 111 || key == 79) {
 				this.showOverview = !this.showOverview;
 				this.redraw = true;
+			} else if (key == 101 && super.frame != null) {
+				// 2005 mapview applet feature
+				System.out.println("Starting export...");
+
+				@Pc(169) Pix24 map = new Pix24(1280 * 2, 1216 * 2);
+				map.bind();
+				this.drawMap(0, 0, 1280, 1216, 0, 0, 1280 * 2, 1216 * 2);
+				super.drawArea.bind();
+
+				int len = map.pixels.length;
+				@Pc(197) byte[] data = new byte[len * 3];
+
+				int off = 0;
+				for (@Pc(201) int i = 0; i < len; i++) {
+					@Pc(208) int rgb = map.pixels[i];
+					data[off++] = (byte) (rgb >> 16);
+					data[off++] = (byte) (rgb >> 8);
+					data[off++] = (byte) rgb;
+				}
+
+				System.out.println("Saving to disk");
+
+				try {
+					@Pc(261) BufferedOutputStream stream = new BufferedOutputStream(new FileOutputStream("map-" + 1280 * 2 + "-" + 1216 * 2 + "-rgb.raw"));
+					stream.write(data);
+					stream.close();
+				} catch (@Pc(268) Exception ex) {
+					ex.printStackTrace();
+				}
+
+				System.out.println("Done export: " + 1280 * 2 + "," + 1216 * 2);
 			}
 		}
 
@@ -749,6 +777,7 @@ public final class mapview extends GameShell {
 
 			if (this.showOverview) {
 				this.imageOverview.blitOpaque(this.overviewX, this.overviewY);
+
 				Draw2D.fillRectAlpha(this.overviewX + this.imageOverviewWidth * left / 1280, this.overviewY + this.imageOverviewHeight * top / 1216, (right - left) * this.imageOverviewWidth / 1280, (bottom - top) * this.imageOverviewHeight / 1216, 0xff0000, 0x80);
 				Draw2D.drawRect(this.overviewX + this.imageOverviewWidth * left / 1280, this.overviewY + this.imageOverviewHeight * top / 1216, 0xff0000, (right - left) * this.imageOverviewWidth / 1280, (bottom - top) * this.imageOverviewHeight / 1216);
 
@@ -1018,7 +1047,7 @@ public final class mapview extends GameShell {
 			}
 		}
 
-        if (this.zoomX == this.zoomY) {
+        if (this.zoomX == this.zoomY && this.shouldDrawLabels) {
             for (int i = 0; i < this.labelCount; i++) {
 				int x = this.labelX[i];
                 @Pc(704) int y = this.labelY[i];
@@ -1093,6 +1122,31 @@ public final class mapview extends GameShell {
                 }
             }
         }
+
+		if (shouldDrawBorders) {
+			for (int mx = 2304 / 64; mx < 3584 / 64; mx++) {
+				for (int mz = 2816 / 64; mz < 4032 / 64; mz++) {
+					int x = mx * 64;
+					int z = mz * 64;
+					x -= 2304;
+					z = 4032 - z;
+
+					int drawLeft = widthOffset + (width - widthOffset) * (x - left) / (right - left);
+					int drawTop = heightOffset + (height - heightOffset) * (z - 64 - top) / (bottom - top);
+					int drawRight = widthOffset + (width - widthOffset) * (x + 64 - left) / (right - left);
+					int drawBottom = heightOffset + (height - heightOffset) * (z - top) / (bottom - top);
+
+					Draw2D.drawRect(drawLeft, drawTop, 0xffffff, drawRight - drawLeft, drawBottom - drawTop);
+					this.b12.drawStringRight(drawRight - 5, drawBottom - 5, mx + "_" + mz, 0xffffff, false);
+
+					if (mx == 33 && mz >= 71 && mz <= 73) {
+						this.b12.drawStringCenter((drawRight + drawLeft) / 2, (drawBottom + drawTop) / 2, "u_pass", 16711680);
+					} else if (mx >= 32 && mx <= 34 && mz >= 70 && mz <= 74) {
+						this.b12.drawStringCenter((drawRight + drawLeft) / 2, (drawBottom + drawTop) / 2, "u_pass", 16776960);
+					}
+				}
+			}
+		}
     }
 
 	@OriginalMember(owner = "mapview!mapview", name = "a", descriptor = "([IIIIIIII)V")
