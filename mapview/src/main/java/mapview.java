@@ -48,6 +48,10 @@ public final class mapview extends GameShell {
 	@OriginalMember(owner = "mapview!mapview", name = "U", descriptor = "[[B")
 	private byte[][] locMapscenes;
 
+	private boolean[][] objTiles;
+
+	private boolean[][] npcTiles;
+
 	@OriginalMember(owner = "mapview!mapview", name = "X", descriptor = "Lmapview!j;")
 	private PixFont b12;
 
@@ -131,6 +135,11 @@ public final class mapview extends GameShell {
 
 	@OriginalMember(owner = "mapview!mapview", name = "W", descriptor = "[Lmapview!h;")
 	private Pix24[] imageMapfunction = new Pix24[50];
+
+	private Pix24 imageMapdot0;
+	private Pix24 imageMapdot1;
+	private Pix24 imageMapdot2;
+	private Pix24 imageMapdot3;
 
 	@OriginalMember(owner = "mapview!mapview", name = "gb", descriptor = "[I")
 	private int[] visibleMapFunctionsX = new int[2000];
@@ -271,6 +280,14 @@ public final class mapview extends GameShell {
 		this.locMapfunctions = new byte[1280][1216];
 		this.readLocData(locData, this.locWalls, this.locMapscenes, this.locMapfunctions);
 
+		byte[] objData = worldmap.read("obj.dat", null);
+		this.objTiles = new boolean[1280][1216];
+		this.readObjData(objData, this.objTiles);
+
+		byte[] npcData = worldmap.read("npc.dat", null);
+		this.npcTiles = new boolean[1280][1216];
+		this.readNpcData(npcData, this.npcTiles);
+
 		try {
 			for (int i = 0; i < 50; i++) {
 				this.imageMapscene[i] = new Pix8(worldmap, "mapscene", i);
@@ -284,6 +301,11 @@ public final class mapview extends GameShell {
 			}
 		} catch (@Pc(204) Exception ignore) {
 		}
+
+		this.imageMapdot0 = new Pix24(worldmap, "mapdots", 0);
+		this.imageMapdot1 = new Pix24(worldmap, "mapdots", 1);
+		this.imageMapdot2 = new Pix24(worldmap, "mapdots", 2);
+		this.imageMapdot3 = new Pix24(worldmap, "mapdots", 3);
 
 		this.b12 = new PixFont(worldmap, "b12");
 		this.f11 = new WorldmapFont(11, true, this);
@@ -353,6 +375,48 @@ public final class mapview extends GameShell {
 						} while (opcode != 0);
 					}
 				}
+			}
+		}
+	}
+
+	private void readObjData(byte[] data, boolean[][] objs) {
+		int pos = 0;
+		while (pos < data.length) {
+			int mx = (data[pos++] & 0xFF) * 64 - 2304;
+			int mz = (data[pos++] & 0xFF) * 64 - 2816;
+
+			if (mx > 0 && mz > 0 && mx + 64 < 1280 && mz + 64 < 1216) {
+				for (int x = 0; x < 64; x++) {
+					boolean[] obj = objs[x + mx];
+					int zIndex = 1216 - mz - 1;
+
+					for (int z = -64; z < 0; z++) {
+						obj[zIndex--] = data[pos++] == 1;
+					}
+				}
+			} else {
+				pos += 4096;
+			}
+		}
+	}
+
+	private void readNpcData(byte[] data, boolean[][] npcs) {
+		int pos = 0;
+		while (pos < data.length) {
+			int mx = (data[pos++] & 0xFF) * 64 - 2304;
+			int mz = (data[pos++] & 0xFF) * 64 - 2816;
+
+			if (mx > 0 && mz > 0 && mx + 64 < 1280 && mz + 64 < 1216) {
+				for (int x = 0; x < 64; x++) {
+					boolean[] npc = npcs[x + mx];
+					int zIndex = 1216 - mz - 1;
+
+					for (int z = -64; z < 0; z++) {
+						npc[zIndex--] = data[pos++] == 1;
+					}
+				}
+			} else {
+				pos += 4096;
 			}
 		}
 	}
@@ -523,8 +587,14 @@ public final class mapview extends GameShell {
 			this.locWalls = null;
 			this.locMapfunctions = null;
 			this.locMapscenes = null;
+			this.objTiles = null;
+			this.npcTiles = null;
 			this.imageMapscene = null;
 			this.imageMapfunction = null;
+			this.imageMapdot0 = null;
+			this.imageMapdot1 = null;
+			this.imageMapdot2 = null;
+			this.imageMapdot3 = null;
 			this.b12 = null;
 			this.visibleMapFunctionsX = null;
 			this.visibleMapFunctionsY = null;
@@ -1029,6 +1099,64 @@ public final class mapview extends GameShell {
 				}
 			}
         }
+
+		for (int x = 0; x < visibleX; x++) {
+			int startX = widthRatio * x >> 16;
+			int endX = widthRatio * (x + 1) >> 16;
+			int lengthX = endX - startX;
+			if (lengthX <= 0) {
+				continue;
+			}
+
+			startX += widthOffset;
+			endX += widthOffset;
+
+			boolean[] objs = this.objTiles[x + left];
+			for (int y = 0; y < visibleY; y++) {
+				int startY = heightRatio * y >> 16;
+				int endY = heightRatio * (y + 1) >> 16;
+				int lengthY = endY - startY;
+				if (lengthY <= 0) {
+					continue;
+				}
+
+				startY += heightOffset;
+				endY += heightOffset;
+
+				if (objs[y + top]) {
+					this.imageMapdot0.draw(startX, startY);
+				}
+			}
+		}
+
+		for (int x = 0; x < visibleX; x++) {
+			int startX = widthRatio * x >> 16;
+			int endX = widthRatio * (x + 1) >> 16;
+			int lengthX = endX - startX;
+			if (lengthX <= 0) {
+				continue;
+			}
+
+			startX += widthOffset;
+			endX += widthOffset;
+
+			boolean[] npcs = this.npcTiles[x + left];
+			for (int y = 0; y < visibleY; y++) {
+				int startY = heightRatio * y >> 16;
+				int endY = heightRatio * (y + 1) >> 16;
+				int lengthY = endY - startY;
+				if (lengthY <= 0) {
+					continue;
+				}
+
+				startY += heightOffset;
+				endY += heightOffset;
+
+				if (npcs[y + top]) {
+					this.imageMapdot1.draw(startX, startY);
+				}
+			}
+		}
 
 		for (int i = 0; i < visibleMapFunctionCount; i++) {
 			this.imageMapfunction[this.visibleMapFunctions[i]].draw(this.visibleMapFunctionsX[i] - 7, this.visibleMapFunctionsY[i] - 7);
