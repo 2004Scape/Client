@@ -21,6 +21,11 @@ public final class mapview extends GameShell {
 	private static final boolean shouldDrawBorders = false;
 	private static final boolean shouldDrawLabels = true;
 
+	private final short sizeX = 1280;
+	private final short sizeZ = 1216;
+	private final short centerX = 2304;
+	private final short centerZ = 2816;
+
 	@OriginalMember(owner = "mapview!mapview", name = "M", descriptor = "I")
 	private int redrawTimer;
 
@@ -104,7 +109,7 @@ public final class mapview extends GameShell {
 	private int lastOffsetX;
 
 	@OriginalMember(owner = "mapview!mapview", name = "Hb", descriptor = "I")
-	private int lastOffsetY;
+	private int lastOffsetZ;
 
 	@OriginalMember(owner = "mapview!mapview", name = "Ib", descriptor = "I")
 	private int labelCount;
@@ -187,7 +192,7 @@ public final class mapview extends GameShell {
 	private int imageOverviewHeight = 200;
 
 	@OriginalMember(owner = "mapview!mapview", name = "zb", descriptor = "I")
-	private int imageOverviewWidth = this.imageOverviewHeight * 1280 / 1216;
+	private int imageOverviewWidth = (this.imageOverviewHeight * this.sizeX) / this.sizeZ;
 
 	@OriginalMember(owner = "mapview!mapview", name = "Ab", descriptor = "I")
 	private int overviewX = 635 - this.imageOverviewWidth - 5;
@@ -220,10 +225,10 @@ public final class mapview extends GameShell {
 	private double zoomY = 4.0D;
 
 	@OriginalMember(owner = "mapview!mapview", name = "Qb", descriptor = "I")
-	private int offsetX = 896;
+	private int offsetX = 3200 - this.centerX;
 
 	@OriginalMember(owner = "mapview!mapview", name = "Rb", descriptor = "I")
-	private int offsetY = 832;
+	private int offsetZ = (this.centerZ + this.sizeZ) - 3200;
 
 	@OriginalMember(owner = "mapview!mapview", name = "Sb", descriptor = "[Ljava/lang/String;")
 	private String[] keyNames = new String[] { "General Store", "Sword Shop", "Magic Shop", "Axe Shop", "Helmet Shop", "Bank", "Quest Start", "Amulet Shop", "Mining Site", "Furnace", "Anvil", "Combat Training", "Dungeon", "Staff Shop", "Platebody Shop", "Platelegs Shop", "Scimitar Shop", "Archery Shop", "Shield Shop", "Altar", "Herbalist", "Jewelery", "Gem Shop", "Crafting Shop", "Candle Shop", "Fishing Shop", "Fishing Spot", "Clothes Shop", "Apothecary", "Silk Trader", "Kebab Seller", "Pub/Bar", "Mace Shop", "Tannery", "Rare Trees", "Spinning Wheel", "Food Shop", "Cookery Shop", "???", "Water Source", "Cooking Range", "Skirt Shop", "Potters Wheel", "Windmill", "Mining Shop", "Chainmail Shop", "Silver Shop", "Fur Trader", "Spice Shop" };
@@ -266,26 +271,26 @@ public final class mapview extends GameShell {
 		}
 
 		@Pc(105) byte[] underlayData = worldmap.read("underlay.dat", null);
-		@Pc(109) byte[][] underlayTiles = new byte[1280][1216];
+		@Pc(109) byte[][] underlayTiles = new byte[this.sizeX][this.sizeZ];
 		this.readUnderlayData(underlayData, underlayTiles);
 
 		@Pc(118) byte[] overlayData = worldmap.read("overlay.dat", null);
-		this.overlayTiles = new int[1280][1216];
-		this.overlayInfo = new byte[1280][1216];
+		this.overlayTiles = new int[this.sizeX][this.sizeZ];
+		this.overlayInfo = new byte[this.sizeX][this.sizeZ];
 		this.readOverlayData(overlayData, this.overlayTiles, this.overlayInfo);
 
 		@Pc(140) byte[] locData = worldmap.read("loc.dat", null);
-		this.locWalls = new byte[1280][1216];
-		this.locMapscenes = new byte[1280][1216];
-		this.locMapfunctions = new byte[1280][1216];
+		this.locWalls = new byte[this.sizeX][this.sizeZ];
+		this.locMapscenes = new byte[this.sizeX][this.sizeZ];
+		this.locMapfunctions = new byte[this.sizeX][this.sizeZ];
 		this.readLocData(locData, this.locWalls, this.locMapscenes, this.locMapfunctions);
 
 		byte[] objData = worldmap.read("obj.dat", null);
-		this.objTiles = new boolean[1280][1216];
+		this.objTiles = new boolean[this.sizeX][this.sizeZ];
 		this.readObjData(objData, this.objTiles);
 
 		byte[] npcData = worldmap.read("npc.dat", null);
-		this.npcTiles = new boolean[1280][1216];
+		this.npcTiles = new boolean[this.sizeX][this.sizeZ];
 		this.readNpcData(npcData, this.npcTiles);
 
 		try {
@@ -317,12 +322,12 @@ public final class mapview extends GameShell {
 		this.f26 = new WorldmapFont(26, true, this);
 		this.f30 = new WorldmapFont(30, true, this);
 
-		this.floormapColors = new int[1280][1216];
+		this.floormapColors = new int[this.sizeX][this.sizeZ];
 		this.averageUnderlayColors(underlayTiles, this.floormapColors);
 
 		this.imageOverview = new Pix24(this.imageOverviewWidth, this.imageOverviewHeight);
 		this.imageOverview.bind();
-		this.drawMap(0, 0, 1280, 1216, 0, 0, this.imageOverviewWidth, this.imageOverviewHeight);
+		this.drawMap(0, 0, this.sizeX, this.sizeZ, 0, 0, this.imageOverviewWidth, this.imageOverviewHeight);
 		Draw2D.drawRect(0, 0, 0, this.imageOverviewWidth, this.imageOverviewHeight);
 		Draw2D.drawRect(1, 1, this.colorInactiveBorderTL, this.imageOverviewWidth - 2, this.imageOverviewHeight - 2);
 
@@ -333,15 +338,15 @@ public final class mapview extends GameShell {
 	private void readLocData(@OriginalArg(0) byte[] data, @OriginalArg(1) byte[][] walls, @OriginalArg(2) byte[][] mapscenes, @OriginalArg(3) byte[][] mapfunctions) {
 		@Pc(3) int pos = 0;
 		while (pos < data.length) {
-			@Pc(16) int mx = (data[pos++] & 0xFF) * 64 - 2304;
-			@Pc(27) int mz = (data[pos++] & 0xFF) * 64 - 2816;
+			@Pc(16) int mx = (data[pos++] & 0xFF) * 64 - this.centerX;
+			@Pc(27) int mz = (data[pos++] & 0xFF) * 64 - this.centerZ;
 
-			if (mx > 0 && mz > 0 && mx + 64 < 1280 && mz + 64 < 1216) {
+			if (mx > 0 && mz > 0 && mx + 64 < this.sizeX && mz + 64 < this.sizeZ) {
 				for (int x = 0; x < 64; x++) {
 					@Pc(51) byte[] wall = walls[x + mx];
 					@Pc(57) byte[] mapscene = mapscenes[x + mx];
 					@Pc(63) byte[] mapfunction = mapfunctions[x + mx];
-					@Pc(69) int zIndex = 1216 - mz - 1;
+					@Pc(69) int zIndex = this.sizeZ - mz - 1;
 
 					for (@Pc(71) int z = -64; z < 0; z++) {
 						while (true) {
@@ -382,13 +387,13 @@ public final class mapview extends GameShell {
 	private void readObjData(byte[] data, boolean[][] objs) {
 		int pos = 0;
 		while (pos < data.length) {
-			int mx = (data[pos++] & 0xFF) * 64 - 2304;
-			int mz = (data[pos++] & 0xFF) * 64 - 2816;
+			int mx = (data[pos++] & 0xFF) * 64 - this.centerX;
+			int mz = (data[pos++] & 0xFF) * 64 - this.centerZ;
 
-			if (mx > 0 && mz > 0 && mx + 64 < 1280 && mz + 64 < 1216) {
+			if (mx > 0 && mz > 0 && mx + 64 < this.sizeX && mz + 64 < this.sizeZ) {
 				for (int x = 0; x < 64; x++) {
 					boolean[] obj = objs[x + mx];
-					int zIndex = 1216 - mz - 1;
+					int zIndex = this.sizeZ - mz - 1;
 
 					for (int z = -64; z < 0; z++) {
 						obj[zIndex--] = data[pos++] == 1;
@@ -403,13 +408,13 @@ public final class mapview extends GameShell {
 	private void readNpcData(byte[] data, boolean[][] npcs) {
 		int pos = 0;
 		while (pos < data.length) {
-			int mx = (data[pos++] & 0xFF) * 64 - 2304;
-			int mz = (data[pos++] & 0xFF) * 64 - 2816;
+			int mx = (data[pos++] & 0xFF) * 64 - this.centerX;
+			int mz = (data[pos++] & 0xFF) * 64 - this.centerZ;
 
-			if (mx > 0 && mz > 0 && mx + 64 < 1280 && mz + 64 < 1216) {
+			if (mx > 0 && mz > 0 && mx + 64 < this.sizeX && mz + 64 < this.sizeZ) {
 				for (int x = 0; x < 64; x++) {
 					boolean[] npc = npcs[x + mx];
-					int zIndex = 1216 - mz - 1;
+					int zIndex = this.sizeZ - mz - 1;
 
 					for (int z = -64; z < 0; z++) {
 						npc[zIndex--] = data[pos++] == 1;
@@ -425,12 +430,13 @@ public final class mapview extends GameShell {
 	private void readUnderlayData(@OriginalArg(0) byte[] data, @OriginalArg(1) byte[][] underlays) {
 		@Pc(3) int pos = 0;
 		while (pos < data.length) {
-			@Pc(16) int mx = (data[pos++] & 0xFF) * 64 - 2304;
-			@Pc(27) int mz = (data[pos++] & 0xFF) * 64 - 2816;
-			if (mx > 0 && mz > 0 && mx + 64 < 1280 && mz + 64 < 1216) {
+			@Pc(16) int mx = (data[pos++] & 0xFF) * 64 - this.centerX;
+			@Pc(27) int mz = (data[pos++] & 0xFF) * 64 - this.centerZ;
+
+			if (mx > 0 && mz > 0 && mx + 64 < this.sizeX && mz + 64 < this.sizeZ) {
 				for (@Pc(43) int x = 0; x < 64; x++) {
 					@Pc(51) byte[] underlay = underlays[x + mx];
-					@Pc(57) int zIndex = 1216 - mz - 1;
+					@Pc(57) int zIndex = this.sizeZ - mz - 1;
 
 					for (@Pc(59) int z = -64; z < 0; z++) {
 						underlay[zIndex--] = data[pos++];
@@ -446,14 +452,14 @@ public final class mapview extends GameShell {
 	private void readOverlayData(@OriginalArg(0) byte[] data, @OriginalArg(1) int[][] tiles, @OriginalArg(2) byte[][] shapes) {
 		@Pc(3) int pos = 0;
 		while (pos < data.length) {
-			@Pc(16) int mx = (data[pos++] & 0xFF) * 64 - 2304;
-			@Pc(27) int mz = (data[pos++] & 0xFF) * 64 - 2816;
+			@Pc(16) int mx = (data[pos++] & 0xFF) * 64 - this.centerX;
+			@Pc(27) int mz = (data[pos++] & 0xFF) * 64 - this.centerZ;
 
-			if (mx > 0 && mz > 0 && mx + 64 < 1280 && mz + 64 < 1216) {
+			if (mx > 0 && mz > 0 && mx + 64 < this.sizeX && mz + 64 < this.sizeZ) {
 				for (int x = 0; x < 64; x++) {
 					@Pc(51) int[] tile = tiles[x + mx];
 					@Pc(57) byte[] shape = shapes[x + mx];
-					@Pc(63) int zIndex = 1216 - mz - 1;
+					@Pc(63) int zIndex = this.sizeZ - mz - 1;
 
 					for (@Pc(65) int z = -64; z < 0; z++) {
 						int opcode = data[pos++];
@@ -478,8 +484,8 @@ public final class mapview extends GameShell {
 
 	@OriginalMember(owner = "mapview!mapview", name = "a", descriptor = "([[B[[I)V")
 	private void averageUnderlayColors(@OriginalArg(0) byte[][] tiles, @OriginalArg(1) int[][] colors) {
-		@Pc(3) short maxX = 1280;
-		@Pc(5) short maxZ = 1216;
+		@Pc(3) short maxX = this.sizeX;
+		@Pc(5) short maxZ = this.sizeZ;
 
 		@Pc(8) int[] average = new int[maxZ];
 
@@ -626,11 +632,11 @@ public final class mapview extends GameShell {
 		}
 
 		if (super.actionKey[3] == 1) {
-			this.offsetY = (int) ((double) this.offsetY - 16.0D / this.zoomX);
+			this.offsetZ = (int) ((double) this.offsetZ - 16.0D / this.zoomX);
 			this.redraw = true;
 		}
 		if (super.actionKey[4] == 1) {
-			this.offsetY = (int) ((double) this.offsetY + 16.0D / this.zoomX);
+			this.offsetZ = (int) ((double) this.offsetZ + 16.0D / this.zoomX);
 			this.redraw = true;
 		}
 
@@ -660,9 +666,9 @@ public final class mapview extends GameShell {
 				// 2005 mapview applet feature
 				System.out.println("Starting export...");
 
-				@Pc(169) Pix24 map = new Pix24(1280 * 2, 1216 * 2);
+				@Pc(169) Pix24 map = new Pix24(this.sizeX * 2, this.sizeZ * 2);
 				map.bind();
-				this.drawMap(0, 0, 1280, 1216, 0, 0, 1280 * 2, 1216 * 2);
+				this.drawMap(0, 0, this.sizeX, this.sizeZ, 0, 0, this.sizeX * 2, this.sizeZ * 2);
 				super.drawArea.bind();
 
 				int len = map.pixels.length;
@@ -679,14 +685,14 @@ public final class mapview extends GameShell {
 				System.out.println("Saving to disk");
 
 				try {
-					@Pc(261) BufferedOutputStream stream = new BufferedOutputStream(new FileOutputStream("map-" + 1280 * 2 + "-" + 1216 * 2 + "-rgb.raw"));
+					@Pc(261) BufferedOutputStream stream = new BufferedOutputStream(new FileOutputStream("map-" + (this.sizeX * 2) + "-" + (this.sizeZ * 2) + "-rgb.raw"));
 					stream.write(data);
 					stream.close();
 				} catch (@Pc(268) Exception ex) {
 					ex.printStackTrace();
 				}
 
-				System.out.println("Done export: " + 1280 * 2 + "," + 1216 * 2);
+				System.out.println("Done export: " + (this.sizeX * 2) + "," + (this.sizeZ * 2));
 			}
 		}
 
@@ -694,7 +700,7 @@ public final class mapview extends GameShell {
             this.lastMouseClickX = super.mouseClickX;
             this.lastMouseClickY = super.mouseClickY;
             this.lastOffsetX = this.offsetX;
-            this.lastOffsetY = this.offsetY;
+            this.lastOffsetZ = this.offsetZ;
 
             if (super.mouseClickX > 170 && super.mouseClickX < 220 && super.mouseClickY > 471 && super.mouseClickY < 503) {
                 this.zoomY = 3.0D;
@@ -768,8 +774,8 @@ public final class mapview extends GameShell {
             }
 
             if (mouseClickX > this.overviewX && mouseClickY > this.overviewY && mouseClickX < this.overviewX + this.imageOverviewWidth && mouseClickY < this.overviewY + this.imageOverviewHeight) {
-                this.offsetX = (mouseClickX - this.overviewX) * 1280 / this.imageOverviewWidth;
-                this.offsetY = (mouseClickY - this.overviewY) * 1216 / this.imageOverviewHeight;
+                this.offsetX = (mouseClickX - this.overviewX) * this.sizeX / this.imageOverviewWidth;
+                this.offsetZ = (mouseClickY - this.overviewY) * this.sizeZ / this.imageOverviewHeight;
                 this.lastMouseClickX = -1;
                 this.redraw = true;
             }
@@ -777,7 +783,7 @@ public final class mapview extends GameShell {
 
         if (super.mouseButton == 1 && this.lastMouseClickX != -1) {
             this.offsetX = this.lastOffsetX + (int) ((double) (this.lastMouseClickX - super.mouseX) * 2.0D / this.zoomY);
-            this.offsetY = this.lastOffsetY + (int) ((double) (this.lastMouseClickY - super.mouseY) * 2.0D / this.zoomY);
+            this.offsetZ = this.lastOffsetZ + (int) ((double) (this.lastMouseClickY - super.mouseY) * 2.0D / this.zoomY);
             this.redraw = true;
         }
 
@@ -813,20 +819,20 @@ public final class mapview extends GameShell {
         }
 
 		int left = this.offsetX - (int) (635.0D / this.zoomX);
-		int top = this.offsetY - (int) (503.0D / this.zoomX);
+		int top = this.offsetZ - (int) (503.0D / this.zoomX);
         @Pc(776) int right = this.offsetX + (int) (635.0D / this.zoomX);
-        @Pc(785) int bottom = this.offsetY + (int) (503.0D / this.zoomX);
+        @Pc(785) int bottom = this.offsetZ + (int) (503.0D / this.zoomX);
         if (left < 48) {
             this.offsetX = (int) (635.0D / this.zoomX) + 48;
         }
         if (top < 48) {
-            this.offsetY = (int) (503.0D / this.zoomX) + 48;
+            this.offsetZ = (int) (503.0D / this.zoomX) + 48;
         }
-        if (right > 1232) {
-            this.offsetX = 1232 - (int) (635.0D / this.zoomX);
+        if (right > (this.sizeX - 48)) {
+            this.offsetX = this.sizeX - 48 - (int) (635.0D / this.zoomX);
         }
-        if (bottom > 1168) {
-            this.offsetY = 1168 - (int) (503.0D / this.zoomX);
+        if (bottom > (this.sizeZ - 48)) {
+            this.offsetZ = (this.sizeZ - 48) - (int) (503.0D / this.zoomX);
         }
     }
 
@@ -840,22 +846,22 @@ public final class mapview extends GameShell {
 			Draw2D.clear();
 
 			@Pc(20) int left = this.offsetX - (int) (635.0D / this.zoomX);
-			@Pc(29) int top = this.offsetY - (int) (503.0D / this.zoomX);
+			@Pc(29) int top = this.offsetZ - (int) (503.0D / this.zoomX);
 			@Pc(38) int right = this.offsetX + (int) (635.0D / this.zoomX);
-			@Pc(47) int bottom = this.offsetY + (int) (503.0D / this.zoomX);
+			@Pc(47) int bottom = this.offsetZ + (int) (503.0D / this.zoomX);
 			this.drawMap(left, top, right, bottom, 0, 0, 635, 503);
 
 			if (this.showOverview) {
 				this.imageOverview.blitOpaque(this.overviewX, this.overviewY);
 
-				Draw2D.fillRectAlpha(this.overviewX + this.imageOverviewWidth * left / 1280, this.overviewY + this.imageOverviewHeight * top / 1216, (right - left) * this.imageOverviewWidth / 1280, (bottom - top) * this.imageOverviewHeight / 1216, 0xff0000, 0x80);
-				Draw2D.drawRect(this.overviewX + this.imageOverviewWidth * left / 1280, this.overviewY + this.imageOverviewHeight * top / 1216, 0xff0000, (right - left) * this.imageOverviewWidth / 1280, (bottom - top) * this.imageOverviewHeight / 1216);
+				Draw2D.fillRectAlpha(this.overviewX + this.imageOverviewWidth * left / this.sizeX, this.overviewY + this.imageOverviewHeight * top / this.sizeZ, (right - left) * this.imageOverviewWidth / this.sizeX, (bottom - top) * this.imageOverviewHeight / this.sizeZ, 0xff0000, 0x80);
+				Draw2D.drawRect(this.overviewX + this.imageOverviewWidth * left / this.sizeX, this.overviewY + this.imageOverviewHeight * top / this.sizeZ, 0xff0000, (right - left) * this.imageOverviewWidth / this.sizeX, (bottom - top) * this.imageOverviewHeight / this.sizeZ);
 
 				if (this.flashTimer > 0 && this.flashTimer % 10 < 5) {
 					for (int i = 0; i < this.activeMapFunctionCount; i++) {
 						if (this.activeMapFunctions[i] == this.currentKey) {
-							int x = this.overviewX + this.imageOverviewWidth * this.activeMapFunctionX[i] / 1280;
-							int y = this.overviewY + this.imageOverviewHeight * this.activeMapFunctionZ[i] / 1216;
+							int x = this.overviewX + this.imageOverviewWidth * this.activeMapFunctionX[i] / this.sizeX;
+							int y = this.overviewY + this.imageOverviewHeight * this.activeMapFunctionZ[i] / this.sizeZ;
 							Draw2D.fillCircle(x, y, 2, 0xffff00, 256);
 						}
 					}
@@ -1179,8 +1185,8 @@ public final class mapview extends GameShell {
             for (int i = 0; i < this.labelCount; i++) {
 				int x = this.labelX[i];
                 @Pc(704) int y = this.labelY[i];
-                x -= 2304;
-                y = 4032 - y;
+                x -= this.centerX;
+                y = (this.centerZ + this.sizeZ) - y;
 
 				int drawX = widthOffset + (width - widthOffset) * (x - left) / (right - left);
 				int drawY = heightOffset + (height - heightOffset) * (y - top) / (bottom - top);
@@ -1252,12 +1258,12 @@ public final class mapview extends GameShell {
         }
 
 		if (shouldDrawBorders) {
-			for (int mx = 2304 / 64; mx < 3584 / 64; mx++) {
-				for (int mz = 2816 / 64; mz < 4032 / 64; mz++) {
+			for (int mx = this.centerX / 64; mx < (this.centerX + this.sizeX) / 64; mx++) {
+				for (int mz = this.centerZ / 64; mz < (this.centerZ + this.sizeZ) / 64; mz++) {
 					int x = mx * 64;
 					int z = mz * 64;
-					x -= 2304;
-					z = 4032 - z;
+					x -= this.centerX;
+					z = (this.centerZ + this.sizeZ) - z;
 
 					int drawLeft = widthOffset + (width - widthOffset) * (x - left) / (right - left);
 					int drawTop = heightOffset + (height - heightOffset) * (z - 64 - top) / (bottom - top);
@@ -1268,9 +1274,9 @@ public final class mapview extends GameShell {
 					this.b12.drawStringRight(drawRight - 5, drawBottom - 5, mx + "_" + mz, 0xffffff, false);
 
 					if (mx == 33 && mz >= 71 && mz <= 73) {
-						this.b12.drawStringCenter((drawRight + drawLeft) / 2, (drawBottom + drawTop) / 2, "u_pass", 16711680);
+						this.b12.drawStringCenter((drawRight + drawLeft) / 2, (drawBottom + drawTop) / 2, "u_pass", 0xff0000);
 					} else if (mx >= 32 && mx <= 34 && mz >= 70 && mz <= 74) {
-						this.b12.drawStringCenter((drawRight + drawLeft) / 2, (drawBottom + drawTop) / 2, "u_pass", 16776960);
+						this.b12.drawStringCenter((drawRight + drawLeft) / 2, (drawBottom + drawTop) / 2, "u_pass", 0xffff00);
 					}
 				}
 			}
