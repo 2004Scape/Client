@@ -21,10 +21,10 @@ public final class mapview extends GameShell {
 	private static final boolean shouldDrawBorders = false;
 	private static final boolean shouldDrawLabels = true;
 
-	private final short sizeX = 1280;
-	private final short sizeZ = 1216;
-	private final short centerX = 2304;
-	private final short centerZ = 2816;
+	private final short sizeX = 20 << 6;
+	private final short sizeZ = 21 << 6;
+	private final short centerX = 35 << 6;
+	private final short centerZ = 43 << 6;
 
 	@OriginalMember(owner = "mapview!mapview", name = "M", descriptor = "I")
 	private int redrawTimer;
