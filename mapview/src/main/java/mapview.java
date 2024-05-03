@@ -21,10 +21,29 @@ public final class mapview extends GameShell {
 	private static final boolean shouldDrawBorders = false;
 	private static final boolean shouldDrawLabels = true;
 
+	// overworld
+	private final short startX = 3200;
+	private final short startZ = 3200;
 	private final short sizeX = 20 << 6;
 	private final short sizeZ = 21 << 6;
-	private final short centerX = 35 << 6;
-	private final short centerZ = 43 << 6;
+	private final short originX = 35 << 6;
+	private final short originZ = 43 << 6;
+
+	// underground
+//	private final short startX = 3200;
+//	private final short startZ = 9600;
+//	private final short sizeX = 20 << 6;
+//	private final short sizeZ = 21 << 6;
+//	private final short originX = 35 << 6;
+//	private final short originZ = 143 << 6;
+
+	// misc. areas (around Z 75)
+//	private final short startX = 2496;
+//	private final short startZ = 4736;
+//	private final short sizeX = 21 << 6;
+//	private final short sizeZ = 15 << 6;
+//	private final short originX = 28 << 6;
+//	private final short originZ = 65 << 6;
 
 	@OriginalMember(owner = "mapview!mapview", name = "M", descriptor = "I")
 	private int redrawTimer;
@@ -54,7 +73,6 @@ public final class mapview extends GameShell {
 	private byte[][] locMapscenes;
 
 	private boolean[][] objTiles;
-
 	private boolean[][] npcTiles;
 
 	@OriginalMember(owner = "mapview!mapview", name = "X", descriptor = "Lmapview!j;")
@@ -219,16 +237,16 @@ public final class mapview extends GameShell {
 	private int[] labelFont = new int[this.maxLabelCount];
 
 	@OriginalMember(owner = "mapview!mapview", name = "Ob", descriptor = "D")
-	private double zoomX = 4.0D;
+	private double zoom = 4.0D;
 
 	@OriginalMember(owner = "mapview!mapview", name = "Pb", descriptor = "D")
-	private double zoomY = 4.0D;
+	private double targetZoom = 4.0D;
 
 	@OriginalMember(owner = "mapview!mapview", name = "Qb", descriptor = "I")
-	private int offsetX = 3200 - this.centerX;
+	private int offsetX = this.startX - this.originX;
 
 	@OriginalMember(owner = "mapview!mapview", name = "Rb", descriptor = "I")
-	private int offsetZ = (this.centerZ + this.sizeZ) - 3200;
+	private int offsetZ = (this.originZ + this.sizeZ) - this.startZ;
 
 	@OriginalMember(owner = "mapview!mapview", name = "Sb", descriptor = "[Ljava/lang/String;")
 	private String[] keyNames = new String[] { "General Store", "Sword Shop", "Magic Shop", "Axe Shop", "Helmet Shop", "Bank", "Quest Start", "Amulet Shop", "Mining Site", "Furnace", "Anvil", "Combat Training", "Dungeon", "Staff Shop", "Platebody Shop", "Platelegs Shop", "Scimitar Shop", "Archery Shop", "Shield Shop", "Altar", "Herbalist", "Jewelery", "Gem Shop", "Crafting Shop", "Candle Shop", "Fishing Shop", "Fishing Spot", "Clothes Shop", "Apothecary", "Silk Trader", "Kebab Seller", "Pub/Bar", "Mace Shop", "Tannery", "Rare Trees", "Spinning Wheel", "Food Shop", "Cookery Shop", "???", "Water Source", "Cooking Range", "Skirt Shop", "Potters Wheel", "Windmill", "Mining Shop", "Chainmail Shop", "Silver Shop", "Fur Trader", "Spice Shop" };
@@ -338,8 +356,8 @@ public final class mapview extends GameShell {
 	private void readLocData(@OriginalArg(0) byte[] data, @OriginalArg(1) byte[][] walls, @OriginalArg(2) byte[][] mapscenes, @OriginalArg(3) byte[][] mapfunctions) {
 		@Pc(3) int pos = 0;
 		while (pos < data.length) {
-			@Pc(16) int mx = (data[pos++] & 0xFF) * 64 - this.centerX;
-			@Pc(27) int mz = (data[pos++] & 0xFF) * 64 - this.centerZ;
+			@Pc(16) int mx = (data[pos++] & 0xFF) * 64 - this.originX;
+			@Pc(27) int mz = (data[pos++] & 0xFF) * 64 - this.originZ;
 
 			if (mx > 0 && mz > 0 && mx + 64 < this.sizeX && mz + 64 < this.sizeZ) {
 				for (int x = 0; x < 64; x++) {
@@ -387,8 +405,8 @@ public final class mapview extends GameShell {
 	private void readObjData(byte[] data, boolean[][] objs) {
 		int pos = 0;
 		while (pos < data.length) {
-			int mx = (data[pos++] & 0xFF) * 64 - this.centerX;
-			int mz = (data[pos++] & 0xFF) * 64 - this.centerZ;
+			int mx = (data[pos++] & 0xFF) * 64 - this.originX;
+			int mz = (data[pos++] & 0xFF) * 64 - this.originZ;
 
 			if (mx > 0 && mz > 0 && mx + 64 < this.sizeX && mz + 64 < this.sizeZ) {
 				for (int x = 0; x < 64; x++) {
@@ -408,8 +426,8 @@ public final class mapview extends GameShell {
 	private void readNpcData(byte[] data, boolean[][] npcs) {
 		int pos = 0;
 		while (pos < data.length) {
-			int mx = (data[pos++] & 0xFF) * 64 - this.centerX;
-			int mz = (data[pos++] & 0xFF) * 64 - this.centerZ;
+			int mx = (data[pos++] & 0xFF) * 64 - this.originX;
+			int mz = (data[pos++] & 0xFF) * 64 - this.originZ;
 
 			if (mx > 0 && mz > 0 && mx + 64 < this.sizeX && mz + 64 < this.sizeZ) {
 				for (int x = 0; x < 64; x++) {
@@ -430,8 +448,8 @@ public final class mapview extends GameShell {
 	private void readUnderlayData(@OriginalArg(0) byte[] data, @OriginalArg(1) byte[][] underlays) {
 		@Pc(3) int pos = 0;
 		while (pos < data.length) {
-			@Pc(16) int mx = (data[pos++] & 0xFF) * 64 - this.centerX;
-			@Pc(27) int mz = (data[pos++] & 0xFF) * 64 - this.centerZ;
+			@Pc(16) int mx = (data[pos++] & 0xFF) * 64 - this.originX;
+			@Pc(27) int mz = (data[pos++] & 0xFF) * 64 - this.originZ;
 
 			if (mx > 0 && mz > 0 && mx + 64 < this.sizeX && mz + 64 < this.sizeZ) {
 				for (@Pc(43) int x = 0; x < 64; x++) {
@@ -452,8 +470,8 @@ public final class mapview extends GameShell {
 	private void readOverlayData(@OriginalArg(0) byte[] data, @OriginalArg(1) int[][] tiles, @OriginalArg(2) byte[][] shapes) {
 		@Pc(3) int pos = 0;
 		while (pos < data.length) {
-			@Pc(16) int mx = (data[pos++] & 0xFF) * 64 - this.centerX;
-			@Pc(27) int mz = (data[pos++] & 0xFF) * 64 - this.centerZ;
+			@Pc(16) int mx = (data[pos++] & 0xFF) * 64 - this.originX;
+			@Pc(27) int mz = (data[pos++] & 0xFF) * 64 - this.originZ;
 
 			if (mx > 0 && mz > 0 && mx + 64 < this.sizeX && mz + 64 < this.sizeZ) {
 				for (int x = 0; x < 64; x++) {
@@ -623,20 +641,20 @@ public final class mapview extends GameShell {
 	@Override
 	protected void update() {
 		if (super.actionKey[1] == 1) {
-			this.offsetX = (int) ((double) this.offsetX - 16.0D / this.zoomX);
+			this.offsetX = (int) ((double) this.offsetX - 16.0D / this.zoom);
 			this.redraw = true;
 		}
 		if (super.actionKey[2] == 1) {
-			this.offsetX = (int) ((double) this.offsetX + 16.0D / this.zoomX);
+			this.offsetX = (int) ((double) this.offsetX + 16.0D / this.zoom);
 			this.redraw = true;
 		}
 
 		if (super.actionKey[3] == 1) {
-			this.offsetZ = (int) ((double) this.offsetZ - 16.0D / this.zoomX);
+			this.offsetZ = (int) ((double) this.offsetZ - 16.0D / this.zoom);
 			this.redraw = true;
 		}
 		if (super.actionKey[4] == 1) {
-			this.offsetZ = (int) ((double) this.offsetZ + 16.0D / this.zoomX);
+			this.offsetZ = (int) ((double) this.offsetZ + 16.0D / this.zoom);
 			this.redraw = true;
 		}
 
@@ -645,16 +663,16 @@ public final class mapview extends GameShell {
 			key = this.pollKey();
 
 			if (key == 49) {
-				this.zoomY = 3.0D;
+				this.targetZoom = 3.0D;
 				this.redraw = true;
 			} else if (key == 50) {
-				this.zoomY = 4.0D;
+				this.targetZoom = 4.0D;
 				this.redraw = true;
 			} else if (key == 51) {
-				this.zoomY = 6.0D;
+				this.targetZoom = 6.0D;
 				this.redraw = true;
 			} else if (key == 52) {
-				this.zoomY = 8.0D;
+				this.targetZoom = 8.0D;
 				this.redraw = true;
 			} else if (key == 107 || key == 75) {
 				this.showKey = !this.showKey;
@@ -703,16 +721,16 @@ public final class mapview extends GameShell {
             this.lastOffsetZ = this.offsetZ;
 
             if (super.mouseClickX > 170 && super.mouseClickX < 220 && super.mouseClickY > 471 && super.mouseClickY < 503) {
-                this.zoomY = 3.0D;
+                this.targetZoom = 3.0D;
                 this.lastMouseClickX = -1;
             } else if (super.mouseClickX > 230 && super.mouseClickX < 280 && super.mouseClickY > 471 && super.mouseClickY < 503) {
-                this.zoomY = 4.0D;
+                this.targetZoom = 4.0D;
                 this.lastMouseClickX = -1;
             } else if (super.mouseClickX > 290 && super.mouseClickX < 340 && super.mouseClickY > 471 && super.mouseClickY < 503) {
-                this.zoomY = 6.0D;
+                this.targetZoom = 6.0D;
                 this.lastMouseClickX = -1;
             } else if (super.mouseClickX > 350 && super.mouseClickX < 400 && super.mouseClickY > 471 && super.mouseClickY < 503) {
-                this.zoomY = 8.0D;
+                this.targetZoom = 8.0D;
                 this.lastMouseClickX = -1;
             } else if (super.mouseClickX > this.keyX && super.mouseClickY > this.keyY + this.keyHeight && super.mouseClickX < this.keyX + this.keyWidth && super.mouseClickY < 503) {
                 this.showKey = !this.showKey;
@@ -782,24 +800,24 @@ public final class mapview extends GameShell {
         }
 
         if (super.mouseButton == 1 && this.lastMouseClickX != -1) {
-            this.offsetX = this.lastOffsetX + (int) ((double) (this.lastMouseClickX - super.mouseX) * 2.0D / this.zoomY);
-            this.offsetZ = this.lastOffsetZ + (int) ((double) (this.lastMouseClickY - super.mouseY) * 2.0D / this.zoomY);
+            this.offsetX = this.lastOffsetX + (int) ((double) (this.lastMouseClickX - super.mouseX) * 2.0D / this.targetZoom);
+            this.offsetZ = this.lastOffsetZ + (int) ((double) (this.lastMouseClickY - super.mouseY) * 2.0D / this.targetZoom);
             this.redraw = true;
         }
 
-        if (this.zoomX < this.zoomY) {
+        if (this.zoom < this.targetZoom) {
             this.redraw = true;
-            this.zoomX += this.zoomX / 30.0D;
-            if (this.zoomX > this.zoomY) {
-                this.zoomX = this.zoomY;
+            this.zoom += this.zoom / 30.0D;
+            if (this.zoom > this.targetZoom) {
+                this.zoom = this.targetZoom;
             }
         }
 
-        if (this.zoomX > this.zoomY) {
+        if (this.zoom > this.targetZoom) {
             this.redraw = true;
-            this.zoomX -= this.zoomX / 30.0D;
-            if (this.zoomX < this.zoomY) {
-                this.zoomX = this.zoomY;
+            this.zoom -= this.zoom / 30.0D;
+            if (this.zoom < this.targetZoom) {
+                this.zoom = this.targetZoom;
             }
         }
 
@@ -818,21 +836,21 @@ public final class mapview extends GameShell {
             this.flashTimer--;
         }
 
-		int left = this.offsetX - (int) (635.0D / this.zoomX);
-		int top = this.offsetZ - (int) (503.0D / this.zoomX);
-        @Pc(776) int right = this.offsetX + (int) (635.0D / this.zoomX);
-        @Pc(785) int bottom = this.offsetZ + (int) (503.0D / this.zoomX);
+		int left = this.offsetX - (int) (635.0D / this.zoom);
+		int top = this.offsetZ - (int) (503.0D / this.zoom);
+        @Pc(776) int right = this.offsetX + (int) (635.0D / this.zoom);
+        @Pc(785) int bottom = this.offsetZ + (int) (503.0D / this.zoom);
         if (left < 48) {
-            this.offsetX = (int) (635.0D / this.zoomX) + 48;
+            this.offsetX = (int) (635.0D / this.zoom) + 48;
         }
         if (top < 48) {
-            this.offsetZ = (int) (503.0D / this.zoomX) + 48;
+            this.offsetZ = (int) (503.0D / this.zoom) + 48;
         }
         if (right > (this.sizeX - 48)) {
-            this.offsetX = this.sizeX - 48 - (int) (635.0D / this.zoomX);
+            this.offsetX = this.sizeX - 48 - (int) (635.0D / this.zoom);
         }
         if (bottom > (this.sizeZ - 48)) {
-            this.offsetZ = (this.sizeZ - 48) - (int) (503.0D / this.zoomX);
+            this.offsetZ = (this.sizeZ - 48) - (int) (503.0D / this.zoom);
         }
     }
 
@@ -845,10 +863,10 @@ public final class mapview extends GameShell {
 
 			Draw2D.clear();
 
-			@Pc(20) int left = this.offsetX - (int) (635.0D / this.zoomX);
-			@Pc(29) int top = this.offsetZ - (int) (503.0D / this.zoomX);
-			@Pc(38) int right = this.offsetX + (int) (635.0D / this.zoomX);
-			@Pc(47) int bottom = this.offsetZ + (int) (503.0D / this.zoomX);
+			@Pc(20) int left = this.offsetX - (int) (635.0D / this.zoom);
+			@Pc(29) int top = this.offsetZ - (int) (503.0D / this.zoom);
+			@Pc(38) int right = this.offsetX + (int) (635.0D / this.zoom);
+			@Pc(47) int bottom = this.offsetZ + (int) (503.0D / this.zoom);
 			this.drawMap(left, top, right, bottom, 0, 0, 635, 503);
 
 			if (this.showOverview) {
@@ -901,25 +919,25 @@ public final class mapview extends GameShell {
 			this.drawString(this.overviewX, this.overviewY + this.imageOverviewHeight, this.imageOverviewWidth, 18, this.colorInactiveBorderTL, this.colorInactive, this.colorInactiveBorderBR, "Overview");
 			this.drawString(this.keyX, this.keyY + this.keyHeight, this.keyWidth, 18, this.colorInactiveBorderTL, this.colorInactive, this.colorInactiveBorderBR, "Key");
 
-			if (this.zoomY == 3.0D) {
+			if (this.targetZoom == 3.0D) {
 				this.drawString(170, 471, 50, 30, this.colorActiveBorderTL, this.colorActive, this.colorActiveBorderBR, "37%");
 			} else {
 				this.drawString(170, 471, 50, 30, this.colorInactiveBorderTL, this.colorInactive, this.colorInactiveBorderBR, "37%");
 			}
 
-			if (this.zoomY == 4.0D) {
+			if (this.targetZoom == 4.0D) {
 				this.drawString(230, 471, 50, 30, this.colorActiveBorderTL, this.colorActive, this.colorActiveBorderBR, "50%");
 			} else {
 				this.drawString(230, 471, 50, 30, this.colorInactiveBorderTL, this.colorInactive, this.colorInactiveBorderBR, "50%");
 			}
 
-			if (this.zoomY == 6.0D) {
+			if (this.targetZoom == 6.0D) {
 				this.drawString(290, 471, 50, 30, this.colorActiveBorderTL, this.colorActive, this.colorActiveBorderBR, "75%");
 			} else {
 				this.drawString(290, 471, 50, 30, this.colorInactiveBorderTL, this.colorInactive, this.colorInactiveBorderBR, "75%");
 			}
 
-			if (this.zoomY == 8.0D) {
+			if (this.targetZoom == 8.0D) {
 				this.drawString(350, 471, 50, 30, this.colorActiveBorderTL, this.colorActive, this.colorActiveBorderBR, "100%");
 			} else {
 				this.drawString(350, 471, 50, 30, this.colorInactiveBorderTL, this.colorInactive, this.colorInactiveBorderBR, "100%");
@@ -1047,9 +1065,14 @@ public final class mapview extends GameShell {
 					}
 
 					@Pc(303) int rgb = 0xcccccc;
-					if (wall >= 5 && wall <= 8 || wall >= 13 && wall <= 16 || wall >= 21 && wall <= 24 || wall == 27 || wall == 28) {
+					if (wall >= 5 && wall <= 8 || wall >= 13 && wall <= 16 || wall >= 21 && wall <= 24) {
 						rgb = 0xcc0000;
 						wall -= 4;
+					}
+					if (wall == 27 || wall == 28) {
+						// bugfix: draw diagonal active locs (doors)
+						rgb = 0xcc0000;
+						wall -= 2;
 					}
 
 					if (wall == 1) {
@@ -1181,12 +1204,12 @@ public final class mapview extends GameShell {
 			}
 		}
 
-        if (this.zoomX == this.zoomY && this.shouldDrawLabels) {
+        if (this.zoom == this.targetZoom && this.shouldDrawLabels) {
             for (int i = 0; i < this.labelCount; i++) {
 				int x = this.labelX[i];
                 @Pc(704) int y = this.labelY[i];
-                x -= this.centerX;
-                y = (this.centerZ + this.sizeZ) - y;
+                x -= this.originX;
+                y = (this.originZ + this.sizeZ) - y;
 
 				int drawX = widthOffset + (width - widthOffset) * (x - left) / (right - left);
 				int drawY = heightOffset + (height - heightOffset) * (y - top) / (bottom - top);
@@ -1195,35 +1218,35 @@ public final class mapview extends GameShell {
 
                 @Pc(746) WorldmapFont font = null;
                 if (fontType == 0) {
-                    if (this.zoomX == 3.0D) {
+                    if (this.zoom == 3.0D) {
                         font = this.f11;
-                    } else if (this.zoomX == 4.0D) {
+                    } else if (this.zoom == 4.0D) {
                         font = this.f12;
-                    } else if (this.zoomX == 6.0D) {
+                    } else if (this.zoom == 6.0D) {
                         font = this.f14;
-                    } else if (this.zoomX == 8.0D) {
+                    } else if (this.zoom == 8.0D) {
                         font = this.f17;
                     }
                 } else if (fontType == 1) {
-                    if (this.zoomX == 3.0D) {
+                    if (this.zoom == 3.0D) {
                         font = this.f14;
-                    } else if (this.zoomX == 4.0D) {
+                    } else if (this.zoom == 4.0D) {
                         font = this.f17;
-                    } else if (this.zoomX == 6.0D) {
+                    } else if (this.zoom == 6.0D) {
                         font = this.f19;
-                    } else if (this.zoomX == 8.0D) {
+                    } else if (this.zoom == 8.0D) {
                         font = this.f22;
                     }
                 } else if (fontType == 2) {
                     rgb = 0xffaa00;
 
-                    if (this.zoomX == 3.0D) {
+                    if (this.zoom == 3.0D) {
                         font = this.f19;
-                    } else if (this.zoomX == 4.0D) {
+                    } else if (this.zoom == 4.0D) {
                         font = this.f22;
-                    } else if (this.zoomX == 6.0D) {
+                    } else if (this.zoom == 6.0D) {
                         font = this.f26;
-                    } else if (this.zoomX == 8.0D) {
+                    } else if (this.zoom == 8.0D) {
                         font = this.f30;
                     }
                 }
@@ -1258,12 +1281,12 @@ public final class mapview extends GameShell {
         }
 
 		if (shouldDrawBorders) {
-			for (int mx = this.centerX / 64; mx < (this.centerX + this.sizeX) / 64; mx++) {
-				for (int mz = this.centerZ / 64; mz < (this.centerZ + this.sizeZ) / 64; mz++) {
+			for (int mx = this.originX / 64; mx < (this.originX + this.sizeX) / 64; mx++) {
+				for (int mz = this.originZ / 64; mz < (this.originZ + this.sizeZ) / 64; mz++) {
 					int x = mx * 64;
 					int z = mz * 64;
-					x -= this.centerX;
-					z = (this.centerZ + this.sizeZ) - z;
+					x -= this.originX;
+					z = (this.originZ + this.sizeZ) - z;
 
 					int drawLeft = widthOffset + (width - widthOffset) * (x - left) / (right - left);
 					int drawTop = heightOffset + (height - heightOffset) * (z - 64 - top) / (bottom - top);
