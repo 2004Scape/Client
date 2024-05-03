@@ -73,6 +73,7 @@ public final class mapview extends GameShell {
 	private byte[][] locMapscenes;
 
 	private boolean[][] objTiles;
+
 	private boolean[][] npcTiles;
 
 	@OriginalMember(owner = "mapview!mapview", name = "X", descriptor = "Lmapview!j;")
@@ -133,22 +134,22 @@ public final class mapview extends GameShell {
 	private int labelCount;
 
 	@OriginalMember(owner = "mapview!mapview", name = "F", descriptor = "I")
-	private int colorInactiveBorderTL = 0x887755;
+	private final int colorInactiveBorderTL = 0x887755;
 
 	@OriginalMember(owner = "mapview!mapview", name = "G", descriptor = "I")
-	private int colorInactive = 0x776644;
+	private final int colorInactive = 0x776644;
 
 	@OriginalMember(owner = "mapview!mapview", name = "H", descriptor = "I")
-	private int colorInactiveBorderBR = 0x665533;
+	private final int colorInactiveBorderBR = 0x665533;
 
 	@OriginalMember(owner = "mapview!mapview", name = "I", descriptor = "I")
-	private int colorActiveBorderTL = 0xaa0000;
+	private final int colorActiveBorderTL = 0xaa0000;
 
 	@OriginalMember(owner = "mapview!mapview", name = "J", descriptor = "I")
-	private int colorActive = 0x990000;
+	private final int colorActive = 0x990000;
 
 	@OriginalMember(owner = "mapview!mapview", name = "K", descriptor = "I")
-	private int colorActiveBorderBR = 0x880000;
+	private final int colorActiveBorderBR = 0x880000;
 
 	@OriginalMember(owner = "mapview!mapview", name = "L", descriptor = "Z")
 	private boolean redraw = true;
@@ -222,7 +223,7 @@ public final class mapview extends GameShell {
 	private boolean showOverview = false;
 
 	@OriginalMember(owner = "mapview!mapview", name = "Jb", descriptor = "I")
-	private int maxLabelCount = 1000;
+	private final int maxLabelCount = 1000;
 
 	@OriginalMember(owner = "mapview!mapview", name = "Kb", descriptor = "[Ljava/lang/String;")
 	private String[] labelText = new String[this.maxLabelCount];
@@ -641,20 +642,19 @@ public final class mapview extends GameShell {
 	@Override
 	protected void update() {
 		if (super.actionKey[1] == 1) {
-			this.offsetX = (int) ((double) this.offsetX - 16.0D / this.zoom);
+			this.offsetX = (int) ((double) this.offsetX - (16.0D / this.zoom));
 			this.redraw = true;
 		}
 		if (super.actionKey[2] == 1) {
-			this.offsetX = (int) ((double) this.offsetX + 16.0D / this.zoom);
+			this.offsetX = (int) ((double) this.offsetX + (16.0D / this.zoom));
 			this.redraw = true;
 		}
-
 		if (super.actionKey[3] == 1) {
-			this.offsetZ = (int) ((double) this.offsetZ - 16.0D / this.zoom);
+			this.offsetZ = (int) ((double) this.offsetZ - (16.0D / this.zoom));
 			this.redraw = true;
 		}
 		if (super.actionKey[4] == 1) {
-			this.offsetZ = (int) ((double) this.offsetZ + 16.0D / this.zoom);
+			this.offsetZ = (int) ((double) this.offsetZ + (16.0D / this.zoom));
 			this.redraw = true;
 		}
 
@@ -846,10 +846,10 @@ public final class mapview extends GameShell {
         if (top < 48) {
             this.offsetZ = (int) (503.0D / this.zoom) + 48;
         }
-        if (right > (this.sizeX - 48)) {
-            this.offsetX = this.sizeX - 48 - (int) (635.0D / this.zoom);
+        if (right > this.sizeX - 48) {
+            this.offsetX = (this.sizeX - 48) - (int) (635.0D / this.zoom);
         }
-        if (bottom > (this.sizeZ - 48)) {
+        if (bottom > this.sizeZ - 48) {
             this.offsetZ = (this.sizeZ - 48) - (int) (503.0D / this.zoom);
         }
     }
@@ -1070,7 +1070,7 @@ public final class mapview extends GameShell {
 						wall -= 4;
 					}
 					if (wall == 27 || wall == 28) {
-						// bugfix: draw diagonal active locs (doors)
+						// bugfix: drawing diagonal doors
 						rgb = 0xcc0000;
 						wall -= 2;
 					}

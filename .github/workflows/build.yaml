@@ -5,7 +5,7 @@ on:
 
 jobs:
   loader-client:
-    name: Build Loader and Client
+    name: Build Projects
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v4
@@ -23,9 +23,16 @@ jobs:
     - name: Run Gradle build
       run: gradle build -x :deob-annotations:build
 
-    - name: Upload a Build Artifact
+    - name: Upload Loader-Client Artifact
       uses: actions/upload-artifact@v3
       with:
         name: loader-client
         path: |
           loader/build/libs/*
+
+    - name: Upload Mapview Artifact
+      uses: actions/upload-artifact@v3
+      with:
+        name: mapview
+        path: |
+          mapview/build/libs/*
