@@ -3,6 +3,7 @@ package jagex2.datastruct;
 import org.openrs2.deob.annotation.OriginalClass;
 import org.openrs2.deob.annotation.OriginalMember;
 
+// name taken from jaclib
 @OriginalClass("client!db")
 public class Hashable extends Linkable {
 

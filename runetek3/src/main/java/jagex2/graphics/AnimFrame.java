@@ -7,17 +7,18 @@ import org.openrs2.deob.annotation.OriginalClass;
 import org.openrs2.deob.annotation.OriginalMember;
 import org.openrs2.deob.annotation.Pc;
 
+// name taken from runetek5
 @OriginalClass("client!g")
-public class SeqFrame {
+public class AnimFrame {
 
 	@OriginalMember(owner = "client!g", name = "a", descriptor = "[Lclient!g;")
-	public static SeqFrame[] instances;
+	public static AnimFrame[] instances;
 
 	@OriginalMember(owner = "client!g", name = "b", descriptor = "I")
 	public int delay;
 
 	@OriginalMember(owner = "client!g", name = "c", descriptor = "Lclient!f;")
-	public SeqBase base;
+	public AnimBase base;
 
 	@OriginalMember(owner = "client!g", name = "d", descriptor = "I")
 	public int length;
@@ -43,7 +44,7 @@ public class SeqFrame {
 
 		@Pc(50) int total = head.g2();
 		@Pc(53) int count = head.g2();
-		instances = new SeqFrame[count + 1];
+		instances = new AnimFrame[count + 1];
 
 		@Pc(61) int[] labels = new int[500];
 		@Pc(64) int[] x = new int[500];
@@ -52,11 +53,11 @@ public class SeqFrame {
 
 		for (@Pc(72) int i = 0; i < total; i++) {
 			@Pc(77) int id = head.g2();
-			@Pc(85) SeqFrame frame = instances[id] = new SeqFrame();
+			@Pc(85) AnimFrame frame = instances[id] = new AnimFrame();
 			frame.delay = del.g1();
 
 			@Pc(92) int baseId = head.g2();
-			@Pc(96) SeqBase base = SeqBase.instances[baseId];
+			@Pc(96) AnimBase base = AnimBase.instances[baseId];
 			frame.base = base;
 
 			@Pc(102) int groupCount = head.g1();

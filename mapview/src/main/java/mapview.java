@@ -1,7 +1,3 @@
-import java.io.*;
-import java.net.URL;
-import java.security.MessageDigest;
-
 import jagex2.client.GameShell;
 import jagex2.graphics.Draw2D;
 import jagex2.graphics.Pix24;
@@ -13,6 +9,10 @@ import org.openrs2.deob.annotation.OriginalArg;
 import org.openrs2.deob.annotation.OriginalClass;
 import org.openrs2.deob.annotation.OriginalMember;
 import org.openrs2.deob.annotation.Pc;
+
+import java.io.*;
+import java.net.URL;
+import java.security.MessageDigest;
 
 @OriginalClass("mapview!mapview")
 public final class mapview extends GameShell {

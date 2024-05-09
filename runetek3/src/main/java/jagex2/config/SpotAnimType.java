@@ -9,6 +9,7 @@ import org.openrs2.deob.annotation.OriginalClass;
 import org.openrs2.deob.annotation.OriginalMember;
 import org.openrs2.deob.annotation.Pc;
 
+// name derived from other types + spotanim.dat (it's been renamed in NXT)
 @OriginalClass("client!kc")
 public class SpotAnimType {
 

@@ -7,6 +7,7 @@ import org.openrs2.deob.annotation.OriginalMember;
 import java.awt.*;
 import java.awt.image.*;
 
+// name taken from rsc
 @OriginalClass("client!qb")
 public class PixMap implements ImageProducer, ImageObserver {
 

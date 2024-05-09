@@ -7,11 +7,12 @@ import org.openrs2.deob.annotation.OriginalClass;
 import org.openrs2.deob.annotation.OriginalMember;
 import org.openrs2.deob.annotation.Pc;
 
+// name taken from runetek5
 @OriginalClass("client!f")
-public class SeqBase {
+public class AnimBase {
 
 	@OriginalMember(owner = "client!f", name = "a", descriptor = "[Lclient!f;")
-	public static SeqBase[] instances;
+	public static AnimBase[] instances;
 
 	@OriginalMember(owner = "client!f", name = "b", descriptor = "I")
 	public int length;
@@ -30,7 +31,7 @@ public class SeqBase {
 
 		@Pc(34) int total = head.g2();
 		@Pc(37) int count = head.g2();
-		instances = new SeqBase[count + 1];
+		instances = new AnimBase[count + 1];
 
 		for (@Pc(50) int i = 0; i < total; i++) {
 			@Pc(55) int id = head.g2();
@@ -50,7 +51,7 @@ public class SeqBase {
 				}
 			}
 
-			instances[id] = new SeqBase();
+			instances[id] = new AnimBase();
 			instances[id].length = length;
 			instances[id].types = transformTypes;
 			instances[id].labels = groupLabels;

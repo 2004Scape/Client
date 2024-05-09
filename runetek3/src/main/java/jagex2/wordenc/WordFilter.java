@@ -3,9 +3,12 @@ package jagex2.wordenc;
 import jagex2.io.Jagfile;
 import jagex2.io.Packet;
 import org.openrs2.deob.annotation.OriginalArg;
+import org.openrs2.deob.annotation.OriginalClass;
 import org.openrs2.deob.annotation.OriginalMember;
 import org.openrs2.deob.annotation.Pc;
 
+// name taken from rsc
+@OriginalClass("client!mc")
 public class WordFilter {
 
 	@OriginalMember(owner = "client!mc", name = "j", descriptor = "[I")

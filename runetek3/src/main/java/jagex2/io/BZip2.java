@@ -5,6 +5,8 @@ import org.openrs2.deob.annotation.OriginalClass;
 import org.openrs2.deob.annotation.OriginalMember;
 import org.openrs2.deob.annotation.Pc;
 
+// name and packaging confirmed 100% in rs2/mapview applet strings
+@OriginalClass("client!rb")
 public class BZip2 {
 
 	@OriginalMember(owner = "client!rb", name = "a", descriptor = "Lclient!sb;")
@@ -649,6 +651,7 @@ public class BZip2 {
 		}
 	}
 
+	// rsc and rs3 says this is an inner class
 	@OriginalClass("client!sb")
 	public static final class BZip2State {
 

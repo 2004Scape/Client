@@ -5,6 +5,7 @@ import org.openrs2.deob.annotation.OriginalClass;
 import org.openrs2.deob.annotation.OriginalMember;
 import org.openrs2.deob.annotation.Pc;
 
+// name taken from jaclib
 @OriginalClass("client!t")
 public class HashTable {
 

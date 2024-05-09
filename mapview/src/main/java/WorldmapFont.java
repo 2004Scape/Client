@@ -1,16 +1,12 @@
-import java.awt.Color;
-import java.awt.Font;
-import java.awt.FontMetrics;
-import java.awt.Graphics;
-import java.awt.Image;
-import java.awt.image.PixelGrabber;
-
 import jagex2.client.GameShell;
 import jagex2.graphics.Draw2D;
 import org.openrs2.deob.annotation.OriginalArg;
 import org.openrs2.deob.annotation.OriginalClass;
 import org.openrs2.deob.annotation.OriginalMember;
 import org.openrs2.deob.annotation.Pc;
+
+import java.awt.*;
+import java.awt.image.PixelGrabber;
 
 @OriginalClass("mapview!g")
 public final class WorldmapFont extends Draw2D {

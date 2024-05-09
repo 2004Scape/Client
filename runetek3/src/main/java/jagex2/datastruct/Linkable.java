@@ -3,6 +3,7 @@ package jagex2.datastruct;
 import org.openrs2.deob.annotation.OriginalClass;
 import org.openrs2.deob.annotation.OriginalMember;
 
+// name and packaging confirmed 100% in rs2/mapview applet strings
 @OriginalClass("client!u")
 public class Linkable {
 

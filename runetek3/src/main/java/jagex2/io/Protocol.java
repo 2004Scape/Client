@@ -1,7 +1,9 @@
 package jagex2.io;
 
+import org.openrs2.deob.annotation.OriginalClass;
 import org.openrs2.deob.annotation.OriginalMember;
 
+@OriginalClass("client!dc")
 public class Protocol {
 
 	@OriginalMember(owner = "client!dc", name = "a", descriptor = "[I")

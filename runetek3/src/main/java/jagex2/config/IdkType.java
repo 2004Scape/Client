@@ -8,6 +8,7 @@ import org.openrs2.deob.annotation.OriginalClass;
 import org.openrs2.deob.annotation.OriginalMember;
 import org.openrs2.deob.annotation.Pc;
 
+// name taken from rs3
 @OriginalClass("client!gc")
 public class IdkType {
 

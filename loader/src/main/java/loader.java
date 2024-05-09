@@ -1,15 +1,12 @@
+import sign.signlink;
+
 import java.applet.Applet;
-import java.awt.Color;
-import java.awt.Font;
-import java.awt.FontMetrics;
-import java.awt.Graphics;
+import java.awt.*;
 import java.io.InputStream;
 import java.net.InetAddress;
 import java.net.URL;
 import java.security.MessageDigest;
 import java.util.zip.ZipFile;
-
-import sign.signlink;
 
 public class loader extends Applet implements Runnable {
 	private static final int swid = 789;

@@ -12,9 +12,9 @@ import org.openrs2.deob.annotation.OriginalClass;
 import org.openrs2.deob.annotation.OriginalMember;
 import org.openrs2.deob.annotation.Pc;
 
-// Interface Component - doesn't quite belong under config...
+// rs3 has this as config.iftype.Component
 @OriginalClass("client!hc")
-public class ComType {
+public class Component {
 
 	public static final int TYPE_LAYER = 0;
 	public static final int TYPE_UNUSED = 1; // TODO: decodes g2, gbool, center, font, shadowed, colour
@@ -33,7 +33,7 @@ public class ComType {
 	public static final int BUTTON_CONTINUE = 6;
 
 	@OriginalMember(owner = "client!hc", name = "c", descriptor = "[Lclient!hc;")
-	public static ComType[] instances;
+	public static Component[] instances;
 
 	@OriginalMember(owner = "client!hc", name = "d", descriptor = "[I")
 	public int[] invSlotObjId;
@@ -280,7 +280,7 @@ public class ComType {
 		@Pc(29) int layer = -1;
 
 		@Pc(32) int count = dat.g2();
-		instances = new ComType[count];
+		instances = new Component[count];
 
 		while (dat.pos < dat.data.length) {
 			@Pc(45) int id = dat.g2();
@@ -289,7 +289,7 @@ public class ComType {
 				id = dat.g2();
 			}
 
-			@Pc(62) ComType com = instances[id] = new ComType();
+			@Pc(62) Component com = instances[id] = new Component();
 			com.id = id;
 			com.layer = layer;
 			com.type = dat.g1();

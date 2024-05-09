@@ -13,6 +13,7 @@ import org.openrs2.deob.annotation.OriginalClass;
 import org.openrs2.deob.annotation.OriginalMember;
 import org.openrs2.deob.annotation.Pc;
 
+// name and packaging confirmed 100% in rs2/mapview applet strings
 @OriginalClass("client!c")
 public class World {
 

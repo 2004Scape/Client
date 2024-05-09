@@ -10,6 +10,7 @@ import org.openrs2.deob.annotation.Pc;
 import java.awt.*;
 import java.awt.image.PixelGrabber;
 
+// name derived from Pix8
 @OriginalClass("client!hb")
 public class Pix24 extends Draw2D {
 

@@ -1,9 +1,13 @@
 package jagex2.datastruct;
 
 import org.openrs2.deob.annotation.OriginalArg;
+import org.openrs2.deob.annotation.OriginalClass;
 import org.openrs2.deob.annotation.OriginalMember;
 import org.openrs2.deob.annotation.Pc;
 
+// name and packaging confirmed 100% in rs2/mapview applet strings
+// later repackaged under jagex2/jstring
+@OriginalClass("client!vb")
 public class JString {
 
 	@OriginalMember(owner = "client!vb", name = "f", descriptor = "[C")

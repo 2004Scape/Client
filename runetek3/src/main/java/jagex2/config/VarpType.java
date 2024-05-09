@@ -7,6 +7,7 @@ import org.openrs2.deob.annotation.OriginalClass;
 import org.openrs2.deob.annotation.OriginalMember;
 import org.openrs2.deob.annotation.Pc;
 
+// name derived from other types + varp.dat (rs3 has this as VarPlayerType)
 @OriginalClass("client!lc")
 public class VarpType {
 

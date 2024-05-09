@@ -7,6 +7,7 @@ import org.openrs2.deob.annotation.Pc;
 
 import java.awt.*;
 
+// name taken from rsc
 @OriginalClass("client!b")
 public class ViewBox extends Frame {
 

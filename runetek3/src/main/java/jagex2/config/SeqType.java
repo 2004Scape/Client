@@ -1,6 +1,6 @@
 package jagex2.config;
 
-import jagex2.graphics.SeqFrame;
+import jagex2.graphics.AnimFrame;
 import jagex2.io.Jagfile;
 import jagex2.io.Packet;
 import org.openrs2.deob.annotation.OriginalArg;
@@ -8,6 +8,7 @@ import org.openrs2.deob.annotation.OriginalClass;
 import org.openrs2.deob.annotation.OriginalMember;
 import org.openrs2.deob.annotation.Pc;
 
+// name taken from rs3
 @OriginalClass("client!jc")
 public class SeqType {
 
@@ -92,7 +93,7 @@ public class SeqType {
 
 					this.delay[i] = dat.g2();
 					if (this.delay[i] == 0) {
-						this.delay[i] = SeqFrame.instances[this.frames[i]].delay;
+						this.delay[i] = AnimFrame.instances[this.frames[i]].delay;
 					}
 
 					if (this.delay[i] == 0) {

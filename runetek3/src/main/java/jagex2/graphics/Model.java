@@ -1180,8 +1180,8 @@ public class Model extends Hashable {
 	@OriginalMember(owner = "client!eb", name = "a", descriptor = "(II)V")
 	public void applyTransform(@OriginalArg(1) int id) {
 		if (this.labelVertices != null && id != -1) {
-			@Pc(11) SeqFrame transform = SeqFrame.instances[id];
-			@Pc(14) SeqBase skeleton = transform.base;
+			@Pc(11) AnimFrame transform = AnimFrame.instances[id];
+			@Pc(14) AnimBase skeleton = transform.base;
 			baseX = 0;
 			baseY = 0;
 			baseZ = 0;
@@ -1201,9 +1201,9 @@ public class Model extends Hashable {
 		if (mask == null || secondaryId == -1) {
 			this.applyTransform(primaryId);
 		} else {
-			@Pc(19) SeqFrame primary = SeqFrame.instances[primaryId];
-			@Pc(32) SeqFrame secondary = SeqFrame.instances[secondaryId];
-			@Pc(35) SeqBase skeleton = primary.base;
+			@Pc(19) AnimFrame primary = AnimFrame.instances[primaryId];
+			@Pc(32) AnimFrame secondary = AnimFrame.instances[secondaryId];
+			@Pc(35) AnimBase skeleton = primary.base;
 
 			baseX = 0;
 			baseY = 0;

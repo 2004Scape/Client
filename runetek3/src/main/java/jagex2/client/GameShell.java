@@ -10,8 +10,8 @@ import org.openrs2.deob.annotation.Pc;
 import java.applet.Applet;
 import java.awt.*;
 import java.awt.event.*;
-import java.net.InetAddress;
 
+// name taken from rsc
 @OriginalClass("client!a")
 public class GameShell extends Applet implements Runnable, MouseListener, MouseMotionListener, KeyListener, FocusListener, WindowListener {
 

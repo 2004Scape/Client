@@ -9,6 +9,7 @@ import org.openrs2.deob.annotation.Pc;
 
 import java.math.BigInteger;
 
+// name and packaging confirmed 100% in rs2/mapview applet strings
 @OriginalClass("client!kb")
 public class Packet extends Hashable {
 
