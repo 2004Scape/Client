@@ -182,12 +182,12 @@ public class Draw3D extends Draw2D {
 		@Pc(17) int b = 0;
 		@Pc(22) int length = texturePalette[id].length;
 		for (@Pc(24) int i = 0; i < length; i++) {
-			r += texturePalette[id][i] >> 16 & 0xFF;
-			g += texturePalette[id][i] >> 8 & 0xFF;
+            r += (texturePalette[id][i] >> 16) & 0xFF;
+            g += (texturePalette[id][i] >> 8) & 0xFF;
 			b += texturePalette[id][i] & 0xFF;
 		}
 
-		@Pc(80) int rgb = (r / length << 16) + (g / length << 8) + b / length;
+		@Pc(80) int rgb = ((r / length) << 16) + ((g / length) << 8) + (b / length);
 		rgb = setGamma(rgb, 1.4D);
 		if (rgb == 0) {
 			rgb = 1;
@@ -370,25 +370,36 @@ public class Draw3D extends Draw2D {
 
 	@OriginalMember(owner = "client!gb", name = "a", descriptor = "(IIIIIIIII)V")
 	public static void fillGouraudTriangle(@OriginalArg(3) int xA, @OriginalArg(4) int xB, @OriginalArg(5) int xC, @OriginalArg(0) int yA, @OriginalArg(1) int yB, @OriginalArg(2) int yC, @OriginalArg(6) int colorA, @OriginalArg(7) int colorB, @OriginalArg(8) int colorC) {
+		int dxAB = xB - xA;
+		int dyAB = yB - yA;
+		int dxAC = xC - xA;
+		int dyAC = yC - yA;
+
 		@Pc(3) int xStepAB = 0;
 		@Pc(5) int colorStepAB = 0;
 		if (yB != yA) {
-			xStepAB = (xB - xA << 16) / (yB - yA);
-			colorStepAB = (colorB - colorA << 15) / (yB - yA);
+			xStepAB = (dxAB << 16) / dyAB;
+            colorStepAB = ((colorB - colorA) << 15) / dyAB;
 		}
 
 		@Pc(30) int xStepBC = 0;
 		@Pc(32) int colorStepBC = 0;
 		if (yC != yB) {
-			xStepBC = (xC - xB << 16) / (yC - yB);
-			colorStepBC = (colorC - colorB << 15) / (yC - yB);
+            xStepBC = ((xC - xB) << 16) / (yC - yB);
+            colorStepBC = ((colorC - colorB) << 15) / (yC - yB);
 		}
 
 		@Pc(57) int xStepAC = 0;
 		@Pc(59) int colorStepAC = 0;
 		if (yC != yA) {
-			xStepAC = (xA - xC << 16) / (yA - yC);
-			colorStepAC = (colorA - colorC << 15) / (yA - yC);
+            xStepAC = ((xA - xC) << 16) / (yA - yC);
+            colorStepAC = ((colorA - colorC) << 15) / (yA - yC);
+		}
+
+		// this won't change any rendering, saves not wasting time "drawing" an invalid triangle
+		int triangleArea = (dxAB * dyAC) - (dyAB * dxAC);
+		if (triangleArea == 0) {
+			return;
 		}
 
 		if (yA <= yB && yA <= yC) {
@@ -813,22 +824,27 @@ public class Draw3D extends Draw2D {
 				} else {
 					colorStep = 0;
 				}
+
 				if (x1 > boundX) {
 					x1 = boundX;
 				}
+
 				if (x0 < 0) {
 					color0 -= x0 * colorStep;
 					x0 = 0;
 				}
+
 				if (x0 >= x1) {
 					return;
 				}
+
 				offset += x0;
-				length = x1 - x0 >> 2;
+                length = (x1 - x0) >> 2;
 				colorStep <<= 0x2;
 			} else if (x0 < x1) {
 				offset += x0;
-				length = x1 - x0 >> 2;
+                length = (x1 - x0) >> 2;
+
 				if (length > 0) {
 					colorStep = (color1 - color0) * reciprocal15[length] >> 15;
 				} else {
@@ -839,104 +855,116 @@ public class Draw3D extends Draw2D {
 			}
 
 			if (alpha == 0) {
-				while (true) {
-					length--;
-					if (length < 0) {
-						length = x1 - x0 & 0x3;
-						if (length > 0) {
-							rgb = palette[color0 >> 8];
-							do {
-								dst[offset++] = rgb;
-								length--;
-							} while (length > 0);
-							return;
-						}
-						break;
-					}
+				while (--length >= 0) {
 					rgb = palette[color0 >> 8];
 					color0 += colorStep;
+
 					dst[offset++] = rgb;
 					dst[offset++] = rgb;
 					dst[offset++] = rgb;
 					dst[offset++] = rgb;
 				}
+
+                length = (x1 - x0) & 0x3;
+				if (length > 0) {
+					rgb = palette[color0 >> 8];
+
+					while (--length >= 0) {
+						dst[offset++] = rgb;
+					}
+				}
 			} else {
 				int alpha = Draw3D.alpha;
 				int invAlpha = 256 - Draw3D.alpha;
-				while (true) {
-					length--;
-					if (length < 0) {
-						length = x1 - x0 & 0x3;
-						if (length > 0) {
-							rgb = palette[color0 >> 8];
-							rgb = ((rgb & 0xFF00FF) * invAlpha >> 8 & 0xFF00FF) + ((rgb & 0xFF00) * invAlpha >> 8 & 0xFF00);
-							do {
-								dst[offset++] = rgb + ((dst[offset] & 0xFF00FF) * alpha >> 8 & 0xFF00FF) + ((dst[offset] & 0xFF00) * alpha >> 8 & 0xFF00);
-								length--;
-							} while (length > 0);
-						}
-						break;
-					}
+
+				while (--length >= 0) {
 					rgb = palette[color0 >> 8];
 					color0 += colorStep;
-					rgb = ((rgb & 0xFF00FF) * invAlpha >> 8 & 0xFF00FF) + ((rgb & 0xFF00) * invAlpha >> 8 & 0xFF00);
-					dst[offset++] = rgb + ((dst[offset] & 0xFF00FF) * alpha >> 8 & 0xFF00FF) + ((dst[offset] & 0xFF00) * alpha >> 8 & 0xFF00);
-					dst[offset++] = rgb + ((dst[offset] & 0xFF00FF) * alpha >> 8 & 0xFF00FF) + ((dst[offset] & 0xFF00) * alpha >> 8 & 0xFF00);
-					dst[offset++] = rgb + ((dst[offset] & 0xFF00FF) * alpha >> 8 & 0xFF00FF) + ((dst[offset] & 0xFF00) * alpha >> 8 & 0xFF00);
-					dst[offset++] = rgb + ((dst[offset] & 0xFF00FF) * alpha >> 8 & 0xFF00FF) + ((dst[offset] & 0xFF00) * alpha >> 8 & 0xFF00);
+
+                    rgb = ((((rgb & 0xFF00FF) * invAlpha) >> 8) & 0xFF00FF) + ((((rgb & 0xFF00) * invAlpha) >> 8) & 0xFF00);
+                    dst[offset++] = rgb + ((((dst[offset] & 0xFF00FF) * alpha) >> 8) & 0xFF00FF) + ((((dst[offset] & 0xFF00) * alpha) >> 8) & 0xFF00);
+                    dst[offset++] = rgb + ((((dst[offset] & 0xFF00FF) * alpha) >> 8) & 0xFF00FF) + ((((dst[offset] & 0xFF00) * alpha) >> 8) & 0xFF00);
+                    dst[offset++] = rgb + ((((dst[offset] & 0xFF00FF) * alpha) >> 8) & 0xFF00FF) + ((((dst[offset] & 0xFF00) * alpha) >> 8) & 0xFF00);
+                    dst[offset++] = rgb + ((((dst[offset] & 0xFF00FF) * alpha) >> 8) & 0xFF00FF) + ((((dst[offset] & 0xFF00) * alpha) >> 8) & 0xFF00);
+				}
+
+                length = (x1 - x0) & 0x3;
+				if (length > 0) {
+					rgb = palette[color0 >> 8];
+                    rgb = ((((rgb & 0xFF00FF) * invAlpha) >> 8) & 0xFF00FF) + ((((rgb & 0xFF00) * invAlpha) >> 8) & 0xFF00);
+
+					while (--length >= 0) {
+                        dst[offset++] = rgb + ((((dst[offset] & 0xFF00FF) * alpha) >> 8) & 0xFF00FF) + ((((dst[offset] & 0xFF00) * alpha) >> 8) & 0xFF00);
+					}
 				}
 			}
 		} else if (x0 < x1) {
 			int colorStep = (color1 - color0) / (x1 - x0);
+
 			if (clipX) {
 				if (x1 > boundX) {
 					x1 = boundX;
 				}
+
 				if (x0 < 0) {
 					color0 -= x0 * colorStep;
 					x0 = 0;
 				}
+
 				if (x0 >= x1) {
 					return;
 				}
 			}
+
 			offset += x0;
 			length = x1 - x0;
+
 			if (alpha == 0) {
-				do {
+				while (--length >= 0) {
 					dst[offset++] = palette[color0 >> 8];
 					color0 += colorStep;
-					length--;
-				} while (length > 0);
+				}
 			} else {
 				int alpha = Draw3D.alpha;
 				int invAlpha = 256 - Draw3D.alpha;
-				do {
+
+				while (--length >= 0) {
 					rgb = palette[color0 >> 8];
 					color0 += colorStep;
-					rgb = ((rgb & 0xFF00FF) * invAlpha >> 8 & 0xFF00FF) + ((rgb & 0xFF00) * invAlpha >> 8 & 0xFF00);
-					dst[offset++] = rgb + ((dst[offset] & 0xFF00FF) * alpha >> 8 & 0xFF00FF) + ((dst[offset] & 0xFF00) * alpha >> 8 & 0xFF00);
-					length--;
-				} while (length > 0);
+
+                    rgb = ((((rgb & 0xFF00FF) * invAlpha) >> 8) & 0xFF00FF) + ((((rgb & 0xFF00) * invAlpha) >> 8) & 0xFF00);
+                    dst[offset++] = rgb + ((((dst[offset] & 0xFF00FF) * alpha) >> 8) & 0xFF00FF) + ((((dst[offset] & 0xFF00) * alpha) >> 8) & 0xFF00);
+				}
 			}
 		}
 	}
 
 	@OriginalMember(owner = "client!gb", name = "a", descriptor = "(IIIIIII)V")
 	public static void fillTriangle(@OriginalArg(3) int xA, @OriginalArg(4) int xB, @OriginalArg(5) int xC, @OriginalArg(0) int yA, @OriginalArg(1) int yB, @OriginalArg(2) int yC, @OriginalArg(6) int color) {
+		int dxAB = xB - xA;
+		int dyAB = yB - yA;
+		int dxAC = xC - xA;
+		int dyAC = yC - yA;
+
 		@Pc(3) int xStepAB = 0;
 		if (yB != yA) {
-			xStepAB = (xB - xA << 16) / (yB - yA);
+			xStepAB = (dxAB << 16) / dyAB;
 		}
 
 		@Pc(18) int xStepBC = 0;
 		if (yC != yB) {
-			xStepBC = (xC - xB << 16) / (yC - yB);
+            xStepBC = ((xC - xB) << 16) / (yC - yB);
 		}
 
 		@Pc(33) int xStepAC = 0;
 		if (yC != yA) {
-			xStepAC = (xA - xC << 16) / (yA - yC);
+            xStepAC = ((xA - xC) << 16) / (yA - yC);
+		}
+
+		// this won't change any rendering, saves not wasting time "drawing" an invalid triangle
+		int triangleArea = (dxAB * dyAC) - (dyAB * dxAC);
+		if (triangleArea == 0) {
+			return;
 		}
 
 		if (yA <= yB && yA <= yC) {
@@ -1276,6 +1304,7 @@ public class Draw3D extends Draw2D {
 			if (x1 > boundX) {
 				x1 = boundX;
 			}
+
 			if (x0 < 0) {
 				x0 = 0;
 			}
@@ -1286,49 +1315,36 @@ public class Draw3D extends Draw2D {
 		}
 
 		offset += x0;
-		@Pc(26) int length = x1 - x0 >> 2;
+		@Pc(26) int length = (x1 - x0) >> 2;
 
 		if (alpha == 0) {
-			while (true) {
-				length--;
-				if (length < 0) {
-					length = x1 - x0 & 0x3;
-					while (true) {
-						length--;
-						if (length < 0) {
-							return;
-						}
-						dst[offset++] = rgb;
-					}
-				}
+			while (--length >= 0) {
 				dst[offset++] = rgb;
 				dst[offset++] = rgb;
 				dst[offset++] = rgb;
 				dst[offset++] = rgb;
 			}
-		}
 
-		@Pc(72) int alpha = Draw3D.alpha;
-		@Pc(76) int invAlpha = 256 - Draw3D.alpha;
-		rgb = ((rgb & 0xFF00FF) * invAlpha >> 8 & 0xFF00FF) + ((rgb & 0xFF00) * invAlpha >> 8 & 0xFF00);
+            length = (x1 - x0) & 0x3;
+			while (--length >= 0) {
+				dst[offset++] = rgb;
+			}
+		} else {
+			@Pc(72) int alpha = Draw3D.alpha;
+			@Pc(76) int invAlpha = 256 - Draw3D.alpha;
+			rgb = ((rgb & 0xFF00FF) * invAlpha >> 8 & 0xFF00FF) + ((rgb & 0xFF00) * invAlpha >> 8 & 0xFF00);
 
-		while (true) {
-			length--;
-			if (length < 0) {
-				length = x1 - x0 & 0x3;
-				while (true) {
-					length--;
-					if (length < 0) {
-						return;
-					}
-					dst[offset++] = rgb + ((dst[offset] & 0xFF00FF) * alpha >> 8 & 0xFF00FF) + ((dst[offset] & 0xFF00) * alpha >> 8 & 0xFF00);
-				}
+			while (--length >= 0) {
+				dst[offset++] = rgb + ((((dst[offset] & 0xFF00FF) * alpha) >> 8) & 0xFF00FF) + ((((dst[offset] & 0xFF00) * alpha) >> 8) & 0xFF00);
+				dst[offset++] = rgb + ((((dst[offset] & 0xFF00FF) * alpha) >> 8) & 0xFF00FF) + ((((dst[offset] & 0xFF00) * alpha) >> 8) & 0xFF00);
+				dst[offset++] = rgb + ((((dst[offset] & 0xFF00FF) * alpha) >> 8) & 0xFF00FF) + ((((dst[offset] & 0xFF00) * alpha) >> 8) & 0xFF00);
+				dst[offset++] = rgb + ((((dst[offset] & 0xFF00FF) * alpha) >> 8) & 0xFF00FF) + ((((dst[offset] & 0xFF00) * alpha) >> 8) & 0xFF00);
 			}
 
-			dst[offset++] = rgb + ((dst[offset] & 0xFF00FF) * alpha >> 8 & 0xFF00FF) + ((dst[offset] & 0xFF00) * alpha >> 8 & 0xFF00);
-			dst[offset++] = rgb + ((dst[offset] & 0xFF00FF) * alpha >> 8 & 0xFF00FF) + ((dst[offset] & 0xFF00) * alpha >> 8 & 0xFF00);
-			dst[offset++] = rgb + ((dst[offset] & 0xFF00FF) * alpha >> 8 & 0xFF00FF) + ((dst[offset] & 0xFF00) * alpha >> 8 & 0xFF00);
-			dst[offset++] = rgb + ((dst[offset] & 0xFF00FF) * alpha >> 8 & 0xFF00FF) + ((dst[offset] & 0xFF00) * alpha >> 8 & 0xFF00);
+			length = (x1 - x0) & 0x3;
+			while (--length >= 0) {
+				dst[offset++] = rgb + ((((dst[offset] & 0xFF00FF) * alpha) >> 8) & 0xFF00FF) + ((((dst[offset] & 0xFF00) * alpha) >> 8) & 0xFF00);
+			}
 		}
 	}
 
@@ -1345,37 +1361,48 @@ public class Draw3D extends Draw2D {
 		@Pc(32) int horizontalY = tyC - originY;
 		@Pc(36) int horizontalZ = tzC - originZ;
 
-		@Pc(46) int u = horizontalX * originY - horizontalY * originX << 14;
-		@Pc(56) int uStride = horizontalY * originZ - horizontalZ * originY << 8;
-		@Pc(66) int uStepVertical = horizontalZ * originX - horizontalX * originZ << 5;
+		@Pc(46) int u = ((horizontalX * originY) - (horizontalY * originX)) << 14;
+		@Pc(56) int uStride = ((horizontalY * originZ) - (horizontalZ * originY)) << 8;
+		@Pc(66) int uStepVertical = ((horizontalZ * originX) - (horizontalX * originZ)) << 5;
 
-		@Pc(76) int v = verticalX * originY - verticalY * originX << 14;
-		@Pc(86) int vStride = verticalY * originZ - verticalZ * originY << 8;
-		@Pc(96) int vStepVertical = verticalZ * originX - verticalX * originZ << 5;
+		@Pc(76) int v = ((verticalX * originY) - (verticalY * originX)) << 14;
+		@Pc(86) int vStride = ((verticalY * originZ) - (verticalZ * originY)) << 8;
+		@Pc(96) int vStepVertical = ((verticalZ * originX) - (verticalX * originZ)) << 5;
 
-		@Pc(106) int w = verticalY * horizontalX - verticalX * horizontalY << 14;
-		@Pc(116) int wStride = verticalZ * horizontalY - verticalY * horizontalZ << 8;
-		@Pc(126) int wStepVertical = verticalX * horizontalZ - verticalZ * horizontalX << 5;
+		@Pc(106) int w = ((verticalY * horizontalX) - (verticalX * horizontalY)) << 14;
+		@Pc(116) int wStride = ((verticalZ * horizontalY) - (verticalY * horizontalZ)) << 8;
+		@Pc(126) int wStepVertical = ((verticalX * horizontalZ) - (verticalZ * horizontalX)) << 5;
+
+		int dxAB = xB - xA;
+		int dyAB = yB - yA;
+		int dxAC = xC - xA;
+		int dyAC = yC - yA;
 
 		@Pc(128) int xStepAB = 0;
 		@Pc(130) int shadeStepAB = 0;
 		if (yB != yA) {
-			xStepAB = (xB - xA << 16) / (yB - yA);
-			shadeStepAB = (shadeB - shadeA << 16) / (yB - yA);
+			xStepAB = (dxAB << 16) / dyAB;
+            shadeStepAB = ((shadeB - shadeA) << 16) / dyAB;
 		}
 
 		@Pc(155) int xStepBC = 0;
 		@Pc(157) int shadeStepBC = 0;
 		if (yC != yB) {
-			xStepBC = (xC - xB << 16) / (yC - yB);
-			shadeStepBC = (shadeC - shadeB << 16) / (yC - yB);
+            xStepBC = ((xC - xB) << 16) / (yC - yB);
+            shadeStepBC = ((shadeC - shadeB) << 16) / (yC - yB);
 		}
 
 		@Pc(182) int xStepAC = 0;
 		@Pc(184) int shadeStepAC = 0;
 		if (yC != yA) {
-			xStepAC = (xA - xC << 16) / (yA - yC);
-			shadeStepAC = (shadeA - shadeC << 16) / (yA - yC);
+            xStepAC = ((xA - xC) << 16) / (yA - yC);
+            shadeStepAC = ((shadeA - shadeC) << 16) / (yA - yC);
+		}
+
+		// this won't change any rendering, saves not wasting time "drawing" an invalid triangle
+		int triangleArea = (dxAB * dyAC) - (dyAB * dxAC);
+		if (triangleArea == 0) {
+			return;
 		}
 
 		if (yA <= yB && yA <= yC) {
@@ -1913,12 +1940,12 @@ public class Draw3D extends Draw2D {
 				return;
 			}
 
-			strides = xB - xA >> 3;
+            strides = (xB - xA) >> 3;
 			shadeStrides <<= 0xC;
 			shadeA <<= 0x9;
 		} else {
 			if (xB - xA > 7) {
-				strides = xB - xA >> 3;
+                strides = (xB - xA) >> 3;
 				shadeStrides = (shadeB - shadeA) * reciprocal15[strides] >> 6;
 			} else {
 				strides = 0;
@@ -1930,92 +1957,102 @@ public class Draw3D extends Draw2D {
 
 		offset += xA;
 
-		@Pc(89) int nextU;
-		@Pc(91) int nextV;
-		@Pc(123) int curW;
-		@Pc(95) int dx;
-		@Pc(188) int stepU;
-		@Pc(194) int stepV;
-		@Pc(206) int shadeShift;
 		if (lowMemory) {
-			nextU = 0;
-			nextV = 0;
-			dx = xA - centerX;
+			int nextU = 0;
+			int nextV = 0;
+			int dx = xA - centerX;
+
 			u = u + (uStride >> 3) * dx;
 			v = v + (vStride >> 3) * dx;
 			w = w + (wStride >> 3) * dx;
-			curW = w >> 12;
+
+			int curW = w >> 12;
 			if (curW != 0) {
 				curU = u / curW;
 				curV = v / curW;
 				if (curU < 0) {
 					curU = 0;
-				} else if (curU > 4032) {
-					curU = 4032;
+				} else if (curU > 0xfc0) {
+					curU = 0xfc0;
 				}
 			}
+
 			u = u + uStride;
 			v = v + vStride;
 			w = w + wStride;
+
 			curW = w >> 12;
 			if (curW != 0) {
 				nextU = u / curW;
 				nextV = v / curW;
-				if (nextU < 7) {
-					nextU = 7;
-				} else if (nextU > 4032) {
-					nextU = 4032;
+				if (nextU < 0x7) {
+					nextU = 0x7;
+				} else if (nextU > 0xfc0) {
+					nextU = 0xfc0;
 				}
 			}
-			stepU = nextU - curU >> 3;
-			stepV = nextV - curV >> 3;
-			curU += shadeA >> 3 & 0xC0000;
-			shadeShift = shadeA >> 23;
+
+			int stepU = (nextU - curU) >> 3;
+			int stepV = (nextV - curV) >> 3;
+            curU += (shadeA >> 3) & 0xC0000;
+			int shadeShift = shadeA >> 23;
+
 			if (opaque) {
 				while (strides-- > 0) {
 					dst[offset++] = texels[(curV & 0xFC0) + (curU >> 6)] >>> shadeShift;
 					curU += stepU;
 					curV += stepV;
+
 					dst[offset++] = texels[(curV & 0xFC0) + (curU >> 6)] >>> shadeShift;
 					curU += stepU;
 					curV += stepV;
+
 					dst[offset++] = texels[(curV & 0xFC0) + (curU >> 6)] >>> shadeShift;
 					curU += stepU;
 					curV += stepV;
+
 					dst[offset++] = texels[(curV & 0xFC0) + (curU >> 6)] >>> shadeShift;
 					curU += stepU;
 					curV += stepV;
+
 					dst[offset++] = texels[(curV & 0xFC0) + (curU >> 6)] >>> shadeShift;
 					curU += stepU;
 					curV += stepV;
+
 					dst[offset++] = texels[(curV & 0xFC0) + (curU >> 6)] >>> shadeShift;
 					curU += stepU;
 					curV += stepV;
+
 					dst[offset++] = texels[(curV & 0xFC0) + (curU >> 6)] >>> shadeShift;
 					curU += stepU;
 					curV += stepV;
+
 					dst[offset++] = texels[(curV & 0xFC0) + (curU >> 6)] >>> shadeShift;
 					curU = nextU;
 					curV = nextV;
+
 					u += uStride;
 					v += vStride;
 					w += wStride;
+
 					curW = w >> 12;
 					if (curW != 0) {
 						nextU = u / curW;
 						nextV = v / curW;
-						if (nextU < 7) {
-							nextU = 7;
-						} else if (nextU > 4032) {
-							nextU = 4032;
+						if (nextU < 0x7) {
+							nextU = 0x7;
+						} else if (nextU > 0xfc0) {
+							nextU = 0xfc0;
 						}
 					}
-					stepU = nextU - curU >> 3;
-					stepV = nextV - curV >> 3;
+
+                    stepU = (nextU - curU) >> 3;
+                    stepV = (nextV - curV) >> 3;
 					shadeA += shadeStrides;
-					curU += shadeA >> 3 & 0xC0000;
+                    curU += (shadeA >> 3) & 0xC0000;
 					shadeShift = shadeA >> 23;
 				}
+
 				strides = xB - xA & 0x7;
 				while (strides-- > 0) {
 					dst[offset++] = texels[(curV & 0xFC0) + (curU >> 6)] >>> shadeShift;
@@ -2028,248 +2065,288 @@ public class Draw3D extends Draw2D {
 					if ((rgb = texels[(curV & 0xFC0) + (curU >> 6)] >>> shadeShift) != 0) {
 						dst[offset] = rgb;
 					}
-					offset = offset + 1;
+					offset++;
 					curU += stepU;
 					curV += stepV;
+
 					if ((rgb = texels[(curV & 0xFC0) + (curU >> 6)] >>> shadeShift) != 0) {
 						dst[offset] = rgb;
 					}
 					offset++;
 					curU += stepU;
 					curV += stepV;
+
 					if ((rgb = texels[(curV & 0xFC0) + (curU >> 6)] >>> shadeShift) != 0) {
 						dst[offset] = rgb;
 					}
 					offset++;
 					curU += stepU;
 					curV += stepV;
+
 					if ((rgb = texels[(curV & 0xFC0) + (curU >> 6)] >>> shadeShift) != 0) {
 						dst[offset] = rgb;
 					}
 					offset++;
 					curU += stepU;
 					curV += stepV;
+
 					if ((rgb = texels[(curV & 0xFC0) + (curU >> 6)] >>> shadeShift) != 0) {
 						dst[offset] = rgb;
 					}
 					offset++;
 					curU += stepU;
 					curV += stepV;
+
 					if ((rgb = texels[(curV & 0xFC0) + (curU >> 6)] >>> shadeShift) != 0) {
 						dst[offset] = rgb;
 					}
 					offset++;
 					curU += stepU;
 					curV += stepV;
+
 					if ((rgb = texels[(curV & 0xFC0) + (curU >> 6)] >>> shadeShift) != 0) {
 						dst[offset] = rgb;
 					}
 					offset++;
 					curU += stepU;
 					curV += stepV;
+
 					if ((rgb = texels[(curV & 0xFC0) + (curU >> 6)] >>> shadeShift) != 0) {
 						dst[offset] = rgb;
 					}
-					offset = offset + 1;
+					offset++;
 					curU = nextU;
 					curV = nextV;
+
 					u += uStride;
 					v += vStride;
 					w += wStride;
+
 					curW = w >> 12;
 					if (curW != 0) {
 						nextU = u / curW;
 						nextV = v / curW;
 						if (nextU < 7) {
 							nextU = 7;
-						} else if (nextU > 4032) {
-							nextU = 4032;
+						} else if (nextU > 0xfc0) {
+							nextU = 0xfc0;
 						}
 					}
+
 					stepU = nextU - curU >> 3;
 					stepV = nextV - curV >> 3;
 					shadeA += shadeStrides;
-					curU += shadeA >> 3 & 0xC0000;
+                    curU += (shadeA >> 3) & 0xC0000;
 					shadeShift = shadeA >> 23;
 				}
-				strides = xB - xA & 0x7;
+
+                strides = (xB - xA) & 0x7;
 				while (strides-- > 0) {
 					@Pc(796) int rgb;
 					if ((rgb = texels[(curV & 0xFC0) + (curU >> 6)] >>> shadeShift) != 0) {
 						dst[offset] = rgb;
 					}
+
 					offset++;
 					curU += stepU;
 					curV += stepV;
 				}
 			}
-			return;
-		}
-		nextU = 0;
-		nextV = 0;
-		dx = xA - centerX;
-		u = u + (uStride >> 3) * dx;
-		v = v + (vStride >> 3) * dx;
-		w = w + (wStride >> 3) * dx;
-		curW = w >> 14;
-		if (curW != 0) {
-			curU = u / curW;
-			curV = v / curW;
-			if (curU < 0) {
-				curU = 0;
-			} else if (curU > 16256) {
-				curU = 16256;
-			}
-		}
-		u = u + uStride;
-		v = v + vStride;
-		w = w + wStride;
-		curW = w >> 14;
-		if (curW != 0) {
-			nextU = u / curW;
-			nextV = v / curW;
-			if (nextU < 7) {
-				nextU = 7;
-			} else if (nextU > 16256) {
-				nextU = 16256;
-			}
-		}
-		stepU = nextU - curU >> 3;
-		stepV = nextV - curV >> 3;
-		curU += shadeA & 0x600000;
-		shadeShift = shadeA >> 23;
-		if (opaque) {
-			while (strides-- > 0) {
-				dst[offset++] = texels[(curV & 0x3F80) + (curU >> 7)] >>> shadeShift;
-				curU += stepU;
-				curV += stepV;
-				dst[offset++] = texels[(curV & 0x3F80) + (curU >> 7)] >>> shadeShift;
-				curU += stepU;
-				curV += stepV;
-				dst[offset++] = texels[(curV & 0x3F80) + (curU >> 7)] >>> shadeShift;
-				curU += stepU;
-				curV += stepV;
-				dst[offset++] = texels[(curV & 0x3F80) + (curU >> 7)] >>> shadeShift;
-				curU += stepU;
-				curV += stepV;
-				dst[offset++] = texels[(curV & 0x3F80) + (curU >> 7)] >>> shadeShift;
-				curU += stepU;
-				curV += stepV;
-				dst[offset++] = texels[(curV & 0x3F80) + (curU >> 7)] >>> shadeShift;
-				curU += stepU;
-				curV += stepV;
-				dst[offset++] = texels[(curV & 0x3F80) + (curU >> 7)] >>> shadeShift;
-				curU += stepU;
-				curV += stepV;
-				dst[offset++] = texels[(curV & 0x3F80) + (curU >> 7)] >>> shadeShift;
-				curU = nextU;
-				curV = nextV;
-				u += uStride;
-				v += vStride;
-				w += wStride;
-				curW = w >> 14;
-				if (curW != 0) {
-					nextU = u / curW;
-					nextV = v / curW;
-					if (nextU < 7) {
-						nextU = 7;
-					} else if (nextU > 16256) {
-						nextU = 16256;
-					}
-				}
-				stepU = nextU - curU >> 3;
-				stepV = nextV - curV >> 3;
-				shadeA += shadeStrides;
-				curU += shadeA & 0x600000;
-				shadeShift = shadeA >> 23;
-			}
-			strides = xB - xA & 0x7;
-			while (strides-- > 0) {
-				dst[offset++] = texels[(curV & 0x3F80) + (curU >> 7)] >>> shadeShift;
-				curU += stepU;
-				curV += stepV;
-			}
-			return;
-		}
+		} else {
+			int nextU = 0;
+			int nextV = 0;
+			int dx = xA - centerX;
 
-		while (strides-- > 0) {
-			@Pc(1230) int rgb;
-			if ((rgb = texels[(curV & 0x3F80) + (curU >> 7)] >>> shadeShift) != 0) {
-				dst[offset] = rgb;
+			u = u + (uStride >> 3) * dx;
+			v = v + (vStride >> 3) * dx;
+			w = w + (wStride >> 3) * dx;
+
+			int curW = w >> 14;
+			if (curW != 0) {
+				curU = u / curW;
+				curV = v / curW;
+				if (curU < 0) {
+					curU = 0;
+				} else if (curU > 0x3f80) {
+					curU = 0x3f80;
+				}
 			}
-			offset = offset + 1;
-			curU += stepU;
-			curV += stepV;
-			if ((rgb = texels[(curV & 0x3F80) + (curU >> 7)] >>> shadeShift) != 0) {
-				dst[offset] = rgb;
-			}
-			offset++;
-			curU += stepU;
-			curV += stepV;
-			if ((rgb = texels[(curV & 0x3F80) + (curU >> 7)] >>> shadeShift) != 0) {
-				dst[offset] = rgb;
-			}
-			offset++;
-			curU += stepU;
-			curV += stepV;
-			if ((rgb = texels[(curV & 0x3F80) + (curU >> 7)] >>> shadeShift) != 0) {
-				dst[offset] = rgb;
-			}
-			offset++;
-			curU += stepU;
-			curV += stepV;
-			if ((rgb = texels[(curV & 0x3F80) + (curU >> 7)] >>> shadeShift) != 0) {
-				dst[offset] = rgb;
-			}
-			offset++;
-			curU += stepU;
-			curV += stepV;
-			if ((rgb = texels[(curV & 0x3F80) + (curU >> 7)] >>> shadeShift) != 0) {
-				dst[offset] = rgb;
-			}
-			offset++;
-			curU += stepU;
-			curV += stepV;
-			if ((rgb = texels[(curV & 0x3F80) + (curU >> 7)] >>> shadeShift) != 0) {
-				dst[offset] = rgb;
-			}
-			offset++;
-			curU += stepU;
-			curV += stepV;
-			if ((rgb = texels[(curV & 0x3F80) + (curU >> 7)] >>> shadeShift) != 0) {
-				dst[offset] = rgb;
-			}
-			offset++;
-			curU = nextU;
-			curV = nextV;
-			u += uStride;
-			v += vStride;
-			w += wStride;
+
+			u = u + uStride;
+			v = v + vStride;
+			w = w + wStride;
+
 			curW = w >> 14;
 			if (curW != 0) {
 				nextU = u / curW;
 				nextV = v / curW;
-				if (nextU < 7) {
-					nextU = 7;
-				} else if (nextU > 16256) {
-					nextU = 16256;
+				if (nextU < 0x7) {
+					nextU = 0x7;
+				} else if (nextU > 0x3f80) {
+					nextU = 0x3f80;
 				}
 			}
-			stepU = nextU - curU >> 3;
-			stepV = nextV - curV >> 3;
-			shadeA += shadeStrides;
+
+			int stepU = nextU - curU >> 3;
+			int stepV = nextV - curV >> 3;
 			curU += shadeA & 0x600000;
-			shadeShift = shadeA >> 23;
-		}
-		strides = xB - xA & 0x7;
-		while (strides-- > 0) {
-			@Pc(1517) int rgb;
-			if ((rgb = texels[(curV & 0x3F80) + (curU >> 7)] >>> shadeShift) != 0) {
-				dst[offset] = rgb;
+			int shadeShift = shadeA >> 23;
+
+			if (opaque) {
+				while (strides-- > 0) {
+					dst[offset++] = texels[(curV & 0x3F80) + (curU >> 7)] >>> shadeShift;
+					curU += stepU;
+					curV += stepV;
+
+					dst[offset++] = texels[(curV & 0x3F80) + (curU >> 7)] >>> shadeShift;
+					curU += stepU;
+					curV += stepV;
+
+					dst[offset++] = texels[(curV & 0x3F80) + (curU >> 7)] >>> shadeShift;
+					curU += stepU;
+					curV += stepV;
+
+					dst[offset++] = texels[(curV & 0x3F80) + (curU >> 7)] >>> shadeShift;
+					curU += stepU;
+					curV += stepV;
+
+					dst[offset++] = texels[(curV & 0x3F80) + (curU >> 7)] >>> shadeShift;
+					curU += stepU;
+					curV += stepV;
+
+					dst[offset++] = texels[(curV & 0x3F80) + (curU >> 7)] >>> shadeShift;
+					curU += stepU;
+					curV += stepV;
+
+					dst[offset++] = texels[(curV & 0x3F80) + (curU >> 7)] >>> shadeShift;
+					curU += stepU;
+					curV += stepV;
+
+					dst[offset++] = texels[(curV & 0x3F80) + (curU >> 7)] >>> shadeShift;
+					curU = nextU;
+					curV = nextV;
+
+					u += uStride;
+					v += vStride;
+					w += wStride;
+
+					curW = w >> 14;
+					if (curW != 0) {
+						nextU = u / curW;
+						nextV = v / curW;
+						if (nextU < 0x7) {
+							nextU = 0x7;
+						} else if (nextU > 0x3f80) {
+							nextU = 0x3f80;
+						}
+					}
+
+					stepU = nextU - curU >> 3;
+					stepV = nextV - curV >> 3;
+					shadeA += shadeStrides;
+					curU += shadeA & 0x600000;
+					shadeShift = shadeA >> 23;
+				}
+
+				strides = xB - xA & 0x7;
+				while (strides-- > 0) {
+					dst[offset++] = texels[(curV & 0x3F80) + (curU >> 7)] >>> shadeShift;
+					curU += stepU;
+					curV += stepV;
+				}
+			} else {
+				while (strides-- > 0) {
+					@Pc(1230) int rgb;
+					if ((rgb = texels[(curV & 0x3F80) + (curU >> 7)] >>> shadeShift) != 0) {
+						dst[offset] = rgb;
+					}
+					offset++;
+					curU += stepU;
+					curV += stepV;
+
+					if ((rgb = texels[(curV & 0x3F80) + (curU >> 7)] >>> shadeShift) != 0) {
+						dst[offset] = rgb;
+					}
+					offset++;
+					curU += stepU;
+					curV += stepV;
+
+					if ((rgb = texels[(curV & 0x3F80) + (curU >> 7)] >>> shadeShift) != 0) {
+						dst[offset] = rgb;
+					}
+					offset++;
+					curU += stepU;
+					curV += stepV;
+
+					if ((rgb = texels[(curV & 0x3F80) + (curU >> 7)] >>> shadeShift) != 0) {
+						dst[offset] = rgb;
+					}
+					offset++;
+					curU += stepU;
+					curV += stepV;
+
+					if ((rgb = texels[(curV & 0x3F80) + (curU >> 7)] >>> shadeShift) != 0) {
+						dst[offset] = rgb;
+					}
+					offset++;
+					curU += stepU;
+					curV += stepV;
+
+					if ((rgb = texels[(curV & 0x3F80) + (curU >> 7)] >>> shadeShift) != 0) {
+						dst[offset] = rgb;
+					}
+					offset++;
+					curU += stepU;
+					curV += stepV;
+
+					if ((rgb = texels[(curV & 0x3F80) + (curU >> 7)] >>> shadeShift) != 0) {
+						dst[offset] = rgb;
+					}
+					offset++;
+					curU += stepU;
+					curV += stepV;
+
+					if ((rgb = texels[(curV & 0x3F80) + (curU >> 7)] >>> shadeShift) != 0) {
+						dst[offset] = rgb;
+					}
+					offset++;
+					curU = nextU;
+					curV = nextV;
+
+					u += uStride;
+					v += vStride;
+					w += wStride;
+
+					curW = w >> 14;
+					if (curW != 0) {
+						nextU = u / curW;
+						nextV = v / curW;
+						if (nextU < 0x7) {
+							nextU = 0x7;
+						} else if (nextU > 0x3f80) {
+							nextU = 0x3f80;
+						}
+					}
+
+					stepU = nextU - curU >> 3;
+					stepV = nextV - curV >> 3;
+					shadeA += shadeStrides;
+					curU += shadeA & 0x600000;
+					shadeShift = shadeA >> 23;
+				}
+
+				strides = xB - xA & 0x7;
+				while (strides-- > 0) {
+					@Pc(1517) int rgb;
+					if ((rgb = texels[(curV & 0x3F80) + (curU >> 7)] >>> shadeShift) != 0) {
+						dst[offset] = rgb;
+					}
+
+					offset++;
+					curU += stepU;
+					curV += stepV;
+				}
 			}
-			offset++;
-			curU += stepU;
-			curV += stepV;
 		}
 	}
 
