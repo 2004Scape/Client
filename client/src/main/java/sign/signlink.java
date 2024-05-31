@@ -159,14 +159,14 @@ public class signlink implements Runnable {
 					cache = new File(dir);
 
 					if (!cache.exists() || !cache.canWrite()) {
-						System.out.println("Unable to find or write to cache directory: " + dir);
+						// System.out.println("Unable to find or write to cache directory: " + dir);
 						continue;
 					}
 				}
 
 				cache = new File(dir + store);
 				if ((!cache.exists() && !cache.mkdir()) || !cache.canWrite()) {
-					System.out.println("Unable to find or write to cache directory: " + dir + store + "/");
+					// System.out.println("Unable to find or write to cache directory: " + dir + store + "/");
 					continue;
 				}
 

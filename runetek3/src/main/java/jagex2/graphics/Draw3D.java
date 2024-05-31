@@ -396,9 +396,11 @@ public class Draw3D extends Draw2D {
 				if (yB > bottom) {
 					yB = bottom;
 				}
+
 				if (yC > bottom) {
 					yC = bottom;
 				}
+
 				if (yB < yC) {
 					xC = xA <<= 0x10;
 					colorC = colorA <<= 0xF;
@@ -409,6 +411,7 @@ public class Draw3D extends Draw2D {
 						colorA -= colorStepAB * yA;
 						yA = 0;
 					}
+
 					xB <<= 0x10;
 					colorB <<= 0xF;
 					if (yB < 0) {
@@ -416,26 +419,13 @@ public class Draw3D extends Draw2D {
 						colorB -= colorStepBC * yB;
 						yB = 0;
 					}
+
 					if (yA != yB && xStepAC < xStepAB || yA == yB && xStepAC > xStepBC) {
 						yC -= yB;
 						yB -= yA;
 						yA = lineOffset[yA];
-						while (true) {
-							yB--;
-							if (yB < 0) {
-								while (true) {
-									yC--;
-									if (yC < 0) {
-										return;
-									}
-									drawGouraudScanline(xC >> 16, xB >> 16, colorC >> 7, colorB >> 7, data, yA, 0);
-									xC += xStepAC;
-									xB += xStepBC;
-									colorC += colorStepAC;
-									colorB += colorStepBC;
-									yA += width2d;
-								}
-							}
+
+						while (--yB >= 0) {
 							drawGouraudScanline(xC >> 16, xA >> 16, colorC >> 7, colorA >> 7, data, yA, 0);
 							xC += xStepAC;
 							xA += xStepAB;
@@ -443,31 +433,33 @@ public class Draw3D extends Draw2D {
 							colorA += colorStepAB;
 							yA += width2d;
 						}
+						while (--yC >= 0) {
+							drawGouraudScanline(xC >> 16, xB >> 16, colorC >> 7, colorB >> 7, data, yA, 0);
+							xC += xStepAC;
+							xB += xStepBC;
+							colorC += colorStepAC;
+							colorB += colorStepBC;
+							yA += width2d;
+						}
 					} else {
 						yC -= yB;
 						yB -= yA;
 						yA = lineOffset[yA];
-						while (true) {
-							yB--;
-							if (yB < 0) {
-								while (true) {
-									yC--;
-									if (yC < 0) {
-										return;
-									}
-									drawGouraudScanline(xB >> 16, xC >> 16, colorB >> 7, colorC >> 7, data, yA, 0);
-									xC += xStepAC;
-									xB += xStepBC;
-									colorC += colorStepAC;
-									colorB += colorStepBC;
-									yA += width2d;
-								}
-							}
+
+						while (--yB >= 0) {
 							drawGouraudScanline(xA >> 16, xC >> 16, colorA >> 7, colorC >> 7, data, yA, 0);
 							xC += xStepAC;
 							xA += xStepAB;
 							colorC += colorStepAC;
 							colorA += colorStepAB;
+							yA += width2d;
+						}
+						while (--yC >= 0) {
+							drawGouraudScanline(xB >> 16, xC >> 16, colorB >> 7, colorC >> 7, data, yA, 0);
+							xC += xStepAC;
+							xB += xStepBC;
+							colorC += colorStepAC;
+							colorB += colorStepBC;
 							yA += width2d;
 						}
 					}
@@ -481,6 +473,7 @@ public class Draw3D extends Draw2D {
 						colorA -= colorStepAB * yA;
 						yA = 0;
 					}
+
 					xC <<= 0x10;
 					colorC <<= 0xF;
 					if (yC < 0) {
@@ -488,26 +481,13 @@ public class Draw3D extends Draw2D {
 						colorC -= colorStepBC * yC;
 						yC = 0;
 					}
+
 					if (yA != yC && xStepAC < xStepAB || yA == yC && xStepBC > xStepAB) {
 						yB -= yC;
 						yC -= yA;
 						yA = lineOffset[yA];
-						while (true) {
-							yC--;
-							if (yC < 0) {
-								while (true) {
-									yB--;
-									if (yB < 0) {
-										return;
-									}
-									drawGouraudScanline(xC >> 16, xA >> 16, colorC >> 7, colorA >> 7, data, yA, 0);
-									xC += xStepBC;
-									xA += xStepAB;
-									colorC += colorStepBC;
-									colorA += colorStepAB;
-									yA += width2d;
-								}
-							}
+
+						while (--yC >= 0) {
 							drawGouraudScanline(xB >> 16, xA >> 16, colorB >> 7, colorA >> 7, data, yA, 0);
 							xB += xStepAC;
 							xA += xStepAB;
@@ -515,30 +495,32 @@ public class Draw3D extends Draw2D {
 							colorA += colorStepAB;
 							yA += width2d;
 						}
+						while (--yB >= 0) {
+							drawGouraudScanline(xC >> 16, xA >> 16, colorC >> 7, colorA >> 7, data, yA, 0);
+							xC += xStepBC;
+							xA += xStepAB;
+							colorC += colorStepBC;
+							colorA += colorStepAB;
+							yA += width2d;
+						}
 					} else {
 						yB -= yC;
 						yC -= yA;
 						yA = lineOffset[yA];
-						while (true) {
-							yC--;
-							if (yC < 0) {
-								while (true) {
-									yB--;
-									if (yB < 0) {
-										return;
-									}
-									drawGouraudScanline(xA >> 16, xC >> 16, colorA >> 7, colorC >> 7, data, yA, 0);
-									xC += xStepBC;
-									xA += xStepAB;
-									colorC += colorStepBC;
-									colorA += colorStepAB;
-									yA += width2d;
-								}
-							}
+
+						while (--yC >= 0) {
 							drawGouraudScanline(xA >> 16, xB >> 16, colorA >> 7, colorB >> 7, data, yA, 0);
 							xB += xStepAC;
 							xA += xStepAB;
 							colorB += colorStepAC;
+							colorA += colorStepAB;
+							yA += width2d;
+						}
+						while (--yB >= 0) {
+							drawGouraudScanline(xA >> 16, xC >> 16, colorA >> 7, colorC >> 7, data, yA, 0);
+							xC += xStepBC;
+							xA += xStepAB;
+							colorC += colorStepBC;
 							colorA += colorStepAB;
 							yA += width2d;
 						}
@@ -550,9 +532,11 @@ public class Draw3D extends Draw2D {
 				if (yC > bottom) {
 					yC = bottom;
 				}
+
 				if (yA > bottom) {
 					yA = bottom;
 				}
+
 				if (yC < yA) {
 					xA = xB <<= 0x10;
 					colorA = colorB <<= 0xF;
@@ -563,6 +547,7 @@ public class Draw3D extends Draw2D {
 						colorB -= colorStepBC * yB;
 						yB = 0;
 					}
+
 					xC <<= 0x10;
 					colorC <<= 0xF;
 					if (yC < 0) {
@@ -570,26 +555,13 @@ public class Draw3D extends Draw2D {
 						colorC -= colorStepAC * yC;
 						yC = 0;
 					}
+
 					if (yB != yC && xStepAB < xStepBC || yB == yC && xStepAB > xStepAC) {
 						yA -= yC;
 						yC -= yB;
 						yB = lineOffset[yB];
-						while (true) {
-							yC--;
-							if (yC < 0) {
-								while (true) {
-									yA--;
-									if (yA < 0) {
-										return;
-									}
-									drawGouraudScanline(xA >> 16, xC >> 16, colorA >> 7, colorC >> 7, data, yB, 0);
-									xA += xStepAB;
-									xC += xStepAC;
-									colorA += colorStepAB;
-									colorC += colorStepAC;
-									yB += width2d;
-								}
-							}
+
+						while (--yC >= 0) {
 							drawGouraudScanline(xA >> 16, xB >> 16, colorA >> 7, colorB >> 7, data, yB, 0);
 							xA += xStepAB;
 							xB += xStepBC;
@@ -597,31 +569,33 @@ public class Draw3D extends Draw2D {
 							colorB += colorStepBC;
 							yB += width2d;
 						}
+						while (--yA >= 0) {
+							drawGouraudScanline(xA >> 16, xC >> 16, colorA >> 7, colorC >> 7, data, yB, 0);
+							xA += xStepAB;
+							xC += xStepAC;
+							colorA += colorStepAB;
+							colorC += colorStepAC;
+							yB += width2d;
+						}
 					} else {
 						yA -= yC;
 						yC -= yB;
 						yB = lineOffset[yB];
-						while (true) {
-							yC--;
-							if (yC < 0) {
-								while (true) {
-									yA--;
-									if (yA < 0) {
-										return;
-									}
-									drawGouraudScanline(xC >> 16, xA >> 16, colorC >> 7, colorA >> 7, data, yB, 0);
-									xA += xStepAB;
-									xC += xStepAC;
-									colorA += colorStepAB;
-									colorC += colorStepAC;
-									yB += width2d;
-								}
-							}
+
+						while (--yC >= 0) {
 							drawGouraudScanline(xB >> 16, xA >> 16, colorB >> 7, colorA >> 7, data, yB, 0);
 							xA += xStepAB;
 							xB += xStepBC;
 							colorA += colorStepAB;
 							colorB += colorStepBC;
+							yB += width2d;
+						}
+						while (--yA >= 0) {
+							drawGouraudScanline(xC >> 16, xA >> 16, colorC >> 7, colorA >> 7, data, yB, 0);
+							xA += xStepAB;
+							xC += xStepAC;
+							colorA += colorStepAB;
+							colorC += colorStepAC;
 							yB += width2d;
 						}
 					}
@@ -635,6 +609,7 @@ public class Draw3D extends Draw2D {
 						colorB -= colorStepBC * yB;
 						yB = 0;
 					}
+
 					xA <<= 0x10;
 					colorA <<= 0xF;
 					if (yA < 0) {
@@ -642,26 +617,13 @@ public class Draw3D extends Draw2D {
 						colorA -= colorStepAC * yA;
 						yA = 0;
 					}
+
 					if (xStepAB < xStepBC) {
 						yC -= yA;
 						yA -= yB;
 						yB = lineOffset[yB];
-						while (true) {
-							yA--;
-							if (yA < 0) {
-								while (true) {
-									yC--;
-									if (yC < 0) {
-										return;
-									}
-									drawGouraudScanline(xA >> 16, xB >> 16, colorA >> 7, colorB >> 7, data, yB, 0);
-									xA += xStepAC;
-									xB += xStepBC;
-									colorA += colorStepAC;
-									colorB += colorStepBC;
-									yB += width2d;
-								}
-							}
+
+						while (--yA >= 0) {
 							drawGouraudScanline(xC >> 16, xB >> 16, colorC >> 7, colorB >> 7, data, yB, 0);
 							xC += xStepAB;
 							xB += xStepBC;
@@ -669,30 +631,32 @@ public class Draw3D extends Draw2D {
 							colorB += colorStepBC;
 							yB += width2d;
 						}
+						while (--yC >= 0) {
+							drawGouraudScanline(xA >> 16, xB >> 16, colorA >> 7, colorB >> 7, data, yB, 0);
+							xA += xStepAC;
+							xB += xStepBC;
+							colorA += colorStepAC;
+							colorB += colorStepBC;
+							yB += width2d;
+						}
 					} else {
 						yC -= yA;
 						yA -= yB;
 						yB = lineOffset[yB];
-						while (true) {
-							yA--;
-							if (yA < 0) {
-								while (true) {
-									yC--;
-									if (yC < 0) {
-										return;
-									}
-									drawGouraudScanline(xB >> 16, xA >> 16, colorB >> 7, colorA >> 7, data, yB, 0);
-									xA += xStepAC;
-									xB += xStepBC;
-									colorA += colorStepAC;
-									colorB += colorStepBC;
-									yB += width2d;
-								}
-							}
+
+						while (--yA >= 0) {
 							drawGouraudScanline(xB >> 16, xC >> 16, colorB >> 7, colorC >> 7, data, yB, 0);
 							xC += xStepAB;
 							xB += xStepBC;
 							colorC += colorStepAB;
+							colorB += colorStepBC;
+							yB += width2d;
+						}
+						while (--yC >= 0) {
+							drawGouraudScanline(xB >> 16, xA >> 16, colorB >> 7, colorA >> 7, data, yB, 0);
+							xA += xStepAC;
+							xB += xStepBC;
+							colorA += colorStepAC;
 							colorB += colorStepBC;
 							yB += width2d;
 						}
@@ -703,9 +667,11 @@ public class Draw3D extends Draw2D {
 			if (yA > bottom) {
 				yA = bottom;
 			}
+
 			if (yB > bottom) {
 				yB = bottom;
 			}
+
 			if (yA < yB) {
 				xB = xC <<= 0x10;
 				colorB = colorC <<= 0xF;
@@ -716,6 +682,7 @@ public class Draw3D extends Draw2D {
 					colorC -= colorStepAC * yC;
 					yC = 0;
 				}
+
 				xA <<= 0x10;
 				colorA <<= 0xF;
 				if (yA < 0) {
@@ -723,26 +690,13 @@ public class Draw3D extends Draw2D {
 					colorA -= colorStepAB * yA;
 					yA = 0;
 				}
+
 				if (xStepBC < xStepAC) {
 					yB -= yA;
 					yA -= yC;
 					yC = lineOffset[yC];
-					while (true) {
-						yA--;
-						if (yA < 0) {
-							while (true) {
-								yB--;
-								if (yB < 0) {
-									return;
-								}
-								drawGouraudScanline(xB >> 16, xA >> 16, colorB >> 7, colorA >> 7, data, yC, 0);
-								xB += xStepBC;
-								xA += xStepAB;
-								colorB += colorStepBC;
-								colorA += colorStepAB;
-								yC += width2d;
-							}
-						}
+
+					while (--yA >= 0) {
 						drawGouraudScanline(xB >> 16, xC >> 16, colorB >> 7, colorC >> 7, data, yC, 0);
 						xB += xStepBC;
 						xC += xStepAC;
@@ -750,31 +704,33 @@ public class Draw3D extends Draw2D {
 						colorC += colorStepAC;
 						yC += width2d;
 					}
+					while (--yB >= 0) {
+						drawGouraudScanline(xB >> 16, xA >> 16, colorB >> 7, colorA >> 7, data, yC, 0);
+						xB += xStepBC;
+						xA += xStepAB;
+						colorB += colorStepBC;
+						colorA += colorStepAB;
+						yC += width2d;
+					}
 				} else {
 					yB -= yA;
 					yA -= yC;
 					yC = lineOffset[yC];
-					while (true) {
-						yA--;
-						if (yA < 0) {
-							while (true) {
-								yB--;
-								if (yB < 0) {
-									return;
-								}
-								drawGouraudScanline(xA >> 16, xB >> 16, colorA >> 7, colorB >> 7, data, yC, 0);
-								xB += xStepBC;
-								xA += xStepAB;
-								colorB += colorStepBC;
-								colorA += colorStepAB;
-								yC += width2d;
-							}
-						}
+
+					while (--yA >= 0) {
 						drawGouraudScanline(xC >> 16, xB >> 16, colorC >> 7, colorB >> 7, data, yC, 0);
 						xB += xStepBC;
 						xC += xStepAC;
 						colorB += colorStepBC;
 						colorC += colorStepAC;
+						yC += width2d;
+					}
+					while (--yB >= 0) {
+						drawGouraudScanline(xA >> 16, xB >> 16, colorA >> 7, colorB >> 7, data, yC, 0);
+						xB += xStepBC;
+						xA += xStepAB;
+						colorB += colorStepBC;
+						colorA += colorStepAB;
 						yC += width2d;
 					}
 				}
@@ -788,6 +744,7 @@ public class Draw3D extends Draw2D {
 					colorC -= colorStepAC * yC;
 					yC = 0;
 				}
+
 				xB <<= 0x10;
 				colorB <<= 0xF;
 				if (yB < 0) {
@@ -795,26 +752,13 @@ public class Draw3D extends Draw2D {
 					colorB -= colorStepAB * yB;
 					yB = 0;
 				}
+
 				if (xStepBC < xStepAC) {
 					yA -= yB;
 					yB -= yC;
 					yC = lineOffset[yC];
-					while (true) {
-						yB--;
-						if (yB < 0) {
-							while (true) {
-								yA--;
-								if (yA < 0) {
-									return;
-								}
-								drawGouraudScanline(xB >> 16, xC >> 16, colorB >> 7, colorC >> 7, data, yC, 0);
-								xB += xStepAB;
-								xC += xStepAC;
-								colorB += colorStepAB;
-								colorC += colorStepAC;
-								yC += width2d;
-							}
-						}
+
+					while (--yB >= 0) {
 						drawGouraudScanline(xA >> 16, xC >> 16, colorA >> 7, colorC >> 7, data, yC, 0);
 						xA += xStepBC;
 						xC += xStepAC;
@@ -822,30 +766,32 @@ public class Draw3D extends Draw2D {
 						colorC += colorStepAC;
 						yC += width2d;
 					}
+					while (--yA >= 0) {
+						drawGouraudScanline(xB >> 16, xC >> 16, colorB >> 7, colorC >> 7, data, yC, 0);
+						xB += xStepAB;
+						xC += xStepAC;
+						colorB += colorStepAB;
+						colorC += colorStepAC;
+						yC += width2d;
+					}
 				} else {
 					yA -= yB;
 					yB -= yC;
 					yC = lineOffset[yC];
-					while (true) {
-						yB--;
-						if (yB < 0) {
-							while (true) {
-								yA--;
-								if (yA < 0) {
-									return;
-								}
-								drawGouraudScanline(xC >> 16, xB >> 16, colorC >> 7, colorB >> 7, data, yC, 0);
-								xB += xStepAB;
-								xC += xStepAC;
-								colorB += colorStepAB;
-								colorC += colorStepAC;
-								yC += width2d;
-							}
-						}
+
+					while (--yB >= 0) {
 						drawGouraudScanline(xC >> 16, xA >> 16, colorC >> 7, colorA >> 7, data, yC, 0);
 						xA += xStepBC;
 						xC += xStepAC;
 						colorA += colorStepBC;
+						colorC += colorStepAC;
+						yC += width2d;
+					}
+					while (--yA >= 0) {
+						drawGouraudScanline(xC >> 16, xB >> 16, colorC >> 7, colorB >> 7, data, yC, 0);
+						xB += xStepAB;
+						xC += xStepAC;
+						colorB += colorStepAB;
 						colorC += colorStepAC;
 						yC += width2d;
 					}
@@ -977,398 +923,347 @@ public class Draw3D extends Draw2D {
 	}
 
 	@OriginalMember(owner = "client!gb", name = "a", descriptor = "(IIIIIII)V")
-	public static void fillTriangle(@OriginalArg(3) int x0, @OriginalArg(4) int x1, @OriginalArg(5) int x2, @OriginalArg(0) int y0, @OriginalArg(1) int y1, @OriginalArg(2) int y2, @OriginalArg(6) int color) {
+	public static void fillTriangle(@OriginalArg(3) int xA, @OriginalArg(4) int xB, @OriginalArg(5) int xC, @OriginalArg(0) int yA, @OriginalArg(1) int yB, @OriginalArg(2) int yC, @OriginalArg(6) int color) {
 		@Pc(3) int xStepAB = 0;
-		if (y1 != y0) {
-			xStepAB = (x1 - x0 << 16) / (y1 - y0);
+		if (yB != yA) {
+			xStepAB = (xB - xA << 16) / (yB - yA);
 		}
+
 		@Pc(18) int xStepBC = 0;
-		if (y2 != y1) {
-			xStepBC = (x2 - x1 << 16) / (y2 - y1);
+		if (yC != yB) {
+			xStepBC = (xC - xB << 16) / (yC - yB);
 		}
+
 		@Pc(33) int xStepAC = 0;
-		if (y2 != y0) {
-			xStepAC = (x0 - x2 << 16) / (y0 - y2);
+		if (yC != yA) {
+			xStepAC = (xA - xC << 16) / (yA - yC);
 		}
-		if (y0 <= y1 && y0 <= y2) {
-			if (y0 < bottom) {
-				if (y1 > bottom) {
-					y1 = bottom;
+
+		if (yA <= yB && yA <= yC) {
+			if (yA < bottom) {
+				if (yB > bottom) {
+					yB = bottom;
 				}
-				if (y2 > bottom) {
-					y2 = bottom;
+
+				if (yC > bottom) {
+					yC = bottom;
 				}
-				if (y1 < y2) {
-					x2 = x0 <<= 0x10;
-					if (y0 < 0) {
-						x2 -= xStepAC * y0;
-						x0 -= xStepAB * y0;
-						y0 = 0;
+
+				if (yB < yC) {
+					xC = xA <<= 0x10;
+					if (yA < 0) {
+						xC -= xStepAC * yA;
+						xA -= xStepAB * yA;
+						yA = 0;
 					}
-					x1 <<= 0x10;
-					if (y1 < 0) {
-						x1 -= xStepBC * y1;
-						y1 = 0;
+
+					xB <<= 0x10;
+					if (yB < 0) {
+						xB -= xStepBC * yB;
+						yB = 0;
 					}
-					if (y0 != y1 && xStepAC < xStepAB || y0 == y1 && xStepAC > xStepBC) {
-						y2 -= y1;
-						y1 -= y0;
-						y0 = lineOffset[y0];
-						while (true) {
-							y1--;
-							if (y1 < 0) {
-								while (true) {
-									y2--;
-									if (y2 < 0) {
-										return;
-									}
-									drawScanline(x2 >> 16, x1 >> 16, data, y0, color);
-									x2 += xStepAC;
-									x1 += xStepBC;
-									y0 += width2d;
-								}
-							}
-							drawScanline(x2 >> 16, x0 >> 16, data, y0, color);
-							x2 += xStepAC;
-							x0 += xStepAB;
-							y0 += width2d;
+
+					if (yA != yB && xStepAC < xStepAB || yA == yB && xStepAC > xStepBC) {
+						yC -= yB;
+						yB -= yA;
+						yA = lineOffset[yA];
+
+						while (--yB >= 0) {
+							drawScanline(xC >> 16, xA >> 16, data, yA, color);
+							xC += xStepAC;
+							xA += xStepAB;
+							yA += width2d;
+						}
+						while (--yC >= 0.0F) {
+							drawScanline(xC >> 16, xB >> 16, data, yA, color);
+							xC += xStepAC;
+							xB += xStepBC;
+							yA += width2d;
 						}
 					} else {
-						y2 -= y1;
-						y1 -= y0;
-						y0 = lineOffset[y0];
-						while (true) {
-							y1--;
-							if (y1 < 0) {
-								while (true) {
-									y2--;
-									if (y2 < 0) {
-										return;
-									}
-									drawScanline(x1 >> 16, x2 >> 16, data, y0, color);
-									x2 += xStepAC;
-									x1 += xStepBC;
-									y0 += width2d;
-								}
-							}
-							drawScanline(x0 >> 16, x2 >> 16, data, y0, color);
-							x2 += xStepAC;
-							x0 += xStepAB;
-							y0 += width2d;
+						yC -= yB;
+						yB -= yA;
+						yA = lineOffset[yA];
+
+						while (--yB >= 0) {
+							drawScanline(xA >> 16, xC >> 16, data, yA, color);
+							xC += xStepAC;
+							xA += xStepAB;
+							yA += width2d;
+						}
+						while (--yC >= 0) {
+							drawScanline(xB >> 16, xC >> 16, data, yA, color);
+							xC += xStepAC;
+							xB += xStepBC;
+							yA += width2d;
 						}
 					}
 				} else {
-					x1 = x0 <<= 0x10;
-					if (y0 < 0) {
-						x1 -= xStepAC * y0;
-						x0 -= xStepAB * y0;
-						y0 = 0;
+					xB = xA <<= 0x10;
+					if (yA < 0) {
+						xB -= xStepAC * yA;
+						xA -= xStepAB * yA;
+						yA = 0;
 					}
-					x2 <<= 0x10;
-					if (y2 < 0) {
-						x2 -= xStepBC * y2;
-						y2 = 0;
+
+					xC <<= 0x10;
+					if (yC < 0) {
+						xC -= xStepBC * yC;
+						yC = 0;
 					}
-					if (y0 != y2 && xStepAC < xStepAB || y0 == y2 && xStepBC > xStepAB) {
-						y1 -= y2;
-						y2 -= y0;
-						y0 = lineOffset[y0];
-						while (true) {
-							y2--;
-							if (y2 < 0) {
-								while (true) {
-									y1--;
-									if (y1 < 0) {
-										return;
-									}
-									drawScanline(x2 >> 16, x0 >> 16, data, y0, color);
-									x2 += xStepBC;
-									x0 += xStepAB;
-									y0 += width2d;
-								}
-							}
-							drawScanline(x1 >> 16, x0 >> 16, data, y0, color);
-							x1 += xStepAC;
-							x0 += xStepAB;
-							y0 += width2d;
+
+					if (yA != yC && xStepAC < xStepAB || yA == yC && xStepBC > xStepAB) {
+						yB -= yC;
+						yC -= yA;
+						yA = lineOffset[yA];
+
+						while (--yC >= 0) {
+							drawScanline(xB >> 16, xA >> 16, data, yA, color);
+							xB += xStepAC;
+							xA += xStepAB;
+							yA += width2d;
+						}
+						while (--yB >= 0) {
+							drawScanline(xC >> 16, xA >> 16, data, yA, color);
+							xC += xStepBC;
+							xA += xStepAB;
+							yA += width2d;
 						}
 					} else {
-						y1 -= y2;
-						y2 -= y0;
-						y0 = lineOffset[y0];
-						while (true) {
-							y2--;
-							if (y2 < 0) {
-								while (true) {
-									y1--;
-									if (y1 < 0) {
-										return;
-									}
-									drawScanline(x0 >> 16, x2 >> 16, data, y0, color);
-									x2 += xStepBC;
-									x0 += xStepAB;
-									y0 += width2d;
-								}
-							}
-							drawScanline(x0 >> 16, x1 >> 16, data, y0, color);
-							x1 += xStepAC;
-							x0 += xStepAB;
-							y0 += width2d;
+						yB -= yC;
+						yC -= yA;
+						yA = lineOffset[yA];
+
+						while (--yC >= 0) {
+							drawScanline(xA >> 16, xB >> 16, data, yA, color);
+							xB += xStepAC;
+							xA += xStepAB;
+							yA += width2d;
+						}
+						while (--yB >= 0) {
+							drawScanline(xA >> 16, xC >> 16, data, yA, color);
+							xC += xStepBC;
+							xA += xStepAB;
+							yA += width2d;
 						}
 					}
 				}
 			}
-		} else if (y1 <= y2) {
-			if (y1 < bottom) {
-				if (y2 > bottom) {
-					y2 = bottom;
+		} else if (yB <= yC) {
+			if (yB < bottom) {
+				if (yC > bottom) {
+					yC = bottom;
 				}
-				if (y0 > bottom) {
-					y0 = bottom;
+
+				if (yA > bottom) {
+					yA = bottom;
 				}
-				if (y2 < y0) {
-					x0 = x1 <<= 0x10;
-					if (y1 < 0) {
-						x0 -= xStepAB * y1;
-						x1 -= xStepBC * y1;
-						y1 = 0;
+
+				if (yC < yA) {
+					xA = xB <<= 0x10;
+					if (yB < 0) {
+						xA -= xStepAB * yB;
+						xB -= xStepBC * yB;
+						yB = 0;
 					}
-					x2 <<= 0x10;
-					if (y2 < 0) {
-						x2 -= xStepAC * y2;
-						y2 = 0;
+
+					xC <<= 0x10;
+					if (yC < 0) {
+						xC -= xStepAC * yC;
+						yC = 0;
 					}
-					if (y1 != y2 && xStepAB < xStepBC || y1 == y2 && xStepAB > xStepAC) {
-						y0 -= y2;
-						y2 -= y1;
-						y1 = lineOffset[y1];
-						while (true) {
-							y2--;
-							if (y2 < 0) {
-								while (true) {
-									y0--;
-									if (y0 < 0) {
-										return;
-									}
-									drawScanline(x0 >> 16, x2 >> 16, data, y1, color);
-									x0 += xStepAB;
-									x2 += xStepAC;
-									y1 += width2d;
-								}
-							}
-							drawScanline(x0 >> 16, x1 >> 16, data, y1, color);
-							x0 += xStepAB;
-							x1 += xStepBC;
-							y1 += width2d;
+
+					if (yB != yC && xStepAB < xStepBC || yB == yC && xStepAB > xStepAC) {
+						yA -= yC;
+						yC -= yB;
+						yB = lineOffset[yB];
+
+						while (--yC >= 0) {
+							drawScanline(xA >> 16, xB >> 16, data, yB, color);
+							xA += xStepAB;
+							xB += xStepBC;
+							yB += width2d;
+						}
+						while (--yA >= 0) {
+							drawScanline(xA >> 16, xC >> 16, data, yB, color);
+							xA += xStepAB;
+							xC += xStepAC;
+							yB += width2d;
 						}
 					} else {
-						y0 -= y2;
-						y2 -= y1;
-						y1 = lineOffset[y1];
-						while (true) {
-							y2--;
-							if (y2 < 0) {
-								while (true) {
-									y0--;
-									if (y0 < 0) {
-										return;
-									}
-									drawScanline(x2 >> 16, x0 >> 16, data, y1, color);
-									x0 += xStepAB;
-									x2 += xStepAC;
-									y1 += width2d;
-								}
-							}
-							drawScanline(x1 >> 16, x0 >> 16, data, y1, color);
-							x0 += xStepAB;
-							x1 += xStepBC;
-							y1 += width2d;
+						yA -= yC;
+						yC -= yB;
+						yB = lineOffset[yB];
+
+						while (--yC >= 0) {
+							drawScanline(xB >> 16, xA >> 16, data, yB, color);
+							xA += xStepAB;
+							xB += xStepBC;
+							yB += width2d;
+						}
+						while (--yA >= 0) {
+							drawScanline(xC >> 16, xA >> 16, data, yB, color);
+							xA += xStepAB;
+							xC += xStepAC;
+							yB += width2d;
 						}
 					}
 				} else {
-					x2 = x1 <<= 0x10;
-					if (y1 < 0) {
-						x2 -= xStepAB * y1;
-						x1 -= xStepBC * y1;
-						y1 = 0;
+					xC = xB <<= 0x10;
+					if (yB < 0) {
+						xC -= xStepAB * yB;
+						xB -= xStepBC * yB;
+						yB = 0;
 					}
-					x0 <<= 0x10;
-					if (y0 < 0) {
-						x0 -= xStepAC * y0;
-						y0 = 0;
+
+					xA <<= 0x10;
+					if (yA < 0) {
+						xA -= xStepAC * yA;
+						yA = 0;
 					}
+
 					if (xStepAB < xStepBC) {
-						y2 -= y0;
-						y0 -= y1;
-						y1 = lineOffset[y1];
-						while (true) {
-							y0--;
-							if (y0 < 0) {
-								while (true) {
-									y2--;
-									if (y2 < 0) {
-										return;
-									}
-									drawScanline(x0 >> 16, x1 >> 16, data, y1, color);
-									x0 += xStepAC;
-									x1 += xStepBC;
-									y1 += width2d;
-								}
-							}
-							drawScanline(x2 >> 16, x1 >> 16, data, y1, color);
-							x2 += xStepAB;
-							x1 += xStepBC;
-							y1 += width2d;
+						yC -= yA;
+						yA -= yB;
+						yB = lineOffset[yB];
+
+						while (--yA >= 0) {
+							drawScanline(xC >> 16, xB >> 16, data, yB, color);
+							xC += xStepAB;
+							xB += xStepBC;
+							yB += width2d;
+						}
+						while (--yC >= 0) {
+							drawScanline(xA >> 16, xB >> 16, data, yB, color);
+							xA += xStepAC;
+							xB += xStepBC;
+							yB += width2d;
 						}
 					} else {
-						y2 -= y0;
-						y0 -= y1;
-						y1 = lineOffset[y1];
-						while (true) {
-							y0--;
-							if (y0 < 0) {
-								while (true) {
-									y2--;
-									if (y2 < 0) {
-										return;
-									}
-									drawScanline(x1 >> 16, x0 >> 16, data, y1, color);
-									x0 += xStepAC;
-									x1 += xStepBC;
-									y1 += width2d;
-								}
-							}
-							drawScanline(x1 >> 16, x2 >> 16, data, y1, color);
-							x2 += xStepAB;
-							x1 += xStepBC;
-							y1 += width2d;
+						yC -= yA;
+						yA -= yB;
+						yB = lineOffset[yB];
+
+						while (--yA >= 0) {
+							drawScanline(xB >> 16, xC >> 16, data, yB, color);
+							xC += xStepAB;
+							xB += xStepBC;
+							yB += width2d;
+						}
+						while (--yC >= 0) {
+							drawScanline(xB >> 16, xA >> 16, data, yB, color);
+							xA += xStepAC;
+							xB += xStepBC;
+							yB += width2d;
 						}
 					}
 				}
 			}
-		} else if (y2 < bottom) {
-			if (y0 > bottom) {
-				y0 = bottom;
+		} else if (yC < bottom) {
+			if (yA > bottom) {
+				yA = bottom;
 			}
-			if (y1 > bottom) {
-				y1 = bottom;
+
+			if (yB > bottom) {
+				yB = bottom;
 			}
-			if (y0 < y1) {
-				x1 = x2 <<= 0x10;
-				if (y2 < 0) {
-					x1 -= xStepBC * y2;
-					x2 -= xStepAC * y2;
-					y2 = 0;
+
+			if (yA < yB) {
+				xB = xC <<= 0x10;
+				if (yC < 0) {
+					xB -= xStepBC * yC;
+					xC -= xStepAC * yC;
+					yC = 0;
 				}
-				x0 <<= 0x10;
-				if (y0 < 0) {
-					x0 -= xStepAB * y0;
-					y0 = 0;
+
+				xA <<= 0x10;
+				if (yA < 0) {
+					xA -= xStepAB * yA;
+					yA = 0;
 				}
+
 				if (xStepBC < xStepAC) {
-					y1 -= y0;
-					y0 -= y2;
-					y2 = lineOffset[y2];
-					while (true) {
-						y0--;
-						if (y0 < 0) {
-							while (true) {
-								y1--;
-								if (y1 < 0) {
-									return;
-								}
-								drawScanline(x1 >> 16, x0 >> 16, data, y2, color);
-								x1 += xStepBC;
-								x0 += xStepAB;
-								y2 += width2d;
-							}
-						}
-						drawScanline(x1 >> 16, x2 >> 16, data, y2, color);
-						x1 += xStepBC;
-						x2 += xStepAC;
-						y2 += width2d;
+					yB -= yA;
+					yA -= yC;
+					yC = lineOffset[yC];
+
+					while (--yA >= 0) {
+						drawScanline(xB >> 16, xC >> 16, data, yC, color);
+						xB += xStepBC;
+						xC += xStepAC;
+						yC += width2d;
+					}
+					while (--yB >= 0) {
+						drawScanline(xB >> 16, xA >> 16, data, yC, color);
+						xB += xStepBC;
+						xA += xStepAB;
+						yC += width2d;
 					}
 				} else {
-					y1 -= y0;
-					y0 -= y2;
-					y2 = lineOffset[y2];
-					while (true) {
-						y0--;
-						if (y0 < 0) {
-							while (true) {
-								y1--;
-								if (y1 < 0) {
-									return;
-								}
-								drawScanline(x0 >> 16, x1 >> 16, data, y2, color);
-								x1 += xStepBC;
-								x0 += xStepAB;
-								y2 += width2d;
-							}
-						}
-						drawScanline(x2 >> 16, x1 >> 16, data, y2, color);
-						x1 += xStepBC;
-						x2 += xStepAC;
-						y2 += width2d;
+					yB -= yA;
+					yA -= yC;
+					yC = lineOffset[yC];
+
+					while (--yA >= 0) {
+						drawScanline(xC >> 16, xB >> 16, data, yC, color);
+						xB += xStepBC;
+						xC += xStepAC;
+						yC += width2d;
+					}
+					while (--yB >= 0) {
+						drawScanline(xA >> 16, xB >> 16, data, yC, color);
+						xB += xStepBC;
+						xA += xStepAB;
+						yC += width2d;
 					}
 				}
 			} else {
-				x0 = x2 <<= 0x10;
-				if (y2 < 0) {
-					x0 -= xStepBC * y2;
-					x2 -= xStepAC * y2;
-					y2 = 0;
+				xA = xC <<= 0x10;
+				if (yC < 0) {
+					xA -= xStepBC * yC;
+					xC -= xStepAC * yC;
+					yC = 0;
 				}
-				x1 <<= 0x10;
-				if (y1 < 0) {
-					x1 -= xStepAB * y1;
-					y1 = 0;
+
+				xB <<= 0x10;
+				if (yB < 0) {
+					xB -= xStepAB * yB;
+					yB = 0;
 				}
+
 				if (xStepBC < xStepAC) {
-					y0 -= y1;
-					y1 -= y2;
-					y2 = lineOffset[y2];
-					while (true) {
-						y1--;
-						if (y1 < 0) {
-							while (true) {
-								y0--;
-								if (y0 < 0) {
-									return;
-								}
-								drawScanline(x1 >> 16, x2 >> 16, data, y2, color);
-								x1 += xStepAB;
-								x2 += xStepAC;
-								y2 += width2d;
-							}
-						}
-						drawScanline(x0 >> 16, x2 >> 16, data, y2, color);
-						x0 += xStepBC;
-						x2 += xStepAC;
-						y2 += width2d;
+					yA -= yB;
+					yB -= yC;
+					yC = lineOffset[yC];
+
+					while (--yB >= 0) {
+						drawScanline(xA >> 16, xC >> 16, data, yC, color);
+						xA += xStepBC;
+						xC += xStepAC;
+						yC += width2d;
+					}
+					while (--yA >= 0) {
+						drawScanline(xB >> 16, xC >> 16, data, yC, color);
+						xB += xStepAB;
+						xC += xStepAC;
+						yC += width2d;
 					}
 				} else {
-					y0 -= y1;
-					y1 -= y2;
-					y2 = lineOffset[y2];
-					while (true) {
-						y1--;
-						if (y1 < 0) {
-							while (true) {
-								y0--;
-								if (y0 < 0) {
-									return;
-								}
-								drawScanline(x2 >> 16, x1 >> 16, data, y2, color);
-								x1 += xStepAB;
-								x2 += xStepAC;
-								y2 += width2d;
-							}
-						}
-						drawScanline(x2 >> 16, x0 >> 16, data, y2, color);
-						x0 += xStepBC;
-						x2 += xStepAC;
-						y2 += width2d;
+					yA -= yB;
+					yB -= yC;
+					yC = lineOffset[yC];
+
+					while (--yB >= 0) {
+						drawScanline(xC >> 16, xA >> 16, data, yC, color);
+						xA += xStepBC;
+						xC += xStepAC;
+						yC += width2d;
+					}
+					while (--yA >= 0) {
+						drawScanline(xC >> 16, xB >> 16, data, yC, color);
+						xB += xStepAB;
+						xC += xStepAC;
+						yC += width2d;
 					}
 				}
 			}
@@ -1503,6 +1398,7 @@ public class Draw3D extends Draw2D {
 						shadeA -= shadeStepAB * yA;
 						yA = 0;
 					}
+
 					xB <<= 0x10;
 					shadeB <<= 0x10;
 					if (yB < 0) {
@@ -1510,33 +1406,18 @@ public class Draw3D extends Draw2D {
 						shadeB -= shadeStepBC * yB;
 						yB = 0;
 					}
+
 					int dy = yA - centerY;
 					u += uStepVertical * dy;
 					v += vStepVertical * dy;
 					w += wStepVertical * dy;
+
 					if (yA != yB && xStepAC < xStepAB || yA == yB && xStepAC > xStepBC) {
 						yC -= yB;
 						yB -= yA;
 						yA = lineOffset[yA];
-						while (true) {
-							yB--;
-							if (yB < 0) {
-								while (true) {
-									yC--;
-									if (yC < 0) {
-										return;
-									}
-									drawTexturedScanline(xC >> 16, xB >> 16, data, yA, texels, 0, 0, u, v, w, uStride, vStride, wStride, shadeC >> 8, shadeB >> 8);
-									xC += xStepAC;
-									xB += xStepBC;
-									shadeC += shadeStepAC;
-									shadeB += shadeStepBC;
-									yA += width2d;
-									u += uStepVertical;
-									v += vStepVertical;
-									w += wStepVertical;
-								}
-							}
+
+						while (--yB >= 0) {
 							drawTexturedScanline(xC >> 16, xA >> 16, data, yA, texels, 0, 0, u, v, w, uStride, vStride, wStride, shadeC >> 8, shadeA >> 8);
 							xC += xStepAC;
 							xA += xStepAB;
@@ -1547,34 +1428,39 @@ public class Draw3D extends Draw2D {
 							v += vStepVertical;
 							w += wStepVertical;
 						}
+						while (--yC >= 0) {
+							drawTexturedScanline(xC >> 16, xB >> 16, data, yA, texels, 0, 0, u, v, w, uStride, vStride, wStride, shadeC >> 8, shadeB >> 8);
+							xC += xStepAC;
+							xB += xStepBC;
+							shadeC += shadeStepAC;
+							shadeB += shadeStepBC;
+							yA += width2d;
+							u += uStepVertical;
+							v += vStepVertical;
+							w += wStepVertical;
+						}
 					} else {
 						yC -= yB;
 						yB -= yA;
 						yA = lineOffset[yA];
-						while (true) {
-							yB--;
-							if (yB < 0) {
-								while (true) {
-									yC--;
-									if (yC < 0) {
-										return;
-									}
-									drawTexturedScanline(xB >> 16, xC >> 16, data, yA, texels, 0, 0, u, v, w, uStride, vStride, wStride, shadeB >> 8, shadeC >> 8);
-									xC += xStepAC;
-									xB += xStepBC;
-									shadeC += shadeStepAC;
-									shadeB += shadeStepBC;
-									yA += width2d;
-									u += uStepVertical;
-									v += vStepVertical;
-									w += wStepVertical;
-								}
-							}
+
+						while (--yB >= 0) {
 							drawTexturedScanline(xA >> 16, xC >> 16, data, yA, texels, 0, 0, u, v, w, uStride, vStride, wStride, shadeA >> 8, shadeC >> 8);
 							xC += xStepAC;
 							xA += xStepAB;
 							shadeC += shadeStepAC;
 							shadeA += shadeStepAB;
+							yA += width2d;
+							u += uStepVertical;
+							v += vStepVertical;
+							w += wStepVertical;
+						}
+						while (--yC >= 0) {
+							drawTexturedScanline(xB >> 16, xC >> 16, data, yA, texels, 0, 0, u, v, w, uStride, vStride, wStride, shadeB >> 8, shadeC >> 8);
+							xC += xStepAC;
+							xB += xStepBC;
+							shadeC += shadeStepAC;
+							shadeB += shadeStepBC;
 							yA += width2d;
 							u += uStepVertical;
 							v += vStepVertical;
@@ -1591,6 +1477,7 @@ public class Draw3D extends Draw2D {
 						shadeA -= shadeStepAB * yA;
 						yA = 0;
 					}
+
 					xC <<= 0x10;
 					shadeC <<= 0x10;
 					if (yC < 0) {
@@ -1598,33 +1485,18 @@ public class Draw3D extends Draw2D {
 						shadeC -= shadeStepBC * yC;
 						yC = 0;
 					}
+
 					int dy = yA - centerY;
 					u += uStepVertical * dy;
 					v += vStepVertical * dy;
 					w += wStepVertical * dy;
+
 					if ((yA == yC || xStepAC >= xStepAB) && (yA != yC || xStepBC <= xStepAB)) {
 						yB -= yC;
 						yC -= yA;
 						yA = lineOffset[yA];
-						while (true) {
-							yC--;
-							if (yC < 0) {
-								while (true) {
-									yB--;
-									if (yB < 0) {
-										return;
-									}
-									drawTexturedScanline(xA >> 16, xC >> 16, data, yA, texels, 0, 0, u, v, w, uStride, vStride, wStride, shadeA >> 8, shadeC >> 8);
-									xC += xStepBC;
-									xA += xStepAB;
-									shadeC += shadeStepBC;
-									shadeA += shadeStepAB;
-									yA += width2d;
-									u += uStepVertical;
-									v += vStepVertical;
-									w += wStepVertical;
-								}
-							}
+
+						while (--yC >= 0) {
 							drawTexturedScanline(xA >> 16, xB >> 16, data, yA, texels, 0, 0, u, v, w, uStride, vStride, wStride, shadeA >> 8, shadeB >> 8);
 							xB += xStepAC;
 							xA += xStepAB;
@@ -1635,33 +1507,38 @@ public class Draw3D extends Draw2D {
 							v += vStepVertical;
 							w += wStepVertical;
 						}
+						while (--yB >= 0) {
+							drawTexturedScanline(xA >> 16, xC >> 16, data, yA, texels, 0, 0, u, v, w, uStride, vStride, wStride, shadeA >> 8, shadeC >> 8);
+							xC += xStepBC;
+							xA += xStepAB;
+							shadeC += shadeStepBC;
+							shadeA += shadeStepAB;
+							yA += width2d;
+							u += uStepVertical;
+							v += vStepVertical;
+							w += wStepVertical;
+						}
 					} else {
 						yB -= yC;
 						yC -= yA;
 						yA = lineOffset[yA];
-						while (true) {
-							yC--;
-							if (yC < 0) {
-								while (true) {
-									yB--;
-									if (yB < 0) {
-										return;
-									}
-									drawTexturedScanline(xC >> 16, xA >> 16, data, yA, texels, 0, 0, u, v, w, uStride, vStride, wStride, shadeC >> 8, shadeA >> 8);
-									xC += xStepBC;
-									xA += xStepAB;
-									shadeC += shadeStepBC;
-									shadeA += shadeStepAB;
-									yA += width2d;
-									u += uStepVertical;
-									v += vStepVertical;
-									w += wStepVertical;
-								}
-							}
+
+						while (--yC >= 0) {
 							drawTexturedScanline(xB >> 16, xA >> 16, data, yA, texels, 0, 0, u, v, w, uStride, vStride, wStride, shadeB >> 8, shadeA >> 8);
 							xB += xStepAC;
 							xA += xStepAB;
 							shadeB += shadeStepAC;
+							shadeA += shadeStepAB;
+							yA += width2d;
+							u += uStepVertical;
+							v += vStepVertical;
+							w += wStepVertical;
+						}
+						while (--yB >= 0) {
+							drawTexturedScanline(xC >> 16, xA >> 16, data, yA, texels, 0, 0, u, v, w, uStride, vStride, wStride, shadeC >> 8, shadeA >> 8);
+							xC += xStepBC;
+							xA += xStepAB;
+							shadeC += shadeStepBC;
 							shadeA += shadeStepAB;
 							yA += width2d;
 							u += uStepVertical;
@@ -1676,9 +1553,11 @@ public class Draw3D extends Draw2D {
 				if (yC > bottom) {
 					yC = bottom;
 				}
+
 				if (yA > bottom) {
 					yA = bottom;
 				}
+
 				if (yC < yA) {
 					xA = xB <<= 0x10;
 					shadeA = shadeB <<= 0x10;
@@ -1689,6 +1568,7 @@ public class Draw3D extends Draw2D {
 						shadeB -= shadeStepBC * yB;
 						yB = 0;
 					}
+
 					xC <<= 0x10;
 					shadeC <<= 0x10;
 					if (yC < 0) {
@@ -1696,33 +1576,18 @@ public class Draw3D extends Draw2D {
 						shadeC -= shadeStepAC * yC;
 						yC = 0;
 					}
+
 					int dy = yB - centerY;
 					u += uStepVertical * dy;
 					v += vStepVertical * dy;
 					w += wStepVertical * dy;
+
 					if (yB != yC && xStepAB < xStepBC || yB == yC && xStepAB > xStepAC) {
 						yA -= yC;
 						yC -= yB;
 						yB = lineOffset[yB];
-						while (true) {
-							yC--;
-							if (yC < 0) {
-								while (true) {
-									yA--;
-									if (yA < 0) {
-										return;
-									}
-									drawTexturedScanline(xA >> 16, xC >> 16, data, yB, texels, 0, 0, u, v, w, uStride, vStride, wStride, shadeA >> 8, shadeC >> 8);
-									xA += xStepAB;
-									xC += xStepAC;
-									shadeA += shadeStepAB;
-									shadeC += shadeStepAC;
-									yB += width2d;
-									u += uStepVertical;
-									v += vStepVertical;
-									w += wStepVertical;
-								}
-							}
+
+						while (--yC >= 0) {
 							drawTexturedScanline(xA >> 16, xB >> 16, data, yB, texels, 0, 0, u, v, w, uStride, vStride, wStride, shadeA >> 8, shadeB >> 8);
 							xA += xStepAB;
 							xB += xStepBC;
@@ -1733,34 +1598,39 @@ public class Draw3D extends Draw2D {
 							v += vStepVertical;
 							w += wStepVertical;
 						}
+						while (--yA >= 0) {
+							drawTexturedScanline(xA >> 16, xC >> 16, data, yB, texels, 0, 0, u, v, w, uStride, vStride, wStride, shadeA >> 8, shadeC >> 8);
+							xA += xStepAB;
+							xC += xStepAC;
+							shadeA += shadeStepAB;
+							shadeC += shadeStepAC;
+							yB += width2d;
+							u += uStepVertical;
+							v += vStepVertical;
+							w += wStepVertical;
+						}
 					} else {
 						yA -= yC;
 						yC -= yB;
 						yB = lineOffset[yB];
-						while (true) {
-							yC--;
-							if (yC < 0) {
-								while (true) {
-									yA--;
-									if (yA < 0) {
-										return;
-									}
-									drawTexturedScanline(xC >> 16, xA >> 16, data, yB, texels, 0, 0, u, v, w, uStride, vStride, wStride, shadeC >> 8, shadeA >> 8);
-									xA += xStepAB;
-									xC += xStepAC;
-									shadeA += shadeStepAB;
-									shadeC += shadeStepAC;
-									yB += width2d;
-									u += uStepVertical;
-									v += vStepVertical;
-									w += wStepVertical;
-								}
-							}
+
+						while (--yC >= 0) {
 							drawTexturedScanline(xB >> 16, xA >> 16, data, yB, texels, 0, 0, u, v, w, uStride, vStride, wStride, shadeB >> 8, shadeA >> 8);
 							xA += xStepAB;
 							xB += xStepBC;
 							shadeA += shadeStepAB;
 							shadeB += shadeStepBC;
+							yB += width2d;
+							u += uStepVertical;
+							v += vStepVertical;
+							w += wStepVertical;
+						}
+						while (--yA >= 0) {
+							drawTexturedScanline(xC >> 16, xA >> 16, data, yB, texels, 0, 0, u, v, w, uStride, vStride, wStride, shadeC >> 8, shadeA >> 8);
+							xA += xStepAB;
+							xC += xStepAC;
+							shadeA += shadeStepAB;
+							shadeC += shadeStepAC;
 							yB += width2d;
 							u += uStepVertical;
 							v += vStepVertical;
@@ -1777,6 +1647,7 @@ public class Draw3D extends Draw2D {
 						shadeB -= shadeStepBC * yB;
 						yB = 0;
 					}
+
 					xA <<= 0x10;
 					shadeA <<= 0x10;
 					if (yA < 0) {
@@ -1784,33 +1655,18 @@ public class Draw3D extends Draw2D {
 						shadeA -= shadeStepAC * yA;
 						yA = 0;
 					}
+
 					int dy = yB - centerY;
 					u += uStepVertical * dy;
 					v += vStepVertical * dy;
 					w += wStepVertical * dy;
+
 					if (xStepAB < xStepBC) {
 						yC -= yA;
 						yA -= yB;
 						yB = lineOffset[yB];
-						while (true) {
-							yA--;
-							if (yA < 0) {
-								while (true) {
-									yC--;
-									if (yC < 0) {
-										return;
-									}
-									drawTexturedScanline(xA >> 16, xB >> 16, data, yB, texels, 0, 0, u, v, w, uStride, vStride, wStride, shadeA >> 8, shadeB >> 8);
-									xA += xStepAC;
-									xB += xStepBC;
-									shadeA += shadeStepAC;
-									shadeB += shadeStepBC;
-									yB += width2d;
-									u += uStepVertical;
-									v += vStepVertical;
-									w += wStepVertical;
-								}
-							}
+
+						while (--yA >= 0) {
 							drawTexturedScanline(xC >> 16, xB >> 16, data, yB, texels, 0, 0, u, v, w, uStride, vStride, wStride, shadeC >> 8, shadeB >> 8);
 							xC += xStepAB;
 							xB += xStepBC;
@@ -1821,33 +1677,38 @@ public class Draw3D extends Draw2D {
 							v += vStepVertical;
 							w += wStepVertical;
 						}
+						while (--yC >= 0) {
+							drawTexturedScanline(xA >> 16, xB >> 16, data, yB, texels, 0, 0, u, v, w, uStride, vStride, wStride, shadeA >> 8, shadeB >> 8);
+							xA += xStepAC;
+							xB += xStepBC;
+							shadeA += shadeStepAC;
+							shadeB += shadeStepBC;
+							yB += width2d;
+							u += uStepVertical;
+							v += vStepVertical;
+							w += wStepVertical;
+						}
 					} else {
 						yC -= yA;
 						yA -= yB;
 						yB = lineOffset[yB];
-						while (true) {
-							yA--;
-							if (yA < 0) {
-								while (true) {
-									yC--;
-									if (yC < 0) {
-										return;
-									}
-									drawTexturedScanline(xB >> 16, xA >> 16, data, yB, texels, 0, 0, u, v, w, uStride, vStride, wStride, shadeB >> 8, shadeA >> 8);
-									xA += xStepAC;
-									xB += xStepBC;
-									shadeA += shadeStepAC;
-									shadeB += shadeStepBC;
-									yB += width2d;
-									u += uStepVertical;
-									v += vStepVertical;
-									w += wStepVertical;
-								}
-							}
+
+						while (--yA >= 0) {
 							drawTexturedScanline(xB >> 16, xC >> 16, data, yB, texels, 0, 0, u, v, w, uStride, vStride, wStride, shadeB >> 8, shadeC >> 8);
 							xC += xStepAB;
 							xB += xStepBC;
 							shadeC += shadeStepAB;
+							shadeB += shadeStepBC;
+							yB += width2d;
+							u += uStepVertical;
+							v += vStepVertical;
+							w += wStepVertical;
+						}
+						while (--yC >= 0) {
+							drawTexturedScanline(xB >> 16, xA >> 16, data, yB, texels, 0, 0, u, v, w, uStride, vStride, wStride, shadeB >> 8, shadeA >> 8);
+							xA += xStepAC;
+							xB += xStepBC;
+							shadeA += shadeStepAC;
 							shadeB += shadeStepBC;
 							yB += width2d;
 							u += uStepVertical;
@@ -1861,9 +1722,11 @@ public class Draw3D extends Draw2D {
 			if (yA > bottom) {
 				yA = bottom;
 			}
+
 			if (yB > bottom) {
 				yB = bottom;
 			}
+
 			if (yA < yB) {
 				xB = xC <<= 0x10;
 				shadeB = shadeC <<= 0x10;
@@ -1874,6 +1737,7 @@ public class Draw3D extends Draw2D {
 					shadeC -= shadeStepAC * yC;
 					yC = 0;
 				}
+
 				xA <<= 0x10;
 				shadeA <<= 0x10;
 				if (yA < 0) {
@@ -1881,33 +1745,18 @@ public class Draw3D extends Draw2D {
 					shadeA -= shadeStepAB * yA;
 					yA = 0;
 				}
+
 				int dy = yC - centerY;
 				u += uStepVertical * dy;
 				v += vStepVertical * dy;
 				w += wStepVertical * dy;
+
 				if (xStepBC < xStepAC) {
 					yB -= yA;
 					yA -= yC;
 					yC = lineOffset[yC];
-					while (true) {
-						yA--;
-						if (yA < 0) {
-							while (true) {
-								yB--;
-								if (yB < 0) {
-									return;
-								}
-								drawTexturedScanline(xB >> 16, xA >> 16, data, yC, texels, 0, 0, u, v, w, uStride, vStride, wStride, shadeB >> 8, shadeA >> 8);
-								xB += xStepBC;
-								xA += xStepAB;
-								shadeB += shadeStepBC;
-								shadeA += shadeStepAB;
-								yC += width2d;
-								u += uStepVertical;
-								v += vStepVertical;
-								w += wStepVertical;
-							}
-						}
+
+					while (--yA >= 0) {
 						drawTexturedScanline(xB >> 16, xC >> 16, data, yC, texels, 0, 0, u, v, w, uStride, vStride, wStride, shadeB >> 8, shadeC >> 8);
 						xB += xStepBC;
 						xC += xStepAC;
@@ -1918,34 +1767,39 @@ public class Draw3D extends Draw2D {
 						v += vStepVertical;
 						w += wStepVertical;
 					}
+					while (--yB >= 0) {
+						drawTexturedScanline(xB >> 16, xA >> 16, data, yC, texels, 0, 0, u, v, w, uStride, vStride, wStride, shadeB >> 8, shadeA >> 8);
+						xB += xStepBC;
+						xA += xStepAB;
+						shadeB += shadeStepBC;
+						shadeA += shadeStepAB;
+						yC += width2d;
+						u += uStepVertical;
+						v += vStepVertical;
+						w += wStepVertical;
+					}
 				} else {
 					yB -= yA;
 					yA -= yC;
 					yC = lineOffset[yC];
-					while (true) {
-						yA--;
-						if (yA < 0) {
-							while (true) {
-								yB--;
-								if (yB < 0) {
-									return;
-								}
-								drawTexturedScanline(xA >> 16, xB >> 16, data, yC, texels, 0, 0, u, v, w, uStride, vStride, wStride, shadeA >> 8, shadeB >> 8);
-								xB += xStepBC;
-								xA += xStepAB;
-								shadeB += shadeStepBC;
-								shadeA += shadeStepAB;
-								yC += width2d;
-								u += uStepVertical;
-								v += vStepVertical;
-								w += wStepVertical;
-							}
-						}
+
+					while (--yA >= 0) {
 						drawTexturedScanline(xC >> 16, xB >> 16, data, yC, texels, 0, 0, u, v, w, uStride, vStride, wStride, shadeC >> 8, shadeB >> 8);
 						xB += xStepBC;
 						xC += xStepAC;
 						shadeB += shadeStepBC;
 						shadeC += shadeStepAC;
+						yC += width2d;
+						u += uStepVertical;
+						v += vStepVertical;
+						w += wStepVertical;
+					}
+					while (--yB >= 0) {
+						drawTexturedScanline(xA >> 16, xB >> 16, data, yC, texels, 0, 0, u, v, w, uStride, vStride, wStride, shadeA >> 8, shadeB >> 8);
+						xB += xStepBC;
+						xA += xStepAB;
+						shadeB += shadeStepBC;
+						shadeA += shadeStepAB;
 						yC += width2d;
 						u += uStepVertical;
 						v += vStepVertical;
@@ -1962,6 +1816,7 @@ public class Draw3D extends Draw2D {
 					shadeC -= shadeStepAC * yC;
 					yC = 0;
 				}
+
 				xB <<= 0x10;
 				shadeB <<= 0x10;
 				if (yB < 0) {
@@ -1969,33 +1824,18 @@ public class Draw3D extends Draw2D {
 					shadeB -= shadeStepAB * yB;
 					yB = 0;
 				}
+
 				int dy = yC - centerY;
 				u += uStepVertical * dy;
 				v += vStepVertical * dy;
 				w += wStepVertical * dy;
+
 				if (xStepBC < xStepAC) {
 					yA -= yB;
 					yB -= yC;
 					yC = lineOffset[yC];
-					while (true) {
-						yB--;
-						if (yB < 0) {
-							while (true) {
-								yA--;
-								if (yA < 0) {
-									return;
-								}
-								drawTexturedScanline(xB >> 16, xC >> 16, data, yC, texels, 0, 0, u, v, w, uStride, vStride, wStride, shadeB >> 8, shadeC >> 8);
-								xB += xStepAB;
-								xC += xStepAC;
-								shadeB += shadeStepAB;
-								shadeC += shadeStepAC;
-								yC += width2d;
-								u += uStepVertical;
-								v += vStepVertical;
-								w += wStepVertical;
-							}
-						}
+
+					while (--yB >= 0) {
 						drawTexturedScanline(xA >> 16, xC >> 16, data, yC, texels, 0, 0, u, v, w, uStride, vStride, wStride, shadeA >> 8, shadeC >> 8);
 						xA += xStepBC;
 						xC += xStepAC;
@@ -2006,33 +1846,38 @@ public class Draw3D extends Draw2D {
 						v += vStepVertical;
 						w += wStepVertical;
 					}
+					while (--yA >= 0) {
+						drawTexturedScanline(xB >> 16, xC >> 16, data, yC, texels, 0, 0, u, v, w, uStride, vStride, wStride, shadeB >> 8, shadeC >> 8);
+						xB += xStepAB;
+						xC += xStepAC;
+						shadeB += shadeStepAB;
+						shadeC += shadeStepAC;
+						yC += width2d;
+						u += uStepVertical;
+						v += vStepVertical;
+						w += wStepVertical;
+					}
 				} else {
 					yA -= yB;
 					yB -= yC;
 					yC = lineOffset[yC];
-					while (true) {
-						yB--;
-						if (yB < 0) {
-							while (true) {
-								yA--;
-								if (yA < 0) {
-									return;
-								}
-								drawTexturedScanline(xC >> 16, xB >> 16, data, yC, texels, 0, 0, u, v, w, uStride, vStride, wStride, shadeC >> 8, shadeB >> 8);
-								xB += xStepAB;
-								xC += xStepAC;
-								shadeB += shadeStepAB;
-								shadeC += shadeStepAC;
-								yC += width2d;
-								u += uStepVertical;
-								v += vStepVertical;
-								w += wStepVertical;
-							}
-						}
+
+					while (--yB >= 0) {
 						drawTexturedScanline(xC >> 16, xA >> 16, data, yC, texels, 0, 0, u, v, w, uStride, vStride, wStride, shadeC >> 8, shadeA >> 8);
 						xA += xStepBC;
 						xC += xStepAC;
 						shadeA += shadeStepBC;
+						shadeC += shadeStepAC;
+						yC += width2d;
+						u += uStepVertical;
+						v += vStepVertical;
+						w += wStepVertical;
+					}
+					while (--yA >= 0) {
+						drawTexturedScanline(xC >> 16, xB >> 16, data, yC, texels, 0, 0, u, v, w, uStride, vStride, wStride, shadeC >> 8, shadeB >> 8);
+						xB += xStepAB;
+						xC += xStepAC;
+						shadeB += shadeStepAB;
 						shadeC += shadeStepAC;
 						yC += width2d;
 						u += uStepVertical;
