@@ -6,6 +6,7 @@ import org.openrs2.deob.annotation.OriginalMember;
 import org.openrs2.deob.annotation.Pc;
 
 // name and packaging confirmed 100% in rs2/mapview applet strings
+// it was also observed in an exception handler string during rev 234
 @OriginalClass("client!ub")
 public class Jagfile {
 
@@ -90,6 +91,7 @@ public class Jagfile {
 				} else {
 					BZip2.read(dst, this.fileUnpackedSize[i], this.buffer, this.filePackedSize[i], this.fileOffset[i]);
 				}
+
 				return dst;
 			}
 		}

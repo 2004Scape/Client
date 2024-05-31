@@ -133,16 +133,20 @@ public class Draw2D extends Hashable {
 			width -= left - x;
 			x = left;
 		}
+
 		if (y < top) {
 			height -= top - y;
 			y = top;
 		}
+
 		if (x + width > right) {
 			width = right - x;
 		}
+
 		if (y + height > bottom) {
 			height = bottom - y;
 		}
+
 		@Pc(45) int invAlpha = 256 - alpha;
 		@Pc(53) int r0 = (rgb >> 16 & 0xFF) * alpha;
 		@Pc(61) int g0 = (rgb >> 8 & 0xFF) * alpha;
@@ -157,6 +161,7 @@ public class Draw2D extends Hashable {
 				@Pc(136) int color = (r0 + r1 >> 8 << 16) + (g0 + g1 >> 8 << 8) + (b0 + b1 >> 8);
 				data[offset++] = color;
 			}
+
 			offset += step;
 		}
 	}
@@ -171,21 +176,25 @@ public class Draw2D extends Hashable {
 		if (yStart < 0) {
 			yStart = 0;
 		}
+
 		@Pc(39) int yEnd = yCenter + yRadius;
 		if (yEnd >= height2d) {
 			yEnd = height2d - 1;
 		}
+
 		for (@Pc(48) int y = yStart; y <= yEnd; y++) {
 			@Pc(54) int midpoint = y - yCenter;
-			@Pc(65) int xRadius = (int) Math.sqrt((double) (yRadius * yRadius - midpoint * midpoint));
+			@Pc(65) int xRadius = (int) Math.sqrt((yRadius * yRadius) - (midpoint * midpoint));
 			@Pc(69) int xStart = xCenter - xRadius;
 			if (xStart < 0) {
 				xStart = 0;
 			}
+
 			@Pc(77) int xEnd = xCenter + xRadius;
 			if (xEnd >= width2d) {
 				xEnd = width2d - 1;
 			}
+
 			@Pc(90) int offset = xStart + y * width2d;
 			for (@Pc(92) int x = xStart; x <= xEnd; x++) {
 				@Pc(104) int r1 = (data[offset] >> 16 & 0xFF) * invAlpha;

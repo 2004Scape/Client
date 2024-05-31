@@ -257,15 +257,17 @@ public class Draw3D extends Draw2D {
 			}
 
 			textureTranslucent[id] = false;
-			for (int i = 0; i < 16384; i++) {
+			for (int i = 0; i < 0x4000; i++) {
 				texels[i] &= 0xF8F8FF;
+
 				int rgb = texels[i];
 				if (rgb == 0) {
 					textureTranslucent[id] = true;
 				}
-				texels[i + 16384] = rgb - (rgb >>> 3) & 0xF8F8FF;
-				texels[i + 32768] = rgb - (rgb >>> 2) & 0xF8F8FF;
-				texels[i + 49152] = rgb - (rgb >>> 2) - (rgb >>> 3) & 0xF8F8FF;
+
+                texels[i + 0x4000] = (rgb - (rgb >>> 3)) & 0xF8F8FF;
+                texels[i + 0x8000] = (rgb - (rgb >>> 2)) & 0xF8F8FF;
+                texels[i + 0xc000] = (rgb - (rgb >>> 2) - (rgb >>> 3)) & 0xF8F8FF;
 			}
 		}
 		return texels;
@@ -279,11 +281,13 @@ public class Draw3D extends Draw2D {
 		for (@Pc(13) int y = 0; y < 512; y++) {
 			@Pc(24) double hue = (double) (y / 8) / 64.0D + 0.0078125D;
 			@Pc(33) double saturation = (double) (y & 0x7) / 8.0D + 0.0625D;
+
 			for (@Pc(35) int x = 0; x < 128; x++) {
 				@Pc(42) double lightness = (double) x / 128.0D;
 				@Pc(44) double r = lightness;
 				@Pc(46) double g = lightness;
 				@Pc(48) double b = lightness;
+
 				if (saturation != 0.0D) {
 					@Pc(62) double q;
 					if (lightness < 0.5D) {
@@ -291,15 +295,19 @@ public class Draw3D extends Draw2D {
 					} else {
 						q = lightness + saturation - lightness * saturation;
 					}
+
 					@Pc(78) double p = lightness * 2.0D - q;
+
 					@Pc(82) double t = hue + 0.3333333333333333D;
 					if (t > 1.0D) {
 						t--;
 					}
+
 					@Pc(96) double d11 = hue - 0.3333333333333333D;
 					if (d11 < 0.0D) {
 						d11++;
 					}
+
 					if (t * 6.0D < 1.0D) {
 						r = p + (q - p) * 6.0D * t;
 					} else if (t * 2.0D < 1.0D) {
@@ -309,6 +317,7 @@ public class Draw3D extends Draw2D {
 					} else {
 						r = p;
 					}
+
 					if (hue * 6.0D < 1.0D) {
 						g = p + (q - p) * 6.0D * hue;
 					} else if (hue * 2.0D < 1.0D) {
@@ -318,6 +327,7 @@ public class Draw3D extends Draw2D {
 					} else {
 						g = p;
 					}
+
 					if (d11 * 6.0D < 1.0D) {
 						b = p + (q - p) * 6.0D * d11;
 					} else if (d11 * 2.0D < 1.0D) {
@@ -328,6 +338,7 @@ public class Draw3D extends Draw2D {
 						b = p;
 					}
 				}
+
 				@Pc(259) int intR = (int) (r * 256.0D);
 				@Pc(264) int intG = (int) (g * 256.0D);
 				@Pc(269) int intB = (int) (b * 256.0D);
@@ -341,6 +352,7 @@ public class Draw3D extends Draw2D {
 			if (textures[id] != null) {
 				@Pc(309) int[] palette = textures[id].palette;
 				texturePalette[id] = new int[palette.length];
+
 				for (@Pc(317) int i = 0; i < palette.length; i++) {
 					texturePalette[id][i] = setGamma(palette[i], randomized);
 				}
@@ -354,8 +366,8 @@ public class Draw3D extends Draw2D {
 
 	@OriginalMember(owner = "client!gb", name = "a", descriptor = "(ID)I")
 	private static int setGamma(@OriginalArg(0) int rgb, @OriginalArg(1) double gamma) {
-		@Pc(6) double r = (double) (rgb >> 16) / 256.0D;
-		@Pc(15) double g = (double) (rgb >> 8 & 0xFF) / 256.0D;
+		@Pc(6) double r = (double) ((rgb >> 16) & 0xFF) / 256.0D;
+		@Pc(15) double g = (double) ((rgb >> 8) & 0xFF) / 256.0D;
 		@Pc(22) double b = (double) (rgb & 0xFF) / 256.0D;
 
 		@Pc(26) double powR = Math.pow(r, gamma);
@@ -413,8 +425,8 @@ public class Draw3D extends Draw2D {
 				}
 
 				if (yB < yC) {
-					xC = xA <<= 0x10;
-					colorC = colorA <<= 0xF;
+					xC = xA <<= 16;
+					colorC = colorA <<= 15;
 					if (yA < 0) {
 						xC -= xStepAC * yA;
 						xA -= xStepAB * yA;
@@ -423,8 +435,8 @@ public class Draw3D extends Draw2D {
 						yA = 0;
 					}
 
-					xB <<= 0x10;
-					colorB <<= 0xF;
+					xB <<= 16;
+					colorB <<= 15;
 					if (yB < 0) {
 						xB -= xStepBC * yB;
 						colorB -= colorStepBC * yB;
@@ -475,8 +487,8 @@ public class Draw3D extends Draw2D {
 						}
 					}
 				} else {
-					xB = xA <<= 0x10;
-					colorB = colorA <<= 0xF;
+					xB = xA <<= 16;
+					colorB = colorA <<= 15;
 					if (yA < 0) {
 						xB -= xStepAC * yA;
 						xA -= xStepAB * yA;
@@ -485,8 +497,8 @@ public class Draw3D extends Draw2D {
 						yA = 0;
 					}
 
-					xC <<= 0x10;
-					colorC <<= 0xF;
+					xC <<= 16;
+					colorC <<= 15;
 					if (yC < 0) {
 						xC -= xStepBC * yC;
 						colorC -= colorStepBC * yC;
@@ -549,8 +561,8 @@ public class Draw3D extends Draw2D {
 				}
 
 				if (yC < yA) {
-					xA = xB <<= 0x10;
-					colorA = colorB <<= 0xF;
+					xA = xB <<= 16;
+					colorA = colorB <<= 15;
 					if (yB < 0) {
 						xA -= xStepAB * yB;
 						xB -= xStepBC * yB;
@@ -559,8 +571,8 @@ public class Draw3D extends Draw2D {
 						yB = 0;
 					}
 
-					xC <<= 0x10;
-					colorC <<= 0xF;
+					xC <<= 16;
+					colorC <<= 15;
 					if (yC < 0) {
 						xC -= xStepAC * yC;
 						colorC -= colorStepAC * yC;
@@ -611,8 +623,8 @@ public class Draw3D extends Draw2D {
 						}
 					}
 				} else {
-					xC = xB <<= 0x10;
-					colorC = colorB <<= 0xF;
+					xC = xB <<= 16;
+					colorC = colorB <<= 15;
 					if (yB < 0) {
 						xC -= xStepAB * yB;
 						xB -= xStepBC * yB;
@@ -621,8 +633,8 @@ public class Draw3D extends Draw2D {
 						yB = 0;
 					}
 
-					xA <<= 0x10;
-					colorA <<= 0xF;
+					xA <<= 16;
+					colorA <<= 15;
 					if (yA < 0) {
 						xA -= xStepAC * yA;
 						colorA -= colorStepAC * yA;
@@ -684,8 +696,8 @@ public class Draw3D extends Draw2D {
 			}
 
 			if (yA < yB) {
-				xB = xC <<= 0x10;
-				colorB = colorC <<= 0xF;
+				xB = xC <<= 16;
+				colorB = colorC <<= 15;
 				if (yC < 0) {
 					xB -= xStepBC * yC;
 					xC -= xStepAC * yC;
@@ -694,8 +706,8 @@ public class Draw3D extends Draw2D {
 					yC = 0;
 				}
 
-				xA <<= 0x10;
-				colorA <<= 0xF;
+				xA <<= 16;
+				colorA <<= 15;
 				if (yA < 0) {
 					xA -= xStepAB * yA;
 					colorA -= colorStepAB * yA;
@@ -746,8 +758,8 @@ public class Draw3D extends Draw2D {
 					}
 				}
 			} else {
-				xA = xC <<= 0x10;
-				colorA = colorC <<= 0xF;
+				xA = xC <<= 16;
+				colorA = colorC <<= 15;
 				if (yC < 0) {
 					xA -= xStepBC * yC;
 					xC -= xStepAC * yC;
@@ -756,8 +768,8 @@ public class Draw3D extends Draw2D {
 					yC = 0;
 				}
 
-				xB <<= 0x10;
-				colorB <<= 0xF;
+				xB <<= 16;
+				colorB <<= 15;
 				if (yB < 0) {
 					xB -= xStepAB * yB;
 					colorB -= colorStepAB * yB;
@@ -840,7 +852,7 @@ public class Draw3D extends Draw2D {
 
 				offset += x0;
                 length = (x1 - x0) >> 2;
-				colorStep <<= 0x2;
+				colorStep <<= 2;
 			} else if (x0 < x1) {
 				offset += x0;
                 length = (x1 - x0) >> 2;
@@ -978,14 +990,14 @@ public class Draw3D extends Draw2D {
 				}
 
 				if (yB < yC) {
-					xC = xA <<= 0x10;
+					xC = xA <<= 16;
 					if (yA < 0) {
 						xC -= xStepAC * yA;
 						xA -= xStepAB * yA;
 						yA = 0;
 					}
 
-					xB <<= 0x10;
+					xB <<= 16;
 					if (yB < 0) {
 						xB -= xStepBC * yB;
 						yB = 0;
@@ -1027,14 +1039,14 @@ public class Draw3D extends Draw2D {
 						}
 					}
 				} else {
-					xB = xA <<= 0x10;
+					xB = xA <<= 16;
 					if (yA < 0) {
 						xB -= xStepAC * yA;
 						xA -= xStepAB * yA;
 						yA = 0;
 					}
 
-					xC <<= 0x10;
+					xC <<= 16;
 					if (yC < 0) {
 						xC -= xStepBC * yC;
 						yC = 0;
@@ -1088,14 +1100,14 @@ public class Draw3D extends Draw2D {
 				}
 
 				if (yC < yA) {
-					xA = xB <<= 0x10;
+					xA = xB <<= 16;
 					if (yB < 0) {
 						xA -= xStepAB * yB;
 						xB -= xStepBC * yB;
 						yB = 0;
 					}
 
-					xC <<= 0x10;
+					xC <<= 16;
 					if (yC < 0) {
 						xC -= xStepAC * yC;
 						yC = 0;
@@ -1137,14 +1149,14 @@ public class Draw3D extends Draw2D {
 						}
 					}
 				} else {
-					xC = xB <<= 0x10;
+					xC = xB <<= 16;
 					if (yB < 0) {
 						xC -= xStepAB * yB;
 						xB -= xStepBC * yB;
 						yB = 0;
 					}
 
-					xA <<= 0x10;
+					xA <<= 16;
 					if (yA < 0) {
 						xA -= xStepAC * yA;
 						yA = 0;
@@ -1197,14 +1209,14 @@ public class Draw3D extends Draw2D {
 			}
 
 			if (yA < yB) {
-				xB = xC <<= 0x10;
+				xB = xC <<= 16;
 				if (yC < 0) {
 					xB -= xStepBC * yC;
 					xC -= xStepAC * yC;
 					yC = 0;
 				}
 
-				xA <<= 0x10;
+				xA <<= 16;
 				if (yA < 0) {
 					xA -= xStepAB * yA;
 					yA = 0;
@@ -1246,14 +1258,14 @@ public class Draw3D extends Draw2D {
 					}
 				}
 			} else {
-				xA = xC <<= 0x10;
+				xA = xC <<= 16;
 				if (yC < 0) {
 					xA -= xStepBC * yC;
 					xC -= xStepAC * yC;
 					yC = 0;
 				}
 
-				xB <<= 0x10;
+				xB <<= 16;
 				if (yB < 0) {
 					xB -= xStepAB * yB;
 					yB = 0;
@@ -1416,8 +1428,8 @@ public class Draw3D extends Draw2D {
 				}
 
 				if (yB < yC) {
-					xC = xA <<= 0x10;
-					shadeC = shadeA <<= 0x10;
+					xC = xA <<= 16;
+					shadeC = shadeA <<= 16;
 					if (yA < 0) {
 						xC -= xStepAC * yA;
 						xA -= xStepAB * yA;
@@ -1426,8 +1438,8 @@ public class Draw3D extends Draw2D {
 						yA = 0;
 					}
 
-					xB <<= 0x10;
-					shadeB <<= 0x10;
+					xB <<= 16;
+					shadeB <<= 16;
 					if (yB < 0) {
 						xB -= xStepBC * yB;
 						shadeB -= shadeStepBC * yB;
@@ -1495,8 +1507,8 @@ public class Draw3D extends Draw2D {
 						}
 					}
 				} else {
-					xB = xA <<= 0x10;
-					shadeB = shadeA <<= 0x10;
+					xB = xA <<= 16;
+					shadeB = shadeA <<= 16;
 					if (yA < 0) {
 						xB -= xStepAC * yA;
 						xA -= xStepAB * yA;
@@ -1505,8 +1517,8 @@ public class Draw3D extends Draw2D {
 						yA = 0;
 					}
 
-					xC <<= 0x10;
-					shadeC <<= 0x10;
+					xC <<= 16;
+					shadeC <<= 16;
 					if (yC < 0) {
 						xC -= xStepBC * yC;
 						shadeC -= shadeStepBC * yC;
@@ -1586,8 +1598,8 @@ public class Draw3D extends Draw2D {
 				}
 
 				if (yC < yA) {
-					xA = xB <<= 0x10;
-					shadeA = shadeB <<= 0x10;
+					xA = xB <<= 16;
+					shadeA = shadeB <<= 16;
 					if (yB < 0) {
 						xA -= xStepAB * yB;
 						xB -= xStepBC * yB;
@@ -1596,8 +1608,8 @@ public class Draw3D extends Draw2D {
 						yB = 0;
 					}
 
-					xC <<= 0x10;
-					shadeC <<= 0x10;
+					xC <<= 16;
+					shadeC <<= 16;
 					if (yC < 0) {
 						xC -= xStepAC * yC;
 						shadeC -= shadeStepAC * yC;
@@ -1665,8 +1677,8 @@ public class Draw3D extends Draw2D {
 						}
 					}
 				} else {
-					xC = xB <<= 0x10;
-					shadeC = shadeB <<= 0x10;
+					xC = xB <<= 16;
+					shadeC = shadeB <<= 16;
 					if (yB < 0) {
 						xC -= xStepAB * yB;
 						xB -= xStepBC * yB;
@@ -1675,8 +1687,8 @@ public class Draw3D extends Draw2D {
 						yB = 0;
 					}
 
-					xA <<= 0x10;
-					shadeA <<= 0x10;
+					xA <<= 16;
+					shadeA <<= 16;
 					if (yA < 0) {
 						xA -= xStepAC * yA;
 						shadeA -= shadeStepAC * yA;
@@ -1755,8 +1767,8 @@ public class Draw3D extends Draw2D {
 			}
 
 			if (yA < yB) {
-				xB = xC <<= 0x10;
-				shadeB = shadeC <<= 0x10;
+				xB = xC <<= 16;
+				shadeB = shadeC <<= 16;
 				if (yC < 0) {
 					xB -= xStepBC * yC;
 					xC -= xStepAC * yC;
@@ -1765,8 +1777,8 @@ public class Draw3D extends Draw2D {
 					yC = 0;
 				}
 
-				xA <<= 0x10;
-				shadeA <<= 0x10;
+				xA <<= 16;
+				shadeA <<= 16;
 				if (yA < 0) {
 					xA -= xStepAB * yA;
 					shadeA -= shadeStepAB * yA;
@@ -1834,8 +1846,8 @@ public class Draw3D extends Draw2D {
 					}
 				}
 			} else {
-				xA = xC <<= 0x10;
-				shadeA = shadeC <<= 0x10;
+				xA = xC <<= 16;
+				shadeA = shadeC <<= 16;
 				if (yC < 0) {
 					xA -= xStepBC * yC;
 					xC -= xStepAC * yC;
@@ -1844,8 +1856,8 @@ public class Draw3D extends Draw2D {
 					yC = 0;
 				}
 
-				xB <<= 0x10;
-				shadeB <<= 0x10;
+				xB <<= 16;
+				shadeB <<= 16;
 				if (yB < 0) {
 					xB -= xStepAB * yB;
 					shadeB -= shadeStepAB * yB;
@@ -1941,8 +1953,8 @@ public class Draw3D extends Draw2D {
 			}
 
             strides = (xB - xA) >> 3;
-			shadeStrides <<= 0xC;
-			shadeA <<= 0x9;
+			shadeStrides <<= 12;
+			shadeA <<= 9;
 		} else {
 			if (xB - xA > 7) {
                 strides = (xB - xA) >> 3;
@@ -1952,7 +1964,7 @@ public class Draw3D extends Draw2D {
 				shadeStrides = 0;
 			}
 
-			shadeA <<= 0x9;
+			shadeA <<= 9;
 		}
 
 		offset += xA;

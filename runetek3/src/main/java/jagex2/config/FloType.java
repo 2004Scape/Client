@@ -24,7 +24,7 @@ public class FloType {
 	public int texture = -1;
 
 	@OriginalMember(owner = "client!fc", name = "g", descriptor = "Z")
-	private boolean opcode3 = false;
+	private boolean overlay = false;
 
 	@OriginalMember(owner = "client!fc", name = "h", descriptor = "Z")
 	public boolean occlude = true;
@@ -82,7 +82,7 @@ public class FloType {
 			} else if (code == 2) {
 				this.texture = dat.g1();
 			} else if (code == 3) {
-				this.opcode3 = true;
+				this.overlay = true;
 			} else if (code == 5) {
 				this.occlude = false;
 			} else if (code == 6) {
