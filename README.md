@@ -1,8 +1,14 @@
-# 2004Scape Client
+<div align="center">
 
-Status: **Completely renamed!** There's no obfuscation or unnamed classes/methods/fields/variables left.
+<h1>2004Scape Client - May 18, 2004</h1>
 
-The TeaVM webclient is in the `webclient` branch until it can be made compatible with this new branch: see https://github.com/2004scape/Client/tree/webclient
+[Website](https://2004scape.org) | [Discord](https://discord.2004scape.org) | [Rune-Server](https://www.rune-server.ee/runescape-development/rs2-server/projects/701698-lost-city-225-emulation.html)
+
+**status: completely refactored**
+
+**The client code was decompiled, deobfuscated, and refactored by us.**  
+**Jagex has never had any source code leaks.**
+</div>
 
 ## Project Structure
 
