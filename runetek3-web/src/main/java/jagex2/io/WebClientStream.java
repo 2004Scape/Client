@@ -47,8 +47,8 @@ public class WebClientStream {
             };
         });
 
-        this.client.onOpen(new EventListener<MessageEvent>(){
-            public void handleEvent(MessageEvent event) {
+        this.client.onOpen(new EventListener<Event>(){
+            public void handleEvent(Event event) {
                 callback.complete(1);
             }
         });
