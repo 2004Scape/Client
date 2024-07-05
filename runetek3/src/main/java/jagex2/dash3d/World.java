@@ -394,7 +394,7 @@ public class World {
 							opcode = buf.g1();
 							if (opcode == 0) {
 								if (level == 0) {
-									this.levelHeightmap[0][stx][stz] = -perlin(stx + originX + 932731, stz + 556238 + originZ) * 8;
+									this.levelHeightmap[0][stx][stz] = -perlin(stx + originX + 932731, stz + originZ + 556238) * 8;
 								} else {
 									this.levelHeightmap[level][stx][stz] = this.levelHeightmap[level - 1][stx][stz] - 240;
 								}

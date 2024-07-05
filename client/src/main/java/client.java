@@ -1701,6 +1701,8 @@ public class client extends GameShell {
 		}
 
 		this.worldLocationState = 0;
+
+        // duel arena
 		if (x >= 3328 && x < 3392 && z >= 3200 && z < 3264) {
 			@Pc(98) int localX = x & 63;
 			@Pc(102) int localZ = z & 63;
@@ -1720,14 +1722,18 @@ public class client extends GameShell {
 			}
 		}
 
+        // duel arena
 		if (this.worldLocationState == 0 && x >= 3328 && x <= 3393 && z >= 3203 && z <= 3325) {
 			this.worldLocationState = 2;
 		}
 
 		this.overrideChat = 0;
+
 		if (x >= 3053 && x <= 3156 && z >= 3056 && z <= 3136) {
+            // tutorial island
 			this.overrideChat = 1;
 		} else if (x >= 3072 && x <= 3118 && z >= 9492 && z <= 9535) {
+            // tutorial island underground
 			this.overrideChat = 1;
 		}
 
@@ -3158,7 +3164,9 @@ public class client extends GameShell {
                                     this.cutsceneDstLocalTileZ = Integer.parseInt(args[2]);
                                     this.cutsceneDstHeight = Integer.parseInt(args[3]);
                                 }
-                            }
+                            } else if (this.chatTyped.startsWith("::fullreload")) {
+								this.fullReload();
+							}
 							// }
 
 							if (this.chatTyped.startsWith("::")) {
@@ -3384,12 +3392,13 @@ public class client extends GameShell {
 	}
 
 	@OriginalMember(owner = "client!client", name = "a", descriptor = "(Ljava/lang/String;ILjava/lang/String;II)Lclient!ub;")
-	private Jagfile loadArchive(@OriginalArg(2) String name, @OriginalArg(1) int crc, @OriginalArg(0) String displayName, @OriginalArg(3) int displayProgress) {
+	private Jagfile loadArchive(@OriginalArg(2) String name, @OriginalArg(1) int crc, @OriginalArg(0) String displayName, @OriginalArg(3) int displayProgress, boolean showUser) {
 		@Pc(3) int retry = 5;
 		@Pc(6) byte[] data = signlink.cacheload(name);
 		if (data != null) {
 			this.crc32.reset();
 			this.crc32.update(data);
+
 			int crcValue = (int) this.crc32.getValue();
 			if (crcValue != crc) {
 				data = null;
@@ -3401,19 +3410,25 @@ public class client extends GameShell {
 		}
 
 		while (data == null) {
-			this.drawProgress("Requesting " + displayName, displayProgress);
+			if (showUser) {
+				this.drawProgress("Requesting " + displayName, displayProgress);
+			}
 
 			try {
 				int lastProgress = 0;
+
 				@Pc(60) DataInputStream stream = this.openUrl(name + crc);
 				@Pc(63) byte[] header = new byte[6];
 				stream.readFully(header, 0, 6);
+
 				@Pc(74) Packet head = new Packet(header);
 				head.pos = 3;
+
 				@Pc(82) int length = head.g3() + 6;
 				@Pc(84) int offset = 6;
 				data = new byte[length];
 				System.arraycopy(header, 0, data, 0, 6);
+
 				while (offset < length) {
 					@Pc(107) int remaining = length - offset;
 					if (remaining > 1000) {
@@ -3421,17 +3436,23 @@ public class client extends GameShell {
 					}
 
 					offset += stream.read(data, offset, remaining);
+
 					@Pc(126) int progress = offset * 100 / length;
-					if (progress != lastProgress) {
+					if (showUser && progress != lastProgress) {
 						this.drawProgress("Loading " + displayName + " - " + progress + "%", displayProgress);
 					}
 					lastProgress = progress;
 				}
+
 				stream.close();
 			} catch (@Pc(155) IOException ex) {
 				data = null;
+
 				for (int i = retry; i > 0; i--) {
-					this.drawProgress("Error loading - Will retry in " + i + " secs.", displayProgress);
+					if (showUser) {
+						this.drawProgress("Error loading - Will retry in " + i + " secs.", displayProgress);
+					}
+
 					try {
 						Thread.sleep(1000L);
 					} catch (@Pc(178) Exception ignored) {
@@ -4776,30 +4797,30 @@ public class client extends GameShell {
 	}
 
 	@OriginalMember(owner = "client!client", name = "a", descriptor = "(Lclient!x;I)V")
-	private void updateForceMovement(@OriginalArg(0) PathingEntity enttiy) {
-		@Pc(4) int delta = enttiy.forceMoveEndCycle - loopCycle;
-		@Pc(14) int dstX = enttiy.forceMoveStartSceneTileX * 128 + enttiy.size * 64;
-		@Pc(24) int dstZ = enttiy.forceMoveStartSceneTileZ * 128 + enttiy.size * 64;
+	private void updateForceMovement(@OriginalArg(0) PathingEntity entity) {
+		@Pc(4) int delta = entity.forceMoveEndCycle - loopCycle;
+		@Pc(14) int dstX = entity.forceMoveStartSceneTileX * 128 + entity.size * 64;
+		@Pc(24) int dstZ = entity.forceMoveStartSceneTileZ * 128 + entity.size * 64;
 
-		enttiy.x += (dstX - enttiy.x) / delta;
-		enttiy.z += (dstZ - enttiy.z) / delta;
+		entity.x += (dstX - entity.x) / delta;
+		entity.z += (dstZ - entity.z) / delta;
 
-		enttiy.seqTrigger = 0;
+		entity.seqTrigger = 0;
 
-		if (enttiy.forceMoveFaceDirection == 0) {
-			enttiy.dstYaw = 1024;
+		if (entity.forceMoveFaceDirection == 0) {
+			entity.dstYaw = 1024;
 		}
 
-		if (enttiy.forceMoveFaceDirection == 1) {
-			enttiy.dstYaw = 1536;
+		if (entity.forceMoveFaceDirection == 1) {
+			entity.dstYaw = 1536;
 		}
 
-		if (enttiy.forceMoveFaceDirection == 2) {
-			enttiy.dstYaw = 0;
+		if (entity.forceMoveFaceDirection == 2) {
+			entity.dstYaw = 0;
 		}
 
-		if (enttiy.forceMoveFaceDirection == 3) {
-			enttiy.dstYaw = 512;
+		if (entity.forceMoveFaceDirection == 3) {
+			entity.dstYaw = 512;
 		}
 	}
 
@@ -6490,6 +6511,261 @@ public class client extends GameShell {
 		return false;
 	}
 
+	private void fullReload() {
+		@Pc(94) int retry = 5;
+		this.archiveChecksum[8] = 0;
+		while (this.archiveChecksum[8] == 0) {
+			try {
+				@Pc(119) DataInputStream stream = this.openUrl("crc" + (int) (Math.random() * 9.9999999E7D));
+				@Pc(126) Packet checksums = new Packet(new byte[36]);
+				stream.readFully(checksums.data, 0, 36);
+				for (@Pc(134) int i = 0; i < 9; i++) {
+					this.archiveChecksum[i] = checksums.g4();
+				}
+				stream.close();
+			} catch (@Pc(150) IOException ex) {
+				for (@Pc(152) int i = retry; i > 0; i--) {
+					this.drawProgress("Error loading - Will retry in " + i + " secs.", 10);
+					try {
+						Thread.sleep(1000L);
+					} catch (@Pc(171) Exception ignored) {
+					}
+				}
+
+				retry *= 2;
+				if (retry > 60) {
+					retry = 60;
+				}
+			}
+		}
+
+		@Pc(255) Jagfile config = this.loadArchive("config", this.archiveChecksum[2], "config", 15, false);
+		@Pc(266) Jagfile inter = this.loadArchive("interface", this.archiveChecksum[3], "interface", 20, false);
+		@Pc(277) Jagfile media = this.loadArchive("media", this.archiveChecksum[4], "2d graphics", 30, false);
+		@Pc(288) Jagfile models = this.loadArchive("models", this.archiveChecksum[5], "3d graphics", 40, false);
+		@Pc(299) Jagfile textures = this.loadArchive("textures", this.archiveChecksum[6], "textures", 60, false);
+		@Pc(310) Jagfile wordenc = this.loadArchive("wordenc", this.archiveChecksum[7], "chat system", 65, false);
+		@Pc(321) Jagfile sounds = this.loadArchive("sounds", this.archiveChecksum[8], "sound effects", 70, false);
+
+		this.imageInvback = new Pix8(media, "invback", 0);
+		this.imageChatback = new Pix8(media, "chatback", 0);
+		this.imageMapback = new Pix8(media, "mapback", 0);
+		this.imageBackbase1 = new Pix8(media, "backbase1", 0);
+		this.imageBackbase2 = new Pix8(media, "backbase2", 0);
+		this.imageBackhmid1 = new Pix8(media, "backhmid1", 0);
+
+		for (@Pc(424) int i = 0; i < 13; i++) {
+			this.imageSideicons[i] = new Pix8(media, "sideicons", i);
+		}
+
+		this.imageCompass = new Pix24(media, "compass", 0);
+
+		try {
+			for (int i = 0; i < 50; i++) {
+				if (i == 22) {
+					// weird debug sprite along water
+					continue;
+				}
+
+				this.imageMapscene[i] = new Pix8(media, "mapscene", i);
+			}
+		} catch (@Pc(468) Exception ex) {
+		}
+
+		try {
+			for (int i = 0; i < 50; i++) {
+				this.imageMapfunction[i] = new Pix24(media, "mapfunction", i);
+			}
+		} catch (@Pc(488) Exception ex) {
+		}
+
+		try {
+			for (int i = 0; i < 20; i++) {
+				this.imageHitmarks[i] = new Pix24(media, "hitmarks", i);
+			}
+		} catch (@Pc(508) Exception ex) {
+		}
+
+		try {
+			for (int i = 0; i < 20; i++) {
+				this.imageHeadicons[i] = new Pix24(media, "headicons", i);
+			}
+		} catch (@Pc(528) Exception ex) {
+		}
+
+		this.imageMapflag = new Pix24(media, "mapflag", 0);
+		for (int i = 0; i < 8; i++) {
+			this.imageCrosses[i] = new Pix24(media, "cross", i);
+		}
+
+		this.imageMapdot0 = new Pix24(media, "mapdots", 0);
+		this.imageMapdot1 = new Pix24(media, "mapdots", 1);
+		this.imageMapdot2 = new Pix24(media, "mapdots", 2);
+		this.imageMapdot3 = new Pix24(media, "mapdots", 3);
+
+		this.imageScrollbar0 = new Pix8(media, "scrollbar", 0);
+		this.imageScrollbar1 = new Pix8(media, "scrollbar", 1);
+
+		this.imageRedstone1 = new Pix8(media, "redstone1", 0);
+		this.imageRedstone2 = new Pix8(media, "redstone2", 0);
+		this.imageRedstone3 = new Pix8(media, "redstone3", 0);
+
+		this.imageRedstone1h = new Pix8(media, "redstone1", 0);
+		this.imageRedstone1h.flipHorizontally();
+
+		this.imageRedstone2h = new Pix8(media, "redstone2", 0);
+		this.imageRedstone2h.flipHorizontally();
+
+		this.imageRedstone1v = new Pix8(media, "redstone1", 0);
+		this.imageRedstone1v.flipVertically();
+
+		this.imageRedstone2v = new Pix8(media, "redstone2", 0);
+		this.imageRedstone2v.flipVertically();
+
+		this.imageRedstone3v = new Pix8(media, "redstone3", 0);
+		this.imageRedstone3v.flipVertically();
+
+		this.imageRedstone1hv = new Pix8(media, "redstone1", 0);
+		this.imageRedstone1hv.flipHorizontally();
+		this.imageRedstone1hv.flipVertically();
+
+		this.imageRedstone2hv = new Pix8(media, "redstone2", 0);
+		this.imageRedstone2hv.flipHorizontally();
+		this.imageRedstone2hv.flipVertically();
+
+		@Pc(725) Pix24 backleft1 = new Pix24(media, "backleft1", 0);
+		this.areaBackleft1 = new PixMap(this.getBaseComponent(), backleft1.width, backleft1.height);
+		backleft1.blitOpaque(0, 0);
+
+		@Pc(750) Pix24 backleft2 = new Pix24(media, "backleft2", 0);
+		this.areaBackleft2 = new PixMap(this.getBaseComponent(), backleft2.width, backleft2.height);
+		backleft2.blitOpaque(0, 0);
+
+		@Pc(775) Pix24 backright1 = new Pix24(media, "backright1", 0);
+		this.areaBackright1 = new PixMap(this.getBaseComponent(), backright1.width, backright1.height);
+		backright1.blitOpaque(0, 0);
+
+		@Pc(800) Pix24 backright2 = new Pix24(media, "backright2", 0);
+		this.areaBackright2 = new PixMap(this.getBaseComponent(), backright2.width, backright2.height);
+		backright2.blitOpaque(0, 0);
+
+		@Pc(825) Pix24 backtop1 = new Pix24(media, "backtop1", 0);
+		this.areaBacktop1 = new PixMap(this.getBaseComponent(), backtop1.width, backtop1.height);
+		backtop1.blitOpaque(0, 0);
+
+		@Pc(850) Pix24 backtop2 = new Pix24(media, "backtop2", 0);
+		this.areaBacktop2 = new PixMap(this.getBaseComponent(), backtop2.width, backtop2.height);
+		backtop2.blitOpaque(0, 0);
+
+		@Pc(875) Pix24 backvmid1 = new Pix24(media, "backvmid1", 0);
+		this.areaBackvmid1 = new PixMap(this.getBaseComponent(), backvmid1.width, backvmid1.height);
+		backvmid1.blitOpaque(0, 0);
+
+		@Pc(900) Pix24 backvmid2 = new Pix24(media, "backvmid2", 0);
+		this.areaBackvmid2 = new PixMap(this.getBaseComponent(), backvmid2.width, backvmid2.height);
+		backvmid2.blitOpaque(0, 0);
+
+		@Pc(925) Pix24 backvmid3 = new Pix24(media, "backvmid3", 0);
+		this.areaBackvmid3 = new PixMap(this.getBaseComponent(), backvmid3.width, backvmid3.height);
+		backvmid3.blitOpaque(0, 0);
+
+		@Pc(950) Pix24 backhmid2 = new Pix24(media, "backhmid2", 0);
+		this.areaBackhmid2 = new PixMap(this.getBaseComponent(), backhmid2.width, backhmid2.height);
+		backhmid2.blitOpaque(0, 0);
+
+		@Pc(975) int randR = (int) (Math.random() * 21.0D) - 10;
+		@Pc(982) int randG = (int) (Math.random() * 21.0D) - 10;
+		@Pc(989) int randB = (int) (Math.random() * 21.0D) - 10;
+		@Pc(996) int rand = (int) (Math.random() * 41.0D) - 20;
+		for (@Pc(998) int i = 0; i < 50; i++) {
+			if (this.imageMapfunction[i] != null) {
+				this.imageMapfunction[i].translate(randR + rand, randG + rand, randB + rand);
+			}
+
+			if (this.imageMapscene[i] != null) {
+				this.imageMapscene[i].translate(randR + rand, randG + rand, randB + rand);
+			}
+		}
+
+		Draw3D.unpackTextures(textures);
+		Draw3D.setBrightness(0.8D);
+		Draw3D.initPool(20);
+
+		Model.unpack(models);
+		AnimBase.unpack(models);
+		AnimFrame.unpack(models);
+
+		SeqType.unpack(config);
+		LocType.unpack(config);
+		FloType.unpack(config);
+		ObjType.unpack(config);
+		NpcType.unpack(config);
+		IdkType.unpack(config);
+		SpotAnimType.unpack(config);
+		VarpType.unpack(config);
+		ObjType.membersWorld = members;
+
+		if (!lowMemory) {
+			@Pc(1113) byte[] data = sounds.read("sounds.dat", null);
+			@Pc(1119) Packet soundDat = new Packet(data);
+			Wave.unpack(soundDat);
+		}
+
+		// TODO: reloading component will reset all active interfaces, so we'd have to relog the user
+		//  or figure out a way to preserve the state
+		// @Pc(1150) PixFont[] fonts = new PixFont[] { this.fontPlain11, this.fontPlain12, this.fontBold12, this.fontQuill8 };
+		// Component.unpack(inter, media, fonts);
+
+		for (@Pc(1162) int y = 0; y < 33; y++) {
+			int left = 999;
+			int right = 0;
+			for (int x = 0; x < 35; x++) {
+				if (this.imageMapback.pixels[x + y * this.imageMapback.width] == 0) {
+					if (left == 999) {
+						left = x;
+					}
+				} else if (left != 999) {
+					right = x;
+					break;
+				}
+			}
+			this.compassMaskLineOffsets[y] = left;
+			this.compassMaskLineLengths[y] = right - left;
+		}
+
+		for (int y = 9; y < 160; y++) {
+			int left = 999;
+			int right = 0;
+			for (int x = 10; x < 168; x++) {
+				if (this.imageMapback.pixels[x + y * this.imageMapback.width] == 0 && (x > 34 || y > 34)) {
+					if (left == 999) {
+						left = x;
+					}
+				} else if (left != 999) {
+					right = x;
+					break;
+				}
+			}
+			this.minimapMaskLineOffsets[y - 9] = left - 21;
+			this.minimapMaskLineLengths[y - 9] = right - left;
+		}
+
+		WordFilter.unpack(wordenc);
+
+		// update all entities to use the new configs
+		for (int i = 0; i < this.npcCount; i++) {
+			NpcEntity npc = this.npcs[this.npcIds[i]];
+			npc.type = NpcType.get((int) npc.type.index);
+		}
+
+		this.areaViewport.bind();
+		this.redrawSideicons = true;
+		this.redrawChatback = true;
+		this.redrawSidebar = true;
+		this.redrawPrivacySettings = true;
+		this.buildScene();
+	}
+
 	@OriginalMember(owner = "client!client", name = "a", descriptor = "()V")
 	@Override
 	protected void load() {
@@ -6551,6 +6827,7 @@ public class client extends GameShell {
 						} catch (@Pc(171) Exception ignored) {
 						}
 					}
+
 					retry *= 2;
 					if (retry > 60) {
 						retry = 60;
@@ -6558,7 +6835,7 @@ public class client extends GameShell {
 				}
 			}
 
-			this.archiveTitle = this.loadArchive("title", this.archiveChecksum[1], "title screen", 10);
+			this.archiveTitle = this.loadArchive("title", this.archiveChecksum[1], "title screen", 10, true);
 			this.fontPlain11 = new PixFont(this.archiveTitle, "p11");
 			this.fontPlain12 = new PixFont(this.archiveTitle, "p12");
 			this.fontBold12 = new PixFont(this.archiveTitle, "b12");
@@ -6566,13 +6843,13 @@ public class client extends GameShell {
 			this.loadTitleBackground();
 			this.loadTitleImages();
 
-			@Pc(255) Jagfile config = this.loadArchive("config", this.archiveChecksum[2], "config", 15);
-			@Pc(266) Jagfile inter = this.loadArchive("interface", this.archiveChecksum[3], "interface", 20);
-			@Pc(277) Jagfile media = this.loadArchive("media", this.archiveChecksum[4], "2d graphics", 30);
-			@Pc(288) Jagfile models = this.loadArchive("models", this.archiveChecksum[5], "3d graphics", 40);
-			@Pc(299) Jagfile textures = this.loadArchive("textures", this.archiveChecksum[6], "textures", 60);
-			@Pc(310) Jagfile wordenc = this.loadArchive("wordenc", this.archiveChecksum[7], "chat system", 65);
-			@Pc(321) Jagfile sounds = this.loadArchive("sounds", this.archiveChecksum[8], "sound effects", 70);
+			@Pc(255) Jagfile config = this.loadArchive("config", this.archiveChecksum[2], "config", 15, true);
+			@Pc(266) Jagfile inter = this.loadArchive("interface", this.archiveChecksum[3], "interface", 20, true);
+			@Pc(277) Jagfile media = this.loadArchive("media", this.archiveChecksum[4], "2d graphics", 30, true);
+			@Pc(288) Jagfile models = this.loadArchive("models", this.archiveChecksum[5], "3d graphics", 40, true);
+			@Pc(299) Jagfile textures = this.loadArchive("textures", this.archiveChecksum[6], "textures", 60, true);
+			@Pc(310) Jagfile wordenc = this.loadArchive("wordenc", this.archiveChecksum[7], "chat system", 65, true);
+			@Pc(321) Jagfile sounds = this.loadArchive("sounds", this.archiveChecksum[8], "sound effects", 70, true);
 
 			this.levelTileFlags = new byte[4][104][104];
 			this.levelHeightmap = new int[4][105][105];
@@ -6581,6 +6858,7 @@ public class client extends GameShell {
 				this.levelCollisionMap[level] = new CollisionMap(104, 104);
 			}
 			this.imageMinimap = new Pix24(512, 512);
+
 			this.drawProgress("Unpacking media", 75);
 			this.imageInvback = new Pix8(media, "invback", 0);
 			this.imageChatback = new Pix8(media, "chatback", 0);
@@ -6588,9 +6866,11 @@ public class client extends GameShell {
 			this.imageBackbase1 = new Pix8(media, "backbase1", 0);
 			this.imageBackbase2 = new Pix8(media, "backbase2", 0);
 			this.imageBackhmid1 = new Pix8(media, "backhmid1", 0);
+
 			for (@Pc(424) int i = 0; i < 13; i++) {
 				this.imageSideicons[i] = new Pix8(media, "sideicons", i);
 			}
+
 			this.imageCompass = new Pix24(media, "compass", 0);
 
 			try {
@@ -6604,80 +6884,104 @@ public class client extends GameShell {
 				}
 			} catch (@Pc(468) Exception ex) {
 			}
+
 			try {
 				for (int i = 0; i < 50; i++) {
 					this.imageMapfunction[i] = new Pix24(media, "mapfunction", i);
 				}
 			} catch (@Pc(488) Exception ex) {
 			}
+
 			try {
 				for (int i = 0; i < 20; i++) {
 					this.imageHitmarks[i] = new Pix24(media, "hitmarks", i);
 				}
 			} catch (@Pc(508) Exception ex) {
 			}
+
 			try {
 				for (int i = 0; i < 20; i++) {
 					this.imageHeadicons[i] = new Pix24(media, "headicons", i);
 				}
 			} catch (@Pc(528) Exception ex) {
 			}
+
 			this.imageMapflag = new Pix24(media, "mapflag", 0);
 			for (int i = 0; i < 8; i++) {
 				this.imageCrosses[i] = new Pix24(media, "cross", i);
 			}
+
 			this.imageMapdot0 = new Pix24(media, "mapdots", 0);
 			this.imageMapdot1 = new Pix24(media, "mapdots", 1);
 			this.imageMapdot2 = new Pix24(media, "mapdots", 2);
 			this.imageMapdot3 = new Pix24(media, "mapdots", 3);
+
 			this.imageScrollbar0 = new Pix8(media, "scrollbar", 0);
 			this.imageScrollbar1 = new Pix8(media, "scrollbar", 1);
+
 			this.imageRedstone1 = new Pix8(media, "redstone1", 0);
 			this.imageRedstone2 = new Pix8(media, "redstone2", 0);
 			this.imageRedstone3 = new Pix8(media, "redstone3", 0);
+
 			this.imageRedstone1h = new Pix8(media, "redstone1", 0);
 			this.imageRedstone1h.flipHorizontally();
+
 			this.imageRedstone2h = new Pix8(media, "redstone2", 0);
 			this.imageRedstone2h.flipHorizontally();
+
 			this.imageRedstone1v = new Pix8(media, "redstone1", 0);
 			this.imageRedstone1v.flipVertically();
+
 			this.imageRedstone2v = new Pix8(media, "redstone2", 0);
 			this.imageRedstone2v.flipVertically();
+
 			this.imageRedstone3v = new Pix8(media, "redstone3", 0);
 			this.imageRedstone3v.flipVertically();
+
 			this.imageRedstone1hv = new Pix8(media, "redstone1", 0);
 			this.imageRedstone1hv.flipHorizontally();
 			this.imageRedstone1hv.flipVertically();
+
 			this.imageRedstone2hv = new Pix8(media, "redstone2", 0);
 			this.imageRedstone2hv.flipHorizontally();
 			this.imageRedstone2hv.flipVertically();
+
 			@Pc(725) Pix24 backleft1 = new Pix24(media, "backleft1", 0);
 			this.areaBackleft1 = new PixMap(this.getBaseComponent(), backleft1.width, backleft1.height);
 			backleft1.blitOpaque(0, 0);
+
 			@Pc(750) Pix24 backleft2 = new Pix24(media, "backleft2", 0);
 			this.areaBackleft2 = new PixMap(this.getBaseComponent(), backleft2.width, backleft2.height);
 			backleft2.blitOpaque(0, 0);
+
 			@Pc(775) Pix24 backright1 = new Pix24(media, "backright1", 0);
 			this.areaBackright1 = new PixMap(this.getBaseComponent(), backright1.width, backright1.height);
 			backright1.blitOpaque(0, 0);
+
 			@Pc(800) Pix24 backright2 = new Pix24(media, "backright2", 0);
 			this.areaBackright2 = new PixMap(this.getBaseComponent(), backright2.width, backright2.height);
 			backright2.blitOpaque(0, 0);
+
 			@Pc(825) Pix24 backtop1 = new Pix24(media, "backtop1", 0);
 			this.areaBacktop1 = new PixMap(this.getBaseComponent(), backtop1.width, backtop1.height);
 			backtop1.blitOpaque(0, 0);
+
 			@Pc(850) Pix24 backtop2 = new Pix24(media, "backtop2", 0);
 			this.areaBacktop2 = new PixMap(this.getBaseComponent(), backtop2.width, backtop2.height);
 			backtop2.blitOpaque(0, 0);
+
 			@Pc(875) Pix24 backvmid1 = new Pix24(media, "backvmid1", 0);
 			this.areaBackvmid1 = new PixMap(this.getBaseComponent(), backvmid1.width, backvmid1.height);
 			backvmid1.blitOpaque(0, 0);
+
 			@Pc(900) Pix24 backvmid2 = new Pix24(media, "backvmid2", 0);
 			this.areaBackvmid2 = new PixMap(this.getBaseComponent(), backvmid2.width, backvmid2.height);
 			backvmid2.blitOpaque(0, 0);
+
 			@Pc(925) Pix24 backvmid3 = new Pix24(media, "backvmid3", 0);
 			this.areaBackvmid3 = new PixMap(this.getBaseComponent(), backvmid3.width, backvmid3.height);
 			backvmid3.blitOpaque(0, 0);
+
 			@Pc(950) Pix24 backhmid2 = new Pix24(media, "backhmid2", 0);
 			this.areaBackhmid2 = new PixMap(this.getBaseComponent(), backhmid2.width, backhmid2.height);
 			backhmid2.blitOpaque(0, 0);
@@ -6700,10 +7004,12 @@ public class client extends GameShell {
 			Draw3D.unpackTextures(textures);
 			Draw3D.setBrightness(0.8D);
 			Draw3D.initPool(20);
+
 			this.drawProgress("Unpacking models", 83);
 			Model.unpack(models);
 			AnimBase.unpack(models);
 			AnimFrame.unpack(models);
+
 			this.drawProgress("Unpacking config", 86);
 			SeqType.unpack(config);
 			LocType.unpack(config);
@@ -6713,8 +7019,8 @@ public class client extends GameShell {
 			IdkType.unpack(config);
 			SpotAnimType.unpack(config);
 			VarpType.unpack(config);
-
 			ObjType.membersWorld = members;
+
 			if (!lowMemory) {
 				this.drawProgress("Unpacking sounds", 90);
 				@Pc(1113) byte[] data = sounds.read("sounds.dat", null);
@@ -6727,6 +7033,7 @@ public class client extends GameShell {
 			Component.unpack(inter, media, fonts);
 
 			this.drawProgress("Preparing game engine", 97);
+
 			for (@Pc(1162) int y = 0; y < 33; y++) {
 				int left = 999;
 				int right = 0;
@@ -6763,8 +7070,10 @@ public class client extends GameShell {
 
 			Draw3D.init3D(479, 96);
 			this.areaChatbackOffsets = Draw3D.lineOffset;
+
 			Draw3D.init3D(190, 261);
 			this.areaSidebarOffsets = Draw3D.lineOffset;
+
 			Draw3D.init3D(512, 334);
 			this.areaViewportOffsets = Draw3D.lineOffset;
 
@@ -6779,6 +7088,7 @@ public class client extends GameShell {
 			World3D.init(512, 334, 500, 800, distance);
 			WordFilter.unpack(wordenc);
 		} catch (@Pc(1357) Exception ex) {
+			ex.printStackTrace();
 			this.errorLoading = true;
 		}
 	}
