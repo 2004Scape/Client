@@ -1,12 +1,13 @@
 package jagex2.graphics;
 
-import jagex2.datastruct.Hashable;
-import jagex2.io.Jagfile;
-import jagex2.io.Packet;
 import org.openrs2.deob.annotation.OriginalArg;
 import org.openrs2.deob.annotation.OriginalClass;
 import org.openrs2.deob.annotation.OriginalMember;
 import org.openrs2.deob.annotation.Pc;
+
+import jagex2.datastruct.Hashable;
+import jagex2.io.Jagfile;
+import jagex2.io.Packet;
 
 @OriginalClass("client!eb")
 public class Model extends Hashable {
@@ -1050,21 +1051,25 @@ public class Model extends Hashable {
 		this.maxY = 0;
 		this.radius = 0;
 		this.minY = 0;
+
 		for (@Pc(14) int i = 0; i < this.vertexCount; i++) {
 			@Pc(21) int x = this.vertexX[i];
 			@Pc(26) int y = this.vertexY[i];
 			@Pc(31) int z = this.vertexZ[i];
+
 			if (-y > this.maxY) {
 				this.maxY = -y;
 			}
 			if (y > this.minY) {
 				this.minY = y;
 			}
+
 			@Pc(55) int radiusSqr = x * x + z * z;
 			if (radiusSqr > this.radius) {
 				this.radius = radiusSqr;
 			}
 		}
+
 		this.radius = (int) (Math.sqrt(this.radius) + 0.99D);
 		this.minDepth = (int) (Math.sqrt(this.radius * this.radius + this.maxY * this.maxY) + 0.99D);
 		this.maxDepth = this.minDepth + (int) (Math.sqrt(this.radius * this.radius + this.minY * this.minY) + 0.99D);
@@ -1074,6 +1079,7 @@ public class Model extends Hashable {
 	public void calculateBoundsY() {
 		this.maxY = 0;
 		this.minY = 0;
+
 		for (@Pc(8) int v = 0; v < this.vertexCount; v++) {
 			@Pc(25) int y = this.vertexY[v];
 			if (-y > this.maxY) {
@@ -1083,6 +1089,7 @@ public class Model extends Hashable {
 				this.minY = y;
 			}
 		}
+
 		this.minDepth = (int) (Math.sqrt(this.radius * this.radius + this.maxY * this.maxY) + 0.99D);
 		this.maxDepth = this.minDepth + (int) (Math.sqrt(this.radius * this.radius + this.minY * this.minY) + 0.99D);
 	}
@@ -1096,33 +1103,39 @@ public class Model extends Hashable {
 		this.maxX = -999999;
 		this.maxZ = -99999;
 		this.minZ = 99999;
+
 		for (@Pc(27) int v = 0; v < this.vertexCount; v++) {
 			@Pc(34) int x = this.vertexX[v];
 			@Pc(39) int y = this.vertexY[v];
 			@Pc(44) int z = this.vertexZ[v];
+
 			if (x < this.minX) {
 				this.minX = x;
 			}
 			if (x > this.maxX) {
 				this.maxX = x;
 			}
+
 			if (z < this.minZ) {
 				this.minZ = z;
 			}
 			if (z > this.maxZ) {
 				this.maxZ = z;
 			}
+
 			if (-y > this.maxY) {
 				this.maxY = -y;
 			}
 			if (y > this.minY) {
 				this.minY = y;
 			}
+
 			@Pc(96) int radiusSqr = x * x + z * z;
 			if (radiusSqr > this.radius) {
 				this.radius = radiusSqr;
 			}
 		}
+
 		this.radius = (int) Math.sqrt(this.radius);
 		this.minDepth = (int) Math.sqrt(this.radius * this.radius + this.maxY * this.maxY);
 		this.maxDepth = this.minDepth + (int) Math.sqrt(this.radius * this.radius + this.minY * this.minY);
@@ -1132,29 +1145,35 @@ public class Model extends Hashable {
 	public void createLabelReferences() {
 		if (this.vertexLabel != null) {
 			int[] labelVertexCount = new int[256];
+
 			int count = 0;
 			for (int v = 0; v < this.vertexCount; v++) {
 				int label = this.vertexLabel[v];
 				int countDebug = labelVertexCount[label]++;
+
 				if (label > count) {
 					count = label;
 				}
 			}
+
 			this.labelVertices = new int[count + 1][];
 			for (int label = 0; label <= count; label++) {
 				this.labelVertices[label] = new int[labelVertexCount[label]];
 				labelVertexCount[label] = 0;
 			}
+
 			int v = 0;
 			while (v < this.vertexCount) {
 				int label = this.vertexLabel[v];
 				this.labelVertices[label][labelVertexCount[label]++] = v++;
 			}
+
 			this.vertexLabel = null;
 		}
 
 		if (this.faceLabel != null) {
 			int[] labelFaceCount = new int[256];
+
 			int count = 0;
 			for (int f = 0; f < this.faceCount; f++) {
 				int label = this.faceLabel[f];
@@ -1163,16 +1182,19 @@ public class Model extends Hashable {
 					count = label;
 				}
 			}
+
 			this.labelFaces = new int[count + 1][];
 			for (int label = 0; label <= count; label++) {
 				this.labelFaces[label] = new int[labelFaceCount[label]];
 				labelFaceCount[label] = 0;
 			}
+
 			int face = 0;
 			while (face < this.faceCount) {
 				int label = this.faceLabel[face];
 				this.labelFaces[label][labelFaceCount[label]++] = face++;
 			}
+
 			this.faceLabel = null;
 		}
 	}
@@ -1180,46 +1202,48 @@ public class Model extends Hashable {
 	@OriginalMember(owner = "client!eb", name = "a", descriptor = "(II)V")
 	public void applyTransform(@OriginalArg(1) int id) {
 		if (this.labelVertices != null && id != -1) {
-			@Pc(11) AnimFrame transform = AnimFrame.instances[id];
-			@Pc(14) AnimBase skeleton = transform.base;
+			@Pc(11) AnimFrame frame = AnimFrame.instances[id];
+			@Pc(14) AnimBase base = frame.base;
+
 			baseX = 0;
 			baseY = 0;
 			baseZ = 0;
-			for (@Pc(22) int i = 0; i < transform.length; i++) {
-				@Pc(29) int base = transform.bases[i];
-				this.applyTransform(transform.x[i], transform.y[i], transform.z[i], skeleton.labels[base], skeleton.types[base]);
+
+			for (@Pc(22) int i = 0; i < frame.length; i++) {
+				@Pc(29) int group = frame.groups[i];
+				this.applyTransform(frame.x[i], frame.y[i], frame.z[i], base.labels[group], base.types[group]);
 			}
 		}
 	}
 
 	@OriginalMember(owner = "client!eb", name = "a", descriptor = "(III[I)V")
-	public void applyTransforms(@OriginalArg(2) int primaryId, @OriginalArg(0) int secondaryId, @OriginalArg(3) int[] mask) {
-		if (primaryId == -1) {
+	public void applyTransforms(@OriginalArg(2) int id, @OriginalArg(0) int id2, @OriginalArg(3) int[] walkmerge) {
+		if (id == -1) {
 			return;
 		}
 
-		if (mask == null || secondaryId == -1) {
-			this.applyTransform(primaryId);
+		if (walkmerge == null || id2 == -1) {
+			this.applyTransform(id);
 		} else {
-			@Pc(19) AnimFrame primary = AnimFrame.instances[primaryId];
-			@Pc(32) AnimFrame secondary = AnimFrame.instances[secondaryId];
-			@Pc(35) AnimBase skeleton = primary.base;
+			@Pc(19) AnimFrame frame = AnimFrame.instances[id];
+			@Pc(32) AnimFrame frame2 = AnimFrame.instances[id2];
+			@Pc(35) AnimBase base = frame.base;
 
 			baseX = 0;
 			baseY = 0;
 			baseZ = 0;
 
-			@Pc(46) int counter = 0;
-			@Pc(48) int maskBase = mask[counter++];
+			@Pc(46) int length = 0;
+			@Pc(48) int merge = walkmerge[length++];
 
-			for (@Pc(50) int i = 0; i < primary.length; i++) {
-				int base = primary.bases[i];
-				while (base > maskBase) {
-					maskBase = mask[counter++];
+			for (@Pc(50) int i = 0; i < frame.length; i++) {
+				int group = frame.groups[i];
+				while (group > merge) {
+					merge = walkmerge[length++];
 				}
 
-				if (base != maskBase || skeleton.types[base] == 0) {
-					this.applyTransform(primary.x[i], primary.y[i], primary.z[i], skeleton.labels[base], skeleton.types[base]);
+				if (group != merge || base.types[group] == AnimBase.OP_BASE) {
+					this.applyTransform(frame.x[i], frame.y[i], frame.z[i], base.labels[group], base.types[group]);
 				}
 			}
 
@@ -1227,17 +1251,17 @@ public class Model extends Hashable {
 			baseY = 0;
 			baseZ = 0;
 
-			counter = 0;
-			maskBase = mask[counter++];
+			length = 0;
+			merge = walkmerge[length++];
 
-			for (int i = 0; i < secondary.length; i++) {
-				@Pc(124) int base = secondary.bases[i];
-				while (base > maskBase) {
-					maskBase = mask[counter++];
+			for (int i = 0; i < frame2.length; i++) {
+				@Pc(124) int group = frame2.groups[i];
+				while (group > merge) {
+					merge = walkmerge[length++];
 				}
 
-				if (base == maskBase || skeleton.types[base] == 0) {
-					this.applyTransform(secondary.x[i], secondary.y[i], secondary.z[i], skeleton.labels[base], skeleton.types[base]);
+				if (group == merge || base.types[group] == AnimBase.OP_BASE) {
+					this.applyTransform(frame2.x[i], frame2.y[i], frame2.z[i], base.labels[group], base.types[group]);
 				}
 			}
 		}
@@ -1247,7 +1271,7 @@ public class Model extends Hashable {
 	private void applyTransform(@OriginalArg(2) int x, @OriginalArg(3) int y, @OriginalArg(4) int z, @OriginalArg(1) int[] labels, @OriginalArg(0) int type) {
 		@Pc(4) int labelCount = labels.length;
 
-		if (type == 0) {
+		if (type == AnimBase.OP_BASE) {
 			int count = 0;
 			baseX = 0;
 			baseY = 0;
@@ -1276,14 +1300,14 @@ public class Model extends Hashable {
 				baseY = y;
 				baseZ = z;
 			}
-		} else if (type == 1) {
+		} else if (type == AnimBase.OP_TRANSLATE) {
 			for (int g = 0; g < labelCount; g++) {
-				int group = labels[g];
-				if (group >= this.labelVertices.length) {
+				int label = labels[g];
+				if (label >= this.labelVertices.length) {
 					continue;
 				}
 
-				int[] vertices = this.labelVertices[group];
+				int[] vertices = this.labelVertices[label];
 				for (int i = 0; i < vertices.length; i++) {
 					int v = vertices[i];
 					this.vertexX[v] += x;
@@ -1291,7 +1315,7 @@ public class Model extends Hashable {
 					this.vertexZ[v] += z;
 				}
 			}
-		} else if (type == 2) {
+		} else if (type == AnimBase.OP_ROTATE) {
 			for (int g = 0; g < labelCount; g++) {
 				int label = labels[g];
 				if (label >= this.labelVertices.length) {
@@ -1341,7 +1365,7 @@ public class Model extends Hashable {
 					this.vertexZ[v] += baseZ;
 				}
 			}
-		} else if (type == 3) {
+		} else if (type == AnimBase.OP_SCALE) {
 			for (int g = 0; g < labelCount; g++) {
 				int label = labels[g];
 				if (label >= this.labelVertices.length) {
@@ -1351,18 +1375,21 @@ public class Model extends Hashable {
 				int[] vertices = this.labelVertices[label];
 				for (int i = 0; i < vertices.length; i++) {
 					int v = vertices[i];
+
 					this.vertexX[v] -= baseX;
 					this.vertexY[v] -= baseY;
 					this.vertexZ[v] -= baseZ;
+
 					this.vertexX[v] = this.vertexX[v] * x / 128;
 					this.vertexY[v] = this.vertexY[v] * y / 128;
 					this.vertexZ[v] = this.vertexZ[v] * z / 128;
+
 					this.vertexX[v] += baseX;
 					this.vertexY[v] += baseY;
 					this.vertexZ[v] += baseZ;
 				}
 			}
-		} else if (type == 5 && (this.labelFaces != null && this.faceAlpha != null)) {
+		} else if (type == AnimBase.OP_ALPHA && (this.labelFaces != null && this.faceAlpha != null)) {
 			for (int g = 0; g < labelCount; g++) {
 				int label = labels[g];
 				if (label >= this.labelFaces.length) {

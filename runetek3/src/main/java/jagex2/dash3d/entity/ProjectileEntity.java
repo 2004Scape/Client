@@ -149,7 +149,7 @@ public class ProjectileEntity extends Entity {
 	@Override
 	public Model draw(int loopCycle) {
 		@Pc(3) Model tmp = this.spotanim.getModel();
-		@Pc(19) Model model = new Model(tmp, true, !this.spotanim.disposeAlpha, false);
+		@Pc(19) Model model = new Model(tmp, true, !this.spotanim.animHasAlpha, false);
 
 		if (this.spotanim.seq != null) {
 			model.createLabelReferences();

@@ -394,7 +394,7 @@ public class World {
 							opcode = buf.g1();
 							if (opcode == 0) {
 								if (level == 0) {
-									this.levelHeightmap[0][stx][stz] = -perlin(stx + originX + 932731, stz + 556238 + originZ) * 8;
+									this.levelHeightmap[0][stx][stz] = -perlin(stx + originX + 932731, stz + originZ + 556238) * 8;
 								} else {
 									this.levelHeightmap[level][stx][stz] = this.levelHeightmap[level - 1][stx][stz] - 240;
 								}
@@ -416,7 +416,7 @@ public class World {
 
 							if (opcode <= 49) {
 								this.levelTileOverlayIds[level][stx][stz] = buf.g1b();
-								this.levelTileOverlayShape[level][stx][stz] = (byte) ((opcode - 2) / 4);
+								this.levelTileOverlayShape[level][stx][stz] = (byte) ((opcode - 2) >> 2);
 								this.levelTileOverlayRotation[level][stx][stz] = (byte) (opcode - 2 & 0x3);
 							} else if (opcode <= 81) {
 								this.levelTileFlags[level][stx][stz] = (byte) (opcode - 49);

@@ -201,7 +201,7 @@ public class PlayerEntity extends PathingEntity {
 
 		if (super.spotanimId != -1 && super.spotanimFrame != -1) {
 			@Pc(35) SpotAnimType spotanim = SpotAnimType.instances[super.spotanimId];
-			@Pc(51) Model model2 = new Model(spotanim.getModel(), true, !spotanim.disposeAlpha, false);
+			@Pc(51) Model model2 = new Model(spotanim.getModel(), true, !spotanim.animHasAlpha, false);
 
 			model2.translate(-super.spotanimOffset, 0, 0);
 			model2.createLabelReferences();

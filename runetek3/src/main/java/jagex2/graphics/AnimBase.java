@@ -1,15 +1,22 @@
 package jagex2.graphics;
 
-import jagex2.io.Jagfile;
-import jagex2.io.Packet;
 import org.openrs2.deob.annotation.OriginalArg;
 import org.openrs2.deob.annotation.OriginalClass;
 import org.openrs2.deob.annotation.OriginalMember;
 import org.openrs2.deob.annotation.Pc;
 
+import jagex2.io.Jagfile;
+import jagex2.io.Packet;
+
 // name taken from runetek5
 @OriginalClass("client!f")
 public class AnimBase {
+
+	public static final int OP_BASE = 0;
+	public static final int OP_TRANSLATE = 1;
+	public static final int OP_ROTATE = 2;
+	public static final int OP_SCALE = 3;
+	public static final int OP_ALPHA = 5;
 
 	@OriginalMember(owner = "client!f", name = "a", descriptor = "[Lclient!f;")
 	public static AnimBase[] instances;
@@ -17,9 +24,11 @@ public class AnimBase {
 	@OriginalMember(owner = "client!f", name = "b", descriptor = "I")
 	public int length;
 
+	// an operation for a specific group - [group]
 	@OriginalMember(owner = "client!f", name = "c", descriptor = "[I")
 	public int[] types;
 
+	// labels for a specific group - [group] [label]
 	@OriginalMember(owner = "client!f", name = "d", descriptor = "[[I")
 	public int[][] labels;
 
@@ -37,24 +46,24 @@ public class AnimBase {
 			@Pc(55) int id = head.g2();
 			@Pc(58) int length = head.g1();
 
-			@Pc(61) int[] transformTypes = new int[length];
-			@Pc(64) int[][] groupLabels = new int[length][];
+			@Pc(61) int[] types = new int[length];
+			@Pc(64) int[][] labels = new int[length][];
 
-			for (@Pc(66) int j = 0; j < length; j++) {
-				transformTypes[j] = type.g1();
+			for (@Pc(66) int g = 0; g < length; g++) {
+				types[g] = type.g1();
 
-				@Pc(76) int groupCount = label.g1();
-				groupLabels[j] = new int[groupCount];
+				@Pc(76) int labelCount = label.g1();
+				labels[g] = new int[labelCount];
 
-				for (@Pc(83) int k = 0; k < groupCount; k++) {
-					groupLabels[j][k] = label.g1();
+				for (@Pc(83) int l = 0; l < labelCount; l++) {
+					labels[g][l] = label.g1();
 				}
 			}
 
 			instances[id] = new AnimBase();
 			instances[id].length = length;
-			instances[id].types = transformTypes;
-			instances[id].labels = groupLabels;
+			instances[id].types = types;
+			instances[id].labels = labels;
 		}
 	}
 }

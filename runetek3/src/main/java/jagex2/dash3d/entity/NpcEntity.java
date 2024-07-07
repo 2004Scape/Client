@@ -28,7 +28,7 @@ public class NpcEntity extends PathingEntity {
 		@Pc(20) Model model = this.getSequencedModel();
 		@Pc(25) SpotAnimType spotanim = SpotAnimType.instances[super.spotanimId];
 
-		@Pc(41) Model model1 = new Model(spotanim.getModel(), true, !spotanim.disposeAlpha, false);
+		@Pc(41) Model model1 = new Model(spotanim.getModel(), true, !spotanim.animHasAlpha, false);
 		model1.translate(-super.spotanimOffset, 0, 0);
 		model1.createLabelReferences();
 		model1.applyTransform(spotanim.seq.frames[super.spotanimFrame]);

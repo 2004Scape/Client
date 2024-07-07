@@ -117,7 +117,7 @@ public class LocType {
 	public String[] op;
 
 	@OriginalMember(owner = "client!ac", name = "C", descriptor = "Z")
-	private boolean disposeAlpha;
+	private boolean animHasAlpha;
 
 	@OriginalMember(owner = "client!ac", name = "D", descriptor = "I")
 	public int mapfunction;
@@ -228,7 +228,7 @@ public class LocType {
 		this.ambient = 0;
 		this.contrast = 0;
 		this.op = null;
-		this.disposeAlpha = false;
+		this.animHasAlpha = false;
 		this.mapfunction = -1;
 		this.mapscene = -1;
 		this.mirror = false;
@@ -292,7 +292,7 @@ public class LocType {
 					this.anim = -1;
 				}
 			} else if (code == 25) {
-				this.disposeAlpha = true;
+				this.animHasAlpha = true;
 			} else if (code == 28) {
 				this.wallwidth = dat.g1();
 			} else if (code == 29) {
@@ -432,7 +432,7 @@ public class LocType {
 		@Pc(235) boolean scaled = this.resizex != 128 || this.resizey != 128 || this.resizez != 128;
 		@Pc(250) boolean translated = this.offsetx != 0 || this.offsety != 0 || this.offsetz != 0;
 
-		@Pc(284) Model modified = new Model(model, this.recol_s == null, !this.disposeAlpha, rotation == 0 && transformId == -1 && !scaled && !translated);
+		@Pc(284) Model modified = new Model(model, this.recol_s == null, !this.animHasAlpha, rotation == 0 && transformId == -1 && !scaled && !translated);
 		if (transformId != -1) {
 			modified.createLabelReferences();
 			modified.applyTransform(transformId);

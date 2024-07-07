@@ -62,7 +62,7 @@ public class NpcType {
 	public int walkanim_l = -1;
 
 	@OriginalMember(owner = "client!bc", name = "r", descriptor = "Z")
-	private boolean disposeAlpha = false;
+	private boolean animHasAlpha = false;
 
 	@OriginalMember(owner = "client!bc", name = "s", descriptor = "[I")
 	private int[] recol_s;
@@ -167,7 +167,7 @@ public class NpcType {
 			} else if (code == 14) {
 				this.walkanim = dat.g2();
 			} else if (code == 16) {
-				this.disposeAlpha = true;
+				this.animHasAlpha = true;
 			} else if (code == 17) {
 				this.walkanim = dat.g2();
 				this.walkanim_b = dat.g2();
@@ -247,7 +247,7 @@ public class NpcType {
 			modelCache.put(this.index, model);
 		}
 
-		tmp = new Model(model, !this.disposeAlpha);
+		tmp = new Model(model, !this.animHasAlpha);
 
 		if (primaryTransformId != -1 && secondaryTransformId != -1) {
 			tmp.applyTransforms(primaryTransformId, secondaryTransformId, seqMask);

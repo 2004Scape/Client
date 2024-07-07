@@ -4776,30 +4776,30 @@ public class client extends GameShell {
 	}
 
 	@OriginalMember(owner = "client!client", name = "a", descriptor = "(Lclient!x;I)V")
-	private void updateForceMovement(@OriginalArg(0) PathingEntity enttiy) {
-		@Pc(4) int delta = enttiy.forceMoveEndCycle - loopCycle;
-		@Pc(14) int dstX = enttiy.forceMoveStartSceneTileX * 128 + enttiy.size * 64;
-		@Pc(24) int dstZ = enttiy.forceMoveStartSceneTileZ * 128 + enttiy.size * 64;
+	private void updateForceMovement(@OriginalArg(0) PathingEntity entity) {
+		@Pc(4) int delta = entity.forceMoveEndCycle - loopCycle;
+		@Pc(14) int dstX = entity.forceMoveStartSceneTileX * 128 + entity.size * 64;
+		@Pc(24) int dstZ = entity.forceMoveStartSceneTileZ * 128 + entity.size * 64;
 
-		enttiy.x += (dstX - enttiy.x) / delta;
-		enttiy.z += (dstZ - enttiy.z) / delta;
+		entity.x += (dstX - entity.x) / delta;
+		entity.z += (dstZ - entity.z) / delta;
 
-		enttiy.seqTrigger = 0;
+		entity.seqTrigger = 0;
 
-		if (enttiy.forceMoveFaceDirection == 0) {
-			enttiy.dstYaw = 1024;
+		if (entity.forceMoveFaceDirection == 0) {
+			entity.dstYaw = 1024;
 		}
 
-		if (enttiy.forceMoveFaceDirection == 1) {
-			enttiy.dstYaw = 1536;
+		if (entity.forceMoveFaceDirection == 1) {
+			entity.dstYaw = 1536;
 		}
 
-		if (enttiy.forceMoveFaceDirection == 2) {
-			enttiy.dstYaw = 0;
+		if (entity.forceMoveFaceDirection == 2) {
+			entity.dstYaw = 0;
 		}
 
-		if (enttiy.forceMoveFaceDirection == 3) {
-			enttiy.dstYaw = 512;
+		if (entity.forceMoveFaceDirection == 3) {
+			entity.dstYaw = 512;
 		}
 	}
 
@@ -6779,6 +6779,7 @@ public class client extends GameShell {
 			World3D.init(512, 334, 500, 800, distance);
 			WordFilter.unpack(wordenc);
 		} catch (@Pc(1357) Exception ex) {
+			ex.printStackTrace();
 			this.errorLoading = true;
 		}
 	}
@@ -11505,6 +11506,7 @@ public class client extends GameShell {
 		} catch (@Pc(3862) IOException ex) {
 			this.tryReconnect();
 		} catch (@Pc(3867) Exception ex) {
+			ex.printStackTrace();
 			String error = "T2 - " + this.packetType + "," + this.lastPacketType1 + "," + this.lastPacketType2 + " - " + this.packetSize + "," + (this.sceneBaseTileX + this.localPlayer.pathTileX[0]) + "," + (this.sceneBaseTileZ + this.localPlayer.pathTileZ[0]) + " - ";
 			for (int i = 0; i < this.packetSize && i < 50; i++) {
 				error = error + this.in.data[i] + ",";
