@@ -416,7 +416,7 @@ public class World {
 
 							if (opcode <= 49) {
 								this.levelTileOverlayIds[level][stx][stz] = buf.g1b();
-								this.levelTileOverlayShape[level][stx][stz] = (byte) ((opcode - 2) / 4);
+								this.levelTileOverlayShape[level][stx][stz] = (byte) ((opcode - 2) >> 2);
 								this.levelTileOverlayRotation[level][stx][stz] = (byte) (opcode - 2 & 0x3);
 							} else if (opcode <= 81) {
 								this.levelTileFlags[level][stx][stz] = (byte) (opcode - 49);

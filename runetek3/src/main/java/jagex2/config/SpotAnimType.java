@@ -32,7 +32,7 @@ public class SpotAnimType {
 	public SeqType seq;
 
 	@OriginalMember(owner = "client!kc", name = "h", descriptor = "Z")
-	public boolean disposeAlpha = false;
+	public boolean animHasAlpha = false;
 
 	@OriginalMember(owner = "client!kc", name = "i", descriptor = "[I")
 	private final int[] recol_s = new int[6];
@@ -94,7 +94,7 @@ public class SpotAnimType {
 					this.seq = SeqType.instances[this.anim];
 				}
 			} else if (code == 3) {
-				this.disposeAlpha = true;
+				this.animHasAlpha = true;
 			} else if (code == 4) {
 				this.resizeh = dat.g2();
 			} else if (code == 5) {

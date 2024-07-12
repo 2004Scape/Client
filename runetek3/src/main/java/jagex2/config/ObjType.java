@@ -378,8 +378,10 @@ public class ObjType {
 					this.yof2d -= 65536;
 				}
 			} else if (code == 9) {
+				// animHasAlpha from code10?
 				this.code9 = true;
 			} else if (code == 10) {
+				// seq?
 				this.code10 = dat.g2();
 			} else if (code == 11) {
 				this.stackable = true;

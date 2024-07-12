@@ -65,7 +65,7 @@ public class SpotAnimEntity extends Entity {
 	@Override
 	public Model draw(int loopCycle) {
 		@Pc(3) Model tmp = this.type.getModel();
-		@Pc(19) Model model = new Model(tmp, true, !this.type.disposeAlpha, false);
+		@Pc(19) Model model = new Model(tmp, true, !this.type.animHasAlpha, false);
 
 		if (!this.seqComplete) {
 			model.createLabelReferences();

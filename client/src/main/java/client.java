@@ -11815,6 +11815,7 @@ public class client extends GameShell {
 		} catch (@Pc(3862) IOException ex) {
 			this.tryReconnect();
 		} catch (@Pc(3867) Exception ex) {
+			ex.printStackTrace();
 			String error = "T2 - " + this.packetType + "," + this.lastPacketType1 + "," + this.lastPacketType2 + " - " + this.packetSize + "," + (this.sceneBaseTileX + this.localPlayer.pathTileX[0]) + "," + (this.sceneBaseTileZ + this.localPlayer.pathTileZ[0]) + " - ";
 			for (int i = 0; i < this.packetSize && i < 50; i++) {
 				error = error + this.in.data[i] + ",";
