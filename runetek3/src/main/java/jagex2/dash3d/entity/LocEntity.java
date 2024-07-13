@@ -10,16 +10,16 @@ import org.openrs2.deob.annotation.OriginalMember;
 public class LocEntity extends Linkable {
 
 	@OriginalMember(owner = "client!nb", name = "e", descriptor = "I")
-	public int heightmapSW;
+	public int level;
 
 	@OriginalMember(owner = "client!nb", name = "f", descriptor = "I")
-	public final int heightmapSE;
+	public final int type;
 
 	@OriginalMember(owner = "client!nb", name = "g", descriptor = "I")
-	public final int heightmapNE;
+	public final int x;
 
 	@OriginalMember(owner = "client!nb", name = "h", descriptor = "I")
-	public final int heightmapNW;
+	public final int z;
 
 	@OriginalMember(owner = "client!nb", name = "i", descriptor = "I")
 	public final int index;
@@ -34,11 +34,11 @@ public class LocEntity extends Linkable {
 	public int seqCycle;
 
 	@OriginalMember(owner = "client!nb", name = "<init>", descriptor = "(ZIIIILclient!jc;II)V")
-	public LocEntity(@OriginalArg(1) int index, @OriginalArg(2) int heightmapSW, @OriginalArg(4) int heightmapSE, @OriginalArg(7) int heightmapNE, @OriginalArg(6) int heightmapNW, @OriginalArg(5) SeqType seq, @OriginalArg(0) boolean randomFrame) {
-		this.heightmapSW = heightmapSW;
-		this.heightmapSE = heightmapSE;
-		this.heightmapNE = heightmapNE;
-		this.heightmapNW = heightmapNW;
+	public LocEntity(@OriginalArg(1) int index, @OriginalArg(2) int level, @OriginalArg(4) int type, @OriginalArg(7) int x, @OriginalArg(6) int z, @OriginalArg(5) SeqType seq, @OriginalArg(0) boolean randomFrame) {
+		this.level = level;
+		this.type = type;
+		this.x = x;
+		this.z = z;
 		this.index = index;
 		this.seq = seq;
 
