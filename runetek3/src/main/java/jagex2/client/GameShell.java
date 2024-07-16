@@ -1,6 +1,6 @@
 package jagex2.client;
 
-import jagex2.graphics.Pix24;
+import jagex2.graphics.Pix32;
 import jagex2.graphics.PixMap;
 import org.openrs2.deob.annotation.OriginalArg;
 import org.openrs2.deob.annotation.OriginalClass;
@@ -43,7 +43,7 @@ public class GameShell extends Applet implements Runnable, MouseListener, MouseM
 	protected PixMap drawArea;
 
 	@OriginalMember(owner = "client!a", name = "p", descriptor = "[Lclient!hb;")
-	private final Pix24[] temp = new Pix24[6];
+	private final Pix32[] temp = new Pix32[6];
 
 	@OriginalMember(owner = "client!a", name = "q", descriptor = "Lclient!b;")
 	protected ViewBox frame;

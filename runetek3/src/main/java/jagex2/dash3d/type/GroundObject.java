@@ -4,8 +4,9 @@ import jagex2.graphics.Model;
 import org.openrs2.deob.annotation.OriginalClass;
 import org.openrs2.deob.annotation.OriginalMember;
 
+// name taken from osrs
 @OriginalClass("client!k")
-public class ObjStack {
+public class GroundObject {
 
 	@OriginalMember(owner = "client!k", name = "a", descriptor = "I")
 	public int y;

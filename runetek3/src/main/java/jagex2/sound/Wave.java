@@ -23,7 +23,7 @@ public class Wave {
 	public static Packet waveBuffer;
 
 	@OriginalMember(owner = "client!yb", name = "g", descriptor = "[Lclient!zb;")
-	private final SoundTone[] tones = new SoundTone[10];
+	private final Tone[] tones = new Tone[10];
 
 	@OriginalMember(owner = "client!yb", name = "h", descriptor = "I")
 	private int loopBegin;
@@ -35,7 +35,7 @@ public class Wave {
 	public static void unpack(@OriginalArg(0) Packet dat) {
 		waveBytes = new byte[441000];
 		waveBuffer = new Packet(waveBytes);
-		SoundTone.init();
+		Tone.init();
 
 		while (true) {
 			@Pc(16) int id = dat.g2();
@@ -64,7 +64,7 @@ public class Wave {
 		for (@Pc(1) int tone = 0; tone < 10; tone++) {
 			if (dat.g1() != 0) {
 				dat.pos--;
-				this.tones[tone] = new SoundTone();
+				this.tones[tone] = new Tone();
 				this.tones[tone].read(dat);
 			}
 		}
@@ -187,32 +187,33 @@ public class Wave {
 		return totalSampleCount;
 	}
 
+	// name taken from osrs
 	@OriginalClass("client!zb")
-	public static final class SoundTone {
+	public static final class Tone {
 
 		@OriginalMember(owner = "client!zb", name = "c", descriptor = "Lclient!xb;")
-		private SoundEnvelope frequencyBase;
+		private Envelope frequencyBase;
 
 		@OriginalMember(owner = "client!zb", name = "d", descriptor = "Lclient!xb;")
-		private SoundEnvelope amplitudeBase;
+		private Envelope amplitudeBase;
 
 		@OriginalMember(owner = "client!zb", name = "e", descriptor = "Lclient!xb;")
-		private SoundEnvelope frequencyModRate;
+		private Envelope frequencyModRate;
 
 		@OriginalMember(owner = "client!zb", name = "f", descriptor = "Lclient!xb;")
-		private SoundEnvelope frequencyModRange;
+		private Envelope frequencyModRange;
 
 		@OriginalMember(owner = "client!zb", name = "g", descriptor = "Lclient!xb;")
-		private SoundEnvelope amplitudeModRate;
+		private Envelope amplitudeModRate;
 
 		@OriginalMember(owner = "client!zb", name = "h", descriptor = "Lclient!xb;")
-		private SoundEnvelope amplitudeModRange;
+		private Envelope amplitudeModRange;
 
 		@OriginalMember(owner = "client!zb", name = "i", descriptor = "Lclient!xb;")
-		private SoundEnvelope release;
+		private Envelope release;
 
 		@OriginalMember(owner = "client!zb", name = "j", descriptor = "Lclient!xb;")
-		private SoundEnvelope attack;
+		private Envelope attack;
 
 		@OriginalMember(owner = "client!zb", name = "k", descriptor = "[I")
 		private final int[] harmonicVolume = new int[5];
@@ -422,39 +423,39 @@ public class Wave {
 
 		@OriginalMember(owner = "client!zb", name = "a", descriptor = "(ZLclient!kb;)V")
 		public void read(@OriginalArg(1) Packet dat) {
-			this.frequencyBase = new SoundEnvelope();
+			this.frequencyBase = new Envelope();
 			this.frequencyBase.read(dat);
 
-			this.amplitudeBase = new SoundEnvelope();
+			this.amplitudeBase = new Envelope();
 			this.amplitudeBase.read(dat);
 
 			if (dat.g1() != 0) {
 				dat.pos--;
 
-				this.frequencyModRate = new SoundEnvelope();
+				this.frequencyModRate = new Envelope();
 				this.frequencyModRate.read(dat);
 
-				this.frequencyModRange = new SoundEnvelope();
+				this.frequencyModRange = new Envelope();
 				this.frequencyModRange.read(dat);
 			}
 
 			if (dat.g1() != 0) {
 				dat.pos--;
 
-				this.amplitudeModRate = new SoundEnvelope();
+				this.amplitudeModRate = new Envelope();
 				this.amplitudeModRate.read(dat);
 
-				this.amplitudeModRange = new SoundEnvelope();
+				this.amplitudeModRange = new Envelope();
 				this.amplitudeModRange.read(dat);
 			}
 
 			if (dat.g1() != 0) {
 				dat.pos--;
 
-				this.release = new SoundEnvelope();
+				this.release = new Envelope();
 				this.release.read(dat);
 
-				this.attack = new SoundEnvelope();
+				this.attack = new Envelope();
 				this.attack.read(dat);
 			}
 
@@ -476,8 +477,9 @@ public class Wave {
 		}
 	}
 
+	// name taken from osrs
 	@OriginalClass("client!xb")
-	public static final class SoundEnvelope {
+	public static final class Envelope {
 
 		@OriginalMember(owner = "client!xb", name = "a", descriptor = "I")
 		private int length;

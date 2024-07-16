@@ -21,6 +21,7 @@ public class ViewBox extends Frame {
 		this.shell = shell;
 		this.setTitle("Jagex");
 		this.setResizable(false);
+		this.setBackground(Color.BLACK);
 		this.show();
 		this.toFront();
 		this.insets = this.getInsets();

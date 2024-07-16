@@ -3,8 +3,9 @@ package jagex2.dash3d;
 import org.openrs2.deob.annotation.OriginalClass;
 import org.openrs2.deob.annotation.OriginalMember;
 
+// name taken from osrs
 @OriginalClass("client!m")
-public class Occluder {
+public class Occlude {
 
 	@OriginalMember(owner = "client!m", name = "a", descriptor = "I")
 	public int minTileX;

@@ -1,6 +1,6 @@
 package jagex2.io;
 
-import jagex2.datastruct.Hashable;
+import jagex2.datastruct.DoublyLinkable;
 import jagex2.datastruct.LinkList;
 import org.openrs2.deob.annotation.OriginalArg;
 import org.openrs2.deob.annotation.OriginalClass;
@@ -11,7 +11,7 @@ import java.math.BigInteger;
 
 // name and packaging confirmed 100% in rs2/mapview applet strings
 @OriginalClass("client!kb")
-public class Packet extends Hashable {
+public class Packet extends DoublyLinkable {
 
 	@OriginalMember(owner = "client!kb", name = "t", descriptor = "[I")
 	private static final int[] crctable = new int[256];

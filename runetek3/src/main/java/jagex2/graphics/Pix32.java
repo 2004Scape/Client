@@ -10,9 +10,9 @@ import org.openrs2.deob.annotation.Pc;
 import java.awt.*;
 import java.awt.image.PixelGrabber;
 
-// name derived from Pix8
+// name taken from osrs
 @OriginalClass("client!hb")
-public class Pix24 extends Draw2D {
+public class Pix32 extends Pix2D {
 
 	@OriginalMember(owner = "client!hb", name = "A", descriptor = "[I")
 	public int[] pixels;
@@ -36,7 +36,7 @@ public class Pix24 extends Draw2D {
 	public int cropH;
 
 	@OriginalMember(owner = "client!hb", name = "<init>", descriptor = "(II)V")
-	public Pix24(@OriginalArg(0) int width, @OriginalArg(1) int height) {
+	public Pix32(@OriginalArg(0) int width, @OriginalArg(1) int height) {
 		this.pixels = new int[width * height];
 		this.width = this.cropW = width;
 		this.height = this.cropH = height;
@@ -44,7 +44,7 @@ public class Pix24 extends Draw2D {
 	}
 
 	@OriginalMember(owner = "client!hb", name = "<init>", descriptor = "([BLjava/awt/Component;)V")
-	public Pix24(@OriginalArg(0) byte[] src, @OriginalArg(1) Component c) {
+	public Pix32(@OriginalArg(0) byte[] src, @OriginalArg(1) Component c) {
 		try {
 			@Pc(17) Image image = Toolkit.getDefaultToolkit().createImage(src);
 			@Pc(22) MediaTracker tracker = new MediaTracker(c);
@@ -65,7 +65,7 @@ public class Pix24 extends Draw2D {
 	}
 
 	@OriginalMember(owner = "client!hb", name = "<init>", descriptor = "(Lclient!ub;Ljava/lang/String;I)V")
-	public Pix24(@OriginalArg(0) Jagfile jag, @OriginalArg(1) String name, @OriginalArg(2) int index) {
+	public Pix32(@OriginalArg(0) Jagfile jag, @OriginalArg(1) String name, @OriginalArg(2) int index) {
 		@Pc(32) Packet dat = new Packet(jag.read(name + ".dat", null));
 		@Pc(42) Packet idx = new Packet(jag.read("index.dat", null));
 
@@ -112,7 +112,7 @@ public class Pix24 extends Draw2D {
 
 	@OriginalMember(owner = "client!hb", name = "a", descriptor = "(B)V")
 	public void bind() {
-		Draw2D.bind(this.width, this.height, this.pixels);
+		Pix2D.bind(this.width, this.height, this.pixels);
 	}
 
 	@OriginalMember(owner = "client!hb", name = "a", descriptor = "(IIIZ)V")
@@ -155,44 +155,44 @@ public class Pix24 extends Draw2D {
 		x += this.cropX;
 		y += this.cropY;
 
-		@Pc(15) int dstOff = x + y * Draw2D.width2d;
+		@Pc(15) int dstOff = x + y * Pix2D.width2d;
 		@Pc(17) int srcOff = 0;
 		@Pc(20) int h = this.height;
 		@Pc(23) int w = this.width;
-		@Pc(27) int dstStep = Draw2D.width2d - w;
+		@Pc(27) int dstStep = Pix2D.width2d - w;
 		@Pc(29) int srcStep = 0;
 
-		if (y < Draw2D.top) {
-			int cutoff = Draw2D.top - y;
+		if (y < Pix2D.top) {
+			int cutoff = Pix2D.top - y;
 			h -= cutoff;
-			y = Draw2D.top;
+			y = Pix2D.top;
 			srcOff += cutoff * w;
-			dstOff += cutoff * Draw2D.width2d;
+			dstOff += cutoff * Pix2D.width2d;
 		}
 
-		if (y + h > Draw2D.bottom) {
-			h -= y + h - Draw2D.bottom;
+		if (y + h > Pix2D.bottom) {
+			h -= y + h - Pix2D.bottom;
 		}
 
-		if (x < Draw2D.left) {
-			int cutoff = Draw2D.left - x;
+		if (x < Pix2D.left) {
+			int cutoff = Pix2D.left - x;
 			w -= cutoff;
-			x = Draw2D.left;
+			x = Pix2D.left;
 			srcOff += cutoff;
 			dstOff += cutoff;
 			srcStep += cutoff;
 			dstStep += cutoff;
 		}
 
-		if (x + w > Draw2D.right) {
-			int cutoff = x + w - Draw2D.right;
+		if (x + w > Pix2D.right) {
+			int cutoff = x + w - Pix2D.right;
 			w -= cutoff;
 			srcStep += cutoff;
 			dstStep += cutoff;
 		}
 
 		if (w > 0 && h > 0) {
-			this.copyPixels(w, h, this.pixels, srcOff, srcStep, Draw2D.data, dstOff, dstStep);
+			this.copyPixels(w, h, this.pixels, srcOff, srcStep, Pix2D.data, dstOff, dstStep);
 		}
 	}
 
@@ -223,44 +223,44 @@ public class Pix24 extends Draw2D {
 		x += this.cropX;
 		y += this.cropY;
 
-		@Pc(20) int dstOff = x + y * Draw2D.width2d;
+		@Pc(20) int dstOff = x + y * Pix2D.width2d;
 		@Pc(22) int srcOff = 0;
 		@Pc(25) int h = this.height;
 		@Pc(28) int w = this.width;
-		@Pc(32) int dstStep = Draw2D.width2d - w;
+		@Pc(32) int dstStep = Pix2D.width2d - w;
 		@Pc(34) int srcStep = 0;
 
-		if (y < Draw2D.top) {
-			int cutoff = Draw2D.top - y;
+		if (y < Pix2D.top) {
+			int cutoff = Pix2D.top - y;
 			h -= cutoff;
-			y = Draw2D.top;
+			y = Pix2D.top;
 			srcOff += cutoff * w;
-			dstOff += cutoff * Draw2D.width2d;
+			dstOff += cutoff * Pix2D.width2d;
 		}
 
-		if (y + h > Draw2D.bottom) {
-			h -= y + h - Draw2D.bottom;
+		if (y + h > Pix2D.bottom) {
+			h -= y + h - Pix2D.bottom;
 		}
 
-		if (x < Draw2D.left) {
-			int cutoff = Draw2D.left - x;
+		if (x < Pix2D.left) {
+			int cutoff = Pix2D.left - x;
 			w -= cutoff;
-			x = Draw2D.left;
+			x = Pix2D.left;
 			srcOff += cutoff;
 			dstOff += cutoff;
 			srcStep += cutoff;
 			dstStep += cutoff;
 		}
 
-		if (x + w > Draw2D.right) {
-			int cutoff = x + w - Draw2D.right;
+		if (x + w > Pix2D.right) {
+			int cutoff = x + w - Pix2D.right;
 			w -= cutoff;
 			srcStep += cutoff;
 			dstStep += cutoff;
 		}
 
 		if (w > 0 && h > 0) {
-			this.copyPixels(Draw2D.data, this.pixels, srcOff, dstOff, w, h, dstStep, srcStep);
+			this.copyPixels(Pix2D.data, this.pixels, srcOff, dstOff, w, h, dstStep, srcStep);
 		}
 	}
 
@@ -344,23 +344,23 @@ public class Pix24 extends Draw2D {
 			w = w * (this.width - (offW >> 16)) / cw;
 			h = h * (this.height - (offH >> 16)) / ch;
 
-			@Pc(137) int dstStep = x + y * Draw2D.width2d;
-			@Pc(141) int dstOff = Draw2D.width2d - w;
+			@Pc(137) int dstStep = x + y * Pix2D.width2d;
+			@Pc(141) int dstOff = Pix2D.width2d - w;
 
-			if (y < Draw2D.top) {
-				int cutoff = Draw2D.top - y;
+			if (y < Pix2D.top) {
+				int cutoff = Pix2D.top - y;
 				h -= cutoff;
 				y = 0;
-				dstStep += cutoff * Draw2D.width2d;
+				dstStep += cutoff * Pix2D.width2d;
 				offH += scaleCropHeight * cutoff;
 			}
 
-			if (y + h > Draw2D.bottom) {
-				h -= y + h - Draw2D.bottom;
+			if (y + h > Pix2D.bottom) {
+				h -= y + h - Pix2D.bottom;
 			}
 
-			if (x < Draw2D.left) {
-				int cutoff = Draw2D.left - x;
+			if (x < Pix2D.left) {
+				int cutoff = Pix2D.left - x;
 				w -= cutoff;
 				x = 0;
 				dstStep += cutoff;
@@ -368,13 +368,13 @@ public class Pix24 extends Draw2D {
 				dstOff += cutoff;
 			}
 
-			if (x + w > Draw2D.right) {
-				int cutoff = x + w - Draw2D.right;
+			if (x + w > Pix2D.right) {
+				int cutoff = x + w - Pix2D.right;
 				w -= cutoff;
 				dstOff += cutoff;
 			}
 
-			this.scale(w, h, this.pixels, offW, offH, Draw2D.data, dstOff, dstStep, currentW, scaleCropWidth, scaleCropHeight);
+			this.scale(w, h, this.pixels, offW, offH, Pix2D.data, dstOff, dstStep, currentW, scaleCropWidth, scaleCropHeight);
 		} catch (@Pc(243) Exception ignored) {
 			System.out.println("error in sprite clipping routine");
 		}
@@ -413,44 +413,44 @@ public class Pix24 extends Draw2D {
 		x += this.cropX;
 		y += this.cropY;
 
-		@Pc(4) int dstStep = x + y * Draw2D.width2d;
+		@Pc(4) int dstStep = x + y * Pix2D.width2d;
 		@Pc(27) int srcStep = 0;
 		@Pc(30) int h = this.height;
 		@Pc(33) int w = this.width;
-		@Pc(37) int dstOff = Draw2D.width2d - w;
+		@Pc(37) int dstOff = Pix2D.width2d - w;
 		@Pc(39) int srcOff = 0;
 
-		if (y < Draw2D.top) {
-			int cutoff = Draw2D.top - y;
+		if (y < Pix2D.top) {
+			int cutoff = Pix2D.top - y;
 			h -= cutoff;
-			y = Draw2D.top;
+			y = Pix2D.top;
 			srcStep += cutoff * w;
-			dstStep += cutoff * Draw2D.width2d;
+			dstStep += cutoff * Pix2D.width2d;
 		}
 
-		if (y + h > Draw2D.bottom) {
-			h -= y + h - Draw2D.bottom;
+		if (y + h > Pix2D.bottom) {
+			h -= y + h - Pix2D.bottom;
 		}
 
-		if (x < Draw2D.left) {
-			int cutoff = Draw2D.left - x;
+		if (x < Pix2D.left) {
+			int cutoff = Pix2D.left - x;
 			w -= cutoff;
-			x = Draw2D.left;
+			x = Pix2D.left;
 			srcStep += cutoff;
 			dstStep += cutoff;
 			srcOff += cutoff;
 			dstOff += cutoff;
 		}
 
-		if (x + w > Draw2D.right) {
-			int cutoff = x + w - Draw2D.right;
+		if (x + w > Pix2D.right) {
+			int cutoff = x + w - Pix2D.right;
 			w -= cutoff;
 			srcOff += cutoff;
 			dstOff += cutoff;
 		}
 
 		if (w > 0 && h > 0) {
-			this.copyPixelsAlpha(w, h, this.pixels, srcStep, srcOff, Draw2D.data, dstStep, dstOff, alpha);
+			this.copyPixelsAlpha(w, h, this.pixels, srcStep, srcOff, Pix2D.data, dstStep, dstOff, alpha);
 		}
 	}
 
@@ -487,7 +487,7 @@ public class Pix24 extends Draw2D {
 
 			@Pc(63) int leftX = (anchorX << 16) + centerY * sinZoom + centerX * cosZoom;
 			@Pc(75) int leftY = (anchorY << 16) + (centerY * cosZoom - centerX * sinZoom);
-			@Pc(81) int leftOff = x + y * Draw2D.width2d;
+			@Pc(81) int leftOff = x + y * Pix2D.width2d;
 
 			for (@Pc(83) int i = 0; i < h; i++) {
 				@Pc(89) int dstOff = lineStart[i];
@@ -496,14 +496,14 @@ public class Pix24 extends Draw2D {
 				@Pc(99) int srcX = leftX + cosZoom * dstOff;
 				@Pc(105) int srcY = leftY - sinZoom * dstOff;
 				for (@Pc(110) int j = -lineWidth[i]; j < 0; j++) {
-					Draw2D.data[dstX++] = this.pixels[(srcX >> 16) + (srcY >> 16) * this.width];
+					Pix2D.data[dstX++] = this.pixels[(srcX >> 16) + (srcY >> 16) * this.width];
 					srcX += cosZoom;
 					srcY -= sinZoom;
 				}
 
 				leftX += sinZoom;
 				leftY += cosZoom;
-				leftOff += Draw2D.width2d;
+				leftOff += Pix2D.width2d;
 			}
 		} catch (@Pc(158) Exception ignored) {
 		}
@@ -514,44 +514,44 @@ public class Pix24 extends Draw2D {
 		x += this.cropX;
 		y += this.cropY;
 
-		@Pc(15) int dstStep = x + y * Draw2D.width2d;
+		@Pc(15) int dstStep = x + y * Pix2D.width2d;
 		@Pc(17) int srcStep = 0;
 		@Pc(24) int h = this.height;
 		@Pc(27) int w = this.width;
-		@Pc(31) int dstOff = Draw2D.width2d - w;
+		@Pc(31) int dstOff = Pix2D.width2d - w;
 		@Pc(33) int srcOff = 0;
 
-		if (y < Draw2D.top) {
-			int cutoff = Draw2D.top - y;
+		if (y < Pix2D.top) {
+			int cutoff = Pix2D.top - y;
 			h -= cutoff;
-			y = Draw2D.top;
+			y = Pix2D.top;
 			srcStep += cutoff * w;
-			dstStep += cutoff * Draw2D.width2d;
+			dstStep += cutoff * Pix2D.width2d;
 		}
 
-		if (y + h > Draw2D.bottom) {
-			h -= y + h - Draw2D.bottom;
+		if (y + h > Pix2D.bottom) {
+			h -= y + h - Pix2D.bottom;
 		}
 
-		if (x < Draw2D.left) {
-			int cutoff = Draw2D.left - x;
+		if (x < Pix2D.left) {
+			int cutoff = Pix2D.left - x;
 			w -= cutoff;
-			x = Draw2D.left;
+			x = Pix2D.left;
 			srcStep += cutoff;
 			dstStep += cutoff;
 			srcOff += cutoff;
 			dstOff += cutoff;
 		}
 
-		if (x + w > Draw2D.right) {
-			int cutoff = x + w - Draw2D.right;
+		if (x + w > Pix2D.right) {
+			int cutoff = x + w - Pix2D.right;
 			w -= cutoff;
 			srcOff += cutoff;
 			dstOff += cutoff;
 		}
 
 		if (w > 0 && h > 0) {
-			this.copyPixelsMasked(w, h, this.pixels, srcOff, srcStep, Draw2D.data, dstStep, dstOff, mask.pixels);
+			this.copyPixelsMasked(w, h, this.pixels, srcOff, srcStep, Pix2D.data, dstStep, dstOff, mask.pixels);
 		}
 	}
 

@@ -4,6 +4,7 @@ import jagex2.datastruct.Linkable;
 import org.openrs2.deob.annotation.OriginalClass;
 import org.openrs2.deob.annotation.OriginalMember;
 
+// name taken from osrs
 @OriginalClass("client!v")
 public class ObjStackEntity extends Linkable {
 

@@ -9,7 +9,7 @@ import org.openrs2.deob.annotation.Pc;
 
 // name and packaging confirmed 100% in rs2/mapview applet strings
 @OriginalClass("client!ib")
-public class Pix8 extends Draw2D {
+public class Pix8 extends Pix2D {
 
 	@OriginalMember(owner = "client!ib", name = "z", descriptor = "[B")
 	public byte[] pixels;
@@ -183,44 +183,44 @@ public class Pix8 extends Draw2D {
 		x += this.cropX;
 		y += this.cropY;
 
-		@Pc(15) int dstOff = x + y * Draw2D.width2d;
+		@Pc(15) int dstOff = x + y * Pix2D.width2d;
 		@Pc(17) int srcOff = 0;
 		@Pc(20) int h = this.height;
 		@Pc(23) int w = this.width;
-		@Pc(27) int dstStep = Draw2D.width2d - w;
+		@Pc(27) int dstStep = Pix2D.width2d - w;
 		@Pc(29) int srcStep = 0;
 
-		if (y < Draw2D.top) {
-			int cutoff = Draw2D.top - y;
+		if (y < Pix2D.top) {
+			int cutoff = Pix2D.top - y;
 			h -= cutoff;
-			y = Draw2D.top;
+			y = Pix2D.top;
 			srcOff += cutoff * w;
-			dstOff += cutoff * Draw2D.width2d;
+			dstOff += cutoff * Pix2D.width2d;
 		}
 
-		if (y + h > Draw2D.bottom) {
-			h -= y + h - Draw2D.bottom;
+		if (y + h > Pix2D.bottom) {
+			h -= y + h - Pix2D.bottom;
 		}
 
-		if (x < Draw2D.left) {
-			int cutoff = Draw2D.left - x;
+		if (x < Pix2D.left) {
+			int cutoff = Pix2D.left - x;
 			w -= cutoff;
-			x = Draw2D.left;
+			x = Pix2D.left;
 			srcOff += cutoff;
 			dstOff += cutoff;
 			srcStep += cutoff;
 			dstStep += cutoff;
 		}
 
-		if (x + w > Draw2D.right) {
-			int cutoff = x + w - Draw2D.right;
+		if (x + w > Pix2D.right) {
+			int cutoff = x + w - Pix2D.right;
 			w -= cutoff;
 			srcStep += cutoff;
 			dstStep += cutoff;
 		}
 
 		if (w > 0 && h > 0) {
-			this.copyPixels(w, h, this.pixels, srcOff, srcStep, Draw2D.data, dstOff, dstStep, this.palette);
+			this.copyPixels(w, h, this.pixels, srcOff, srcStep, Pix2D.data, dstOff, dstStep, this.palette);
 		}
 	}
 
@@ -297,33 +297,33 @@ public class Pix8 extends Draw2D {
 			}
 			arg2 = arg2 * (this.width - (local7 >> 16)) / local24;
 			arg3 = arg3 * (this.height - (local9 >> 16)) / local27;
-			@Pc(133) int local133 = arg0 + arg1 * Draw2D.width2d;
-			@Pc(137) int local137 = Draw2D.width2d - arg2;
+			@Pc(133) int local133 = arg0 + arg1 * Pix2D.width2d;
+			@Pc(137) int local137 = Pix2D.width2d - arg2;
 			@Pc(144) int local144;
-			if (arg1 < Draw2D.top) {
-				local144 = Draw2D.top - arg1;
+			if (arg1 < Pix2D.top) {
+				local144 = Pix2D.top - arg1;
 				arg3 -= local144;
 				arg1 = 0;
-				local133 += local144 * Draw2D.width2d;
+				local133 += local144 * Pix2D.width2d;
 				local9 += local39 * local144;
 			}
-			if (arg1 + arg3 > Draw2D.bottom) {
-				arg3 -= arg1 + arg3 - Draw2D.bottom;
+			if (arg1 + arg3 > Pix2D.bottom) {
+				arg3 -= arg1 + arg3 - Pix2D.bottom;
 			}
-			if (arg0 < Draw2D.left) {
-				local144 = Draw2D.left - arg0;
+			if (arg0 < Pix2D.left) {
+				local144 = Pix2D.left - arg0;
 				arg2 -= local144;
 				arg0 = 0;
 				local133 += local144;
 				local7 += local33 * local144;
 				local137 += local144;
 			}
-			if (arg0 + arg2 > Draw2D.right) {
-				local144 = arg0 + arg2 - Draw2D.right;
+			if (arg0 + arg2 > Pix2D.right) {
+				local144 = arg0 + arg2 - Pix2D.right;
 				arg2 -= local144;
 				local137 += local144;
 			}
-			this.plot_scale(Draw2D.data, this.pixels, this.palette, local7, local9, local133, local137, arg2, arg3, local33, local39, local2);
+			this.plot_scale(Pix2D.data, this.pixels, this.palette, local7, local9, local133, local137, arg2, arg3, local33, local39, local2);
 		} catch (@Pc(239) Exception local239) {
 			System.out.println("error in sprite clipping routine");
 		}

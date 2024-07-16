@@ -4,8 +4,9 @@ import jagex2.graphics.Model;
 import org.openrs2.deob.annotation.OriginalClass;
 import org.openrs2.deob.annotation.OriginalMember;
 
+// name taken from osrs
 @OriginalClass("client!h")
-public class WallDecoration {
+public class Decor {
 
 	@OriginalMember(owner = "client!h", name = "a", descriptor = "I")
 	public int y;

@@ -5,12 +5,12 @@ import org.openrs2.deob.annotation.OriginalClass;
 import org.openrs2.deob.annotation.OriginalMember;
 import org.openrs2.deob.annotation.Pc;
 
-import jagex2.datastruct.Hashable;
+import jagex2.datastruct.DoublyLinkable;
 import jagex2.io.Jagfile;
 import jagex2.io.Packet;
 
 @OriginalClass("client!eb")
-public class Model extends Hashable {
+public class Model extends DoublyLinkable {
 
 	@OriginalMember(owner = "client!eb", name = "n", descriptor = "I")
 	public int vertexCount;
@@ -118,10 +118,10 @@ public class Model extends Hashable {
 	public boolean pickable = false;
 
 	@OriginalMember(owner = "client!eb", name = "W", descriptor = "[Lclient!n;")
-	public VertexNormal[] vertexNormal;
+	public FaceNormal[] normals;
 
 	@OriginalMember(owner = "client!eb", name = "X", descriptor = "[Lclient!n;")
-	public VertexNormal[] vertexNormalOriginal;
+	public FaceNormal[] normalsOriginal;
 
 	@OriginalMember(owner = "client!eb", name = "Y", descriptor = "[Lclient!l;")
 	public static Metadata[] metadata;
@@ -247,16 +247,16 @@ public class Model extends Hashable {
 	public static final int[] pickedBitsets = new int[1000];
 
 	@OriginalMember(owner = "client!eb", name = "Nb", descriptor = "[I")
-	public static int[] sin = Draw3D.sin;
+	public static int[] sin = Pix3D.sin;
 
 	@OriginalMember(owner = "client!eb", name = "Ob", descriptor = "[I")
-	public static int[] cos = Draw3D.cos;
+	public static int[] cos = Pix3D.cos;
 
 	@OriginalMember(owner = "client!eb", name = "Pb", descriptor = "[I")
-	public static int[] palette = Draw3D.palette;
+	public static int[] palette = Pix3D.palette;
 
 	@OriginalMember(owner = "client!eb", name = "Qb", descriptor = "[I")
-	public static int[] reciprical16 = Draw3D.reciprocal16;
+	public static int[] reciprical16 = Pix3D.reciprocal16;
 
 	@OriginalMember(owner = "client!eb", name = "<init>", descriptor = "(ZI)V")
 	public Model(@OriginalArg(1) int id) {
@@ -767,17 +767,17 @@ public class Model extends Hashable {
 				System.arraycopy(src.faceInfo, 0, this.faceInfo, 0, this.faceCount);
 			}
 
-			this.vertexNormal = new VertexNormal[this.vertexCount];
+			this.normals = new FaceNormal[this.vertexCount];
 			for (int v = 0; v < this.vertexCount; v++) {
-				@Pc(170) VertexNormal copy = this.vertexNormal[v] = new VertexNormal();
-				@Pc(175) VertexNormal original = src.vertexNormal[v];
+				@Pc(170) FaceNormal copy = this.normals[v] = new FaceNormal();
+				@Pc(175) FaceNormal original = src.normals[v];
 				copy.x = original.x;
 				copy.y = original.y;
 				copy.z = original.z;
 				copy.w = original.w;
 			}
 
-			this.vertexNormalOriginal = src.vertexNormalOriginal;
+			this.normalsOriginal = src.normalsOriginal;
 		} else {
 			this.faceColorA = src.faceColorA;
 			this.faceColorB = src.faceColorB;
@@ -1484,10 +1484,10 @@ public class Model extends Hashable {
 			this.faceColorC = new int[this.faceCount];
 		}
 
-		if (this.vertexNormal == null) {
-			this.vertexNormal = new VertexNormal[this.vertexCount];
+		if (this.normals == null) {
+			this.normals = new FaceNormal[this.vertexCount];
 			for (int v = 0; v < this.vertexCount; v++) {
-				this.vertexNormal[v] = new VertexNormal();
+				this.normals[v] = new FaceNormal();
 			}
 		}
 
@@ -1522,19 +1522,19 @@ public class Model extends Hashable {
 			nz = nz * 256 / length;
 
 			if (this.faceInfo == null || (this.faceInfo[f] & 0x1) == 0) {
-				@Pc(251) VertexNormal n = this.vertexNormal[a];
+				@Pc(251) FaceNormal n = this.normals[a];
 				n.x += nx;
 				n.y += ny;
 				n.z += nz;
 				n.w++;
 
-				n = this.vertexNormal[b];
+				n = this.normals[b];
 				n.x += nx;
 				n.y += ny;
 				n.z += nz;
 				n.w++;
 
-				n = this.vertexNormal[c];
+				n = this.normals[c];
 				n.x += nx;
 				n.y += ny;
 				n.z += nz;
@@ -1548,10 +1548,10 @@ public class Model extends Hashable {
 		if (applyLighting) {
 			this.applyLighting(lightAmbient, attenuation, lightSrcX, lightSrcY, lightSrcZ);
 		} else {
-			this.vertexNormalOriginal = new VertexNormal[this.vertexCount];
+			this.normalsOriginal = new FaceNormal[this.vertexCount];
 			for (int v = 0; v < this.vertexCount; v++) {
-				@Pc(399) VertexNormal normal = this.vertexNormal[v];
-				@Pc(408) VertexNormal copy = this.vertexNormalOriginal[v] = new VertexNormal();
+				@Pc(399) FaceNormal normal = this.normals[v];
+				@Pc(408) FaceNormal copy = this.normalsOriginal[v] = new FaceNormal();
 				copy.x = normal.x;
 				copy.y = normal.y;
 				copy.z = normal.z;
@@ -1576,37 +1576,37 @@ public class Model extends Hashable {
 			if (this.faceInfo == null) {
 				int color = this.faceColor[f];
 
-				VertexNormal n = this.vertexNormal[a];
+				FaceNormal n = this.normals[a];
 				int lightness = lightAmbient + (lightSrcX * n.x + lightSrcY * n.y + lightSrcZ * n.z) / (lightAttenuation * n.w);
 				this.faceColorA[f] = mulColorLightness(color, lightness, 0);
 
-				n = this.vertexNormal[b];
+				n = this.normals[b];
 				lightness = lightAmbient + (lightSrcX * n.x + lightSrcY * n.y + lightSrcZ * n.z) / (lightAttenuation * n.w);
 				this.faceColorB[f] = mulColorLightness(color, lightness, 0);
 
-				n = this.vertexNormal[c];
+				n = this.normals[c];
 				lightness = lightAmbient + (lightSrcX * n.x + lightSrcY * n.y + lightSrcZ * n.z) / (lightAttenuation * n.w);
 				this.faceColorC[f] = mulColorLightness(color, lightness, 0);
 			} else if ((this.faceInfo[f] & 0x1) == 0) {
 				int color = this.faceColor[f];
 				@Pc(152) int info = this.faceInfo[f];
 
-				VertexNormal n = this.vertexNormal[a];
+				FaceNormal n = this.normals[a];
 				int lightness = lightAmbient + (lightSrcX * n.x + lightSrcY * n.y + lightSrcZ * n.z) / (lightAttenuation * n.w);
 				this.faceColorA[f] = mulColorLightness(color, lightness, info);
 
-				n = this.vertexNormal[b];
+				n = this.normals[b];
 				lightness = lightAmbient + (lightSrcX * n.x + lightSrcY * n.y + lightSrcZ * n.z) / (lightAttenuation * n.w);
 				this.faceColorB[f] = mulColorLightness(color, lightness, info);
 
-				n = this.vertexNormal[c];
+				n = this.normals[c];
 				lightness = lightAmbient + (lightSrcX * n.x + lightSrcY * n.y + lightSrcZ * n.z) / (lightAttenuation * n.w);
 				this.faceColorC[f] = mulColorLightness(color, lightness, info);
 			}
 		}
 
-		this.vertexNormal = null;
-		this.vertexNormalOriginal = null;
+		this.normals = null;
+		this.normalsOriginal = null;
 		this.vertexLabel = null;
 		this.faceLabel = null;
 
@@ -1623,8 +1623,8 @@ public class Model extends Hashable {
 
 	@OriginalMember(owner = "client!eb", name = "a", descriptor = "(IIIIIII)V")
 	public void drawSimple(@OriginalArg(0) int pitch, @OriginalArg(1) int yaw, @OriginalArg(2) int roll, @OriginalArg(3) int eyePitch, @OriginalArg(4) int eyeX, @OriginalArg(5) int eyeY, @OriginalArg(6) int eyeZ) {
-		@Pc(1) int centerX = Draw3D.centerX;
-		@Pc(3) int centerY = Draw3D.centerY;
+		@Pc(1) int centerX = Pix3D.centerX;
+		@Pc(3) int centerY = Pix3D.centerY;
 		@Pc(7) int sinPitch = sin[pitch];
 		@Pc(11) int cosPitch = cos[pitch];
 		@Pc(15) int sinYaw = sin[yaw];
@@ -1696,12 +1696,12 @@ public class Model extends Hashable {
 
 		@Pc(49) int midX = relativeZ * sinEyeYaw + relativeX * cosEyeYaw >> 16;
 		@Pc(56) int leftX = midX - this.radius << 9;
-		if (leftX / maxZ >= Draw2D.centerX2d) {
+		if (leftX / maxZ >= Pix2D.centerX2d) {
 			return;
 		}
 
 		@Pc(69) int rightX = midX + this.radius << 9;
-		if (rightX / maxZ <= -Draw2D.centerX2d) {
+		if (rightX / maxZ <= -Pix2D.centerX2d) {
 			return;
 		}
 
@@ -1709,13 +1709,13 @@ public class Model extends Hashable {
 		@Pc(93) int radiusSinEyePitch = this.radius * sinEyePitch >> 16;
 
 		@Pc(99) int bottomY = midY + radiusSinEyePitch << 9;
-		if (bottomY / maxZ <= -Draw2D.centerY2d) {
+		if (bottomY / maxZ <= -Pix2D.centerY2d) {
 			return;
 		}
 
 		@Pc(115) int yPrime = radiusSinEyePitch + (this.maxY * cosEyePitch >> 16);
 		@Pc(121) int topY = midY - yPrime << 9;
-		if (topY / maxZ >= Draw2D.centerY2d) {
+		if (topY / maxZ >= Pix2D.centerY2d) {
 			return;
 		}
 
@@ -1746,8 +1746,8 @@ public class Model extends Hashable {
 				topY /= z;
 			}
 
-			int mouseX = Model.mouseX - Draw3D.centerX;
-			int mouseY = mouseZ - Draw3D.centerY;
+			int mouseX = Model.mouseX - Pix3D.centerX;
+			int mouseY = mouseZ - Pix3D.centerY;
 			if (mouseX > leftX && mouseX < rightX && mouseY > topY && mouseY < bottomY) {
 				if (this.pickable) {
 					pickedBitsets[pickedCount++] = bitset;
@@ -1757,8 +1757,8 @@ public class Model extends Hashable {
 			}
 		}
 
-		int centerX = Draw3D.centerX;
-		int centerY = Draw3D.centerY;
+		int centerX = Pix3D.centerX;
+		int centerY = Pix3D.centerY;
 
 		int sinYaw = 0;
 		@Pc(243) int cosYaw = 0;
@@ -1841,7 +1841,7 @@ public class Model extends Hashable {
 
 					if ((xA - xB) * (vertexScreenY[c] - vertexScreenY[b]) - (vertexScreenY[a] - vertexScreenY[b]) * (xC - xB) > 0) {
 						faceNearClipped[f] = false;
-						faceClippedX[f] = xA < 0 || xB < 0 || xC < 0 || xA > Draw2D.boundX || xB > Draw2D.boundX || xC > Draw2D.boundX;
+						faceClippedX[f] = xA < 0 || xB < 0 || xC < 0 || xA > Pix2D.boundX || xB > Pix2D.boundX || xC > Pix2D.boundX;
 						int depthAverage = (vertexScreenZ[a] + vertexScreenZ[b] + vertexScreenZ[c]) / 3 + this.minDepth;
 						tmpDepthFaces[depthAverage][tmpDepthFaceCount[depthAverage]++] = f;
 					}
@@ -2007,12 +2007,12 @@ public class Model extends Hashable {
 		@Pc(19) int b = this.faceVertexB[face];
 		@Pc(24) int c = this.faceVertexC[face];
 
-		Draw3D.clipX = faceClippedX[face];
+		Pix3D.clipX = faceClippedX[face];
 
 		if (this.faceAlpha == null) {
-			Draw3D.alpha = 0;
+			Pix3D.alpha = 0;
 		} else {
-			Draw3D.alpha = this.faceAlpha[face];
+			Pix3D.alpha = this.faceAlpha[face];
 		}
 
 		@Pc(45) int type;
@@ -2023,28 +2023,28 @@ public class Model extends Hashable {
 		}
 
 		if (type == 0) {
-			Draw3D.fillGouraudTriangle(vertexScreenX[a], vertexScreenX[b], vertexScreenX[c], vertexScreenY[a], vertexScreenY[b], vertexScreenY[c], this.faceColorA[face], this.faceColorB[face], this.faceColorC[face]);
+			Pix3D.gouraudTriangle(vertexScreenX[a], vertexScreenX[b], vertexScreenX[c], vertexScreenY[a], vertexScreenY[b], vertexScreenY[c], this.faceColorA[face], this.faceColorB[face], this.faceColorC[face]);
 		} else if (type == 1) {
-			Draw3D.fillTriangle(vertexScreenX[a], vertexScreenX[b], vertexScreenX[c], vertexScreenY[a], vertexScreenY[b], vertexScreenY[c], palette[this.faceColorA[face]]);
+			Pix3D.flatTriangle(vertexScreenX[a], vertexScreenX[b], vertexScreenX[c], vertexScreenY[a], vertexScreenY[b], vertexScreenY[c], palette[this.faceColorA[face]]);
 		} else if (type == 2) {
 			int texturedFace = this.faceInfo[face] >> 2;
 			int tA = this.texturedVertexA[texturedFace];
 			int tB = this.texturedVertexB[texturedFace];
 			int tC = this.texturedVertexC[texturedFace];
-			Draw3D.fillTexturedTriangle(vertexScreenX[a], vertexScreenX[b], vertexScreenX[c], vertexScreenY[a], vertexScreenY[b], vertexScreenY[c], this.faceColorA[face], this.faceColorB[face], this.faceColorC[face], vertexViewSpaceX[tA], vertexViewSpaceY[tA], vertexViewSpaceZ[tA], vertexViewSpaceX[tB], vertexViewSpaceX[tC], vertexViewSpaceY[tB], vertexViewSpaceY[tC], vertexViewSpaceZ[tB], vertexViewSpaceZ[tC], this.faceColor[face]);
+			Pix3D.textureTriangle(vertexScreenX[a], vertexScreenX[b], vertexScreenX[c], vertexScreenY[a], vertexScreenY[b], vertexScreenY[c], this.faceColorA[face], this.faceColorB[face], this.faceColorC[face], vertexViewSpaceX[tA], vertexViewSpaceY[tA], vertexViewSpaceZ[tA], vertexViewSpaceX[tB], vertexViewSpaceX[tC], vertexViewSpaceY[tB], vertexViewSpaceY[tC], vertexViewSpaceZ[tB], vertexViewSpaceZ[tC], this.faceColor[face]);
 		} else if (type == 3) {
 			int texturedFace = this.faceInfo[face] >> 2;
 			int tA = this.texturedVertexA[texturedFace];
 			int tB = this.texturedVertexB[texturedFace];
 			int tC = this.texturedVertexC[texturedFace];
-			Draw3D.fillTexturedTriangle(vertexScreenX[a], vertexScreenX[b], vertexScreenX[c], vertexScreenY[a], vertexScreenY[b], vertexScreenY[c], this.faceColorA[face], this.faceColorA[face], this.faceColorA[face], vertexViewSpaceX[tA], vertexViewSpaceY[tA], vertexViewSpaceZ[tA], vertexViewSpaceX[tB], vertexViewSpaceX[tC], vertexViewSpaceY[tB], vertexViewSpaceY[tC], vertexViewSpaceZ[tB], vertexViewSpaceZ[tC], this.faceColor[face]);
+			Pix3D.textureTriangle(vertexScreenX[a], vertexScreenX[b], vertexScreenX[c], vertexScreenY[a], vertexScreenY[b], vertexScreenY[c], this.faceColorA[face], this.faceColorA[face], this.faceColorA[face], vertexViewSpaceX[tA], vertexViewSpaceY[tA], vertexViewSpaceZ[tA], vertexViewSpaceX[tB], vertexViewSpaceX[tC], vertexViewSpaceY[tB], vertexViewSpaceY[tC], vertexViewSpaceZ[tB], vertexViewSpaceZ[tC], this.faceColor[face]);
 		}
 	}
 
 	@OriginalMember(owner = "client!eb", name = "g", descriptor = "(I)V")
 	private void drawNearClippedFace(@OriginalArg(0) int face) {
-		@Pc(3) int centerX = Draw3D.centerX;
-		@Pc(5) int centerY = Draw3D.centerY;
+		@Pc(3) int centerX = Pix3D.centerX;
+		@Pc(5) int centerY = Pix3D.centerY;
 		@Pc(7) int elements = 0;
 
 		@Pc(12) int a = this.faceVertexA[face];
@@ -2138,11 +2138,11 @@ public class Model extends Hashable {
 			return;
 		}
 
-		Draw3D.clipX = false;
+		Pix3D.clipX = false;
 
 		if (elements == 3) {
-			if (x0 < 0 || x1 < 0 || x2 < 0 || x0 > Draw2D.boundX || x1 > Draw2D.boundX || x2 > Draw2D.boundX) {
-				Draw3D.clipX = true;
+			if (x0 < 0 || x1 < 0 || x2 < 0 || x0 > Pix2D.boundX || x1 > Pix2D.boundX || x2 > Pix2D.boundX) {
+				Pix3D.clipX = true;
 			}
 
 			int type;
@@ -2153,25 +2153,25 @@ public class Model extends Hashable {
 			}
 
 			if (type == 0) {
-				Draw3D.fillGouraudTriangle(x0, x1, x2, y0, y1, y2, clippedColor[0], clippedColor[1], clippedColor[2]);
+				Pix3D.gouraudTriangle(x0, x1, x2, y0, y1, y2, clippedColor[0], clippedColor[1], clippedColor[2]);
 			} else if (type == 1) {
-				Draw3D.fillTriangle(x0, x1, x2, y0, y1, y2, palette[this.faceColorA[face]]);
+				Pix3D.flatTriangle(x0, x1, x2, y0, y1, y2, palette[this.faceColorA[face]]);
 			} else if (type == 2) {
 				int texturedFace = this.faceInfo[face] >> 2;
 				int tA = this.texturedVertexA[texturedFace];
 				int tB = this.texturedVertexB[texturedFace];
 				int tC = this.texturedVertexC[texturedFace];
-				Draw3D.fillTexturedTriangle(x0, x1, x2, y0, y1, y2, clippedColor[0], clippedColor[1], clippedColor[2], vertexViewSpaceX[tA], vertexViewSpaceY[tA], vertexViewSpaceZ[tA], vertexViewSpaceX[tB], vertexViewSpaceX[tC], vertexViewSpaceY[tB], vertexViewSpaceY[tC], vertexViewSpaceZ[tB], vertexViewSpaceZ[tC], this.faceColor[face]);
+				Pix3D.textureTriangle(x0, x1, x2, y0, y1, y2, clippedColor[0], clippedColor[1], clippedColor[2], vertexViewSpaceX[tA], vertexViewSpaceY[tA], vertexViewSpaceZ[tA], vertexViewSpaceX[tB], vertexViewSpaceX[tC], vertexViewSpaceY[tB], vertexViewSpaceY[tC], vertexViewSpaceZ[tB], vertexViewSpaceZ[tC], this.faceColor[face]);
 			} else if (type == 3) {
 				int texturedFace = this.faceInfo[face] >> 2;
 				int tA = this.texturedVertexA[texturedFace];
 				int tB = this.texturedVertexB[texturedFace];
 				int tC = this.texturedVertexC[texturedFace];
-				Draw3D.fillTexturedTriangle(x0, x1, x2, y0, y1, y2, this.faceColorA[face], this.faceColorA[face], this.faceColorA[face], vertexViewSpaceX[tA], vertexViewSpaceY[tA], vertexViewSpaceZ[tA], vertexViewSpaceX[tB], vertexViewSpaceX[tC], vertexViewSpaceY[tB], vertexViewSpaceY[tC], vertexViewSpaceZ[tB], vertexViewSpaceZ[tC], this.faceColor[face]);
+				Pix3D.textureTriangle(x0, x1, x2, y0, y1, y2, this.faceColorA[face], this.faceColorA[face], this.faceColorA[face], vertexViewSpaceX[tA], vertexViewSpaceY[tA], vertexViewSpaceZ[tA], vertexViewSpaceX[tB], vertexViewSpaceX[tC], vertexViewSpaceY[tB], vertexViewSpaceY[tC], vertexViewSpaceZ[tB], vertexViewSpaceZ[tC], this.faceColor[face]);
 			}
 		} else if (elements == 4) {
-			if (x0 < 0 || x1 < 0 || x2 < 0 || x0 > Draw2D.boundX || x1 > Draw2D.boundX || x2 > Draw2D.boundX || clippedX[3] < 0 || clippedX[3] > Draw2D.boundX) {
-				Draw3D.clipX = true;
+			if (x0 < 0 || x1 < 0 || x2 < 0 || x0 > Pix2D.boundX || x1 > Pix2D.boundX || x2 > Pix2D.boundX || clippedX[3] < 0 || clippedX[3] > Pix2D.boundX) {
+				Pix3D.clipX = true;
 			}
 
 			int type;
@@ -2182,26 +2182,26 @@ public class Model extends Hashable {
 			}
 
 			if (type == 0) {
-				Draw3D.fillGouraudTriangle(x0, x1, x2, y0, y1, y2, clippedColor[0], clippedColor[1], clippedColor[2]);
-				Draw3D.fillGouraudTriangle(x0, x2, clippedX[3], y0, y2, clippedY[3], clippedColor[0], clippedColor[2], clippedColor[3]);
+				Pix3D.gouraudTriangle(x0, x1, x2, y0, y1, y2, clippedColor[0], clippedColor[1], clippedColor[2]);
+				Pix3D.gouraudTriangle(x0, x2, clippedX[3], y0, y2, clippedY[3], clippedColor[0], clippedColor[2], clippedColor[3]);
 			} else if (type == 1) {
 				int colorA = palette[this.faceColorA[face]];
-				Draw3D.fillTriangle(x0, x1, x2, y0, y1, y2, colorA);
-				Draw3D.fillTriangle(x0, x2, clippedX[3], y0, y2, clippedY[3], colorA);
+				Pix3D.flatTriangle(x0, x1, x2, y0, y1, y2, colorA);
+				Pix3D.flatTriangle(x0, x2, clippedX[3], y0, y2, clippedY[3], colorA);
 			} else if (type == 2) {
 				int texturedFace = this.faceInfo[face] >> 2;
 				int tA = this.texturedVertexA[texturedFace];
 				int tB = this.texturedVertexB[texturedFace];
 				int tC = this.texturedVertexC[texturedFace];
-				Draw3D.fillTexturedTriangle(x0, x1, x2, y0, y1, y2, clippedColor[0], clippedColor[1], clippedColor[2], vertexViewSpaceX[tA], vertexViewSpaceY[tA], vertexViewSpaceZ[tA], vertexViewSpaceX[tB], vertexViewSpaceX[tC], vertexViewSpaceY[tB], vertexViewSpaceY[tC], vertexViewSpaceZ[tB], vertexViewSpaceZ[tC], this.faceColor[face]);
-				Draw3D.fillTexturedTriangle(x0, x2, clippedX[3], y0, y2, clippedY[3], clippedColor[0], clippedColor[2], clippedColor[3], vertexViewSpaceX[tA], vertexViewSpaceY[tA], vertexViewSpaceZ[tA], vertexViewSpaceX[tB], vertexViewSpaceX[tC], vertexViewSpaceY[tB], vertexViewSpaceY[tC], vertexViewSpaceZ[tB], vertexViewSpaceZ[tC], this.faceColor[face]);
+				Pix3D.textureTriangle(x0, x1, x2, y0, y1, y2, clippedColor[0], clippedColor[1], clippedColor[2], vertexViewSpaceX[tA], vertexViewSpaceY[tA], vertexViewSpaceZ[tA], vertexViewSpaceX[tB], vertexViewSpaceX[tC], vertexViewSpaceY[tB], vertexViewSpaceY[tC], vertexViewSpaceZ[tB], vertexViewSpaceZ[tC], this.faceColor[face]);
+				Pix3D.textureTriangle(x0, x2, clippedX[3], y0, y2, clippedY[3], clippedColor[0], clippedColor[2], clippedColor[3], vertexViewSpaceX[tA], vertexViewSpaceY[tA], vertexViewSpaceZ[tA], vertexViewSpaceX[tB], vertexViewSpaceX[tC], vertexViewSpaceY[tB], vertexViewSpaceY[tC], vertexViewSpaceZ[tB], vertexViewSpaceZ[tC], this.faceColor[face]);
 			} else if (type == 3) {
 				int texturedFace = this.faceInfo[face] >> 2;
 				int tA = this.texturedVertexA[texturedFace];
 				int tB = this.texturedVertexB[texturedFace];
 				int tC = this.texturedVertexC[texturedFace];
-				Draw3D.fillTexturedTriangle(x0, x1, x2, y0, y1, y2, this.faceColorA[face], this.faceColorA[face], this.faceColorA[face], vertexViewSpaceX[tA], vertexViewSpaceY[tA], vertexViewSpaceZ[tA], vertexViewSpaceX[tB], vertexViewSpaceX[tC], vertexViewSpaceY[tB], vertexViewSpaceY[tC], vertexViewSpaceZ[tB], vertexViewSpaceZ[tC], this.faceColor[face]);
-				Draw3D.fillTexturedTriangle(x0, x2, clippedX[3], y0, y2, clippedY[3], this.faceColorA[face], this.faceColorA[face], this.faceColorA[face], vertexViewSpaceX[tA], vertexViewSpaceY[tA], vertexViewSpaceZ[tA], vertexViewSpaceX[tB], vertexViewSpaceX[tC], vertexViewSpaceY[tB], vertexViewSpaceY[tC], vertexViewSpaceZ[tB], vertexViewSpaceZ[tC], this.faceColor[face]);
+				Pix3D.textureTriangle(x0, x1, x2, y0, y1, y2, this.faceColorA[face], this.faceColorA[face], this.faceColorA[face], vertexViewSpaceX[tA], vertexViewSpaceY[tA], vertexViewSpaceZ[tA], vertexViewSpaceX[tB], vertexViewSpaceX[tC], vertexViewSpaceY[tB], vertexViewSpaceY[tC], vertexViewSpaceZ[tB], vertexViewSpaceZ[tC], this.faceColor[face]);
+				Pix3D.textureTriangle(x0, x2, clippedX[3], y0, y2, clippedY[3], this.faceColorA[face], this.faceColorA[face], this.faceColorA[face], vertexViewSpaceX[tA], vertexViewSpaceY[tA], vertexViewSpaceZ[tA], vertexViewSpaceX[tB], vertexViewSpaceX[tC], vertexViewSpaceY[tB], vertexViewSpaceY[tC], vertexViewSpaceZ[tB], vertexViewSpaceZ[tC], this.faceColor[face]);
 			}
 		}
 	}
@@ -2272,7 +2272,7 @@ public class Model extends Hashable {
 	}
 
 	@OriginalClass("client!n")
-	public static final class VertexNormal {
+	public static final class FaceNormal {
 
 		@OriginalMember(owner = "client!n", name = "a", descriptor = "I")
 		public int x;

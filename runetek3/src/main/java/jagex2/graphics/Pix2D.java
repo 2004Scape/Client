@@ -1,13 +1,14 @@
 package jagex2.graphics;
 
-import jagex2.datastruct.Hashable;
+import jagex2.datastruct.DoublyLinkable;
 import org.openrs2.deob.annotation.OriginalArg;
 import org.openrs2.deob.annotation.OriginalClass;
 import org.openrs2.deob.annotation.OriginalMember;
 import org.openrs2.deob.annotation.Pc;
 
+// name taken from osrs
 @OriginalClass("client!fb")
-public class Draw2D extends Hashable {
+public class Pix2D extends DoublyLinkable {
 
 	@OriginalMember(owner = "client!fb", name = "k", descriptor = "[I")
 	public static int[] data;
@@ -40,7 +41,7 @@ public class Draw2D extends Hashable {
 	public static int centerY2d;
 
 	@OriginalMember(owner = "client!fb", name = "<init>", descriptor = "()V")
-	protected Draw2D() {
+	protected Pix2D() {
 	}
 
 	@OriginalMember(owner = "client!fb", name = "a", descriptor = "(I[III)V")
@@ -79,13 +80,13 @@ public class Draw2D extends Hashable {
 			bottom = height2d;
 		}
 
-		Draw2D.left = left;
-		Draw2D.top = top;
-		Draw2D.right = right;
-		Draw2D.bottom = bottom;
-		boundX = Draw2D.right - 1;
-		centerX2d = Draw2D.right / 2;
-		centerY2d = Draw2D.bottom / 2;
+		Pix2D.left = left;
+		Pix2D.top = top;
+		Pix2D.right = right;
+		Pix2D.bottom = bottom;
+		boundX = Pix2D.right - 1;
+		centerX2d = Pix2D.right / 2;
+		centerY2d = Pix2D.bottom / 2;
 	}
 
 	@OriginalMember(owner = "client!fb", name = "b", descriptor = "(I)V")

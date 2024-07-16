@@ -11,6 +11,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.Socket;
 
+// name taken from osrs
 @OriginalClass("client!d")
 public class ClientStream implements Runnable {
 

@@ -5,8 +5,9 @@ import org.openrs2.deob.annotation.OriginalArg;
 import org.openrs2.deob.annotation.OriginalClass;
 import org.openrs2.deob.annotation.OriginalMember;
 
+// name taken from osrs (hopefully the right class)
 @OriginalClass("client!cb")
-public class Tile extends Linkable {
+public class Ground extends Linkable {
 
 	@OriginalMember(owner = "client!cb", name = "e", descriptor = "I")
 	public int level;
@@ -30,19 +31,19 @@ public class Tile extends Linkable {
 	public Wall wall;
 
 	@OriginalMember(owner = "client!cb", name = "l", descriptor = "Lclient!h;")
-	public WallDecoration wallDecoration;
+	public Decor wallDecor;
 
 	@OriginalMember(owner = "client!cb", name = "m", descriptor = "Lclient!j;")
-	public GroundDecoration groundDecoration;
+	public GroundDecor groundDecor;
 
 	@OriginalMember(owner = "client!cb", name = "n", descriptor = "Lclient!k;")
-	public ObjStack objStack;
+	public GroundObject objStack;
 
 	@OriginalMember(owner = "client!cb", name = "o", descriptor = "I")
 	public int locCount;
 
 	@OriginalMember(owner = "client!cb", name = "p", descriptor = "[Lclient!p;")
-	public final Loc[] locs = new Loc[5];
+	public final Location[] locs = new Location[5];
 
 	@OriginalMember(owner = "client!cb", name = "q", descriptor = "[I")
 	public final int[] locSpan = new int[5];
@@ -75,10 +76,10 @@ public class Tile extends Linkable {
 	public int backWallTypes;
 
 	@OriginalMember(owner = "client!cb", name = "A", descriptor = "Lclient!cb;")
-	public Tile bridge;
+	public Ground bridge;
 
 	@OriginalMember(owner = "client!cb", name = "<init>", descriptor = "(III)V")
-	public Tile(@OriginalArg(0) int level, @OriginalArg(1) int x, @OriginalArg(2) int z) {
+	public Ground(@OriginalArg(0) int level, @OriginalArg(1) int x, @OriginalArg(2) int z) {
 		this.occludeLevel = this.level = level;
 		this.x = x;
 		this.z = z;

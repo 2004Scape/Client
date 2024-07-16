@@ -5,8 +5,8 @@ import jagex2.config.LocType;
 import jagex2.config.SeqType;
 import jagex2.dash3d.entity.LocEntity;
 import jagex2.datastruct.LinkList;
-import jagex2.graphics.Draw3D;
 import jagex2.graphics.Model;
+import jagex2.graphics.Pix3D;
 import jagex2.io.Packet;
 import org.openrs2.deob.annotation.OriginalArg;
 import org.openrs2.deob.annotation.OriginalClass;
@@ -144,7 +144,7 @@ public class World {
 
 	@OriginalMember(owner = "client!c", name = "a", descriptor = "(IIII)I")
 	private static int interpolate(@OriginalArg(0) int a, @OriginalArg(1) int b, @OriginalArg(2) int x, @OriginalArg(3) int scale) {
-		@Pc(11) int f = 65536 - Draw3D.cos[x * 1024 / scale] >> 1;
+		@Pc(11) int f = 65536 - Pix3D.cos[x * 1024 / scale] >> 1;
 		return (a * (65536 - f) >> 16) + (b * f >> 16);
 	}
 
@@ -957,7 +957,7 @@ public class World {
 
 								int shadeColor = 0;
 								if (baseColor != -1) {
-									shadeColor = Draw3D.palette[mulHSL(tintColor, 96)];
+									shadeColor = Pix3D.palette[mulHSL(tintColor, 96)];
 								}
 
 								if (overlayId == 0) {
@@ -971,7 +971,7 @@ public class World {
 									@Pc(934) int rgb;
 
 									if (textureId >= 0) {
-										rgb = Draw3D.getAverageTextureRGB(textureId);
+										rgb = Pix3D.getAverageTextureRGB(textureId);
 										hsl = -1;
 									} else if (flo.rgb == 16711935) {
 										rgb = 0;
@@ -979,7 +979,7 @@ public class World {
 										textureId = -1;
 									} else {
 										hsl = this.hsl24to16(flo.hue, flo.saturation, flo.lightness);
-										rgb = Draw3D.palette[this.adjustLightness(flo.hsl, 96)];
+										rgb = Pix3D.palette[this.adjustLightness(flo.hsl, 96)];
 									}
 
 									scene.setTile(level, x0, z0, shape, rotation, textureId, heightSW, heightSE, heightNE, heightNW, mulHSL(baseColor, lightSW), mulHSL(baseColor, lightSE), mulHSL(baseColor, lightNE), mulHSL(baseColor, lightNW), this.adjustLightness(hsl, lightSW), this.adjustLightness(hsl, lightSE), this.adjustLightness(hsl, lightNE), this.adjustLightness(hsl, lightNW), shadeColor, rgb);
