@@ -1081,7 +1081,7 @@ public class client extends GameShell {
 	private Pix8 imageTitlebutton;
 
 	@OriginalMember(owner = "client!client", name = "Yh", descriptor = "[I")
-	private final int[] LOC_KIND_TO_CLASS_ID = new int[] { 0, 0, 0, 0, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 3 };
+	private final int[] LOC_SHAPE_TO_LAYER = new int[] { 0, 0, 0, 0, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 3 };
 
 	@OriginalMember(owner = "client!client", name = "Zh", descriptor = "I")
 	public static int cyclelogic5;
@@ -1910,7 +1910,7 @@ public class client extends GameShell {
 			int info = buf.g1();
 			int shape = info >> 2;
 			int angle = info & 0x3;
-			int layer = this.LOC_KIND_TO_CLASS_ID[shape];
+			int layer = this.LOC_SHAPE_TO_LAYER[shape];
 			int id;
 			if (opcode == 76) {
 				id = -1;
@@ -1967,7 +1967,7 @@ public class client extends GameShell {
 			// LOC_ANIM
 			int info = buf.g1();
 			int shape = info >> 2;
-			int layer = this.LOC_KIND_TO_CLASS_ID[shape];
+			int layer = this.LOC_SHAPE_TO_LAYER[shape];
 			int id = buf.g2();
 			if (x >= 0 && z >= 0 && x < 104 && z < 104) {
 				int bitset = 0;
@@ -2072,7 +2072,7 @@ public class client extends GameShell {
 			int info = buf.g1();
 			int shape = info >> 2;
 			int angle = info & 0x3;
-			int layer = this.LOC_KIND_TO_CLASS_ID[shape];
+			int layer = this.LOC_SHAPE_TO_LAYER[shape];
 			int id = buf.g2();
 			int start = buf.g2();
 			int end = buf.g2();
@@ -4072,29 +4072,29 @@ public class client extends GameShell {
 			@Pc(73) int index = this.playerIds[i];
 			@Pc(78) PlayerEntity player = this.players[index];
 
-			@Pc(83) int hasUpdate = buf.gBit(1);
-			if (hasUpdate == 0) {
+			@Pc(83) int info = buf.gBit(1);
+			if (info == 0) {
 				this.playerIds[this.playerCount++] = index;
 				player.cycle = loopCycle;
 			} else {
-				@Pc(106) int updateType = buf.gBit(2);
+				@Pc(106) int op = buf.gBit(2);
 
-				if (updateType == 0) {
+				if (op == 0) {
 					this.playerIds[this.playerCount++] = index;
 					player.cycle = loopCycle;
 					this.entityUpdateIds[this.entityUpdateCount++] = index;
-				} else if (updateType == 1) {
+				} else if (op == 1) {
 					this.playerIds[this.playerCount++] = index;
 					player.cycle = loopCycle;
 
 					int walkDir = buf.gBit(3);
 					player.step(false, walkDir);
 
-					int hasMaskUpdate = buf.gBit(1);
-					if (hasMaskUpdate == 1) {
+					int extendedInfo = buf.gBit(1);
+					if (extendedInfo == 1) {
 						this.entityUpdateIds[this.entityUpdateCount++] = index;
 					}
-				} else if (updateType == 2) {
+				} else if (op == 2) {
 					this.playerIds[this.playerCount++] = index;
 					player.cycle = loopCycle;
 
@@ -4103,11 +4103,11 @@ public class client extends GameShell {
 					int runDir = buf.gBit(3);
 					player.step(true, runDir);
 
-					@Pc(225) int hasMaskUpdate = buf.gBit(1);
-					if (hasMaskUpdate == 1) {
+					@Pc(225) int extendedInfo = buf.gBit(1);
+					if (extendedInfo == 1) {
 						this.entityUpdateIds[this.entityUpdateCount++] = index;
 					}
-				} else if (updateType == 3) {
+				} else if (op == 3) {
 					this.entityRemovalIds[this.entityRemovalCount++] = index;
 				}
 			}
@@ -4339,8 +4339,8 @@ public class client extends GameShell {
 			@Pc(99) int jump = buf.gBit(1);
 			player.move(jump == 1, this.localPlayer.pathTileX[0] + dx, this.localPlayer.pathTileZ[0] + dz);
 
-			@Pc(127) int hasMaskUpdate = buf.gBit(1);
-			if (hasMaskUpdate == 1) {
+			@Pc(127) int extendedInfo = buf.gBit(1);
+			if (extendedInfo == 1) {
 				this.entityUpdateIds[this.entityUpdateCount++] = index;
 			}
 		}
@@ -6343,8 +6343,8 @@ public class client extends GameShell {
 				dz -= 32;
 			}
 			npc.move(false, this.localPlayer.pathTileX[0] + dx, this.localPlayer.pathTileZ[0] + dz);
-			@Pc(128) int update = buf.gBit(1);
-			if (update == 1) {
+			@Pc(128) int extendedInfo = buf.gBit(1);
+			if (extendedInfo == 1) {
 				this.entityUpdateIds[this.entityUpdateCount++] = index;
 			}
 		}
@@ -9311,29 +9311,29 @@ public class client extends GameShell {
 			@Pc(72) int index = this.npcIds[i];
 			@Pc(77) NpcEntity npc = this.npcs[index];
 
-			@Pc(82) int hasUpdate = buf.gBit(1);
-			if (hasUpdate == 0) {
+			@Pc(82) int info = buf.gBit(1);
+			if (info == 0) {
 				this.npcIds[this.npcCount++] = index;
 				npc.cycle = loopCycle;
 			} else {
-				@Pc(105) int updateType = buf.gBit(2);
+				@Pc(105) int op = buf.gBit(2);
 
-				if (updateType == 0) {
+				if (op == 0) {
 					this.npcIds[this.npcCount++] = index;
 					npc.cycle = loopCycle;
 					this.entityUpdateIds[this.entityUpdateCount++] = index;
-				} else if (updateType == 1) {
+				} else if (op == 1) {
 					this.npcIds[this.npcCount++] = index;
 					npc.cycle = loopCycle;
 
 					int walkDir = buf.gBit(3);
 					npc.step(false, walkDir);
 
-					int hasMaskUpdate = buf.gBit(1);
-					if (hasMaskUpdate == 1) {
+					int extendedInfo = buf.gBit(1);
+					if (extendedInfo == 1) {
 						this.entityUpdateIds[this.entityUpdateCount++] = index;
 					}
-				} else if (updateType == 2) {
+				} else if (op == 2) {
 					this.npcIds[this.npcCount++] = index;
 					npc.cycle = loopCycle;
 
@@ -9342,11 +9342,11 @@ public class client extends GameShell {
 					int runDir = buf.gBit(3);
 					npc.step(true, runDir);
 
-					@Pc(224) int hasMaskUpdate = buf.gBit(1);
-					if (hasMaskUpdate == 1) {
+					@Pc(224) int extendedInfo = buf.gBit(1);
+					if (extendedInfo == 1) {
 						this.entityUpdateIds[this.entityUpdateCount++] = index;
 					}
-				} else if (updateType == 3) {
+				} else if (op == 3) {
 					this.entityRemovalIds[this.entityRemovalCount++] = index;
 				}
 			}
@@ -10244,31 +10244,31 @@ public class client extends GameShell {
 	private void getPlayerLocal(@OriginalArg(2) Packet buf, @OriginalArg(1) int size) {
 		buf.accessBits();
 
-		@Pc(7) int hasUpdate = buf.gBit(1);
-		if (hasUpdate != 0) {
-			@Pc(21) int updateType = buf.gBit(2);
+		@Pc(7) int info = buf.gBit(1);
+		if (info != 0) {
+			@Pc(21) int op = buf.gBit(2);
 
-			if (updateType == 0) {
+			if (op == 0) {
 				this.entityUpdateIds[this.entityUpdateCount++] = this.LOCAL_PLAYER_INDEX;
-			} else if (updateType == 1) {
+			} else if (op == 1) {
 				int walkDir = buf.gBit(3);
 				this.localPlayer.step(false, walkDir);
 
-				int hasMaskUpdate = buf.gBit(1);
-				if (hasMaskUpdate == 1) {
+				int extendedInfo = buf.gBit(1);
+				if (extendedInfo == 1) {
 					this.entityUpdateIds[this.entityUpdateCount++] = this.LOCAL_PLAYER_INDEX;
 				}
-			} else if (updateType == 2) {
+			} else if (op == 2) {
 				int walkDir = buf.gBit(3);
 				this.localPlayer.step(true, walkDir);
 				int runDir = buf.gBit(3);
 				this.localPlayer.step(true, runDir);
 
-				int hasMaskUpdate = buf.gBit(1);
-				if (hasMaskUpdate == 1) {
+				int extendedInfo = buf.gBit(1);
+				if (extendedInfo == 1) {
 					this.entityUpdateIds[this.entityUpdateCount++] = this.LOCAL_PLAYER_INDEX;
 				}
-			} else if (updateType == 3) {
+			} else if (op == 3) {
 				this.currentLevel = buf.gBit(2);
 				if (this.showDebug) {
 					this.userTileMarkers = new Ground[4];
@@ -10279,8 +10279,8 @@ public class client extends GameShell {
 				int jump = buf.gBit(1);
 				this.localPlayer.move(jump == 1, localX, localZ);
 
-				@Pc(158) int hasMaskUpdate = buf.gBit(1);
-				if (hasMaskUpdate == 1) {
+				@Pc(158) int extendedInfo = buf.gBit(1);
+				if (extendedInfo == 1) {
 					this.entityUpdateIds[this.entityUpdateCount++] = this.LOCAL_PLAYER_INDEX;
 				}
 			}
