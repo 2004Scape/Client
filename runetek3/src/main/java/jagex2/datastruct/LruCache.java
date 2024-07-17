@@ -18,7 +18,7 @@ public class LruCache {
 	private final HashTable hashtable = new HashTable(1024);
 
 	@OriginalMember(owner = "client!s", name = "f", descriptor = "Lclient!pb;")
-	private final Stack history = new Stack();
+	private final DoublyLinkList history = new DoublyLinkList();
 
 	@OriginalMember(owner = "client!s", name = "<init>", descriptor = "(BI)V")
 	public LruCache(@OriginalArg(1) int size) {
@@ -27,8 +27,8 @@ public class LruCache {
 	}
 
 	@OriginalMember(owner = "client!s", name = "a", descriptor = "(J)Lclient!db;")
-	public Hashable get(@OriginalArg(0) long key) {
-		@Pc(5) Hashable node = (Hashable) this.hashtable.get(key);
+	public DoublyLinkable get(@OriginalArg(0) long key) {
+		@Pc(5) DoublyLinkable node = (DoublyLinkable) this.hashtable.get(key);
 		if (node != null) {
 			this.history.push(node);
 		}
@@ -37,9 +37,9 @@ public class LruCache {
 	}
 
 	@OriginalMember(owner = "client!s", name = "a", descriptor = "(IJLclient!db;)V")
-	public void put(@OriginalArg(1) long key, @OriginalArg(2) Hashable value) {
+	public void put(@OriginalArg(1) long key, @OriginalArg(2) DoublyLinkable value) {
 		if (this.available == 0) {
-			@Pc(8) Hashable node = this.history.pop();
+			@Pc(8) DoublyLinkable node = this.history.pop();
 			node.unlink();
 			node.uncache();
 		} else {
@@ -53,7 +53,7 @@ public class LruCache {
 	@OriginalMember(owner = "client!s", name = "a", descriptor = "()V")
 	public void clear() {
 		while (true) {
-			@Pc(3) Hashable node = this.history.pop();
+			@Pc(3) DoublyLinkable node = this.history.pop();
 			if (node == null) {
 				this.available = this.capacity;
 				return;

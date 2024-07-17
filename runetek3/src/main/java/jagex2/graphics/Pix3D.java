@@ -6,14 +6,15 @@ import org.openrs2.deob.annotation.OriginalClass;
 import org.openrs2.deob.annotation.OriginalMember;
 import org.openrs2.deob.annotation.Pc;
 
+// name taken from osrs
 @OriginalClass("client!gb")
-public class Draw3D extends Draw2D {
+public class Pix3D extends Pix2D {
 
 	@OriginalMember(owner = "client!gb", name = "A", descriptor = "Z")
-	public static boolean lowMemory = true;
+	public static boolean lowDetail = true;
 
 	@OriginalMember(owner = "client!gb", name = "B", descriptor = "Z")
-	public static boolean clipX;
+	public static boolean hclip;
 
 	@OriginalMember(owner = "client!gb", name = "C", descriptor = "Z")
 	private static boolean opaque;
@@ -22,25 +23,25 @@ public class Draw3D extends Draw2D {
 	public static boolean jagged = true;
 
 	@OriginalMember(owner = "client!gb", name = "E", descriptor = "I")
-	public static int alpha;
+	public static int trans;
 
 	@OriginalMember(owner = "client!gb", name = "F", descriptor = "I")
-	public static int centerX;
+	public static int centerW3D;
 
 	@OriginalMember(owner = "client!gb", name = "G", descriptor = "I")
-	public static int centerY;
+	public static int centerH3D;
 
 	@OriginalMember(owner = "client!gb", name = "H", descriptor = "[I")
-	public static int[] reciprocal15 = new int[512];
+	public static int[] divTable = new int[512];
 
 	@OriginalMember(owner = "client!gb", name = "I", descriptor = "[I")
-	public static int[] reciprocal16 = new int[2048];
+	public static int[] divTable2 = new int[2048];
 
 	@OriginalMember(owner = "client!gb", name = "J", descriptor = "[I")
-	public static int[] sin = new int[2048];
+	public static int[] sinTable = new int[2048];
 
 	@OriginalMember(owner = "client!gb", name = "K", descriptor = "[I")
-	public static int[] cos = new int[2048];
+	public static int[] cosTable = new int[2048];
 
 	@OriginalMember(owner = "client!gb", name = "L", descriptor = "[I")
 	public static int[] lineOffset;
@@ -73,32 +74,32 @@ public class Draw3D extends Draw2D {
 	public static int cycle;
 
 	@OriginalMember(owner = "client!gb", name = "V", descriptor = "[I")
-	public static int[] palette = new int[65536];
+	public static int[] colourTable = new int[65536];
 
 	@OriginalMember(owner = "client!gb", name = "W", descriptor = "[[I")
 	private static int[][] texturePalette = new int[50][];
 
 	static {
 		for (@Pc(23) int i = 1; i < 512; i++) {
-			reciprocal15[i] = 32768 / i;
+			divTable[i] = 32768 / i;
 		}
 
 		for (@Pc(36) int i = 1; i < 2048; i++) {
-			reciprocal16[i] = 65536 / i;
+			divTable2[i] = 65536 / i;
 		}
 
 		for (@Pc(49) int i = 0; i < 2048; i++) {
-			sin[i] = (int) (Math.sin((double) i * 0.0030679615D) * 65536.0D);
-			cos[i] = (int) (Math.cos((double) i * 0.0030679615D) * 65536.0D);
+			sinTable[i] = (int) (Math.sin((double) i * 0.0030679615D) * 65536.0D);
+			cosTable[i] = (int) (Math.cos((double) i * 0.0030679615D) * 65536.0D);
 		}
 	}
 
 	@OriginalMember(owner = "client!gb", name = "a", descriptor = "(Z)V")
 	public static void unload() {
-		reciprocal15 = null;
-		reciprocal16 = null; // original typo: reciprocal15 = null; (yes twice)
-		sin = null;
-		cos = null;
+		divTable = null;
+		divTable2 = null; // original typo: divTable = null; (yes twice)
+		sinTable = null;
+		cosTable = null;
 		lineOffset = null;
 		textures = null;
 		textureTranslucent = null;
@@ -106,7 +107,7 @@ public class Draw3D extends Draw2D {
 		texelPool = null;
 		activeTexels = null;
 		textureCycle = null;
-		palette = null;
+		colourTable = null;
 		texturePalette = null;
 	}
 
@@ -116,8 +117,8 @@ public class Draw3D extends Draw2D {
 		for (int y = 0; y < height2d; y++) {
 			lineOffset[y] = width2d * y;
 		}
-		centerX = width2d / 2;
-		centerY = height2d / 2;
+		centerW3D = width2d / 2;
+		centerH3D = height2d / 2;
 	}
 
 	@OriginalMember(owner = "client!gb", name = "a", descriptor = "(III)V")
@@ -126,8 +127,8 @@ public class Draw3D extends Draw2D {
 		for (@Pc(12) int y = 0; y < height; y++) {
 			lineOffset[y] = width * y;
 		}
-		centerX = width / 2;
-		centerY = height / 2;
+		centerW3D = width / 2;
+		centerH3D = height / 2;
 	}
 
 	@OriginalMember(owner = "client!gb", name = "b", descriptor = "(Z)V")
@@ -144,7 +145,7 @@ public class Draw3D extends Draw2D {
 			return;
 		}
 		poolSize = size;
-		if (lowMemory) {
+		if (lowDetail) {
 			texelPool = new int[poolSize][16384];
 		} else {
 			texelPool = new int[poolSize][65536];
@@ -160,7 +161,7 @@ public class Draw3D extends Draw2D {
 		for (@Pc(9) int id = 0; id < 50; id++) {
 			try {
 				textures[id] = new Pix8(jag, String.valueOf(id), 0);
-				if (lowMemory && textures[id].cropW == 128) {
+				if (lowDetail && textures[id].cropW == 128) {
 					textures[id].shrink();
 				} else {
 					textures[id].crop();
@@ -232,7 +233,7 @@ public class Draw3D extends Draw2D {
 		@Pc(79) Pix8 texture = textures[id];
 		@Pc(83) int[] palette = texturePalette[id];
 
-		if (lowMemory) {
+		if (lowDetail) {
 			textureTranslucent[id] = false;
 			for (int i = 0; i < 4096; i++) {
 				int rgb = texels[i] = palette[texture.pixels[i]] & 0xF8F8FF;
@@ -344,7 +345,7 @@ public class Draw3D extends Draw2D {
 				@Pc(269) int intB = (int) (b * 256.0D);
 				@Pc(279) int rgb = (intR << 16) + (intG << 8) + intB;
 				@Pc(283) int rgbAdjusted = setGamma(rgb, randomized);
-				palette[offset++] = rgbAdjusted;
+				colourTable[offset++] = rgbAdjusted;
 			}
 		}
 
@@ -381,7 +382,7 @@ public class Draw3D extends Draw2D {
 	}
 
 	@OriginalMember(owner = "client!gb", name = "a", descriptor = "(IIIIIIIII)V")
-	public static void fillGouraudTriangle(@OriginalArg(3) int xA, @OriginalArg(4) int xB, @OriginalArg(5) int xC, @OriginalArg(0) int yA, @OriginalArg(1) int yB, @OriginalArg(2) int yC, @OriginalArg(6) int colorA, @OriginalArg(7) int colorB, @OriginalArg(8) int colorC) {
+	public static void gouraudTriangle(@OriginalArg(3) int xA, @OriginalArg(4) int xB, @OriginalArg(5) int xC, @OriginalArg(0) int yA, @OriginalArg(1) int yB, @OriginalArg(2) int yC, @OriginalArg(6) int colorA, @OriginalArg(7) int colorB, @OriginalArg(8) int colorC) {
 		int dxAB = xB - xA;
 		int dyAB = yB - yA;
 		int dxAC = xC - xA;
@@ -415,13 +416,13 @@ public class Draw3D extends Draw2D {
 		}
 
 		if (yA <= yB && yA <= yC) {
-			if (yA < bottom) {
-				if (yB > bottom) {
-					yB = bottom;
+			if (yA < boundBottom) {
+				if (yB > boundBottom) {
+					yB = boundBottom;
 				}
 
-				if (yC > bottom) {
-					yC = bottom;
+				if (yC > boundBottom) {
+					yC = boundBottom;
 				}
 
 				if (yB < yC) {
@@ -449,7 +450,7 @@ public class Draw3D extends Draw2D {
 						yA = lineOffset[yA];
 
 						while (--yB >= 0) {
-							drawGouraudScanline(xC >> 16, xA >> 16, colorC >> 7, colorA >> 7, data, yA, 0);
+							gouraudRaster(xC >> 16, xA >> 16, colorC >> 7, colorA >> 7, data, yA, 0);
 							xC += xStepAC;
 							xA += xStepAB;
 							colorC += colorStepAC;
@@ -457,7 +458,7 @@ public class Draw3D extends Draw2D {
 							yA += width2d;
 						}
 						while (--yC >= 0) {
-							drawGouraudScanline(xC >> 16, xB >> 16, colorC >> 7, colorB >> 7, data, yA, 0);
+							gouraudRaster(xC >> 16, xB >> 16, colorC >> 7, colorB >> 7, data, yA, 0);
 							xC += xStepAC;
 							xB += xStepBC;
 							colorC += colorStepAC;
@@ -470,7 +471,7 @@ public class Draw3D extends Draw2D {
 						yA = lineOffset[yA];
 
 						while (--yB >= 0) {
-							drawGouraudScanline(xA >> 16, xC >> 16, colorA >> 7, colorC >> 7, data, yA, 0);
+							gouraudRaster(xA >> 16, xC >> 16, colorA >> 7, colorC >> 7, data, yA, 0);
 							xC += xStepAC;
 							xA += xStepAB;
 							colorC += colorStepAC;
@@ -478,7 +479,7 @@ public class Draw3D extends Draw2D {
 							yA += width2d;
 						}
 						while (--yC >= 0) {
-							drawGouraudScanline(xB >> 16, xC >> 16, colorB >> 7, colorC >> 7, data, yA, 0);
+							gouraudRaster(xB >> 16, xC >> 16, colorB >> 7, colorC >> 7, data, yA, 0);
 							xC += xStepAC;
 							xB += xStepBC;
 							colorC += colorStepAC;
@@ -511,7 +512,7 @@ public class Draw3D extends Draw2D {
 						yA = lineOffset[yA];
 
 						while (--yC >= 0) {
-							drawGouraudScanline(xB >> 16, xA >> 16, colorB >> 7, colorA >> 7, data, yA, 0);
+							gouraudRaster(xB >> 16, xA >> 16, colorB >> 7, colorA >> 7, data, yA, 0);
 							xB += xStepAC;
 							xA += xStepAB;
 							colorB += colorStepAC;
@@ -519,7 +520,7 @@ public class Draw3D extends Draw2D {
 							yA += width2d;
 						}
 						while (--yB >= 0) {
-							drawGouraudScanline(xC >> 16, xA >> 16, colorC >> 7, colorA >> 7, data, yA, 0);
+							gouraudRaster(xC >> 16, xA >> 16, colorC >> 7, colorA >> 7, data, yA, 0);
 							xC += xStepBC;
 							xA += xStepAB;
 							colorC += colorStepBC;
@@ -532,7 +533,7 @@ public class Draw3D extends Draw2D {
 						yA = lineOffset[yA];
 
 						while (--yC >= 0) {
-							drawGouraudScanline(xA >> 16, xB >> 16, colorA >> 7, colorB >> 7, data, yA, 0);
+							gouraudRaster(xA >> 16, xB >> 16, colorA >> 7, colorB >> 7, data, yA, 0);
 							xB += xStepAC;
 							xA += xStepAB;
 							colorB += colorStepAC;
@@ -540,7 +541,7 @@ public class Draw3D extends Draw2D {
 							yA += width2d;
 						}
 						while (--yB >= 0) {
-							drawGouraudScanline(xA >> 16, xC >> 16, colorA >> 7, colorC >> 7, data, yA, 0);
+							gouraudRaster(xA >> 16, xC >> 16, colorA >> 7, colorC >> 7, data, yA, 0);
 							xC += xStepBC;
 							xA += xStepAB;
 							colorC += colorStepBC;
@@ -551,13 +552,13 @@ public class Draw3D extends Draw2D {
 				}
 			}
 		} else if (yB <= yC) {
-			if (yB < bottom) {
-				if (yC > bottom) {
-					yC = bottom;
+			if (yB < boundBottom) {
+				if (yC > boundBottom) {
+					yC = boundBottom;
 				}
 
-				if (yA > bottom) {
-					yA = bottom;
+				if (yA > boundBottom) {
+					yA = boundBottom;
 				}
 
 				if (yC < yA) {
@@ -585,7 +586,7 @@ public class Draw3D extends Draw2D {
 						yB = lineOffset[yB];
 
 						while (--yC >= 0) {
-							drawGouraudScanline(xA >> 16, xB >> 16, colorA >> 7, colorB >> 7, data, yB, 0);
+							gouraudRaster(xA >> 16, xB >> 16, colorA >> 7, colorB >> 7, data, yB, 0);
 							xA += xStepAB;
 							xB += xStepBC;
 							colorA += colorStepAB;
@@ -593,7 +594,7 @@ public class Draw3D extends Draw2D {
 							yB += width2d;
 						}
 						while (--yA >= 0) {
-							drawGouraudScanline(xA >> 16, xC >> 16, colorA >> 7, colorC >> 7, data, yB, 0);
+							gouraudRaster(xA >> 16, xC >> 16, colorA >> 7, colorC >> 7, data, yB, 0);
 							xA += xStepAB;
 							xC += xStepAC;
 							colorA += colorStepAB;
@@ -606,7 +607,7 @@ public class Draw3D extends Draw2D {
 						yB = lineOffset[yB];
 
 						while (--yC >= 0) {
-							drawGouraudScanline(xB >> 16, xA >> 16, colorB >> 7, colorA >> 7, data, yB, 0);
+							gouraudRaster(xB >> 16, xA >> 16, colorB >> 7, colorA >> 7, data, yB, 0);
 							xA += xStepAB;
 							xB += xStepBC;
 							colorA += colorStepAB;
@@ -614,7 +615,7 @@ public class Draw3D extends Draw2D {
 							yB += width2d;
 						}
 						while (--yA >= 0) {
-							drawGouraudScanline(xC >> 16, xA >> 16, colorC >> 7, colorA >> 7, data, yB, 0);
+							gouraudRaster(xC >> 16, xA >> 16, colorC >> 7, colorA >> 7, data, yB, 0);
 							xA += xStepAB;
 							xC += xStepAC;
 							colorA += colorStepAB;
@@ -647,7 +648,7 @@ public class Draw3D extends Draw2D {
 						yB = lineOffset[yB];
 
 						while (--yA >= 0) {
-							drawGouraudScanline(xC >> 16, xB >> 16, colorC >> 7, colorB >> 7, data, yB, 0);
+							gouraudRaster(xC >> 16, xB >> 16, colorC >> 7, colorB >> 7, data, yB, 0);
 							xC += xStepAB;
 							xB += xStepBC;
 							colorC += colorStepAB;
@@ -655,7 +656,7 @@ public class Draw3D extends Draw2D {
 							yB += width2d;
 						}
 						while (--yC >= 0) {
-							drawGouraudScanline(xA >> 16, xB >> 16, colorA >> 7, colorB >> 7, data, yB, 0);
+							gouraudRaster(xA >> 16, xB >> 16, colorA >> 7, colorB >> 7, data, yB, 0);
 							xA += xStepAC;
 							xB += xStepBC;
 							colorA += colorStepAC;
@@ -668,7 +669,7 @@ public class Draw3D extends Draw2D {
 						yB = lineOffset[yB];
 
 						while (--yA >= 0) {
-							drawGouraudScanline(xB >> 16, xC >> 16, colorB >> 7, colorC >> 7, data, yB, 0);
+							gouraudRaster(xB >> 16, xC >> 16, colorB >> 7, colorC >> 7, data, yB, 0);
 							xC += xStepAB;
 							xB += xStepBC;
 							colorC += colorStepAB;
@@ -676,7 +677,7 @@ public class Draw3D extends Draw2D {
 							yB += width2d;
 						}
 						while (--yC >= 0) {
-							drawGouraudScanline(xB >> 16, xA >> 16, colorB >> 7, colorA >> 7, data, yB, 0);
+							gouraudRaster(xB >> 16, xA >> 16, colorB >> 7, colorA >> 7, data, yB, 0);
 							xA += xStepAC;
 							xB += xStepBC;
 							colorA += colorStepAC;
@@ -686,13 +687,13 @@ public class Draw3D extends Draw2D {
 					}
 				}
 			}
-		} else if (yC < bottom) {
-			if (yA > bottom) {
-				yA = bottom;
+		} else if (yC < boundBottom) {
+			if (yA > boundBottom) {
+				yA = boundBottom;
 			}
 
-			if (yB > bottom) {
-				yB = bottom;
+			if (yB > boundBottom) {
+				yB = boundBottom;
 			}
 
 			if (yA < yB) {
@@ -720,7 +721,7 @@ public class Draw3D extends Draw2D {
 					yC = lineOffset[yC];
 
 					while (--yA >= 0) {
-						drawGouraudScanline(xB >> 16, xC >> 16, colorB >> 7, colorC >> 7, data, yC, 0);
+						gouraudRaster(xB >> 16, xC >> 16, colorB >> 7, colorC >> 7, data, yC, 0);
 						xB += xStepBC;
 						xC += xStepAC;
 						colorB += colorStepBC;
@@ -728,7 +729,7 @@ public class Draw3D extends Draw2D {
 						yC += width2d;
 					}
 					while (--yB >= 0) {
-						drawGouraudScanline(xB >> 16, xA >> 16, colorB >> 7, colorA >> 7, data, yC, 0);
+						gouraudRaster(xB >> 16, xA >> 16, colorB >> 7, colorA >> 7, data, yC, 0);
 						xB += xStepBC;
 						xA += xStepAB;
 						colorB += colorStepBC;
@@ -741,7 +742,7 @@ public class Draw3D extends Draw2D {
 					yC = lineOffset[yC];
 
 					while (--yA >= 0) {
-						drawGouraudScanline(xC >> 16, xB >> 16, colorC >> 7, colorB >> 7, data, yC, 0);
+						gouraudRaster(xC >> 16, xB >> 16, colorC >> 7, colorB >> 7, data, yC, 0);
 						xB += xStepBC;
 						xC += xStepAC;
 						colorB += colorStepBC;
@@ -749,7 +750,7 @@ public class Draw3D extends Draw2D {
 						yC += width2d;
 					}
 					while (--yB >= 0) {
-						drawGouraudScanline(xA >> 16, xB >> 16, colorA >> 7, colorB >> 7, data, yC, 0);
+						gouraudRaster(xA >> 16, xB >> 16, colorA >> 7, colorB >> 7, data, yC, 0);
 						xB += xStepBC;
 						xA += xStepAB;
 						colorB += colorStepBC;
@@ -782,7 +783,7 @@ public class Draw3D extends Draw2D {
 					yC = lineOffset[yC];
 
 					while (--yB >= 0) {
-						drawGouraudScanline(xA >> 16, xC >> 16, colorA >> 7, colorC >> 7, data, yC, 0);
+						gouraudRaster(xA >> 16, xC >> 16, colorA >> 7, colorC >> 7, data, yC, 0);
 						xA += xStepBC;
 						xC += xStepAC;
 						colorA += colorStepBC;
@@ -790,7 +791,7 @@ public class Draw3D extends Draw2D {
 						yC += width2d;
 					}
 					while (--yA >= 0) {
-						drawGouraudScanline(xB >> 16, xC >> 16, colorB >> 7, colorC >> 7, data, yC, 0);
+						gouraudRaster(xB >> 16, xC >> 16, colorB >> 7, colorC >> 7, data, yC, 0);
 						xB += xStepAB;
 						xC += xStepAC;
 						colorB += colorStepAB;
@@ -803,7 +804,7 @@ public class Draw3D extends Draw2D {
 					yC = lineOffset[yC];
 
 					while (--yB >= 0) {
-						drawGouraudScanline(xC >> 16, xA >> 16, colorC >> 7, colorA >> 7, data, yC, 0);
+						gouraudRaster(xC >> 16, xA >> 16, colorC >> 7, colorA >> 7, data, yC, 0);
 						xA += xStepBC;
 						xC += xStepAC;
 						colorA += colorStepBC;
@@ -811,7 +812,7 @@ public class Draw3D extends Draw2D {
 						yC += width2d;
 					}
 					while (--yA >= 0) {
-						drawGouraudScanline(xC >> 16, xB >> 16, colorC >> 7, colorB >> 7, data, yC, 0);
+						gouraudRaster(xC >> 16, xB >> 16, colorC >> 7, colorB >> 7, data, yC, 0);
 						xB += xStepAB;
 						xC += xStepAC;
 						colorB += colorStepAB;
@@ -824,21 +825,21 @@ public class Draw3D extends Draw2D {
 	}
 
 	@OriginalMember(owner = "client!gb", name = "a", descriptor = "([IIIIIIII)V")
-	private static void drawGouraudScanline(@OriginalArg(4) int x0, @OriginalArg(5) int x1, @OriginalArg(6) int color0, @OriginalArg(7) int color1, @OriginalArg(0) int[] dst, @OriginalArg(1) int offset, @OriginalArg(3) int length) {
+	private static void gouraudRaster(@OriginalArg(4) int x0, @OriginalArg(5) int x1, @OriginalArg(6) int color0, @OriginalArg(7) int color1, @OriginalArg(0) int[] dst, @OriginalArg(1) int offset, @OriginalArg(3) int length) {
 		int rgb;
 
 		if (jagged) {
 			int colorStep;
 
-			if (clipX) {
+			if (hclip) {
 				if (x1 - x0 > 3) {
 					colorStep = (color1 - color0) / (x1 - x0);
 				} else {
 					colorStep = 0;
 				}
 
-				if (x1 > boundX) {
-					x1 = boundX;
+				if (x1 > safeWidth) {
+					x1 = safeWidth;
 				}
 
 				if (x0 < 0) {
@@ -858,7 +859,7 @@ public class Draw3D extends Draw2D {
                 length = (x1 - x0) >> 2;
 
 				if (length > 0) {
-					colorStep = (color1 - color0) * reciprocal15[length] >> 15;
+					colorStep = (color1 - color0) * divTable[length] >> 15;
 				} else {
 					colorStep = 0;
 				}
@@ -866,9 +867,9 @@ public class Draw3D extends Draw2D {
 				return;
 			}
 
-			if (alpha == 0) {
+			if (trans == 0) {
 				while (--length >= 0) {
-					rgb = palette[color0 >> 8];
+					rgb = colourTable[color0 >> 8];
 					color0 += colorStep;
 
 					dst[offset++] = rgb;
@@ -879,18 +880,18 @@ public class Draw3D extends Draw2D {
 
                 length = (x1 - x0) & 0x3;
 				if (length > 0) {
-					rgb = palette[color0 >> 8];
+					rgb = colourTable[color0 >> 8];
 
 					while (--length >= 0) {
 						dst[offset++] = rgb;
 					}
 				}
 			} else {
-				int alpha = Draw3D.alpha;
-				int invAlpha = 256 - Draw3D.alpha;
+				int alpha = Pix3D.trans;
+				int invAlpha = 256 - Pix3D.trans;
 
 				while (--length >= 0) {
-					rgb = palette[color0 >> 8];
+					rgb = colourTable[color0 >> 8];
 					color0 += colorStep;
 
                     rgb = ((((rgb & 0xFF00FF) * invAlpha) >> 8) & 0xFF00FF) + ((((rgb & 0xFF00) * invAlpha) >> 8) & 0xFF00);
@@ -902,7 +903,7 @@ public class Draw3D extends Draw2D {
 
                 length = (x1 - x0) & 0x3;
 				if (length > 0) {
-					rgb = palette[color0 >> 8];
+					rgb = colourTable[color0 >> 8];
                     rgb = ((((rgb & 0xFF00FF) * invAlpha) >> 8) & 0xFF00FF) + ((((rgb & 0xFF00) * invAlpha) >> 8) & 0xFF00);
 
 					while (--length >= 0) {
@@ -913,9 +914,9 @@ public class Draw3D extends Draw2D {
 		} else if (x0 < x1) {
 			int colorStep = (color1 - color0) / (x1 - x0);
 
-			if (clipX) {
-				if (x1 > boundX) {
-					x1 = boundX;
+			if (hclip) {
+				if (x1 > safeWidth) {
+					x1 = safeWidth;
 				}
 
 				if (x0 < 0) {
@@ -931,17 +932,17 @@ public class Draw3D extends Draw2D {
 			offset += x0;
 			length = x1 - x0;
 
-			if (alpha == 0) {
+			if (trans == 0) {
 				while (--length >= 0) {
-					dst[offset++] = palette[color0 >> 8];
+					dst[offset++] = colourTable[color0 >> 8];
 					color0 += colorStep;
 				}
 			} else {
-				int alpha = Draw3D.alpha;
-				int invAlpha = 256 - Draw3D.alpha;
+				int alpha = Pix3D.trans;
+				int invAlpha = 256 - Pix3D.trans;
 
 				while (--length >= 0) {
-					rgb = palette[color0 >> 8];
+					rgb = colourTable[color0 >> 8];
 					color0 += colorStep;
 
                     rgb = ((((rgb & 0xFF00FF) * invAlpha) >> 8) & 0xFF00FF) + ((((rgb & 0xFF00) * invAlpha) >> 8) & 0xFF00);
@@ -952,7 +953,7 @@ public class Draw3D extends Draw2D {
 	}
 
 	@OriginalMember(owner = "client!gb", name = "a", descriptor = "(IIIIIII)V")
-	public static void fillTriangle(@OriginalArg(3) int xA, @OriginalArg(4) int xB, @OriginalArg(5) int xC, @OriginalArg(0) int yA, @OriginalArg(1) int yB, @OriginalArg(2) int yC, @OriginalArg(6) int color) {
+	public static void flatTriangle(@OriginalArg(3) int xA, @OriginalArg(4) int xB, @OriginalArg(5) int xC, @OriginalArg(0) int yA, @OriginalArg(1) int yB, @OriginalArg(2) int yC, @OriginalArg(6) int color) {
 		int dxAB = xB - xA;
 		int dyAB = yB - yA;
 		int dxAC = xC - xA;
@@ -980,13 +981,13 @@ public class Draw3D extends Draw2D {
 		}
 
 		if (yA <= yB && yA <= yC) {
-			if (yA < bottom) {
-				if (yB > bottom) {
-					yB = bottom;
+			if (yA < boundBottom) {
+				if (yB > boundBottom) {
+					yB = boundBottom;
 				}
 
-				if (yC > bottom) {
-					yC = bottom;
+				if (yC > boundBottom) {
+					yC = boundBottom;
 				}
 
 				if (yB < yC) {
@@ -1009,13 +1010,13 @@ public class Draw3D extends Draw2D {
 						yA = lineOffset[yA];
 
 						while (--yB >= 0) {
-							drawScanline(xC >> 16, xA >> 16, data, yA, color);
+							flatRaster(xC >> 16, xA >> 16, data, yA, color);
 							xC += xStepAC;
 							xA += xStepAB;
 							yA += width2d;
 						}
 						while (--yC >= 0.0F) {
-							drawScanline(xC >> 16, xB >> 16, data, yA, color);
+							flatRaster(xC >> 16, xB >> 16, data, yA, color);
 							xC += xStepAC;
 							xB += xStepBC;
 							yA += width2d;
@@ -1026,13 +1027,13 @@ public class Draw3D extends Draw2D {
 						yA = lineOffset[yA];
 
 						while (--yB >= 0) {
-							drawScanline(xA >> 16, xC >> 16, data, yA, color);
+							flatRaster(xA >> 16, xC >> 16, data, yA, color);
 							xC += xStepAC;
 							xA += xStepAB;
 							yA += width2d;
 						}
 						while (--yC >= 0) {
-							drawScanline(xB >> 16, xC >> 16, data, yA, color);
+							flatRaster(xB >> 16, xC >> 16, data, yA, color);
 							xC += xStepAC;
 							xB += xStepBC;
 							yA += width2d;
@@ -1058,13 +1059,13 @@ public class Draw3D extends Draw2D {
 						yA = lineOffset[yA];
 
 						while (--yC >= 0) {
-							drawScanline(xB >> 16, xA >> 16, data, yA, color);
+							flatRaster(xB >> 16, xA >> 16, data, yA, color);
 							xB += xStepAC;
 							xA += xStepAB;
 							yA += width2d;
 						}
 						while (--yB >= 0) {
-							drawScanline(xC >> 16, xA >> 16, data, yA, color);
+							flatRaster(xC >> 16, xA >> 16, data, yA, color);
 							xC += xStepBC;
 							xA += xStepAB;
 							yA += width2d;
@@ -1075,13 +1076,13 @@ public class Draw3D extends Draw2D {
 						yA = lineOffset[yA];
 
 						while (--yC >= 0) {
-							drawScanline(xA >> 16, xB >> 16, data, yA, color);
+							flatRaster(xA >> 16, xB >> 16, data, yA, color);
 							xB += xStepAC;
 							xA += xStepAB;
 							yA += width2d;
 						}
 						while (--yB >= 0) {
-							drawScanline(xA >> 16, xC >> 16, data, yA, color);
+							flatRaster(xA >> 16, xC >> 16, data, yA, color);
 							xC += xStepBC;
 							xA += xStepAB;
 							yA += width2d;
@@ -1090,13 +1091,13 @@ public class Draw3D extends Draw2D {
 				}
 			}
 		} else if (yB <= yC) {
-			if (yB < bottom) {
-				if (yC > bottom) {
-					yC = bottom;
+			if (yB < boundBottom) {
+				if (yC > boundBottom) {
+					yC = boundBottom;
 				}
 
-				if (yA > bottom) {
-					yA = bottom;
+				if (yA > boundBottom) {
+					yA = boundBottom;
 				}
 
 				if (yC < yA) {
@@ -1119,13 +1120,13 @@ public class Draw3D extends Draw2D {
 						yB = lineOffset[yB];
 
 						while (--yC >= 0) {
-							drawScanline(xA >> 16, xB >> 16, data, yB, color);
+							flatRaster(xA >> 16, xB >> 16, data, yB, color);
 							xA += xStepAB;
 							xB += xStepBC;
 							yB += width2d;
 						}
 						while (--yA >= 0) {
-							drawScanline(xA >> 16, xC >> 16, data, yB, color);
+							flatRaster(xA >> 16, xC >> 16, data, yB, color);
 							xA += xStepAB;
 							xC += xStepAC;
 							yB += width2d;
@@ -1136,13 +1137,13 @@ public class Draw3D extends Draw2D {
 						yB = lineOffset[yB];
 
 						while (--yC >= 0) {
-							drawScanline(xB >> 16, xA >> 16, data, yB, color);
+							flatRaster(xB >> 16, xA >> 16, data, yB, color);
 							xA += xStepAB;
 							xB += xStepBC;
 							yB += width2d;
 						}
 						while (--yA >= 0) {
-							drawScanline(xC >> 16, xA >> 16, data, yB, color);
+							flatRaster(xC >> 16, xA >> 16, data, yB, color);
 							xA += xStepAB;
 							xC += xStepAC;
 							yB += width2d;
@@ -1168,13 +1169,13 @@ public class Draw3D extends Draw2D {
 						yB = lineOffset[yB];
 
 						while (--yA >= 0) {
-							drawScanline(xC >> 16, xB >> 16, data, yB, color);
+							flatRaster(xC >> 16, xB >> 16, data, yB, color);
 							xC += xStepAB;
 							xB += xStepBC;
 							yB += width2d;
 						}
 						while (--yC >= 0) {
-							drawScanline(xA >> 16, xB >> 16, data, yB, color);
+							flatRaster(xA >> 16, xB >> 16, data, yB, color);
 							xA += xStepAC;
 							xB += xStepBC;
 							yB += width2d;
@@ -1185,13 +1186,13 @@ public class Draw3D extends Draw2D {
 						yB = lineOffset[yB];
 
 						while (--yA >= 0) {
-							drawScanline(xB >> 16, xC >> 16, data, yB, color);
+							flatRaster(xB >> 16, xC >> 16, data, yB, color);
 							xC += xStepAB;
 							xB += xStepBC;
 							yB += width2d;
 						}
 						while (--yC >= 0) {
-							drawScanline(xB >> 16, xA >> 16, data, yB, color);
+							flatRaster(xB >> 16, xA >> 16, data, yB, color);
 							xA += xStepAC;
 							xB += xStepBC;
 							yB += width2d;
@@ -1199,13 +1200,13 @@ public class Draw3D extends Draw2D {
 					}
 				}
 			}
-		} else if (yC < bottom) {
-			if (yA > bottom) {
-				yA = bottom;
+		} else if (yC < boundBottom) {
+			if (yA > boundBottom) {
+				yA = boundBottom;
 			}
 
-			if (yB > bottom) {
-				yB = bottom;
+			if (yB > boundBottom) {
+				yB = boundBottom;
 			}
 
 			if (yA < yB) {
@@ -1228,13 +1229,13 @@ public class Draw3D extends Draw2D {
 					yC = lineOffset[yC];
 
 					while (--yA >= 0) {
-						drawScanline(xB >> 16, xC >> 16, data, yC, color);
+						flatRaster(xB >> 16, xC >> 16, data, yC, color);
 						xB += xStepBC;
 						xC += xStepAC;
 						yC += width2d;
 					}
 					while (--yB >= 0) {
-						drawScanline(xB >> 16, xA >> 16, data, yC, color);
+						flatRaster(xB >> 16, xA >> 16, data, yC, color);
 						xB += xStepBC;
 						xA += xStepAB;
 						yC += width2d;
@@ -1245,13 +1246,13 @@ public class Draw3D extends Draw2D {
 					yC = lineOffset[yC];
 
 					while (--yA >= 0) {
-						drawScanline(xC >> 16, xB >> 16, data, yC, color);
+						flatRaster(xC >> 16, xB >> 16, data, yC, color);
 						xB += xStepBC;
 						xC += xStepAC;
 						yC += width2d;
 					}
 					while (--yB >= 0) {
-						drawScanline(xA >> 16, xB >> 16, data, yC, color);
+						flatRaster(xA >> 16, xB >> 16, data, yC, color);
 						xB += xStepBC;
 						xA += xStepAB;
 						yC += width2d;
@@ -1277,13 +1278,13 @@ public class Draw3D extends Draw2D {
 					yC = lineOffset[yC];
 
 					while (--yB >= 0) {
-						drawScanline(xA >> 16, xC >> 16, data, yC, color);
+						flatRaster(xA >> 16, xC >> 16, data, yC, color);
 						xA += xStepBC;
 						xC += xStepAC;
 						yC += width2d;
 					}
 					while (--yA >= 0) {
-						drawScanline(xB >> 16, xC >> 16, data, yC, color);
+						flatRaster(xB >> 16, xC >> 16, data, yC, color);
 						xB += xStepAB;
 						xC += xStepAC;
 						yC += width2d;
@@ -1294,13 +1295,13 @@ public class Draw3D extends Draw2D {
 					yC = lineOffset[yC];
 
 					while (--yB >= 0) {
-						drawScanline(xC >> 16, xA >> 16, data, yC, color);
+						flatRaster(xC >> 16, xA >> 16, data, yC, color);
 						xA += xStepBC;
 						xC += xStepAC;
 						yC += width2d;
 					}
 					while (--yA >= 0) {
-						drawScanline(xC >> 16, xB >> 16, data, yC, color);
+						flatRaster(xC >> 16, xB >> 16, data, yC, color);
 						xB += xStepAB;
 						xC += xStepAC;
 						yC += width2d;
@@ -1311,10 +1312,10 @@ public class Draw3D extends Draw2D {
 	}
 
 	@OriginalMember(owner = "client!gb", name = "a", descriptor = "([IIIIII)V")
-	private static void drawScanline(@OriginalArg(4) int x0, @OriginalArg(5) int x1, @OriginalArg(0) int[] dst, @OriginalArg(1) int offset, @OriginalArg(2) int rgb) {
-		if (clipX) {
-			if (x1 > boundX) {
-				x1 = boundX;
+	private static void flatRaster(@OriginalArg(4) int x0, @OriginalArg(5) int x1, @OriginalArg(0) int[] dst, @OriginalArg(1) int offset, @OriginalArg(2) int rgb) {
+		if (hclip) {
+			if (x1 > safeWidth) {
+				x1 = safeWidth;
 			}
 
 			if (x0 < 0) {
@@ -1329,7 +1330,7 @@ public class Draw3D extends Draw2D {
 		offset += x0;
 		@Pc(26) int length = (x1 - x0) >> 2;
 
-		if (alpha == 0) {
+		if (trans == 0) {
 			while (--length >= 0) {
 				dst[offset++] = rgb;
 				dst[offset++] = rgb;
@@ -1342,8 +1343,8 @@ public class Draw3D extends Draw2D {
 				dst[offset++] = rgb;
 			}
 		} else {
-			@Pc(72) int alpha = Draw3D.alpha;
-			@Pc(76) int invAlpha = 256 - Draw3D.alpha;
+			@Pc(72) int alpha = Pix3D.trans;
+			@Pc(76) int invAlpha = 256 - Pix3D.trans;
 			rgb = ((rgb & 0xFF00FF) * invAlpha >> 8 & 0xFF00FF) + ((rgb & 0xFF00) * invAlpha >> 8 & 0xFF00);
 
 			while (--length >= 0) {
@@ -1361,7 +1362,7 @@ public class Draw3D extends Draw2D {
 	}
 
 	@OriginalMember(owner = "client!gb", name = "a", descriptor = "(IIIIIIIIIIIIIIIIIII)V")
-	public static void fillTexturedTriangle(@OriginalArg(3) int xA, @OriginalArg(4) int xB, @OriginalArg(5) int xC, @OriginalArg(0) int yA, @OriginalArg(1) int yB, @OriginalArg(2) int yC, @OriginalArg(6) int shadeA, @OriginalArg(7) int shadeB, @OriginalArg(8) int shadeC, @OriginalArg(9) int originX, @OriginalArg(12) int originY, @OriginalArg(15) int originZ, @OriginalArg(10) int txB, @OriginalArg(11) int txC, @OriginalArg(13) int tyB, @OriginalArg(14) int tyC, @OriginalArg(16) int tzB, @OriginalArg(17) int tzC, @OriginalArg(18) int texture) {
+	public static void textureTriangle(@OriginalArg(3) int xA, @OriginalArg(4) int xB, @OriginalArg(5) int xC, @OriginalArg(0) int yA, @OriginalArg(1) int yB, @OriginalArg(2) int yC, @OriginalArg(6) int shadeA, @OriginalArg(7) int shadeB, @OriginalArg(8) int shadeC, @OriginalArg(9) int originX, @OriginalArg(12) int originY, @OriginalArg(15) int originZ, @OriginalArg(10) int txB, @OriginalArg(11) int txC, @OriginalArg(13) int tyB, @OriginalArg(14) int tyC, @OriginalArg(16) int tzB, @OriginalArg(17) int tzC, @OriginalArg(18) int texture) {
 		@Pc(4) int[] texels = getTexels(texture);
 		opaque = !textureTranslucent[texture];
 
@@ -1418,13 +1419,13 @@ public class Draw3D extends Draw2D {
 		}
 
 		if (yA <= yB && yA <= yC) {
-			if (yA < bottom) {
-				if (yB > bottom) {
-					yB = bottom;
+			if (yA < boundBottom) {
+				if (yB > boundBottom) {
+					yB = boundBottom;
 				}
 
-				if (yC > bottom) {
-					yC = bottom;
+				if (yC > boundBottom) {
+					yC = boundBottom;
 				}
 
 				if (yB < yC) {
@@ -1446,7 +1447,7 @@ public class Draw3D extends Draw2D {
 						yB = 0;
 					}
 
-					int dy = yA - centerY;
+					int dy = yA - centerH3D;
 					u += uStepVertical * dy;
 					v += vStepVertical * dy;
 					w += wStepVertical * dy;
@@ -1457,7 +1458,7 @@ public class Draw3D extends Draw2D {
 						yA = lineOffset[yA];
 
 						while (--yB >= 0) {
-							drawTexturedScanline(xC >> 16, xA >> 16, data, yA, texels, 0, 0, u, v, w, uStride, vStride, wStride, shadeC >> 8, shadeA >> 8);
+							textureRaster(xC >> 16, xA >> 16, data, yA, texels, 0, 0, u, v, w, uStride, vStride, wStride, shadeC >> 8, shadeA >> 8);
 							xC += xStepAC;
 							xA += xStepAB;
 							shadeC += shadeStepAC;
@@ -1468,7 +1469,7 @@ public class Draw3D extends Draw2D {
 							w += wStepVertical;
 						}
 						while (--yC >= 0) {
-							drawTexturedScanline(xC >> 16, xB >> 16, data, yA, texels, 0, 0, u, v, w, uStride, vStride, wStride, shadeC >> 8, shadeB >> 8);
+							textureRaster(xC >> 16, xB >> 16, data, yA, texels, 0, 0, u, v, w, uStride, vStride, wStride, shadeC >> 8, shadeB >> 8);
 							xC += xStepAC;
 							xB += xStepBC;
 							shadeC += shadeStepAC;
@@ -1484,7 +1485,7 @@ public class Draw3D extends Draw2D {
 						yA = lineOffset[yA];
 
 						while (--yB >= 0) {
-							drawTexturedScanline(xA >> 16, xC >> 16, data, yA, texels, 0, 0, u, v, w, uStride, vStride, wStride, shadeA >> 8, shadeC >> 8);
+							textureRaster(xA >> 16, xC >> 16, data, yA, texels, 0, 0, u, v, w, uStride, vStride, wStride, shadeA >> 8, shadeC >> 8);
 							xC += xStepAC;
 							xA += xStepAB;
 							shadeC += shadeStepAC;
@@ -1495,7 +1496,7 @@ public class Draw3D extends Draw2D {
 							w += wStepVertical;
 						}
 						while (--yC >= 0) {
-							drawTexturedScanline(xB >> 16, xC >> 16, data, yA, texels, 0, 0, u, v, w, uStride, vStride, wStride, shadeB >> 8, shadeC >> 8);
+							textureRaster(xB >> 16, xC >> 16, data, yA, texels, 0, 0, u, v, w, uStride, vStride, wStride, shadeB >> 8, shadeC >> 8);
 							xC += xStepAC;
 							xB += xStepBC;
 							shadeC += shadeStepAC;
@@ -1525,7 +1526,7 @@ public class Draw3D extends Draw2D {
 						yC = 0;
 					}
 
-					int dy = yA - centerY;
+					int dy = yA - centerH3D;
 					u += uStepVertical * dy;
 					v += vStepVertical * dy;
 					w += wStepVertical * dy;
@@ -1536,7 +1537,7 @@ public class Draw3D extends Draw2D {
 						yA = lineOffset[yA];
 
 						while (--yC >= 0) {
-							drawTexturedScanline(xA >> 16, xB >> 16, data, yA, texels, 0, 0, u, v, w, uStride, vStride, wStride, shadeA >> 8, shadeB >> 8);
+							textureRaster(xA >> 16, xB >> 16, data, yA, texels, 0, 0, u, v, w, uStride, vStride, wStride, shadeA >> 8, shadeB >> 8);
 							xB += xStepAC;
 							xA += xStepAB;
 							shadeB += shadeStepAC;
@@ -1547,7 +1548,7 @@ public class Draw3D extends Draw2D {
 							w += wStepVertical;
 						}
 						while (--yB >= 0) {
-							drawTexturedScanline(xA >> 16, xC >> 16, data, yA, texels, 0, 0, u, v, w, uStride, vStride, wStride, shadeA >> 8, shadeC >> 8);
+							textureRaster(xA >> 16, xC >> 16, data, yA, texels, 0, 0, u, v, w, uStride, vStride, wStride, shadeA >> 8, shadeC >> 8);
 							xC += xStepBC;
 							xA += xStepAB;
 							shadeC += shadeStepBC;
@@ -1563,7 +1564,7 @@ public class Draw3D extends Draw2D {
 						yA = lineOffset[yA];
 
 						while (--yC >= 0) {
-							drawTexturedScanline(xB >> 16, xA >> 16, data, yA, texels, 0, 0, u, v, w, uStride, vStride, wStride, shadeB >> 8, shadeA >> 8);
+							textureRaster(xB >> 16, xA >> 16, data, yA, texels, 0, 0, u, v, w, uStride, vStride, wStride, shadeB >> 8, shadeA >> 8);
 							xB += xStepAC;
 							xA += xStepAB;
 							shadeB += shadeStepAC;
@@ -1574,7 +1575,7 @@ public class Draw3D extends Draw2D {
 							w += wStepVertical;
 						}
 						while (--yB >= 0) {
-							drawTexturedScanline(xC >> 16, xA >> 16, data, yA, texels, 0, 0, u, v, w, uStride, vStride, wStride, shadeC >> 8, shadeA >> 8);
+							textureRaster(xC >> 16, xA >> 16, data, yA, texels, 0, 0, u, v, w, uStride, vStride, wStride, shadeC >> 8, shadeA >> 8);
 							xC += xStepBC;
 							xA += xStepAB;
 							shadeC += shadeStepBC;
@@ -1588,13 +1589,13 @@ public class Draw3D extends Draw2D {
 				}
 			}
 		} else if (yB <= yC) {
-			if (yB < bottom) {
-				if (yC > bottom) {
-					yC = bottom;
+			if (yB < boundBottom) {
+				if (yC > boundBottom) {
+					yC = boundBottom;
 				}
 
-				if (yA > bottom) {
-					yA = bottom;
+				if (yA > boundBottom) {
+					yA = boundBottom;
 				}
 
 				if (yC < yA) {
@@ -1616,7 +1617,7 @@ public class Draw3D extends Draw2D {
 						yC = 0;
 					}
 
-					int dy = yB - centerY;
+					int dy = yB - centerH3D;
 					u += uStepVertical * dy;
 					v += vStepVertical * dy;
 					w += wStepVertical * dy;
@@ -1627,7 +1628,7 @@ public class Draw3D extends Draw2D {
 						yB = lineOffset[yB];
 
 						while (--yC >= 0) {
-							drawTexturedScanline(xA >> 16, xB >> 16, data, yB, texels, 0, 0, u, v, w, uStride, vStride, wStride, shadeA >> 8, shadeB >> 8);
+							textureRaster(xA >> 16, xB >> 16, data, yB, texels, 0, 0, u, v, w, uStride, vStride, wStride, shadeA >> 8, shadeB >> 8);
 							xA += xStepAB;
 							xB += xStepBC;
 							shadeA += shadeStepAB;
@@ -1638,7 +1639,7 @@ public class Draw3D extends Draw2D {
 							w += wStepVertical;
 						}
 						while (--yA >= 0) {
-							drawTexturedScanline(xA >> 16, xC >> 16, data, yB, texels, 0, 0, u, v, w, uStride, vStride, wStride, shadeA >> 8, shadeC >> 8);
+							textureRaster(xA >> 16, xC >> 16, data, yB, texels, 0, 0, u, v, w, uStride, vStride, wStride, shadeA >> 8, shadeC >> 8);
 							xA += xStepAB;
 							xC += xStepAC;
 							shadeA += shadeStepAB;
@@ -1654,7 +1655,7 @@ public class Draw3D extends Draw2D {
 						yB = lineOffset[yB];
 
 						while (--yC >= 0) {
-							drawTexturedScanline(xB >> 16, xA >> 16, data, yB, texels, 0, 0, u, v, w, uStride, vStride, wStride, shadeB >> 8, shadeA >> 8);
+							textureRaster(xB >> 16, xA >> 16, data, yB, texels, 0, 0, u, v, w, uStride, vStride, wStride, shadeB >> 8, shadeA >> 8);
 							xA += xStepAB;
 							xB += xStepBC;
 							shadeA += shadeStepAB;
@@ -1665,7 +1666,7 @@ public class Draw3D extends Draw2D {
 							w += wStepVertical;
 						}
 						while (--yA >= 0) {
-							drawTexturedScanline(xC >> 16, xA >> 16, data, yB, texels, 0, 0, u, v, w, uStride, vStride, wStride, shadeC >> 8, shadeA >> 8);
+							textureRaster(xC >> 16, xA >> 16, data, yB, texels, 0, 0, u, v, w, uStride, vStride, wStride, shadeC >> 8, shadeA >> 8);
 							xA += xStepAB;
 							xC += xStepAC;
 							shadeA += shadeStepAB;
@@ -1695,7 +1696,7 @@ public class Draw3D extends Draw2D {
 						yA = 0;
 					}
 
-					int dy = yB - centerY;
+					int dy = yB - centerH3D;
 					u += uStepVertical * dy;
 					v += vStepVertical * dy;
 					w += wStepVertical * dy;
@@ -1706,7 +1707,7 @@ public class Draw3D extends Draw2D {
 						yB = lineOffset[yB];
 
 						while (--yA >= 0) {
-							drawTexturedScanline(xC >> 16, xB >> 16, data, yB, texels, 0, 0, u, v, w, uStride, vStride, wStride, shadeC >> 8, shadeB >> 8);
+							textureRaster(xC >> 16, xB >> 16, data, yB, texels, 0, 0, u, v, w, uStride, vStride, wStride, shadeC >> 8, shadeB >> 8);
 							xC += xStepAB;
 							xB += xStepBC;
 							shadeC += shadeStepAB;
@@ -1717,7 +1718,7 @@ public class Draw3D extends Draw2D {
 							w += wStepVertical;
 						}
 						while (--yC >= 0) {
-							drawTexturedScanline(xA >> 16, xB >> 16, data, yB, texels, 0, 0, u, v, w, uStride, vStride, wStride, shadeA >> 8, shadeB >> 8);
+							textureRaster(xA >> 16, xB >> 16, data, yB, texels, 0, 0, u, v, w, uStride, vStride, wStride, shadeA >> 8, shadeB >> 8);
 							xA += xStepAC;
 							xB += xStepBC;
 							shadeA += shadeStepAC;
@@ -1733,7 +1734,7 @@ public class Draw3D extends Draw2D {
 						yB = lineOffset[yB];
 
 						while (--yA >= 0) {
-							drawTexturedScanline(xB >> 16, xC >> 16, data, yB, texels, 0, 0, u, v, w, uStride, vStride, wStride, shadeB >> 8, shadeC >> 8);
+							textureRaster(xB >> 16, xC >> 16, data, yB, texels, 0, 0, u, v, w, uStride, vStride, wStride, shadeB >> 8, shadeC >> 8);
 							xC += xStepAB;
 							xB += xStepBC;
 							shadeC += shadeStepAB;
@@ -1744,7 +1745,7 @@ public class Draw3D extends Draw2D {
 							w += wStepVertical;
 						}
 						while (--yC >= 0) {
-							drawTexturedScanline(xB >> 16, xA >> 16, data, yB, texels, 0, 0, u, v, w, uStride, vStride, wStride, shadeB >> 8, shadeA >> 8);
+							textureRaster(xB >> 16, xA >> 16, data, yB, texels, 0, 0, u, v, w, uStride, vStride, wStride, shadeB >> 8, shadeA >> 8);
 							xA += xStepAC;
 							xB += xStepBC;
 							shadeA += shadeStepAC;
@@ -1757,13 +1758,13 @@ public class Draw3D extends Draw2D {
 					}
 				}
 			}
-		} else if (yC < bottom) {
-			if (yA > bottom) {
-				yA = bottom;
+		} else if (yC < boundBottom) {
+			if (yA > boundBottom) {
+				yA = boundBottom;
 			}
 
-			if (yB > bottom) {
-				yB = bottom;
+			if (yB > boundBottom) {
+				yB = boundBottom;
 			}
 
 			if (yA < yB) {
@@ -1785,7 +1786,7 @@ public class Draw3D extends Draw2D {
 					yA = 0;
 				}
 
-				int dy = yC - centerY;
+				int dy = yC - centerH3D;
 				u += uStepVertical * dy;
 				v += vStepVertical * dy;
 				w += wStepVertical * dy;
@@ -1796,7 +1797,7 @@ public class Draw3D extends Draw2D {
 					yC = lineOffset[yC];
 
 					while (--yA >= 0) {
-						drawTexturedScanline(xB >> 16, xC >> 16, data, yC, texels, 0, 0, u, v, w, uStride, vStride, wStride, shadeB >> 8, shadeC >> 8);
+						textureRaster(xB >> 16, xC >> 16, data, yC, texels, 0, 0, u, v, w, uStride, vStride, wStride, shadeB >> 8, shadeC >> 8);
 						xB += xStepBC;
 						xC += xStepAC;
 						shadeB += shadeStepBC;
@@ -1807,7 +1808,7 @@ public class Draw3D extends Draw2D {
 						w += wStepVertical;
 					}
 					while (--yB >= 0) {
-						drawTexturedScanline(xB >> 16, xA >> 16, data, yC, texels, 0, 0, u, v, w, uStride, vStride, wStride, shadeB >> 8, shadeA >> 8);
+						textureRaster(xB >> 16, xA >> 16, data, yC, texels, 0, 0, u, v, w, uStride, vStride, wStride, shadeB >> 8, shadeA >> 8);
 						xB += xStepBC;
 						xA += xStepAB;
 						shadeB += shadeStepBC;
@@ -1823,7 +1824,7 @@ public class Draw3D extends Draw2D {
 					yC = lineOffset[yC];
 
 					while (--yA >= 0) {
-						drawTexturedScanline(xC >> 16, xB >> 16, data, yC, texels, 0, 0, u, v, w, uStride, vStride, wStride, shadeC >> 8, shadeB >> 8);
+						textureRaster(xC >> 16, xB >> 16, data, yC, texels, 0, 0, u, v, w, uStride, vStride, wStride, shadeC >> 8, shadeB >> 8);
 						xB += xStepBC;
 						xC += xStepAC;
 						shadeB += shadeStepBC;
@@ -1834,7 +1835,7 @@ public class Draw3D extends Draw2D {
 						w += wStepVertical;
 					}
 					while (--yB >= 0) {
-						drawTexturedScanline(xA >> 16, xB >> 16, data, yC, texels, 0, 0, u, v, w, uStride, vStride, wStride, shadeA >> 8, shadeB >> 8);
+						textureRaster(xA >> 16, xB >> 16, data, yC, texels, 0, 0, u, v, w, uStride, vStride, wStride, shadeA >> 8, shadeB >> 8);
 						xB += xStepBC;
 						xA += xStepAB;
 						shadeB += shadeStepBC;
@@ -1864,7 +1865,7 @@ public class Draw3D extends Draw2D {
 					yB = 0;
 				}
 
-				int dy = yC - centerY;
+				int dy = yC - centerH3D;
 				u += uStepVertical * dy;
 				v += vStepVertical * dy;
 				w += wStepVertical * dy;
@@ -1875,7 +1876,7 @@ public class Draw3D extends Draw2D {
 					yC = lineOffset[yC];
 
 					while (--yB >= 0) {
-						drawTexturedScanline(xA >> 16, xC >> 16, data, yC, texels, 0, 0, u, v, w, uStride, vStride, wStride, shadeA >> 8, shadeC >> 8);
+						textureRaster(xA >> 16, xC >> 16, data, yC, texels, 0, 0, u, v, w, uStride, vStride, wStride, shadeA >> 8, shadeC >> 8);
 						xA += xStepBC;
 						xC += xStepAC;
 						shadeA += shadeStepBC;
@@ -1886,7 +1887,7 @@ public class Draw3D extends Draw2D {
 						w += wStepVertical;
 					}
 					while (--yA >= 0) {
-						drawTexturedScanline(xB >> 16, xC >> 16, data, yC, texels, 0, 0, u, v, w, uStride, vStride, wStride, shadeB >> 8, shadeC >> 8);
+						textureRaster(xB >> 16, xC >> 16, data, yC, texels, 0, 0, u, v, w, uStride, vStride, wStride, shadeB >> 8, shadeC >> 8);
 						xB += xStepAB;
 						xC += xStepAC;
 						shadeB += shadeStepAB;
@@ -1902,7 +1903,7 @@ public class Draw3D extends Draw2D {
 					yC = lineOffset[yC];
 
 					while (--yB >= 0) {
-						drawTexturedScanline(xC >> 16, xA >> 16, data, yC, texels, 0, 0, u, v, w, uStride, vStride, wStride, shadeC >> 8, shadeA >> 8);
+						textureRaster(xC >> 16, xA >> 16, data, yC, texels, 0, 0, u, v, w, uStride, vStride, wStride, shadeC >> 8, shadeA >> 8);
 						xA += xStepBC;
 						xC += xStepAC;
 						shadeA += shadeStepBC;
@@ -1913,7 +1914,7 @@ public class Draw3D extends Draw2D {
 						w += wStepVertical;
 					}
 					while (--yA >= 0) {
-						drawTexturedScanline(xC >> 16, xB >> 16, data, yC, texels, 0, 0, u, v, w, uStride, vStride, wStride, shadeC >> 8, shadeB >> 8);
+						textureRaster(xC >> 16, xB >> 16, data, yC, texels, 0, 0, u, v, w, uStride, vStride, wStride, shadeC >> 8, shadeB >> 8);
 						xB += xStepAB;
 						xC += xStepAC;
 						shadeB += shadeStepAB;
@@ -1929,18 +1930,18 @@ public class Draw3D extends Draw2D {
 	}
 
 	@OriginalMember(owner = "client!gb", name = "a", descriptor = "([I[IIIIIIIIIIIIII)V")
-	private static void drawTexturedScanline(@OriginalArg(5) int xA, @OriginalArg(6) int xB, @OriginalArg(0) int[] dst, @OriginalArg(4) int offset, @OriginalArg(1) int[] texels, @OriginalArg(2) int curU, @OriginalArg(3) int curV, @OriginalArg(9) int u, @OriginalArg(10) int v, @OriginalArg(11) int w, @OriginalArg(12) int uStride, @OriginalArg(13) int vStride, @OriginalArg(14) int wStride, @OriginalArg(7) int shadeA, @OriginalArg(8) int shadeB) {
+	private static void textureRaster(@OriginalArg(5) int xA, @OriginalArg(6) int xB, @OriginalArg(0) int[] dst, @OriginalArg(4) int offset, @OriginalArg(1) int[] texels, @OriginalArg(2) int curU, @OriginalArg(3) int curV, @OriginalArg(9) int u, @OriginalArg(10) int v, @OriginalArg(11) int w, @OriginalArg(12) int uStride, @OriginalArg(13) int vStride, @OriginalArg(14) int wStride, @OriginalArg(7) int shadeA, @OriginalArg(8) int shadeB) {
 		if (xA >= xB) {
 			return;
 		}
 
 		@Pc(15) int shadeStrides;
 		@Pc(40) int strides;
-		if (clipX) {
+		if (hclip) {
 			shadeStrides = (shadeB - shadeA) / (xB - xA);
 
-			if (xB > boundX) {
-				xB = boundX;
+			if (xB > safeWidth) {
+				xB = safeWidth;
 			}
 
 			if (xA < 0) {
@@ -1958,7 +1959,7 @@ public class Draw3D extends Draw2D {
 		} else {
 			if (xB - xA > 7) {
                 strides = (xB - xA) >> 3;
-				shadeStrides = (shadeB - shadeA) * reciprocal15[strides] >> 6;
+				shadeStrides = (shadeB - shadeA) * divTable[strides] >> 6;
 			} else {
 				strides = 0;
 				shadeStrides = 0;
@@ -1969,10 +1970,10 @@ public class Draw3D extends Draw2D {
 
 		offset += xA;
 
-		if (lowMemory) {
+		if (lowDetail) {
 			int nextU = 0;
 			int nextV = 0;
-			int dx = xA - centerX;
+			int dx = xA - centerW3D;
 
 			u = u + (uStride >> 3) * dx;
 			v = v + (vStride >> 3) * dx;
@@ -2167,7 +2168,7 @@ public class Draw3D extends Draw2D {
 		} else {
 			int nextU = 0;
 			int nextV = 0;
-			int dx = xA - centerX;
+			int dx = xA - centerW3D;
 
 			u = u + (uStride >> 3) * dx;
 			v = v + (vStride >> 3) * dx;

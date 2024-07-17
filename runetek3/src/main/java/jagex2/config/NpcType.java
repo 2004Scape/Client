@@ -215,6 +215,8 @@ public class NpcType {
 				this.resizeh = dat.g2();
 			} else if (code == 98) {
 				this.resizev = dat.g2();
+			} else {
+				System.out.println("Error unrecognised npc config code: " + code);
 			}
 		}
 	}

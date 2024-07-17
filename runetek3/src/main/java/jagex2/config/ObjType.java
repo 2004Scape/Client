@@ -1,10 +1,10 @@
 package jagex2.config;
 
 import jagex2.datastruct.LruCache;
-import jagex2.graphics.Draw2D;
-import jagex2.graphics.Draw3D;
+import jagex2.graphics.Pix2D;
+import jagex2.graphics.Pix3D;
 import jagex2.graphics.Model;
-import jagex2.graphics.Pix24;
+import jagex2.graphics.Pix32;
 import jagex2.io.Jagfile;
 import jagex2.io.Packet;
 import org.openrs2.deob.annotation.OriginalArg;
@@ -204,8 +204,8 @@ public class ObjType {
 	}
 
 	@OriginalMember(owner = "client!cc", name = "a", descriptor = "(III)Lclient!hb;")
-	public static Pix24 getIcon(@OriginalArg(0) int id, @OriginalArg(2) int count) {
-		@Pc(7) Pix24 icon = (Pix24) iconCache.get(id);
+	public static Pix32 getIcon(@OriginalArg(0) int id, @OriginalArg(2) int count) {
+		@Pc(7) Pix32 icon = (Pix32) iconCache.get(id);
 		if (icon != null && icon.cropH != count && icon.cropH != -1) {
 			icon.unlink();
 			icon = null;
@@ -233,27 +233,27 @@ public class ObjType {
 			}
 		}
 
-		icon = new Pix24(32, 32);
+		icon = new Pix32(32, 32);
 
-		int _cx = Draw3D.centerX;
-		int _cy = Draw3D.centerY;
-		@Pc(80) int[] _loff = Draw3D.lineOffset;
-		@Pc(82) int[] _data = Draw2D.data;
-		@Pc(84) int _w = Draw2D.width2d;
-		@Pc(86) int _h = Draw2D.height2d;
-		@Pc(88) int _l = Draw2D.left;
-		@Pc(90) int _r = Draw2D.right;
-		@Pc(92) int _t = Draw2D.top;
-		@Pc(94) int _b = Draw2D.bottom;
+		int _cx = Pix3D.centerW3D;
+		int _cy = Pix3D.centerH3D;
+		@Pc(80) int[] _loff = Pix3D.lineOffset;
+		@Pc(82) int[] _data = Pix2D.data;
+		@Pc(84) int _w = Pix2D.width2d;
+		@Pc(86) int _h = Pix2D.height2d;
+		@Pc(88) int _l = Pix2D.boundLeft;
+		@Pc(90) int _r = Pix2D.boundRight;
+		@Pc(92) int _t = Pix2D.boundTop;
+		@Pc(94) int _b = Pix2D.boundBottom;
 
-		Draw3D.jagged = false;
-		Draw2D.bind(32, 32, icon.pixels);
-		Draw2D.fillRect(0, 0, 0, 32, 32);
-		Draw3D.init2D();
+		Pix3D.jagged = false;
+		Pix2D.bind(32, 32, icon.pixels);
+		Pix2D.fillRect(0, 0, 0, 32, 32);
+		Pix3D.init2D();
 
 		@Pc(115) Model iModel = obj.getInterfaceModel(1);
-		@Pc(125) int sinPitch = Draw3D.sin[obj.xan2d] * obj.zoom2d >> 16;
-		@Pc(135) int cosPitch = Draw3D.cos[obj.xan2d] * obj.zoom2d >> 16;
+		@Pc(125) int sinPitch = Pix3D.sinTable[obj.xan2d] * obj.zoom2d >> 16;
+		@Pc(135) int cosPitch = Pix3D.cosTable[obj.xan2d] * obj.zoom2d >> 16;
 		iModel.drawSimple(0, obj.yan2d, obj.zan2d, obj.xan2d, obj.xof2d, sinPitch + iModel.maxY / 2 + obj.yof2d, cosPitch + obj.yof2d);
 
 		for (@Pc(168) int x = 31; x >= 0; x--) {
@@ -283,7 +283,7 @@ public class ObjType {
 		}
 
 		if (obj.certtemplate != -1) {
-			@Pc(348) Pix24 linkedIcon = getIcon(obj.certlink, 10);
+			@Pc(348) Pix32 linkedIcon = getIcon(obj.certlink, 10);
 			@Pc(351) int w = linkedIcon.cropW;
 			@Pc(354) int h = linkedIcon.cropH;
 			linkedIcon.cropW = 32;
@@ -294,12 +294,12 @@ public class ObjType {
 		}
 
 		iconCache.put(id, icon);
-		Draw2D.bind(_w, _h, _data);
-		Draw2D.setBounds(_b, _r, _t, _l);
-		Draw3D.centerX = _cx;
-		Draw3D.centerY = _cy;
-		Draw3D.lineOffset = _loff;
-		Draw3D.jagged = true;
+		Pix2D.bind(_w, _h, _data);
+		Pix2D.setClipping(_b, _r, _t, _l);
+		Pix3D.centerW3D = _cx;
+		Pix3D.centerH3D = _cy;
+		Pix3D.lineOffset = _loff;
+		Pix3D.jagged = true;
 		if (obj.stackable) {
 			icon.cropW = 33;
 		} else {
@@ -449,6 +449,8 @@ public class ObjType {
 
 				this.countobj[code - 100] = dat.g2();
 				this.countco[code - 100] = dat.g2();
+			} else {
+				System.out.println("Error unrecognised obj config code: " + code);
 			}
 		}
 	}

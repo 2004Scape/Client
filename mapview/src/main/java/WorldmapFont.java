@@ -1,5 +1,5 @@
 import jagex2.client.GameShell;
-import jagex2.graphics.Draw2D;
+import jagex2.graphics.Pix2D;
 import org.openrs2.deob.annotation.OriginalArg;
 import org.openrs2.deob.annotation.OriginalClass;
 import org.openrs2.deob.annotation.OriginalMember;
@@ -9,7 +9,7 @@ import java.awt.*;
 import java.awt.image.PixelGrabber;
 
 @OriginalClass("mapview!g")
-public final class WorldmapFont extends Draw2D {
+public final class WorldmapFont extends Pix2D {
 
 	private static final String CHARSET = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!\"£$%^&*()-_=+[{]};:'@#~,<.>/?\\| ";
 
@@ -215,7 +215,7 @@ public final class WorldmapFont extends Draw2D {
 	public void drawStringCenter(@OriginalArg(0) String str, @OriginalArg(1) int x, @OriginalArg(2) int y, @OriginalArg(3) int rgb, @OriginalArg(4) boolean shadowed) {
 		@Pc(5) int xOffset = this.stringWidth(str) / 2;
 		@Pc(8) int yOffset = this.getYOffset();
-		if (x - xOffset <= Draw2D.right && (x + xOffset >= Draw2D.left && (y - yOffset <= Draw2D.bottom && y >= 0))) {
+		if (x - xOffset <= Pix2D.boundRight && (x + xOffset >= Pix2D.boundLeft && (y - yOffset <= Pix2D.boundBottom && y >= 0))) {
 			this.drawString(str, x - xOffset, y, rgb, shadowed);
 		}
 	}
@@ -266,31 +266,31 @@ public final class WorldmapFont extends Draw2D {
 		@Pc(21) int local21 = info[c + 3];
 		@Pc(27) int local27 = info[c + 4];
 		@Pc(47) int local47 = info[c] * 16384 + info[c + 1] * 128 + info[c + 2];
-		@Pc(53) int local53 = local7 + local15 * Draw2D.width2d;
-		@Pc(57) int local57 = Draw2D.width2d - local21;
+		@Pc(53) int local53 = local7 + local15 * Pix2D.width2d;
+		@Pc(57) int local57 = Pix2D.width2d - local21;
 		@Pc(59) int local59 = 0;
 		@Pc(66) int local66;
-		if (local15 < Draw2D.top) {
-			local66 = Draw2D.top - local15;
+		if (local15 < Pix2D.boundTop) {
+			local66 = Pix2D.boundTop - local15;
 			local27 -= local66;
-			local15 = Draw2D.top;
+			local15 = Pix2D.boundTop;
 			local47 += local66 * local21;
-			local53 += local66 * Draw2D.width2d;
+			local53 += local66 * Pix2D.width2d;
 		}
-		if (local15 + local27 >= Draw2D.bottom) {
-			local27 -= local15 + local27 - Draw2D.bottom + 1;
+		if (local15 + local27 >= Pix2D.boundBottom) {
+			local27 -= local15 + local27 - Pix2D.boundBottom + 1;
 		}
-		if (local7 < Draw2D.left) {
-			local66 = Draw2D.left - local7;
+		if (local7 < Pix2D.boundLeft) {
+			local66 = Pix2D.boundLeft - local7;
 			local21 -= local66;
-			local7 = Draw2D.left;
+			local7 = Pix2D.boundLeft;
 			local47 += local66;
 			local53 += local66;
 			local59 += local66;
 			local57 += local66;
 		}
-		if (local7 + local21 >= Draw2D.right) {
-			local66 = local7 + local21 - Draw2D.right + 1;
+		if (local7 + local21 >= Pix2D.boundRight) {
+			local66 = local7 + local21 - Pix2D.boundRight + 1;
 			local21 -= local66;
 			local59 += local66;
 			local57 += local66;
@@ -299,9 +299,9 @@ public final class WorldmapFont extends Draw2D {
 			return;
 		}
 		if (flagged) {
-			this.plotLetter2(Draw2D.data, info, rgb, local47, local53, local21, local27, local57, local59);
+			this.plotLetter2(Pix2D.data, info, rgb, local47, local53, local21, local27, local57, local59);
 		} else {
-			this.plotLetter(Draw2D.data, info, rgb, local47, local53, local21, local27, local57, local59);
+			this.plotLetter(Pix2D.data, info, rgb, local47, local53, local21, local27, local57, local59);
 		}
 	}
 

@@ -1,6 +1,6 @@
 import jagex2.client.GameShell;
-import jagex2.graphics.Draw2D;
-import jagex2.graphics.Pix24;
+import jagex2.graphics.Pix2D;
+import jagex2.graphics.Pix32;
 import jagex2.graphics.Pix8;
 import jagex2.graphics.PixFont;
 import jagex2.io.Jagfile;
@@ -116,7 +116,7 @@ public final class mapview extends GameShell {
 	private int flashTimer;
 
 	@OriginalMember(owner = "mapview!mapview", name = "Db", descriptor = "Lmapview!h;")
-	private Pix24 imageOverview;
+	private Pix32 imageOverview;
 
 	@OriginalMember(owner = "mapview!mapview", name = "Eb", descriptor = "I")
 	private int lastMouseClickX;
@@ -158,12 +158,12 @@ public final class mapview extends GameShell {
 	private Pix8[] imageMapscene = new Pix8[50];
 
 	@OriginalMember(owner = "mapview!mapview", name = "W", descriptor = "[Lmapview!h;")
-	private Pix24[] imageMapfunction = new Pix24[50];
+	private Pix32[] imageMapfunction = new Pix32[50];
 
-	private Pix24 imageMapdot0;
-	private Pix24 imageMapdot1;
-	private Pix24 imageMapdot2;
-	private Pix24 imageMapdot3;
+	private Pix32 imageMapdot0;
+	private Pix32 imageMapdot1;
+	private Pix32 imageMapdot2;
+	private Pix32 imageMapdot3;
 
 	@OriginalMember(owner = "mapview!mapview", name = "gb", descriptor = "[I")
 	private int[] visibleMapFunctionsX = new int[2000];
@@ -321,15 +321,15 @@ public final class mapview extends GameShell {
 
 		try {
 			for (int i = 0; i < 50; i++) {
-				this.imageMapfunction[i] = new Pix24(worldmap, "mapfunction", i);
+				this.imageMapfunction[i] = new Pix32(worldmap, "mapfunction", i);
 			}
 		} catch (@Pc(204) Exception ignore) {
 		}
 
-		this.imageMapdot0 = new Pix24(worldmap, "mapdots", 0);
-		this.imageMapdot1 = new Pix24(worldmap, "mapdots", 1);
-		this.imageMapdot2 = new Pix24(worldmap, "mapdots", 2);
-		this.imageMapdot3 = new Pix24(worldmap, "mapdots", 3);
+		this.imageMapdot0 = new Pix32(worldmap, "mapdots", 0);
+		this.imageMapdot1 = new Pix32(worldmap, "mapdots", 1);
+		this.imageMapdot2 = new Pix32(worldmap, "mapdots", 2);
+		this.imageMapdot3 = new Pix32(worldmap, "mapdots", 3);
 
 		this.b12 = new PixFont(worldmap, "b12");
 		this.f11 = new WorldmapFont(11, true, this);
@@ -344,11 +344,11 @@ public final class mapview extends GameShell {
 		this.floormapColors = new int[this.sizeX][this.sizeZ];
 		this.averageUnderlayColors(underlayTiles, this.floormapColors);
 
-		this.imageOverview = new Pix24(this.imageOverviewWidth, this.imageOverviewHeight);
+		this.imageOverview = new Pix32(this.imageOverviewWidth, this.imageOverviewHeight);
 		this.imageOverview.bind();
 		this.drawMap(0, 0, this.sizeX, this.sizeZ, 0, 0, this.imageOverviewWidth, this.imageOverviewHeight);
-		Draw2D.drawRect(0, 0, 0, this.imageOverviewWidth, this.imageOverviewHeight);
-		Draw2D.drawRect(1, 1, this.colorInactiveBorderTL, this.imageOverviewWidth - 2, this.imageOverviewHeight - 2);
+		Pix2D.drawRect(0, 0, 0, this.imageOverviewWidth, this.imageOverviewHeight);
+		Pix2D.drawRect(1, 1, this.colorInactiveBorderTL, this.imageOverviewWidth - 2, this.imageOverviewHeight - 2);
 
 		super.drawArea.bind();
 	}
@@ -684,7 +684,7 @@ public final class mapview extends GameShell {
 				// 2005 mapview applet feature
 				System.out.println("Starting export...");
 
-				@Pc(169) Pix24 map = new Pix24(this.sizeX * 2, this.sizeZ * 2);
+				@Pc(169) Pix32 map = new Pix32(this.sizeX * 2, this.sizeZ * 2);
 				map.bind();
 				this.drawMap(0, 0, this.sizeX, this.sizeZ, 0, 0, this.sizeX * 2, this.sizeZ * 2);
 				super.drawArea.bind();
@@ -861,7 +861,7 @@ public final class mapview extends GameShell {
 			this.redraw = false;
 			this.redrawTimer = 0;
 
-			Draw2D.clear();
+			Pix2D.clear();
 
 			@Pc(20) int left = this.offsetX - (int) (635.0D / this.zoom);
 			@Pc(29) int top = this.offsetZ - (int) (503.0D / this.zoom);
@@ -872,15 +872,15 @@ public final class mapview extends GameShell {
 			if (this.showOverview) {
 				this.imageOverview.blitOpaque(this.overviewX, this.overviewY);
 
-				Draw2D.fillRectAlpha(this.overviewX + this.imageOverviewWidth * left / this.sizeX, this.overviewY + this.imageOverviewHeight * top / this.sizeZ, (right - left) * this.imageOverviewWidth / this.sizeX, (bottom - top) * this.imageOverviewHeight / this.sizeZ, 0xff0000, 0x80);
-				Draw2D.drawRect(this.overviewX + this.imageOverviewWidth * left / this.sizeX, this.overviewY + this.imageOverviewHeight * top / this.sizeZ, 0xff0000, (right - left) * this.imageOverviewWidth / this.sizeX, (bottom - top) * this.imageOverviewHeight / this.sizeZ);
+				Pix2D.fillRectTrans(this.overviewX + this.imageOverviewWidth * left / this.sizeX, this.overviewY + this.imageOverviewHeight * top / this.sizeZ, (right - left) * this.imageOverviewWidth / this.sizeX, (bottom - top) * this.imageOverviewHeight / this.sizeZ, 0xff0000, 0x80);
+				Pix2D.drawRect(this.overviewX + this.imageOverviewWidth * left / this.sizeX, this.overviewY + this.imageOverviewHeight * top / this.sizeZ, 0xff0000, (right - left) * this.imageOverviewWidth / this.sizeX, (bottom - top) * this.imageOverviewHeight / this.sizeZ);
 
 				if (this.flashTimer > 0 && this.flashTimer % 10 < 5) {
 					for (int i = 0; i < this.activeMapFunctionCount; i++) {
 						if (this.activeMapFunctions[i] == this.currentKey) {
 							int x = this.overviewX + this.imageOverviewWidth * this.activeMapFunctionX[i] / this.sizeX;
 							int y = this.overviewY + this.imageOverviewHeight * this.activeMapFunctionZ[i] / this.sizeZ;
-							Draw2D.fillCircle(x, y, 2, 0xffff00, 256);
+							Pix2D.fillCircleTrans(x, y, 2, 0xffff00, 256);
 						}
 					}
 				}
@@ -959,18 +959,18 @@ public final class mapview extends GameShell {
 
 	@OriginalMember(owner = "mapview!mapview", name = "a", descriptor = "(IIIIIIILjava/lang/String;)V")
 	private void drawString(@OriginalArg(0) int x, @OriginalArg(1) int y, @OriginalArg(2) int width, @OriginalArg(3) int height, @OriginalArg(4) int colorBorderTL, @OriginalArg(5) int fillColor, @OriginalArg(6) int colorBorderBR, @OriginalArg(7) String str) {
-		Draw2D.drawRect(x, y, 0, width, height);
+		Pix2D.drawRect(x, y, 0, width, height);
 
 		@Pc(6) int xPad = x + 1;
 		@Pc(7) int yPad = y + 1;
 		@Pc(8) int widthPad = width - 2;
 		@Pc(9) int heightPad = height - 2;
 
-		Draw2D.fillRect(xPad, yPad, fillColor, widthPad, heightPad);
-		Draw2D.drawHorizontalLine(xPad, yPad, colorBorderTL, widthPad);
-		Draw2D.drawVerticalLine(xPad, yPad, colorBorderTL, heightPad);
-		Draw2D.drawHorizontalLine(xPad, yPad + heightPad - 1, colorBorderBR, widthPad);
-		Draw2D.drawVerticalLine(xPad + widthPad - 1, yPad, colorBorderBR, heightPad);
+		Pix2D.fillRect(xPad, yPad, fillColor, widthPad, heightPad);
+		Pix2D.hline(xPad, yPad, colorBorderTL, widthPad);
+		Pix2D.vline(xPad, yPad, colorBorderTL, heightPad);
+		Pix2D.hline(xPad, yPad + heightPad - 1, colorBorderBR, widthPad);
+		Pix2D.vline(xPad + widthPad - 1, yPad, colorBorderBR, heightPad);
 
 		this.b12.drawStringCenter(xPad + widthPad / 2 + 1, yPad + heightPad / 2 + 1 + 4, str, 0);
 		this.b12.drawStringCenter(xPad + widthPad / 2, yPad + heightPad / 2 + 4, str, 0xffffff);
@@ -1011,14 +1011,14 @@ public final class mapview extends GameShell {
 
 				int overlay = overlays[y + top];
                 if (overlay == 0) {
-                    Draw2D.fillRect(startX, startY, colors[y + top], endX - startX, endY - startY);
+                    Pix2D.fillRect(startX, startY, colors[y + top], endX - startX, endY - startY);
                 } else {
                     @Pc(140) byte info = shapes[y + top];
 					int shape = info & 0xFC;
                     if (shape == 0 || lengthX <= 1 || lengthY <= 1) {
-                        Draw2D.fillRect(startX, startY, overlay, lengthX, lengthY);
+                        Pix2D.fillRect(startX, startY, overlay, lengthX, lengthY);
                     } else {
-                        this.drawSmoothEdges(Draw2D.data, startY * Draw2D.width2d + startX, colors[y + top], overlay, lengthX, lengthY, shape >> 2, info & 0x3);
+                        this.drawSmoothEdges(Pix2D.data, startY * Pix2D.width2d + startX, colors[y + top], overlay, lengthX, lengthY, shape >> 2, info & 0x3);
                     }
                 }
             }
@@ -1076,40 +1076,40 @@ public final class mapview extends GameShell {
 					}
 
 					if (wall == 1) {
-						Draw2D.drawVerticalLine(startX, startY, rgb, lengthY);
+						Pix2D.vline(startX, startY, rgb, lengthY);
 					} else if (wall == 2) {
-						Draw2D.drawHorizontalLine(startX, startY, rgb, lengthX);
+						Pix2D.hline(startX, startY, rgb, lengthX);
 					} else if (wall == 3) {
-						Draw2D.drawVerticalLine(edgeX, startY, rgb, lengthY);
+						Pix2D.vline(edgeX, startY, rgb, lengthY);
 					} else if (wall == 4) {
-						Draw2D.drawHorizontalLine(startX, edgeY, rgb, lengthX);
+						Pix2D.hline(startX, edgeY, rgb, lengthX);
 					} else if (wall == 9) {
-						Draw2D.drawVerticalLine(startX, startY, 0xffffff, lengthY);
-						Draw2D.drawHorizontalLine(startX, startY, rgb, lengthX);
+						Pix2D.vline(startX, startY, 0xffffff, lengthY);
+						Pix2D.hline(startX, startY, rgb, lengthX);
 					} else if (wall == 10) {
-						Draw2D.drawVerticalLine(edgeX, startY, 0xffffff, lengthY);
-						Draw2D.drawHorizontalLine(startX, startY, rgb, lengthX);
+						Pix2D.vline(edgeX, startY, 0xffffff, lengthY);
+						Pix2D.hline(startX, startY, rgb, lengthX);
 					} else if (wall == 11) {
-						Draw2D.drawVerticalLine(edgeX, startY, 0xffffff, lengthY);
-						Draw2D.drawHorizontalLine(startX, edgeY, rgb, lengthX);
+						Pix2D.vline(edgeX, startY, 0xffffff, lengthY);
+						Pix2D.hline(startX, edgeY, rgb, lengthX);
 					} else if (wall == 12) {
-						Draw2D.drawVerticalLine(startX, startY, 0xffffff, lengthY);
-						Draw2D.drawHorizontalLine(startX, edgeY, rgb, lengthX);
+						Pix2D.vline(startX, startY, 0xffffff, lengthY);
+						Pix2D.hline(startX, edgeY, rgb, lengthX);
 					} else if (wall == 17) {
-						Draw2D.drawHorizontalLine(startX, startY, rgb, 1);
+						Pix2D.hline(startX, startY, rgb, 1);
 					} else if (wall == 18) {
-						Draw2D.drawHorizontalLine(edgeX, startY, rgb, 1);
+						Pix2D.hline(edgeX, startY, rgb, 1);
 					} else if (wall == 19) {
-						Draw2D.drawHorizontalLine(edgeX, edgeY, rgb, 1);
+						Pix2D.hline(edgeX, edgeY, rgb, 1);
 					} else if (wall == 20) {
-						Draw2D.drawHorizontalLine(startX, edgeY, rgb, 1);
+						Pix2D.hline(startX, edgeY, rgb, 1);
 					} else if (wall == 25) {
 						for (int i = 0; i < lengthY; i++) {
-							Draw2D.drawHorizontalLine(startX + i, edgeY - i, rgb, 1);
+							Pix2D.hline(startX + i, edgeY - i, rgb, 1);
 						}
 					} else if (wall == 26) {
 						for (int i = 0; i < lengthY; i++) {
-							Draw2D.drawHorizontalLine(startX + i, startY + i, rgb, 1);
+							Pix2D.hline(startX + i, startY + i, rgb, 1);
 						}
 					}
 				}
@@ -1197,8 +1197,8 @@ public final class mapview extends GameShell {
 					this.imageMapfunction[this.visibleMapFunctions[i]].draw(this.visibleMapFunctionsX[i] - 7, this.visibleMapFunctionsY[i] - 7);
 
 					if (this.flashTimer % 10 < 5) {
-						Draw2D.fillCircle(this.visibleMapFunctionsX[i], this.visibleMapFunctionsY[i], 15, 0xffff00, 128);
-						Draw2D.fillCircle(this.visibleMapFunctionsX[i], this.visibleMapFunctionsY[i], 7, 0xffffff, 256);
+						Pix2D.fillCircleTrans(this.visibleMapFunctionsX[i], this.visibleMapFunctionsY[i], 15, 0xffff00, 128);
+						Pix2D.fillCircleTrans(this.visibleMapFunctionsX[i], this.visibleMapFunctionsY[i], 7, 0xffffff, 256);
 					}
 				}
 			}
@@ -1293,7 +1293,7 @@ public final class mapview extends GameShell {
 					int drawRight = widthOffset + (width - widthOffset) * (x + 64 - left) / (right - left);
 					int drawBottom = heightOffset + (height - heightOffset) * (z - top) / (bottom - top);
 
-					Draw2D.drawRect(drawLeft, drawTop, 0xffffff, drawRight - drawLeft, drawBottom - drawTop);
+					Pix2D.drawRect(drawLeft, drawTop, 0xffffff, drawRight - drawLeft, drawBottom - drawTop);
 					this.b12.drawStringRight(drawRight - 5, drawBottom - 5, mx + "_" + mz, 0xffffff, false);
 
 					if (mx == 33 && mz >= 71 && mz <= 73) {
@@ -1308,7 +1308,7 @@ public final class mapview extends GameShell {
 
 	@OriginalMember(owner = "mapview!mapview", name = "a", descriptor = "([IIIIIIII)V")
 	private void drawSmoothEdges(@OriginalArg(0) int[] data, @OriginalArg(1) int off, @OriginalArg(2) int color, @OriginalArg(3) int overlay, @OriginalArg(4) int width, @OriginalArg(5) int height, @OriginalArg(6) int shape, @OriginalArg(7) int rotation) {
-		@Pc(5) int step = Draw2D.width2d - width;
+		@Pc(5) int step = Pix2D.width2d - width;
 		if (shape == 9) {
 			shape = 1;
 			rotation = rotation + 1 & 0x3;

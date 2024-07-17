@@ -341,6 +341,8 @@ public class LocType {
 				this.offsetz = dat.g2b();
 			} else if (code == 73) {
 				this.forcedecor = true;
+			} else {
+				System.out.println("Error unrecognised loc config code: " + code);
 			}
 		}
 

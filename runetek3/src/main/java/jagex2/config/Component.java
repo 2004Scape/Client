@@ -3,7 +3,7 @@ package jagex2.config;
 import jagex2.datastruct.JString;
 import jagex2.datastruct.LruCache;
 import jagex2.graphics.Model;
-import jagex2.graphics.Pix24;
+import jagex2.graphics.Pix32;
 import jagex2.graphics.PixFont;
 import jagex2.io.Jagfile;
 import jagex2.io.Packet;
@@ -188,7 +188,7 @@ public class Component {
 	public int marginY;
 
 	@OriginalMember(owner = "client!hc", name = "H", descriptor = "[Lclient!hb;")
-	public Pix24[] invSlotSprite;
+	public Pix32[] invSlotSprite;
 
 	@OriginalMember(owner = "client!hc", name = "I", descriptor = "[I")
 	public int[] invSlotOffsetX;
@@ -227,10 +227,10 @@ public class Component {
 	public int overColour;
 
 	@OriginalMember(owner = "client!hc", name = "U", descriptor = "Lclient!hb;")
-	public Pix24 graphic;
+	public Pix32 graphic;
 
 	@OriginalMember(owner = "client!hc", name = "V", descriptor = "Lclient!hb;")
-	public Pix24 activeGraphic;
+	public Pix32 activeGraphic;
 
 	@OriginalMember(owner = "client!hc", name = "W", descriptor = "Lclient!eb;")
 	public Model model;
@@ -362,7 +362,7 @@ public class Component {
 
 				com.invSlotOffsetX = new int[20];
 				com.invSlotOffsetY = new int[20];
-				com.invSlotSprite = new Pix24[20];
+				com.invSlotSprite = new Pix32[20];
 
 				for (int i = 0; i < 20; i++) {
 					if (dat.g1() == 1) {
@@ -511,16 +511,16 @@ public class Component {
 	}
 
 	@OriginalMember(owner = "client!hc", name = "a", descriptor = "(Lclient!ub;ILjava/lang/String;I)Lclient!hb;")
-	private static Pix24 getImage(@OriginalArg(0) Jagfile media, @OriginalArg(2) String sprite, @OriginalArg(1) int spriteId) {
+	private static Pix32 getImage(@OriginalArg(0) Jagfile media, @OriginalArg(2) String sprite, @OriginalArg(1) int spriteId) {
 		@Pc(8) long uid = (JString.hashCode(sprite) << 8) + (long) spriteId;
-		@Pc(13) Pix24 image = (Pix24) imageCache.get(uid);
+		@Pc(13) Pix32 image = (Pix32) imageCache.get(uid);
 
 		if (image != null) {
 			return image;
 		}
 
 		try {
-			image = new Pix24(media, sprite, spriteId);
+			image = new Pix32(media, sprite, spriteId);
 			imageCache.put(uid, image);
 		} catch (@Pc(38) Exception ignored) {
 			return null;

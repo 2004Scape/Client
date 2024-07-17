@@ -10,7 +10,7 @@ import org.openrs2.deob.annotation.Pc;
 import java.util.Random;
 
 @OriginalClass("client!jb")
-public class PixFont extends Draw2D {
+public class PixFont extends Pix2D {
 
 	@OriginalMember(owner = "client!jb", name = "B", descriptor = "[[B")
 	private final byte[][] charMask = new byte[94][];
@@ -299,43 +299,43 @@ public class PixFont extends Draw2D {
 
 	@OriginalMember(owner = "client!jb", name = "a", descriptor = "([BIIIII)V")
 	private void drawChar(@OriginalArg(0) byte[] data, @OriginalArg(1) int x, @OriginalArg(2) int y, @OriginalArg(3) int w, @OriginalArg(4) int h, @OriginalArg(5) int rgb) {
-		@Pc(5) int dstOff = x + y * Draw2D.width2d;
-		@Pc(9) int dstStep = Draw2D.width2d - w;
+		@Pc(5) int dstOff = x + y * Pix2D.width2d;
+		@Pc(9) int dstStep = Pix2D.width2d - w;
 
 		@Pc(11) int srcStep = 0;
 		@Pc(13) int srcOff = 0;
 
-		if (y < Draw2D.top) {
-			int cutoff = Draw2D.top - y;
+		if (y < Pix2D.boundTop) {
+			int cutoff = Pix2D.boundTop - y;
 			h -= cutoff;
-			y = Draw2D.top;
+			y = Pix2D.boundTop;
 			srcOff += cutoff * w;
-			dstOff += cutoff * Draw2D.width2d;
+			dstOff += cutoff * Pix2D.width2d;
 		}
 
-		if (y + h >= Draw2D.bottom) {
-			h -= y + h + 1 - Draw2D.bottom;
+		if (y + h >= Pix2D.boundBottom) {
+			h -= y + h + 1 - Pix2D.boundBottom;
 		}
 
-		if (x < Draw2D.left) {
-			int cutoff = Draw2D.left - x;
+		if (x < Pix2D.boundLeft) {
+			int cutoff = Pix2D.boundLeft - x;
 			w -= cutoff;
-			x = Draw2D.left;
+			x = Pix2D.boundLeft;
 			srcOff += cutoff;
 			dstOff += cutoff;
 			srcStep += cutoff;
 			dstStep += cutoff;
 		}
 
-		if (x + w >= Draw2D.right) {
-			int cutoff = x + w + 1 - Draw2D.right;
+		if (x + w >= Pix2D.boundRight) {
+			int cutoff = x + w + 1 - Pix2D.boundRight;
 			w -= cutoff;
 			srcStep += cutoff;
 			dstStep += cutoff;
 		}
 
 		if (w > 0 && h > 0) {
-			this.drawMask(w, h, data, srcOff, srcStep, Draw2D.data, dstOff, dstStep, rgb);
+			this.drawMask(w, h, data, srcOff, srcStep, Pix2D.data, dstOff, dstStep, rgb);
 		}
 	}
 
@@ -386,43 +386,43 @@ public class PixFont extends Draw2D {
 
 	@OriginalMember(owner = "client!jb", name = "a", descriptor = "([BBIIIIII)V")
 	private void drawCharAlpha(@OriginalArg(2) int x, @OriginalArg(5) int y, @OriginalArg(7) int w, @OriginalArg(3) int h, @OriginalArg(4) int rgb, @OriginalArg(6) int alpha, @OriginalArg(0) byte[] mask) {
-		@Pc(10) int dstOff = x + y * Draw2D.width2d;
-		@Pc(14) int dstStep = Draw2D.width2d - w;
+		@Pc(10) int dstOff = x + y * Pix2D.width2d;
+		@Pc(14) int dstStep = Pix2D.width2d - w;
 
 		@Pc(16) int srcStep = 0;
 		@Pc(18) int srcOff = 0;
 
-		if (y < Draw2D.top) {
-			int cutoff = Draw2D.top - y;
+		if (y < Pix2D.boundTop) {
+			int cutoff = Pix2D.boundTop - y;
 			h -= cutoff;
-			y = Draw2D.top;
+			y = Pix2D.boundTop;
 			srcOff += cutoff * w;
-			dstOff += cutoff * Draw2D.width2d;
+			dstOff += cutoff * Pix2D.width2d;
 		}
 
-		if (y + h >= Draw2D.bottom) {
-			h -= y + h + 1 - Draw2D.bottom;
+		if (y + h >= Pix2D.boundBottom) {
+			h -= y + h + 1 - Pix2D.boundBottom;
 		}
 
-		if (x < Draw2D.left) {
-			int cutoff = Draw2D.left - x;
+		if (x < Pix2D.boundLeft) {
+			int cutoff = Pix2D.boundLeft - x;
 			w -= cutoff;
-			x = Draw2D.left;
+			x = Pix2D.boundLeft;
 			srcOff += cutoff;
 			dstOff += cutoff;
 			srcStep += cutoff;
 			dstStep += cutoff;
 		}
 
-		if (x + w >= Draw2D.right) {
-			int cutoff = x + w + 1 - Draw2D.right;
+		if (x + w >= Pix2D.boundRight) {
+			int cutoff = x + w + 1 - Pix2D.boundRight;
 			w -= cutoff;
 			srcStep += cutoff;
 			dstStep += cutoff;
 		}
 
 		if (w > 0 && h > 0) {
-			this.drawMaskAlpha(w, h, Draw2D.data, dstOff, dstStep, mask, srcOff, srcStep, rgb, alpha);
+			this.drawMaskAlpha(w, h, Pix2D.data, dstOff, dstStep, mask, srcOff, srcStep, rgb, alpha);
 		}
 	}
 

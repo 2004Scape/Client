@@ -8,7 +8,7 @@ import jagex2.dash3d.World3D;
 import jagex2.dash3d.entity.*;
 import jagex2.dash3d.type.LocSpawned;
 import jagex2.dash3d.type.LocTemporary;
-import jagex2.dash3d.type.Tile;
+import jagex2.dash3d.type.Ground;
 import jagex2.datastruct.JString;
 import jagex2.datastruct.LinkList;
 import jagex2.graphics.*;
@@ -39,7 +39,7 @@ public class client extends GameShell {
     public boolean cameraEditor = false;
 
 	// alt+shift click to add a tile overlay
-	public Tile[] userTileMarkers = new Tile[4];
+	public Ground[] userTileMarkers = new Ground[4];
 	public int userTileMarkerIndex = 0;
 
 	@OriginalMember(owner = "client!client", name = "E", descriptor = "I")
@@ -118,7 +118,7 @@ public class client extends GameShell {
 	private int minimapOffsetCycle;
 
 	@OriginalMember(owner = "client!client", name = "fb", descriptor = "Z")
-	private boolean redrawTitleBackground = false;
+	private boolean redrawFrame = false;
 
 	@OriginalMember(owner = "client!client", name = "gb", descriptor = "Lclient!ob;")
 	private LinkList locList = new LinkList();
@@ -181,7 +181,7 @@ public class client extends GameShell {
 	private String socialMessage = "";
 
 	@OriginalMember(owner = "client!client", name = "Eb", descriptor = "[Lclient!hb;")
-	private Pix24[] imageHitmarks = new Pix24[20];
+	private Pix32[] imageHitmarks = new Pix32[20];
 
 	@OriginalMember(owner = "client!client", name = "Fb", descriptor = "J")
 	private long lastWaveStartTime;
@@ -217,7 +217,7 @@ public class client extends GameShell {
 	private final int[] designIdentikits = new int[7];
 
 	@OriginalMember(owner = "client!client", name = "Tb", descriptor = "[Lclient!hb;")
-	private Pix24[] activeMapFunctions = new Pix24[1000];
+	private Pix32[] activeMapFunctions = new Pix32[1000];
 
 	@OriginalMember(owner = "client!client", name = "Ub", descriptor = "I")
 	private int chatScrollHeight = 78;
@@ -661,7 +661,7 @@ public class client extends GameShell {
 	public static int loopCycle;
 
 	@OriginalMember(owner = "client!client", name = "cf", descriptor = "[Lclient!hb;")
-	private Pix24[] imageHeadicons = new Pix24[20];
+	private Pix32[] imageHeadicons = new Pix32[20];
 
 	@OriginalMember(owner = "client!client", name = "df", descriptor = "I")
 	private int systemUpdateTimer;
@@ -673,10 +673,10 @@ public class client extends GameShell {
 	private boolean objGrabThreshold = false;
 
 	@OriginalMember(owner = "client!client", name = "hf", descriptor = "Lclient!hb;")
-	private Pix24 genderButtonImage0;
+	private Pix32 genderButtonImage0;
 
 	@OriginalMember(owner = "client!client", name = "jf", descriptor = "Lclient!hb;")
-	private Pix24 genderButtonImage1;
+	private Pix32 genderButtonImage1;
 
 	@OriginalMember(owner = "client!client", name = "kf", descriptor = "I")
 	private int midiSyncCrc;
@@ -724,10 +724,10 @@ public class client extends GameShell {
 	private int chatScrollOffset;
 
 	@OriginalMember(owner = "client!client", name = "zf", descriptor = "Lclient!hb;")
-	private Pix24 imageFlamesLeft;
+	private Pix32 imageFlamesLeft;
 
 	@OriginalMember(owner = "client!client", name = "Af", descriptor = "Lclient!hb;")
-	private Pix24 imageFlamesRight;
+	private Pix32 imageFlamesRight;
 
 	@OriginalMember(owner = "client!client", name = "Bf", descriptor = "I")
 	private final int SCROLLBAR_GRIP_LOWLIGHT = 0x332d25;
@@ -778,7 +778,7 @@ public class client extends GameShell {
 	private final CRC32 crc32 = new CRC32();
 
 	@OriginalMember(owner = "client!client", name = "Sf", descriptor = "Lclient!hb;")
-	private Pix24 imageMapflag;
+	private Pix32 imageMapflag;
 
 	@OriginalMember(owner = "client!client", name = "Tf", descriptor = "I")
 	public static int cyclelogic3;
@@ -937,7 +937,7 @@ public class client extends GameShell {
 	private int flagSceneTileZ;
 
 	@OriginalMember(owner = "client!client", name = "Wg", descriptor = "Lclient!hb;")
-	private Pix24 imageMinimap;
+	private Pix32 imageMinimap;
 
 	@OriginalMember(owner = "client!client", name = "Xg", descriptor = "I")
 	private int unreadMessages;
@@ -949,16 +949,16 @@ public class client extends GameShell {
 	private LinkList spotanims = new LinkList();
 
 	@OriginalMember(owner = "client!client", name = "ah", descriptor = "Lclient!hb;")
-	private Pix24 imageMapdot0;
+	private Pix32 imageMapdot0;
 
 	@OriginalMember(owner = "client!client", name = "bh", descriptor = "Lclient!hb;")
-	private Pix24 imageMapdot1;
+	private Pix32 imageMapdot1;
 
 	@OriginalMember(owner = "client!client", name = "ch", descriptor = "Lclient!hb;")
-	private Pix24 imageMapdot2;
+	private Pix32 imageMapdot2;
 
 	@OriginalMember(owner = "client!client", name = "dh", descriptor = "Lclient!hb;")
-	private Pix24 imageMapdot3;
+	private Pix32 imageMapdot3;
 
 	@OriginalMember(owner = "client!client", name = "eh", descriptor = "I")
 	private int lastAddress;
@@ -1117,7 +1117,7 @@ public class client extends GameShell {
 	private String currentMidi;
 
 	@OriginalMember(owner = "client!client", name = "li", descriptor = "[Lclient!hb;")
-	private Pix24[] imageCrosses = new Pix24[8];
+	private Pix32[] imageCrosses = new Pix32[8];
 
 	@OriginalMember(owner = "client!client", name = "mi", descriptor = "Z")
 	private boolean flameThread = false;
@@ -1165,7 +1165,7 @@ public class client extends GameShell {
 	private String chatTyped = "";
 
 	@OriginalMember(owner = "client!client", name = "Di", descriptor = "[Lclient!hb;")
-	private Pix24[] imageMapfunction = new Pix24[50];
+	private Pix32[] imageMapfunction = new Pix32[50];
 
 	@OriginalMember(owner = "client!client", name = "Ei", descriptor = "[I")
 	private int[] menuParamB = new int[500];
@@ -1183,7 +1183,7 @@ public class client extends GameShell {
 	private boolean scrollGrabbed = false;
 
 	@OriginalMember(owner = "client!client", name = "Ki", descriptor = "Lclient!hb;")
-	private Pix24 imageCompass;
+	private Pix32 imageCompass;
 
 	@OriginalMember(owner = "client!client", name = "Li", descriptor = "J")
 	private long serverSeed;
@@ -1275,7 +1275,7 @@ public class client extends GameShell {
 	@OriginalMember(owner = "client!client", name = "d", descriptor = "(Z)V")
 	public static void setLowMemory() {
 		World3D.lowMemory = true;
-		Draw3D.lowMemory = true;
+		Pix3D.lowDetail = true;
 		lowMemory = true;
 		World.lowMemory = true;
 	}
@@ -1323,7 +1323,7 @@ public class client extends GameShell {
 	@OriginalMember(owner = "client!client", name = "B", descriptor = "(I)V")
 	public static void setHighMemory() {
 		World3D.lowMemory = false;
-		Draw3D.lowMemory = false;
+		Pix3D.lowDetail = false;
 		lowMemory = false;
 		World.lowMemory = false;
 	}
@@ -1549,8 +1549,8 @@ public class client extends GameShell {
 					if (w > 30) {
 						w = 30;
 					}
-					Draw2D.fillRect(this.projectX - 15, this.projectY - 3, 0xff00, w, 5);
-					Draw2D.fillRect(this.projectX - 15 + w, this.projectY - 3, 0xff0000, 30 - w, 5);
+					Pix2D.fillRect(this.projectX - 15, this.projectY - 3, 0xff00, w, 5);
+					Pix2D.fillRect(this.projectX - 15 + w, this.projectY - 3, 0xff0000, 30 - w, 5);
 				}
 			}
 
@@ -1648,10 +1648,10 @@ public class client extends GameShell {
 				if (this.chatStyles[i] == 2) {
 					int w = this.fontBold12.stringWidth(message);
 					@Pc(913) int offsetX = (150 - this.chatTimers[i]) * (w + 100) / 150;
-					Draw2D.setBounds(334, this.projectX + 50, 0, this.projectX - 50);
+					Pix2D.setClipping(334, this.projectX + 50, 0, this.projectX - 50);
 					this.fontBold12.drawString(this.projectX + 50 - offsetX, this.projectY + 1, message, 0);
 					this.fontBold12.drawString(this.projectX + 50 - offsetX, this.projectY, message, color);
-					Draw2D.resetBounds();
+					Pix2D.resetClipping();
 				}
 			} else {
 				this.fontBold12.drawStringCenter(this.projectX, this.projectY + 1, message, 0);
@@ -1791,7 +1791,7 @@ public class client extends GameShell {
 	}
 
 	@OriginalMember(owner = "client!client", name = "a", descriptor = "(Lclient!kb;II)V")
-	private void readNpcUpdates(@OriginalArg(0) Packet buf, @OriginalArg(1) int size) {
+	private void getNpcPosExtended(@OriginalArg(0) Packet buf, @OriginalArg(1) int size) {
 		for (@Pc(1) int i = 0; i < this.entityUpdateCount; i++) {
 			@Pc(8) int id = this.entityUpdateIds[i];
 			@Pc(13) NpcEntity npc = this.npcs[id];
@@ -2331,12 +2331,12 @@ public class client extends GameShell {
 				}
 			}
 		}
-		jitter = Draw3D.cycle;
+		jitter = Pix3D.cycle;
 		Model.checkHover = true;
 		Model.pickedCount = 0;
 		Model.mouseX = super.mouseX - 8;
 		Model.mouseZ = super.mouseY - 11;
-		Draw2D.clear();
+		Pix2D.clear();
 		this.scene.draw(this.cameraX, this.cameraY, this.cameraZ, level, this.cameraYaw, this.cameraPitch, loopCycle);
 		this.scene.clearTemporaryLocs();
 		this.draw2DEntityElements();
@@ -3512,8 +3512,8 @@ public class client extends GameShell {
 	@OriginalMember(owner = "client!client", name = "a", descriptor = "(IZ)V")
 	private void updateTextures(@OriginalArg(0) int cycle) {
 		if (!lowMemory) {
-			if (Draw3D.textureCycle[17] >= cycle) {
-				Pix8 texture = Draw3D.textures[17];
+			if (Pix3D.textureCycle[17] >= cycle) {
+				Pix8 texture = Pix3D.textures[17];
 				int bottom = texture.width * texture.height - 1;
 				int adjustment = texture.width * this.sceneDelta * 2;
 
@@ -3525,11 +3525,11 @@ public class client extends GameShell {
 
 				texture.pixels = dst;
 				this.textureBuffer = src;
-				Draw3D.pushTexture(17);
+				Pix3D.pushTexture(17);
 			}
 
-			if (Draw3D.textureCycle[24] >= cycle) {
-				Pix8 texture = Draw3D.textures[24];
+			if (Pix3D.textureCycle[24] >= cycle) {
+				Pix8 texture = Pix3D.textures[24];
 				int bottom = texture.width * texture.height - 1;
 				int adjustment = texture.width * this.sceneDelta * 2;
 
@@ -3541,7 +3541,7 @@ public class client extends GameShell {
 
 				texture.pixels = dst;
 				this.textureBuffer = src;
-				Draw3D.pushTexture(24);
+				Pix3D.pushTexture(24);
 			}
 		}
 	}
@@ -3677,7 +3677,7 @@ public class client extends GameShell {
 			this.drawOnMinimap(anchorY, this.imageMapflag, anchorX);
 		}
 
-		Draw2D.fillRect(93, 82, 0xffffff, 3, 3);
+		Pix2D.fillRect(93, 82, 0xffffff, 3, 3);
 		this.areaViewport.bind();
 	}
 
@@ -3948,13 +3948,13 @@ public class client extends GameShell {
 	}
 
 	@OriginalMember(owner = "client!client", name = "a", descriptor = "(Lclient!kb;IZ)V")
-	private void readNpcInfo(@OriginalArg(0) Packet buf, @OriginalArg(1) int size) {
+	private void getNpcPos(@OriginalArg(0) Packet buf, @OriginalArg(1) int size) {
 		this.entityRemovalCount = 0;
 		this.entityUpdateCount = 0;
 
-		this.readNpcs(buf, size);
-		this.readNewNpcs(buf, size);
-		this.readNpcUpdates(buf, size);
+		this.getNpcPosOldVis(buf, size);
+		this.getNpcPosNewVis(buf, size);
+		this.getNpcPosExtended(buf, size);
 
 		for (@Pc(29) int i = 0; i < this.entityRemovalCount; i++) {
 			int index = this.entityRemovalIds[i];
@@ -3995,8 +3995,8 @@ public class client extends GameShell {
 		for (@Pc(32) int i = 0; i < 12; i++) {
 			this.imageRunes[i] = new Pix8(this.archiveTitle, "runes", i);
 		}
-		this.imageFlamesLeft = new Pix24(128, 265);
-		this.imageFlamesRight = new Pix24(128, 265);
+		this.imageFlamesLeft = new Pix32(128, 265);
+		this.imageFlamesRight = new Pix32(128, 265);
 		System.arraycopy(this.imageTitle0.pixels, 0, this.imageFlamesLeft.pixels, 0, 33920);
 		System.arraycopy(this.imageTitle1.pixels, 0, this.imageFlamesRight.pixels, 0, 33920);
 		this.flameGradient0 = new int[256];
@@ -4053,7 +4053,7 @@ public class client extends GameShell {
 	}
 
 	@OriginalMember(owner = "client!client", name = "a", descriptor = "(ILclient!kb;I)V")
-	private void readPlayers(@OriginalArg(1) Packet buf, @OriginalArg(0) int size) {
+	private void getPlayerOldVis(@OriginalArg(1) Packet buf, @OriginalArg(0) int size) {
 		@Pc(6) int count = buf.gBit(8);
 
 		if (count < this.playerCount) {
@@ -4118,7 +4118,7 @@ public class client extends GameShell {
 	private void drawScrollbar(@OriginalArg(1) int x, @OriginalArg(2) int y, @OriginalArg(3) int scrollY, @OriginalArg(4) int scrollHeight, @OriginalArg(5) int height) {
 		this.imageScrollbar0.draw(x, y);
 		this.imageScrollbar1.draw(x, y + height - 16);
-		Draw2D.fillRect(x, y + 16, this.SCROLLBAR_TRACK, 16, height - 32);
+		Pix2D.fillRect(x, y + 16, this.SCROLLBAR_TRACK, 16, height - 32);
 
 		@Pc(35) int gripSize = (height - 32) * height / scrollHeight;
 		if (gripSize < 8) {
@@ -4126,19 +4126,19 @@ public class client extends GameShell {
 		}
 
 		@Pc(52) int gripY = (height - gripSize - 32) * scrollY / (scrollHeight - height);
-		Draw2D.fillRect(x, y + gripY + 16, this.SCROLLBAR_GRIP_FOREGROUND, 16, gripSize);
+		Pix2D.fillRect(x, y + gripY + 16, this.SCROLLBAR_GRIP_FOREGROUND, 16, gripSize);
 
-		Draw2D.drawVerticalLine(x, y + gripY + 16, this.SCROLLBAR_GRIP_HIGHLIGHT, gripSize);
-		Draw2D.drawVerticalLine(x + 1, y + gripY + 16, this.SCROLLBAR_GRIP_HIGHLIGHT, gripSize);
+		Pix2D.vline(x, y + gripY + 16, this.SCROLLBAR_GRIP_HIGHLIGHT, gripSize);
+		Pix2D.vline(x + 1, y + gripY + 16, this.SCROLLBAR_GRIP_HIGHLIGHT, gripSize);
 
-		Draw2D.drawHorizontalLine(x, y + gripY + 16, this.SCROLLBAR_GRIP_HIGHLIGHT, 16);
-		Draw2D.drawHorizontalLine(x, y + gripY + 17, this.SCROLLBAR_GRIP_HIGHLIGHT, 16);
+		Pix2D.hline(x, y + gripY + 16, this.SCROLLBAR_GRIP_HIGHLIGHT, 16);
+		Pix2D.hline(x, y + gripY + 17, this.SCROLLBAR_GRIP_HIGHLIGHT, 16);
 
-		Draw2D.drawVerticalLine(x + 15, y + gripY + 16, this.SCROLLBAR_GRIP_LOWLIGHT, gripSize);
-		Draw2D.drawVerticalLine(x + 14, y + gripY + 17, this.SCROLLBAR_GRIP_LOWLIGHT, gripSize - 1);
+		Pix2D.vline(x + 15, y + gripY + 16, this.SCROLLBAR_GRIP_LOWLIGHT, gripSize);
+		Pix2D.vline(x + 14, y + gripY + 17, this.SCROLLBAR_GRIP_LOWLIGHT, gripSize - 1);
 
-		Draw2D.drawHorizontalLine(x, y + gripY + gripSize + 15, this.SCROLLBAR_GRIP_LOWLIGHT, 16);
-		Draw2D.drawHorizontalLine(x + 1, y + gripY + gripSize + 14, this.SCROLLBAR_GRIP_LOWLIGHT, 15);
+		Pix2D.hline(x, y + gripY + gripSize + 15, this.SCROLLBAR_GRIP_LOWLIGHT, 16);
+		Pix2D.hline(x + 1, y + gripY + gripSize + 14, this.SCROLLBAR_GRIP_LOWLIGHT, 15);
 	}
 
 	@OriginalMember(owner = "client!client", name = "g", descriptor = "(B)V")
@@ -4268,8 +4268,8 @@ public class client extends GameShell {
 		}
 
 		this.imageTitle4.draw(super.graphics, 214, 186);
-		if (this.redrawTitleBackground) {
-			this.redrawTitleBackground = false;
+		if (this.redrawFrame) {
+			this.redrawFrame = false;
 			this.imageTitle2.draw(super.graphics, 128, 0);
 			this.imageTitle3.draw(super.graphics, 214, 386);
 			this.imageTitle5.draw(super.graphics, 0, 265);
@@ -4298,19 +4298,19 @@ public class client extends GameShell {
 		this.imageTitle8 = null;
 		this.areaChatback = new PixMap(this.getBaseComponent(), 479, 96);
 		this.areaMapback = new PixMap(this.getBaseComponent(), 168, 160);
-		Draw2D.clear();
+		Pix2D.clear();
 		this.imageMapback.draw(0, 0);
 		this.areaSidebar = new PixMap(this.getBaseComponent(), 190, 261);
 		this.areaViewport = new PixMap(this.getBaseComponent(), 512, 334);
-		Draw2D.clear();
+		Pix2D.clear();
 		this.areaBackbase1 = new PixMap(this.getBaseComponent(), 501, 61);
 		this.areaBackbase2 = new PixMap(this.getBaseComponent(), 288, 40);
 		this.areaBackhmid1 = new PixMap(this.getBaseComponent(), 269, 66);
-		this.redrawTitleBackground = true;
+		this.redrawFrame = true;
 	}
 
 	@OriginalMember(owner = "client!client", name = "a", descriptor = "(IILclient!kb;)V")
-	private void readNewPlayers(@OriginalArg(1) int size, @OriginalArg(2) Packet buf) {
+	private void getPlayerNewVis(@OriginalArg(1) int size, @OriginalArg(2) Packet buf) {
 		@Pc(9) int index;
 		while (buf.bitPos + 10 < size * 8) {
 			index = buf.gBit(11);
@@ -4383,12 +4383,12 @@ public class client extends GameShell {
 			return;
 		}
 
-		@Pc(29) int left = Draw2D.left;
-		@Pc(31) int top = Draw2D.top;
-		@Pc(33) int right = Draw2D.right;
-		@Pc(35) int bottom = Draw2D.bottom;
+		@Pc(29) int left = Pix2D.boundLeft;
+		@Pc(31) int top = Pix2D.boundTop;
+		@Pc(33) int right = Pix2D.boundRight;
+		@Pc(35) int bottom = Pix2D.boundBottom;
 
-		Draw2D.setBounds(y + com.height, x + com.width, y, x);
+		Pix2D.setClipping(y + com.height, x + com.width, y, x);
 		@Pc(57) int children = com.childId.length;
 
 		for (@Pc(59) int i = 0; i < children; i++) {
@@ -4435,7 +4435,7 @@ public class client extends GameShell {
 							int id = child.invSlotObjId[slot] - 1;
 
 							if (slotX >= -32 && slotX <= 512 && slotY >= -32 && slotY <= 334 || this.objDragArea != 0 && this.objDragSlot == slot) {
-								@Pc(251) Pix24 icon = ObjType.getIcon(id, child.invSlotObjCount[slot]);
+								@Pc(251) Pix32 icon = ObjType.getIcon(id, child.invSlotObjCount[slot]);
 								if (this.objDragArea != 0 && this.objDragSlot == slot && this.objDragInterfaceId == child.id) {
 									dx = super.mouseX - this.objGrabX;
 									dy = super.mouseY - this.objGrabY;
@@ -4467,7 +4467,7 @@ public class client extends GameShell {
 								}
 							}
 						} else if (child.invSlotSprite != null && slot < 20) {
-							@Pc(398) Pix24 image = child.invSlotSprite[slot];
+							@Pc(398) Pix32 image = child.invSlotSprite[slot];
 
 							if (image != null) {
 								image.draw(slotX, slotY);
@@ -4479,9 +4479,9 @@ public class client extends GameShell {
 				}
 			} else if (child.type == 3) {
 				if (child.fill) {
-					Draw2D.fillRect(childX, childY, child.colour, child.width, child.height);
+					Pix2D.fillRect(childX, childY, child.colour, child.width, child.height);
 				} else {
-					Draw2D.drawRect(childX, childY, child.colour, child.width, child.height);
+					Pix2D.drawRect(childX, childY, child.colour, child.width, child.height);
 				}
 			} else if (child.type == 4) {
 				PixFont font = child.font;
@@ -4570,7 +4570,7 @@ public class client extends GameShell {
 					}
 				}
 			} else if (child.type == 5) {
-				@Pc(766) Pix24 image;
+				@Pc(766) Pix32 image;
 				if (this.executeInterfaceScript(child)) {
 					image = child.activeGraphic;
 				} else {
@@ -4581,14 +4581,14 @@ public class client extends GameShell {
 					image.draw(childX, childY);
 				}
 			} else if (child.type == 6) {
-				int tmpX = Draw3D.centerX;
-				int tmpY = Draw3D.centerY;
+				int tmpX = Pix3D.centerW3D;
+				int tmpY = Pix3D.centerH3D;
 
-				Draw3D.centerX = childX + child.width / 2;
-				Draw3D.centerY = childY + child.height / 2;
+				Pix3D.centerW3D = childX + child.width / 2;
+				Pix3D.centerH3D = childY + child.height / 2;
 
-				int eyeY = Draw3D.sin[child.xan] * child.zoom >> 16;
-				int eyeZ = Draw3D.cos[child.xan] * child.zoom >> 16;
+				int eyeY = Pix3D.sinTable[child.xan] * child.zoom >> 16;
+				int eyeZ = Pix3D.cosTable[child.xan] * child.zoom >> 16;
 
 				@Pc(827) boolean active = this.executeInterfaceScript(child);
 				int seqId;
@@ -4610,8 +4610,8 @@ public class client extends GameShell {
 					model.drawSimple(0, child.yan, 0, child.xan, 0, eyeY, eyeZ);
 				}
 
-				Draw3D.centerX = tmpX;
-				Draw3D.centerY = tmpY;
+				Pix3D.centerW3D = tmpX;
+				Pix3D.centerH3D = tmpY;
 			} else if (child.type == 7) {
 				PixFont font = child.font;
 				int slot = 0;
@@ -4640,11 +4640,11 @@ public class client extends GameShell {
 			}
 		}
 
-		Draw2D.setBounds(bottom, right, top, left);
+		Pix2D.setClipping(bottom, right, top, left);
 	}
 
 	@OriginalMember(owner = "client!client", name = "a", descriptor = "(ZILclient!kb;)V")
-	private void readPlayerUpdates(@OriginalArg(2) Packet buf, @OriginalArg(1) int size) {
+	private void getPlayerExtended(@OriginalArg(2) Packet buf, @OriginalArg(1) int size) {
 		for (@Pc(1) int i = 0; i < this.entityUpdateCount; i++) {
 			@Pc(8) int index = this.entityUpdateIds[i];
 			@Pc(13) PlayerEntity player = this.players[index];
@@ -4652,7 +4652,7 @@ public class client extends GameShell {
 			if ((mask & 0x80) == 128) {
 				mask += buf.g1() << 8;
 			}
-			this.readPlayerUpdates(player, index, mask, buf);
+			this.getPlayerExtended(player, index, mask, buf);
 		}
 	}
 
@@ -4666,17 +4666,17 @@ public class client extends GameShell {
 		@Pc(16) int value = this.varps[id];
 		if (clientcode == 1) {
 			if (value == 1) {
-				Draw3D.setBrightness(0.9D);
+				Pix3D.setBrightness(0.9D);
 			} else if (value == 2) {
-				Draw3D.setBrightness(0.8D);
+				Pix3D.setBrightness(0.8D);
 			} else if (value == 3) {
-				Draw3D.setBrightness(0.7D);
+				Pix3D.setBrightness(0.7D);
 			} else if (value == 4) {
-				Draw3D.setBrightness(0.6D);
+				Pix3D.setBrightness(0.6D);
 			}
 
 			ObjType.iconCache.clear();
-			this.redrawTitleBackground = true;
+			this.redrawFrame = true;
 		} else if (clientcode == 3) {
 			@Pc(54) boolean lastMidiActive = this.midiActive;
 			if (value == 0) {
@@ -5092,8 +5092,8 @@ public class client extends GameShell {
 
 	@OriginalMember(owner = "client!client", name = "r", descriptor = "(I)V")
 	private void drawGame() {
-		if (this.redrawTitleBackground) {
-			this.redrawTitleBackground = false;
+		if (this.redrawFrame) {
+			this.redrawFrame = false;
 			this.areaBackleft1.draw(super.graphics, 0, 11);
 			this.areaBackleft2.draw(super.graphics, 0, 375);
 			this.areaBackright1.draw(super.graphics, 729, 5);
@@ -6047,9 +6047,9 @@ public class client extends GameShell {
 		@Pc(8) int w = this.menuWidth;
 		@Pc(11) int h = this.menuHeight;
 		@Pc(13) int background = 0x5d5447;
-		Draw2D.fillRect(x, y, background, w, h);
-		Draw2D.fillRect(x + 1, y + 1, 0, w - 2, 16);
-		Draw2D.drawRect(x + 1, y + 18, 0, w - 2, h - 19);
+		Pix2D.fillRect(x, y, background, w, h);
+		Pix2D.fillRect(x + 1, y + 1, 0, w - 2, 16);
+		Pix2D.drawRect(x + 1, y + 18, 0, w - 2, h - 19);
 
 		this.fontBold12.drawString(x + 3, y + 14, "Choose Option", background);
 		@Pc(63) int mouseX = super.mouseX;
@@ -6315,7 +6315,7 @@ public class client extends GameShell {
 	}
 
 	@OriginalMember(owner = "client!client", name = "a", descriptor = "(ZLclient!kb;I)V")
-	private void readNewNpcs(@OriginalArg(1) Packet buf, @OriginalArg(2) int size) {
+	private void getNpcPosNewVis(@OriginalArg(1) Packet buf, @OriginalArg(2) int size) {
 		while (buf.bitPos + 21 < size * 8) {
 			@Pc(16) int index = buf.gBit(13);
 			if (index == 8191) {
@@ -6580,7 +6580,7 @@ public class client extends GameShell {
 			for (@Pc(346) int level = 0; level < 4; level++) {
 				this.levelCollisionMap[level] = new CollisionMap(104, 104);
 			}
-			this.imageMinimap = new Pix24(512, 512);
+			this.imageMinimap = new Pix32(512, 512);
 			this.drawProgress("Unpacking media", 75);
 			this.imageInvback = new Pix8(media, "invback", 0);
 			this.imageChatback = new Pix8(media, "chatback", 0);
@@ -6591,7 +6591,7 @@ public class client extends GameShell {
 			for (@Pc(424) int i = 0; i < 13; i++) {
 				this.imageSideicons[i] = new Pix8(media, "sideicons", i);
 			}
-			this.imageCompass = new Pix24(media, "compass", 0);
+			this.imageCompass = new Pix32(media, "compass", 0);
 
 			try {
 				for (int i = 0; i < 50; i++) {
@@ -6606,30 +6606,30 @@ public class client extends GameShell {
 			}
 			try {
 				for (int i = 0; i < 50; i++) {
-					this.imageMapfunction[i] = new Pix24(media, "mapfunction", i);
+					this.imageMapfunction[i] = new Pix32(media, "mapfunction", i);
 				}
 			} catch (@Pc(488) Exception ex) {
 			}
 			try {
 				for (int i = 0; i < 20; i++) {
-					this.imageHitmarks[i] = new Pix24(media, "hitmarks", i);
+					this.imageHitmarks[i] = new Pix32(media, "hitmarks", i);
 				}
 			} catch (@Pc(508) Exception ex) {
 			}
 			try {
 				for (int i = 0; i < 20; i++) {
-					this.imageHeadicons[i] = new Pix24(media, "headicons", i);
+					this.imageHeadicons[i] = new Pix32(media, "headicons", i);
 				}
 			} catch (@Pc(528) Exception ex) {
 			}
-			this.imageMapflag = new Pix24(media, "mapflag", 0);
+			this.imageMapflag = new Pix32(media, "mapflag", 0);
 			for (int i = 0; i < 8; i++) {
-				this.imageCrosses[i] = new Pix24(media, "cross", i);
+				this.imageCrosses[i] = new Pix32(media, "cross", i);
 			}
-			this.imageMapdot0 = new Pix24(media, "mapdots", 0);
-			this.imageMapdot1 = new Pix24(media, "mapdots", 1);
-			this.imageMapdot2 = new Pix24(media, "mapdots", 2);
-			this.imageMapdot3 = new Pix24(media, "mapdots", 3);
+			this.imageMapdot0 = new Pix32(media, "mapdots", 0);
+			this.imageMapdot1 = new Pix32(media, "mapdots", 1);
+			this.imageMapdot2 = new Pix32(media, "mapdots", 2);
+			this.imageMapdot3 = new Pix32(media, "mapdots", 3);
 			this.imageScrollbar0 = new Pix8(media, "scrollbar", 0);
 			this.imageScrollbar1 = new Pix8(media, "scrollbar", 1);
 			this.imageRedstone1 = new Pix8(media, "redstone1", 0);
@@ -6651,34 +6651,34 @@ public class client extends GameShell {
 			this.imageRedstone2hv = new Pix8(media, "redstone2", 0);
 			this.imageRedstone2hv.flipHorizontally();
 			this.imageRedstone2hv.flipVertically();
-			@Pc(725) Pix24 backleft1 = new Pix24(media, "backleft1", 0);
+			@Pc(725) Pix32 backleft1 = new Pix32(media, "backleft1", 0);
 			this.areaBackleft1 = new PixMap(this.getBaseComponent(), backleft1.width, backleft1.height);
 			backleft1.blitOpaque(0, 0);
-			@Pc(750) Pix24 backleft2 = new Pix24(media, "backleft2", 0);
+			@Pc(750) Pix32 backleft2 = new Pix32(media, "backleft2", 0);
 			this.areaBackleft2 = new PixMap(this.getBaseComponent(), backleft2.width, backleft2.height);
 			backleft2.blitOpaque(0, 0);
-			@Pc(775) Pix24 backright1 = new Pix24(media, "backright1", 0);
+			@Pc(775) Pix32 backright1 = new Pix32(media, "backright1", 0);
 			this.areaBackright1 = new PixMap(this.getBaseComponent(), backright1.width, backright1.height);
 			backright1.blitOpaque(0, 0);
-			@Pc(800) Pix24 backright2 = new Pix24(media, "backright2", 0);
+			@Pc(800) Pix32 backright2 = new Pix32(media, "backright2", 0);
 			this.areaBackright2 = new PixMap(this.getBaseComponent(), backright2.width, backright2.height);
 			backright2.blitOpaque(0, 0);
-			@Pc(825) Pix24 backtop1 = new Pix24(media, "backtop1", 0);
+			@Pc(825) Pix32 backtop1 = new Pix32(media, "backtop1", 0);
 			this.areaBacktop1 = new PixMap(this.getBaseComponent(), backtop1.width, backtop1.height);
 			backtop1.blitOpaque(0, 0);
-			@Pc(850) Pix24 backtop2 = new Pix24(media, "backtop2", 0);
+			@Pc(850) Pix32 backtop2 = new Pix32(media, "backtop2", 0);
 			this.areaBacktop2 = new PixMap(this.getBaseComponent(), backtop2.width, backtop2.height);
 			backtop2.blitOpaque(0, 0);
-			@Pc(875) Pix24 backvmid1 = new Pix24(media, "backvmid1", 0);
+			@Pc(875) Pix32 backvmid1 = new Pix32(media, "backvmid1", 0);
 			this.areaBackvmid1 = new PixMap(this.getBaseComponent(), backvmid1.width, backvmid1.height);
 			backvmid1.blitOpaque(0, 0);
-			@Pc(900) Pix24 backvmid2 = new Pix24(media, "backvmid2", 0);
+			@Pc(900) Pix32 backvmid2 = new Pix32(media, "backvmid2", 0);
 			this.areaBackvmid2 = new PixMap(this.getBaseComponent(), backvmid2.width, backvmid2.height);
 			backvmid2.blitOpaque(0, 0);
-			@Pc(925) Pix24 backvmid3 = new Pix24(media, "backvmid3", 0);
+			@Pc(925) Pix32 backvmid3 = new Pix32(media, "backvmid3", 0);
 			this.areaBackvmid3 = new PixMap(this.getBaseComponent(), backvmid3.width, backvmid3.height);
 			backvmid3.blitOpaque(0, 0);
-			@Pc(950) Pix24 backhmid2 = new Pix24(media, "backhmid2", 0);
+			@Pc(950) Pix32 backhmid2 = new Pix32(media, "backhmid2", 0);
 			this.areaBackhmid2 = new PixMap(this.getBaseComponent(), backhmid2.width, backhmid2.height);
 			backhmid2.blitOpaque(0, 0);
 
@@ -6697,9 +6697,9 @@ public class client extends GameShell {
 			}
 
 			this.drawProgress("Unpacking textures", 80);
-			Draw3D.unpackTextures(textures);
-			Draw3D.setBrightness(0.8D);
-			Draw3D.initPool(20);
+			Pix3D.unpackTextures(textures);
+			Pix3D.setBrightness(0.8D);
+			Pix3D.initPool(20);
 			this.drawProgress("Unpacking models", 83);
 			Model.unpack(models);
 			AnimBase.unpack(models);
@@ -6761,18 +6761,18 @@ public class client extends GameShell {
 				this.minimapMaskLineLengths[y - 9] = right - left;
 			}
 
-			Draw3D.init3D(479, 96);
-			this.areaChatbackOffsets = Draw3D.lineOffset;
-			Draw3D.init3D(190, 261);
-			this.areaSidebarOffsets = Draw3D.lineOffset;
-			Draw3D.init3D(512, 334);
-			this.areaViewportOffsets = Draw3D.lineOffset;
+			Pix3D.init3D(479, 96);
+			this.areaChatbackOffsets = Pix3D.lineOffset;
+			Pix3D.init3D(190, 261);
+			this.areaSidebarOffsets = Pix3D.lineOffset;
+			Pix3D.init3D(512, 334);
+			this.areaViewportOffsets = Pix3D.lineOffset;
 
 			@Pc(1312) int[] distance = new int[9];
 			for (int x = 0; x < 9; x++) {
 				int angle = x * 32 + 128 + 15;
 				@Pc(1330) int offset = angle * 3 + 600;
-				@Pc(1334) int sin = Draw3D.sin[angle];
+				@Pc(1334) int sin = Pix3D.sinTable[angle];
 				distance[x] = offset * sin >> 16;
 			}
 
@@ -7011,14 +7011,14 @@ public class client extends GameShell {
 		}
 
 		if (crossed) {
-			Draw2D.drawLine(x0, y0, x3, y3, (color & 0xFEFEFE) >> 1);
-			Draw2D.drawLine(x1, y1, x2, y2, (color & 0xFEFEFE) >> 1);
+			Pix2D.line(x0, y0, x3, y3, (color & 0xFEFEFE) >> 1);
+			Pix2D.line(x1, y1, x2, y2, (color & 0xFEFEFE) >> 1);
 		}
 
-		Draw2D.drawLine(x0, y0, x1, y1, color);
-		Draw2D.drawLine(x0, y0, x2, y2, color);
-		Draw2D.drawLine(x1, y1, x3, y3, color);
-		Draw2D.drawLine(x2, y2, x3, y3, color);
+		Pix2D.line(x0, y0, x1, y1, color);
+		Pix2D.line(x0, y0, x2, y2, color);
+		Pix2D.line(x1, y1, x3, y3, color);
+		Pix2D.line(x2, y2, x3, y3, color);
 	}
 
 	private void updateCameraEditor() {
@@ -7236,11 +7236,11 @@ public class client extends GameShell {
 	@OriginalMember(owner = "client!client", name = "c", descriptor = "(I)V")
 	@Override
 	protected void refresh() {
-		this.redrawTitleBackground = true;
+		this.redrawFrame = true;
 	}
 
 	@OriginalMember(owner = "client!client", name = "a", descriptor = "(IILclient!hb;I)V")
-	private void drawOnMinimap(@OriginalArg(0) int dy, @OriginalArg(2) Pix24 image, @OriginalArg(3) int dx) {
+	private void drawOnMinimap(@OriginalArg(0) int dy, @OriginalArg(2) Pix32 image, @OriginalArg(3) int dx) {
 		@Pc(7) int angle = this.orbitCameraYaw + this.minimapAnticheatAngle & 0x7FF;
 		@Pc(15) int distance = dx * dx + dy * dy;
 		if (distance > 6400) {
@@ -7310,8 +7310,8 @@ public class client extends GameShell {
 		dy = tmp;
 
 		if (dz >= 50) {
-			this.projectX = Draw3D.centerX + (dx << 9) / dz;
-			this.projectY = Draw3D.centerY + (dy << 9) / dz;
+			this.projectX = Pix3D.centerW3D + (dx << 9) / dz;
+			this.projectY = Pix3D.centerH3D + (dy << 9) / dz;
 		} else {
 			this.projectX = -1;
 			this.projectY = -1;
@@ -7472,38 +7472,38 @@ public class client extends GameShell {
 		this.areaBackhmid1 = null;
 
 		this.imageTitle0 = new PixMap(this.getBaseComponent(), 128, 265);
-		Draw2D.clear();
+		Pix2D.clear();
 
 		this.imageTitle1 = new PixMap(this.getBaseComponent(), 128, 265);
-		Draw2D.clear();
+		Pix2D.clear();
 
 		this.imageTitle2 = new PixMap(this.getBaseComponent(), 533, 186);
-		Draw2D.clear();
+		Pix2D.clear();
 
 		this.imageTitle3 = new PixMap(this.getBaseComponent(), 360, 146);
-		Draw2D.clear();
+		Pix2D.clear();
 
 		this.imageTitle4 = new PixMap(this.getBaseComponent(), 360, 200);
-		Draw2D.clear();
+		Pix2D.clear();
 
 		this.imageTitle5 = new PixMap(this.getBaseComponent(), 214, 267);
-		Draw2D.clear();
+		Pix2D.clear();
 
 		this.imageTitle6 = new PixMap(this.getBaseComponent(), 215, 267);
-		Draw2D.clear();
+		Pix2D.clear();
 
 		this.imageTitle7 = new PixMap(this.getBaseComponent(), 86, 79);
-		Draw2D.clear();
+		Pix2D.clear();
 
 		this.imageTitle8 = new PixMap(this.getBaseComponent(), 87, 79);
-		Draw2D.clear();
+		Pix2D.clear();
 
 		if (this.archiveTitle != null) {
 			this.loadTitleBackground();
 			this.loadTitleImages();
 		}
 
-		this.redrawTitleBackground = true;
+		this.redrawFrame = true;
 	}
 
 	@OriginalMember(owner = "client!client", name = "z", descriptor = "(I)V")
@@ -7846,7 +7846,7 @@ public class client extends GameShell {
 				LocType type = LocType.get(otherId);
 
 				if (type.blockwalk) {
-					this.levelCollisionMap[level].removeWall(x, z, otherShape, otherRotation, type.blockrange);
+					this.levelCollisionMap[level].delWall(x, z, otherShape, otherRotation, type.blockrange);
 				}
 			}
 
@@ -7863,7 +7863,7 @@ public class client extends GameShell {
 				}
 
 				if (type.blockwalk) {
-					this.levelCollisionMap[level].removeLoc(x, z, type.width, type.length, otherRotation, type.blockrange);
+					this.levelCollisionMap[level].delLoc(x, z, type.width, type.length, otherRotation, type.blockrange);
 				}
 			}
 
@@ -8050,7 +8050,7 @@ public class client extends GameShell {
 		VarpType.instances = null;
 		super.drawArea = null;
 		PlayerEntity.modelCache = null;
-		Draw3D.unload();
+		Pix3D.unload();
 		World3D.unload();
 		Model.unload();
 		AnimBase.instances = null;
@@ -8547,18 +8547,18 @@ public class client extends GameShell {
 			if (locShape != 0) {
 				int shape = locShape - 1;
 
-				if ((shape <= LocType.WALL_SQUARECORNER || shape == LocType.WALL_DIAGONAL) && this.levelCollisionMap[this.currentLevel].reachedWall(x, z, dx, dz, shape, locRotation)) {
+				if ((shape <= LocType.WALL_SQUARECORNER || shape == LocType.WALL_DIAGONAL) && this.levelCollisionMap[this.currentLevel].testWall(x, z, dx, dz, shape, locRotation)) {
 					arrived = true;
 					break;
 				}
 
-				if (shape <= LocType.WALLDECOR_DIAGONAL_BOTH && this.levelCollisionMap[this.currentLevel].reachedWallDecoration(x, z, dx, dz, shape, locRotation)) {
+				if (shape <= LocType.WALLDECOR_DIAGONAL_BOTH && this.levelCollisionMap[this.currentLevel].testWDecor(x, z, dx, dz, shape, locRotation)) {
 					arrived = true;
 					break;
 				}
 			}
 
-			if (locWidth != 0 && locLength != 0 && this.levelCollisionMap[this.currentLevel].reachedLoc(x, z, dx, dz, locWidth, locLength, forceapproach)) {
+			if (locWidth != 0 && locLength != 0 && this.levelCollisionMap[this.currentLevel].testLoc(x, z, dx, dz, locWidth, locLength, forceapproach)) {
 				arrived = true;
 				break;
 			}
@@ -8708,7 +8708,7 @@ public class client extends GameShell {
 				}
 
 				// add new
-				this.userTileMarkers[this.userTileMarkerIndex] = new Tile(this.currentLevel, World3D.clickTileX, World3D.clickTileZ);
+				this.userTileMarkers[this.userTileMarkerIndex] = new Ground(this.currentLevel, World3D.clickTileX, World3D.clickTileZ);
 				this.userTileMarkerIndex = this.userTileMarkerIndex + 1 & (this.userTileMarkers.length - 1);
 				return false;
 			}
@@ -8751,14 +8751,14 @@ public class client extends GameShell {
 	}
 
 	@OriginalMember(owner = "client!client", name = "b", descriptor = "(Lclient!kb;II)V")
-	private void readPlayerInfo(@OriginalArg(0) Packet buf, @OriginalArg(1) int size) {
+	private void getPlayer(@OriginalArg(0) Packet buf, @OriginalArg(1) int size) {
 		this.entityRemovalCount = 0;
 		this.entityUpdateCount = 0;
 
-		this.readLocalPlayer(buf, size);
-		this.readPlayers(buf, size);
-		this.readNewPlayers(size, buf);
-		this.readPlayerUpdates(buf, size);
+		this.getPlayerLocal(buf, size);
+		this.getPlayerOldVis(buf, size);
+		this.getPlayerNewVis(size, buf);
+		this.getPlayerExtended(buf, size);
 
 		for (@Pc(29) int i = 0; i < this.entityRemovalCount; i++) {
 			int index = this.entityRemovalIds[i];
@@ -8920,8 +8920,8 @@ public class client extends GameShell {
 				y -= 75;
 
 				@Pc(44) int yaw = this.orbitCameraYaw + this.minimapAnticheatAngle & 0x7FF;
-				@Pc(48) int sinYaw = Draw3D.sin[yaw];
-				@Pc(52) int cosYaw = Draw3D.cos[yaw];
+				@Pc(48) int sinYaw = Pix3D.sinTable[yaw];
+				@Pc(52) int cosYaw = Pix3D.cosTable[yaw];
 
 				sinYaw = (sinYaw * (this.minimapZoom + 256)) >> 8;
 				cosYaw = (cosYaw * (this.minimapZoom + 256)) >> 8;
@@ -9291,7 +9291,7 @@ public class client extends GameShell {
 	}
 
 	@OriginalMember(owner = "client!client", name = "b", descriptor = "(ILclient!kb;I)V")
-	private void readNpcs(@OriginalArg(1) Packet buf, @OriginalArg(2) int size) {
+	private void getNpcPosOldVis(@OriginalArg(1) Packet buf, @OriginalArg(2) int size) {
 		buf.accessBits();
 
 		@Pc(14) int count = buf.gBit(8);
@@ -9497,7 +9497,7 @@ public class client extends GameShell {
 			this.locList.clear();
 			this.spotanims.clear();
 			this.projectiles.clear();
-			Draw3D.clearTexels();
+			Pix3D.clearTexels();
 			this.clearCaches();
 			this.scene.reset();
 			for (@Pc(28) int level = 0; level < 4; level++) {
@@ -9539,7 +9539,7 @@ public class client extends GameShell {
 				if (src != null) {
 					int length = (new Packet(src)).g4();
 					BZip2.read(data, length, src, src.length - 4, 4);
-					world.readLandscape((this.sceneCenterZoneX - 6) * 8, (this.sceneCenterZoneZ - 6) * 8, x, z, data);
+					world.loadGround((this.sceneCenterZoneX - 6) * 8, (this.sceneCenterZoneZ - 6) * 8, x, z, data);
 				} else if (this.sceneCenterZoneZ < 800) {
 					world.clearLandscape(z, x, 64, 64);
 				}
@@ -9554,7 +9554,7 @@ public class client extends GameShell {
 					BZip2.read(data, length, src, src.length - 4, 4);
 					int x = (this.sceneMapIndex[i] >> 8) * 64 - this.sceneBaseTileX;
 					@Pc(259) int z = (this.sceneMapIndex[i] & 0xFF) * 64 - this.sceneBaseTileZ;
-					world.readLocs(this.scene, this.locList, this.levelCollisionMap, data, x, z);
+					world.loadLocations(this.scene, this.locList, this.levelCollisionMap, data, x, z);
 				}
 			}
 
@@ -9588,7 +9588,7 @@ public class client extends GameShell {
 
 		LocType.modelCacheStatic.clear();
 		System.gc();
-		Draw3D.initPool(20);
+		Pix3D.initPool(20);
 	}
 
 	@OriginalMember(owner = "client!client", name = "b", descriptor = "(I)V")
@@ -9786,7 +9786,7 @@ public class client extends GameShell {
 	@OriginalMember(owner = "client!client", name = "p", descriptor = "(B)V")
 	private void loadTitleBackground() {
 		@Pc(8) byte[] data = this.archiveTitle.read("title.dat", null);
-		@Pc(14) Pix24 title = new Pix24(data, this);
+		@Pc(14) Pix32 title = new Pix32(data, this);
 		this.imageTitle0.bind();
 		title.blitOpaque(0, 0);
 
@@ -9852,7 +9852,7 @@ public class client extends GameShell {
 		this.imageTitle8.bind();
 		title.blitOpaque(-180, -186);
 
-		title = new Pix24(this.archiveTitle, "logo", 0);
+		title = new Pix32(this.archiveTitle, "logo", 0);
 		this.imageTitle2.bind();
 		title.draw(super.screenWidth / 2 - title.width / 2 - 128, 18);
 		title = null;
@@ -10241,7 +10241,7 @@ public class client extends GameShell {
 	}
 
 	@OriginalMember(owner = "client!client", name = "b", descriptor = "(IILclient!kb;)V")
-	private void readLocalPlayer(@OriginalArg(2) Packet buf, @OriginalArg(1) int size) {
+	private void getPlayerLocal(@OriginalArg(2) Packet buf, @OriginalArg(1) int size) {
 		buf.accessBits();
 
 		@Pc(7) int hasUpdate = buf.gBit(1);
@@ -10271,7 +10271,7 @@ public class client extends GameShell {
 			} else if (updateType == 3) {
 				this.currentLevel = buf.gBit(2);
 				if (this.showDebug) {
-					this.userTileMarkers = new Tile[4];
+					this.userTileMarkers = new Ground[4];
 					this.userTileMarkerIndex = 0;
 				}
 				int localX = buf.gBit(7);
@@ -10290,7 +10290,7 @@ public class client extends GameShell {
 	@OriginalMember(owner = "client!client", name = "o", descriptor = "(Z)V")
 	private void drawChatback() {
 		this.areaChatback.bind();
-		Draw3D.lineOffset = this.areaChatbackOffsets;
+		Pix3D.lineOffset = this.areaChatbackOffsets;
 		this.imageChatback.draw(0, 0);
 		if (this.showSocialInput) {
 			this.fontBold12.drawStringCenter(239, 40, this.socialMessage, 0);
@@ -10306,7 +10306,7 @@ public class client extends GameShell {
 		} else if (this.stickyChatInterfaceId == -1) {
 			@Pc(135) PixFont font = this.fontPlain12;
 			@Pc(137) int line = 0;
-			Draw2D.setBounds(77, 463, 0, 0);
+			Pix2D.setClipping(77, 463, 0, 0);
 			for (@Pc(145) int i = 0; i < 100; i++) {
 				if (this.messageText[i] != null) {
 					@Pc(157) int type = this.messageType[i];
@@ -10365,7 +10365,7 @@ public class client extends GameShell {
 					}
 				}
 			}
-			Draw2D.resetBounds();
+			Pix2D.resetClipping();
 			this.chatScrollHeight = line * 14 + 7;
 			if (this.chatScrollHeight < 78) {
 				this.chatScrollHeight = 78;
@@ -10373,7 +10373,7 @@ public class client extends GameShell {
 			this.drawScrollbar(463, 0, this.chatScrollHeight - this.chatScrollOffset - 77, this.chatScrollHeight, 77);
 			font.drawString(4, 90, JString.formatName(this.username) + ":", 0);
 			font.drawString(font.stringWidth(this.username + ": ") + 6, 90, this.chatTyped + "*", 255);
-			Draw2D.drawHorizontalLine(0, 77, 0, 479);
+			Pix2D.hline(0, 77, 0, 479);
 		} else {
 			this.drawInterface(Component.instances[this.stickyChatInterfaceId], 0, 0, 0);
 		}
@@ -10382,7 +10382,7 @@ public class client extends GameShell {
 		}
 		this.areaChatback.draw(super.graphics, 22, 375);
 		this.areaViewport.bind();
-		Draw3D.lineOffset = this.areaViewportOffsets;
+		Pix3D.lineOffset = this.areaViewportOffsets;
 	}
 
 	@OriginalMember(owner = "client!client", name = "p", descriptor = "(Z)Z")
@@ -10532,7 +10532,7 @@ public class client extends GameShell {
 			}
 			if (this.packetType == 1) {
 				// NPC_INFO
-				this.readNpcInfo(this.in, this.packetSize);
+				this.getNpcPos(this.in, this.packetSize);
 				this.packetType = -1;
 				return true;
 			}
@@ -11480,7 +11480,7 @@ public class client extends GameShell {
 			}
 			if (this.packetType == 184) {
 				// PLAYER_INFO
-				this.readPlayerInfo(this.in, this.packetSize);
+				this.getPlayer(this.in, this.packetSize);
 				if (this.sceneState == 1) {
 					this.sceneState = 2;
 					World.levelBuilt = this.currentLevel;
@@ -11520,7 +11520,7 @@ public class client extends GameShell {
 	@OriginalMember(owner = "client!client", name = "s", descriptor = "(B)V")
 	private void drawSidebar() {
 		this.areaSidebar.bind();
-		Draw3D.lineOffset = this.areaSidebarOffsets;
+		Pix3D.lineOffset = this.areaSidebarOffsets;
 		this.imageInvback.draw(0, 0);
 		if (this.sidebarInterfaceId != -1) {
 			this.drawInterface(Component.instances[this.sidebarInterfaceId], 0, 0, 0);
@@ -11532,7 +11532,7 @@ public class client extends GameShell {
 		}
 		this.areaSidebar.draw(super.graphics, 562, 231);
 		this.areaViewport.bind();
-		Draw3D.lineOffset = this.areaViewportOffsets;
+		Pix3D.lineOffset = this.areaViewportOffsets;
 	}
 
 	@OriginalMember(owner = "client!client", name = "a", descriptor = "(ILjava/lang/String;)Z")
@@ -11570,7 +11570,7 @@ public class client extends GameShell {
 	}
 
 	@OriginalMember(owner = "client!client", name = "a", descriptor = "(ZIILclient!kb;Lclient!z;)V")
-	private void readPlayerUpdates(@OriginalArg(4) PlayerEntity player, @OriginalArg(1) int index, @OriginalArg(2) int mask, @OriginalArg(3) Packet buf) {
+	private void getPlayerExtended(@OriginalArg(4) PlayerEntity player, @OriginalArg(1) int index, @OriginalArg(2) int mask, @OriginalArg(3) Packet buf) {
 		player.lastMask = mask;
 		player.lastMaskCycle = loopCycle;
 
@@ -11702,14 +11702,14 @@ public class client extends GameShell {
 			@Pc(21) byte offsetY = 20;
 			this.fontBold12.drawStringCenter(x / 2, y / 2 - offsetY - 26, "RuneScape is loading - please wait...", 16777215);
 			@Pc(51) int midY = y / 2 - offsetY - 18;
-			Draw2D.drawRect(x / 2 - 152, midY, 9179409, 304, 34);
-			Draw2D.drawRect(x / 2 - 151, midY + 1, 0, 302, 32);
-			Draw2D.fillRect(x / 2 - 150, midY + 2, 9179409, progress * 3, 30);
-			Draw2D.fillRect(x / 2 - 150 + progress * 3, midY + 2, 0, 300 - progress * 3, 30);
+			Pix2D.drawRect(x / 2 - 152, midY, 9179409, 304, 34);
+			Pix2D.drawRect(x / 2 - 151, midY + 1, 0, 302, 32);
+			Pix2D.fillRect(x / 2 - 150, midY + 2, 9179409, progress * 3, 30);
+			Pix2D.fillRect(x / 2 - 150 + progress * 3, midY + 2, 0, 300 - progress * 3, 30);
 			this.fontBold12.drawStringCenter(x / 2, y / 2 + 5 - offsetY, message, 16777215);
 			this.imageTitle4.draw(super.graphics, 214, 186);
-			if (this.redrawTitleBackground) {
-				this.redrawTitleBackground = false;
+			if (this.redrawFrame) {
+				this.redrawFrame = false;
 				if (!this.flameActive) {
 					this.imageTitle0.draw(super.graphics, 0, 0);
 					this.imageTitle1.draw(super.graphics, 661, 0);

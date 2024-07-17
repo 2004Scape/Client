@@ -101,7 +101,7 @@ public class VarpType {
 			} else if (code == 10) {
 				this.code10 = dat.gjstr();
 			} else {
-				System.out.println("Error unrecognised config code: " + code);
+				System.out.println("Error unrecognised varp config code: " + code);
 			}
 		}
 	}

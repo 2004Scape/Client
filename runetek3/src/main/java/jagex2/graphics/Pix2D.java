@@ -1,13 +1,14 @@
 package jagex2.graphics;
 
-import jagex2.datastruct.Hashable;
+import jagex2.datastruct.DoublyLinkable;
 import org.openrs2.deob.annotation.OriginalArg;
 import org.openrs2.deob.annotation.OriginalClass;
 import org.openrs2.deob.annotation.OriginalMember;
 import org.openrs2.deob.annotation.Pc;
 
+// name taken from osrs
 @OriginalClass("client!fb")
-public class Draw2D extends Hashable {
+public class Pix2D extends DoublyLinkable {
 
 	@OriginalMember(owner = "client!fb", name = "k", descriptor = "[I")
 	public static int[] data;
@@ -19,28 +20,28 @@ public class Draw2D extends Hashable {
 	public static int height2d;
 
 	@OriginalMember(owner = "client!fb", name = "n", descriptor = "I")
-	public static int top;
+	public static int boundTop;
 
 	@OriginalMember(owner = "client!fb", name = "o", descriptor = "I")
-	public static int bottom;
+	public static int boundBottom;
 
 	@OriginalMember(owner = "client!fb", name = "p", descriptor = "I")
-	public static int left;
+	public static int boundLeft;
 
 	@OriginalMember(owner = "client!fb", name = "q", descriptor = "I")
-	public static int right;
+	public static int boundRight;
 
 	@OriginalMember(owner = "client!fb", name = "r", descriptor = "I")
-	public static int boundX;
+	public static int safeWidth;
 
 	@OriginalMember(owner = "client!fb", name = "s", descriptor = "I")
-	public static int centerX2d;
+	public static int centerW2D;
 
 	@OriginalMember(owner = "client!fb", name = "t", descriptor = "I")
-	public static int centerY2d;
+	public static int centerH2D;
 
 	@OriginalMember(owner = "client!fb", name = "<init>", descriptor = "()V")
-	protected Draw2D() {
+	protected Pix2D() {
 	}
 
 	@OriginalMember(owner = "client!fb", name = "a", descriptor = "(I[III)V")
@@ -48,21 +49,21 @@ public class Draw2D extends Hashable {
 		data = src;
 		width2d = width;
 		height2d = height;
-		setBounds(height, width, 0, 0);
+		setClipping(height, width, 0, 0);
 	}
 
 	@OriginalMember(owner = "client!fb", name = "a", descriptor = "(I)V")
-	public static void resetBounds() {
-		left = 0;
-		top = 0;
-		right = width2d;
-		bottom = height2d;
-		boundX = right - 1;
-		centerX2d = right / 2;
+	public static void resetClipping() {
+		boundLeft = 0;
+		boundTop = 0;
+		boundRight = width2d;
+		boundBottom = height2d;
+		safeWidth = boundRight - 1;
+		centerW2D = boundRight / 2;
 	}
 
 	@OriginalMember(owner = "client!fb", name = "a", descriptor = "(IIIII)V")
-	public static void setBounds(@OriginalArg(0) int bottom, @OriginalArg(2) int right, @OriginalArg(1) int top, @OriginalArg(4) int left) {
+	public static void setClipping(@OriginalArg(0) int bottom, @OriginalArg(2) int right, @OriginalArg(1) int top, @OriginalArg(4) int left) {
 		if (left < 0) {
 			left = 0;
 		}
@@ -79,13 +80,13 @@ public class Draw2D extends Hashable {
 			bottom = height2d;
 		}
 
-		Draw2D.left = left;
-		Draw2D.top = top;
-		Draw2D.right = right;
-		Draw2D.bottom = bottom;
-		boundX = Draw2D.right - 1;
-		centerX2d = Draw2D.right / 2;
-		centerY2d = Draw2D.bottom / 2;
+		Pix2D.boundLeft = left;
+		Pix2D.boundTop = top;
+		Pix2D.boundRight = right;
+		Pix2D.boundBottom = bottom;
+		safeWidth = Pix2D.boundRight - 1;
+		centerW2D = Pix2D.boundRight / 2;
+		centerH2D = Pix2D.boundBottom / 2;
 	}
 
 	@OriginalMember(owner = "client!fb", name = "b", descriptor = "(I)V")
@@ -98,22 +99,22 @@ public class Draw2D extends Hashable {
 
 	@OriginalMember(owner = "client!fb", name = "a", descriptor = "(IIIBII)V")
 	public static void fillRect(@OriginalArg(1) int x, @OriginalArg(0) int y, @OriginalArg(2) int rgb, @OriginalArg(4) int width, @OriginalArg(5) int height) {
-		if (x < left) {
-			width -= left - x;
-			x = left;
+		if (x < boundLeft) {
+			width -= boundLeft - x;
+			x = boundLeft;
 		}
 
-		if (y < top) {
-			height -= top - y;
-			y = top;
+		if (y < boundTop) {
+			height -= boundTop - y;
+			y = boundTop;
 		}
 
-		if (x + width > right) {
-			width = right - x;
+		if (x + width > boundRight) {
+			width = boundRight - x;
 		}
 
-		if (y + height > bottom) {
-			height = bottom - y;
+		if (y + height > boundBottom) {
+			height = boundBottom - y;
 		}
 
 		@Pc(50) int step = width2d - width;
@@ -128,23 +129,23 @@ public class Draw2D extends Hashable {
 	}
 
 	@OriginalMember(owner = "mapview!f", name = "a", descriptor = "(IIIIII)V")
-	public static void fillRectAlpha(@OriginalArg(0) int x, @OriginalArg(1) int y, @OriginalArg(2) int width, @OriginalArg(3) int height, @OriginalArg(4) int rgb, @OriginalArg(5) int alpha) {
-		if (x < left) {
-			width -= left - x;
-			x = left;
+	public static void fillRectTrans(@OriginalArg(0) int x, @OriginalArg(1) int y, @OriginalArg(2) int width, @OriginalArg(3) int height, @OriginalArg(4) int rgb, @OriginalArg(5) int alpha) {
+		if (x < boundLeft) {
+			width -= boundLeft - x;
+			x = boundLeft;
 		}
 
-		if (y < top) {
-			height -= top - y;
-			y = top;
+		if (y < boundTop) {
+			height -= boundTop - y;
+			y = boundTop;
 		}
 
-		if (x + width > right) {
-			width = right - x;
+		if (x + width > boundRight) {
+			width = boundRight - x;
 		}
 
-		if (y + height > bottom) {
-			height = bottom - y;
+		if (y + height > boundBottom) {
+			height = boundBottom - y;
 		}
 
 		@Pc(45) int invAlpha = 256 - alpha;
@@ -167,7 +168,7 @@ public class Draw2D extends Hashable {
 	}
 
 	@OriginalMember(owner = "mapview!f", name = "c", descriptor = "(IIIII)V")
-	public static void fillCircle(@OriginalArg(0) int xCenter, @OriginalArg(1) int yCenter, @OriginalArg(2) int yRadius, @OriginalArg(3) int rgb, @OriginalArg(4) int alpha) {
+	public static void fillCircleTrans(@OriginalArg(0) int xCenter, @OriginalArg(1) int yCenter, @OriginalArg(2) int yRadius, @OriginalArg(3) int rgb, @OriginalArg(4) int alpha) {
 		@Pc(5) int invAlpha = 256 - alpha;
 		@Pc(13) int r0 = (rgb >> 16 & 0xFF) * alpha;
 		@Pc(21) int g0 = (rgb >> 8 & 0xFF) * alpha;
@@ -208,25 +209,25 @@ public class Draw2D extends Hashable {
 
 	@OriginalMember(owner = "client!fb", name = "a", descriptor = "(IIIIII)V")
 	public static void drawRect(@OriginalArg(1) int x, @OriginalArg(4) int y, @OriginalArg(2) int rgb, @OriginalArg(5) int width, @OriginalArg(3) int height) {
-		drawHorizontalLine(x, y, rgb, width);
-		drawHorizontalLine(x, y + height - 1, rgb, width);
-		drawVerticalLine(x, y, rgb, height);
-		drawVerticalLine(x + width - 1, y, rgb, height);
+		hline(x, y, rgb, width);
+		hline(x, y + height - 1, rgb, width);
+		vline(x, y, rgb, height);
+		vline(x + width - 1, y, rgb, height);
 	}
 
 	@OriginalMember(owner = "client!fb", name = "b", descriptor = "(IIIII)V")
-	public static void drawHorizontalLine(@OriginalArg(4) int x, @OriginalArg(2) int y, @OriginalArg(0) int rgb, @OriginalArg(3) int width) {
-		if (y < top || y >= bottom) {
+	public static void hline(@OriginalArg(4) int x, @OriginalArg(2) int y, @OriginalArg(0) int rgb, @OriginalArg(3) int width) {
+		if (y < boundTop || y >= boundBottom) {
 			return;
 		}
 
-		if (x < left) {
-			width -= left - x;
-			x = left;
+		if (x < boundLeft) {
+			width -= boundLeft - x;
+			x = boundLeft;
 		}
 
-		if (x + width > right) {
-			width = right - x;
+		if (x + width > boundRight) {
+			width = boundRight - x;
 		}
 
 		@Pc(32) int off = x + y * width2d;
@@ -236,18 +237,18 @@ public class Draw2D extends Hashable {
 	}
 
 	@OriginalMember(owner = "client!fb", name = "c", descriptor = "(IIIII)V")
-	public static void drawVerticalLine(@OriginalArg(4) int x, @OriginalArg(2) int y, @OriginalArg(0) int rgb, @OriginalArg(3) int height) {
-		if (x < left || x >= right) {
+	public static void vline(@OriginalArg(4) int x, @OriginalArg(2) int y, @OriginalArg(0) int rgb, @OriginalArg(3) int height) {
+		if (x < boundLeft || x >= boundRight) {
 			return;
 		}
 
-		if (y < top) {
-			height -= top - y;
-			y = top;
+		if (y < boundTop) {
+			height -= boundTop - y;
+			y = boundTop;
 		}
 
-		if (y + height > bottom) {
-			height = bottom - y;
+		if (y + height > boundBottom) {
+			height = boundBottom - y;
 		}
 
 		@Pc(32) int off = x + y * width2d;
@@ -256,7 +257,7 @@ public class Draw2D extends Hashable {
 		}
 	}
 
-	public static void drawLine(int x1, int y1, int x2, int y2, int rgb) {
+	public static void line(int x1, int y1, int x2, int y2, int rgb) {
 		int dx = Math.abs(x2 - x1);
 		int dy = Math.abs(y2 - y1);
 
@@ -266,7 +267,7 @@ public class Draw2D extends Hashable {
 		int err = dx - dy;
 
 		while (true) {
-			if ((x1 >= left) && (x1 < right) && (y1 >= top) && (y1 < bottom)) {
+			if ((x1 >= boundLeft) && (x1 < boundRight) && (y1 >= boundTop) && (y1 < boundBottom)) {
 				data[x1 + (y1 * width2d)] = rgb;
 			}
 

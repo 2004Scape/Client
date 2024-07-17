@@ -80,7 +80,7 @@ public class IdkType {
 			} else if (code >= 60 && code < 70) {
 				this.heads[code - 60] = dat.g2();
 			} else {
-				System.out.println("Error unrecognised config code: " + code);
+				System.out.println("Error unrecognised idk config code: " + code);
 			}
 		}
 	}
