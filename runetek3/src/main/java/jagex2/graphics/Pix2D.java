@@ -129,7 +129,7 @@ public class Pix2D extends DoublyLinkable {
 	}
 
 	@OriginalMember(owner = "mapview!f", name = "a", descriptor = "(IIIIII)V")
-	public static void fillRectAlpha(@OriginalArg(0) int x, @OriginalArg(1) int y, @OriginalArg(2) int width, @OriginalArg(3) int height, @OriginalArg(4) int rgb, @OriginalArg(5) int alpha) {
+	public static void fillRectTrans(@OriginalArg(0) int x, @OriginalArg(1) int y, @OriginalArg(2) int width, @OriginalArg(3) int height, @OriginalArg(4) int rgb, @OriginalArg(5) int alpha) {
 		if (x < left) {
 			width -= left - x;
 			x = left;
@@ -168,7 +168,7 @@ public class Pix2D extends DoublyLinkable {
 	}
 
 	@OriginalMember(owner = "mapview!f", name = "c", descriptor = "(IIIII)V")
-	public static void fillCircle(@OriginalArg(0) int xCenter, @OriginalArg(1) int yCenter, @OriginalArg(2) int yRadius, @OriginalArg(3) int rgb, @OriginalArg(4) int alpha) {
+	public static void fillCircleTrans(@OriginalArg(0) int xCenter, @OriginalArg(1) int yCenter, @OriginalArg(2) int yRadius, @OriginalArg(3) int rgb, @OriginalArg(4) int alpha) {
 		@Pc(5) int invAlpha = 256 - alpha;
 		@Pc(13) int r0 = (rgb >> 16 & 0xFF) * alpha;
 		@Pc(21) int g0 = (rgb >> 8 & 0xFF) * alpha;
@@ -209,14 +209,14 @@ public class Pix2D extends DoublyLinkable {
 
 	@OriginalMember(owner = "client!fb", name = "a", descriptor = "(IIIIII)V")
 	public static void drawRect(@OriginalArg(1) int x, @OriginalArg(4) int y, @OriginalArg(2) int rgb, @OriginalArg(5) int width, @OriginalArg(3) int height) {
-		drawHorizontalLine(x, y, rgb, width);
-		drawHorizontalLine(x, y + height - 1, rgb, width);
-		drawVerticalLine(x, y, rgb, height);
-		drawVerticalLine(x + width - 1, y, rgb, height);
+		hline(x, y, rgb, width);
+		hline(x, y + height - 1, rgb, width);
+		vline(x, y, rgb, height);
+		vline(x + width - 1, y, rgb, height);
 	}
 
 	@OriginalMember(owner = "client!fb", name = "b", descriptor = "(IIIII)V")
-	public static void drawHorizontalLine(@OriginalArg(4) int x, @OriginalArg(2) int y, @OriginalArg(0) int rgb, @OriginalArg(3) int width) {
+	public static void hline(@OriginalArg(4) int x, @OriginalArg(2) int y, @OriginalArg(0) int rgb, @OriginalArg(3) int width) {
 		if (y < top || y >= bottom) {
 			return;
 		}
@@ -237,7 +237,7 @@ public class Pix2D extends DoublyLinkable {
 	}
 
 	@OriginalMember(owner = "client!fb", name = "c", descriptor = "(IIIII)V")
-	public static void drawVerticalLine(@OriginalArg(4) int x, @OriginalArg(2) int y, @OriginalArg(0) int rgb, @OriginalArg(3) int height) {
+	public static void vline(@OriginalArg(4) int x, @OriginalArg(2) int y, @OriginalArg(0) int rgb, @OriginalArg(3) int height) {
 		if (x < left || x >= right) {
 			return;
 		}
@@ -257,7 +257,7 @@ public class Pix2D extends DoublyLinkable {
 		}
 	}
 
-	public static void drawLine(int x1, int y1, int x2, int y2, int rgb) {
+	public static void line(int x1, int y1, int x2, int y2, int rgb) {
 		int dx = Math.abs(x2 - x1);
 		int dy = Math.abs(y2 - y1);
 

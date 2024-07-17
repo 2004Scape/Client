@@ -19,7 +19,7 @@ public class Component {
 	public static final int TYPE_LAYER = 0;
 	public static final int TYPE_UNUSED = 1; // TODO: decodes g2, gbool, center, font, shadowed, colour
 	public static final int TYPE_INV = 2;
-	public static final int TYPE_RECT = 3;
+	public static final int TYPE_RECTANGLE = 3;
 	public static final int TYPE_TEXT = 4;
 	public static final int TYPE_GRAPHIC = 5;
 	public static final int TYPE_MODEL = 6;
@@ -295,6 +295,7 @@ public class Component {
 			com.type = dat.g1();
 			com.buttonType = dat.g1();
 			com.clientCode = dat.g2();
+
 			com.width = dat.g2();
 			com.height = dat.g2();
 			com.overLayer = dat.g1();
@@ -387,7 +388,7 @@ public class Component {
 				}
 			}
 
-			if (com.type == TYPE_RECT) {
+			if (com.type == TYPE_RECTANGLE) {
 				com.fill = dat.g1() == 1;
 			}
 
@@ -405,11 +406,11 @@ public class Component {
 				com.activeText = dat.gjstr();
 			}
 
-			if (com.type == TYPE_UNUSED || com.type == TYPE_RECT || com.type == TYPE_TEXT) {
+			if (com.type == TYPE_UNUSED || com.type == TYPE_RECTANGLE || com.type == TYPE_TEXT) {
 				com.colour = dat.g4();
 			}
 
-			if (com.type == TYPE_RECT || com.type == TYPE_TEXT) {
+			if (com.type == TYPE_RECTANGLE || com.type == TYPE_TEXT) {
 				com.activeColour = dat.g4();
 				com.overColour = dat.g4();
 			}

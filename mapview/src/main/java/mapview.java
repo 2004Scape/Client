@@ -872,7 +872,7 @@ public final class mapview extends GameShell {
 			if (this.showOverview) {
 				this.imageOverview.blitOpaque(this.overviewX, this.overviewY);
 
-				Pix2D.fillRectAlpha(this.overviewX + this.imageOverviewWidth * left / this.sizeX, this.overviewY + this.imageOverviewHeight * top / this.sizeZ, (right - left) * this.imageOverviewWidth / this.sizeX, (bottom - top) * this.imageOverviewHeight / this.sizeZ, 0xff0000, 0x80);
+				Pix2D.fillRectTrans(this.overviewX + this.imageOverviewWidth * left / this.sizeX, this.overviewY + this.imageOverviewHeight * top / this.sizeZ, (right - left) * this.imageOverviewWidth / this.sizeX, (bottom - top) * this.imageOverviewHeight / this.sizeZ, 0xff0000, 0x80);
 				Pix2D.drawRect(this.overviewX + this.imageOverviewWidth * left / this.sizeX, this.overviewY + this.imageOverviewHeight * top / this.sizeZ, 0xff0000, (right - left) * this.imageOverviewWidth / this.sizeX, (bottom - top) * this.imageOverviewHeight / this.sizeZ);
 
 				if (this.flashTimer > 0 && this.flashTimer % 10 < 5) {
@@ -880,7 +880,7 @@ public final class mapview extends GameShell {
 						if (this.activeMapFunctions[i] == this.currentKey) {
 							int x = this.overviewX + this.imageOverviewWidth * this.activeMapFunctionX[i] / this.sizeX;
 							int y = this.overviewY + this.imageOverviewHeight * this.activeMapFunctionZ[i] / this.sizeZ;
-							Pix2D.fillCircle(x, y, 2, 0xffff00, 256);
+							Pix2D.fillCircleTrans(x, y, 2, 0xffff00, 256);
 						}
 					}
 				}
@@ -967,10 +967,10 @@ public final class mapview extends GameShell {
 		@Pc(9) int heightPad = height - 2;
 
 		Pix2D.fillRect(xPad, yPad, fillColor, widthPad, heightPad);
-		Pix2D.drawHorizontalLine(xPad, yPad, colorBorderTL, widthPad);
-		Pix2D.drawVerticalLine(xPad, yPad, colorBorderTL, heightPad);
-		Pix2D.drawHorizontalLine(xPad, yPad + heightPad - 1, colorBorderBR, widthPad);
-		Pix2D.drawVerticalLine(xPad + widthPad - 1, yPad, colorBorderBR, heightPad);
+		Pix2D.hline(xPad, yPad, colorBorderTL, widthPad);
+		Pix2D.vline(xPad, yPad, colorBorderTL, heightPad);
+		Pix2D.hline(xPad, yPad + heightPad - 1, colorBorderBR, widthPad);
+		Pix2D.vline(xPad + widthPad - 1, yPad, colorBorderBR, heightPad);
 
 		this.b12.drawStringCenter(xPad + widthPad / 2 + 1, yPad + heightPad / 2 + 1 + 4, str, 0);
 		this.b12.drawStringCenter(xPad + widthPad / 2, yPad + heightPad / 2 + 4, str, 0xffffff);
@@ -1076,40 +1076,40 @@ public final class mapview extends GameShell {
 					}
 
 					if (wall == 1) {
-						Pix2D.drawVerticalLine(startX, startY, rgb, lengthY);
+						Pix2D.vline(startX, startY, rgb, lengthY);
 					} else if (wall == 2) {
-						Pix2D.drawHorizontalLine(startX, startY, rgb, lengthX);
+						Pix2D.hline(startX, startY, rgb, lengthX);
 					} else if (wall == 3) {
-						Pix2D.drawVerticalLine(edgeX, startY, rgb, lengthY);
+						Pix2D.vline(edgeX, startY, rgb, lengthY);
 					} else if (wall == 4) {
-						Pix2D.drawHorizontalLine(startX, edgeY, rgb, lengthX);
+						Pix2D.hline(startX, edgeY, rgb, lengthX);
 					} else if (wall == 9) {
-						Pix2D.drawVerticalLine(startX, startY, 0xffffff, lengthY);
-						Pix2D.drawHorizontalLine(startX, startY, rgb, lengthX);
+						Pix2D.vline(startX, startY, 0xffffff, lengthY);
+						Pix2D.hline(startX, startY, rgb, lengthX);
 					} else if (wall == 10) {
-						Pix2D.drawVerticalLine(edgeX, startY, 0xffffff, lengthY);
-						Pix2D.drawHorizontalLine(startX, startY, rgb, lengthX);
+						Pix2D.vline(edgeX, startY, 0xffffff, lengthY);
+						Pix2D.hline(startX, startY, rgb, lengthX);
 					} else if (wall == 11) {
-						Pix2D.drawVerticalLine(edgeX, startY, 0xffffff, lengthY);
-						Pix2D.drawHorizontalLine(startX, edgeY, rgb, lengthX);
+						Pix2D.vline(edgeX, startY, 0xffffff, lengthY);
+						Pix2D.hline(startX, edgeY, rgb, lengthX);
 					} else if (wall == 12) {
-						Pix2D.drawVerticalLine(startX, startY, 0xffffff, lengthY);
-						Pix2D.drawHorizontalLine(startX, edgeY, rgb, lengthX);
+						Pix2D.vline(startX, startY, 0xffffff, lengthY);
+						Pix2D.hline(startX, edgeY, rgb, lengthX);
 					} else if (wall == 17) {
-						Pix2D.drawHorizontalLine(startX, startY, rgb, 1);
+						Pix2D.hline(startX, startY, rgb, 1);
 					} else if (wall == 18) {
-						Pix2D.drawHorizontalLine(edgeX, startY, rgb, 1);
+						Pix2D.hline(edgeX, startY, rgb, 1);
 					} else if (wall == 19) {
-						Pix2D.drawHorizontalLine(edgeX, edgeY, rgb, 1);
+						Pix2D.hline(edgeX, edgeY, rgb, 1);
 					} else if (wall == 20) {
-						Pix2D.drawHorizontalLine(startX, edgeY, rgb, 1);
+						Pix2D.hline(startX, edgeY, rgb, 1);
 					} else if (wall == 25) {
 						for (int i = 0; i < lengthY; i++) {
-							Pix2D.drawHorizontalLine(startX + i, edgeY - i, rgb, 1);
+							Pix2D.hline(startX + i, edgeY - i, rgb, 1);
 						}
 					} else if (wall == 26) {
 						for (int i = 0; i < lengthY; i++) {
-							Pix2D.drawHorizontalLine(startX + i, startY + i, rgb, 1);
+							Pix2D.hline(startX + i, startY + i, rgb, 1);
 						}
 					}
 				}
@@ -1197,8 +1197,8 @@ public final class mapview extends GameShell {
 					this.imageMapfunction[this.visibleMapFunctions[i]].draw(this.visibleMapFunctionsX[i] - 7, this.visibleMapFunctionsY[i] - 7);
 
 					if (this.flashTimer % 10 < 5) {
-						Pix2D.fillCircle(this.visibleMapFunctionsX[i], this.visibleMapFunctionsY[i], 15, 0xffff00, 128);
-						Pix2D.fillCircle(this.visibleMapFunctionsX[i], this.visibleMapFunctionsY[i], 7, 0xffffff, 256);
+						Pix2D.fillCircleTrans(this.visibleMapFunctionsX[i], this.visibleMapFunctionsY[i], 15, 0xffff00, 128);
+						Pix2D.fillCircleTrans(this.visibleMapFunctionsX[i], this.visibleMapFunctionsY[i], 7, 0xffffff, 256);
 					}
 				}
 			}

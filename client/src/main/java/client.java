@@ -1795,7 +1795,7 @@ public class client extends GameShell {
 	}
 
 	@OriginalMember(owner = "client!client", name = "a", descriptor = "(Lclient!kb;II)V")
-	private void readNpcUpdates(@OriginalArg(0) Packet buf, @OriginalArg(1) int size) {
+	private void getNpcPosExtended(@OriginalArg(0) Packet buf, @OriginalArg(1) int size) {
 		for (@Pc(1) int i = 0; i < this.entityUpdateCount; i++) {
 			@Pc(8) int id = this.entityUpdateIds[i];
 			@Pc(13) NpcEntity npc = this.npcs[id];
@@ -3967,13 +3967,13 @@ public class client extends GameShell {
 	}
 
 	@OriginalMember(owner = "client!client", name = "a", descriptor = "(Lclient!kb;IZ)V")
-	private void readNpcInfo(@OriginalArg(0) Packet buf, @OriginalArg(1) int size) {
+	private void getNpcPos(@OriginalArg(0) Packet buf, @OriginalArg(1) int size) {
 		this.entityRemovalCount = 0;
 		this.entityUpdateCount = 0;
 
-		this.readNpcs(buf, size);
-		this.readNewNpcs(buf, size);
-		this.readNpcUpdates(buf, size);
+		this.getNpcPosOldVis(buf, size);
+		this.getNpcPosNewVis(buf, size);
+		this.getNpcPosExtended(buf, size);
 
 		for (@Pc(29) int i = 0; i < this.entityRemovalCount; i++) {
 			int index = this.entityRemovalIds[i];
@@ -4072,7 +4072,7 @@ public class client extends GameShell {
 	}
 
 	@OriginalMember(owner = "client!client", name = "a", descriptor = "(ILclient!kb;I)V")
-	private void readPlayers(@OriginalArg(1) Packet buf, @OriginalArg(0) int size) {
+	private void getPlayerPosOldVis(@OriginalArg(1) Packet buf, @OriginalArg(0) int size) {
 		@Pc(6) int count = buf.gBit(8);
 
 		if (count < this.playerCount) {
@@ -4147,17 +4147,17 @@ public class client extends GameShell {
 		@Pc(52) int gripY = (height - gripSize - 32) * scrollY / (scrollHeight - height);
 		Pix2D.fillRect(x, y + gripY + 16, this.SCROLLBAR_GRIP_FOREGROUND, 16, gripSize);
 
-		Pix2D.drawVerticalLine(x, y + gripY + 16, this.SCROLLBAR_GRIP_HIGHLIGHT, gripSize);
-		Pix2D.drawVerticalLine(x + 1, y + gripY + 16, this.SCROLLBAR_GRIP_HIGHLIGHT, gripSize);
+		Pix2D.vline(x, y + gripY + 16, this.SCROLLBAR_GRIP_HIGHLIGHT, gripSize);
+		Pix2D.vline(x + 1, y + gripY + 16, this.SCROLLBAR_GRIP_HIGHLIGHT, gripSize);
 
-		Pix2D.drawHorizontalLine(x, y + gripY + 16, this.SCROLLBAR_GRIP_HIGHLIGHT, 16);
-		Pix2D.drawHorizontalLine(x, y + gripY + 17, this.SCROLLBAR_GRIP_HIGHLIGHT, 16);
+		Pix2D.hline(x, y + gripY + 16, this.SCROLLBAR_GRIP_HIGHLIGHT, 16);
+		Pix2D.hline(x, y + gripY + 17, this.SCROLLBAR_GRIP_HIGHLIGHT, 16);
 
-		Pix2D.drawVerticalLine(x + 15, y + gripY + 16, this.SCROLLBAR_GRIP_LOWLIGHT, gripSize);
-		Pix2D.drawVerticalLine(x + 14, y + gripY + 17, this.SCROLLBAR_GRIP_LOWLIGHT, gripSize - 1);
+		Pix2D.vline(x + 15, y + gripY + 16, this.SCROLLBAR_GRIP_LOWLIGHT, gripSize);
+		Pix2D.vline(x + 14, y + gripY + 17, this.SCROLLBAR_GRIP_LOWLIGHT, gripSize - 1);
 
-		Pix2D.drawHorizontalLine(x, y + gripY + gripSize + 15, this.SCROLLBAR_GRIP_LOWLIGHT, 16);
-		Pix2D.drawHorizontalLine(x + 1, y + gripY + gripSize + 14, this.SCROLLBAR_GRIP_LOWLIGHT, 15);
+		Pix2D.hline(x, y + gripY + gripSize + 15, this.SCROLLBAR_GRIP_LOWLIGHT, 16);
+		Pix2D.hline(x + 1, y + gripY + gripSize + 14, this.SCROLLBAR_GRIP_LOWLIGHT, 15);
 	}
 
 	@OriginalMember(owner = "client!client", name = "g", descriptor = "(B)V")
@@ -4329,7 +4329,7 @@ public class client extends GameShell {
 	}
 
 	@OriginalMember(owner = "client!client", name = "a", descriptor = "(IILclient!kb;)V")
-	private void readNewPlayers(@OriginalArg(1) int size, @OriginalArg(2) Packet buf) {
+	private void getPlayerPosNewVis(@OriginalArg(1) int size, @OriginalArg(2) Packet buf) {
 		@Pc(9) int index;
 		while (buf.bitPos + 10 < size * 8) {
 			index = buf.gBit(11);
@@ -4663,7 +4663,7 @@ public class client extends GameShell {
 	}
 
 	@OriginalMember(owner = "client!client", name = "a", descriptor = "(ZILclient!kb;)V")
-	private void readPlayerUpdates(@OriginalArg(2) Packet buf, @OriginalArg(1) int size) {
+	private void getPlayerPosExtended(@OriginalArg(2) Packet buf, @OriginalArg(1) int size) {
 		for (@Pc(1) int i = 0; i < this.entityUpdateCount; i++) {
 			@Pc(8) int index = this.entityUpdateIds[i];
 			@Pc(13) PlayerEntity player = this.players[index];
@@ -4671,7 +4671,7 @@ public class client extends GameShell {
 			if ((mask & 0x80) == 128) {
 				mask += buf.g1() << 8;
 			}
-			this.readPlayerUpdates(player, index, mask, buf);
+			this.getPlayerPosExtended(player, index, mask, buf);
 		}
 	}
 
@@ -6334,7 +6334,7 @@ public class client extends GameShell {
 	}
 
 	@OriginalMember(owner = "client!client", name = "a", descriptor = "(ZLclient!kb;I)V")
-	private void readNewNpcs(@OriginalArg(1) Packet buf, @OriginalArg(2) int size) {
+	private void getNpcPosNewVis(@OriginalArg(1) Packet buf, @OriginalArg(2) int size) {
 		while (buf.bitPos + 21 < size * 8) {
 			@Pc(16) int index = buf.gBit(13);
 			if (index == 8191) {
@@ -7318,14 +7318,14 @@ public class client extends GameShell {
 		}
 
 		if (crossed) {
-			Pix2D.drawLine(x0, y0, x3, y3, (color & 0xFEFEFE) >> 1);
-			Pix2D.drawLine(x1, y1, x2, y2, (color & 0xFEFEFE) >> 1);
+			Pix2D.line(x0, y0, x3, y3, (color & 0xFEFEFE) >> 1);
+			Pix2D.line(x1, y1, x2, y2, (color & 0xFEFEFE) >> 1);
 		}
 
-		Pix2D.drawLine(x0, y0, x1, y1, color);
-		Pix2D.drawLine(x0, y0, x2, y2, color);
-		Pix2D.drawLine(x1, y1, x3, y3, color);
-		Pix2D.drawLine(x2, y2, x3, y3, color);
+		Pix2D.line(x0, y0, x1, y1, color);
+		Pix2D.line(x0, y0, x2, y2, color);
+		Pix2D.line(x1, y1, x3, y3, color);
+		Pix2D.line(x2, y2, x3, y3, color);
 	}
 
 	private void updateCameraEditor() {
@@ -9058,14 +9058,14 @@ public class client extends GameShell {
 	}
 
 	@OriginalMember(owner = "client!client", name = "b", descriptor = "(Lclient!kb;II)V")
-	private void readPlayerInfo(@OriginalArg(0) Packet buf, @OriginalArg(1) int size) {
+	private void getPlayerPos(@OriginalArg(0) Packet buf, @OriginalArg(1) int size) {
 		this.entityRemovalCount = 0;
 		this.entityUpdateCount = 0;
 
-		this.readLocalPlayer(buf, size);
-		this.readPlayers(buf, size);
-		this.readNewPlayers(size, buf);
-		this.readPlayerUpdates(buf, size);
+		this.getPlayerPosLocal(buf, size);
+		this.getPlayerPosOldVis(buf, size);
+		this.getPlayerPosNewVis(size, buf);
+		this.getPlayerPosExtended(buf, size);
 
 		for (@Pc(29) int i = 0; i < this.entityRemovalCount; i++) {
 			int index = this.entityRemovalIds[i];
@@ -9598,7 +9598,7 @@ public class client extends GameShell {
 	}
 
 	@OriginalMember(owner = "client!client", name = "b", descriptor = "(ILclient!kb;I)V")
-	private void readNpcs(@OriginalArg(1) Packet buf, @OriginalArg(2) int size) {
+	private void getNpcPosOldVis(@OriginalArg(1) Packet buf, @OriginalArg(2) int size) {
 		buf.accessBits();
 
 		@Pc(14) int count = buf.gBit(8);
@@ -9846,7 +9846,7 @@ public class client extends GameShell {
 				if (src != null) {
 					int length = (new Packet(src)).g4();
 					BZip2.read(data, length, src, src.length - 4, 4);
-					world.readLandscape((this.sceneCenterZoneX - 6) * 8, (this.sceneCenterZoneZ - 6) * 8, x, z, data);
+					world.loadGround((this.sceneCenterZoneX - 6) * 8, (this.sceneCenterZoneZ - 6) * 8, x, z, data);
 				} else if (this.sceneCenterZoneZ < 800) {
 					world.clearLandscape(z, x, 64, 64);
 				}
@@ -9861,7 +9861,7 @@ public class client extends GameShell {
 					BZip2.read(data, length, src, src.length - 4, 4);
 					int x = (this.sceneMapIndex[i] >> 8) * 64 - this.sceneBaseTileX;
 					@Pc(259) int z = (this.sceneMapIndex[i] & 0xFF) * 64 - this.sceneBaseTileZ;
-					world.readLocs(this.scene, this.locList, this.levelCollisionMap, data, x, z);
+					world.loadLocations(this.scene, this.locList, this.levelCollisionMap, data, x, z);
 				}
 			}
 
@@ -10548,7 +10548,7 @@ public class client extends GameShell {
 	}
 
 	@OriginalMember(owner = "client!client", name = "b", descriptor = "(IILclient!kb;)V")
-	private void readLocalPlayer(@OriginalArg(2) Packet buf, @OriginalArg(1) int size) {
+	private void getPlayerPosLocal(@OriginalArg(2) Packet buf, @OriginalArg(1) int size) {
 		buf.accessBits();
 
 		@Pc(7) int hasUpdate = buf.gBit(1);
@@ -10680,7 +10680,7 @@ public class client extends GameShell {
 			this.drawScrollbar(463, 0, this.chatScrollHeight - this.chatScrollOffset - 77, this.chatScrollHeight, 77);
 			font.drawString(4, 90, JString.formatName(this.username) + ":", 0);
 			font.drawString(font.stringWidth(this.username + ": ") + 6, 90, this.chatTyped + "*", 255);
-			Pix2D.drawHorizontalLine(0, 77, 0, 479);
+			Pix2D.hline(0, 77, 0, 479);
 		} else {
 			this.drawInterface(Component.instances[this.stickyChatInterfaceId], 0, 0, 0);
 		}
@@ -10839,7 +10839,7 @@ public class client extends GameShell {
 			}
 			if (this.packetType == 1) {
 				// NPC_INFO
-				this.readNpcInfo(this.in, this.packetSize);
+				this.getNpcPos(this.in, this.packetSize);
 				this.packetType = -1;
 				return true;
 			}
@@ -11787,7 +11787,7 @@ public class client extends GameShell {
 			}
 			if (this.packetType == 184) {
 				// PLAYER_INFO
-				this.readPlayerInfo(this.in, this.packetSize);
+				this.getPlayerPos(this.in, this.packetSize);
 				if (this.sceneState == 1) {
 					this.sceneState = 2;
 					World.levelBuilt = this.currentLevel;
@@ -11877,7 +11877,7 @@ public class client extends GameShell {
 	}
 
 	@OriginalMember(owner = "client!client", name = "a", descriptor = "(ZIILclient!kb;Lclient!z;)V")
-	private void readPlayerUpdates(@OriginalArg(4) PlayerEntity player, @OriginalArg(1) int index, @OriginalArg(2) int mask, @OriginalArg(3) Packet buf) {
+	private void getPlayerPosExtended(@OriginalArg(4) PlayerEntity player, @OriginalArg(1) int index, @OriginalArg(2) int mask, @OriginalArg(3) Packet buf) {
 		player.lastMask = mask;
 		player.lastMaskCycle = loopCycle;
 

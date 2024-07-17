@@ -116,8 +116,8 @@ public class World {
 	}
 
 	@OriginalMember(owner = "client!c", name = "a", descriptor = "(II)I")
-	public static int perlin(@OriginalArg(0) int x, @OriginalArg(1) int z) {
-		@Pc(32) int value = perlin(x + 45365, z + 91923, 4) + (perlin(x + 10294, z + 37821, 2) - 128 >> 1) + (perlin(x, z, 1) - 128 >> 2) - 128;
+	public static int perlinNoise(@OriginalArg(0) int x, @OriginalArg(1) int z) {
+		@Pc(32) int value = interpolatedNoise(x + 45365, z + 91923, 4) + (interpolatedNoise(x + 10294, z + 37821, 2) - 128 >> 1) + (interpolatedNoise(x, z, 1) - 128 >> 2) - 128;
 		value = (int) ((double) value * 0.3D) + 35;
 		if (value < 10) {
 			value = 10;
@@ -128,7 +128,7 @@ public class World {
 	}
 
 	@OriginalMember(owner = "client!c", name = "a", descriptor = "(III)I")
-	private static int perlin(@OriginalArg(0) int x, @OriginalArg(1) int z, @OriginalArg(2) int scale) {
+	private static int interpolatedNoise(@OriginalArg(0) int x, @OriginalArg(1) int z, @OriginalArg(2) int scale) {
 		@Pc(3) int intX = x / scale;
 		@Pc(9) int fracX = x & scale - 1;
 		@Pc(13) int intZ = z / scale;
@@ -378,7 +378,7 @@ public class World {
 	}
 
 	@OriginalMember(owner = "client!c", name = "a", descriptor = "([BIIIII)V")
-	public void readLandscape(@OriginalArg(1) int originX, @OriginalArg(5) int originZ, @OriginalArg(4) int xOffset, @OriginalArg(3) int zOffset, @OriginalArg(0) byte[] src) {
+	public void loadGround(@OriginalArg(1) int originX, @OriginalArg(5) int originZ, @OriginalArg(4) int xOffset, @OriginalArg(3) int zOffset, @OriginalArg(0) byte[] src) {
 		@Pc(7) Packet buf = new Packet(src);
 
 		for (@Pc(20) int level = 0; level < 4; level++) {
@@ -394,7 +394,7 @@ public class World {
 							opcode = buf.g1();
 							if (opcode == 0) {
 								if (level == 0) {
-									this.levelHeightmap[0][stx][stz] = -perlin(stx + originX + 932731, stz + originZ + 556238) * 8;
+									this.levelHeightmap[0][stx][stz] = -perlinNoise(stx + originX + 932731, stz + originZ + 556238) * 8;
 								} else {
 									this.levelHeightmap[level][stx][stz] = this.levelHeightmap[level - 1][stx][stz] - 240;
 								}
@@ -447,7 +447,7 @@ public class World {
 	}
 
 	@OriginalMember(owner = "client!c", name = "a", descriptor = "([BLclient!r;[Lclient!ec;Lclient!ob;ZII)V")
-	public void readLocs(@OriginalArg(1) World3D scene, @OriginalArg(3) LinkList locs, @OriginalArg(2) CollisionMap[] collision, @OriginalArg(0) byte[] src, @OriginalArg(6) int xOffset, @OriginalArg(5) int zOffset) {
+	public void loadLocations(@OriginalArg(1) World3D scene, @OriginalArg(3) LinkList locs, @OriginalArg(2) CollisionMap[] collision, @OriginalArg(0) byte[] src, @OriginalArg(6) int xOffset, @OriginalArg(5) int zOffset) {
 		@Pc(7) Packet buf = new Packet(src);
 		@Pc(19) int locId = -1;
 
