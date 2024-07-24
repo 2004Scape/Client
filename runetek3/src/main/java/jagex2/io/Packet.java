@@ -136,7 +136,7 @@ public class Packet extends DoublyLinkable {
 
 	@OriginalMember(owner = "client!kb", name = "a", descriptor = "(BI)V")
 	public void p1isaac(@OriginalArg(1) int opcode) {
-		this.data[this.pos++] = (byte) (opcode + this.random.nextInt());
+		this.data[this.pos++] = (byte) (opcode + this.random.takeNextValue());
 	}
 
 	@OriginalMember(owner = "client!kb", name = "a", descriptor = "(I)V")

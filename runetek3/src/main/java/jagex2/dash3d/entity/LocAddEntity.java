@@ -1,11 +1,11 @@
-package jagex2.dash3d.type;
+package jagex2.dash3d.entity;
 
 import jagex2.datastruct.Linkable;
 import org.openrs2.deob.annotation.OriginalClass;
 import org.openrs2.deob.annotation.OriginalMember;
 
 @OriginalClass("client!lb")
-public class LocTemporary extends Linkable {
+public class LocAddEntity extends Linkable {
 
 	@OriginalMember(owner = "client!lb", name = "e", descriptor = "I")
 	public int plane;

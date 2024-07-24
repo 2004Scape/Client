@@ -1,4 +1,4 @@
-package jagex2.dash3d.type;
+package jagex2.dash3d.entity;
 
 import jagex2.datastruct.Linkable;
 import org.openrs2.deob.annotation.OriginalArg;
@@ -6,7 +6,7 @@ import org.openrs2.deob.annotation.OriginalClass;
 import org.openrs2.deob.annotation.OriginalMember;
 
 @OriginalClass("client!mb")
-public class LocSpawned extends Linkable {
+public class LocMergeEntity extends Linkable {
 
 	@OriginalMember(owner = "client!mb", name = "f", descriptor = "I")
 	public final int plane;
@@ -33,7 +33,7 @@ public class LocSpawned extends Linkable {
 	public final int lastCycle;
 
 	@OriginalMember(owner = "client!mb", name = "<init>", descriptor = "(IIIIIIIII)V")
-	public LocSpawned(@OriginalArg(0) int plane, @OriginalArg(8) int layer, @OriginalArg(7) int x, @OriginalArg(2) int z, @OriginalArg(6) int locIndex, @OriginalArg(1) int angle, @OriginalArg(5) int shape, @OriginalArg(3) int lastCycle) {
+	public LocMergeEntity(@OriginalArg(0) int plane, @OriginalArg(8) int layer, @OriginalArg(7) int x, @OriginalArg(2) int z, @OriginalArg(6) int locIndex, @OriginalArg(1) int angle, @OriginalArg(5) int shape, @OriginalArg(3) int lastCycle) {
 		this.plane = plane;
 		this.layer = layer;
 		this.x = x;

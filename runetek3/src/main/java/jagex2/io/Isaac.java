@@ -36,16 +36,16 @@ public class Isaac {
 	}
 
 	@OriginalMember(owner = "client!tb", name = "a", descriptor = "()I")
-	public int nextInt() {
+	public int takeNextValue() {
 		if (this.count-- == 0) {
-			this.isaac();
+			this.generate();
 			this.count = 255;
 		}
 		return this.rsl[this.count];
 	}
 
 	@OriginalMember(owner = "client!tb", name = "b", descriptor = "()V")
-	private void isaac() {
+	private void generate() {
 		this.b += ++this.c;
 
 		for (@Pc(15) int i = 0; i < 256; i++) {
@@ -151,7 +151,7 @@ public class Isaac {
 			this.mem[i + 7] = h;
 		}
 
-		this.isaac();
+		this.generate();
 		this.count = 256;
 	}
 }

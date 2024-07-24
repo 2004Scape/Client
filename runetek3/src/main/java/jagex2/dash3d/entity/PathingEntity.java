@@ -171,12 +171,12 @@ public class PathingEntity extends Entity {
 	public int lastFaceZ = -1;
 
 	@OriginalMember(owner = "client!x", name = "a", descriptor = "(ZZII)V")
-	public final void move(@OriginalArg(1) boolean teleport, @OriginalArg(2) int x, @OriginalArg(3) int z) {
+	public final void teleport(@OriginalArg(1) boolean jump, @OriginalArg(2) int x, @OriginalArg(3) int z) {
 		if (this.primarySeqId != -1 && SeqType.instances[this.primarySeqId].priority <= 1) {
 			this.primarySeqId = -1;
 		}
 
-		if (!teleport) {
+		if (!jump) {
 			@Pc(22) int dx = x - this.pathTileX[0];
 			@Pc(29) int dz = z - this.pathTileZ[0];
 
@@ -207,7 +207,7 @@ public class PathingEntity extends Entity {
 	}
 
 	@OriginalMember(owner = "client!x", name = "a", descriptor = "(ZIB)V")
-	public final void step(@OriginalArg(0) boolean running, @OriginalArg(1) int direction) {
+	public final void moveAlongRoute(@OriginalArg(0) boolean running, @OriginalArg(1) int direction) {
 		@Pc(6) int nextX = this.pathTileX[0];
 		@Pc(11) int nextZ = this.pathTileZ[0];
 

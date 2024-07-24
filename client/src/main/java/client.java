@@ -6,8 +6,6 @@ import jagex2.dash3d.CollisionMap;
 import jagex2.dash3d.World;
 import jagex2.dash3d.World3D;
 import jagex2.dash3d.entity.*;
-import jagex2.dash3d.type.LocSpawned;
-import jagex2.dash3d.type.LocTemporary;
 import jagex2.dash3d.type.Ground;
 import jagex2.datastruct.JString;
 import jagex2.datastruct.LinkList;
@@ -118,7 +116,7 @@ public class client extends GameShell {
 	private int minimapOffsetCycle;
 
 	@OriginalMember(owner = "client!client", name = "fb", descriptor = "Z")
-	private boolean redrawFrame = false;
+	private boolean redrawBackground = false;
 
 	@OriginalMember(owner = "client!client", name = "gb", descriptor = "Lclient!ob;")
 	private LinkList locList = new LinkList();
@@ -157,7 +155,7 @@ public class client extends GameShell {
 	private String socialInput = "";
 
 	@OriginalMember(owner = "client!client", name = "vb", descriptor = "Lclient!ob;")
-	private LinkList temporaryLocs = new LinkList();
+	private LinkList mergedLocations = new LinkList();
 
 	@OriginalMember(owner = "client!client", name = "wb", descriptor = "[J")
 	private final long[] ignoreName37 = new long[100];
@@ -1918,8 +1916,8 @@ public class client extends GameShell {
 				id = buf.g2();
 			}
 			if (x >= 0 && z >= 0 && x < 104 && z < 104) {
-				@Pc(69) LocTemporary loc = null;
-				for (@Pc(74) LocTemporary next = (LocTemporary) this.spawnedLocations.head(); next != null; next = (LocTemporary) this.spawnedLocations.next()) {
+				@Pc(69) LocAddEntity loc = null;
+				for (@Pc(74) LocAddEntity next = (LocAddEntity) this.spawnedLocations.head(); next != null; next = (LocAddEntity) this.spawnedLocations.next()) {
 					if (next.plane == this.currentLevel && next.x == x && next.z == z && next.layer == layer) {
 						loc = next;
 						break;
@@ -1948,7 +1946,7 @@ public class client extends GameShell {
 						otherShape = otherInfo & 0x1F;
 						otherAngle = otherInfo >> 6;
 					}
-					loc = new LocTemporary();
+					loc = new LocAddEntity();
 					loc.plane = this.currentLevel;
 					loc.layer = layer;
 					loc.x = x;
@@ -2090,11 +2088,11 @@ public class client extends GameShell {
 			}
 
 			if (player != null) {
-				@Pc(946) LocSpawned loc1 = new LocSpawned(this.currentLevel, layer, x, z, -1, angle, shape, start + loopCycle);
-				this.temporaryLocs.addTail(loc1);
+				@Pc(946) LocMergeEntity loc1 = new LocMergeEntity(this.currentLevel, layer, x, z, -1, angle, shape, start + loopCycle);
+				this.mergedLocations.addTail(loc1);
 
-				@Pc(966) LocSpawned loc2 = new LocSpawned(this.currentLevel, layer, x, z, id, angle, shape, end + loopCycle);
-				this.temporaryLocs.addTail(loc2);
+				@Pc(966) LocMergeEntity loc2 = new LocMergeEntity(this.currentLevel, layer, x, z, id, angle, shape, end + loopCycle);
+				this.mergedLocations.addTail(loc2);
 
 				@Pc(980) int y0 = this.levelHeightmap[this.currentLevel][x][z];
 				@Pc(992) int y1 = this.levelHeightmap[this.currentLevel][x + 1][z];
@@ -3695,9 +3693,9 @@ public class client extends GameShell {
 	}
 
 	@OriginalMember(owner = "client!client", name = "m", descriptor = "(I)V")
-	private void updateTemporaryLocs() {
+	private void updateMergeLocs() {
 		if (this.sceneState == 2) {
-			for (@Pc(12) LocSpawned loc = (LocSpawned) this.temporaryLocs.head(); loc != null; loc = (LocSpawned) this.temporaryLocs.next()) {
+			for (@Pc(12) LocMergeEntity loc = (LocMergeEntity) this.mergedLocations.head(); loc != null; loc = (LocMergeEntity) this.mergedLocations.next()) {
 				if (loopCycle >= loc.lastCycle) {
 					this.addLoc(loc.plane, loc.x, loc.z, loc.locIndex, loc.angle, loc.shape, loc.layer);
 					loc.unlink();
@@ -4088,7 +4086,7 @@ public class client extends GameShell {
 					player.cycle = loopCycle;
 
 					int walkDir = buf.gBit(3);
-					player.step(false, walkDir);
+					player.moveAlongRoute(false, walkDir);
 
 					int extendedInfo = buf.gBit(1);
 					if (extendedInfo == 1) {
@@ -4099,9 +4097,9 @@ public class client extends GameShell {
 					player.cycle = loopCycle;
 
 					int walkDir = buf.gBit(3);
-					player.step(true, walkDir);
+					player.moveAlongRoute(true, walkDir);
 					int runDir = buf.gBit(3);
-					player.step(true, runDir);
+					player.moveAlongRoute(true, runDir);
 
 					@Pc(225) int extendedInfo = buf.gBit(1);
 					if (extendedInfo == 1) {
@@ -4268,8 +4266,8 @@ public class client extends GameShell {
 		}
 
 		this.imageTitle4.draw(super.graphics, 214, 186);
-		if (this.redrawFrame) {
-			this.redrawFrame = false;
+		if (this.redrawBackground) {
+			this.redrawBackground = false;
 			this.imageTitle2.draw(super.graphics, 128, 0);
 			this.imageTitle3.draw(super.graphics, 214, 386);
 			this.imageTitle5.draw(super.graphics, 0, 265);
@@ -4306,7 +4304,7 @@ public class client extends GameShell {
 		this.areaBackbase1 = new PixMap(this.getBaseComponent(), 501, 61);
 		this.areaBackbase2 = new PixMap(this.getBaseComponent(), 288, 40);
 		this.areaBackhmid1 = new PixMap(this.getBaseComponent(), 269, 66);
-		this.redrawFrame = true;
+		this.redrawBackground = true;
 	}
 
 	@OriginalMember(owner = "client!client", name = "a", descriptor = "(IILclient!kb;)V")
@@ -4337,7 +4335,7 @@ public class client extends GameShell {
 				dz -= 32;
 			}
 			@Pc(99) int jump = buf.gBit(1);
-			player.move(jump == 1, this.localPlayer.pathTileX[0] + dx, this.localPlayer.pathTileZ[0] + dz);
+			player.teleport(jump == 1, this.localPlayer.pathTileX[0] + dx, this.localPlayer.pathTileZ[0] + dz);
 
 			@Pc(127) int extendedInfo = buf.gBit(1);
 			if (extendedInfo == 1) {
@@ -4676,7 +4674,7 @@ public class client extends GameShell {
 			}
 
 			ObjType.iconCache.clear();
-			this.redrawFrame = true;
+			this.redrawBackground = true;
 		} else if (clientcode == 3) {
 			@Pc(54) boolean lastMidiActive = this.midiActive;
 			if (value == 0) {
@@ -5092,8 +5090,8 @@ public class client extends GameShell {
 
 	@OriginalMember(owner = "client!client", name = "r", descriptor = "(I)V")
 	private void drawGame() {
-		if (this.redrawFrame) {
-			this.redrawFrame = false;
+		if (this.redrawBackground) {
+			this.redrawBackground = false;
 			this.areaBackleft1.draw(super.graphics, 0, 11);
 			this.areaBackleft2.draw(super.graphics, 0, 375);
 			this.areaBackright1.draw(super.graphics, 729, 5);
@@ -6342,7 +6340,7 @@ public class client extends GameShell {
 			if (dz > 15) {
 				dz -= 32;
 			}
-			npc.move(false, this.localPlayer.pathTileX[0] + dx, this.localPlayer.pathTileZ[0] + dz);
+			npc.teleport(false, this.localPlayer.pathTileX[0] + dx, this.localPlayer.pathTileZ[0] + dz);
 			@Pc(128) int extendedInfo = buf.gBit(1);
 			if (extendedInfo == 1) {
 				this.entityUpdateIds[this.entityUpdateCount++] = index;
@@ -7236,7 +7234,7 @@ public class client extends GameShell {
 	@OriginalMember(owner = "client!client", name = "c", descriptor = "(I)V")
 	@Override
 	protected void refresh() {
-		this.redrawFrame = true;
+		this.redrawBackground = true;
 	}
 
 	@OriginalMember(owner = "client!client", name = "a", descriptor = "(IILclient!hb;I)V")
@@ -7503,7 +7501,7 @@ public class client extends GameShell {
 			this.loadTitleImages();
 		}
 
-		this.redrawFrame = true;
+		this.redrawBackground = true;
 	}
 
 	@OriginalMember(owner = "client!client", name = "z", descriptor = "(I)V")
@@ -7704,7 +7702,7 @@ public class client extends GameShell {
 				this.localPlayer = this.players[this.LOCAL_PLAYER_INDEX] = new PlayerEntity();
 				this.projectiles.clear();
 				this.spotanims.clear();
-				this.temporaryLocs.clear();
+				this.mergedLocations.clear();
 				for (@Pc(460) int level = 0; level < 4; level++) {
 					for (int x = 0; x < 104; x++) {
 						for (@Pc(468) int z = 0; z < 104; z++) {
@@ -8011,7 +8009,7 @@ public class client extends GameShell {
 		this.npcIds = null;
 		this.levelObjStacks = null;
 		this.spawnedLocations = null;
-		this.temporaryLocs = null;
+		this.mergedLocations = null;
 		this.projectiles = null;
 		this.spotanims = null;
 		this.locList = null;
@@ -8225,7 +8223,7 @@ public class client extends GameShell {
 			this.updatePlayers();
 			this.updateNpcs();
 			this.updateEntityChats();
-			this.updateTemporaryLocs();
+			this.updateMergeLocs();
 
 			if ((super.actionKey[1] == 1 || super.actionKey[2] == 1 || super.actionKey[3] == 1 || super.actionKey[4] == 1) && this.cameraMovedWrite++ > 5) {
 				this.cameraMovedWrite = 0;
@@ -9327,7 +9325,7 @@ public class client extends GameShell {
 					npc.cycle = loopCycle;
 
 					int walkDir = buf.gBit(3);
-					npc.step(false, walkDir);
+					npc.moveAlongRoute(false, walkDir);
 
 					int extendedInfo = buf.gBit(1);
 					if (extendedInfo == 1) {
@@ -9338,9 +9336,9 @@ public class client extends GameShell {
 					npc.cycle = loopCycle;
 
 					int walkDir = buf.gBit(3);
-					npc.step(true, walkDir);
+					npc.moveAlongRoute(true, walkDir);
 					int runDir = buf.gBit(3);
-					npc.step(true, runDir);
+					npc.moveAlongRoute(true, runDir);
 
 					@Pc(224) int extendedInfo = buf.gBit(1);
 					if (extendedInfo == 1) {
@@ -9493,7 +9491,7 @@ public class client extends GameShell {
 	private void buildScene() {
 		try {
 			this.minimapLevel = -1;
-			this.temporaryLocs.clear();
+			this.mergedLocations.clear();
 			this.locList.clear();
 			this.spotanims.clear();
 			this.projectiles.clear();
@@ -9580,7 +9578,7 @@ public class client extends GameShell {
 				}
 			}
 
-			for (@Pc(361) LocTemporary loc = (LocTemporary) this.spawnedLocations.head(); loc != null; loc = (LocTemporary) this.spawnedLocations.next()) {
+			for (@Pc(361) LocAddEntity loc = (LocAddEntity) this.spawnedLocations.head(); loc != null; loc = (LocAddEntity) this.spawnedLocations.next()) {
 				this.addLoc(loc.plane, loc.x, loc.z, loc.locIndex, loc.angle, loc.shape, loc.layer);
 			}
 		} catch (@Pc(390) Exception ignored) {
@@ -10252,7 +10250,7 @@ public class client extends GameShell {
 				this.entityUpdateIds[this.entityUpdateCount++] = this.LOCAL_PLAYER_INDEX;
 			} else if (op == 1) {
 				int walkDir = buf.gBit(3);
-				this.localPlayer.step(false, walkDir);
+				this.localPlayer.moveAlongRoute(false, walkDir);
 
 				int extendedInfo = buf.gBit(1);
 				if (extendedInfo == 1) {
@@ -10260,9 +10258,9 @@ public class client extends GameShell {
 				}
 			} else if (op == 2) {
 				int walkDir = buf.gBit(3);
-				this.localPlayer.step(true, walkDir);
+				this.localPlayer.moveAlongRoute(true, walkDir);
 				int runDir = buf.gBit(3);
-				this.localPlayer.step(true, runDir);
+				this.localPlayer.moveAlongRoute(true, runDir);
 
 				int extendedInfo = buf.gBit(1);
 				if (extendedInfo == 1) {
@@ -10277,7 +10275,7 @@ public class client extends GameShell {
 				int localX = buf.gBit(7);
 				int localZ = buf.gBit(7);
 				int jump = buf.gBit(1);
-				this.localPlayer.move(jump == 1, localX, localZ);
+				this.localPlayer.teleport(jump == 1, localX, localZ);
 
 				@Pc(158) int extendedInfo = buf.gBit(1);
 				if (extendedInfo == 1) {
@@ -10401,7 +10399,7 @@ public class client extends GameShell {
 				this.stream.read(this.in.data, 0, 1);
 				this.packetType = this.in.data[0] & 0xFF;
 				if (this.randomIn != null) {
-					this.packetType = (this.packetType - this.randomIn.nextInt()) & 0xFF;
+					this.packetType = (this.packetType - this.randomIn.takeNextValue()) & 0xFF;
 				}
 				this.packetSize = Protocol.SERVERPROT_SIZES[this.packetType];
 				available--;
@@ -10671,7 +10669,7 @@ public class client extends GameShell {
 						}
 					}
 				}
-				for (@Pc(1066) LocTemporary loc = (LocTemporary) this.spawnedLocations.head(); loc != null; loc = (LocTemporary) this.spawnedLocations.next()) {
+				for (@Pc(1066) LocAddEntity loc = (LocAddEntity) this.spawnedLocations.head(); loc != null; loc = (LocAddEntity) this.spawnedLocations.next()) {
 					loc.x -= dx;
 					loc.z -= dz;
 					if (loc.x < 0 || loc.z < 0 || loc.x >= 104 || loc.z >= 104) {
@@ -11112,7 +11110,7 @@ public class client extends GameShell {
 						}
 					}
 				}
-				for (@Pc(2487) LocTemporary loc = (LocTemporary) this.spawnedLocations.head(); loc != null; loc = (LocTemporary) this.spawnedLocations.next()) {
+				for (@Pc(2487) LocAddEntity loc = (LocAddEntity) this.spawnedLocations.head(); loc != null; loc = (LocAddEntity) this.spawnedLocations.next()) {
 					if (loc.x >= this.baseX && loc.x < this.baseX + 8 && loc.z >= this.baseZ && loc.z < this.baseZ + 8 && loc.plane == this.currentLevel) {
 						this.addLoc(loc.plane, loc.x, loc.z, loc.lastLocIndex, loc.lastAngle, loc.lastShape, loc.layer);
 						loc.unlink();
@@ -11708,8 +11706,8 @@ public class client extends GameShell {
 			Pix2D.fillRect(x / 2 - 150 + progress * 3, midY + 2, 0, 300 - progress * 3, 30);
 			this.fontBold12.drawStringCenter(x / 2, y / 2 + 5 - offsetY, message, 16777215);
 			this.imageTitle4.draw(super.graphics, 214, 186);
-			if (this.redrawFrame) {
-				this.redrawFrame = false;
+			if (this.redrawBackground) {
+				this.redrawBackground = false;
 				if (!this.flameActive) {
 					this.imageTitle0.draw(super.graphics, 0, 0);
 					this.imageTitle1.draw(super.graphics, 661, 0);
