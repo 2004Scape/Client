@@ -17,6 +17,11 @@ tasks.register('sig', JavaExec) {
     args = ['client/build/libs/client.jar']
 }
 
+tasks.register('mapSig', JavaExec) {
+    classpath = sourceSets.main.runtimeClasspath
+    mainClass = 'lostcity.tools.MapviewSig'
+}
+
 tasks.register('removeAnnotations', JavaExec) {
     classpath = sourceSets.main.runtimeClasspath
     mainClass = 'lostcity.tools.RemoveAnnotations'

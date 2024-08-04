@@ -6,3 +6,9 @@ build/
 
 loader/src/main/java/sig.java
 loader/src/main/java/sign/signlink.java
+
+mapview/src/main/java/sig.java
+
+/worldmap.jag
+/*.png
+/*.raw

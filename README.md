@@ -35,3 +35,9 @@ Thanks to these individuals' projects for shedding light on some things - this w
 ## Running
 
 Because there are multiple entry points, instead of `gradle run` you have to execute `gradle client:run` or `gradle mapview:run` else it will launch both sequentially.
+
+### Mapview Applet
+
+1. Copy worldmap.jag to the root folder.
+2. Run `gradle mapSig --args="worldmap.jag"`
+3. Run `gradle mapview:run`

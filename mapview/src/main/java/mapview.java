@@ -17,9 +17,16 @@ import java.security.MessageDigest;
 @OriginalClass("mapview!mapview")
 public final class mapview extends GameShell {
 
-	// 2005 mapview applet features
 	private static final boolean shouldDrawBorders = false;
 	private static final boolean shouldDrawLabels = true;
+
+    private static final boolean showMultiZones = false;
+    private static final boolean showFreeZones = false;
+
+	private boolean[][] objTiles;
+	private boolean[][] npcTiles;
+	private boolean[][] multiTiles;
+	private boolean[][] freeTiles;
 
 	// overworld
 	private final short startX = 3200;
@@ -71,10 +78,6 @@ public final class mapview extends GameShell {
 
 	@OriginalMember(owner = "mapview!mapview", name = "U", descriptor = "[[B")
 	private byte[][] locMapscenes;
-
-	private boolean[][] objTiles;
-
-	private boolean[][] npcTiles;
 
 	@OriginalMember(owner = "mapview!mapview", name = "X", descriptor = "Lmapview!j;")
 	private PixFont b12;
@@ -312,6 +315,20 @@ public final class mapview extends GameShell {
 		this.npcTiles = new boolean[this.sizeX][this.sizeZ];
 		this.readNpcData(npcData, this.npcTiles);
 
+        try {
+            byte[] multiData = worldmap.read("multi.dat", null);
+            this.multiTiles = new boolean[this.sizeX][this.sizeZ];
+            this.readMultiData(multiData, this.multiTiles);
+        } catch (Exception ex) {
+        }
+
+        try {
+            byte[] freeData = worldmap.read("free.dat", null);
+            this.freeTiles = new boolean[this.sizeX][this.sizeZ];
+            this.readFreeData(freeData, this.freeTiles);
+        } catch (Exception ex) {
+        }
+
 		try {
 			for (int i = 0; i < 50; i++) {
 				this.imageMapscene[i] = new Pix8(worldmap, "mapscene", i);
@@ -437,6 +454,48 @@ public final class mapview extends GameShell {
 
 					for (int z = -64; z < 0; z++) {
 						npc[zIndex--] = data[pos++] == 1;
+					}
+				}
+			} else {
+				pos += 4096;
+			}
+		}
+	}
+
+	private void readMultiData(byte[] data, boolean[][] multimap) {
+		int pos = 0;
+		while (pos < data.length) {
+			int mx = (data[pos++] & 0xFF) * 64 - this.originX;
+			int mz = (data[pos++] & 0xFF) * 64 - this.originZ;
+
+			if (mx > 0 && mz > 0 && mx + 64 < this.sizeX && mz + 64 < this.sizeZ) {
+				for (int x = 0; x < 64; x++) {
+					boolean[] map = multimap[x + mx];
+					int zIndex = this.sizeZ - mz - 1;
+
+					for (int z = -64; z < 0; z++) {
+						map[zIndex--] = data[pos++] == 1;
+					}
+				}
+			} else {
+				pos += 4096;
+			}
+		}
+	}
+
+	private void readFreeData(byte[] data, boolean[][] freemap) {
+		int pos = 0;
+		while (pos < data.length) {
+			int mx = (data[pos++] & 0xFF) * 64 - this.originX;
+			int mz = (data[pos++] & 0xFF) * 64 - this.originZ;
+
+			if (mx > 0 && mz > 0 && mx + 64 < this.sizeX && mz + 64 < this.sizeZ) {
+				for (int x = 0; x < 64; x++) {
+					boolean[] map = freemap[x + mx];
+					int zIndex = this.sizeZ - mz - 1;
+
+					for (int z = -64; z < 0; z++) {
+						map[zIndex--] = data[pos++] == 1;
 					}
 				}
 			} else {
@@ -614,6 +673,8 @@ public final class mapview extends GameShell {
 			this.locMapscenes = null;
 			this.objTiles = null;
 			this.npcTiles = null;
+			this.multiTiles = null;
+            this.freeTiles = null;
 			this.imageMapscene = null;
 			this.imageMapfunction = null;
 			this.imageMapdot0 = null;
@@ -1186,6 +1247,68 @@ public final class mapview extends GameShell {
 				}
 			}
 		}
+
+        if (showMultiZones) {
+            for (int x = 0; x < visibleX; x++) {
+                int startX = widthRatio * x >> 16;
+                int endX = widthRatio * (x + 1) >> 16;
+                int lengthX = endX - startX;
+                if (lengthX <= 0) {
+                    continue;
+                }
+
+                startX += widthOffset;
+                endX += widthOffset;
+
+                boolean[] multi = this.multiTiles[x + left];
+                for (int y = 0; y < visibleY; y++) {
+                    int startY = heightRatio * y >> 16;
+                    int endY = heightRatio * (y + 1) >> 16;
+                    int lengthY = endY - startY;
+                    if (lengthY <= 0) {
+                        continue;
+                    }
+
+                    startY += heightOffset;
+                    endY += heightOffset;
+
+                    if (multi[y + top]) {
+                        Pix2D.fillRectTrans(startX, startY, lengthX, lengthY, 0xff0000, 96);
+                    }
+                }
+            }
+        }
+
+        if (showFreeZones) {
+            for (int x = 0; x < visibleX; x++) {
+                int startX = widthRatio * x >> 16;
+                int endX = widthRatio * (x + 1) >> 16;
+                int lengthX = endX - startX;
+                if (lengthX <= 0) {
+                    continue;
+                }
+
+                startX += widthOffset;
+                endX += widthOffset;
+
+                boolean[] free = this.freeTiles[x + left];
+                for (int y = 0; y < visibleY; y++) {
+                    int startY = heightRatio * y >> 16;
+                    int endY = heightRatio * (y + 1) >> 16;
+                    int lengthY = endY - startY;
+                    if (lengthY <= 0) {
+                        continue;
+                    }
+
+                    startY += heightOffset;
+                    endY += heightOffset;
+
+                    if (free[y + top]) {
+                        Pix2D.fillRectTrans(startX, startY, lengthX, lengthY, 0x00ff00, 96);
+                    }
+                }
+            }
+        }
 
 		for (int i = 0; i < visibleMapFunctionCount; i++) {
 			this.imageMapfunction[this.visibleMapFunctions[i]].draw(this.visibleMapFunctionsX[i] - 7, this.visibleMapFunctionsY[i] - 7);
