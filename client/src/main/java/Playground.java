@@ -74,7 +74,9 @@ public class Playground extends GameShell {
     int eyeYaw = 0;
 
     int modifier = 2;
-    int model = 0;
+
+    Model model = null;
+    int modelId = 0;
     int modelX = 0;
     int modelY = 0;
     int modelZ = 420;
@@ -155,6 +157,9 @@ public class Playground extends GameShell {
 
             this.drawArea.bind();
             Pix3D.init2D();
+
+            this.model = new Model(this.modelId);
+            this.model.calculateNormals(64, 850, -30, -50, -30, true);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -169,9 +174,7 @@ public class Playground extends GameShell {
         Pix2D.clear();
         Pix2D.fillRect(0, 0, 0x555555, this.screenWidth, this.screenHeight);
 
-        Model model = new Model(this.model);
-        model.calculateNormals(64, 850, -30, -50, -30, true);
-        model.draw(this.modelYaw, Pix3D.sinTable[this.eyePitch], Pix3D.cosTable[this.eyePitch], Pix3D.sinTable[this.eyeYaw], Pix3D.cosTable[this.eyeYaw], this.modelX - this.eyeX, this.modelY - this.eyeY, this.modelZ - this.eyeZ, 0);
+        this.model.draw(this.modelYaw, Pix3D.sinTable[this.eyePitch], Pix3D.cosTable[this.eyePitch], Pix3D.sinTable[this.eyeYaw], Pix3D.cosTable[this.eyeYaw], this.modelX - this.eyeX, this.modelY - this.eyeY, this.modelZ - this.eyeZ, 0);
 
         this.fontBold12.drawStringRight(this.screenWidth, this.fontBold12.height, "FPS: " + super.fps, 0xFFFF00, true);
 
