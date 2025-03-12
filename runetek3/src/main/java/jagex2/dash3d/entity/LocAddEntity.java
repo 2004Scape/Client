@@ -7,6 +7,17 @@ import org.openrs2.deob.annotation.OriginalMember;
 @OriginalClass("client!lb")
 public class LocAddEntity extends Linkable {
 
+	public int duration = -1;
+
+	@OriginalMember(owner = "client!lb", name = "i", descriptor = "I")
+	public int locIndex;
+
+	@OriginalMember(owner = "client!lb", name = "j", descriptor = "I")
+	public int angle;
+
+	@OriginalMember(owner = "client!lb", name = "k", descriptor = "I")
+	public int shape;
+
 	@OriginalMember(owner = "client!lb", name = "e", descriptor = "I")
 	public int plane;
 
@@ -19,15 +30,6 @@ public class LocAddEntity extends Linkable {
 	@OriginalMember(owner = "client!lb", name = "h", descriptor = "I")
 	public int z;
 
-	@OriginalMember(owner = "client!lb", name = "i", descriptor = "I")
-	public int locIndex;
-
-	@OriginalMember(owner = "client!lb", name = "j", descriptor = "I")
-	public int angle;
-
-	@OriginalMember(owner = "client!lb", name = "k", descriptor = "I")
-	public int shape;
-
 	@OriginalMember(owner = "client!lb", name = "l", descriptor = "I")
 	public int lastLocIndex;
 
@@ -36,4 +38,7 @@ public class LocAddEntity extends Linkable {
 
 	@OriginalMember(owner = "client!lb", name = "n", descriptor = "I")
 	public int lastShape;
+
+	public int delay;
+
 }

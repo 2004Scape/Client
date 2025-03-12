@@ -154,9 +154,6 @@ public class client extends GameShell {
 	@OriginalMember(owner = "client!client", name = "tb", descriptor = "Ljava/lang/String;")
 	private String socialInput = "";
 
-	@OriginalMember(owner = "client!client", name = "vb", descriptor = "Lclient!ob;")
-	private LinkList mergedLocations = new LinkList();
-
 	@OriginalMember(owner = "client!client", name = "wb", descriptor = "[J")
 	private final long[] ignoreName37 = new long[100];
 
@@ -165,6 +162,8 @@ public class client extends GameShell {
 
 	@OriginalMember(owner = "client!client", name = "yb", descriptor = "[[B")
 	private byte[][] sceneMapLandData;
+
+    private boolean[] sceneMapLandReady;
 
 	@OriginalMember(owner = "client!client", name = "Ab", descriptor = "I")
 	public static int oplogic1;
@@ -787,6 +786,8 @@ public class client extends GameShell {
 	@OriginalMember(owner = "client!client", name = "Vf", descriptor = "[[B")
 	private byte[][] sceneMapLocData;
 
+    private boolean[] sceneMapLocReady;
+
 	@OriginalMember(owner = "client!client", name = "Wf", descriptor = "I")
 	private int chatInterfaceId = -1;
 
@@ -1221,6 +1222,8 @@ public class client extends GameShell {
 
 	@OriginalMember(owner = "client!client", name = "Yi", descriptor = "[I")
 	private final int[] cameraModifierWobbleSpeed = new int[5];
+
+    private boolean awaitingSync = false;
 
 	static {
 		@Pc(6) int acc = 0;
@@ -1903,65 +1906,30 @@ public class client extends GameShell {
 		int x = this.baseX + (pos >> 4 & 0x7);
 		int z = this.baseZ + (pos & 0x7);
 
-		if (opcode == 59 || opcode == 76) {
-			// LOC_ADD_CHANGE || LOC_DEL
+		if (opcode == 59) {
+			// LOC_ADD_CHANGE
 			int info = buf.g1();
+			int id = buf.g2();
+
 			int shape = info >> 2;
 			int angle = info & 0x3;
 			int layer = this.LOC_SHAPE_TO_LAYER[shape];
-			int id;
-			if (opcode == 76) {
-				id = -1;
-			} else {
-				id = buf.g2();
-			}
+
 			if (x >= 0 && z >= 0 && x < 104 && z < 104) {
-				@Pc(69) LocAddEntity loc = null;
-				for (@Pc(74) LocAddEntity next = (LocAddEntity) this.spawnedLocations.head(); next != null; next = (LocAddEntity) this.spawnedLocations.next()) {
-					if (next.plane == this.currentLevel && next.x == x && next.z == z && next.layer == layer) {
-						loc = next;
-						break;
-					}
-				}
-				if (loc == null) {
-					int bitset = 0;
-					int otherId = -1;
-					int otherShape = 0;
-					@Pc(114) int otherAngle = 0;
-					if (layer == 0) {
-						bitset = this.scene.getWallBitset(this.currentLevel, x, z);
-					}
-					if (layer == 1) {
-						bitset = this.scene.getWallDecorationBitset(this.currentLevel, z, x);
-					}
-					if (layer == 2) {
-						bitset = this.scene.getLocBitset(this.currentLevel, x, z);
-					}
-					if (layer == 3) {
-						bitset = this.scene.getGroundDecorationBitset(this.currentLevel, x, z);
-					}
-					if (bitset != 0) {
-						@Pc(169) int otherInfo = this.scene.getInfo(this.currentLevel, x, z, bitset);
-						otherId = bitset >> 14 & 0x7FFF;
-						otherShape = otherInfo & 0x1F;
-						otherAngle = otherInfo >> 6;
-					}
-					loc = new LocAddEntity();
-					loc.plane = this.currentLevel;
-					loc.layer = layer;
-					loc.x = x;
-					loc.z = z;
-					loc.lastLocIndex = otherId;
-					loc.lastShape = otherShape;
-					loc.lastAngle = otherAngle;
-					this.spawnedLocations.addTail(loc);
-				}
-				loc.locIndex = id;
-				loc.shape = shape;
-				loc.angle = angle;
-				this.addLoc(this.currentLevel, x, z, id, angle, shape, layer);
+                this.appendLoc(-1, id, angle, layer, z, shape, this.currentLevel, x, 0);
 			}
-		} else if (opcode == 42) {
+		} else if (opcode == 76) {
+            // LOC_DEL
+			int info = buf.g1();
+
+			int shape = info >> 2;
+			int angle = info & 0x3;
+			int layer = this.LOC_SHAPE_TO_LAYER[shape];
+
+			if (x >= 0 && z >= 0 && x < 104 && z < 104) {
+                this.appendLoc(-1, -1, angle, layer, z, shape, this.currentLevel, x, 0);
+			}
+        } else if (opcode == 42) {
 			// LOC_ANIM
 			int info = buf.g1();
 			int shape = info >> 2;
@@ -2088,11 +2056,7 @@ public class client extends GameShell {
 			}
 
 			if (player != null) {
-				@Pc(946) LocMergeEntity loc1 = new LocMergeEntity(this.currentLevel, layer, x, z, -1, angle, shape, start + loopCycle);
-				this.mergedLocations.addTail(loc1);
-
-				@Pc(966) LocMergeEntity loc2 = new LocMergeEntity(this.currentLevel, layer, x, z, id, angle, shape, end + loopCycle);
-				this.mergedLocations.addTail(loc2);
+                this.appendLoc(start + loopCycle, -1, angle, layer, z, shape, this.currentLevel, x, end + loopCycle);
 
 				@Pc(980) int y0 = this.levelHeightmap[this.currentLevel][x][z];
 				@Pc(992) int y1 = this.levelHeightmap[this.currentLevel][x + 1][z];
@@ -3690,25 +3654,6 @@ public class client extends GameShell {
 		}
 
 		return this;
-	}
-
-	@OriginalMember(owner = "client!client", name = "m", descriptor = "(I)V")
-	private void updateMergeLocs() {
-		if (this.sceneState == 2) {
-			for (@Pc(12) LocMergeEntity loc = (LocMergeEntity) this.mergedLocations.head(); loc != null; loc = (LocMergeEntity) this.mergedLocations.next()) {
-				if (loopCycle >= loc.lastCycle) {
-					this.addLoc(loc.plane, loc.x, loc.z, loc.locIndex, loc.angle, loc.shape, loc.layer);
-					loc.unlink();
-				}
-			}
-
-			cyclelogic5++;
-			if (cyclelogic5 > 85) {
-				cyclelogic5 = 0;
-				// ANTICHEAT_CYCLELOGIC5
-				this.out.p1isaac(85);
-			}
-		}
 	}
 
 	@OriginalMember(owner = "client!client", name = "c", descriptor = "(II)V")
@@ -7700,9 +7645,10 @@ public class client extends GameShell {
 				}
 
 				this.localPlayer = this.players[this.LOCAL_PLAYER_INDEX] = new PlayerEntity();
+
 				this.projectiles.clear();
 				this.spotanims.clear();
-				this.mergedLocations.clear();
+
 				for (@Pc(460) int level = 0; level < 4; level++) {
 					for (int x = 0; x < 104; x++) {
 						for (@Pc(468) int z = 0; z < 104; z++) {
@@ -7816,20 +7762,13 @@ public class client extends GameShell {
 		}
 
 		@Pc(25) int bitset = 0;
-
 		if (layer == 0) {
 			bitset = this.scene.getWallBitset(level, x, z);
-		}
-
-		if (layer == 1) {
+		} else if (layer == 1) {
 			bitset = this.scene.getWallDecorationBitset(level, z, x);
-		}
-
-		if (layer == 2) {
+		} else if (layer == 2) {
 			bitset = this.scene.getLocBitset(level, x, z);
-		}
-
-		if (layer == 3) {
+		} else if (layer == 3) {
 			bitset = this.scene.getGroundDecorationBitset(level, x, z);
 		}
 
@@ -7841,21 +7780,17 @@ public class client extends GameShell {
 
 			if (layer == 0) {
 				this.scene.removeWall(level, x, z, 1);
-				LocType type = LocType.get(otherId);
 
+				LocType type = LocType.get(otherId);
 				if (type.blockwalk) {
 					this.levelCollisionMap[level].delWall(x, z, otherShape, otherRotation, type.blockrange);
 				}
-			}
-
-			if (layer == 1) {
+			} else if (layer == 1) {
 				this.scene.removeWallDecoration(level, x, z);
-			}
-
-			if (layer == 2) {
+			} else if (layer == 2) {
 				this.scene.removeLoc(level, x, z);
-				LocType type = LocType.get(otherId);
 
+				LocType type = LocType.get(otherId);
 				if (x + type.width > 103 || z + type.width > 103 || x + type.length > 103 || z + type.length > 103) {
 					return;
 				}
@@ -7863,12 +7798,10 @@ public class client extends GameShell {
 				if (type.blockwalk) {
 					this.levelCollisionMap[level].delLoc(x, z, type.width, type.length, otherRotation, type.blockrange);
 				}
-			}
-
-			if (layer == 3) {
+			} else if (layer == 3) {
 				this.scene.removeGroundDecoration(level, x, z);
-				LocType type = LocType.get(otherId);
 
+				LocType type = LocType.get(otherId);
 				if (type.blockwalk && type.active) {
 					this.levelCollisionMap[level].removeBlocked(x, z);
 				}
@@ -7877,7 +7810,6 @@ public class client extends GameShell {
 
 		if (id >= 0) {
 			int tileLevel = level;
-
 			if (level < 3 && (this.levelTileFlags[1][x][z] & 0x2) == 2) {
 				tileLevel = level + 1;
 			}
@@ -7945,7 +7877,9 @@ public class client extends GameShell {
 		this.in = null;
 		this.sceneMapIndex = null;
 		this.sceneMapLandData = null;
+		this.sceneMapLandReady = null;
 		this.sceneMapLocData = null;
+		this.sceneMapLocReady = null;
 		this.levelHeightmap = null;
 		this.levelTileFlags = null;
 		this.scene = null;
@@ -8009,7 +7943,6 @@ public class client extends GameShell {
 		this.npcIds = null;
 		this.levelObjStacks = null;
 		this.spawnedLocations = null;
-		this.mergedLocations = null;
 		this.projectiles = null;
 		this.spotanims = null;
 		this.locList = null;
@@ -8215,6 +8148,9 @@ public class client extends GameShell {
 				tracking.release();
 			}
 
+            this.updateSceneState();
+            this.updateTemporaryLocs();
+
 			this.idleNetCycles++;
 			if (this.idleNetCycles > 750) {
 				this.tryReconnect();
@@ -8223,7 +8159,6 @@ public class client extends GameShell {
 			this.updatePlayers();
 			this.updateNpcs();
 			this.updateEntityChats();
-			this.updateMergeLocs();
 
 			if ((super.actionKey[1] == 1 || super.actionKey[2] == 1 || super.actionKey[3] == 1 || super.actionKey[4] == 1) && this.cameraMovedWrite++ > 5) {
 				this.cameraMovedWrite = 0;
@@ -8449,6 +8384,151 @@ public class client extends GameShell {
 			}
 		}
 	}
+
+    private void updateSceneState() {
+		if (lowMemory && this.sceneState == 2 && World.levelBuilt != this.currentLevel) {
+			this.areaViewport.bind();
+            this.fontPlain12.drawStringCenter(257, 151, "Loading - please wait.", 0);
+            this.fontPlain12.drawStringCenter(256, 150, "Loading - please wait.", 16777215);
+            this.areaViewport.draw(super.graphics, 8, 11);
+			this.sceneState = 1;
+		}
+
+		if (this.sceneState == 1) {
+			this.checkScene();
+		}
+
+		if (this.sceneState == 2 && this.minimapLevel != this.currentLevel) {
+			this.minimapLevel = this.currentLevel;
+            this.createMinimap(this.currentLevel);
+		}
+    }
+
+    private int checkScene() {
+		for (int var2 = 0; var2 < this.sceneMapLandData.length; var2++) {
+			if (this.sceneMapLandData[var2] == null || this.sceneMapLandReady[var2] == false) {
+				return -1;
+			}
+
+			if (this.sceneMapLocData[var2] == null || this.sceneMapLocReady[var2] == false) {
+				return -2;
+			}
+		}
+
+        if (this.awaitingSync) {
+			return -4;
+		}
+
+        System.out.println("Building scene: " + this.sceneState);
+        this.sceneState = 2;
+        World.levelBuilt = this.currentLevel;
+        this.buildScene();
+        return 0;
+    }
+
+    private void updateTemporaryLocs() {
+		if (this.sceneState != 2) {
+			return;
+		}
+
+		for (LocAddEntity var3 = (LocAddEntity) this.spawnedLocations.head(); var3 != null; var3 = (LocAddEntity) this.spawnedLocations.next()) {
+			if (var3.duration > 0) {
+				var3.duration--;
+			}
+
+			if (var3.duration != 0) {
+				if (var3.delay > 0) {
+					var3.delay--;
+				}
+
+				if (var3.delay == 0 && var3.x >= 1 && var3.z >= 1 && var3.x <= 102 && var3.z <= 102) {
+					this.addLoc(var3.plane, var3.x, var3.z, var3.locIndex, var3.angle, var3.shape, var3.layer);
+					var3.delay = -1;
+
+					if (var3.lastLocIndex == var3.locIndex && var3.lastLocIndex == -1) {
+						var3.unlink();
+					} else if (var3.lastLocIndex == var3.locIndex && var3.lastAngle == var3.angle && var3.lastShape == var3.shape) {
+						var3.unlink();
+					}
+				}
+			} else if (var3.lastLocIndex < 0) {
+                this.addLoc(var3.plane, var3.x, var3.z, var3.lastLocIndex, var3.lastAngle, var3.lastShape, var3.layer);
+				var3.unlink();
+			}
+		}
+
+        cyclelogic5++;
+        if (cyclelogic5 > 85) {
+            cyclelogic5 = 0;
+            // ANTICHEAT_CYCLELOGIC5
+            this.out.p1isaac(85);
+        }
+    }
+
+    private void clearTemporaryLocs() {
+        for (@Pc(361) LocAddEntity loc = (LocAddEntity) this.spawnedLocations.head(); loc != null; loc = (LocAddEntity) this.spawnedLocations.next()) {
+            if (loc.duration == -1) {
+                loc.delay = 0;
+                this.storeLoc(loc);
+            } else {
+                loc.unlink();
+            }
+        }
+    }
+
+    private void storeLoc(LocAddEntity loc) {
+        int bitset = 0;
+        int otherId = -1;
+        int otherShape = 0;
+        int otherAngle = 0;
+
+        if (loc.layer == 0) {
+            bitset = this.scene.getWallBitset(loc.plane, loc.x, loc.z);
+        } else if (loc.layer == 1) {
+            bitset = this.scene.getWallDecorationBitset(loc.plane, loc.z, loc.x);
+        } else if (loc.layer == 2) {
+            bitset = this.scene.getLocBitset(loc.plane, loc.x, loc.z);
+        } else if (loc.layer == 3) {
+            bitset = this.scene.getGroundDecorationBitset(loc.plane, loc.x, loc.z);
+        }
+
+        if (bitset != 0) {
+            int otherInfo = this.scene.getInfo(loc.plane, loc.x, loc.z, bitset);
+            otherId = bitset >> 14 & 0x7FFF;
+            otherShape = otherInfo & 0x1F;
+            otherAngle = otherInfo >> 6;
+        }
+
+        loc.lastLocIndex = otherId;
+        loc.lastShape = otherShape;
+        loc.lastAngle = otherAngle;
+    }
+
+    private void appendLoc(int duration, int type, int rotation, int layer, int z, int shape, int level, int x, int delay) {
+        @Pc(69) LocAddEntity loc = null;
+        for (@Pc(74) LocAddEntity next = (LocAddEntity) this.spawnedLocations.head(); next != null; next = (LocAddEntity) this.spawnedLocations.next()) {
+            if (next.plane == level && next.x == x && next.z == z && next.layer == layer) {
+                loc = next;
+                break;
+            }
+        }
+
+        if (loc == null) {
+            loc = new LocAddEntity();
+            loc.plane = level;
+            loc.layer = layer;
+            loc.x = x;
+            loc.z = z;
+            this.storeLoc(loc);
+            this.spawnedLocations.addTail(loc);
+        }
+
+        loc.locIndex = type;
+        loc.shape = shape;
+        loc.angle = rotation;
+        loc.delay = delay;
+        loc.duration = duration;
+    }
 
 	@OriginalMember(owner = "client!client", name = "k", descriptor = "(Z)V")
 	private void drawTooltip() {
@@ -9491,7 +9571,6 @@ public class client extends GameShell {
 	private void buildScene() {
 		try {
 			this.minimapLevel = -1;
-			this.mergedLocations.clear();
 			this.locList.clear();
 			this.spotanims.clear();
 			this.projectiles.clear();
@@ -9507,7 +9586,6 @@ public class client extends GameShell {
 			World.lowMemory = World3D.lowMemory;
 
 			@Pc(60) int maps = this.sceneMapLandData.length;
-
 			for (@Pc(64) int index = 0; index < maps; index++) {
 				int mapsquareX = this.sceneMapIndex[index] >> 8;
 				int mapsquareZ = this.sceneMapIndex[index] & 0xFF;
@@ -9578,9 +9656,7 @@ public class client extends GameShell {
 				}
 			}
 
-			for (@Pc(361) LocAddEntity loc = (LocAddEntity) this.spawnedLocations.head(); loc != null; loc = (LocAddEntity) this.spawnedLocations.next()) {
-				this.addLoc(loc.plane, loc.x, loc.z, loc.locIndex, loc.angle, loc.shape, loc.layer);
-			}
+            this.clearTemporaryLocs();
 		} catch (@Pc(390) Exception ignored) {
 		}
 
@@ -9896,17 +9972,11 @@ public class client extends GameShell {
 				@Pc(104) int bitset = 0;
 				if (loc.type == 0) {
 					bitset = this.scene.getWallBitset(level, x, z);
-				}
-
-				if (loc.type == 1) {
+				} else if (loc.type == 1) {
 					bitset = this.scene.getWallDecorationBitset(level, z, x);
-				}
-
-				if (loc.type == 2) {
+				} else if (loc.type == 2) {
 					bitset = this.scene.getLocBitset(level, x, z);
-				}
-
-				if (loc.type == 3) {
+				} else if (loc.type == 3) {
 					bitset = this.scene.getGroundDecorationBitset(level, x, z);
 				}
 
@@ -10523,7 +10593,7 @@ public class client extends GameShell {
 				}
 				if (index != -1) {
 					signlink.cachesave("m" + x + "_" + z, this.sceneMapLandData[index]);
-					this.sceneState = 1;
+                    this.sceneMapLandReady[index] = true;
 				}
 				this.packetType = -1;
 				return true;
@@ -10538,24 +10608,32 @@ public class client extends GameShell {
 				// REBUILD_NORMAL
 				int zoneX = this.in.g2();
 				int zoneZ = this.in.g2();
+
 				if (this.sceneCenterZoneX == zoneX && this.sceneCenterZoneZ == zoneZ && this.sceneState != 0) {
 					this.packetType = -1;
 					return true;
 				}
+
 				this.sceneCenterZoneX = zoneX;
 				this.sceneCenterZoneZ = zoneZ;
 				this.sceneBaseTileX = (this.sceneCenterZoneX - 6) * 8;
 				this.sceneBaseTileZ = (this.sceneCenterZoneZ - 6) * 8;
 				this.sceneState = 1;
+
 				this.areaViewport.bind();
 				this.fontPlain12.drawStringCenter(257, 151, "Loading - please wait.", 0);
 				this.fontPlain12.drawStringCenter(256, 150, "Loading - please wait.", 16777215);
 				this.areaViewport.draw(super.graphics, 8, 11);
+
 				signlink.looprate(5);
+
 				int regions = (this.packetSize - 2) / 10;
 				this.sceneMapLandData = new byte[regions][];
+                this.sceneMapLandReady = new boolean[regions];
 				this.sceneMapLocData = new byte[regions][];
+                this.sceneMapLocReady = new boolean[regions];
 				this.sceneMapIndex = new int[regions];
+
 				// REBUILD_GETMAPS
 				this.out.p1isaac(150);
 				this.out.p1(0);
@@ -10565,59 +10643,72 @@ public class client extends GameShell {
 					int mapsquareZ = this.in.g1();
 					int landCrc = this.in.g4();
 					int locCrc = this.in.g4();
+
 					this.sceneMapIndex[i] = (mapsquareX << 8) + mapsquareZ;
+
 					@Pc(686) byte[] data;
 					if (landCrc != 0) {
 						data = signlink.cacheload("m" + mapsquareX + "_" + mapsquareZ);
+
 						if (data != null) {
 							this.crc32.reset();
 							this.crc32.update(data);
+
 							if ((int) this.crc32.getValue() != landCrc) {
 								data = null;
 							}
 						}
+
 						if (data == null) {
-							this.sceneState = 0;
 							this.out.p1(0);
 							this.out.p1(mapsquareX);
 							this.out.p1(mapsquareZ);
 							mapCount += 3;
 						} else {
 							this.sceneMapLandData[i] = data;
+                            this.sceneMapLandReady[i] = true;
 						}
 					}
+ 
 					if (locCrc != 0) {
 						data = signlink.cacheload("l" + mapsquareX + "_" + mapsquareZ);
+
 						if (data != null) {
 							this.crc32.reset();
 							this.crc32.update(data);
+
 							if ((int) this.crc32.getValue() != locCrc) {
 								data = null;
 							}
 						}
+
 						if (data == null) {
-							this.sceneState = 0;
 							this.out.p1(1);
 							this.out.p1(mapsquareX);
 							this.out.p1(mapsquareZ);
 							mapCount += 3;
 						} else {
 							this.sceneMapLocData[i] = data;
+                            this.sceneMapLocReady[i] = true;
 						}
 					}
 				}
 				this.out.psize1(mapCount);
+
 				signlink.looprate(50);
+
 				this.areaViewport.bind();
 				if (this.sceneState == 0) {
 					this.fontPlain12.drawStringCenter(257, 166, "Map area updated since last visit, so load will take longer this time only", 0);
 					this.fontPlain12.drawStringCenter(256, 165, "Map area updated since last visit, so load will take longer this time only", 16777215);
 				}
 				this.areaViewport.draw(super.graphics, 8, 11);
+
 				int dx = this.sceneBaseTileX - this.mapLastBaseX;
 				int dz = this.sceneBaseTileZ - this.mapLastBaseZ;
 				this.mapLastBaseX = this.sceneBaseTileX;
 				this.mapLastBaseZ = this.sceneBaseTileZ;
+
 				for (int i = 0; i < 8192; i++) {
 					@Pc(856) NpcEntity npc = this.npcs[i];
 					if (npc != null) {
@@ -10625,10 +10716,12 @@ public class client extends GameShell {
 							npc.pathTileX[j] -= dx;
 							npc.pathTileZ[j] -= dz;
 						}
+
 						npc.x -= dx * 128;
 						npc.z -= dz * 128;
 					}
 				}
+
 				for (int i = 0; i < this.MAX_PLAYER_COUNT; i++) {
 					@Pc(911) PlayerEntity player = this.players[i];
 					if (player != null) {
@@ -10636,10 +10729,14 @@ public class client extends GameShell {
 							player.pathTileX[j] -= dx;
 							player.pathTileZ[j] -= dz;
 						}
+
 						player.x -= dx * 128;
 						player.z -= dz * 128;
 					}
 				}
+
+                this.awaitingSync = true;
+
 				@Pc(960) byte startTileX = 0;
 				@Pc(962) byte endTileX = 104;
 				@Pc(964) byte dirX = 1;
@@ -10648,6 +10745,7 @@ public class client extends GameShell {
 					endTileX = -1;
 					dirX = -1;
 				}
+
 				@Pc(974) byte startTileZ = 0;
 				@Pc(976) byte endTileZ = 104;
 				@Pc(978) byte dirZ = 1;
@@ -10656,10 +10754,12 @@ public class client extends GameShell {
 					endTileZ = -1;
 					dirZ = -1;
 				}
+
 				for (@Pc(988) int x = startTileX; x != endTileX; x += dirX) {
 					for (@Pc(992) int z = startTileZ; z != endTileZ; z += dirZ) {
 						@Pc(998) int lastX = x + dx;
 						@Pc(1002) int lastZ = z + dz;
+
 						for (@Pc(1004) int level = 0; level < 4; level++) {
 							if (lastX >= 0 && lastZ >= 0 && lastX < 104 && lastZ < 104) {
 								this.levelObjStacks[level][x][z] = this.levelObjStacks[level][lastX][lastZ];
@@ -10669,17 +10769,21 @@ public class client extends GameShell {
 						}
 					}
 				}
+
 				for (@Pc(1066) LocAddEntity loc = (LocAddEntity) this.spawnedLocations.head(); loc != null; loc = (LocAddEntity) this.spawnedLocations.next()) {
 					loc.x -= dx;
 					loc.z -= dz;
+
 					if (loc.x < 0 || loc.z < 0 || loc.x >= 104 || loc.z >= 104) {
 						loc.unlink();
 					}
 				}
+
 				if (this.flagSceneTileX != 0) {
 					this.flagSceneTileX -= dx;
 					this.flagSceneTileZ -= dz;
 				}
+
 				this.cutscene = false;
 				this.packetType = -1;
 				return true;
@@ -10762,7 +10866,7 @@ public class client extends GameShell {
 				}
 				if (index != -1) {
 					signlink.cachesave("l" + x + "_" + z, this.sceneMapLocData[index]);
-					this.sceneState = 1;
+                    this.sceneMapLocReady[index] = true;
 				}
 				this.packetType = -1;
 				return true;
@@ -11112,8 +11216,7 @@ public class client extends GameShell {
 				}
 				for (@Pc(2487) LocAddEntity loc = (LocAddEntity) this.spawnedLocations.head(); loc != null; loc = (LocAddEntity) this.spawnedLocations.next()) {
 					if (loc.x >= this.baseX && loc.x < this.baseX + 8 && loc.z >= this.baseZ && loc.z < this.baseZ + 8 && loc.plane == this.currentLevel) {
-						this.addLoc(loc.plane, loc.x, loc.z, loc.lastLocIndex, loc.lastAngle, loc.lastShape, loc.layer);
-						loc.unlink();
+                        loc.duration = 0;
 					}
 				}
 				this.packetType = -1;
@@ -11479,23 +11582,7 @@ public class client extends GameShell {
 			if (this.packetType == 184) {
 				// PLAYER_INFO
 				this.getPlayer(this.in, this.packetSize);
-				if (this.sceneState == 1) {
-					this.sceneState = 2;
-					World.levelBuilt = this.currentLevel;
-					this.buildScene();
-				}
-				if (lowMemory && this.sceneState == 2 && World.levelBuilt != this.currentLevel) {
-					this.areaViewport.bind();
-					this.fontPlain12.drawStringCenter(257, 151, "Loading - please wait.", 0);
-					this.fontPlain12.drawStringCenter(256, 150, "Loading - please wait.", 16777215);
-					this.areaViewport.draw(super.graphics, 8, 11);
-					World.levelBuilt = this.currentLevel;
-					this.buildScene();
-				}
-				if (this.currentLevel != this.minimapLevel && this.sceneState == 2) {
-					this.minimapLevel = this.currentLevel;
-					this.createMinimap(this.currentLevel);
-				}
+                this.awaitingSync = false;
 				this.packetType = -1;
 				return true;
 			}
